@@ -1,0 +1,25 @@
+{
+  "name": "opencv4nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./lib/opencv4nodejs.js",
+  "scripts": {
+    "install": "node-pre-gyp install --fallback-to-build",
+    "reinstall": "node-pre-gyp reinstall --fallback-to-build",
+    "configure": "node-gyp configure",
+    "build": "node-gyp configure build",
+    "rebuild": "node-gyp configure rebuild"
+  },
+  "binary": {
+    "module_name": "opencv4nodejs",
+    "module_path": "./build/Release/",
+    "host": "none"
+  },
+  "author": "Vincent Mühler",
+  "license": "ISC",
+  "gypfile": true,
+  "dependencies": {
+    "nan": "^2.6.2",
+    "node-pre-gyp": "^0.6.36"
+  }
+}

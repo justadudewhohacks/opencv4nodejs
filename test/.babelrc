@@ -1,0 +1,7 @@
+{
+  "presets": ["es2017", "stage-0"],
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-object-rest-spread"
+  ]
+}
