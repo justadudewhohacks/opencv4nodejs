@@ -35,6 +35,19 @@
 #define FF_MAT_TO_JS_ARR(data, rows, cols)										\
 	v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(rows);	\
 
+#define FF_VERIFY_OPTIONAL_ARG(n, arg, assertType, castType)		\
+	if (info.Length() > n) {																			\
+		if (!info[n]->assertType()) {																\
+			return Nan::ThrowError(Nan::New(													\
+				"Expected " + std::string(#arg) + " " + #assertType +		\
+				", argument " + std::to_string(n) + " invalid: " +			\
+				std::string(*Nan::Utf8String(info[n]->ToString()))			\
+			).ToLocalChecked());																			\
+		}																														\
+		arg = info[0]->castType();																	\
+	}
+
+
 namespace FF {
 	static inline v8::Local<v8::Array> matrixdToJsArray(Eigen::MatrixXd vec) {
 		v8::Local<v8::Array> jsVec = Nan::New<v8::Array>(vec.rows());

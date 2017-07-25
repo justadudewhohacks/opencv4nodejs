@@ -1,4 +1,4 @@
-const { Mat, matTypes } = require('../../');
+const { Mat, matTypes } = require('../../../');
 const { assert, expect } = require('chai');
 
 const charMax = 127;

@@ -1,8 +1,9 @@
 #include <nan.h>
 #include <opencv2/imgproc.hpp>
+#include <opencv2/features2d.hpp>
 #include <opencv2/xfeatures2d.hpp>
 
-class Features2d {
+class XFeatures2d {
 public:
   static NAN_MODULE_INIT(Init);
   // xfeatures2d

@@ -2,8 +2,8 @@
   "name": "opencv4nodejs_test",
   "version": "1.0.0",
   "scripts": {
-    "test": "set NODE_ENV=TEST&& set NO_LOGGING=true&& set TESTS_REPORT=TRIM_FAILURES&& mocha ./src --compilers js:babel-core/register --require tests/utils/trimFailuresReporter --recursive",
-    "test-details": "set NODE_ENV=TEST&& mocha ./src --compilers js:babel-core/register --recursive"
+    "test": "set NODE_ENV=TEST&& set NO_LOGGING=true&& set TESTS_REPORT=TRIM_FAILURES&& mocha ./cc --compilers js:babel-core/register --require tests/utils/trimFailuresReporter --recursive",
+    "test-details": "set NODE_ENV=TEST&& mocha ./cc --compilers js:babel-core/register --recursive"
   },
   "author": "Vincent Mühler",
   "license": "ISC",

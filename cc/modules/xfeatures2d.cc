@@ -1,4 +1,4 @@
-#include "features2d.h"
+#include "xfeatures2d.h"
 #include "../core/Mat.h"
 #include "../KeyPointMatch.h"
 #include <iostream>
@@ -6,24 +6,24 @@
 
 static v8::Local<v8::Object> initializeEnum(const std::string enumNames[], int length);
 
-NAN_MODULE_INIT(Features2d::Init) {
+NAN_MODULE_INIT(XFeatures2d::Init) {
   v8::Local<v8::Object> obj = Nan::New<v8::Object>();
 
-  // xfeatures2d
+  // XFeatures2d
   Nan::SetMethod(obj, "detectKeypointsSIFT", DetectKeypointsSIFT);
   Nan::SetMethod(obj, "detectKeypointsSURF", DetectKeypointsSURF);
   Nan::SetMethod(obj, "computeDescriptorsSIFT", ComputeDescriptorsSIFT);
   Nan::SetMethod(obj, "computeDescriptorsSURF", ComputeDescriptorsSURF);
   Nan::SetMethod(obj, "matchDescriptors", MatchDescriptors);
 
-  // features2d
+  // Features2d
   Nan::SetMethod(obj, "detectKeypointsORB", DetectKeypointsORB);
   Nan::SetMethod(obj, "computeDescriptorsORB", ComputeDescriptorsORB);
 
-  target->Set(Nan::New("features2d").ToLocalChecked(), obj);
+  target->Set(Nan::New("xfeatures2d").ToLocalChecked(), obj);
 };
 
-NAN_METHOD(Features2d::DetectKeypointsSIFT) {
+NAN_METHOD(XFeatures2d::DetectKeypointsSIFT) {
   if (!info[0]->IsObject()) {
     return Nan::ThrowError("usage: detectKeypointsSIFT(Mat img)");      
   }
@@ -35,7 +35,7 @@ NAN_METHOD(Features2d::DetectKeypointsSIFT) {
   );
 }
 
-NAN_METHOD(Features2d::DetectKeypointsSURF) {
+NAN_METHOD(XFeatures2d::DetectKeypointsSURF) {
   if (!info[0]->IsObject()) {
     return Nan::ThrowError("usage: detectKeypointsSURF(Mat img)");      
   }
@@ -47,7 +47,7 @@ NAN_METHOD(Features2d::DetectKeypointsSURF) {
   );
 }
 
-NAN_METHOD(Features2d::DetectKeypointsORB) {
+NAN_METHOD(XFeatures2d::DetectKeypointsORB) {
   if (!info[0]->IsObject()) {
     return Nan::ThrowError("usage: detectKeypointsORB(Mat img)");      
   }
@@ -59,7 +59,7 @@ NAN_METHOD(Features2d::DetectKeypointsORB) {
   );
 }
 
-NAN_METHOD(Features2d::ComputeDescriptorsSIFT) {
+NAN_METHOD(XFeatures2d::ComputeDescriptorsSIFT) {
   if (!info[0]->IsObject() || !info[1]->IsObject()) {
     return Nan::ThrowError("usage: computeDescriptors(Mat img, KeyPoints[] keyPoints)");      
   }
@@ -72,7 +72,7 @@ NAN_METHOD(Features2d::ComputeDescriptorsSIFT) {
   );
 }
 
-NAN_METHOD(Features2d::ComputeDescriptorsSURF) {
+NAN_METHOD(XFeatures2d::ComputeDescriptorsSURF) {
   if (!info[0]->IsObject() || !info[1]->IsObject()) {
     return Nan::ThrowError("usage: computeDescriptors(Mat img, KeyPoints[] keyPoints)");      
   }
@@ -85,7 +85,7 @@ NAN_METHOD(Features2d::ComputeDescriptorsSURF) {
   );
 }
 
-NAN_METHOD(Features2d::ComputeDescriptorsORB) {
+NAN_METHOD(XFeatures2d::ComputeDescriptorsORB) {
   if (!info[0]->IsObject() || !info[1]->IsObject()) {
     return Nan::ThrowError("usage: computeDescriptors(Mat img, KeyPoints[] keyPoints)");      
   }
@@ -98,7 +98,7 @@ NAN_METHOD(Features2d::ComputeDescriptorsORB) {
   );
 }
 
-NAN_METHOD(Features2d::MatchDescriptors) {
+NAN_METHOD(XFeatures2d::MatchDescriptors) {
 
   if (!info[0]->IsObject() || !info[1]->IsObject() || !info[2]->IsObject() || !info[3]->IsObject()) {
     return Nan::ThrowError("usage: matchDescriptors(Mat descFrom, Mat descTo, KeyPoint[] kpsFrom, KeyPoint[] kpsTo, int matcherType)");      
@@ -126,9 +126,9 @@ NAN_METHOD(Features2d::MatchDescriptors) {
   info.GetReturnValue().Set(jsMatches);
 }
 
-v8::Local<v8::Value> Features2d::detectKeyPoints(cv::Mat mat, cv::Ptr<cv::FeatureDetector> detector) {
+v8::Local<v8::Value> XFeatures2d::detectKeyPoints(cv::Mat mat, cv::Ptr<cv::FeatureDetector> detector) {
   std::vector<cv::KeyPoint> kps;
-	
+
   try {
     detector->detect(mat, kps);
   } catch(std::exception &e) {
@@ -149,7 +149,7 @@ v8::Local<v8::Value> Features2d::detectKeyPoints(cv::Mat mat, cv::Ptr<cv::Featur
   return jsKps;
 }
 
-v8::Local<v8::Value> Features2d::computeDescriptors(cv::Mat mat, v8::Local<v8::Array> jsKps, cv::Ptr<cv::FeatureDetector> detector) {
+v8::Local<v8::Value> XFeatures2d::computeDescriptors(cv::Mat mat, v8::Local<v8::Array> jsKps, cv::Ptr<cv::FeatureDetector> detector) {
   std::vector<cv::KeyPoint> kps = KeyPoint::unwrapJSKps(jsKps);
   cv::Mat desc;
     try {
