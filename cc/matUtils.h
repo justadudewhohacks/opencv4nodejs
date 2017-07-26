@@ -1,6 +1,9 @@
 #include <nan.h>
 #include <opencv2/core.hpp>
 
+#ifndef FF_MATUTILS_H_
+#define FF_MATUTILS_H_
+
 #define FF_MAT_FROM_JS_ARRAY(mat, rowArray, put)																	\
 	for (int r = 0; r < mat.rows; r++) {																						\
 		v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(rowArray->Get(r));	\
@@ -250,3 +253,5 @@ namespace FF {
 		}	
 	}
 }
+
+#endif

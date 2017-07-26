@@ -3,6 +3,9 @@
 #include <iostream>
 #include "KeyPoint.h"
 
+#ifndef FF_KEYPOINTMATCH_H_
+#define FF_KEYPOINTMATCH_H_
+
 class KeyPointMatch : public Nan::ObjectWrap {
 public:
   Nan::Persistent<v8::Object> kpFrom;
@@ -26,3 +29,5 @@ public:
     return Nan::ObjectWrap::Unwrap<KeyPoint>(Nan::New(this->kpTo));
   }
 };
+
+#endif

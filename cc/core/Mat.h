@@ -4,6 +4,8 @@
 #include <opencv2/imgproc.hpp>
 #include <iostream>
 
+#ifndef FF_MAT_H_
+#define FF_MAT_H_
 
 class Mat : public Nan::ObjectWrap {
 public:
@@ -26,3 +28,5 @@ public:
 
   void setNativeProps(cv::Mat);
 };
+
+#endif

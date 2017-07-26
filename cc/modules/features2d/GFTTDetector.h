@@ -1,8 +1,11 @@
 #include <nan.h>
-#include <opencv2/features2d.hpp>
-#include "../../macros.h"
+#include "FeatureDetector.h"
+#include "macros.h"
 
-class GFTTDetector : public Nan::ObjectWrap {
+#ifndef FF_GFTTDETECTOR_H_
+#define FF_GFTTDETECTOR_H_
+
+class GFTTDetector : public FeatureDetector {
 public:
 	cv::Ptr<cv::GFTTDetector> detector;
 
@@ -17,4 +20,10 @@ public:
 	static FF_GETTER(GFTTDetector, GetK, detector->getK());
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::Ptr<cv::FeatureDetector> getDetector() {
+		return detector;
+	}
 };
+
+#endif

@@ -1,6 +1,6 @@
 #include "io.h"
-#include "../core/Mat.h"
-#include "../KeyPointMatch.h"
+#include "Mat.h"
+#include "features2d/KeyPointMatch.h"
 #include<iostream>
 
 

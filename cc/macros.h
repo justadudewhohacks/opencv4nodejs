@@ -2,11 +2,20 @@
 #include <Eigen/Core>
 #include <iostream>
 
+#ifndef FF_MACROS_H_
+#define FF_MACROS_H_
+
+#define FF_V8STRING(s) \
+	Nan::New(s).ToLocalChecked()
+
+#define FF_JS_VAL_TO_STRING(s) \
+	std::string(*Nan::Utf8String(s->ToString()))
+
 #define FF_GETTER(clazz, name, value)	\
 	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->value); }
 
 #define FF_GET_JS_PROP(obj, prop) \
-	Nan::Get(obj, Nan::New(#prop).ToLocalChecked()).ToLocalChecked()
+	Nan::Get(obj, FF_V8STRING(#prop)).ToLocalChecked()
 
 #define FF_GET_JS_PROP_NUMBER(obj, prop) \
 	FF_GET_JS_PROP(obj, prop)->NumberValue()
@@ -21,7 +30,15 @@
 	(double)FF_GET_JS_PROP_NUMBER(obj, prop)
 
 #define FF_GET_JS_PROP_INT(obj, prop) \
-	(int)FF_GET_JS_PROP_NUMBER(obj, prop)
+	(int)FF_GET_JS_PROP(obj, prop)->IntegerValue()
+
+#define FF_GET_JS_PROP_UINT(obj, prop) \
+	(uint)FF_GET_JS_PROP(obj, prop)->Uint32Value()
+
+#define FF_GET_JS_PROP_STRING(obj, prop) \
+	FF_JS_VAL_TO_STRING(FF_GET_JS_PROP(obj, prop)->ToString())
+
+
 
 #define FF_TRY(work)										\
 	try {																	\
@@ -35,16 +52,16 @@
 #define FF_MAT_TO_JS_ARR(data, rows, cols)										\
 	v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(rows);	\
 
-#define FF_VERIFY_OPTIONAL_ARG(n, arg, assertType, castType)		\
-	if (info.Length() > n) {																			\
-		if (!info[n]->assertType()) {																\
-			return Nan::ThrowError(Nan::New(													\
-				"Expected " + std::string(#arg) + " " + #assertType +		\
-				", argument " + std::to_string(n) + " invalid: " +			\
-				std::string(*Nan::Utf8String(info[n]->ToString()))			\
-			).ToLocalChecked());																			\
-		}																														\
-		arg = info[0]->castType();																	\
+#define FF_GET_CHECKED_PROP_IFDEF(obj, prop, assertType, castType)		\
+	if (obj->HasOwnProperty(FF_V8STRING(#prop))) {											\
+		if (!FF_GET_JS_PROP(obj, prop)->assertType()) {										\
+			return Nan::ThrowError(Nan::New(																\
+				"Invalid type for " + std::string(#prop) + " :"								\
+				+ FF_GET_JS_PROP_STRING(obj, prop)														\
+				+ ", expected: " + #assertType																\
+			).ToLocalChecked());																						\
+		}																																	\
+		prop = FF_GET_JS_PROP(obj, prop)->castType();											\
 	}
 
 
@@ -75,6 +92,4 @@ namespace FF {
 	}
 }
 
-
-
-	
+#endif

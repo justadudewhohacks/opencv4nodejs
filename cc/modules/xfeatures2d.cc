@@ -1,6 +1,6 @@
 #include "xfeatures2d.h"
-#include "../core/Mat.h"
-#include "../KeyPointMatch.h"
+#include "Mat.h"
+#include "features2d/KeyPointMatch.h"
 #include <iostream>
 #include <opencv2/highgui.hpp>
 
@@ -150,7 +150,7 @@ v8::Local<v8::Value> XFeatures2d::detectKeyPoints(cv::Mat mat, cv::Ptr<cv::Featu
 }
 
 v8::Local<v8::Value> XFeatures2d::computeDescriptors(cv::Mat mat, v8::Local<v8::Array> jsKps, cv::Ptr<cv::FeatureDetector> detector) {
-  std::vector<cv::KeyPoint> kps = KeyPoint::unwrapJSKps(jsKps);
+  std::vector<cv::KeyPoint> kps = KeyPoint::unwrapJSKeyPointArray(jsKps);
   cv::Mat desc;
     try {
     detector->compute(mat, kps, desc);

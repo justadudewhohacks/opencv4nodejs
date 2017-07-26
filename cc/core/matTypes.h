@@ -1,6 +1,9 @@
 #include <nan.h>
 #include <opencv2/core.hpp>
 
+#ifndef FF_MATTYPES_H_
+#define FF_MATTYPES_H_
+
 #define FF_TYPE(C) \
   matTypesModule->Set(Nan::New<v8::String>(#C).ToLocalChecked(), Nan::New<v8::Integer>(C));
 
@@ -48,3 +51,5 @@ static void initMatTypes(v8::Local<v8::Object> matTypesModule) {
 	FF_TYPE(CV_64FC3);
 	FF_TYPE(CV_64FC4);
 }
+
+#endif

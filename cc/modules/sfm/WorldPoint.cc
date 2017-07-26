@@ -1,5 +1,5 @@
 #include "WorldPoint.h"
-#include "../../macros.h"
+#include "macros.h"
 
 Nan::Persistent<v8::FunctionTemplate> WorldPoint::constructor;
 

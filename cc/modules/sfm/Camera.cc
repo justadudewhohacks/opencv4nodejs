@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "../../macros.h"
+#include "macros.h"
 
 Nan::Persistent<v8::FunctionTemplate> Camera::constructor;
 

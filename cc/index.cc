@@ -1,6 +1,5 @@
 #include <node.h>
-#include "core/Mat.h"
-#include "KeyPointMatch.h"
+#include "Mat.h"
 #include "modules/io.h"
 #include "modules/xfeatures2d.h"
 #include "modules/photo.h"
@@ -9,8 +8,6 @@
 
 void init(v8::Local<v8::Object> target) {
   Mat::Init(target);
-  KeyPoint::Init(target);
-  KeyPointMatch::Init(target);
   Io::Init(target);
   XFeatures2d::Init(target);
   Photo::Init(target);

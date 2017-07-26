@@ -4,24 +4,25 @@ Nan::Persistent<v8::FunctionTemplate> GFTTDetector::constructor;
 
 NAN_MODULE_INIT(GFTTDetector::Init) {
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(GFTTDetector::New);
-  constructor.Reset(ctor);
-  ctor->InstanceTemplate()->SetInternalFieldCount(1);
-  ctor->SetClassName(Nan::New("GFTTDetector").ToLocalChecked());
+	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
-	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("maxCorners").ToLocalChecked(), GFTTDetector::GetMaxFeatures);
-	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("qualityLevel").ToLocalChecked(), GFTTDetector::GetQualityLevel);
-	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("minDistance").ToLocalChecked(), GFTTDetector::GetMinDistance);
-	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("blockSize").ToLocalChecked(), GFTTDetector::GetBlockSize);
-	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("useHarrisDetector").ToLocalChecked(), GFTTDetector::GetUseHarrisDetector);
-	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("k").ToLocalChecked(), GFTTDetector::GetK);
-/*
-	//cv::AKAZE
-	//cv::AgastFeatureDetector
-	//BRISK, ORB, MSER, FAST, AGAST, GFTTDetector, KAZE
-	int maxCorners = 1000, double qualityLevel = 0.01, double minDistance = 1,
-		int blockSize = 3, bool useHarrisDetector = false, double k = 0.04;
+	FeatureDetector::Init(ctor);
+  constructor.Reset(ctor);
+	ctor->SetClassName(Nan::New("GFTTDetector").ToLocalChecked());
+  instanceTemplate->SetInternalFieldCount(1);
 	
-	// detector->getHarrisDetector() != nullptr
+	Nan::SetAccessor(instanceTemplate, Nan::New("maxCorners").ToLocalChecked(), GFTTDetector::GetMaxFeatures);
+	Nan::SetAccessor(instanceTemplate, Nan::New("qualityLevel").ToLocalChecked(), GFTTDetector::GetQualityLevel);
+	Nan::SetAccessor(instanceTemplate, Nan::New("minDistance").ToLocalChecked(), GFTTDetector::GetMinDistance);
+	Nan::SetAccessor(instanceTemplate, Nan::New("blockSize").ToLocalChecked(), GFTTDetector::GetBlockSize);
+	Nan::SetAccessor(instanceTemplate, Nan::New("useHarrisDetector").ToLocalChecked(), GFTTDetector::GetUseHarrisDetector);
+	Nan::SetAccessor(instanceTemplate, Nan::New("k").ToLocalChecked(), GFTTDetector::GetK);
+
+
+
+/*
+	//BRISK, MSER, FAST, AGAST, AKAZE, KAZE
+
 	//cv::FastFeatureDetector::create()
 	//cv::AgastFeatureDetector::cre
 		//cv::BRISK::create
@@ -32,20 +33,26 @@ NAN_MODULE_INIT(GFTTDetector::Init) {
 };
 
 NAN_METHOD(GFTTDetector::New) {
+	if (!info.IsConstructCall()) {
+		return Nan::ThrowError("GFTTDetector::New expected new key word");
+	}
+
 	int maxCorners = 1000;
 	double qualityLevel = 0.01;
 	double minDistance = 1;
 	int blockSize = 3;
 	bool useHarrisDetector = false;
 	double k = 0.04;
-	
-	FF_VERIFY_OPTIONAL_ARG(0, maxCorners, IsUint32, Int32Value)
-	FF_VERIFY_OPTIONAL_ARG(1, qualityLevel, IsNumber, NumberValue)
-	FF_VERIFY_OPTIONAL_ARG(2, minDistance, IsNumber, NumberValue)
-	FF_VERIFY_OPTIONAL_ARG(3, blockSize, IsUint32, Int32Value)
-	FF_VERIFY_OPTIONAL_ARG(4, useHarrisDetector, IsBoolean, BooleanValue)
-	FF_VERIFY_OPTIONAL_ARG(5, k, IsNumber, NumberValue)
 
+	if (info[0]->IsObject()) {
+		v8::Local<v8::Object> args = info[0]->ToObject();
+		FF_GET_CHECKED_PROP_IFDEF(args, maxCorners, IsInt32, Int32Value)
+		FF_GET_CHECKED_PROP_IFDEF(args, qualityLevel, IsNumber, NumberValue)
+		FF_GET_CHECKED_PROP_IFDEF(args, minDistance, IsNumber, NumberValue)
+		FF_GET_CHECKED_PROP_IFDEF(args, blockSize, IsInt32, Int32Value)
+		FF_GET_CHECKED_PROP_IFDEF(args, useHarrisDetector, IsBoolean, BooleanValue)
+		FF_GET_CHECKED_PROP_IFDEF(args, k, IsNumber, NumberValue)
+	}
 	GFTTDetector* self = new GFTTDetector();
 	self->Wrap(info.Holder());
 	self->detector = cv::GFTTDetector::create(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
