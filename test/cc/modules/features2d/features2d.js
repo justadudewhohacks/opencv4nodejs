@@ -1,36 +1,75 @@
 const { features2d } = require('../../../../');
-const { expect } = require('chai');
-
-const expectToHaveProps = detector => (props) => {
-  Object.keys(props).forEach(key =>
-    expect(detector).to.have.property(key).equal(props[key])
-  );
-};
-
-const detectorTests = (defaults, customProps, Detector) => {
-  it('should use default values for empty args', () => {
-    expectToHaveProps(new Detector())(defaults);
-  });
-
-  it('should use default values for empty object', () => {
-    expectToHaveProps(new Detector({}))(defaults);
-  });
-
-  it('should be constructable with custom props', () => {
-    expectToHaveProps(new Detector(customProps))(customProps);
-  });
-
-  it('should have function detect', () => {
-    expect(new Detector()).to.have.property('detect').to.be.a('function');
-  });
-
-  it('should have function compute', () => {
-    expect(new Detector()).to.have.property('compute').to.be.a('function');
-  });
-};
-
+const { detectorTests } = require('./testUtils');
 
 describe('features2d', () => {
+  describe('AGASTDetector', () => {
+    const defaults = {
+      type: 3,
+      nonmaxSuppression: true,
+      threshold: 10
+    };
+    const customProps = {
+      type: 1,
+      nonmaxSuppression: false,
+      threshold: 50
+    };
+    const Detector = features2d.AGASTDetector;
+    detectorTests(defaults, customProps, Detector);
+  });
+
+  describe('AKAZEDetector', () => {
+    const defaults = {
+      diffusivity: 1,
+      nOctaveLayers: 4,
+      nOctaves: 4,
+      threshold: 0.0010000000474974513,
+      descriptorChannels: 3,
+      descriptorSize: 0,
+      descriptorType: 5
+    };
+    const customProps = {
+      diffusivity: 2,
+      nOctaveLayers: 8,
+      nOctaves: 8,
+      threshold: 2 * 0.0010000000474974513,
+      descriptorChannels: 6,
+      descriptorSize: 1,
+      descriptorType: 1
+    };
+    const Detector = features2d.AKAZEDetector;
+    detectorTests(defaults, customProps, Detector);
+  });
+
+  describe('BRISKDetector', () => {
+    const defaults = {
+      patternScale: 1.0,
+      octaves: 3,
+      thresh: 30
+    };
+    const customProps = {
+      patternScale: 2.4,
+      octaves: 6,
+      thresh: 60
+    };
+    const Detector = features2d.BRISKDetector;
+    detectorTests(defaults, customProps, Detector);
+  });
+
+  describe('FASTDetector', () => {
+    const defaults = {
+      type: 2,
+      nonmaxSuppression: true,
+      threshold: 10
+    };
+    const customProps = {
+      type: 1,
+      nonmaxSuppression: false,
+      threshold: 20
+    };
+    const Detector = features2d.FASTDetector;
+    detectorTests(defaults, customProps, Detector);
+  });
+
   describe('GFTTDetector', () => {
     const defaults = {
       k: 0.04,
@@ -49,6 +88,54 @@ describe('features2d', () => {
       maxCorners: 2000
     };
     const Detector = features2d.GFTTDetector;
+    detectorTests(defaults, customProps, Detector);
+  });
+
+  describe('KAZEDetector', () => {
+    const defaults = {
+      diffusivity: 1,
+      nOctaveLayers: 4,
+      nOctaves: 4,
+      threshold: 0.0010000000474974513,
+      upright: false,
+      extended: false
+    };
+    const customProps = {
+      diffusivity: 2,
+      nOctaveLayers: 8,
+      nOctaves: 8,
+      threshold: 2 * 0.0010000000474974513,
+      upright: true,
+      extended: true
+    };
+    const Detector = features2d.KAZEDetector;
+    detectorTests(defaults, customProps, Detector);
+  });
+
+  describe('MSERDetector', () => {
+    const defaults = {
+      edgeBlurSize: 5,
+      minMargin: 0.003,
+      areaThreshold: 1.01,
+      maxEvolution: 200,
+      minDiversity: 0.2,
+      maxVariation: 0.25,
+      maxArea: 14400,
+      minArea: 60,
+      delta: 5
+    };
+    const customProps = {
+      edgeBlurSize: 10,
+      minMargin: 0.006,
+      areaThreshold: 2.02,
+      maxEvolution: 400,
+      minDiversity: 0.4,
+      maxVariation: 0.75,
+      maxArea: 28800,
+      minArea: 120,
+      delta: 10
+    };
+    const Detector = features2d.MSERDetector;
     detectorTests(defaults, customProps, Detector);
   });
 

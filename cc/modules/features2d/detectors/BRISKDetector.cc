@@ -11,9 +11,9 @@ NAN_MODULE_INIT(BRISKDetector::Init) {
 	ctor->SetClassName(Nan::New("BRISKDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 	
-	//Nan::SetAccessor(instanceTemplate, Nan::New("thresh").ToLocalChecked(), BRISKDetector::GetThresh);
-	//Nan::SetAccessor(instanceTemplate, Nan::New("octaves").ToLocalChecked(), BRISKDetector::GetOctaves);
-	//Nan::SetAccessor(instanceTemplate, Nan::New("patternScale").ToLocalChecked(), BRISKDetector::GetPatternScale);
+	Nan::SetAccessor(instanceTemplate, Nan::New("thresh").ToLocalChecked(), BRISKDetector::GetThresh);
+	Nan::SetAccessor(instanceTemplate, Nan::New("octaves").ToLocalChecked(), BRISKDetector::GetOctaves);
+	Nan::SetAccessor(instanceTemplate, Nan::New("patternScale").ToLocalChecked(), BRISKDetector::GetPatternScale);
 
   target->Set(Nan::New("BRISKDetector").ToLocalChecked(), ctor->GetFunction());
 };
@@ -23,18 +23,15 @@ NAN_METHOD(BRISKDetector::New) {
 		return Nan::ThrowError("BRISKDetector::New expected new key word");
 	}
 
-	int thresh = 30; 
-	int octaves = 3;
-	float patternScale = 1.0f;
-
-	if (info[0]->IsObject()) {
-		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_GET_CHECKED_PROP_IFDEF(args, thresh, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, octaves, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, patternScale, IsNumber, NumberValue)
-	}
 	BRISKDetector* self = new BRISKDetector();
+	if (info[0]->IsObject()) {
+		v8::Local<v8::Object> args = info[0]->ToObject();	
+		FF_GET_CHECKED_PROP_IFDEF(args, self->thresh, thresh, IsInt32, Int32Value)
+		FF_GET_CHECKED_PROP_IFDEF(args, self->octaves, octaves, IsInt32, Int32Value)
+		FF_GET_CHECKED_PROP_IFDEF(args, self->patternScale, patternScale, IsNumber, NumberValue)
+	}
+	
 	self->Wrap(info.Holder());
-	self->detector = cv::BRISK::create(thresh, octaves, patternScale);
+	self->detector = cv::BRISK::create(self->thresh, self->octaves, (float)self->patternScale);
   info.GetReturnValue().Set(info.Holder());
 }

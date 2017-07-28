@@ -18,17 +18,6 @@ NAN_MODULE_INIT(GFTTDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("useHarrisDetector").ToLocalChecked(), GFTTDetector::GetUseHarrisDetector);
 	Nan::SetAccessor(instanceTemplate, Nan::New("k").ToLocalChecked(), GFTTDetector::GetK);
 
-
-
-/*
-	//BRISK, MSER, FAST, AGAST, AKAZE, KAZE
-
-	//cv::FastFeatureDetector::create()
-	//cv::AgastFeatureDetector::cre
-		//cv::BRISK::create
-		//cv::FastFeatureDetector::create
-		*/
-
   target->Set(Nan::New("GFTTDetector").ToLocalChecked(), ctor->GetFunction());
 };
 
@@ -46,12 +35,12 @@ NAN_METHOD(GFTTDetector::New) {
 
 	if (info[0]->IsObject()) {
 		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_GET_CHECKED_PROP_IFDEF(args, maxCorners, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, qualityLevel, IsNumber, NumberValue)
-		FF_GET_CHECKED_PROP_IFDEF(args, minDistance, IsNumber, NumberValue)
-		FF_GET_CHECKED_PROP_IFDEF(args, blockSize, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, useHarrisDetector, IsBoolean, BooleanValue)
-		FF_GET_CHECKED_PROP_IFDEF(args, k, IsNumber, NumberValue)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, maxCorners, IsInt32, Int32Value)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, qualityLevel, IsNumber, NumberValue)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, minDistance, IsNumber, NumberValue)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, blockSize, IsInt32, Int32Value)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, useHarrisDetector, IsBoolean, BooleanValue)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, k, IsNumber, NumberValue)
 	}
 	GFTTDetector* self = new GFTTDetector();
 	self->Wrap(info.Holder());

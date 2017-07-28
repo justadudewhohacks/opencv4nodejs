@@ -41,15 +41,15 @@ NAN_METHOD(ORBDetector::New) {
 
 	if (info[0]->IsObject()) {
 		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_GET_CHECKED_PROP_IFDEF(args, nfeatures, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, scaleFactor, IsNumber, NumberValue)
-		FF_GET_CHECKED_PROP_IFDEF(args, nlevels, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, edgeThreshold, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, firstLevel, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, WTA_K, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, scoreType, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, patchSize, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, fastThreshold, IsInt32, Int32Value)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, nfeatures, IsInt32, Int32Value)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, scaleFactor, IsNumber, NumberValue)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, nlevels, IsInt32, Int32Value)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, edgeThreshold, IsInt32, Int32Value)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, firstLevel, IsInt32, Int32Value)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, WTA_K, IsInt32, Int32Value)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, scoreType, IsInt32, Int32Value)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, patchSize, IsInt32, Int32Value)
+		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, fastThreshold, IsInt32, Int32Value)
 	}
 
 	ORBDetector* self = new ORBDetector();

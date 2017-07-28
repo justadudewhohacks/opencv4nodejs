@@ -1,9 +1,9 @@
 #include <nan.h>
-#include "FeatureDetector.h"
+#include "../FeatureDetector.h"
 #include "macros.h"
 
-#ifndef FF_GFTTDETECTOR_H_
-#define FF_GFTTDETECTOR_H_
+#ifndef __FF_GFTTDETECTOR_H__
+#define __FF_GFTTDETECTOR_H__
 
 class GFTTDetector : public FeatureDetector {
 public:

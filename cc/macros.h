@@ -52,18 +52,20 @@
 #define FF_MAT_TO_JS_ARR(data, rows, cols)										\
 	v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(rows);	\
 
-#define FF_GET_CHECKED_PROP_IFDEF(obj, prop, assertType, castType)		\
-	if (obj->HasOwnProperty(FF_V8STRING(#prop))) {											\
-		if (!FF_GET_JS_PROP(obj, prop)->assertType()) {										\
-			return Nan::ThrowError(Nan::New(																\
-				"Invalid type for " + std::string(#prop) + " :"								\
-				+ FF_GET_JS_PROP_STRING(obj, prop)														\
-				+ ", expected: " + #assertType																\
-			).ToLocalChecked());																						\
-		}																																	\
-		prop = FF_GET_JS_PROP(obj, prop)->castType();											\
+#define FF_GET_CHECKED_PROP_IFDEF(obj, var, prop, assertType, castType)	\
+	if (obj->HasOwnProperty(FF_V8STRING(#prop))) {												\
+		if (!FF_GET_JS_PROP(obj, prop)->assertType()) {											\
+			return Nan::ThrowError(Nan::New(																	\
+				"Invalid type for " + std::string(#prop) + " :"									\
+				+ FF_GET_JS_PROP_STRING(obj, prop)															\
+				+ ", expected: " + #assertType																	\
+			).ToLocalChecked());																							\
+		}																																		\
+		var = FF_GET_JS_PROP(obj, prop)->castType();												\
 	}
 
+#define FF_DESTRUCTURE_CHECKED_PROP_IFDEF(obj, prop, assertType, castType)	\
+	FF_GET_CHECKED_PROP_IFDEF(obj, prop, prop, assertType, castType)
 
 namespace FF {
 	static inline v8::Local<v8::Array> matrixdToJsArray(Eigen::MatrixXd vec) {

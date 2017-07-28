@@ -1,9 +1,9 @@
 #include <nan.h>
-#include "FeatureDetector.h"
+#include "../FeatureDetector.h"
 #include "macros.h"
 
-#ifndef FF_ORBDETECTOR_H_
-#define FF_ORBDETECTOR_H_
+#ifndef __FF_ORBDETECTOR_H__
+#define __FF_ORBDETECTOR_H__
 
 class ORBDetector : public FeatureDetector {
 public:
