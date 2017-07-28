@@ -43,7 +43,7 @@ NAN_METHOD(Mat::New) {
 		}
 	
 		cv::Mat mat = cv::Mat(rowArray->Length(), numCols, type);
-		FF::fillMatDataFromJsArray(mat, rowArray);
+		FF::fillMatDataFromJsArray(mat, rowArray, type);
     self->setNativeProps(mat);
   }
   self->Wrap(info.Holder());

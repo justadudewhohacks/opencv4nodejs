@@ -26,9 +26,9 @@ NAN_METHOD(BRISKDetector::New) {
 	BRISKDetector* self = new BRISKDetector();
 	if (info[0]->IsObject()) {
 		v8::Local<v8::Object> args = info[0]->ToObject();	
-		FF_GET_CHECKED_PROP_IFDEF(args, self->thresh, thresh, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->octaves, octaves, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->patternScale, patternScale, IsNumber, NumberValue)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->thresh, thresh, IsInt32, Int32Value)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->octaves, octaves, IsInt32, Int32Value)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->patternScale, patternScale, IsNumber, NumberValue)
 	}
 	
 	self->Wrap(info.Holder());

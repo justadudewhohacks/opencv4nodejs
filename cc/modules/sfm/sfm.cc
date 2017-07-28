@@ -101,13 +101,13 @@ NAN_METHOD(Sfm::TheiaReconstruction) {
 	// two view geometry graph from relative poses
 	for (uint i = 0; i < jsRelativePoses->Length(); ++i) {
 		v8::Local<v8::Object> jsRelativePose = Nan::To<v8::Object>(jsRelativePoses->Get(i)).ToLocalChecked();
-		theia::ViewId viewIdFrom = pReconst->ViewIdFromName("view_" + std::to_string(FF_GET_JS_PROP_INT(jsRelativePose, imgFromId)));
-		theia::ViewId viewIdTo = pReconst->ViewIdFromName("view_" + std::to_string(FF_GET_JS_PROP_INT(jsRelativePose, imgToId)));
-		RelativePose* relativePose = Nan::ObjectWrap::Unwrap<RelativePose>(FF_GET_JS_PROP_OBJECT(jsRelativePose, relativePose));
+		theia::ViewId viewIdFrom = pReconst->ViewIdFromName("view_" + std::to_string(FF_GET_JSPROP_INT(jsRelativePose, imgFromId)));
+		theia::ViewId viewIdTo = pReconst->ViewIdFromName("view_" + std::to_string(FF_GET_JSPROP_INT(jsRelativePose, imgToId)));
+		RelativePose* relativePose = Nan::ObjectWrap::Unwrap<RelativePose>(FF_GET_JSPROP_OBJECT(jsRelativePose, relativePose));
 		theia::TwoViewInfo twoViewInfo;
 		twoViewInfo.focal_length_1 = pReconst->MutableView(viewIdFrom)->MutableCamera()->FocalLength();
 		twoViewInfo.focal_length_2 = pReconst->MutableView(viewIdTo)->MutableCamera()->FocalLength();
-		twoViewInfo.num_verified_matches = FF_GET_JS_PROP_INT(jsRelativePose, numMatches);
+		twoViewInfo.num_verified_matches = FF_GET_JSPROP_INT(jsRelativePose, numMatches);
 		twoViewInfo.position_2 = relativePose->relativePose.position;
 		twoViewInfo.rotation_2 = relativePose->rotationAsAngleAxis;
 		pViewGraph->AddEdge(viewIdFrom, viewIdTo, twoViewInfo);

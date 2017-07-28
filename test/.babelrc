@@ -1,7 +1,16 @@
 {
-  "presets": ["es2017", "stage-0"],
+  "presets": ["es2015", "es2017", "stage-0"],
   "plugins": [
     "transform-async-to-generator",
-    "transform-object-rest-spread"
+    "transform-object-rest-spread",
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "dut": "../",
+          "utils": "./utils"
+        }
+      }
+    ]
   ]
 }

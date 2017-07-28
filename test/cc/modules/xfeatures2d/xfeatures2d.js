@@ -1,5 +1,5 @@
-const { xfeatures2d } = require('../../../../');
-const { detectorTests } = require('../features2d/testUtils');
+import { xfeatures2d } from 'dut';
+import { detectorTests } from 'utils';
 
 describe('xfeatures2d', () => {
   describe('SIFTDetector', () => {

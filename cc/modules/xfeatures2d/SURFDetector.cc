@@ -33,11 +33,11 @@ NAN_METHOD(SURFDetector::New) {
 
 	if (info[0]->IsObject()) {
 		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, hessianThreshold, IsNumber, NumberValue)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, nOctaves, IsInt32, Int32Value)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, nOctaveLayers, IsInt32, Int32Value)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, extended, IsBoolean, BooleanValue)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, upright, IsBoolean, BooleanValue)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, hessianThreshold, IsNumber, NumberValue)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nOctaves, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nOctaveLayers, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, extended, IsBoolean, BooleanValue)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, upright, IsBoolean, BooleanValue)
 	}
 
 	SURFDetector* self = new SURFDetector();

@@ -35,12 +35,12 @@ NAN_METHOD(KAZEDetector::New) {
 
 	if (info[0]->IsObject()) {
 		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, extended, IsBoolean, BooleanValue)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, upright, IsBoolean, BooleanValue)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, threshold, IsNumber, NumberValue)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, nOctaves, IsInt32, Int32Value)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, nOctaveLayers, IsInt32, Int32Value)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, diffusivity, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, extended, IsBoolean, BooleanValue)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, upright, IsBoolean, BooleanValue)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, threshold, IsNumber, NumberValue)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nOctaves, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nOctaveLayers, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, diffusivity, IsInt32, Int32Value)
 	}
 
 	KAZEDetector* self = new KAZEDetector();

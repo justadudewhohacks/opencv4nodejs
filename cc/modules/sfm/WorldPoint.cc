@@ -22,10 +22,10 @@ NAN_METHOD(WorldPoint::New) {
 		WorldPoint *worldPoint = new WorldPoint();
 		v8::Local<v8::Object> jsonWorldPoint = info[0]->ToObject();
 		worldPoint->setNativeProps(
-			FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JS_PROP(jsonWorldPoint, point))),
-			FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JS_PROP(jsonWorldPoint, color))),
-			FF_GET_JS_PROP_INT(jsonWorldPoint, numObservations),
-			FF_GET_JS_PROP(jsonWorldPoint, isEstimated)->BooleanValue()
+			FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JSPROP(jsonWorldPoint, point))),
+			FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JSPROP(jsonWorldPoint, color))),
+			FF_GET_JSPROP_INT(jsonWorldPoint, numObservations),
+			FF_GET_JSPROP(jsonWorldPoint, isEstimated)->BooleanValue()
 		);
 		worldPoint->Wrap(info.Holder());
 	}

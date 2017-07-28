@@ -1,10 +1,7 @@
-const { assert, expect } = require('chai');
+import { expect } from 'chai';
+import { assertPropsWithValue } from './testUtils';
 
-const assertPropsWithValue = detector => (props) => {
-  Object.keys(props).forEach(key =>
-    assert(props[key] === detector[key], `${key} - expected: ${props[key]}, have: ${detector[key]}`)
-  );
-};
+// TODO test return values of compute, detect
 
 const detectorTests = (defaults, customProps, Detector) => {
   it('should use default values for empty args', () => {
@@ -29,6 +26,5 @@ const detectorTests = (defaults, customProps, Detector) => {
 };
 
 module.exports = {
-  assertPropsWithValue,
   detectorTests
 };

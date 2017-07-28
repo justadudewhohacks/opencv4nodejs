@@ -29,9 +29,9 @@ NAN_METHOD(FASTDetector::New) {
 
 	if (info[0]->IsObject()) {
 		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, threshold, IsInt32, Int32Value)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, nonmaxSuppression, IsBoolean, BooleanValue)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, type, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, threshold, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nonmaxSuppression, IsBoolean, BooleanValue)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, type, IsInt32, Int32Value)
 	}
 	FASTDetector* self = new FASTDetector();
 	self->Wrap(info.Holder());

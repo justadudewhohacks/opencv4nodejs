@@ -30,13 +30,13 @@ NAN_METHOD(KeyPoint::New) {
     keyPoint->setNativeProps(
       (uint)Nan::Get(jsKp, Nan::New("localId").ToLocalChecked()).ToLocalChecked()->NumberValue(),
       cv::KeyPoint(
-				FF_GET_JS_PROP_FLOAT(jsKp, x),
-				FF_GET_JS_PROP_FLOAT(jsKp, y),
-				FF_GET_JS_PROP_FLOAT(jsKp, size),
-				FF_GET_JS_PROP_FLOAT(jsKp, angle),
-				FF_GET_JS_PROP_FLOAT(jsKp, response),
-				FF_GET_JS_PROP_INT(jsKp, octave),
-				FF_GET_JS_PROP_INT(jsKp, classId)
+				FF_GET_JSPROP_FLOAT(jsKp, x),
+				FF_GET_JSPROP_FLOAT(jsKp, y),
+				FF_GET_JSPROP_FLOAT(jsKp, size),
+				FF_GET_JSPROP_FLOAT(jsKp, angle),
+				FF_GET_JSPROP_FLOAT(jsKp, response),
+				FF_GET_JSPROP_INT(jsKp, octave),
+				FF_GET_JSPROP_INT(jsKp, classId)
       )
     );
     keyPoint->Wrap(info.Holder());

@@ -37,13 +37,13 @@ NAN_METHOD(AKAZEDetector::New) {
 
 	if (info[0]->IsObject()) {
 		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, descriptorType, IsInt32, Int32Value)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, descriptorSize, IsInt32, Int32Value)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, descriptorChannels, IsInt32, Int32Value)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, threshold, IsNumber, NumberValue)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, nOctaves, IsInt32, Int32Value)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, nOctaveLayers, IsInt32, Int32Value)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, diffusivity, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, descriptorType, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, descriptorSize, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, descriptorChannels, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, threshold, IsNumber, NumberValue)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nOctaves, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nOctaveLayers, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, diffusivity, IsInt32, Int32Value)
 	}
 
 	AKAZEDetector* self = new AKAZEDetector();

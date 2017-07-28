@@ -25,13 +25,13 @@ NAN_METHOD(Camera::New) {
 		Camera *camera = new Camera();
 		v8::Local<v8::Object> jsonCamera = info[0]->ToObject();
 		camera->setNativeProps(
-			FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JS_PROP(jsonCamera, pos))),
-			FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JS_PROP(jsonCamera, rot))),
-			FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JS_PROP(jsonCamera, principalPoint))),
-			FF_GET_JS_PROP_DOUBLE(jsonCamera, focalLength),
-			FF_GET_JS_PROP_INT(jsonCamera, imgWidth),
-			FF_GET_JS_PROP_INT(jsonCamera, imgHeight),
-			FF_GET_JS_PROP(jsonCamera, isEstimated)->BooleanValue()
+			FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JSPROP(jsonCamera, pos))),
+			FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JSPROP(jsonCamera, rot))),
+			FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JSPROP(jsonCamera, principalPoint))),
+			FF_GET_JSPROP_DOUBLE(jsonCamera, focalLength),
+			FF_GET_JSPROP_INT(jsonCamera, imgWidth),
+			FF_GET_JSPROP_INT(jsonCamera, imgHeight),
+			FF_GET_JSPROP(jsonCamera, isEstimated)->BooleanValue()
 		);
 		camera->Wrap(info.Holder());
 	}

@@ -1,5 +1,5 @@
-const { features2d } = require('../../../../');
-const { detectorTests } = require('./testUtils');
+import { features2d } from 'dut';
+import { detectorTests } from 'utils';
 
 describe('features2d', () => {
   describe('AGASTDetector', () => {

@@ -4,8 +4,8 @@
 #ifndef FF_MATTYPES_H_
 #define FF_MATTYPES_H_
 
-#define FF_TYPE(C) \
-  matTypesModule->Set(Nan::New<v8::String>(#C).ToLocalChecked(), Nan::New<v8::Integer>(C));
+#define FF_TYPE(CONST) \
+  matTypesModule->Set(Nan::New<v8::String>(#CONST).ToLocalChecked(), Nan::New<v8::Integer>(CONST));
 
 static void initMatTypes(v8::Local<v8::Object> matTypesModule) {
 	FF_TYPE(CV_8U);

@@ -1,5 +1,5 @@
-const { Mat, matTypes } = require('../../../');
-const { assert, expect } = require('chai');
+import { Mat, matTypes } from 'dut';
+import { assert, expect } from 'chai';
 
 const charMax = 127;
 const charMin = -charMax - 1;
@@ -30,15 +30,18 @@ const expectMetaData = mat => (type, cols, rows) => {
 describe('Mat', () => {
   describe('constructor, getData', () => {
     it('should throw column must be an array', () => {
+      let errMsg = '';
       try {
         const matData = [1, 1, 1];
         new Mat(matData, matTypes.CV_8U);
       } catch (err) {
-        assert.include(err.toString(), 'Column should be an array, at column: 0');
+        errMsg = err.toString();
       }
+      assert.include(errMsg, 'Column should be an array, at column: 0');
     });
 
     it('should throw columns must be of uniform length', () => {
+      let errMsg = '';
       try {
         const matData = [
           [1, 0, 0],
@@ -47,11 +50,13 @@ describe('Mat', () => {
         ];
         new Mat(matData, matTypes.CV_8U);
       } catch (err) {
-        assert.include(err.toString(), 'must be of uniform length, at column: 2');
+        errMsg = err.toString();
       }
+      assert.include(errMsg, 'must be of uniform length, at column: 2');
     });
 
     it('should throw invalid matType', () => {
+      let errMsg = '';
       const invalidMatType = -1;
       try {
         const matData = [
@@ -61,8 +66,9 @@ describe('Mat', () => {
         ];
         new Mat(matData, invalidMatType);
       } catch (err) {
-        assert.include(err.toString(), `invalid matType: ${invalidMatType}`);
+        errMsg = err.toString();
       }
+      assert.include(errMsg, `invalid matType: ${invalidMatType}`);
     });
 
     it('should initialize CV_8UC1 with correct data', () => {

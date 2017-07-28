@@ -170,8 +170,8 @@ namespace FF {
 		return rowArray;
 	}
 
-	static void fillMatDataFromJsArray(cv::Mat& mat, v8::Local<v8::Array> rowArray) {
-		switch (mat.type()) {
+	static void fillMatDataFromJsArray(cv::Mat& mat, v8::Local<v8::Array> rowArray, int type) {
+		switch (type) {
 			case CV_8UC1:
 				FF_MAT_FROM_JS_ARRAY(mat, rowArray, matPut<uchar>)
 					break;
@@ -249,6 +249,7 @@ namespace FF {
 				FF_MAT_FROM_JS_ARRAY(mat, rowArray, matPutVec4<double>)
 					break;
 			default:
+				Nan::ThrowError(Nan::New("invalid matType: " + std::to_string(type)).ToLocalChecked());
 					break;
 		}	
 	}

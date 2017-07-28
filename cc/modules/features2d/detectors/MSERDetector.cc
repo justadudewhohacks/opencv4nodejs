@@ -32,15 +32,15 @@ NAN_METHOD(MSERDetector::New) {
 	MSERDetector* self = new MSERDetector();
 	if (info[0]->IsObject()) {
 		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_GET_CHECKED_PROP_IFDEF(args, self->delta, delta, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->minArea, minArea, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->maxArea, maxArea, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->maxVariation, maxVariation, IsNumber, NumberValue)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->minDiversity, minDiversity, IsNumber, NumberValue)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->maxEvolution, maxEvolution, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->areaThreshold, areaThreshold, IsNumber, NumberValue)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->minMargin, minMargin, IsNumber, NumberValue)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->edgeBlurSize, edgeBlurSize, IsInt32, Int32Value)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->delta, delta, IsInt32, Int32Value)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->minArea, minArea, IsInt32, Int32Value)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->maxArea, maxArea, IsInt32, Int32Value)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->maxVariation, maxVariation, IsNumber, NumberValue)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->minDiversity, minDiversity, IsNumber, NumberValue)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->maxEvolution, maxEvolution, IsInt32, Int32Value)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->areaThreshold, areaThreshold, IsNumber, NumberValue)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->minMargin, minMargin, IsNumber, NumberValue)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->edgeBlurSize, edgeBlurSize, IsInt32, Int32Value)
 	}
 	
 	self->Wrap(info.Holder());

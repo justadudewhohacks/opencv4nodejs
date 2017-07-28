@@ -14,31 +14,31 @@
 #define FF_GETTER(clazz, name, value)	\
 	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->value); }
 
-#define FF_GET_JS_PROP(obj, prop) \
+/* unchecked js prop getters */
+
+#define FF_GET_JSPROP(obj, prop) \
 	Nan::Get(obj, FF_V8STRING(#prop)).ToLocalChecked()
 
-#define FF_GET_JS_PROP_NUMBER(obj, prop) \
-	FF_GET_JS_PROP(obj, prop)->NumberValue()
+#define FF_GET_JSPROP_NUMBER(obj, prop) \
+	FF_GET_JSPROP(obj, prop)->NumberValue()
 
-#define FF_GET_JS_PROP_OBJECT(obj, prop) \
-	FF_GET_JS_PROP(obj, prop)->ToObject()
+#define FF_GET_JSPROP_OBJECT(obj, prop) \
+	FF_GET_JSPROP(obj, prop)->ToObject()
 
-#define FF_GET_JS_PROP_FLOAT(obj, prop) \
-	(float)FF_GET_JS_PROP_NUMBER(obj, prop)
+#define FF_GET_JSPROP_FLOAT(obj, prop) \
+	(float)FF_GET_JSPROP_NUMBER(obj, prop)
 
-#define FF_GET_JS_PROP_DOUBLE(obj, prop) \
-	(double)FF_GET_JS_PROP_NUMBER(obj, prop)
+#define FF_GET_JSPROP_DOUBLE(obj, prop) \
+	(double)FF_GET_JSPROP_NUMBER(obj, prop)
 
-#define FF_GET_JS_PROP_INT(obj, prop) \
-	(int)FF_GET_JS_PROP(obj, prop)->IntegerValue()
+#define FF_GET_JSPROP_INT(obj, prop) \
+	(int)FF_GET_JSPROP(obj, prop)->IntegerValue()
 
-#define FF_GET_JS_PROP_UINT(obj, prop) \
-	(uint)FF_GET_JS_PROP(obj, prop)->Uint32Value()
+#define FF_GET_JSPROP_UINT(obj, prop) \
+	(uint)FF_GET_JSPROP(obj, prop)->Uint32Value()
 
-#define FF_GET_JS_PROP_STRING(obj, prop) \
-	FF_JS_VAL_TO_STRING(FF_GET_JS_PROP(obj, prop)->ToString())
-
-
+#define FF_GET_JSPROP_STRING(obj, prop) \
+	FF_JS_VAL_TO_STRING(FF_GET_JSPROP(obj, prop)->ToString())
 
 #define FF_TRY(work)										\
 	try {																	\
@@ -52,22 +52,31 @@
 #define FF_MAT_TO_JS_ARR(data, rows, cols)										\
 	v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(rows);	\
 
-#define FF_GET_CHECKED_PROP_IFDEF(obj, var, prop, assertType, castType)	\
-	if (obj->HasOwnProperty(FF_V8STRING(#prop))) {												\
-		if (!FF_GET_JS_PROP(obj, prop)->assertType()) {											\
-			return Nan::ThrowError(Nan::New(																	\
-				"Invalid type for " + std::string(#prop) + " :"									\
-				+ FF_GET_JS_PROP_STRING(obj, prop)															\
-				+ ", expected: " + #assertType																	\
-			).ToLocalChecked());																							\
-		}																																		\
-		var = FF_GET_JS_PROP(obj, prop)->castType();												\
+#define FF_GET_TYPECHECKED_JSPROP_IFDEF(obj, var, prop, assertType, castType)	\
+	if (obj->HasOwnProperty(FF_V8STRING(#prop))) {															\
+		if (!FF_GET_JSPROP(obj, prop)->assertType()) {														\
+			return Nan::ThrowError(FF_V8STRING(																			\
+				"Invalid type for " + std::string(#prop) + " :"												\
+				+ FF_GET_JSPROP_STRING(obj, prop)																			\
+				+ ", expected: " + #assertType																				\
+			));																																			\
+		}																																					\
+		var = FF_GET_JSPROP(obj, prop)->castType();																\
 	}
 
-#define FF_DESTRUCTURE_CHECKED_PROP_IFDEF(obj, prop, assertType, castType)	\
-	FF_GET_CHECKED_PROP_IFDEF(obj, prop, prop, assertType, castType)
+#define FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(obj, prop, assertType, castType)	\
+	FF_GET_TYPECHECKED_JSPROP_IFDEF(obj, prop, prop, assertType, castType)
 
 namespace FF {
+	/* checked js prop getters */
+
+	static inline v8::Local<v8::Value> getCheckedJsProp(v8::Local<v8::Object> obj, char* prop) {
+		if (!obj->HasOwnProperty(FF_V8STRING(prop))) {
+			Nan::ThrowError(FF_V8STRING("Object has no property: " + std::string(prop)));
+		}
+		return Nan::Get(obj, FF_V8STRING(prop)).ToLocalChecked();
+	}
+
 	static inline v8::Local<v8::Array> matrixdToJsArray(Eigen::MatrixXd vec) {
 		v8::Local<v8::Array> jsVec = Nan::New<v8::Array>(vec.rows());
 		for (int r = 0; r < vec.rows(); r++) {

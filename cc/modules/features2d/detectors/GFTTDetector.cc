@@ -35,12 +35,12 @@ NAN_METHOD(GFTTDetector::New) {
 
 	if (info[0]->IsObject()) {
 		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, maxCorners, IsInt32, Int32Value)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, qualityLevel, IsNumber, NumberValue)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, minDistance, IsNumber, NumberValue)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, blockSize, IsInt32, Int32Value)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, useHarrisDetector, IsBoolean, BooleanValue)
-		FF_DESTRUCTURE_CHECKED_PROP_IFDEF(args, k, IsNumber, NumberValue)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, maxCorners, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, qualityLevel, IsNumber, NumberValue)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, minDistance, IsNumber, NumberValue)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, blockSize, IsInt32, Int32Value)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, useHarrisDetector, IsBoolean, BooleanValue)
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, k, IsNumber, NumberValue)
 	}
 	GFTTDetector* self = new GFTTDetector();
 	self->Wrap(info.Holder());

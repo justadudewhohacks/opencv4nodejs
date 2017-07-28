@@ -27,11 +27,11 @@ NAN_METHOD(SIFTDetector::New) {
 	SIFTDetector* self = new SIFTDetector();
 	if (info[0]->IsObject()) {
 		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_GET_CHECKED_PROP_IFDEF(args, self->nfeatures, nfeatures, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->nOctaveLayers, nOctaveLayers, IsInt32, Int32Value)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->contrastThreshold, contrastThreshold, IsNumber, NumberValue)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->edgeThreshold, edgeThreshold, IsNumber, NumberValue)
-		FF_GET_CHECKED_PROP_IFDEF(args, self->sigma, sigma, IsNumber, NumberValue)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->nfeatures, nfeatures, IsInt32, Int32Value)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->nOctaveLayers, nOctaveLayers, IsInt32, Int32Value)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->contrastThreshold, contrastThreshold, IsNumber, NumberValue)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->edgeThreshold, edgeThreshold, IsNumber, NumberValue)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->sigma, sigma, IsNumber, NumberValue)
 	}
 
 	self->Wrap(info.Holder());

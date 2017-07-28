@@ -22,9 +22,9 @@ NAN_METHOD(RelativePose::New) {
 		RelativePose *relativePose = new RelativePose();
 		v8::Local<v8::Object> jsonRelativePose = info[0]->ToObject();
 		theia::RelativePose rp;
-		rp.position = FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JS_PROP(jsonRelativePose, pos)));
-		rp.rotation = FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JS_PROP(jsonRelativePose, rot)));
-		rp.essential_matrix = FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JS_PROP(jsonRelativePose, essentialMat)));
+		rp.position = FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JSPROP(jsonRelativePose, pos)));
+		rp.rotation = FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JSPROP(jsonRelativePose, rot)));
+		rp.essential_matrix = FF::jsArrayToMatrixd(v8::Local<v8::Array>::Cast(FF_GET_JSPROP(jsonRelativePose, essentialMat)));
 		relativePose->setNativeProps(rp);
 		relativePose->Wrap(info.Holder());
 	}
