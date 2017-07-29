@@ -3,7 +3,7 @@ import { assertPropsWithValue, funcRequiresArgs } from 'utils';
 import { assert } from 'chai';
 
 describe('calib3d', () => {
-  describe.only('findHomography', () => {
+  describe('findHomography', () => {
     funcRequiresArgs(calib3d.findHomography);
 
     it('should throw if point validation fails', () => {

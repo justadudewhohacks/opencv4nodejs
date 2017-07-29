@@ -3,7 +3,7 @@ import { funcRequiresArgs, readTestImage } from 'utils';
 import { expect } from 'chai';
 import { deepEquals, expectMetaData } from './matTestUtils';
 
-describe.only('Mat', () => {
+describe('Mat', () => {
   describe('warpPerspective', () => {
     funcRequiresArgs((() => {
       const mat = new Mat();
