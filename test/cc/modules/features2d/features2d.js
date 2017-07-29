@@ -14,7 +14,7 @@ describe('features2d', () => {
       threshold: 50
     };
     const Detector = features2d.AGASTDetector;
-    detectorTests(defaults, customProps, Detector);
+    detectorTests(defaults, customProps, Detector, false);
   });
 
   describe('AKAZEDetector', () => {
@@ -67,7 +67,7 @@ describe('features2d', () => {
       threshold: 20
     };
     const Detector = features2d.FASTDetector;
-    detectorTests(defaults, customProps, Detector);
+    detectorTests(defaults, customProps, Detector, false);
   });
 
   describe('GFTTDetector', () => {
@@ -88,7 +88,7 @@ describe('features2d', () => {
       maxCorners: 2000
     };
     const Detector = features2d.GFTTDetector;
-    detectorTests(defaults, customProps, Detector);
+    detectorTests(defaults, customProps, Detector, false);
   });
 
   describe('KAZEDetector', () => {
@@ -136,7 +136,7 @@ describe('features2d', () => {
       delta: 10
     };
     const Detector = features2d.MSERDetector;
-    detectorTests(defaults, customProps, Detector);
+    detectorTests(defaults, customProps, Detector, false);
   });
 
   describe('ORBDetector', () => {

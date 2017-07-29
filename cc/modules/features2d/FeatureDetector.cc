@@ -6,11 +6,11 @@ void FeatureDetector::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(FeatureDetector::Detect) {
-	FeatureDetector* self = Nan::ObjectWrap::Unwrap<FeatureDetector>(info[0]->ToObject());
   if (!info[0]->IsObject()) {
-    return Nan::ThrowError("usage: detectKeypointsORB(Mat img)");      
+    return Nan::ThrowError("required argument image");      
   }
-
+	FeatureDetector* self = Nan::ObjectWrap::Unwrap<FeatureDetector>(info.This());
+	// TODO check instanceof Mat
 	cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
 	std::vector<cv::KeyPoint> kps;
 	FF_TRY(self->getDetector()->detect(mat, kps);)
@@ -26,11 +26,10 @@ NAN_METHOD(FeatureDetector::Detect) {
 }
 
 NAN_METHOD(FeatureDetector::Compute) {
-	FeatureDetector* self = Nan::ObjectWrap::Unwrap<FeatureDetector>(info[0]->ToObject());
   if (!info[0]->IsObject() || !info[1]->IsObject()) {
-    return Nan::ThrowError("usage: computeDescriptors(Mat img, KeyPoints[] keyPoints)");      
+    return Nan::ThrowError("required arguments image, keyPoints");      
   }
-
+	FeatureDetector* self = Nan::ObjectWrap::Unwrap<FeatureDetector>(info.This());
 	cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
 	std::vector<cv::KeyPoint> kps = KeyPoint::unwrapJSKeyPointArray(v8::Local<v8::Array>::Cast(info[1]));
 

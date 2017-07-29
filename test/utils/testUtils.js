@@ -1,6 +1,16 @@
 import { assert } from 'chai';
 import { io } from 'dut';
 
+exports.assertError = func => (msg) => {
+  let errMsg = '';
+  try {
+    func();
+  } catch (err) {
+    errMsg = err.toString();
+  }
+  assert.include(errMsg, msg);
+};
+
 exports.assertPropsWithValue = obj => (props) => {
   Object.keys(props).forEach(key =>
     assert(props[key] === obj[key], `${key} - expected: ${props[key]}, have: ${obj[key]}`)
