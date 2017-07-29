@@ -1,5 +1,5 @@
 import { xfeatures2d } from 'dut';
-import { detectorTests } from 'utils';
+import { detectorTests } from '../features2d/detectorTests';
 
 describe('xfeatures2d', () => {
   describe('SIFTDetector', () => {

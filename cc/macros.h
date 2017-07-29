@@ -14,6 +14,9 @@
 #define FF_GETTER(clazz, name, value)	\
 	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->value); }
 
+#define FF_SET_JS_PROP(obj, prop, val) \
+	Nan::Set(obj, FF_V8STRING(#prop), val)
+
 /* unchecked js prop getters */
 
 #define FF_GET_JSPROP(obj, prop) \
@@ -40,13 +43,33 @@
 #define FF_GET_JSPROP_STRING(obj, prop) \
 	FF_JS_VAL_TO_STRING(FF_GET_JSPROP(obj, prop)->ToString())
 
-#define FF_TRY(work)										\
-	try {																	\
-		work																\
-	} catch (std::exception &e) {					\
-		return Nan::ThrowError(e.what());		\
-	} catch (...) {												\
-		return Nan::ThrowError("SEGFAULT");	\
+/* checked js prop getters */
+
+#define FF_GET_JSPROP_REQUIRED(obj, var, prop, castType)																	\
+	if (!obj->HasOwnProperty(FF_V8STRING(#prop))) {																					\
+		return Nan::ThrowError(FF_V8STRING("Object has no property: " + std::string(#prop)));	\
+	}																																												\
+	var = FF_GET_JSPROP(obj, prop)->castType();																																										
+
+#define FF_DESTRUCTURE_JSPROP_REQUIRED(obj, prop, castType)	\
+	FF_GET_JSPROP_REQUIRED(obj, prop, prop, castType)
+
+#define FF_TRY(work)																					\
+	try {																												\
+		work																											\
+	} catch (std::exception &e) {																\
+		return info.GetReturnValue().Set(Nan::Error(e.what()));		\
+	} catch (...) {																							\
+		return info.GetReturnValue().Set(Nan::Error("SEGFAULT"));	\
+	}
+
+#define FF_TRY_CATCH(work)					\
+	try {															\
+		work														\
+	} catch (std::exception &e) {			\
+		Nan::ThrowError(e.what());			\
+	} catch (...) {										\
+		Nan::ThrowError("SEGFAULT");		\
 	}
 
 #define FF_MAT_TO_JS_ARR(data, rows, cols)										\
@@ -68,15 +91,6 @@
 	FF_GET_TYPECHECKED_JSPROP_IFDEF(obj, prop, prop, assertType, castType)
 
 namespace FF {
-	/* checked js prop getters */
-
-	static inline v8::Local<v8::Value> getCheckedJsProp(v8::Local<v8::Object> obj, char* prop) {
-		if (!obj->HasOwnProperty(FF_V8STRING(prop))) {
-			Nan::ThrowError(FF_V8STRING("Object has no property: " + std::string(prop)));
-		}
-		return Nan::Get(obj, FF_V8STRING(prop)).ToLocalChecked();
-	}
-
 	static inline v8::Local<v8::Array> matrixdToJsArray(Eigen::MatrixXd vec) {
 		v8::Local<v8::Array> jsVec = Nan::New<v8::Array>(vec.rows());
 		for (int r = 0; r < vec.rows(); r++) {

@@ -1,14 +1,14 @@
 import { expect } from 'chai';
-import { assertPropsWithValue } from './testUtils';
+import { assertPropsWithValue } from 'utils';
 
 // TODO test return values of compute, detect
 
-const detectorTests = (defaults, customProps, Detector) => {
-  it('should use default values for empty args', () => {
+exports.detectorTests = (defaults, customProps, Detector) => {
+  it('should use default values for no args', () => {
     assertPropsWithValue(new Detector())(defaults);
   });
 
-  it('should use default values for empty object', () => {
+  it('should use default values for empty args', () => {
     assertPropsWithValue(new Detector({}))(defaults);
   });
 
@@ -23,8 +23,4 @@ const detectorTests = (defaults, customProps, Detector) => {
   it('should have function compute', () => {
     expect(new Detector()).to.have.property('compute').to.be.a('function');
   });
-};
-
-module.exports = {
-  detectorTests
 };

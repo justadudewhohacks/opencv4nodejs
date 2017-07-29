@@ -1,6 +1,7 @@
 #include <nan.h>
 #include "../macros.h"
 #include "matTypes.h"
+#include "Size.h"
 #include <opencv2/imgproc.hpp>
 #include <iostream>
 
@@ -12,16 +13,21 @@ public:
   cv::Mat mat;
 
   static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 
 	static FF_GETTER(Mat, GetRows, mat.rows);
 	static FF_GETTER(Mat, GetCols, mat.cols);
 	static FF_GETTER(Mat, GetType, mat.type());
 
-  static NAN_METHOD(New);
 	static NAN_METHOD(GetData);
+
+	/* #IFDEF IMGPROC */
   static NAN_METHOD(Rescale);
   static NAN_METHOD(Resize);
   static NAN_METHOD(ResizeToMax);
+	static NAN_METHOD(WarpPerspective);
+	/* #ENDIF IMGPROC */
+
   static NAN_METHOD(Row);
 
   static Nan::Persistent<v8::FunctionTemplate> Mat::constructor;

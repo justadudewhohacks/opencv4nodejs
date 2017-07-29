@@ -1,5 +1,6 @@
 import { Mat, matTypes } from 'dut';
 import { assert, expect } from 'chai';
+import { deepEquals, expectMetaData } from './matTestUtils';
 
 const charMax = 127;
 const charMin = -charMax - 1;
@@ -17,15 +18,6 @@ const floatMax = 3.4E+38;
 
 const doubleMin = 2.2E-308;
 const doubleMax = 1.79E+308;
-
-// TODO: proper deepEquals
-const deepEquals = (obj0, obj1) => JSON.stringify(obj0) === JSON.stringify(obj1);
-
-const expectMetaData = mat => (type, cols, rows) => {
-  expect(mat).to.have.property('type').equal(type);
-  expect(mat).to.have.property('cols').equal(cols);
-  expect(mat).to.have.property('rows').equal(rows);
-};
 
 describe('Mat', () => {
   describe('constructor, getData', () => {
@@ -435,5 +427,4 @@ describe('Mat', () => {
       expectMetaData(mat)(type, 3, 4);
     });
   });
-
 });

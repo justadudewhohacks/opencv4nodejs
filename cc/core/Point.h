@@ -10,34 +10,29 @@
 class Point : public Nan::ObjectWrap {
 public:
   static NAN_MODULE_INIT(Init);
-
   static NAN_METHOD(New);
 	static NAN_METHOD(NewPoint2);
 	static NAN_METHOD(NewPoint3);
 
-	static std::vector<cv::Point2d> unpackJSPoint2Array(v8::Local<v8::Array> jsPts) {
-		std::vector<cv::Point2d> pts;
+	static void unpackJSPoint2Array(std::vector<cv::Point2d> &pts, v8::Local<v8::Array> jsPts) {
 		for (uint i = 0; i < jsPts->Length(); i++) {
 			v8::Local<v8::Object> obj = Nan::To<v8::Object>(jsPts->Get(i)).ToLocalChecked();
-			pts.push_back(cv::Point2d(
-				FF::getCheckedJsProp(obj, "x")->NumberValue(),
-				FF::getCheckedJsProp(obj, "y")->NumberValue()
-			));
+			double x, y;
+			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, x, NumberValue)
+			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, y, NumberValue)
+			pts.push_back(cv::Point2d(x, y));
 		}
-		return pts;
 	};
 
-	static std::vector<cv::Point3d> unpackJSPoint3Array(v8::Local<v8::Array> jsPts) {
-		std::vector<cv::Point3d> pts;
+	static void unpackJSPoint3Array(std::vector<cv::Point3d> &pts, v8::Local<v8::Array> jsPts) {
 		for (uint i = 0; i < jsPts->Length(); i++) {
 			v8::Local<v8::Object> obj = Nan::To<v8::Object>(jsPts->Get(i)).ToLocalChecked();
-			pts.push_back(cv::Point3d(
-				FF::getCheckedJsProp(obj, "x")->NumberValue(),
-				FF::getCheckedJsProp(obj, "y")->NumberValue(),
-				FF::getCheckedJsProp(obj, "z")->NumberValue()
-			));
+			double x, y, z;
+			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, x, NumberValue)
+			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, y, NumberValue)
+			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, z, NumberValue)
+			pts.push_back(cv::Point3d(x, y, z));
 		}
-		return pts;
 	};
 
 	static Nan::Persistent<v8::FunctionTemplate> Point::constructor;

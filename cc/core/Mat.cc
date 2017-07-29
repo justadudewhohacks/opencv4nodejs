@@ -13,10 +13,16 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("type").ToLocalChecked(), Mat::GetType);
 
 	Nan::SetPrototypeMethod(ctor, "getData", GetData);
+	Nan::SetPrototypeMethod(ctor, "row", Row);
+
+	/* #IFDEF IMGPROC */
   Nan::SetPrototypeMethod(ctor, "rescale", Rescale);
   Nan::SetPrototypeMethod(ctor, "resize", Resize);
   Nan::SetPrototypeMethod(ctor, "resizeToMax", ResizeToMax);
-  Nan::SetPrototypeMethod(ctor, "row", Row);
+	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
+	/* #ENDIF IMGPROC */
+
+	
 
 	v8::Local<v8::Object> matTypesModule = Nan::New<v8::Object>();
   initMatTypes(matTypesModule);
@@ -53,6 +59,8 @@ NAN_METHOD(Mat::New) {
 NAN_METHOD(Mat::GetData) {
 	info.GetReturnValue().Set(FF::matDataToJsArray(Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat));
 }
+
+/* #IFDEC IMGPROC */
 
 NAN_METHOD(Mat::Rescale) {
   if (!info[0]->IsNumber()) {
@@ -103,6 +111,36 @@ NAN_METHOD(Mat::ResizeToMax) {
   );
   info.GetReturnValue().Set(handle);
 }
+
+NAN_METHOD(Mat::WarpPerspective) {
+	if (!info[0]->IsObject()) {
+		// TODO usage messages
+		return Nan::ThrowError(FF_V8STRING("warpPerspective - args object required"));
+	}
+	Mat* self = Nan::ObjectWrap::Unwrap<Mat>(info.This());
+	v8::Local<v8::Object> args = info[0]->ToObject();
+	v8::Local<v8::Object> jsTransformMat;
+	FF_GET_JSPROP_REQUIRED(args, jsTransformMat, transformationMatrix, ToObject);
+	cv::Mat transformationMatrix = Nan::ObjectWrap::Unwrap<Mat>(jsTransformMat)->mat;
+	cv::Size size = cv::Size(self->mat.cols, self->mat.rows); 
+	if (args->HasOwnProperty(FF_V8STRING("size"))) {
+		Nan::ObjectWrap::Unwrap<Size>(FF_GET_JSPROP(args, size)->ToObject())->size;
+	}
+	int flags = cv::INTER_LINEAR;
+	int borderMode = cv::BORDER_CONSTANT;
+	// TODO borderValue
+	const cv::Scalar& borderValue = cv::Scalar();
+
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, flags, IsInt32, Int32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, borderMode, IsInt32, Int32Value);
+
+	v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+	cv::warpPerspective(self->mat, Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat, transformationMatrix, size, flags, borderMode, borderValue);
+
+	info.GetReturnValue().Set(jsMat);
+}
+
+/* #ENDIF IMGPROC */
 
 NAN_METHOD(Mat::Row) {
   if (!info[0]->IsNumber()) {
