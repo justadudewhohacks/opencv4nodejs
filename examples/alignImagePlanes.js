@@ -15,8 +15,7 @@ io.imread('../data/Lenna.png', (err, img) => {
     console.error(err);
     return;
   }
-  console.log(img)
-  console.log(homography)
+
   let warped;
   try {
     warped = img.warpPerspective({
@@ -28,7 +27,6 @@ io.imread('../data/Lenna.png', (err, img) => {
     return;
   }
 
-console.log(warped)
   io.imshow('original image', img);
   io.imshow('warped image', warped);
 });
