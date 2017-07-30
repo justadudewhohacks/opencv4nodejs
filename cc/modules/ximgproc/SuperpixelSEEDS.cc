@@ -15,6 +15,10 @@ NAN_MODULE_INIT(SuperpixelSEEDS::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("prior").ToLocalChecked(), SuperpixelSEEDS::GetPrior);
 	Nan::SetAccessor(instanceTemplate, Nan::New("histogramBins").ToLocalChecked(), SuperpixelSEEDS::GetHistogramBins);
 	Nan::SetAccessor(instanceTemplate, Nan::New("doubleStep").ToLocalChecked(), SuperpixelSEEDS::GetDoubleStep);
+	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), SuperpixelSEEDS::GetNumCalculatedSuperpixels);
+	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), SuperpixelSEEDS::GetLabels);
+
+	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelSEEDS::Iterate);
 
   target->Set(Nan::New("SuperpixelSEEDS").ToLocalChecked(), ctor->GetFunction());
 };
@@ -39,6 +43,9 @@ NAN_METHOD(SuperpixelSEEDS::New) {
 		return Nan::ThrowError(FF_V8STRING("SuperpixelSEEDS::New - empty image"));
 	}
 
+	Mat* _jsLabels = Nan::ObjectWrap::Unwrap<Mat>(Nan::NewInstance(Nan::New(Mat::constructor)->GetFunction()).ToLocalChecked());
+	self->jsLabels.Reset(_jsLabels->persistent());
+
 	FF_GET_TYPECHECKED_JSPROP_REQUIRED(args, self->numSuperpixels, numSuperpixels, IsInt32, Int32Value);
 	FF_GET_TYPECHECKED_JSPROP_REQUIRED(args, self->numLevels, numLevels, IsInt32, Int32Value);
 	FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->prior, prior, IsInt32, Int32Value);
@@ -49,4 +56,15 @@ NAN_METHOD(SuperpixelSEEDS::New) {
 	self->superpixelSeeds = cv::ximgproc::createSuperpixelSEEDS(img->mat.cols, img->mat.rows,
 		img->mat.channels(), self->numSuperpixels, self->numLevels, self->prior, self->histogramBins, self->doubleStep);
   info.GetReturnValue().Set(info.Holder());
+}
+
+NAN_METHOD(SuperpixelSEEDS::Iterate) {
+	int iterations = 4;
+	if (info[0]->IsInt32()) {
+		iterations = info[0]->Int32Value();
+	}
+	SuperpixelSEEDS* self = Nan::ObjectWrap::Unwrap<SuperpixelSEEDS>(info.This());
+	self->superpixelSeeds->iterate(Nan::ObjectWrap::Unwrap<Mat>(Nan::New(self->jsImg))->mat, iterations);
+	self->superpixelSeeds->getLabels(Nan::ObjectWrap::Unwrap<Mat>(Nan::New(self->jsLabels))->mat);
+	self->numCalculatedSuperpixels = self->superpixelSeeds->getNumberOfSuperpixels();
 }
