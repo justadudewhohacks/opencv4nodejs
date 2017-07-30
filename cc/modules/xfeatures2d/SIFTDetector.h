@@ -9,7 +9,7 @@
 class SIFTDetector : public FeatureDetector {
 public:
 	cv::Ptr<cv::xfeatures2d::SIFT> detector;
-	int nfeatures = 0;
+	int nFeatures = 0;
 	int nOctaveLayers = 3;
 	double contrastThreshold = 0.04;
 	double edgeThreshold = 10;
@@ -18,7 +18,7 @@ public:
   static NAN_MODULE_INIT(Init); 
   static NAN_METHOD(New);
 
-	static FF_GETTER(SIFTDetector, GetNFeatures, nfeatures);
+	static FF_GETTER(SIFTDetector, GetNFeatures, nFeatures);
 	static FF_GETTER(SIFTDetector, GeNOctaveLayers, nOctaveLayers);
 	static FF_GETTER(SIFTDetector, GetContrastThreshold, contrastThreshold);
 	static FF_GETTER(SIFTDetector, GetEdgeThreshold, edgeThreshold);

@@ -46,6 +46,8 @@ NAN_METHOD(Calib3d::FindHomography) {
 		Nan::ObjectWrap::Unwrap<Mat>(FF_GET_JSPROP(args, mask)->ToObject())->mat.copyTo(mask);
 	}
 
+	std::cout << srcPoints.size() << std::endl;
+	std::cout << dstPoints.size() << std::endl;
 	cv::Mat homography;
 	FF_TRY_CATCH(homography = cv::findHomography(srcPoints, dstPoints, method, ransacReprojThreshold, mask, maxIters, confidence);)
 	if (tryCatch.HasCaught()) {

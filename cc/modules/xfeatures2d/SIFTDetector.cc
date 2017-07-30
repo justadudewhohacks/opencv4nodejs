@@ -11,7 +11,7 @@ NAN_MODULE_INIT(SIFTDetector::Init) {
   instanceTemplate->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("SIFTDetector").ToLocalChecked());
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("nfeatures").ToLocalChecked(), SIFTDetector::GetNFeatures);
+	Nan::SetAccessor(instanceTemplate, Nan::New("nFeatures").ToLocalChecked(), SIFTDetector::GetNFeatures);
 	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaveLayers").ToLocalChecked(), SIFTDetector::GeNOctaveLayers);
 	Nan::SetAccessor(instanceTemplate, Nan::New("contrastThreshold").ToLocalChecked(), SIFTDetector::GetContrastThreshold);
 	Nan::SetAccessor(instanceTemplate, Nan::New("edgeThreshold").ToLocalChecked(), SIFTDetector::GetEdgeThreshold);
@@ -27,7 +27,7 @@ NAN_METHOD(SIFTDetector::New) {
 	SIFTDetector* self = new SIFTDetector();
 	if (info[0]->IsObject()) {
 		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->nfeatures, nfeatures, IsInt32, Int32Value)
+		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->nFeatures, nFeatures, IsInt32, Int32Value)
 		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->nOctaveLayers, nOctaveLayers, IsInt32, Int32Value)
 		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->contrastThreshold, contrastThreshold, IsNumber, NumberValue)
 		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->edgeThreshold, edgeThreshold, IsNumber, NumberValue)
@@ -35,6 +35,6 @@ NAN_METHOD(SIFTDetector::New) {
 	}
 
 	self->Wrap(info.Holder());
-	self->detector = cv::xfeatures2d::SIFT::create(self->nfeatures, self->nOctaveLayers, self->contrastThreshold, self->edgeThreshold, self->sigma);
+	self->detector = cv::xfeatures2d::SIFT::create(self->nFeatures, self->nOctaveLayers, self->contrastThreshold, self->edgeThreshold, self->sigma);
   info.GetReturnValue().Set(info.Holder());
 }

@@ -2,7 +2,7 @@ import { matTypes, ximgproc } from 'dut';
 import { assertPropsWithValue, funcRequiresArgs, readTestImage } from 'utils';
 import { assert } from 'chai';
 
-describe.only('ximgproc', () => {
+describe('ximgproc', () => {
   let testImg;
 
   before(async () => {

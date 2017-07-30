@@ -25,7 +25,6 @@ void init(v8::Local<v8::Object> target) {
   Features2d::Init(target);
 	XFeatures2d::Init(target);
   Sfm::Init(target);
-
 };
 
 NODE_MODULE(tutorial, init)
