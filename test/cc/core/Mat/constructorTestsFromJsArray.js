@@ -1,26 +1,11 @@
 import { Mat, matTypes } from 'dut';
-import { assert, expect } from 'chai';
-import { deepEquals, expectMetaData } from './matTestUtils';
+import { assert } from 'chai';
+import { assertDataDeepEquals, assertMetaData } from './matTestUtils';
+import { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
+  intMin, floatMin, floatMax, doubleMin, doubleMax } from './typeRanges';
 
-const charMax = 127;
-const charMin = -charMax - 1;
-const ucharMax = (charMax * 2) + 1;
-
-const shortMax = 32767;
-const shortMin = -shortMax - 1;
-const ushortMax = (shortMax * 2) + 1;
-
-const intMax = 2147483647;
-const intMin = -intMax - 1;
-
-const floatMin = 1.8E-38;
-const floatMax = 3.4E+38;
-
-const doubleMin = 2.2E-308;
-const doubleMax = 1.79E+308;
-
-describe('Mat', () => {
-  describe('constructor, getData', () => {
+module.exports = () =>
+  describe('constructor from js array', () => {
     it('should throw column must be an array', () => {
       let errMsg = '';
       try {
@@ -72,8 +57,8 @@ describe('Mat', () => {
         [ucharMax, 0, 0]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_8UC2 with correct data', () => {
@@ -85,8 +70,8 @@ describe('Mat', () => {
         [[ucharMax, 0], [0, 0], [0, 0]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_8UC3 with correct data', () => {
@@ -98,8 +83,8 @@ describe('Mat', () => {
         [[ucharMax, 0, ucharMax], [0, 0, 0], [0, 0, ucharMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_8UC4 with correct data', () => {
@@ -111,8 +96,8 @@ describe('Mat', () => {
         [[ucharMax, 0, ucharMax, 0], [ucharMax, 0, 0, 0], [0, 0, ucharMax, ucharMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_8SC1 with correct data', () => {
@@ -124,8 +109,8 @@ describe('Mat', () => {
         [charMax, charMin, charMin]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_8SC2 with correct data', () => {
@@ -137,8 +122,8 @@ describe('Mat', () => {
         [[charMax, charMin], [charMin, charMin], [charMin, charMin]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_8SC3 with correct data', () => {
@@ -150,8 +135,8 @@ describe('Mat', () => {
         [[charMax, charMin, charMax], [charMin, charMin, charMin], [charMin, charMin, charMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_8SC4 with correct data', () => {
@@ -163,8 +148,8 @@ describe('Mat', () => {
         [[charMax, charMin, charMax, charMin], [charMax, charMin, charMin, charMin], [charMin, charMin, charMax, charMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_16UC1 with correct data', () => {
@@ -176,8 +161,8 @@ describe('Mat', () => {
         [ushortMax, 0, 0]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_16UC2 with correct data', () => {
@@ -189,8 +174,8 @@ describe('Mat', () => {
         [[ushortMax, 0], [0, 0], [0, 0]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_16UC3 with correct data', () => {
@@ -202,8 +187,8 @@ describe('Mat', () => {
         [[ushortMax, 0, ushortMax], [0, 0, 0], [0, 0, ushortMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_16UC4 with correct data', () => {
@@ -215,8 +200,8 @@ describe('Mat', () => {
         [[ushortMax, 0, ushortMax, 0], [ushortMax, 0, 0, 0], [0, 0, ushortMax, ushortMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_16SC1 with correct data', () => {
@@ -228,8 +213,8 @@ describe('Mat', () => {
         [shortMax, shortMin, shortMin]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_16SC2 with correct data', () => {
@@ -241,8 +226,8 @@ describe('Mat', () => {
         [[shortMax, shortMin], [shortMin, shortMin], [shortMin, shortMin]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_16SC3 with correct data', () => {
@@ -254,8 +239,8 @@ describe('Mat', () => {
         [[shortMax, shortMin, shortMax], [shortMin, shortMin, shortMin], [shortMin, shortMin, shortMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_16SC4 with correct data', () => {
@@ -267,8 +252,8 @@ describe('Mat', () => {
         [[shortMax, shortMin, shortMax, shortMin], [shortMax, shortMin, shortMin, shortMin], [shortMin, shortMin, shortMax, shortMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_32SC1 with correct data', () => {
@@ -280,8 +265,8 @@ describe('Mat', () => {
         [intMax, intMin, intMin]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_32SC2 with correct data', () => {
@@ -293,8 +278,8 @@ describe('Mat', () => {
         [[intMax, intMin], [intMin, intMin], [intMin, intMin]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_32SC3 with correct data', () => {
@@ -306,8 +291,8 @@ describe('Mat', () => {
         [[intMax, intMin, intMax], [intMin, intMin, intMin], [intMin, intMin, intMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_32SC4 with correct data', () => {
@@ -319,8 +304,8 @@ describe('Mat', () => {
         [[intMax, intMin, intMax, intMin], [intMax, intMin, intMin, intMin], [intMin, intMin, intMax, intMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_32FC1 with correct data', () => {
@@ -332,8 +317,8 @@ describe('Mat', () => {
         [floatMax, floatMin, floatMin]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(matTypes.CV_64FC1, 3, 4);
+      assertMetaData(mat)(4, 3, matTypes.CV_64FC1);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_32FC2 with correct data', () => {
@@ -345,8 +330,8 @@ describe('Mat', () => {
         [[floatMax, -floatMin], [floatMin, floatMin], [floatMin, floatMin]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(matTypes.CV_64FC2, 3, 4);
+      assertMetaData(mat)(4, 3, matTypes.CV_64FC2);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_32FC3 with correct data', () => {
@@ -358,8 +343,8 @@ describe('Mat', () => {
         [[-floatMax, floatMin, floatMax], [floatMin, -floatMin, -floatMin], [floatMin, floatMin, floatMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(matTypes.CV_64FC3, 3, 4);
+      assertMetaData(mat)(4, 3, matTypes.CV_64FC3);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_32FC4 with correct data', () => {
@@ -371,8 +356,8 @@ describe('Mat', () => {
         [[-floatMax, floatMin, floatMax, floatMin], [floatMax, floatMin, floatMin, -floatMin], [-floatMin, floatMin, floatMax, floatMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(matTypes.CV_64FC4, 3, 4);
+      assertMetaData(mat)(4, 3, matTypes.CV_64FC4);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_64FC1 with correct data', () => {
@@ -384,8 +369,8 @@ describe('Mat', () => {
         [doubleMax, doubleMin, doubleMin]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_64FC2 with correct data', () => {
@@ -397,8 +382,8 @@ describe('Mat', () => {
         [[doubleMax, -doubleMin], [doubleMin, doubleMin], [doubleMin, doubleMin]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_64FC3 with correct data', () => {
@@ -410,8 +395,8 @@ describe('Mat', () => {
         [[-doubleMax, doubleMin, doubleMax], [doubleMin, -doubleMin, -doubleMin], [doubleMin, doubleMin, doubleMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
 
     it('should initialize CV_64FC4 with correct data', () => {
@@ -423,8 +408,7 @@ describe('Mat', () => {
         [[-doubleMax, doubleMin, doubleMax, doubleMin], [doubleMax, doubleMin, doubleMin, -doubleMin], [-doubleMin, doubleMin, doubleMax, doubleMax]]
       ];
       const mat = new Mat(matData, type);
-      expect(deepEquals(matData, mat.getData())).to.be.true;
-      expectMetaData(mat)(type, 3, 4);
+      assertMetaData(mat)(4, 3, type);
+      assertDataDeepEquals(matData, mat.getData());
     });
   });
-});

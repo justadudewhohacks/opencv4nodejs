@@ -1,10 +1,17 @@
-import { expect } from 'chai';
+import { assert } from 'chai';
+import { assertPropsWithValue } from 'utils';
 
 // TODO: proper deepEquals
-exports.deepEquals = (obj0, obj1) => JSON.stringify(obj0) === JSON.stringify(obj1);
+const deepEquals = (obj0, obj1) => JSON.stringify(obj0) === JSON.stringify(obj1);
 
-exports.expectMetaData = mat => (type, cols, rows) => {
-  expect(mat).to.have.property('type').equal(type);
-  expect(mat).to.have.property('cols').equal(cols);
-  expect(mat).to.have.property('rows').equal(rows);
+exports.deepEquals = deepEquals;
+
+exports.assertDataDeepEquals = (data0, data1) => {
+  assert(deepEquals(data0, data1), 'mat data not equal');
+};
+
+exports.assertMetaData = mat => (rows, cols, type) => {
+  assertPropsWithValue(mat)({
+    rows, cols, type
+  });
 };

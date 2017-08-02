@@ -1,9 +1,14 @@
 import { Mat, matTypes } from 'dut';
 import { funcRequiresArgs, readTestImage } from 'utils';
 import { expect } from 'chai';
-import { deepEquals, expectMetaData } from './matTestUtils';
+import { assertMetaData, deepEquals } from './matTestUtils';
+import constructorTestsFromJsArray from './constructorTestsFromJsArray';
+import constructorTestsFromFillVector from './constructorTestsFromFillVector';
 
 describe('Mat', () => {
+  constructorTestsFromJsArray();
+  constructorTestsFromFillVector();
+
   describe('warpPerspective', () => {
     funcRequiresArgs((() => {
       const mat = new Mat();
@@ -22,8 +27,8 @@ describe('Mat', () => {
       );
 
       const warped = img.warpPerspective({ transformationMatrix });
+      assertMetaData(warped)(img.rows, img.cols, img.type);
       expect(deepEquals(warped.getData(), img.getData())).to.be.false;
-      expectMetaData(warped)(img.type, img.cols, img.rows);
     });
   });
 });
