@@ -15,10 +15,20 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "getData", GetData);
 	Nan::SetPrototypeMethod(ctor, "row", Row);
 
+	Nan::SetPrototypeMethod(ctor, "add", Add);
+	Nan::SetPrototypeMethod(ctor, "sub", Sub);
+	Nan::SetPrototypeMethod(ctor, "and", And);
+	Nan::SetPrototypeMethod(ctor, "or", Or);
+	Nan::SetPrototypeMethod(ctor, "mul", Mul);
+	Nan::SetPrototypeMethod(ctor, "div", Div);
+
 	/* #IFDEF IMGPROC */
   Nan::SetPrototypeMethod(ctor, "rescale", Rescale);
   Nan::SetPrototypeMethod(ctor, "resize", Resize);
-  Nan::SetPrototypeMethod(ctor, "resizeToMax", ResizeToMax);
+  Nan::SetPrototypeMethod(ctor, "resizeToMax", ResizeToMax); 
+	Nan::SetPrototypeMethod(ctor, "cvtColor", CvtColor);
+	Nan::SetPrototypeMethod(ctor, "bgrToGray", BgrToGray);
+	Nan::SetPrototypeMethod(ctor, "threshold", Threshold);
 	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
 	/* #ENDIF IMGPROC */
 
@@ -28,6 +38,7 @@ NAN_MODULE_INIT(Mat::Init) {
   target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
 };
 
+// TODO type undefined throw error 
 NAN_METHOD(Mat::New) {
 	Mat* self = new Mat();
 	/* data, type */
@@ -82,6 +93,30 @@ NAN_METHOD(Mat::GetData) {
 	info.GetReturnValue().Set(rowArray);
 }
 
+NAN_METHOD(Mat::Add) {
+	FF_MAT_OPERATOR(Mat::Add, +, false);
+}
+
+NAN_METHOD(Mat::Sub) {
+	FF_MAT_OPERATOR(Mat::Sub, -, false);
+}
+
+NAN_METHOD(Mat::And) {
+	FF_MAT_OPERATOR(Mat::And, &, false);
+}
+
+NAN_METHOD(Mat::Or) {
+	FF_MAT_OPERATOR(Mat::Or, |, false);
+}
+
+NAN_METHOD(Mat::Mul) {
+	FF_MAT_OPERATOR_WITH_SCALAR(Mat::Mul, *);
+}
+
+NAN_METHOD(Mat::Div) {
+	FF_MAT_OPERATOR_WITH_SCALAR(Mat::Div, / );
+}
+
 /* #IFDEC IMGPROC */
 
 NAN_METHOD(Mat::Rescale) {
@@ -134,6 +169,58 @@ NAN_METHOD(Mat::ResizeToMax) {
   info.GetReturnValue().Set(handle);
 }
 
+NAN_METHOD(Mat::Threshold) {
+	if (!info[0]->IsObject()) {
+		// TODO usage messages
+		return Nan::ThrowError(FF_V8STRING("Mat::Threshold - args object required"));
+	}
+	v8::Local<v8::Object> args = info[0]->ToObject();
+	double thresh, maxVal;
+	int type;
+	FF_DESTRUCTURE_JSPROP_REQUIRED(args, thresh, NumberValue);
+	FF_DESTRUCTURE_JSPROP_REQUIRED(args, maxVal, NumberValue);
+	FF_DESTRUCTURE_JSPROP_REQUIRED(args, type, Int32Value);
+
+	v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+	cv::threshold(
+		Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat,
+		Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat,
+		thresh,
+		maxVal,
+		type
+	);
+	info.GetReturnValue().Set(jsMat);
+}
+
+NAN_METHOD(Mat::CvtColor) {
+	if (!info[0]->IsObject()) {
+		// TODO usage messages
+		return Nan::ThrowError(FF_V8STRING("Mat::Threshold - args object required"));
+	}
+	v8::Local<v8::Object> args = info[0]->ToObject();
+	int code, dstCn;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, code, IsInt32, Int32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, dstCn, IsInt32, Int32Value)
+		v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+	cv::cvtColor(
+		Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat,
+		Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat,
+		code,
+		dstCn
+	);
+	info.GetReturnValue().Set(jsMat);
+}
+
+NAN_METHOD(Mat::BgrToGray) {
+	v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+	cv::cvtColor(
+		Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat, 
+		Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat,
+		CV_BGR2GRAY
+	);
+
+	info.GetReturnValue().Set(jsMat);
+}
 NAN_METHOD(Mat::WarpPerspective) {
 	if (!info[0]->IsObject()) {
 		// TODO usage messages

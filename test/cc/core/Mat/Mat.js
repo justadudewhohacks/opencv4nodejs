@@ -4,10 +4,13 @@ import { expect } from 'chai';
 import { assertMetaData, deepEquals } from './matTestUtils';
 import constructorTestsFromJsArray from './constructorTestsFromJsArray';
 import constructorTestsFromFillVector from './constructorTestsFromFillVector';
+import operatorTests from './operatorTests';
+
 
 describe('Mat', () => {
   constructorTestsFromJsArray();
   constructorTestsFromFillVector();
+  operatorTests();
 
   describe('warpPerspective', () => {
     funcRequiresArgs((() => {
@@ -32,3 +35,4 @@ describe('Mat', () => {
     });
   });
 });
+

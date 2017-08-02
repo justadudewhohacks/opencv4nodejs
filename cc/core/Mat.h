@@ -20,15 +20,25 @@ public:
 	static FF_GETTER(Mat, GetType, mat.type());
 
 	static NAN_METHOD(GetData);
+	static NAN_METHOD(Row);
+
+	static NAN_METHOD(Add);
+	static NAN_METHOD(Sub);
+	static NAN_METHOD(And);
+	static NAN_METHOD(Or);
+	static NAN_METHOD(Mul);
+	static NAN_METHOD(Div);
 
 	/* #IFDEF IMGPROC */
   static NAN_METHOD(Rescale);
   static NAN_METHOD(Resize);
   static NAN_METHOD(ResizeToMax);
+	static NAN_METHOD(Threshold);
+	static NAN_METHOD(CvtColor);
+	static NAN_METHOD(BgrToGray);
 	static NAN_METHOD(WarpPerspective);
 	/* #ENDIF IMGPROC */
 
-  static NAN_METHOD(Row);
 
   static Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
 
