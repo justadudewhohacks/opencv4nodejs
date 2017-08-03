@@ -10,7 +10,6 @@
 #include "modules/ximgproc/ximgproc.h"
 #include "modules/features2d/features2d.h"
 #include "modules/xfeatures2d/xfeatures2d.h"
-#include "modules/sfm/sfm.h"
 
 // TODO core index
 void init(v8::Local<v8::Object> target) {
@@ -24,7 +23,6 @@ void init(v8::Local<v8::Object> target) {
 	XImgproc::Init(target);
   Features2d::Init(target);
 	XFeatures2d::Init(target);
-  Sfm::Init(target);
 };
 
-NODE_MODULE(tutorial, init)
+NODE_MODULE(opencv4nodejs, init)

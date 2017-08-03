@@ -1,5 +1,4 @@
 #include "matUtils.h"
-#include <Eigen/Core>
 #include <iostream>
 
 #ifndef FF_MACROS_H_
@@ -115,33 +114,5 @@
 		return Nan::ThrowError(FF_V8STRING(std::string(methodName) + " - args object required"));	\
 	}																																														\
 	v8::Local<v8::Object> args = info[0]->ToObject()
-
-// TODO remove with sfm
-namespace FF {
-	static inline v8::Local<v8::Array> matrixdToJsArray(Eigen::MatrixXd vec) {
-		v8::Local<v8::Array> jsVec = Nan::New<v8::Array>(vec.rows());
-		for (int r = 0; r < vec.rows(); r++) {
-			v8::Local<v8::Array> colArray = Nan::New<v8::Array>(vec.cols());
-			for (int c = 0; c < vec.cols(); c++) {
-				colArray->Set(c, Nan::New(vec(r, c)));
-			}
-			jsVec->Set(r, colArray);
-		}
-		return jsVec;
-	}
-
-	static inline Eigen::MatrixXd jsArrayToMatrixd(v8::Local<v8::Array> jsVec) {
-		int rows = jsVec->Length(),
-				cols = v8::Local<v8::Array>::Cast(jsVec->Get(0))->Length();
-		Eigen::MatrixXd mat(rows, cols);
-		for (int r = 0; r < rows; r++) {
-			v8::Local<v8::Array> rowArray = v8::Local<v8::Array>::Cast(jsVec->Get(r));
-			for (int c = 0; c < cols; c++) {
-				mat(r, c) = rowArray->Get(c)->NumberValue();
-			}
-		}
-		return mat;
-	}
-}
 
 #endif
