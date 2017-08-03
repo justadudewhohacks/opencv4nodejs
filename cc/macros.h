@@ -16,6 +16,8 @@
 #define FF_SET_JS_PROP(obj, prop, val) \
 	Nan::Set(obj, FF_V8STRING(#prop), val)
 
+#define FF_HAS_JS_PROP(obj, prop) \
+	Nan::HasOwnProperty(obj, FF_V8STRING(#prop)).FromJust()
 
 /* unchecked js prop getters */
 
@@ -47,7 +49,7 @@
 /* checked js prop getters */
 
 #define FF_GET_JSPROP_IFDEF(obj, var, prop, castType)	\
-	if (obj->HasOwnProperty(FF_V8STRING(#prop))) {			\
+	if (FF_HAS_JS_PROP(obj, prop)) {										\
 		FF_GET_JSPROP(obj, var, prop, castType)						\
 	}
 
@@ -55,7 +57,7 @@
 	FF_GET_JSPROP_IFDEF(obj, prop, prop, castType)
 
 #define FF_GET_JSPROP_REQUIRED(obj, var, prop, castType)																	\
-	if (!obj->HasOwnProperty(FF_V8STRING(#prop))) {																					\
+	if (!FF_HAS_JS_PROP(obj, prop)) {																												\
 		return Nan::ThrowError(FF_V8STRING("Object has no property: " + std::string(#prop)));	\
 	}																																												\
 	var = FF_GET_JSPROP(obj, prop)->castType();																																										
@@ -74,7 +76,7 @@
 	var = FF_GET_JSPROP(obj, prop)->castType();															
 
 #define FF_GET_TYPECHECKED_JSPROP_REQUIRED(obj, var, prop, assertType, castType)					\
-	if (!obj->HasOwnProperty(FF_V8STRING(#prop))) {																					\
+	if (!FF_HAS_JS_PROP(obj, prop)) {																												\
 		return Nan::ThrowError(FF_V8STRING("Object has no property: " + std::string(#prop)));	\
 	}																																												\
 	FF_GET_TYPECHECKED_JSPROP(obj, var, prop, assertType, castType)
@@ -83,7 +85,7 @@
 	FF_GET_TYPECHECKED_JSPROP_REQUIRED(obj, prop, prop, assertType, castType)
 
 #define FF_GET_TYPECHECKED_JSPROP_IFDEF(obj, var, prop, assertType, castType)	\
-	if (obj->HasOwnProperty(FF_V8STRING(#prop))) {															\
+	if (FF_HAS_JS_PROP(obj, prop)) {																						\
 		FF_GET_TYPECHECKED_JSPROP(obj, var, prop, assertType, castType)						\
 	}
 

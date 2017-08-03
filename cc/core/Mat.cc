@@ -278,7 +278,7 @@ NAN_METHOD(Mat::WarpPerspective) {
 	FF_GET_JSPROP_REQUIRED(args, jsTransformMat, transformationMatrix, ToObject);
 	cv::Mat transformationMatrix = Nan::ObjectWrap::Unwrap<Mat>(jsTransformMat)->mat;
 	cv::Size size = cv::Size(self->mat.cols, self->mat.rows);
-	if (args->HasOwnProperty(FF_V8STRING("size"))) {
+	if (FF_HAS_JS_PROP(args, size)) {
 		Nan::ObjectWrap::Unwrap<Size>(FF_GET_JSPROP(args, size)->ToObject())->size;
 	}
 	int flags = cv::INTER_LINEAR;

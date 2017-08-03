@@ -18,7 +18,7 @@ NAN_METHOD(Imgproc::GetStructuringElement) {
 	cv::Point2i anchor = cv::Point2i(-1, -1);
 	FF_DESTRUCTURE_JSPROP_REQUIRED(args, shape, Int32Value);
 	FF_GET_JSPROP_REQUIRED(args, jsSize, size, ToObject);
-	if (args->HasOwnProperty(FF_V8STRING("anchor"))) {
+	if (FF_HAS_JS_PROP(args, anchor)) {
 		anchor = Nan::ObjectWrap::Unwrap<Point2>(FF_GET_JSPROP(args, anchor)->ToObject())->pt;
 	}
 	v8::Local<v8::Object> jsKernel = Nan::NewInstance(Nan::New(Mat::constructor)->GetFunction()).ToLocalChecked();

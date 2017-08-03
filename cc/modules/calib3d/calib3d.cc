@@ -42,7 +42,7 @@ NAN_METHOD(Calib3d::FindHomography) {
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, maxIters, IsInt32, Int32Value)
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, confidence, IsNumber, NumberValue)
 
-	if (args->HasOwnProperty(FF_V8STRING("mask"))) {
+	if (FF_HAS_JS_PROP(args, mask)) {
 		Nan::ObjectWrap::Unwrap<Mat>(FF_GET_JSPROP(args, mask)->ToObject())->mat.copyTo(mask);
 	}
 
