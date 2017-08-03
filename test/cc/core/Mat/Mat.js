@@ -1,10 +1,10 @@
 import { Mat, matTypes } from 'dut';
-import { assertError, funcRequiresArgsObject, readTestImage } from 'utils';
-import { expect } from 'chai';
-import { assertMetaData, assertDataDeepEquals, deepEquals } from './matTestUtils';
+import { assertError } from 'utils';
+import { assertMetaData, assertDataDeepEquals } from './matTestUtils';
 import constructorTestsFromJsArray from './constructorTestsFromJsArray';
 import constructorTestsFromFillVector from './constructorTestsFromFillVector';
 import operatorTests from './operatorTests';
+import imgprocTests from './imgprocTests';
 import { doubleMin, doubleMax } from './typeRanges';
 
 const srcMatData = [
@@ -27,6 +27,7 @@ describe('Mat', () => {
   constructorTestsFromJsArray();
   constructorTestsFromFillVector();
   operatorTests();
+  imgprocTests();
 
   describe('copy', () => {
     it('should copy data', async () => {
@@ -61,29 +62,6 @@ describe('Mat', () => {
       const dstMat = srcMat.copyTo(new Mat(srcMat.rows, srcMat.cols, srcMat.type, 0), mask);
       assertMetaData(dstMat)(expectedCopy.rows, expectedCopy.cols, expectedCopy.type);
       assertDataDeepEquals(expectedCopyData, dstMat.getData());
-    });
-  });
-
-  describe('warpPerspective', () => {
-    funcRequiresArgsObject((() => {
-      const mat = new Mat();
-      return mat.warpPerspective.bind(mat);
-    })());
-
-    it('should warp image perspective', async () => {
-      const img = await readTestImage();
-      const transformationMatrix = new Mat(
-        [
-          [0.5, 0, 0],
-          [0, 0.5, 0],
-          [0, 0, 1]
-        ],
-        matTypes.CV_64F
-      );
-
-      const warped = img.warpPerspective({ transformationMatrix });
-      assertMetaData(warped)(img.rows, img.cols, img.type);
-      expect(deepEquals(warped.getData(), img.getData())).to.be.false;
     });
   });
 });

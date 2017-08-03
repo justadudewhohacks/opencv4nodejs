@@ -130,6 +130,10 @@
 		op Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;																						\
 	info.GetReturnValue().Set(jsMat);																																				\
 
+#define FF_MAT_DILATE_OR_ERODE(method) 																												\
+	method(matSelf, Nan::ObjectWrap::Unwrap<Mat>(jsMatDst)->mat,																\
+		Nan::ObjectWrap::Unwrap<Mat>(jsKernel)->mat, anchor, iterations, borderType, borderValue);							
+
 namespace FF {
 	template<typename type>
 	static inline void matPut(cv::Mat mat, v8::Local<v8::Value> value, int r, int c) {

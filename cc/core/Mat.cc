@@ -27,11 +27,13 @@ NAN_MODULE_INIT(Mat::Init) {
 	/* #IFDEF IMGPROC */
   Nan::SetPrototypeMethod(ctor, "rescale", Rescale);
   Nan::SetPrototypeMethod(ctor, "resize", Resize);
-  Nan::SetPrototypeMethod(ctor, "resizeToMax", ResizeToMax); 
+  Nan::SetPrototypeMethod(ctor, "resizeToMax", ResizeToMax);
 	Nan::SetPrototypeMethod(ctor, "cvtColor", CvtColor);
 	Nan::SetPrototypeMethod(ctor, "bgrToGray", BgrToGray);
 	Nan::SetPrototypeMethod(ctor, "threshold", Threshold);
 	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
+	Nan::SetPrototypeMethod(ctor, "dilate", Dilate);
+	Nan::SetPrototypeMethod(ctor, "erode", Erode);
 	/* #ENDIF IMGPROC */
 
 	v8::Local<v8::Object> matTypesModule = Nan::New<v8::Object>();
@@ -40,7 +42,7 @@ NAN_MODULE_INIT(Mat::Init) {
   target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
 };
 
-// TODO type undefined throw error 
+// TODO type undefined throw error
 NAN_METHOD(Mat::New) {
 	Mat* self = new Mat();
 	/* data, type */
@@ -73,7 +75,7 @@ NAN_METHOD(Mat::New) {
 			v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[3]);
 			if (mat.channels() != vec->Length()) {
 				return Nan::ThrowError(FF_V8STRING(
-					std::string("Mat::New - number of channels (") + std::to_string(mat.channels())  
+					std::string("Mat::New - number of channels (") + std::to_string(mat.channels())
 					+ std::string(") dont match fill vector length ") + std::to_string(vec->Length()))
 				);
 			}
@@ -83,7 +85,7 @@ NAN_METHOD(Mat::New) {
 			FF_MAT_APPLY_TYPED_OPERATOR(mat, info[3], type, FF_MAT_FILL, FF::matPut);
 		}
 		self->setNativeProps(mat);
-	} 
+	}
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }
@@ -116,7 +118,7 @@ NAN_METHOD(Mat::CopyTo) {
 	}
 	cv::Mat matSelf = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;
 	cv::Mat matDst = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
-	
+
 	if (info[1]->IsObject()) {
 		/* with mask*/
 		matSelf.copyTo(matDst, Nan::ObjectWrap::Unwrap<Mat>(info[1]->ToObject())->mat);
@@ -204,11 +206,8 @@ NAN_METHOD(Mat::ResizeToMax) {
 }
 
 NAN_METHOD(Mat::Threshold) {
-	if (!info[0]->IsObject()) {
-		// TODO usage messages
-		return Nan::ThrowError(FF_V8STRING("Mat::Threshold - args object required"));
-	}
-	v8::Local<v8::Object> args = info[0]->ToObject();
+	FF_REQUIRE_ARGS_OBJ("Mat::Threshold");
+
 	double thresh, maxVal;
 	int type;
 	FF_DESTRUCTURE_JSPROP_REQUIRED(args, thresh, NumberValue);
@@ -227,11 +226,8 @@ NAN_METHOD(Mat::Threshold) {
 }
 
 NAN_METHOD(Mat::CvtColor) {
-	if (!info[0]->IsObject()) {
-		// TODO usage messages
-		return Nan::ThrowError(FF_V8STRING("Mat::Threshold - args object required"));
-	}
-	v8::Local<v8::Object> args = info[0]->ToObject();
+	FF_REQUIRE_ARGS_OBJ("Mat::CvtColor");
+
 	int code, dstCn;
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, code, IsInt32, Int32Value);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, dstCn, IsInt32, Int32Value)
@@ -248,7 +244,7 @@ NAN_METHOD(Mat::CvtColor) {
 NAN_METHOD(Mat::BgrToGray) {
 	v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
 	cv::cvtColor(
-		Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat, 
+		Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat,
 		Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat,
 		CV_BGR2GRAY
 	);
@@ -256,12 +252,9 @@ NAN_METHOD(Mat::BgrToGray) {
 	info.GetReturnValue().Set(jsMat);
 }
 NAN_METHOD(Mat::WarpPerspective) {
-	if (!info[0]->IsObject()) {
-		// TODO usage messages
-		return Nan::ThrowError(FF_V8STRING("warpPerspective - args object required"));
-	}
+	FF_REQUIRE_ARGS_OBJ("Mat::WarpPerspective");
+
 	Mat* self = Nan::ObjectWrap::Unwrap<Mat>(info.This());
-	v8::Local<v8::Object> args = info[0]->ToObject();
 	v8::Local<v8::Object> jsTransformMat;
 	FF_GET_JSPROP_REQUIRED(args, jsTransformMat, transformationMatrix, ToObject);
 	cv::Mat transformationMatrix = Nan::ObjectWrap::Unwrap<Mat>(jsTransformMat)->mat;
@@ -281,6 +274,34 @@ NAN_METHOD(Mat::WarpPerspective) {
 	cv::warpPerspective(self->mat, Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat, transformationMatrix, size, flags, borderMode, borderValue);
 
 	info.GetReturnValue().Set(jsMat);
+}
+
+void Mat::dilateOrErode(Nan::NAN_METHOD_ARGS_TYPE info, char* methodName, bool isErode = false) {
+	FF_REQUIRE_ARGS_OBJ(methodName);
+	v8::Local<v8::Object> jsKernel;																																						
+	cv::Point2i anchor(-1, -1);																																								
+	cv::Scalar borderValue = cv::morphologyDefaultBorderValue();																							
+	int iterations = 1, borderType = 0;																																				
+	FF_GET_JSPROP_REQUIRED(args, jsKernel, kernel, ToObject);																									
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, iterations, IsInt32, Int32Value);														
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, borderType, IsInt32, Int32Value);														
+	cv::Mat matSelf = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;																					
+	v8::Local<v8::Object> jsMatDst = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();	
+	if (isErode) {
+		FF_MAT_DILATE_OR_ERODE(cv::erode);
+	}
+	else {
+		FF_MAT_DILATE_OR_ERODE(cv::dilate);
+	}
+	info.GetReturnValue().Set(jsMatDst);
+}
+
+NAN_METHOD(Mat::Dilate) {
+	dilateOrErode(info, "Mat::Dilate");
+}
+
+NAN_METHOD(Mat::Erode) {
+	dilateOrErode(info, "Mat::Erode", true);
 }
 
 /* #ENDIF IMGPROC */

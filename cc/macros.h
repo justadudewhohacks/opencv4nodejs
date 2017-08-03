@@ -17,6 +17,7 @@
 #define FF_SET_JS_PROP(obj, prop, val) \
 	Nan::Set(obj, FF_V8STRING(#prop), val)
 
+
 /* unchecked js prop getters */
 
 #define FF_GET_JSPROP(obj, prop) \
@@ -43,6 +44,7 @@
 #define FF_GET_JSPROP_STRING(obj, prop) \
 	FF_JS_VAL_TO_STRING(FF_GET_JSPROP(obj, prop)->ToString())
 
+
 /* checked js prop getters */
 
 #define FF_GET_JSPROP_IFDEF(obj, var, prop, castType)	\
@@ -61,27 +63,6 @@
 
 #define FF_DESTRUCTURE_JSPROP_REQUIRED(obj, prop, castType)	\
 	FF_GET_JSPROP_REQUIRED(obj, prop, prop, castType)
-
-#define FF_TRY(work)																					\
-	try {																												\
-		work																											\
-	} catch (std::exception &e) {																\
-		return info.GetReturnValue().Set(Nan::Error(e.what()));		\
-	} catch (...) {																							\
-		return info.GetReturnValue().Set(Nan::Error("SEGFAULT"));	\
-	}
-
-#define FF_TRY_CATCH(work)					\
-	try {															\
-		work														\
-	} catch (std::exception &e) {			\
-		Nan::ThrowError(e.what());			\
-	} catch (...) {										\
-		Nan::ThrowError("SEGFAULT");		\
-	}
-
-#define FF_MAT_TO_JS_ARR(data, rows, cols)										\
-	v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(rows);	\
 
 #define FF_GET_TYPECHECKED_JSPROP(obj, var, prop, assertType, castType)			\
 	if (!FF_GET_JSPROP(obj, prop)->assertType()) {														\
@@ -110,6 +91,32 @@
 #define FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(obj, prop, assertType, castType)	\
 	FF_GET_TYPECHECKED_JSPROP_IFDEF(obj, prop, prop, assertType, castType)
 
+
+#define FF_TRY(work)																					\
+	try {																												\
+		work																											\
+	} catch (std::exception &e) {																\
+		return info.GetReturnValue().Set(Nan::Error(e.what()));		\
+	} catch (...) {																							\
+		return info.GetReturnValue().Set(Nan::Error("SEGFAULT"));	\
+	}
+
+#define FF_TRY_CATCH(work)					\
+	try {															\
+		work														\
+	} catch (std::exception &e) {			\
+		Nan::ThrowError(e.what());			\
+	} catch (...) {										\
+		Nan::ThrowError("SEGFAULT");		\
+	}	
+
+#define FF_REQUIRE_ARGS_OBJ(methodName)																												\
+	if (!info[0]->IsObject()) {																																	\
+		return Nan::ThrowError(FF_V8STRING(std::string(methodName) + " - args object required"));	\
+	}																																														\
+	v8::Local<v8::Object> args = info[0]->ToObject()
+
+// TODO remove with sfm
 namespace FF {
 	static inline v8::Local<v8::Array> matrixdToJsArray(Eigen::MatrixXd vec) {
 		v8::Local<v8::Array> jsVec = Nan::New<v8::Array>(vec.rows());

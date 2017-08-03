@@ -39,8 +39,11 @@ public:
 	static NAN_METHOD(CvtColor);
 	static NAN_METHOD(BgrToGray);
 	static NAN_METHOD(WarpPerspective);
+	static NAN_METHOD(Dilate);
+	static NAN_METHOD(Erode);
 	/* #ENDIF IMGPROC */
 
+	static void dilateOrErode(Nan::NAN_METHOD_ARGS_TYPE, char*, bool);
 
   static Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
 

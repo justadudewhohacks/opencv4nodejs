@@ -9,6 +9,8 @@
 class Imgproc {
 public:
   static NAN_MODULE_INIT(Init);
+
+	static NAN_METHOD(GetStructuringElement);
 };
 
 #endif
