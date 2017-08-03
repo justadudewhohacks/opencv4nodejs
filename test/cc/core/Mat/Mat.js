@@ -1,5 +1,5 @@
 import { Mat, matTypes } from 'dut';
-import { assertError } from 'utils';
+import { assertError, funcRequiresArgsObject } from 'utils';
 import { assertMetaData, assertDataDeepEquals } from './matTestUtils';
 import constructorTestsFromJsArray from './constructorTestsFromJsArray';
 import constructorTestsFromFillVector from './constructorTestsFromFillVector';
@@ -62,6 +62,20 @@ describe('Mat', () => {
       const dstMat = srcMat.copyTo(new Mat(srcMat.rows, srcMat.cols, srcMat.type, 0), mask);
       assertMetaData(dstMat)(expectedCopy.rows, expectedCopy.cols, expectedCopy.type);
       assertDataDeepEquals(expectedCopyData, dstMat.getData());
+    });
+  });
+
+  describe('convertTo', () => {
+    funcRequiresArgsObject(args => new Mat().convertTo(args));
+
+    it('should throw if type invalid', async () => {
+      assertError(() => srcMat.convertTo({ type: undefined }), 'Invalid type for type');
+      assertError(() => srcMat.convertTo({ type: null }), 'Invalid type for type');
+    });
+
+    it('should convert mat', async () => {
+      const dstMat = srcMat.convertTo({ type: matTypes.CV_32S });
+      assertMetaData(dstMat)(srcMat.rows, srcMat.cols, matTypes.CV_32S);
     });
   });
 });

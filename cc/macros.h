@@ -81,7 +81,7 @@
 	FF_GET_TYPECHECKED_JSPROP(obj, var, prop, assertType, castType)
 
 #define FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(obj, prop, assertType, castType)	\
-	FF_GET_JSPROP_REQUIRED(obj, prop, prop, assertType, castType)
+	FF_GET_TYPECHECKED_JSPROP_REQUIRED(obj, prop, prop, assertType, castType)
 
 #define FF_GET_TYPECHECKED_JSPROP_IFDEF(obj, var, prop, assertType, castType)	\
 	if (obj->HasOwnProperty(FF_V8STRING(#prop))) {															\

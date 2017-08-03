@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import { io } from 'dut';
 
-const assertError = func => (msg) => {
+const assertError = (func, msg) => {
   let errMsg = '';
   try {
     func();
@@ -25,7 +25,7 @@ exports.funcRequiresArgsObject = (func) => {
   });
 
   it('should throw if args empty', () => {
-    assertError(func, 'has no property');
+    assertError(() => func({}), 'has no property');
   });
 };
 

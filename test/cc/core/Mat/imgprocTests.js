@@ -1,18 +1,42 @@
-import { Mat, matTypes } from 'dut';
-import { funcRequiresArgsObject, readTestImage } from 'utils';
+import { Mat, matTypes, imgproc } from 'dut';
+import { assertError, funcRequiresArgsObject, readTestImage } from 'utils';
 import { expect } from 'chai';
 import { assertMetaData, assertDataDeepEquals, deepEquals } from './matTestUtils';
 
+const { colorConversionCodes } = imgproc;
+
+const rgbMatData = [
+  Array(5).fill([255, 125, 0]),
+  Array(5).fill([0, 0, 0]),
+  Array(5).fill([125, 75, 125]),
+  Array(5).fill([75, 255, 75])
+];
+const rgbMat = new Mat(rgbMatData, matTypes.CV_8UC3);
 
 module.exports = () => {
-  describe('dilate', () => {
+  describe('bgrToGray', () => {
+    it('should convert mat to gray scale', async () => {
+      const converted = rgbMat.bgrToGray();
+      assertMetaData(converted)(rgbMat.rows, rgbMat.cols, matTypes.CV_8U);
+      expect(deepEquals(converted.getData(), rgbMatData)).to.be.false;
+    });
+  });
+
+  describe('cvtColor', () => {
     funcRequiresArgsObject((() => {
       const mat = new Mat();
-      return mat.dilate.bind(mat);
+      return mat.cvtColor.bind(mat);
     })());
 
-    it('', async () => {
+    it('should throw if code invalid', async () => {
+      assertError(() => rgbMat.cvtColor({ code: undefined }), 'Invalid type for code');
+      assertError(() => rgbMat.cvtColor({ code: null }), 'Invalid type for code');
+    });
 
+    it('should convert color', async () => {
+      const converted = rgbMat.cvtColor({ code: colorConversionCodes.COLOR_BGR2Lab });
+      assertMetaData(converted)(rgbMat.rows, rgbMat.cols, rgbMat.type);
+      expect(deepEquals(converted.getData(), rgbMatData)).to.be.false;
     });
   });
 
@@ -31,7 +55,6 @@ module.exports = () => {
       assertDataDeepEquals(Array(5).fill(Array(5).fill(0)), eroded.getData());
     });
   });
-
 
   describe('dilate', () => {
     funcRequiresArgsObject((() => {

@@ -1,5 +1,5 @@
-import { Point, Size, imgproc } from 'dut';
-import { assertPropsWithValue, funcRequiresArgsObject } from 'utils';
+import { Mat, Point, Size, imgproc } from 'dut';
+import { assertError, assertPropsWithValue, funcRequiresArgsObject } from 'utils';
 
 const { morphShapes } = imgproc;
 
@@ -10,6 +10,11 @@ describe('imgproc', () => {
     const size = new Size(cols, rows);
 
     funcRequiresArgsObject(imgproc.getStructuringElement);
+
+    it('should throw if type invalid', async () => {
+      assertError(() => new Mat().convertTo({ type: undefined }), 'Invalid type for type');
+      assertError(() => new Mat().convertTo({ type: null }), 'Invalid type for type');
+    });
 
     it('should be constructable with required args', async () => {
       const kernel = imgproc.getStructuringElement({

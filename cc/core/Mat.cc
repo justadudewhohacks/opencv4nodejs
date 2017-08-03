@@ -16,6 +16,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "row", Row);
 	Nan::SetPrototypeMethod(ctor, "copy", Copy);
 	Nan::SetPrototypeMethod(ctor, "copyTo", CopyTo);
+	Nan::SetPrototypeMethod(ctor, "convertTo", ConvertTo);
 
 	Nan::SetPrototypeMethod(ctor, "add", Add);
 	Nan::SetPrototypeMethod(ctor, "sub", Sub);
@@ -129,6 +130,24 @@ NAN_METHOD(Mat::CopyTo) {
 	info.GetReturnValue().Set(info[0]);
 }
 
+NAN_METHOD(Mat::ConvertTo) {
+	FF_REQUIRE_ARGS_OBJ("Mat::ConvertTo");
+
+	int type;
+	double alpha = 1.0, beta = 0.0;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, type, IsInt32, Int32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, alpha, IsNumber, NumberValue);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, beta, IsNumber, NumberValue);
+	v8::Local<v8::Object> jsMatConverted = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+	Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat.convertTo(
+		Nan::ObjectWrap::Unwrap<Mat>(jsMatConverted)->mat,
+		type,
+		alpha,
+		beta
+	);
+	info.GetReturnValue().Set(jsMatConverted);
+}
+
 NAN_METHOD(Mat::Add) {
 	FF_MAT_OPERATOR(Mat::Add, +, false);
 }
@@ -230,8 +249,8 @@ NAN_METHOD(Mat::CvtColor) {
 
 	int code, dstCn;
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, code, IsInt32, Int32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, dstCn, IsInt32, Int32Value)
-		v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, dstCn, IsInt32, Int32Value);
+	v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
 	cv::cvtColor(
 		Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat,
 		Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat,
