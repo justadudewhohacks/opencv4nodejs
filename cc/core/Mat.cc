@@ -14,6 +14,8 @@ NAN_MODULE_INIT(Mat::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "getData", GetData);
 	Nan::SetPrototypeMethod(ctor, "row", Row);
+	Nan::SetPrototypeMethod(ctor, "copy", Copy);
+	Nan::SetPrototypeMethod(ctor, "copyTo", CopyTo);
 
 	Nan::SetPrototypeMethod(ctor, "add", Add);
 	Nan::SetPrototypeMethod(ctor, "sub", Sub);
@@ -91,6 +93,38 @@ NAN_METHOD(Mat::GetData) {
 	v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(mat.rows);
 	FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT, FF::matGet);
 	info.GetReturnValue().Set(rowArray);
+}
+
+NAN_METHOD(Mat::Copy) {
+	cv::Mat matSelf = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;
+	v8::Local<v8::Object> jsMatDst = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+	cv::Mat matDst = cv::Mat::zeros(matSelf.size(), matSelf.type());
+	Nan::ObjectWrap::Unwrap<Mat>(jsMatDst)->setNativeProps(matDst);
+	if (info[0]->IsObject()) {
+		/* with mask*/
+		matSelf.copyTo(matDst, Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat);
+	}
+	else {
+		matSelf.copyTo(matDst);
+	}
+	info.GetReturnValue().Set(jsMatDst);
+}
+
+NAN_METHOD(Mat::CopyTo) {
+	if (!info[0]->IsObject()) {
+		return Nan::ThrowError("Mat::CopyTo - expected arg: destination mat");
+	}
+	cv::Mat matSelf = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;
+	cv::Mat matDst = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
+	
+	if (info[1]->IsObject()) {
+		/* with mask*/
+		matSelf.copyTo(matDst, Nan::ObjectWrap::Unwrap<Mat>(info[1]->ToObject())->mat);
+	}
+	else {
+		matSelf.copyTo(matDst);
+	}
+	info.GetReturnValue().Set(info[0]);
 }
 
 NAN_METHOD(Mat::Add) {

@@ -2,7 +2,7 @@ import { Mat, matTypes } from 'dut';
 import { assert } from 'chai';
 import { assertDataDeepEquals, assertMetaData } from './matTestUtils';
 
-const funcRequiresArg = (func, acceptsScalar) => {
+const operatorRequiresArg = (func, acceptsScalar) => {
   it('should throw if no args', () => {
     let errMsg = '';
     try {
@@ -17,7 +17,7 @@ const funcRequiresArg = (func, acceptsScalar) => {
 
 module.exports = () => {
   describe('add', () => {
-    funcRequiresArg('add');
+    operatorRequiresArg('add');
 
     it('add matrices', async () => {
       const mat = new Mat([
@@ -35,7 +35,7 @@ module.exports = () => {
   });
 
   describe('sub', () => {
-    funcRequiresArg('sub');
+    operatorRequiresArg('sub');
 
     it('subtract matrices', async () => {
       const mat0 = new Mat([
@@ -54,7 +54,7 @@ module.exports = () => {
   });
 
   describe('mul', () => {
-    funcRequiresArg('mul', true);
+    operatorRequiresArg('mul', true);
 
     it('multiply matrix with scalar', async () => {
       const mat = new Mat([
@@ -73,7 +73,7 @@ module.exports = () => {
   });
 
   describe('div', () => {
-    funcRequiresArg('div', true);
+    operatorRequiresArg('div', true);
 
     it('divide matrix with scalar', async () => {
       const mat = new Mat([
@@ -92,7 +92,7 @@ module.exports = () => {
   });
 
   describe('and', () => {
-    funcRequiresArg('and');
+    operatorRequiresArg('and');
 
     it('apply and to matrices', async () => {
       const mat0 = new Mat([
@@ -114,7 +114,7 @@ module.exports = () => {
   });
 
   describe('or', () => {
-    funcRequiresArg('or');
+    operatorRequiresArg('or');
 
     it('apply or to matrices', async () => {
       const mat0 = new Mat([

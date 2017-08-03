@@ -21,6 +21,8 @@ public:
 
 	static NAN_METHOD(GetData);
 	static NAN_METHOD(Row);
+	static NAN_METHOD(Copy);
+	static NAN_METHOD(CopyTo);
 
 	static NAN_METHOD(Add);
 	static NAN_METHOD(Sub);

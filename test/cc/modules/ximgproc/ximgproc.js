@@ -1,5 +1,5 @@
 import { matTypes, ximgproc } from 'dut';
-import { assertPropsWithValue, funcRequiresArgs, readTestImage } from 'utils';
+import { assertPropsWithValue, funcRequiresArgsObject, readTestImage } from 'utils';
 import { assert } from 'chai';
 
 describe('ximgproc', () => {
@@ -11,7 +11,7 @@ describe('ximgproc', () => {
 
   describe('SuperpixelSEEDS', () => {
     describe('constructor', () => {
-      funcRequiresArgs(args => new ximgproc.SuperpixelSEEDS(args));
+      funcRequiresArgsObject(args => new ximgproc.SuperpixelSEEDS(args));
 
       it('should throw if image is no Mat instance', async () => {
         // TODO

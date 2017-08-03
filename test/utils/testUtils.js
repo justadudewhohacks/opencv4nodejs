@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import { io } from 'dut';
 
-exports.assertError = func => (msg) => {
+const assertError = func => (msg) => {
   let errMsg = '';
   try {
     func();
@@ -11,31 +11,21 @@ exports.assertError = func => (msg) => {
   assert.include(errMsg, msg);
 };
 
+exports.assertError = assertError;
+
 exports.assertPropsWithValue = obj => (props) => {
   Object.keys(props).forEach(key =>
     assert(props[key] === obj[key], `${key} - expected: ${props[key]}, have: ${obj[key]}`)
   );
 };
 
-exports.funcRequiresArgs = (func) => {
+exports.funcRequiresArgsObject = (func) => {
   it('should throw if no args', () => {
-    let errMsg = '';
-    try {
-      func();
-    } catch (err) {
-      errMsg = err.toString();
-    }
-    assert.include(errMsg, 'args object required');
+    assertError(func, 'args object required');
   });
 
   it('should throw if args empty', () => {
-    let errMsg = '';
-    try {
-      func({});
-    } catch (err) {
-      errMsg = err.toString();
-    }
-    assert.include(errMsg, 'has no property');
+    assertError(func, 'has no property');
   });
 };
 

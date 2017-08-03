@@ -1,10 +1,10 @@
 import { matTypes, calib3d } from 'dut';
-import { assertPropsWithValue, funcRequiresArgs } from 'utils';
+import { assertPropsWithValue, funcRequiresArgsObject } from 'utils';
 import { assert } from 'chai';
 
 describe('calib3d', () => {
   describe('findHomography', () => {
-    funcRequiresArgs(calib3d.findHomography);
+    funcRequiresArgsObject(calib3d.findHomography);
 
     it('should throw if point validation fails', () => {
       let errMsg = '';
