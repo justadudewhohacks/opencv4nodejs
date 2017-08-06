@@ -1,7 +1,7 @@
 import { Mat, matTypes, imgproc } from 'dut';
 import { assertError, funcRequiresArgsObject, readTestImage } from 'utils';
 import { expect } from 'chai';
-import { assertMetaData, assertDataDeepEquals, deepEquals } from './matTestUtils';
+import { assertMetaData, assertDataDeepEquals, dangerousDeepEquals } from './matTestUtils';
 
 const { colorConversionCodes } = imgproc;
 
@@ -18,7 +18,7 @@ module.exports = () => {
     it('should convert mat to gray scale', async () => {
       const converted = rgbMat.bgrToGray();
       assertMetaData(converted)(rgbMat.rows, rgbMat.cols, matTypes.CV_8U);
-      expect(deepEquals(converted.getData(), rgbMatData)).to.be.false;
+      expect(dangerousDeepEquals(converted.getData(), rgbMatData)).to.be.false;
     });
   });
 
@@ -36,7 +36,7 @@ module.exports = () => {
     it('should convert color', async () => {
       const converted = rgbMat.cvtColor({ code: colorConversionCodes.COLOR_BGR2Lab });
       assertMetaData(converted)(rgbMat.rows, rgbMat.cols, rgbMat.type);
-      expect(deepEquals(converted.getData(), rgbMatData)).to.be.false;
+      expect(dangerousDeepEquals(converted.getData(), rgbMatData)).to.be.false;
     });
   });
 
@@ -91,7 +91,7 @@ module.exports = () => {
 
       const warped = img.warpPerspective({ transformationMatrix });
       assertMetaData(warped)(img.rows, img.cols, img.type);
-      expect(deepEquals(warped.getData(), img.getData())).to.be.false;
+      expect(dangerousDeepEquals(warped.getData(), img.getData())).to.be.false;
     });
   });
 };

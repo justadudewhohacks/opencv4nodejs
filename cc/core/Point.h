@@ -35,7 +35,7 @@ public:
 		}
 	};
 
-	static Nan::Persistent<v8::FunctionTemplate> Point::constructor;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 };
 
 #endif

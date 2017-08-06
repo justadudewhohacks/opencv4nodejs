@@ -46,7 +46,7 @@ public:
 
 	static void dilateOrErode(Nan::NAN_METHOD_ARGS_TYPE, char*, bool);
 
-  static Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
+  static Nan::Persistent<v8::FunctionTemplate> constructor;
 
   void setNativeProps(cv::Mat);
 };

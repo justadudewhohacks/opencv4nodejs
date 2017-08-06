@@ -17,7 +17,7 @@
 		for (int c = 0; c < mat.cols; c++) {																					\
 			put(mat, colArray->Get(c), r, c);																						\
 		}																																							\
-	}	
+	}
 
 #define FF_JS_ARRAY_FROM_MAT(mat, rowArray, get)										\
 	for (int r = 0; r < mat.rows; r++) {															\
@@ -26,7 +26,7 @@
 			get(colArray, mat, r, c);																			\
 		}																																\
 		rowArray->Set(r, colArray);																			\
-	}	
+	}
 
 #define FF_MAT_APPLY_TYPED_OPERATOR(mat, arg, type, ITERATOR, OPERATOR) {	\
 	switch (type) {																													\
@@ -132,7 +132,7 @@
 
 #define FF_MAT_DILATE_OR_ERODE(method) 																												\
 	method(matSelf, Nan::ObjectWrap::Unwrap<Mat>(jsMatDst)->mat,																\
-		Nan::ObjectWrap::Unwrap<Mat>(jsKernel)->mat, anchor, iterations, borderType, borderValue);							
+		Nan::ObjectWrap::Unwrap<Mat>(jsKernel)->mat, anchor, iterations, borderType, borderValue);
 
 namespace FF {
 	template<typename type>
@@ -143,7 +143,7 @@ namespace FF {
 	template<typename type>
 	static inline void matPutVec2(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
-		mat.at<cv::Vec<type, 2>>(r, c) = cv::Vec<type, 2>(
+		mat.at< cv::Vec<type, 2> >(r, c) = cv::Vec<type, 2>(
 			(type)vec->Get(0)->NumberValue(),
 			(type)vec->Get(1)->NumberValue()
 		);
@@ -152,7 +152,7 @@ namespace FF {
 	template<typename type>
 	static inline void matPutVec3(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
-		mat.at<cv::Vec<type, 3>>(r, c) = cv::Vec<type, 3>(
+		mat.at< cv::Vec<type, 3> >(r, c) = cv::Vec<type, 3>(
 			(type)vec->Get(0)->NumberValue(),
 			(type)vec->Get(1)->NumberValue(),
 			(type)vec->Get(2)->NumberValue()
@@ -162,7 +162,7 @@ namespace FF {
 	template<typename type>
 	static inline void matPutVec4(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
-		mat.at<cv::Vec<type, 4>>(r, c) = cv::Vec<type, 4>(
+		mat.at< cv::Vec<type, 4> >(r, c) = cv::Vec<type, 4>(
 			(type)vec->Get(0)->NumberValue(),
 			(type)vec->Get(1)->NumberValue(),
 			(type)vec->Get(2)->NumberValue(),
@@ -178,27 +178,27 @@ namespace FF {
 	template<typename type>
 	static inline void matGetVec2(v8::Local<v8::Array> colArray, cv::Mat mat, int r, int c) {
 		v8::Local<v8::Array> vec = Nan::New<v8::Array>(2);
-		vec->Set(0, Nan::New(mat.at<cv::Vec<type, 2>>(r, c)[0]));
-		vec->Set(1, Nan::New(mat.at<cv::Vec<type, 2>>(r, c)[1]));
+		vec->Set(0, Nan::New(mat.at< cv::Vec<type, 2> >(r, c)[0]));
+		vec->Set(1, Nan::New(mat.at< cv::Vec<type, 2> >(r, c)[1]));
 		colArray->Set(c, vec);
 	}
 
 	template<typename type>
 	static inline void matGetVec3(v8::Local<v8::Array> colArray, cv::Mat mat, int r, int c) {
 		v8::Local<v8::Array> vec = Nan::New<v8::Array>(3);
-		vec->Set(0, Nan::New(mat.at<cv::Vec<type, 3>>(r, c)[0]));
-		vec->Set(1, Nan::New(mat.at<cv::Vec<type, 3>>(r, c)[1]));
-		vec->Set(2, Nan::New(mat.at<cv::Vec<type, 3>>(r, c)[2]));
+		vec->Set(0, Nan::New(mat.at< cv::Vec<type, 3> >(r, c)[0]));
+		vec->Set(1, Nan::New(mat.at< cv::Vec<type, 3> >(r, c)[1]));
+		vec->Set(2, Nan::New(mat.at< cv::Vec<type, 3> >(r, c)[2]));
 		colArray->Set(c, vec);
 	}
 
 	template<typename type>
 	static inline void matGetVec4(v8::Local<v8::Array> colArray, cv::Mat mat, int r, int c) {
 		v8::Local<v8::Array> vec = Nan::New<v8::Array>(4);
-		vec->Set(0, Nan::New(mat.at<cv::Vec<type, 4>>(r, c)[0]));
-		vec->Set(1, Nan::New(mat.at<cv::Vec<type, 4>>(r, c)[1]));
-		vec->Set(2, Nan::New(mat.at<cv::Vec<type, 4>>(r, c)[2]));
-		vec->Set(3, Nan::New(mat.at<cv::Vec<type, 4>>(r, c)[3]));
+		vec->Set(0, Nan::New(mat.at< cv::Vec<type, 4> >(r, c)[0]));
+		vec->Set(1, Nan::New(mat.at< cv::Vec<type, 4> >(r, c)[1]));
+		vec->Set(2, Nan::New(mat.at< cv::Vec<type, 4> >(r, c)[2]));
+		vec->Set(3, Nan::New(mat.at< cv::Vec<type, 4> >(r, c)[3]));
 		colArray->Set(c, vec);
 	}
 

@@ -19,7 +19,7 @@ public:
 	static FF_GETTER(Point3, GetY, pt.y);
 	static FF_GETTER(Point3, GetZ, pt.z);
 
-  static Nan::Persistent<v8::FunctionTemplate> Point3::constructor;
+  static Nan::Persistent<v8::FunctionTemplate> constructor;
 };
 
 #endif

@@ -15,7 +15,7 @@ public:
 	static FF_GETTER(Size, GetWidth, size.width);
 	static FF_GETTER(Size, GetHeight, size.height);
 
-	static Nan::Persistent<v8::FunctionTemplate> Size::constructor;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 };
 
 #endif
