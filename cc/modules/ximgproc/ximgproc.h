@@ -1,5 +1,5 @@
 #include <nan.h>
-#include <opencv2/xImgproc.hpp>
+#include <opencv2/ximgproc.hpp>
 
 #ifndef __FF_XIMGPROC_H__
 #define __FF_XIMGPROC_H__
