@@ -43,7 +43,7 @@
 		ITERATOR(mat, arg, OPERATOR##Vec4<uchar>)												\
 			break;																															\
 	case CV_8SC1:																														\
-		ITERATOR(mat, arg, OPERATOR##Val<<char>)\
+		ITERATOR(mat, arg, OPERATOR##Val<char>)\
 			break;\
 	case CV_8SC2:\
 		ITERATOR(mat, arg, OPERATOR##Vec2<char>)\
@@ -55,7 +55,7 @@
 		ITERATOR(mat, arg, OPERATOR##Vec4<char>)\
 			break;\
 	case CV_16UC1:\
-		ITERATOR(mat, arg, OPERATOR##Val<<ushort>)\
+		ITERATOR(mat, arg, OPERATOR##Val<ushort>)\
 			break;\
 	case CV_16UC2:\
 		ITERATOR(mat, arg, OPERATOR##Vec2<ushort>)\
@@ -67,7 +67,7 @@
 		ITERATOR(mat, arg, OPERATOR##Vec4<ushort>)\
 			break;\
 	case CV_16SC1:\
-		ITERATOR(mat, arg, OPERATOR##Val<<short>)\
+		ITERATOR(mat, arg, OPERATOR##Val<short>)\
 			break;\
 	case CV_16SC2:\
 		ITERATOR(mat, arg, OPERATOR##Vec2<short>)\
@@ -79,7 +79,7 @@
 		ITERATOR(mat, arg, OPERATOR##Vec4<short>)\
 			break;\
 	case CV_32SC1:\
-		ITERATOR(mat, arg, OPERATOR##Val<<int>)\
+		ITERATOR(mat, arg, OPERATOR##Val<int>)\
 			break;\
 	case CV_32SC2:\
 		ITERATOR(mat, arg, OPERATOR##Vec2<int>)\
@@ -91,7 +91,7 @@
 		ITERATOR(mat, arg, OPERATOR##Vec4<int>)\
 			break;\
 	case CV_32FC1: case CV_64FC1:\
-		ITERATOR(mat, arg, OPERATOR##Val<<double>)\
+		ITERATOR(mat, arg, OPERATOR##Val<double>)\
 			break;\
 	case CV_32FC2: case CV_64FC2:\
 		ITERATOR(mat, arg, OPERATOR##Vec2<double>)\
