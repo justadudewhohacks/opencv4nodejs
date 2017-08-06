@@ -31,7 +31,7 @@
 #define FF_MAT_APPLY_TYPED_OPERATOR(mat, arg, type, ITERATOR, OPERATOR) {	\
 	switch (type) {																													\
 	case CV_8UC1:																														\
-		ITERATOR(mat, arg, OPERATOR<uchar>)															\
+		ITERATOR(mat, arg, OPERATOR##Val<uchar>)															\
 			break;																															\
 	case CV_8UC2:																														\
 		ITERATOR(mat, arg, OPERATOR##Vec2<uchar>)												\
@@ -43,7 +43,7 @@
 		ITERATOR(mat, arg, OPERATOR##Vec4<uchar>)												\
 			break;																															\
 	case CV_8SC1:																														\
-		ITERATOR(mat, arg, OPERATOR##<char>)\
+		ITERATOR(mat, arg, OPERATOR##Val<<char>)\
 			break;\
 	case CV_8SC2:\
 		ITERATOR(mat, arg, OPERATOR##Vec2<char>)\
@@ -55,7 +55,7 @@
 		ITERATOR(mat, arg, OPERATOR##Vec4<char>)\
 			break;\
 	case CV_16UC1:\
-		ITERATOR(mat, arg, OPERATOR##<ushort>)\
+		ITERATOR(mat, arg, OPERATOR##Val<<ushort>)\
 			break;\
 	case CV_16UC2:\
 		ITERATOR(mat, arg, OPERATOR##Vec2<ushort>)\
@@ -67,7 +67,7 @@
 		ITERATOR(mat, arg, OPERATOR##Vec4<ushort>)\
 			break;\
 	case CV_16SC1:\
-		ITERATOR(mat, arg, OPERATOR##<short>)\
+		ITERATOR(mat, arg, OPERATOR##Val<<short>)\
 			break;\
 	case CV_16SC2:\
 		ITERATOR(mat, arg, OPERATOR##Vec2<short>)\
@@ -79,7 +79,7 @@
 		ITERATOR(mat, arg, OPERATOR##Vec4<short>)\
 			break;\
 	case CV_32SC1:\
-		ITERATOR(mat, arg, OPERATOR##<int>)\
+		ITERATOR(mat, arg, OPERATOR##Val<<int>)\
 			break;\
 	case CV_32SC2:\
 		ITERATOR(mat, arg, OPERATOR##Vec2<int>)\
@@ -91,7 +91,7 @@
 		ITERATOR(mat, arg, OPERATOR##Vec4<int>)\
 			break;\
 	case CV_32FC1: case CV_64FC1:\
-		ITERATOR(mat, arg, OPERATOR##<double>)\
+		ITERATOR(mat, arg, OPERATOR##Val<<double>)\
 			break;\
 	case CV_32FC2: case CV_64FC2:\
 		ITERATOR(mat, arg, OPERATOR##Vec2<double>)\
@@ -171,7 +171,7 @@ namespace FF {
 	}
 
 	template<typename type>
-	static inline void matGet(v8::Local<v8::Array> colArray, cv::Mat mat, int r, int c) {
+	static inline void matGetVal(v8::Local<v8::Array> colArray, cv::Mat mat, int r, int c) {
 		colArray->Set(c, Nan::New(mat.at<type>(r, c)));
 	}
 
