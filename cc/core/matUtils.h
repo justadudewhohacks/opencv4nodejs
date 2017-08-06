@@ -136,7 +136,7 @@
 
 namespace FF {
 	template<typename type>
-	static inline void matPut(cv::Mat mat, v8::Local<v8::Value> value, int r, int c) {
+	static inline void matPutVal(cv::Mat mat, v8::Local<v8::Value> value, int r, int c) {
 		mat.at<type>(r, c) = (type)value->NumberValue();
 	}
 
