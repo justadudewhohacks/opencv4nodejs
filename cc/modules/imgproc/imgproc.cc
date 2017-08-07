@@ -6,7 +6,7 @@
 
 NAN_MODULE_INIT(Imgproc::Init) {
   v8::Local<v8::Object> module = Nan::New<v8::Object>();
-	initImgProcConstants(module);
+	ImgprocConstants::init(module);
 	Nan::SetMethod(module, "getStructuringElement", GetStructuringElement);
   target->Set(Nan::New("imgproc").ToLocalChecked(), module);
 };

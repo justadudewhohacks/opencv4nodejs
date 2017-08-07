@@ -29,6 +29,7 @@
 			"cc/modules/photo.cc",
 			"cc/modules/calib3d/calib3d.cc",
 			"cc/modules/imgproc/imgproc.cc",
+			"cc/modules/imgproc/imgprocConstants.cc",
 			"cc/modules/ximgproc/ximgproc.cc",
 			"cc/modules/ximgproc/SuperpixelSEEDS.cc",
 			"cc/modules/features2d/features2d.cc",
