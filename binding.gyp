@@ -50,9 +50,11 @@
 			"cc/modules/xfeatures2d/SURFDetector.cc"
 		],
 
-		"cflags!" : [
+		"cflags" : [
 			"-std=c++11",
-  		"-stdlib=libc++",
+  		"-stdlib=libc++"
+		],
+		"cflags!" : [
 			"-fno-exceptions"
 		],
 		"cflags_cc!": [ "-fno-rtti",  "-fno-exceptions"],
