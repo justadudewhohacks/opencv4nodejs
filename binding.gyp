@@ -51,8 +51,7 @@
 		],
 
 		"cflags" : [
-			"-std=c++11",
-  		"-stdlib=libc++"
+			"-std=c++11"
 		],
 		"cflags!" : [
 			"-fno-exceptions"
