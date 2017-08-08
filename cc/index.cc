@@ -1,6 +1,7 @@
 #include <node.h>
 #include "Mat.h"
 #include "Point.h"
+#include "Vec.h"
 #include "Size.h"
 
 #include "modules/io.h"
@@ -15,6 +16,7 @@
 void init(v8::Local<v8::Object> target) {
   Mat::Init(target);
 	Point::Init(target);
+	Vec::Init(target);
 	Size::Init(target);
   Io::Init(target);
   Photo::Init(target);

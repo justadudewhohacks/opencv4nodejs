@@ -13,11 +13,11 @@ exports.detectorTests = (defaults, customProps, Detector, implementsCompute = tr
     keyPoints = (new Detector()).detect(testImg);
   });
 
-  it('should use default values for no args', () => {
+  it('should use default values if no args', () => {
     assertPropsWithValue(new Detector())(defaults);
   });
 
-  it('should use default values for empty args', () => {
+  it('should use default values if empty args', () => {
     assertPropsWithValue(new Detector({}))(defaults);
   });
 

@@ -1,9 +1,9 @@
 #include <nan.h>
-#include "../macros.h"
+#include <opencv2/imgproc.hpp>
 #include "matTypes.h"
 #include "Size.h"
-#include <opencv2/imgproc.hpp>
-#include <iostream>
+#include "macros.h"
+#include "coreUtils.h"
 
 #ifndef FF_MAT_H_
 #define FF_MAT_H_

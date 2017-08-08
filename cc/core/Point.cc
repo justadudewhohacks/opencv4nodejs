@@ -10,6 +10,7 @@ NAN_MODULE_INIT(Point::Init) {
 	pt2Ctor->SetClassName(Nan::New("Point2").ToLocalChecked());
 	Nan::SetAccessor(pt2Ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Point2::GetX);
 	Nan::SetAccessor(pt2Ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Point2::GetY);
+	Nan::SetPrototypeMethod(pt2Ctor, "at", Point2::At);
 
 	v8::Local<v8::FunctionTemplate> pt3Ctor = Nan::New<v8::FunctionTemplate>(Point3::New);
 	Point3::constructor.Reset(pt3Ctor);
@@ -18,6 +19,7 @@ NAN_MODULE_INIT(Point::Init) {
 	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Point3::GetX);
 	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Point3::GetY);
 	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("z").ToLocalChecked(), Point3::GetZ);
+	Nan::SetPrototypeMethod(pt3Ctor, "at", Point3::At);
 
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Point::New);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
@@ -31,16 +33,16 @@ NAN_METHOD(Point::New) {
 	}
 	double x = info[0]->NumberValue();
 	double y = info[1]->NumberValue();
-	v8::Local<v8::Object> point;
-	if (2 < info.Length()) {
+	v8::Local<v8::Object> jsPoint;
+	if (info.Length() == 3) {
 		double z = info[2]->NumberValue();
-		point = Nan::NewInstance(Nan::New(Point3::constructor)->GetFunction()).ToLocalChecked();
-		Nan::ObjectWrap::Unwrap<Point3>(point)->pt = cv::Point3d(x, y, z);
+		jsPoint = Nan::NewInstance(Nan::New(Point3::constructor)->GetFunction()).ToLocalChecked();
+		Nan::ObjectWrap::Unwrap<Point3>(jsPoint)->pt = cv::Point3d(x, y, z);
 	}
 	else {
 		v8::Local<v8::Function> ct = Nan::New(Point2::constructor)->GetFunction();
-		point = Nan::NewInstance(ct).ToLocalChecked();
-		Nan::ObjectWrap::Unwrap<Point2>(point)->pt = cv::Point2d(x, y);
+		jsPoint = Nan::NewInstance(ct).ToLocalChecked();
+		Nan::ObjectWrap::Unwrap<Point2>(jsPoint)->pt = cv::Point2d(x, y);
 	}
-  info.GetReturnValue().Set(point);
+  info.GetReturnValue().Set(jsPoint);
 }

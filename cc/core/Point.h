@@ -34,8 +34,6 @@ public:
 			pts.push_back(cv::Point3d(x, y, z));
 		}
 	};
-
-	static Nan::Persistent<v8::FunctionTemplate> constructor;
 };
 
 #endif

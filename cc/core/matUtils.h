@@ -34,16 +34,16 @@
 		ITERATOR(mat, arg, OPERATOR##Val<uchar>)															\
 			break;																															\
 	case CV_8UC2:																														\
-		ITERATOR(mat, arg, OPERATOR##Vec2<uchar>)												\
+		ITERATOR(mat, arg, OPERATOR##Vec2<uchar>)															\
 			break;																															\
 	case CV_8UC3:																														\
-		ITERATOR(mat, arg, OPERATOR##Vec3<uchar>)												\
+		ITERATOR(mat, arg, OPERATOR##Vec3<uchar>)															\
 			break;																															\
 	case CV_8UC4:																														\
-		ITERATOR(mat, arg, OPERATOR##Vec4<uchar>)												\
+		ITERATOR(mat, arg, OPERATOR##Vec4<uchar>)															\
 			break;																															\
 	case CV_8SC1:																														\
-		ITERATOR(mat, arg, OPERATOR##Val<char>)\
+		ITERATOR(mat, arg, OPERATOR##Val<char>)																\
 			break;\
 	case CV_8SC2:\
 		ITERATOR(mat, arg, OPERATOR##Vec2<char>)\
@@ -107,28 +107,6 @@
 		break;\
 	}\
 }
-
-#define FF_MAT_OPERATOR_WITH_SCALAR(name, op)																															\
-	if (info[0]->IsNumber()) {																																							\
-		v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();\
-		Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat =																														\
-			Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat																											\
-			op info[0]->NumberValue();																																					\
-		return info.GetReturnValue().Set(jsMat);																															\
-	}																																																				\
-	FF_MAT_OPERATOR(name, op, true)
-
-#define FF_MAT_OPERATOR(name, op, acceptsScalar)																													\
-	if (!info[0]->IsObject()) {																																							\
-		return Nan::ThrowError(FF_V8STRING(std::string(#name)																									\
-			+ " - expected arg to be a Mat" + (acceptsScalar ? " or Scalar" : ""))															\
-		);																																																		\
-	}																																																				\
-	v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();	\
-	Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat =																															\
-		Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat																												\
-		op Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;																						\
-	info.GetReturnValue().Set(jsMat);																																				\
 
 #define FF_MAT_DILATE_OR_ERODE(method) 																												\
 	method(matSelf, Nan::ObjectWrap::Unwrap<Mat>(jsMatDst)->mat,																\

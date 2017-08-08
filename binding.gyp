@@ -24,6 +24,7 @@
 			"cc/index.cc",
 			"cc/core/Mat.cc",
 			"cc/core/Point.cc",
+			"cc/core/Vec.cc",
 			"cc/core/Size.cc",
 			"cc/modules/io.cc",
 			"cc/modules/photo.cc",

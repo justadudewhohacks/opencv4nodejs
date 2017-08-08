@@ -1,6 +1,7 @@
 #include <nan.h>
 #include <opencv2/core.hpp>
 #include "macros.h"
+#include "coreUtils.h"
 
 #ifndef __FF_POINT3_H__
 #define __FF_POINT3_H__
@@ -18,6 +19,13 @@ public:
 	static FF_GETTER(Point3, GetX, pt.x);
 	static FF_GETTER(Point3, GetY, pt.y);
 	static FF_GETTER(Point3, GetZ, pt.z);
+
+	static NAN_METHOD(At) {
+		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 2);
+		cv::Point3d ptSelf = Nan::ObjectWrap::Unwrap<Point3>(info.This())->pt;
+		const double coords[] = { ptSelf.x, ptSelf.y, ptSelf.z };
+		info.GetReturnValue().Set(coords[info[0]->Int32Value()]);
+	}
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 };
