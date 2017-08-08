@@ -1,17 +1,16 @@
 import { Mat, matTypes } from 'dut';
-import { assert } from 'chai';
+import { assertError } from 'utils';
 import { assertDataDeepEquals, assertMetaData } from './matTestUtils';
 
-const operatorRequiresArg = (func, acceptsScalar) => {
+const operatorRequiresArg = (func, isScalar) => {
   it('should throw if no args', () => {
-    let errMsg = '';
-    try {
-      const mat = new Mat();
-      mat[func].bind(mat)();
-    } catch (err) {
-      errMsg = err.toString();
-    }
-    assert.include(errMsg, `expected arg to be a Mat${acceptsScalar ? ' or Scalar' : ''}`);
+    assertError(
+      () => {
+        const mat = new Mat();
+        return mat[func].bind(mat)();
+      },
+      `expected arg to be a ${isScalar ? 'Scalar' : 'Mat'}`
+    );
   });
 };
 
@@ -56,7 +55,7 @@ module.exports = () => {
   describe('mul', () => {
     operatorRequiresArg('mul', true);
 
-    it('multiply matrix with scalar', async () => {
+    it('multiply matrix by scalar', async () => {
       const mat = new Mat([
         [20, 40],
         [20, 40]
@@ -75,7 +74,7 @@ module.exports = () => {
   describe('div', () => {
     operatorRequiresArg('div', true);
 
-    it('divide matrix with scalar', async () => {
+    it('divide matrix by scalar', async () => {
       const mat = new Mat([
         [20, 40],
         [20, 40]

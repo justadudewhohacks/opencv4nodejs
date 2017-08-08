@@ -14,10 +14,16 @@ public:
 		Vec2* self = new Vec2();
 		self->Wrap(info.Holder());
 		info.GetReturnValue().Set(info.Holder());
-	};
+	}
+
+	static void Init(v8::Local<v8::FunctionTemplate> ctor) {
+		FF_PROTO_SET_NUMERIC_OPERATORS(ctor);
+	}
 
 	static FF_GETTER(Vec2, GetX, vec[0]);
 	static FF_GETTER(Vec2, GetY, vec[1]);
+
+	FF_INIT_NUMERIC_OPERATORS(Vec2, vec);
 
 	static NAN_METHOD(At) {
 		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 1);

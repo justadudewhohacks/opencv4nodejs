@@ -14,12 +14,18 @@ public:
 		Vec4* self = new Vec4();
 		self->Wrap(info.Holder());
 		info.GetReturnValue().Set(info.Holder());
-	};
+	}
+
+	static void Init(v8::Local<v8::FunctionTemplate> ctor) {
+		FF_PROTO_SET_NUMERIC_OPERATORS(ctor);
+	}
 
 	static FF_GETTER(Vec4, GetW, vec[0]);
 	static FF_GETTER(Vec4, GetX, vec[1]);
 	static FF_GETTER(Vec4, GetY, vec[2]);
 	static FF_GETTER(Vec4, GetZ, vec[3]);
+
+	FF_INIT_NUMERIC_OPERATORS(Vec4, vec);
 
 	static NAN_METHOD(At) {
 		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 3);

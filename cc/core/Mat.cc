@@ -18,12 +18,8 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "copyTo", CopyTo);
 	Nan::SetPrototypeMethod(ctor, "convertTo", ConvertTo);
 
-	Nan::SetPrototypeMethod(ctor, "add", Add);
-	Nan::SetPrototypeMethod(ctor, "sub", Sub);
-	Nan::SetPrototypeMethod(ctor, "and", And);
-	Nan::SetPrototypeMethod(ctor, "or", Or);
-	Nan::SetPrototypeMethod(ctor, "mul", Mul);
-	Nan::SetPrototypeMethod(ctor, "div", Div);
+	FF_PROTO_SET_NUMERIC_OPERATORS(ctor);
+	FF_PROTO_SET_LOGICAL_OPERATORS(ctor);
 
 	/* #IFDEF IMGPROC */
   Nan::SetPrototypeMethod(ctor, "rescale", Rescale);
@@ -146,30 +142,6 @@ NAN_METHOD(Mat::ConvertTo) {
 		beta
 	);
 	info.GetReturnValue().Set(jsMatConverted);
-}
-
-NAN_METHOD(Mat::Add) {
-	FF_MAT_OPERATOR(Mat::Add, +, false);
-}
-
-NAN_METHOD(Mat::Sub) {
-	FF_MAT_OPERATOR(Mat::Sub, -, false);
-}
-
-NAN_METHOD(Mat::And) {
-	FF_MAT_OPERATOR(Mat::And, &, false);
-}
-
-NAN_METHOD(Mat::Or) {
-	FF_MAT_OPERATOR(Mat::Or, |, false);
-}
-
-NAN_METHOD(Mat::Mul) {
-	FF_MAT_OPERATOR_WITH_SCALAR(Mat::Mul, *);
-}
-
-NAN_METHOD(Mat::Div) {
-	FF_MAT_OPERATOR_WITH_SCALAR(Mat::Div, / );
 }
 
 /* #IFDEC IMGPROC */
