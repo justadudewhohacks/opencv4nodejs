@@ -88,20 +88,21 @@ NAN_METHOD(Mat::New) {
 }
 
 NAN_METHOD(Mat::GetData) {
-	cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;
+	cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info.This());
 	v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(mat.rows);
 	FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT, FF::matGet);
 	info.GetReturnValue().Set(rowArray);
 }
 
 NAN_METHOD(Mat::Copy) {
-	cv::Mat matSelf = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;
-	v8::Local<v8::Object> jsMatDst = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+	v8::Local<v8::Object> jsMatDst = FF_NEW(constructor);
 	cv::Mat matDst = cv::Mat::zeros(matSelf.size(), matSelf.type());
 	Nan::ObjectWrap::Unwrap<Mat>(jsMatDst)->setNativeProps(matDst);
 	if (info[0]->IsObject()) {
 		/* with mask*/
-		matSelf.copyTo(matDst, Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat);
+		FF_REQUIRE_INSTANCE(constructor, info[0], "expected mask to be an instance of Mat");
+		matSelf.copyTo(matDst, FF_UNWRAP_MAT_AND_GET(info[0]->ToObject()));
 	}
 	else {
 		matSelf.copyTo(matDst);
@@ -113,7 +114,7 @@ NAN_METHOD(Mat::CopyTo) {
 	if (!info[0]->IsObject()) {
 		return Nan::ThrowError("Mat::CopyTo - expected arg: destination mat");
 	}
-	cv::Mat matSelf = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;
+	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
 	cv::Mat matDst = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
 
 	if (info[1]->IsObject()) {
@@ -134,9 +135,9 @@ NAN_METHOD(Mat::ConvertTo) {
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, type, IsInt32, Int32Value);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, alpha, IsNumber, NumberValue);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, beta, IsNumber, NumberValue);
-	v8::Local<v8::Object> jsMatConverted = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
-	Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat.convertTo(
-		Nan::ObjectWrap::Unwrap<Mat>(jsMatConverted)->mat,
+	v8::Local<v8::Object> jsMatConverted = FF_NEW(constructor);
+	FF_UNWRAP_MAT_AND_GET(info.This()).convertTo(
+		FF_UNWRAP_MAT_AND_GET(jsMatConverted),
 		type,
 		alpha,
 		beta
@@ -148,52 +149,52 @@ NAN_METHOD(Mat::ConvertTo) {
 
 NAN_METHOD(Mat::Rescale) {
   if (!info[0]->IsNumber()) {
-    return Nan::ThrowError("usage: rescale(double factor)");
+    return Nan::ThrowError("Mat::Rescale - expected arg: factor");
   }
   double factor = (double)info[0]->NumberValue();
-  v8::Local<v8::Object> handle = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+  v8::Local<v8::Object> jsMat = FF_NEW(constructor);
   cv::resize(
-    Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat,
-    Nan::ObjectWrap::Unwrap<Mat>(handle)->mat,
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
     cv::Size(),
     factor,
     factor
   );
-  info.GetReturnValue().Set(handle);
+  info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(Mat::Resize) {
   if (!info[0]->IsNumber() || !info[1]->IsNumber()) {
-    return Nan::ThrowError("usage: resize(int rows, int cols)");
+    return Nan::ThrowError("Mat::Resize - expected args: rows, cols");
   }
   int rows = (int)info[0]->NumberValue();
   int cols = (int)info[1]->NumberValue();
-  v8::Local<v8::Object> handle = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+  v8::Local<v8::Object> jsMat = FF_NEW(constructor);
   cv::resize(
-    Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat,
-    Nan::ObjectWrap::Unwrap<Mat>(handle)->mat,
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
     cv::Size(rows, cols)
   );
-  info.GetReturnValue().Set(handle);
+  info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(Mat::ResizeToMax) {
   if (!info[0]->IsNumber()) {
-    return Nan::ThrowError("usage: resizeToMax(int maxRowsOrCols)");
+    return Nan::ThrowError("Mat::ResizeToMax - expected arg: maxRowsOrCols");
   }
   int maxRowsOrCols = (int)info[0]->NumberValue();
-  cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;
+  cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info.This());
   double ratioY = (double)maxRowsOrCols / (double)mat.rows;
   double ratioX = (double)maxRowsOrCols / (double)mat.cols;
 	double scale = std::min(ratioY, ratioX);
 
-  v8::Local<v8::Object> handle = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+  v8::Local<v8::Object> jsMat = FF_NEW(constructor);
   cv::resize(
     mat,
-    Nan::ObjectWrap::Unwrap<Mat>(handle)->mat,
+		FF_UNWRAP_MAT_AND_GET(jsMat),
     cv::Size((int)(mat.cols * scale), (int)(mat.rows * scale))
   );
-  info.GetReturnValue().Set(handle);
+  info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(Mat::Threshold) {
@@ -205,10 +206,10 @@ NAN_METHOD(Mat::Threshold) {
 	FF_DESTRUCTURE_JSPROP_REQUIRED(args, maxVal, NumberValue);
 	FF_DESTRUCTURE_JSPROP_REQUIRED(args, type, Int32Value);
 
-	v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
 	cv::threshold(
-		Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat,
-		Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat,
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
 		thresh,
 		maxVal,
 		type
@@ -222,10 +223,10 @@ NAN_METHOD(Mat::CvtColor) {
 	int code, dstCn;
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, code, IsInt32, Int32Value);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, dstCn, IsInt32, Int32Value);
-	v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
 	cv::cvtColor(
-		Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat,
-		Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat,
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
 		code,
 		dstCn
 	);
@@ -233,23 +234,25 @@ NAN_METHOD(Mat::CvtColor) {
 }
 
 NAN_METHOD(Mat::BgrToGray) {
-	v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
+	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
 	cv::cvtColor(
-		Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat,
-		Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat,
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
 		CV_BGR2GRAY
 	);
 
 	info.GetReturnValue().Set(jsMat);
 }
+
 NAN_METHOD(Mat::WarpPerspective) {
 	FF_REQUIRE_ARGS_OBJ("Mat::WarpPerspective");
-
-	Mat* self = Nan::ObjectWrap::Unwrap<Mat>(info.This());
-	v8::Local<v8::Object> jsTransformMat;
-	FF_GET_JSPROP_REQUIRED(args, jsTransformMat, transformationMatrix, ToObject);
-	cv::Mat transformationMatrix = Nan::ObjectWrap::Unwrap<Mat>(jsTransformMat)->mat;
-	cv::Size size = cv::Size(self->mat.cols, self->mat.rows);
+	
+	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+	cv::Mat transformationMatrix;
+	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, transformationMatrix, constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+	
+	
+	cv::Size size = cv::Size(matSelf.cols, matSelf.rows);
 	if (FF_HAS_JS_PROP(args, size)) {
 		Nan::ObjectWrap::Unwrap<Size>(FF_GET_JSPROP(args, size)->ToObject())->size;
 	}
@@ -261,8 +264,8 @@ NAN_METHOD(Mat::WarpPerspective) {
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, flags, IsInt32, Int32Value);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, borderMode, IsInt32, Int32Value);
 
-	v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();
-	cv::warpPerspective(self->mat, Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat, transformationMatrix, size, flags, borderMode, borderValue);
+	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
+	cv::warpPerspective(matSelf, FF_UNWRAP_MAT_AND_GET(jsMat), transformationMatrix, size, flags, borderMode, borderValue);
 
 	info.GetReturnValue().Set(jsMat);
 }
@@ -276,8 +279,8 @@ void Mat::dilateOrErode(Nan::NAN_METHOD_ARGS_TYPE info, char* methodName, bool i
 	FF_GET_JSPROP_REQUIRED(args, jsKernel, kernel, ToObject);																									
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, iterations, IsInt32, Int32Value);														
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, borderType, IsInt32, Int32Value);														
-	cv::Mat matSelf = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;																					
-	v8::Local<v8::Object> jsMatDst = Nan::NewInstance(Nan::New(constructor)->GetFunction()).ToLocalChecked();	
+	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+	v8::Local<v8::Object> jsMatDst = FF_NEW(constructor);
 	if (isErode) {
 		FF_MAT_DILATE_OR_ERODE(cv::erode);
 	}

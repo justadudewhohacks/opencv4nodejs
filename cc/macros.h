@@ -7,6 +7,9 @@
 #define FF_V8STRING(s) \
 	Nan::New(s).ToLocalChecked()
 
+#define FF_NEW(ctor) \
+	Nan::NewInstance(Nan::New(ctor)->GetFunction()).ToLocalChecked()
+
 #define FF_JS_VAL_TO_STRING(s) \
 	std::string(*Nan::Utf8String(s->ToString()))
 
@@ -116,5 +119,40 @@
 		return Nan::ThrowError(FF_V8STRING(std::string(methodName) + " - args object required"));	\
 	}																																														\
 	v8::Local<v8::Object> args = info[0]->ToObject()
+
+#define FF_IS_INSTANCE(ctor, obj)		\
+	Nan::New(ctor)->HasInstance(obj)
+
+#define FF_GET_JSOBJ_REQUIRED(args, var, prop, objCtor, unwrapper, clazz)	\
+	do {																																		\
+		v8::Local<v8::Object> obj;																						\
+		FF_GET_JSPROP_REQUIRED(args, obj, prop, ToObject);										\
+		FF_REQUIRE_INSTANCE(objCtor, obj, FF_V8STRING(std::string(#prop)			\
+			+ " is not an instance of " + std::string(#clazz)));								\
+		var = unwrapper(obj);																									\
+	} while (0);																														\
+
+#define FF_DESTRUCTURE_JSOBJ_REQUIRED(args, prop, objCtor, unwrapper, clazz)	\
+	FF_GET_JSOBJ_REQUIRED(args, prop, prop, objCtor, unwrapper, clazz)
+
+#define FF_REQUIRE_INSTANCE(objCtor, obj, err)	\
+	if (!FF_IS_INSTANCE(objCtor, obj)) {					\
+			return Nan::ThrowError(err);							\
+	}
+
+/* unwrappers */
+
+#define FF_UNWRAP_MAT(obj)	\
+	Nan::ObjectWrap::Unwrap<Mat>(obj)
+
+#define FF_UNWRAP_MAT_AND_GET(obj)	\
+	FF_UNWRAP_MAT(obj)->mat
+
+#define FF_UNWRAP_SIZE(obj)	\
+	Nan::ObjectWrap::Unwrap<Size>(obj)
+
+#define FF_UNWRAP_SIZE_AND_GET(obj)	\
+	FF_UNWRAP_SIZE(obj)->size
+
 
 #endif
