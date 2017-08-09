@@ -1,7 +1,7 @@
 import { Mat, matTypes } from 'dut';
 import { assertError } from 'utils';
-import { assertDataDeepEquals, assertMetaData } from './matTestUtils';
 import { expect } from 'chai';
+import { assertDataDeepEquals, assertMetaData } from './matTestUtils';
 
 const operatorRequiresArg = (func, isScalar) => {
   it('should throw if no args', () => {
@@ -151,7 +151,7 @@ module.exports = () => {
         [100, 160],
         [120, 80]
       ];
-      const res = mat0.hMul(mat1);console.log(res.getData())
+      const res = mat0.hMul(mat1);
       assertMetaData(res)(2, 2, matTypes.CV_8U);
       assertDataDeepEquals(res.getData(), expectedResult);
     });
@@ -193,6 +193,102 @@ module.exports = () => {
       ], matTypes.CV_8U);
       const res = mat0.dot(mat1);
       expect(res).to.equal(2000);
+    });
+  });
+
+  describe('bitwiseAnd', () => {
+    operatorRequiresArg('bitwiseAnd');
+
+    it('apply bitwiseAnd to matrices', async () => {
+      const mat0 = new Mat([
+        [[15, 15], [15, 15]],
+        [[15, 15], [15, 15]]
+      ], matTypes.CV_8UC2);
+      const mat1 = new Mat([
+        [[15, 0], [0, 0]],
+        [[12, 12], [3, 3]]
+      ], matTypes.CV_8UC2);
+      const res = mat0.bitwiseAnd(mat1);
+      assertMetaData(res)(2, 2, matTypes.CV_8UC2);
+      assertDataDeepEquals(res.getData(), mat1.getData());
+    });
+  });
+
+  describe('bitwiseNot', () => {
+    it('apply bitwiseNot to matrix', async () => {
+      const mat0 = new Mat([
+        [[255, 127], [15, 7]],
+        [[63, 31], [3, 0]]
+      ], matTypes.CV_8UC2);
+      const expectedResult = [
+        [[0, 128], [240, 248]],
+        [[192, 224], [252, 255]]
+      ];
+      const res = mat0.bitwiseNot();
+      assertMetaData(res)(2, 2, matTypes.CV_8UC2);
+      assertDataDeepEquals(res.getData(), expectedResult);
+    });
+  });
+
+  describe('bitwiseOr', () => {
+    operatorRequiresArg('bitwiseOr');
+
+    it('apply bitwiseOr to matrices', async () => {
+      const mat0 = new Mat([
+        [[15, 15], [15, 15]],
+        [[15, 15], [15, 15]]
+      ], matTypes.CV_8UC2);
+      const mat1 = new Mat([
+        [[15, 0], [0, 0]],
+        [[12, 12], [3, 3]]
+      ], matTypes.CV_8UC2);
+      const res = mat0.bitwiseOr(mat1);
+      assertMetaData(res)(2, 2, matTypes.CV_8UC2);
+      assertDataDeepEquals(res.getData(), mat0.getData());
+    });
+  });
+
+  describe('bitwiseXor', () => {
+    operatorRequiresArg('bitwiseXor');
+
+    it('apply bitwiseXor to matrices', async () => {
+      const mat0 = new Mat([
+        [[15, 15], [15, 15]],
+        [[15, 15], [15, 15]]
+      ], matTypes.CV_8UC2);
+      const mat1 = new Mat([
+        [[15, 0], [0, 0]],
+        [[12, 12], [3, 3]]
+      ], matTypes.CV_8UC2);
+      const expectedResult = [
+        [[0, 15],  [15, 15]],
+        [[3, 3], [12, 12]]
+      ];
+      const res = mat0.bitwiseXor(mat1);
+      assertMetaData(res)(2, 2, matTypes.CV_8UC2);
+      assertDataDeepEquals(res.getData(), expectedResult);
+    });
+  });
+
+  describe('absdiff', () => {
+    operatorRequiresArg('absdiff');
+
+    it('apply absdiff to matrices', async () => {
+      const mat0 = new Mat([
+        [[255, 50], [255, 50]],
+        [[100, 0], [100, 0]]
+      ], matTypes.CV_8UC2);
+      const mat1 = new Mat([
+        [[0, 0], [255, 255]],
+        [[0, 0], [255, 255]]
+      ], matTypes.CV_8UC2);
+      const expectedResult = [
+        [[255, 50], [0, 205]],
+        [[100, 0], [155, 255]]
+      ];
+      const res = mat0.absdiff(mat1);
+      assertMetaData(res)(2, 2, matTypes.CV_8UC2);
+      assertDataDeepEquals(res.getData(), expectedResult);
     });
   });
 };

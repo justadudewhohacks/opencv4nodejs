@@ -15,6 +15,16 @@
 
 #define FF_ERR_WHERE(func, clazz) std::string(#clazz) + "  " + std::string(#func) + " : "
 
+#define FF_SELF_OPERATOR_RET(func, unwrapper)					\
+	v8::Local<v8::Object> jsObj = FF_NEW(constructor);	\
+	unwrapper(jsObj) = func(unwrapper(info.This()));		\
+	return info.GetReturnValue().Set(jsObj);		
+
+#define FF_SELF_OPERATOR(func, unwrapper)							\
+	v8::Local<v8::Object> jsObj = FF_NEW(constructor);	\
+	func(unwrapper(info.This()), unwrapper(jsObj));			\
+	return info.GetReturnValue().Set(jsObj);					
+
 #define FF_SCALAR_OPERATOR(func, applyFunc, unwrapper, clazz)			\
 	if (!info[0]->IsNumber()) {																			\
 		return Nan::ThrowError(FF_V8STRING(FF_ERR_WHERE(func, clazz)	\
@@ -53,19 +63,30 @@
 	);																																							\
 	return info.GetReturnValue().Set(ret);
 
-#define FF_PROTO_SET_MATRIX_OPERATIONS(ctor)		\
-	Nan::SetPrototypeMethod(ctor, "add", Add);		\
-	Nan::SetPrototypeMethod(ctor, "sub", Sub);		\
-	Nan::SetPrototypeMethod(ctor, "mul", Mul);		\
-	Nan::SetPrototypeMethod(ctor, "div", Div);		\
-	Nan::SetPrototypeMethod(ctor, "hMul", HMul);	\
-	Nan::SetPrototypeMethod(ctor, "hDiv", HDiv);	\
+#define FF_PROTO_SET_MATRIX_OPERATIONS(ctor)								\
+	Nan::SetPrototypeMethod(ctor, "add", Add);								\
+	Nan::SetPrototypeMethod(ctor, "sub", Sub);								\
+	Nan::SetPrototypeMethod(ctor, "mul", Mul);								\
+	Nan::SetPrototypeMethod(ctor, "div", Div);								\
+	Nan::SetPrototypeMethod(ctor, "hMul", HMul);							\
+	Nan::SetPrototypeMethod(ctor, "hDiv", HDiv);							\
+	Nan::SetPrototypeMethod(ctor, "absdiff", Absdiff);				\
+	Nan::SetPrototypeMethod(ctor, "exp", Exp);								\
+	Nan::SetPrototypeMethod(ctor, "mean", Mean);							\
+	Nan::SetPrototypeMethod(ctor, "sqrt", Sqrt);							\
+	Nan::SetPrototypeMethod(ctor, "transpose", Transpose);		\
 	Nan::SetPrototypeMethod(ctor, "dot", Dot);
 
-#define FF_PROTO_SET_MAT_OPERATIONS(ctor)				\
-	FF_PROTO_SET_MATRIX_OPERATIONS(ctor)					\
-	Nan::SetPrototypeMethod(ctor, "and", And);		\
-	Nan::SetPrototypeMethod(ctor, "or", Or);	
+#define FF_PROTO_SET_MAT_OPERATIONS(ctor)										\
+	FF_PROTO_SET_MATRIX_OPERATIONS(ctor)											\
+	Nan::SetPrototypeMethod(ctor, "and", And);								\
+	Nan::SetPrototypeMethod(ctor, "or", Or);									\
+	Nan::SetPrototypeMethod(ctor, "bitwiseAnd", BitwiseAnd);	\
+	Nan::SetPrototypeMethod(ctor, "bitwiseNot", BitwiseNot);	\
+	Nan::SetPrototypeMethod(ctor, "bitwiseOr", BitwiseOr);		\
+	Nan::SetPrototypeMethod(ctor, "bitwiseXor", BitwiseXor);	\
+	Nan::SetPrototypeMethod(ctor, "abs", Abs);								\
+	Nan::SetPrototypeMethod(ctor, "determinant", Determinant);
 
 #define FF_INIT_MATRIX_OPERATIONS(clazz, accessor, unwrapper)						\
 	static NAN_METHOD(Add) {																							\
@@ -85,16 +106,50 @@
 	}																																			\
 	static NAN_METHOD(HDiv) {																							\
 		FF_OPERATOR(cv::divide, FF_APPLY_FUNC, unwrapper, clazz);						\
-	}																																			
+	}																																			\
+	static NAN_METHOD(Absdiff) {																					\
+		FF_OPERATOR(cv::absdiff, FF_APPLY_FUNC, unwrapper, clazz);					\
+	}																																			\
+	static NAN_METHOD(Exp) {																							\
+		FF_SELF_OPERATOR(cv::exp, unwrapper);																\
+	}																																			\
+	static NAN_METHOD(Mean) {																							\
+		FF_SELF_OPERATOR(cv::mean, unwrapper);															\
+	}																																			\
+	static NAN_METHOD(Sqrt) {																							\
+		FF_SELF_OPERATOR(cv::sqrt, unwrapper);															\
+	}																																			\
+	static NAN_METHOD(Transpose) {																				\
+		FF_SELF_OPERATOR(cv::transpose, unwrapper);													\
+	}																																			\
 
-#define FF_INIT_MAT_OPERATIONS()																								\
-	FF_INIT_MATRIX_OPERATIONS(Mat, mat, FF_UNWRAP_MAT_AND_GET);										\
-	static NAN_METHOD(And) {																											\
-		FF_OPERATOR(&, FF_APPLY_OPERATOR, FF_UNWRAP_MAT_AND_GET, Mat);							\
-	}																																							\
-	static NAN_METHOD(Or) {																												\
-		FF_OPERATOR(|, FF_APPLY_OPERATOR, FF_UNWRAP_MAT_AND_GET, Mat);							\
-	}
+#define FF_INIT_MAT_OPERATIONS()																						\
+	FF_INIT_MATRIX_OPERATIONS(Mat, mat, FF_UNWRAP_MAT_AND_GET);								\
+	static NAN_METHOD(And) {																									\
+		FF_OPERATOR(&, FF_APPLY_OPERATOR, FF_UNWRAP_MAT_AND_GET, Mat);					\
+	}																																					\
+	static NAN_METHOD(Or) {																										\
+		FF_OPERATOR(|, FF_APPLY_OPERATOR, FF_UNWRAP_MAT_AND_GET, Mat);					\
+	}																																					\
+	static NAN_METHOD(BitwiseAnd) {																						\
+		FF_OPERATOR(cv::bitwise_and, FF_APPLY_FUNC, FF_UNWRAP_MAT_AND_GET, Mat);\
+	}																																					\
+	static NAN_METHOD(BitwiseNot) {																						\
+		FF_SELF_OPERATOR(cv::bitwise_not, FF_UNWRAP_MAT_AND_GET);								\
+	}																																					\
+	static NAN_METHOD(BitwiseOr) {																						\
+		FF_OPERATOR(cv::bitwise_or, FF_APPLY_FUNC, FF_UNWRAP_MAT_AND_GET, Mat);	\
+	}																																					\
+	static NAN_METHOD(BitwiseXor) {																						\
+		FF_OPERATOR(cv::bitwise_xor, FF_APPLY_FUNC, FF_UNWRAP_MAT_AND_GET, Mat);\
+	}																																					\
+	static NAN_METHOD(Abs) {																									\
+		FF_SELF_OPERATOR_RET(cv::abs, FF_UNWRAP_MAT_AND_GET);										\
+	}																																					\
+	static NAN_METHOD(Determinant) {																					\
+		return info.GetReturnValue().Set(																				\
+			cv::determinant(FF_UNWRAP_MAT_AND_GET(info.This())));									\
+	}																																			
 
 #define FF_INIT_VEC2_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec2, vec, FF_UNWRAP_VEC2_AND_GET);
 #define FF_INIT_VEC3_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec3, vec, FF_UNWRAP_VEC3_AND_GET);

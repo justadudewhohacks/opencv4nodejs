@@ -73,6 +73,14 @@ module.exports = () => {
           expect(vec0.dot(vec2)).to.equal(1300);
         });
       });
+
+      describe('absdiff', () => {
+        operatorRequiresArg('absdiff');
+
+        it('apply absdiff to matrices', async () => {
+          assertPropsWithValue(new Vec(100, 50).absdiff(new Vec(25, 75)))({ x: 75, y: 25 });
+        });
+      });
     });
 
     describe('Vec3', () => {
@@ -133,6 +141,14 @@ module.exports = () => {
 
         it('compute dot product of vectors', async () => {
           expect(vec0.dot(vec2)).to.equal(2200);
+        });
+      });
+
+      describe('absdiff', () => {
+        operatorRequiresArg('absdiff');
+
+        it('apply absdiff to matrices', async () => {
+          assertPropsWithValue(new Vec(100, 50, 25).absdiff(new Vec(25, 75, 25)))({ x: 75, y: 25, z: 0 });
         });
       });
 
@@ -203,6 +219,14 @@ module.exports = () => {
 
         it('compute dot product of vectors', async () => {
           expect(vec0.dot(vec2)).to.equal(2300);
+        });
+      });
+
+      describe('absdiff', () => {
+        operatorRequiresArg('absdiff');
+
+        it('apply absdiff to matrices', async () => {
+          assertPropsWithValue(new Vec(0, 100, 50, 25).absdiff(new Vec(50, 25, 75, 25)))({ w: 50, x: 75, y: 25, z: 0 });
         });
       });
     });
