@@ -7,7 +7,7 @@
 	}																																											
 
 #define FF_APPLY_FUNC(func, arg0, arg1, ret) func(arg0, arg1, ret);
-#define FF_APPLY_CLASS_FUNC(func, arg0, arg1, ret) ret = arg0.##func##(arg1);
+#define FF_APPLY_CLASS_FUNC(func, arg0, arg1, ret) ret = arg0##func##(arg1);
 #define FF_APPLY_OPERATOR(op, arg0, arg1, ret) ret = arg0 op arg1;
 
 
@@ -53,11 +53,11 @@
 	);																																							\
 	return info.GetReturnValue().Set(ret);
 
-#define FF_PROTO_SET_MATRIX_OPERATIONS(ctor)				\
-	Nan::SetPrototypeMethod(ctor, "add", Add);				\
-	Nan::SetPrototypeMethod(ctor, "sub", Sub);				\
-	Nan::SetPrototypeMethod(ctor, "mul", Mul);				\
-	Nan::SetPrototypeMethod(ctor, "div", Div);				\
+#define FF_PROTO_SET_MATRIX_OPERATIONS(ctor)		\
+	Nan::SetPrototypeMethod(ctor, "add", Add);		\
+	Nan::SetPrototypeMethod(ctor, "sub", Sub);		\
+	Nan::SetPrototypeMethod(ctor, "mul", Mul);		\
+	Nan::SetPrototypeMethod(ctor, "div", Div);		\
 	Nan::SetPrototypeMethod(ctor, "hMul", HMul);	\
 	Nan::SetPrototypeMethod(ctor, "hDiv", HDiv);	\
 	Nan::SetPrototypeMethod(ctor, "dot", Dot);
@@ -87,7 +87,7 @@
 		FF_OPERATOR(cv::divide, FF_APPLY_FUNC, unwrapper, clazz);						\
 	}																																			\
 	static NAN_METHOD(Dot) {																							\
-		FF_OPERATOR_RET_SCALAR(dot, FF_APPLY_CLASS_FUNC, unwrapper, clazz);	\
+		FF_OPERATOR_RET_SCALAR(.dot, FF_APPLY_CLASS_FUNC, unwrapper, clazz);\
 	}
 
 #define FF_INIT_MAT_OPERATIONS()																								\
