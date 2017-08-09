@@ -26,6 +26,9 @@ public:
 	static NAN_METHOD(ConvertTo);
 
 	FF_INIT_MAT_OPERATIONS();
+	static NAN_METHOD(Dot) {
+		FF_OPERATOR_RET_SCALAR(&cv::Mat::dot, FF_APPLY_CLASS_FUNC, FF_UNWRAP_MAT_AND_GET, Mat);
+	}
 
 	/* #IFDEF IMGPROC */
   static NAN_METHOD(Rescale);

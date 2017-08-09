@@ -4,10 +4,10 @@
 #define FF_ASSERT_INDEX_RANGE(idx, max)																									\
 	if (idx < 0 || max < idx) {																														\
 		return Nan::ThrowError(FF_V8STRING("Index out of bounds: " + std::to_string(idx)));	\
-	}																																											
+	}				
 
 #define FF_APPLY_FUNC(func, arg0, arg1, ret) func(arg0, arg1, ret);
-#define FF_APPLY_CLASS_FUNC(func, arg0, arg1, ret) ret = arg0##func##(arg1);
+#define FF_APPLY_CLASS_FUNC(func, arg0, arg1, ret) ret = ((arg0).*(func))(arg1);
 #define FF_APPLY_OPERATOR(op, arg0, arg1, ret) ret = arg0 op arg1;
 
 
@@ -85,10 +85,7 @@
 	}																																			\
 	static NAN_METHOD(HDiv) {																							\
 		FF_OPERATOR(cv::divide, FF_APPLY_FUNC, unwrapper, clazz);						\
-	}																																			\
-	static NAN_METHOD(Dot) {																							\
-		FF_OPERATOR_RET_SCALAR(.dot, FF_APPLY_CLASS_FUNC, unwrapper, clazz);\
-	}
+	}																																			
 
 #define FF_INIT_MAT_OPERATIONS()																								\
 	FF_INIT_MATRIX_OPERATIONS(Mat, mat, FF_UNWRAP_MAT_AND_GET);										\

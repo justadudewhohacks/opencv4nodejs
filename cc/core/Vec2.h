@@ -24,6 +24,9 @@ public:
 	static FF_GETTER(Vec2, GetY, vec[1]);
 
 	FF_INIT_VEC2_OPERATIONS();
+	static NAN_METHOD(Dot) {
+		FF_OPERATOR_RET_SCALAR(&cv::Vec2d::dot, FF_APPLY_CLASS_FUNC, FF_UNWRAP_VEC2_AND_GET, Vec2);
+	}
 
 	static NAN_METHOD(At) {
 		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 1);

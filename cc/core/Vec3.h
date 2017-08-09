@@ -25,8 +25,11 @@ public:
 	static FF_GETTER(Vec3, GetZ, vec[2]);
 
 	FF_INIT_VEC3_OPERATIONS();
+	static NAN_METHOD(Dot) {
+		FF_OPERATOR_RET_SCALAR(&cv::Vec3d::dot, FF_APPLY_CLASS_FUNC, FF_UNWRAP_VEC3_AND_GET, Vec3);
+	}
 	static NAN_METHOD(Cross) {
-		FF_OPERATOR(.cross, FF_APPLY_CLASS_FUNC, FF_UNWRAP_VEC3_AND_GET, Vec3);
+		FF_OPERATOR(&cv::Vec3d::cross, FF_APPLY_CLASS_FUNC, FF_UNWRAP_VEC3_AND_GET, Vec3);
 	}
 
 	static NAN_METHOD(At) {
