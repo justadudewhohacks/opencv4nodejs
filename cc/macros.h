@@ -142,17 +142,22 @@
 
 /* unwrappers */
 
-#define FF_UNWRAP_MAT(obj)	\
-	Nan::ObjectWrap::Unwrap<Mat>(obj)
+#define FF_UNWRAP(obj, clazz)	Nan::ObjectWrap::Unwrap<clazz>(obj)
 
-#define FF_UNWRAP_MAT_AND_GET(obj)	\
-	FF_UNWRAP_MAT(obj)->mat
+#define FF_UNWRAP_MAT(obj) FF_UNWRAP(obj, Mat)
+#define FF_UNWRAP_MAT_AND_GET(obj) FF_UNWRAP_MAT(obj)->mat
 
-#define FF_UNWRAP_SIZE(obj)	\
-	Nan::ObjectWrap::Unwrap<Size>(obj)
+#define FF_UNWRAP_VEC2(obj) FF_UNWRAP(obj, Vec2)
+#define FF_UNWRAP_VEC2_AND_GET(obj) FF_UNWRAP_VEC2(obj)->vec
 
-#define FF_UNWRAP_SIZE_AND_GET(obj)	\
-	FF_UNWRAP_SIZE(obj)->size
+#define FF_UNWRAP_VEC3(obj) FF_UNWRAP(obj, Vec3)
+#define FF_UNWRAP_VEC3_AND_GET(obj) FF_UNWRAP_VEC3(obj)->vec
+
+#define FF_UNWRAP_VEC4(obj) FF_UNWRAP(obj, Vec4)
+#define FF_UNWRAP_VEC4_AND_GET(obj) FF_UNWRAP_VEC4(obj)->vec
+
+#define FF_UNWRAP_SIZE(obj)	FF_UNWRAP(obj, Size)
+#define FF_UNWRAP_SIZE_AND_GET(obj)	FF_UNWRAP_SIZE(obj)->size
 
 
 #endif

@@ -108,9 +108,8 @@
 	}\
 }
 
-#define FF_MAT_DILATE_OR_ERODE(method) 																												\
-	method(matSelf, Nan::ObjectWrap::Unwrap<Mat>(jsMatDst)->mat,																\
-		Nan::ObjectWrap::Unwrap<Mat>(jsKernel)->mat, anchor, iterations, borderType, borderValue);
+#define FF_MAT_DILATE_OR_ERODE(func)	\
+	func(matSelf, FF_UNWRAP_MAT_AND_GET(jsMatDst), FF_UNWRAP_MAT_AND_GET(jsKernel), anchor, iterations, borderType, borderValue);
 
 namespace FF {
 	template<typename type>

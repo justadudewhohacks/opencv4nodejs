@@ -25,8 +25,7 @@ public:
 	static NAN_METHOD(CopyTo);
 	static NAN_METHOD(ConvertTo);
 
-	FF_INIT_NUMERIC_OPERATORS(Mat, mat);
-	FF_INIT_LOGICAL_OPERATORS(Mat, mat);
+	FF_INIT_MAT_OPERATIONS();
 
 	/* #IFDEF IMGPROC */
   static NAN_METHOD(Rescale);

@@ -18,8 +18,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "copyTo", CopyTo);
 	Nan::SetPrototypeMethod(ctor, "convertTo", ConvertTo);
 
-	FF_PROTO_SET_NUMERIC_OPERATORS(ctor);
-	FF_PROTO_SET_LOGICAL_OPERATORS(ctor);
+	FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
 	/* #IFDEF IMGPROC */
   Nan::SetPrototypeMethod(ctor, "rescale", Rescale);

@@ -17,7 +17,7 @@ public:
 	}
 
 	static void Init(v8::Local<v8::FunctionTemplate> ctor) {
-		FF_PROTO_SET_NUMERIC_OPERATORS(ctor);
+		FF_PROTO_SET_MATRIX_OPERATIONS(ctor);
 	}
 
 	static FF_GETTER(Vec4, GetW, vec[0]);
@@ -25,7 +25,7 @@ public:
 	static FF_GETTER(Vec4, GetY, vec[2]);
 	static FF_GETTER(Vec4, GetZ, vec[3]);
 
-	FF_INIT_NUMERIC_OPERATORS(Vec4, vec);
+	FF_INIT_VEC4_OPERATIONS();
 
 	static NAN_METHOD(At) {
 		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 3);

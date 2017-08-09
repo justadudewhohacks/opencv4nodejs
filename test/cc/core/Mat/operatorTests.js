@@ -1,6 +1,7 @@
 import { Mat, matTypes } from 'dut';
 import { assertError } from 'utils';
 import { assertDataDeepEquals, assertMetaData } from './matTestUtils';
+import { expect } from 'chai';
 
 const operatorRequiresArg = (func, isScalar) => {
   it('should throw if no args', () => {
@@ -9,7 +10,7 @@ const operatorRequiresArg = (func, isScalar) => {
         const mat = new Mat();
         return mat[func].bind(mat)();
       },
-      `expected arg to be a ${isScalar ? 'Scalar' : 'Mat'}`
+      `expected arg to be ${isScalar ? 'a Scalar' : 'an instance of Mat'}`
     );
   });
 };
@@ -131,6 +132,67 @@ module.exports = () => {
       const res = mat0.or(mat1);
       assertMetaData(res)(2, 2, matTypes.CV_8U);
       assertDataDeepEquals(res.getData(), expectedResult);
+    });
+  });
+
+  describe('hMul', () => {
+    operatorRequiresArg('hMul');
+
+    it('apply or to matrices', async () => {
+      const mat0 = new Mat([
+        [20, 40],
+        [60, 80]
+      ], matTypes.CV_8U);
+      const mat1 = new Mat([
+        [5, 4],
+        [2, 1]
+      ], matTypes.CV_8U);
+      const expectedResult = [
+        [100, 160],
+        [120, 80]
+      ];
+      const res = mat0.hMul(mat1);console.log(res.getData())
+      assertMetaData(res)(2, 2, matTypes.CV_8U);
+      assertDataDeepEquals(res.getData(), expectedResult);
+    });
+  });
+
+  describe('hDiv', () => {
+    operatorRequiresArg('hDiv');
+
+    it('apply or to matrices', async () => {
+      const mat0 = new Mat([
+        [20, 40],
+        [60, 80]
+      ], matTypes.CV_8U);
+      const mat1 = new Mat([
+        [2, 5],
+        [10, 20]
+      ], matTypes.CV_8U);
+      const expectedResult = [
+        [10, 8],
+        [6, 4]
+      ];
+      const res = mat0.hDiv(mat1);
+      assertMetaData(res)(2, 2, matTypes.CV_8U);
+      assertDataDeepEquals(res.getData(), expectedResult);
+    });
+  });
+
+  describe('dot', () => {
+    operatorRequiresArg('dot');
+
+    it('apply or to matrices', async () => {
+      const mat0 = new Mat([
+        [20, 40],
+        [60, 80]
+      ], matTypes.CV_8U);
+      const mat1 = new Mat([
+        [10, 10],
+        [10, 10]
+      ], matTypes.CV_8U);
+      const res = mat0.dot(mat1);
+      expect(res).to.equal(2000);
     });
   });
 };

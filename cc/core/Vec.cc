@@ -22,6 +22,7 @@ NAN_MODULE_INIT(Vec::Init) {
 	Nan::SetAccessor(vec3Ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Vec3::GetY);
 	Nan::SetAccessor(vec3Ctor->InstanceTemplate(), Nan::New("z").ToLocalChecked(), Vec3::GetZ);
 	Nan::SetPrototypeMethod(vec3Ctor, "at", Vec3::At);
+	Nan::SetPrototypeMethod(vec3Ctor, "cross", Vec3::Cross);
 	Vec3::Init(vec3Ctor);
 
 	v8::Local<v8::FunctionTemplate> vec4Ctor = Nan::New<v8::FunctionTemplate>(Vec4::New);
