@@ -74,7 +74,6 @@
 	Nan::SetPrototypeMethod(ctor, "exp", Exp);								\
 	Nan::SetPrototypeMethod(ctor, "mean", Mean);							\
 	Nan::SetPrototypeMethod(ctor, "sqrt", Sqrt);							\
-	Nan::SetPrototypeMethod(ctor, "transpose", Transpose);		\
 	Nan::SetPrototypeMethod(ctor, "dot", Dot);
 
 #define FF_PROTO_SET_MAT_OPERATIONS(ctor)										\
@@ -86,6 +85,7 @@
 	Nan::SetPrototypeMethod(ctor, "bitwiseOr", BitwiseOr);		\
 	Nan::SetPrototypeMethod(ctor, "bitwiseXor", BitwiseXor);	\
 	Nan::SetPrototypeMethod(ctor, "abs", Abs);								\
+	Nan::SetPrototypeMethod(ctor, "transpose", Transpose);		\
 	Nan::SetPrototypeMethod(ctor, "determinant", Determinant);
 
 #define FF_INIT_MATRIX_OPERATIONS(clazz, accessor, unwrapper)						\
@@ -119,9 +119,7 @@
 	static NAN_METHOD(Sqrt) {																							\
 		FF_SELF_OPERATOR(cv::sqrt, unwrapper);															\
 	}																																			\
-	static NAN_METHOD(Transpose) {																				\
-		FF_SELF_OPERATOR(cv::transpose, unwrapper);													\
-	}																																			\
+
 
 #define FF_INIT_MAT_OPERATIONS()																						\
 	FF_INIT_MATRIX_OPERATIONS(Mat, mat, FF_UNWRAP_MAT_AND_GET);								\
@@ -149,7 +147,10 @@
 	static NAN_METHOD(Determinant) {																					\
 		return info.GetReturnValue().Set(																				\
 			cv::determinant(FF_UNWRAP_MAT_AND_GET(info.This())));									\
-	}																																			
+	}																																					\
+	static NAN_METHOD(Transpose) {																						\
+		FF_SELF_OPERATOR(cv::transpose, FF_UNWRAP_MAT_AND_GET);									\
+	}																																					
 
 #define FF_INIT_VEC2_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec2, vec, FF_UNWRAP_VEC2_AND_GET);
 #define FF_INIT_VEC3_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec3, vec, FF_UNWRAP_VEC3_AND_GET);

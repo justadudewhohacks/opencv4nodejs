@@ -291,4 +291,49 @@ module.exports = () => {
       assertDataDeepEquals(res.getData(), expectedResult);
     });
   });
+
+  describe('exp', () => {
+    it('apply exp to matrix', async () => {
+      const res = new Mat([
+        [Math.log(1), Math.log(2)],
+        [0, Math.log(4)]
+      ], matTypes.CV_64F).exp();
+      assertMetaData(res)(2, 2, matTypes.CV_64F);
+    });
+  });
+
+  describe('sqrt', () => {
+    it('apply sqrt to matrix', async () => {
+      const mat0 = new Mat([
+        [4, 16],
+        [0, 64]
+      ], matTypes.CV_64F);
+      const expectedResult = [
+        [2, 4],
+        [0, 8]
+      ];
+
+      const res = mat0.sqrt();
+      assertMetaData(res)(2, 2, matTypes.CV_64F);
+      assertDataDeepEquals(res.getData(), expectedResult);
+    });
+  });
+
+  describe('transpose', () => {
+    it('apply transpose to matrix', async () => {
+      const mat0 = new Mat([
+        [255, 0],
+        [0, 255],
+        [0, 0]
+      ], matTypes.CV_8U);
+      const expectedResult = [
+        [255, 0, 0],
+        [0, 255, 0]
+      ];
+
+      const res = mat0.transpose();
+      assertMetaData(res)(2, 3, matTypes.CV_8U);
+      assertDataDeepEquals(res.getData(), expectedResult);
+    });
+  });
 };

@@ -81,6 +81,18 @@ module.exports = () => {
           assertPropsWithValue(new Vec(100, 50).absdiff(new Vec(25, 75)))({ x: 75, y: 25 });
         });
       });
+
+      describe('exp', () => {
+        it('apply exp to vector', async () => {
+          assertPropsWithValue(new Vec(Math.log(4), 0).exp())({ x: 4, y: 1 });
+        });
+      });
+
+      describe('sqrt', () => {
+        it('apply sqrt to vector', async () => {
+          assertPropsWithValue(new Vec(4, 16).sqrt())({ x: 2, y: 4 });
+        });
+      });
     });
 
     describe('Vec3', () => {
@@ -149,6 +161,18 @@ module.exports = () => {
 
         it('apply absdiff to matrices', async () => {
           assertPropsWithValue(new Vec(100, 50, 25).absdiff(new Vec(25, 75, 25)))({ x: 75, y: 25, z: 0 });
+        });
+      });
+
+      describe('exp', () => {
+        it('apply exp to vector', async () => {
+          assertPropsWithValue(new Vec(Math.log(4), 0, Math.log(0)).exp())({ x: 4, y: 1, z: 0 });
+        });
+      });
+
+      describe('sqrt', () => {
+        it('apply sqrt to vector', async () => {
+          assertPropsWithValue(new Vec(4, 16, 64).sqrt())({ x: 2, y: 4, z: 8 });
         });
       });
 
@@ -229,6 +253,19 @@ module.exports = () => {
           assertPropsWithValue(new Vec(0, 100, 50, 25).absdiff(new Vec(50, 25, 75, 25)))({ w: 50, x: 75, y: 25, z: 0 });
         });
       });
+
+      describe('exp', () => {
+        it('apply exp to vector', async () => {
+          assertPropsWithValue(new Vec(Math.log(1), Math.log(4), 0, Math.log(0)).exp())({ w: 1, x: 4, y: 1, z: 0 });
+        });
+      });
+
+      describe('sqrt', () => {
+        it('apply sqrt to vector', async () => {
+          assertPropsWithValue(new Vec(0, 4, 16, 64).sqrt())({ w: 0, x: 2, y: 4, z: 8 });
+        });
+      });
+
     });
   });
 };
