@@ -2,4 +2,5 @@ vs
 .vs
 .vscode
 build
+bin
 node_modules

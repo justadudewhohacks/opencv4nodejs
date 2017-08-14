@@ -14,7 +14,7 @@ const test = (type, value) => {
     assertType = type + 1;
   }
   assertMetaData(mat)(rows, cols, assertType);
-  assertDataDeepEquals(matDataFromValue(value), mat.getData());
+  assertDataDeepEquals(matDataFromValue(value), mat.getDataAsArray());
 };
 
 

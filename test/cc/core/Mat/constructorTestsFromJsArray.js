@@ -58,7 +58,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_8UC2 with correct data', () => {
@@ -71,7 +71,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_8UC3 with correct data', () => {
@@ -84,7 +84,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_8UC4 with correct data', () => {
@@ -97,7 +97,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_8SC1 with correct data', () => {
@@ -110,7 +110,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_8SC2 with correct data', () => {
@@ -123,7 +123,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_8SC3 with correct data', () => {
@@ -136,7 +136,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_8SC4 with correct data', () => {
@@ -149,7 +149,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_16UC1 with correct data', () => {
@@ -162,7 +162,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_16UC2 with correct data', () => {
@@ -175,7 +175,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_16UC3 with correct data', () => {
@@ -188,7 +188,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_16UC4 with correct data', () => {
@@ -201,7 +201,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_16SC1 with correct data', () => {
@@ -214,7 +214,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_16SC2 with correct data', () => {
@@ -227,7 +227,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_16SC3 with correct data', () => {
@@ -240,7 +240,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_16SC4 with correct data', () => {
@@ -253,7 +253,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_32SC1 with correct data', () => {
@@ -266,7 +266,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_32SC2 with correct data', () => {
@@ -279,7 +279,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_32SC3 with correct data', () => {
@@ -292,7 +292,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_32SC4 with correct data', () => {
@@ -305,7 +305,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_32FC1 with correct data', () => {
@@ -318,7 +318,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, matTypes.CV_64FC1);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_32FC2 with correct data', () => {
@@ -331,7 +331,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, matTypes.CV_64FC2);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_32FC3 with correct data', () => {
@@ -344,7 +344,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, matTypes.CV_64FC3);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_32FC4 with correct data', () => {
@@ -357,7 +357,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, matTypes.CV_64FC4);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_64FC1 with correct data', () => {
@@ -370,7 +370,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_64FC2 with correct data', () => {
@@ -383,7 +383,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_64FC3 with correct data', () => {
@@ -396,7 +396,7 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
 
     it('should initialize CV_64FC4 with correct data', () => {
@@ -409,6 +409,6 @@ module.exports = () =>
       ];
       const mat = new Mat(matData, type);
       assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getData());
+      assertDataDeepEquals(matData, mat.getDataAsArray());
     });
   });

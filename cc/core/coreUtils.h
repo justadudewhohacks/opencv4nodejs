@@ -1,9 +1,10 @@
 #ifndef FF_COREUTILS_H_
 #define FF_COREUTILS_H_
 
-#define FF_ASSERT_INDEX_RANGE(idx, max)																									\
-	if (idx < 0 || max < idx) {																														\
-		return Nan::ThrowError(FF_V8STRING("Index out of bounds: " + std::to_string(idx)));	\
+#define FF_ASSERT_INDEX_RANGE(idx, max, what)											\
+	if (idx < 0 || max < idx) {																			\
+		return Nan::ThrowError(FF_V8STRING("Index out of bounds: "		\
+			+ std::string(what) + " at index " + std::to_string(idx)));	\
 	}				
 
 #define FF_APPLY_FUNC(func, arg0, arg1, ret) func(arg0, arg1, ret);

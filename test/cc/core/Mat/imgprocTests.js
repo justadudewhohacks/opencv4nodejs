@@ -15,10 +15,10 @@ const rgbMat = new Mat(rgbMatData, matTypes.CV_8UC3);
 
 module.exports = () => {
   describe('bgrToGray', () => {
-    it('should convert mat to gray scale', async () => {
+    it('should convert mat to gray scale', () => {
       const converted = rgbMat.bgrToGray();
       assertMetaData(converted)(rgbMat.rows, rgbMat.cols, matTypes.CV_8U);
-      expect(dangerousDeepEquals(converted.getData(), rgbMatData)).to.be.false;
+      expect(dangerousDeepEquals(converted.getDataAsArray(), rgbMatData)).to.be.false;
     });
   });
 
@@ -28,15 +28,15 @@ module.exports = () => {
       return mat.cvtColor.bind(mat);
     })());
 
-    it('should throw if code invalid', async () => {
+    it('should throw if code invalid', () => {
       assertError(() => rgbMat.cvtColor({ code: undefined }), 'Invalid type for code');
       assertError(() => rgbMat.cvtColor({ code: null }), 'Invalid type for code');
     });
 
-    it('should convert color', async () => {
+    it('should convert color', () => {
       const converted = rgbMat.cvtColor({ code: colorConversionCodes.COLOR_BGR2Lab });
       assertMetaData(converted)(rgbMat.rows, rgbMat.cols, rgbMat.type);
-      expect(dangerousDeepEquals(converted.getData(), rgbMatData)).to.be.false;
+      expect(dangerousDeepEquals(converted.getDataAsArray(), rgbMatData)).to.be.false;
     });
   });
 
@@ -46,13 +46,13 @@ module.exports = () => {
       return mat.erode.bind(mat);
     })());
 
-    it('should erode image', async () => {
+    it('should erode image', () => {
       const matData = Array(5).fill([0, 255, 0, 255, 0]);
       const kernelData = Array(3).fill([255, 255, 255]);
       const eroded = new Mat(matData, matTypes.CV_8U).erode({
         kernel: new Mat(kernelData, matTypes.CV_8U)
       });
-      assertDataDeepEquals(Array(5).fill(Array(5).fill(0)), eroded.getData());
+      assertDataDeepEquals(Array(5).fill(Array(5).fill(0)), eroded.getDataAsArray());
     });
   });
 
@@ -62,13 +62,13 @@ module.exports = () => {
       return mat.dilate.bind(mat);
     })());
 
-    it('should dilate image', async () => {
+    it('should dilate image', () => {
       const matData = Array(5).fill([0, 255, 0, 255, 0]);
       const kernelData = Array(3).fill([255, 255, 255]);
       const eroded = new Mat(matData, matTypes.CV_8U).dilate({
         kernel: new Mat(kernelData, matTypes.CV_8U)
       });
-      assertDataDeepEquals(Array(5).fill(Array(5).fill(255)), eroded.getData());
+      assertDataDeepEquals(Array(5).fill(Array(5).fill(255)), eroded.getDataAsArray());
     });
   });
 
@@ -91,7 +91,7 @@ module.exports = () => {
 
       const warped = img.warpPerspective({ transformationMatrix });
       assertMetaData(warped)(img.rows, img.cols, img.type);
-      expect(dangerousDeepEquals(warped.getData(), img.getData())).to.be.false;
+      expect(dangerousDeepEquals(warped.getDataAsArray(), img.getDataAsArray())).to.be.false;
     });
   });
 };

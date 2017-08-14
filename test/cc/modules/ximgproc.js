@@ -13,12 +13,12 @@ describe('ximgproc', () => {
     describe('constructor', () => {
       funcRequiresArgsObject(args => new ximgproc.SuperpixelSEEDS(args));
 
-      it('should throw if image is no Mat instance', async () => {
+      it('should throw if image is no Mat instance', () => {
         // TODO
         // assert(false, 'not implemented yet');
       });
 
-      it('should be constructable with required args', async () => {
+      it('should be constructable with required args', () => {
         const args = {
           img: testImg,
           numSuperpixels: 100,
@@ -41,7 +41,7 @@ describe('ximgproc', () => {
         });
       });
 
-      it('should iterate with default values', async () => {
+      it('should iterate with default values', () => {
         superpixelSeeds.iterate();
         assert(superpixelSeeds.numCalculatedSuperpixels > 0, 'no superpixels calculated');
         assertPropsWithValue(superpixelSeeds.labels)({

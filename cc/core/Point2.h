@@ -20,7 +20,7 @@ public:
 	static FF_GETTER(Point2, GetY, pt.y);
 
 	static NAN_METHOD(At) {
-		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 1);
+		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 1, "Point2");
 		cv::Point2d ptSelf = Nan::ObjectWrap::Unwrap<Point2>(info.This())->pt;
 		const double coords[] = { ptSelf.x, ptSelf.y };
 		info.GetReturnValue().Set(coords[info[0]->Uint32Value()]);

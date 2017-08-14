@@ -42,8 +42,8 @@ describe('Point', () => {
       describe('at', () => {
         const pt2 = new Point(10, 20);
         it('should throw index out of bounds', () => {
-          assertError(() => pt2.at(-1), 'Index out of bounds: -1');
-          assertError(() => pt2.at(2), 'Index out of bounds: 2');
+          assertError(() => pt2.at(-1), 'Index out of bounds: Point2 at index -1');
+          assertError(() => pt2.at(2), 'Index out of bounds: Point2 at index 2');
         });
 
         it('should return values from indices', () => {
@@ -89,8 +89,8 @@ describe('Point', () => {
       describe('at', () => {
         const pt3 = new Point(10, 20, 30);
         it('should throw index out of bounds', () => {
-          assertError(() => pt3.at(-1), 'Index out of bounds: -1');
-          assertError(() => pt3.at(3), 'Index out of bounds: 3');
+          assertError(() => pt3.at(-1), 'Index out of bounds: Point3 at index -1');
+          assertError(() => pt3.at(3), 'Index out of bounds: Point3 at index 3');
         });
 
         it('should return values from indeces', () => {

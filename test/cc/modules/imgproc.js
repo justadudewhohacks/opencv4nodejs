@@ -11,12 +11,12 @@ describe('imgproc', () => {
 
     funcRequiresArgsObject(imgproc.getStructuringElement);
 
-    it('should throw if type invalid', async () => {
+    it('should throw if type invalid', () => {
       assertError(() => new Mat().convertTo({ type: undefined }), 'Invalid type for type');
       assertError(() => new Mat().convertTo({ type: null }), 'Invalid type for type');
     });
 
-    it('should be constructable with required args', async () => {
+    it('should be constructable with required args', () => {
       const kernel = imgproc.getStructuringElement({
         shape: morphShapes.MORPH_CROSS,
         size
@@ -24,7 +24,7 @@ describe('imgproc', () => {
       assertPropsWithValue(kernel)({ rows, cols });
     });
 
-    it('should be constructable with anchor', async () => {
+    it('should be constructable with anchor', () => {
       const kernel = imgproc.getStructuringElement({
         shape: morphShapes.MORPH_CROSS,
         size,

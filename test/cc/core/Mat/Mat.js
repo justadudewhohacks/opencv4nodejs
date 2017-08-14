@@ -1,5 +1,6 @@
 import { Mat, matTypes } from 'dut';
 import { assertError, funcRequiresArgsObject } from 'utils';
+import { expect } from 'chai';
 import { assertMetaData, assertDataDeepEquals } from './matTestUtils';
 import constructorTestsFromJsArray from './constructorTestsFromJsArray';
 import constructorTestsFromFillVector from './constructorTestsFromFillVector';
@@ -30,16 +31,16 @@ describe('Mat', () => {
   imgprocTests();
 
   describe('copy', () => {
-    it('should copy data', async () => {
+    it('should copy data', () => {
       const dstMat = srcMat.copy();
       assertMetaData(dstMat)(srcMat.rows, srcMat.cols, srcMat.type);
-      assertDataDeepEquals(srcMat.getData(), dstMat.getData());
+      assertDataDeepEquals(srcMat.getDataAsArray(), dstMat.getDataAsArray());
     });
 
-    it('should copy masked data', async () => {
+    it('should copy masked data', () => {
       const dstMat = srcMat.copy(mask);
       assertMetaData(dstMat)(expectedCopy.rows, expectedCopy.cols, expectedCopy.type);
-      assertDataDeepEquals(expectedCopyData, dstMat.getData());
+      assertDataDeepEquals(expectedCopyData, dstMat.getDataAsArray());
     });
   });
 
@@ -52,30 +53,48 @@ describe('Mat', () => {
       'expected arg: destination mat'
     );
 
-    it('should copy data', async () => {
+    it('should copy data', () => {
       const dstMat = srcMat.copyTo(new Mat(srcMat.rows, srcMat.cols, srcMat.type));
       assertMetaData(dstMat)(srcMat.rows, srcMat.cols, srcMat.type);
-      assertDataDeepEquals(srcMat.getData(), dstMat.getData());
+      assertDataDeepEquals(srcMat.getDataAsArray(), dstMat.getDataAsArray());
     });
 
-    it('should copy masked data', async () => {
+    it('should copy masked data', () => {
       const dstMat = srcMat.copyTo(new Mat(srcMat.rows, srcMat.cols, srcMat.type, 0), mask);
       assertMetaData(dstMat)(expectedCopy.rows, expectedCopy.cols, expectedCopy.type);
-      assertDataDeepEquals(expectedCopyData, dstMat.getData());
+      assertDataDeepEquals(expectedCopyData, dstMat.getDataAsArray());
     });
   });
 
   describe('convertTo', () => {
     funcRequiresArgsObject(args => new Mat().convertTo(args));
 
-    it('should throw if type invalid', async () => {
+    it('should throw if type invalid', () => {
       assertError(() => srcMat.convertTo({ type: undefined }), 'Invalid type for type');
       assertError(() => srcMat.convertTo({ type: null }), 'Invalid type for type');
     });
 
-    it('should convert mat', async () => {
+    it('should convert mat', () => {
       const dstMat = srcMat.convertTo({ type: matTypes.CV_32S });
       assertMetaData(dstMat)(srcMat.rows, srcMat.cols, matTypes.CV_32S);
+    });
+  });
+
+  describe.only('getData', () => {
+    it('getData', () => {
+      console.log(srcMat.getData())
+    });
+  });
+
+  describe('at', () => {
+    it('at', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe('atRaw', () => {
+    it('atRaw', () => {
+      expect(true).to.be.false;
     });
   });
 });

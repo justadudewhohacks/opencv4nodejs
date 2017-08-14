@@ -19,7 +19,7 @@ module.exports = () => {
   describe('add', () => {
     operatorRequiresArg('add');
 
-    it('add matrices', async () => {
+    it('add matrices', () => {
       const mat = new Mat([
         [10, 20],
         [10, 20]
@@ -30,14 +30,14 @@ module.exports = () => {
       ];
       const res = mat.add(mat);
       assertMetaData(res)(2, 2, matTypes.CV_8U);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 
   describe('sub', () => {
     operatorRequiresArg('sub');
 
-    it('subtract matrices', async () => {
+    it('subtract matrices', () => {
       const mat0 = new Mat([
         [20, 40],
         [20, 40]
@@ -46,17 +46,17 @@ module.exports = () => {
         [10, 20],
         [10, 20]
       ], matTypes.CV_8U);
-      const expectedResult = mat1.getData();
+      const expectedResult = mat1.getDataAsArray();
       const res = mat0.sub(mat1);
       assertMetaData(res)(2, 2, matTypes.CV_8U);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 
   describe('mul', () => {
     operatorRequiresArg('mul', true);
 
-    it('multiply matrix by scalar', async () => {
+    it('multiply matrix by scalar', () => {
       const mat = new Mat([
         [20, 40],
         [20, 40]
@@ -68,14 +68,14 @@ module.exports = () => {
       ];
       const res = mat.mul(scalar);
       assertMetaData(res)(2, 2, matTypes.CV_8U);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 
   describe('div', () => {
     operatorRequiresArg('div', true);
 
-    it('divide matrix by scalar', async () => {
+    it('divide matrix by scalar', () => {
       const mat = new Mat([
         [20, 40],
         [20, 40]
@@ -87,14 +87,14 @@ module.exports = () => {
       ];
       const res = mat.div(scalar);
       assertMetaData(res)(2, 2, matTypes.CV_8U);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 
   describe('and', () => {
     operatorRequiresArg('and');
 
-    it('apply and to matrices', async () => {
+    it('apply and to matrices', () => {
       const mat0 = new Mat([
         [15, 15],
         [15, 15]
@@ -109,14 +109,14 @@ module.exports = () => {
       ];
       const res = mat0.and(mat1);
       assertMetaData(res)(2, 2, matTypes.CV_8U);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 
   describe('or', () => {
     operatorRequiresArg('or');
 
-    it('apply or to matrices', async () => {
+    it('apply or to matrices', () => {
       const mat0 = new Mat([
         [15, 15],
         [0, 0]
@@ -131,14 +131,14 @@ module.exports = () => {
       ];
       const res = mat0.or(mat1);
       assertMetaData(res)(2, 2, matTypes.CV_8U);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 
   describe('hMul', () => {
     operatorRequiresArg('hMul');
 
-    it('apply or to matrices', async () => {
+    it('apply or to matrices', () => {
       const mat0 = new Mat([
         [20, 40],
         [60, 80]
@@ -153,14 +153,14 @@ module.exports = () => {
       ];
       const res = mat0.hMul(mat1);
       assertMetaData(res)(2, 2, matTypes.CV_8U);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 
   describe('hDiv', () => {
     operatorRequiresArg('hDiv');
 
-    it('apply or to matrices', async () => {
+    it('apply or to matrices', () => {
       const mat0 = new Mat([
         [20, 40],
         [60, 80]
@@ -175,14 +175,14 @@ module.exports = () => {
       ];
       const res = mat0.hDiv(mat1);
       assertMetaData(res)(2, 2, matTypes.CV_8U);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 
   describe('dot', () => {
     operatorRequiresArg('dot');
 
-    it('apply or to matrices', async () => {
+    it('apply or to matrices', () => {
       const mat0 = new Mat([
         [20, 40],
         [60, 80]
@@ -199,7 +199,7 @@ module.exports = () => {
   describe('bitwiseAnd', () => {
     operatorRequiresArg('bitwiseAnd');
 
-    it('apply bitwiseAnd to matrices', async () => {
+    it('apply bitwiseAnd to matrices', () => {
       const mat0 = new Mat([
         [[15, 15], [15, 15]],
         [[15, 15], [15, 15]]
@@ -210,12 +210,12 @@ module.exports = () => {
       ], matTypes.CV_8UC2);
       const res = mat0.bitwiseAnd(mat1);
       assertMetaData(res)(2, 2, matTypes.CV_8UC2);
-      assertDataDeepEquals(res.getData(), mat1.getData());
+      assertDataDeepEquals(res.getDataAsArray(), mat1.getDataAsArray());
     });
   });
 
   describe('bitwiseNot', () => {
-    it('apply bitwiseNot to matrix', async () => {
+    it('apply bitwiseNot to matrix', () => {
       const mat0 = new Mat([
         [[255, 127], [15, 7]],
         [[63, 31], [3, 0]]
@@ -226,14 +226,14 @@ module.exports = () => {
       ];
       const res = mat0.bitwiseNot();
       assertMetaData(res)(2, 2, matTypes.CV_8UC2);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 
   describe('bitwiseOr', () => {
     operatorRequiresArg('bitwiseOr');
 
-    it('apply bitwiseOr to matrices', async () => {
+    it('apply bitwiseOr to matrices', () => {
       const mat0 = new Mat([
         [[15, 15], [15, 15]],
         [[15, 15], [15, 15]]
@@ -244,14 +244,14 @@ module.exports = () => {
       ], matTypes.CV_8UC2);
       const res = mat0.bitwiseOr(mat1);
       assertMetaData(res)(2, 2, matTypes.CV_8UC2);
-      assertDataDeepEquals(res.getData(), mat0.getData());
+      assertDataDeepEquals(res.getDataAsArray(), mat0.getDataAsArray());
     });
   });
 
   describe('bitwiseXor', () => {
     operatorRequiresArg('bitwiseXor');
 
-    it('apply bitwiseXor to matrices', async () => {
+    it('apply bitwiseXor to matrices', () => {
       const mat0 = new Mat([
         [[15, 15], [15, 15]],
         [[15, 15], [15, 15]]
@@ -266,14 +266,14 @@ module.exports = () => {
       ];
       const res = mat0.bitwiseXor(mat1);
       assertMetaData(res)(2, 2, matTypes.CV_8UC2);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 
   describe('absdiff', () => {
     operatorRequiresArg('absdiff');
 
-    it('apply absdiff to matrices', async () => {
+    it('apply absdiff to matrices', () => {
       const mat0 = new Mat([
         [[255, 50], [255, 50]],
         [[100, 0], [100, 0]]
@@ -288,12 +288,12 @@ module.exports = () => {
       ];
       const res = mat0.absdiff(mat1);
       assertMetaData(res)(2, 2, matTypes.CV_8UC2);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 
   describe('exp', () => {
-    it('apply exp to matrix', async () => {
+    it('apply exp to matrix', () => {
       const res = new Mat([
         [Math.log(1), Math.log(2)],
         [0, Math.log(4)]
@@ -303,7 +303,7 @@ module.exports = () => {
   });
 
   describe('sqrt', () => {
-    it('apply sqrt to matrix', async () => {
+    it('apply sqrt to matrix', () => {
       const mat0 = new Mat([
         [4, 16],
         [0, 64]
@@ -315,12 +315,12 @@ module.exports = () => {
 
       const res = mat0.sqrt();
       assertMetaData(res)(2, 2, matTypes.CV_64F);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 
   describe('transpose', () => {
-    it('apply transpose to matrix', async () => {
+    it('apply transpose to matrix', () => {
       const mat0 = new Mat([
         [255, 0],
         [0, 255],
@@ -333,7 +333,7 @@ module.exports = () => {
 
       const res = mat0.transpose();
       assertMetaData(res)(2, 3, matTypes.CV_8U);
-      assertDataDeepEquals(res.getData(), expectedResult);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
 };

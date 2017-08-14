@@ -29,7 +29,7 @@ public:
 	}
 
 	static NAN_METHOD(At) {
-		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 1);
+		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 1, "Vec2");
 		cv::Vec2d vecSelf = Nan::ObjectWrap::Unwrap<Vec2>(info.This())->vec;
 		info.GetReturnValue().Set(vecSelf[info[0]->Uint32Value()]);
 	}

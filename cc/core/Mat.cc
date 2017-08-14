@@ -11,7 +11,10 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("cols").ToLocalChecked(), Mat::GetCols);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("type").ToLocalChecked(), Mat::GetType);
 
+	Nan::SetPrototypeMethod(ctor, "at", At);
+	Nan::SetPrototypeMethod(ctor, "atRaw", AtRaw);
 	Nan::SetPrototypeMethod(ctor, "getData", GetData);
+	Nan::SetPrototypeMethod(ctor, "getDataAsArray", GetDataAsArray);
 	Nan::SetPrototypeMethod(ctor, "row", Row);
 	Nan::SetPrototypeMethod(ctor, "copy", Copy);
 	Nan::SetPrototypeMethod(ctor, "copyTo", CopyTo);
@@ -85,7 +88,55 @@ NAN_METHOD(Mat::New) {
 	info.GetReturnValue().Set(info.Holder());
 }
 
+NAN_METHOD(Mat::At) {
+	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+	FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.rows - 1, "Mat::At row");
+	FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.cols - 1, "Mat::At col");
+
+	v8::Local<v8::Value> val;
+	FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
+	v8::Local<v8::Value> jsVal;
+	if (val->IsArray()) {
+		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(val);
+		v8::Local<v8::Object> jsVec;
+		if (vec->Length() == 2) {
+			jsVec = FF_NEW(Vec2::constructor);
+			FF_UNWRAP_VEC2(jsVec)->vec = cv::Vec2d(vec->Get(0)->NumberValue(), vec->Get(1)->NumberValue());
+		}
+		else if (vec->Length() == 3) {
+			jsVec = FF_NEW(Vec3::constructor);
+			FF_UNWRAP_VEC3(jsVec)->vec = cv::Vec3d(vec->Get(0)->NumberValue(), vec->Get(1)->NumberValue(), vec->Get(2)->NumberValue());
+		}
+		else {
+			jsVec = FF_NEW(Vec4::constructor);
+			FF_UNWRAP_VEC4(jsVec)->vec = cv::Vec4d(vec->Get(0)->NumberValue(), vec->Get(1)->NumberValue(), vec->Get(2)->NumberValue());
+		}
+		jsVal = jsVec;
+	}
+	else {
+		jsVal = v8::Local<v8::Value>::Cast(val);
+	}
+	info.GetReturnValue().Set(jsVal);
+}
+
+NAN_METHOD(Mat::AtRaw) {
+	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+	FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.rows - 1, "Mat::At row");
+	FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.cols - 1, "Mat::At col");
+	v8::Local<v8::Value> val;
+	FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
+	info.GetReturnValue().Set(val);
+}
+
 NAN_METHOD(Mat::GetData) {
+	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+	size_t size = matSelf.rows * matSelf.cols * matSelf.elemSize();
+	char *data = static_cast<char *>(malloc(size));
+	memcpy(data, matSelf.data, size);
+	info.GetReturnValue().Set(Nan::NewBuffer(data, size).ToLocalChecked());
+}
+
+NAN_METHOD(Mat::GetDataAsArray) {
 	cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info.This());
 	v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(mat.rows);
 	FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT, FF::matGet);
