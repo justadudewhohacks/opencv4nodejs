@@ -34,7 +34,6 @@ public:
 		FF_OPERATOR_RET_SCALAR(&cv::Mat::dot, FF_APPLY_CLASS_FUNC, FF_UNWRAP_MAT_AND_GET, Mat);
 	}
 	
-
 	/* #IFDEF IMGPROC */
   static NAN_METHOD(Rescale);
   static NAN_METHOD(Resize);

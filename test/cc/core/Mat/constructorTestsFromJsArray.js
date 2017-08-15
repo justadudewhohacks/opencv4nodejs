@@ -1,8 +1,19 @@
 import { Mat, matTypes } from 'dut';
 import { assert } from 'chai';
 import { assertDataDeepEquals, assertMetaData } from './matTestUtils';
-import { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
-  intMin, floatMin, floatMax, doubleMin, doubleMax } from './typeRanges';
+import { getExampleMatData } from './exampleData';
+
+const createAndAssertMatDataEquals = (type) => {
+  const matData = getExampleMatData(type);
+  const mat = new Mat(matData, type);
+  let assertType = type;
+  // assert float type to become double type
+  if ([matTypes.CV_32FC1, matTypes.CV_32FC2, matTypes.CV_32FC3, matTypes.CV_32FC4].some(matType => matType === type)) {
+    assertType = type + 1;
+  }
+  assertMetaData(mat)(4, 3, assertType);
+  assertDataDeepEquals(matData, mat.getDataAsArray());
+};
 
 module.exports = () =>
   describe('constructor from js array', () => {
@@ -49,366 +60,114 @@ module.exports = () =>
     });
 
     it('should initialize CV_8UC1 with correct data', () => {
-      const type = matTypes.CV_8UC1;
-      const matData = [
-        [ucharMax, 0, 0],
-        [0, ucharMax, 0],
-        [0, 0, ucharMax],
-        [ucharMax, 0, 0]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_8UC1);
     });
 
     it('should initialize CV_8UC2 with correct data', () => {
-      const type = matTypes.CV_8UC2;
-      const matData = [
-        [[ucharMax, 0], [0, 0], [0, ucharMax]],
-        [[0, 0], [ucharMax, 0], [0, ucharMax]],
-        [[0, 0], [0, 0], [ucharMax, 0]],
-        [[ucharMax, 0], [0, 0], [0, 0]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_8UC2);
     });
 
     it('should initialize CV_8UC3 with correct data', () => {
-      const type = matTypes.CV_8UC3;
-      const matData = [
-        [[ucharMax, 0, 0], [0, 0, 0], [0, ucharMax, ucharMax]],
-        [[0, 0, ucharMax], [ucharMax, 0, 0], [ucharMax, 0, ucharMax]],
-        [[0, 0, ucharMax], [0, 0, 0], [ucharMax, 0, 0]],
-        [[ucharMax, 0, ucharMax], [0, 0, 0], [0, 0, ucharMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_8UC3);
     });
 
     it('should initialize CV_8UC4 with correct data', () => {
-      const type = matTypes.CV_8UC4;
-      const matData = [
-        [[ucharMax, 0, 0, 0], [ucharMax, 0, 0, 0], [0, ucharMax, ucharMax, ucharMax]],
-        [[0, 0, ucharMax, 0], [ucharMax, ucharMax, 0, 0], [ucharMax, 0, ucharMax, ucharMax]],
-        [[0, 0, ucharMax, 0], [ucharMax, 0, 0, 0], [ucharMax, 0, 0, ucharMax]],
-        [[ucharMax, 0, ucharMax, 0], [ucharMax, 0, 0, 0], [0, 0, ucharMax, ucharMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_8UC4);
     });
 
     it('should initialize CV_8SC1 with correct data', () => {
-      const type = matTypes.CV_8SC1;
-      const matData = [
-        [charMax, charMin, charMin],
-        [charMin, charMax, charMin],
-        [charMin, charMin, charMax],
-        [charMax, charMin, charMin]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_8SC1);
     });
 
     it('should initialize CV_8SC2 with correct data', () => {
-      const type = matTypes.CV_8SC2;
-      const matData = [
-        [[charMax, charMin], [charMin, charMin], [charMin, charMax]],
-        [[charMin, charMin], [charMax, charMin], [charMin, charMax]],
-        [[charMin, charMin], [charMin, charMin], [charMax, charMin]],
-        [[charMax, charMin], [charMin, charMin], [charMin, charMin]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_8SC2);
     });
 
     it('should initialize CV_8SC3 with correct data', () => {
-      const type = matTypes.CV_8SC3;
-      const matData = [
-        [[charMax, charMin, charMin], [charMin, charMin, charMin], [charMin, charMax, charMax]],
-        [[charMin, charMin, charMax], [charMax, charMin, charMin], [charMax, charMin, charMax]],
-        [[charMin, charMin, charMax], [charMin, charMin, charMin], [charMax, charMin, charMin]],
-        [[charMax, charMin, charMax], [charMin, charMin, charMin], [charMin, charMin, charMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_8SC3);
     });
 
     it('should initialize CV_8SC4 with correct data', () => {
-      const type = matTypes.CV_8SC4;
-      const matData = [
-        [[charMax, charMin, charMin, charMin], [charMax, charMin, charMin, charMin], [charMin, charMax, charMax, charMax]],
-        [[charMin, charMin, charMax, charMin], [charMax, charMax, charMin, charMin], [charMax, charMin, charMax, charMax]],
-        [[charMin, charMin, charMax, charMin], [charMax, charMin, charMin, charMin], [charMax, charMin, charMin, charMax]],
-        [[charMax, charMin, charMax, charMin], [charMax, charMin, charMin, charMin], [charMin, charMin, charMax, charMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_8SC4);
     });
 
     it('should initialize CV_16UC1 with correct data', () => {
-      const type = matTypes.CV_16UC1;
-      const matData = [
-        [ushortMax, 0, 0],
-        [0, ushortMax, 0],
-        [0, 0, ushortMax],
-        [ushortMax, 0, 0]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_16UC1);
     });
 
     it('should initialize CV_16UC2 with correct data', () => {
-      const type = matTypes.CV_16UC2;
-      const matData = [
-        [[ushortMax, 0], [0, 0], [0, ushortMax]],
-        [[0, 0], [ushortMax, 0], [0, ushortMax]],
-        [[0, 0], [0, 0], [ushortMax, 0]],
-        [[ushortMax, 0], [0, 0], [0, 0]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_16UC2);
     });
 
     it('should initialize CV_16UC3 with correct data', () => {
-      const type = matTypes.CV_16UC3;
-      const matData = [
-        [[ushortMax, 0, 0], [0, 0, 0], [0, ushortMax, ushortMax]],
-        [[0, 0, ushortMax], [ushortMax, 0, 0], [ushortMax, 0, ushortMax]],
-        [[0, 0, ushortMax], [0, 0, 0], [ushortMax, 0, 0]],
-        [[ushortMax, 0, ushortMax], [0, 0, 0], [0, 0, ushortMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_16UC3);
     });
 
     it('should initialize CV_16UC4 with correct data', () => {
-      const type = matTypes.CV_16UC4;
-      const matData = [
-        [[ushortMax, 0, 0, 0], [ushortMax, 0, 0, 0], [0, ushortMax, ushortMax, ushortMax]],
-        [[0, 0, ushortMax, 0], [ushortMax, ushortMax, 0, 0], [ushortMax, 0, ushortMax, ushortMax]],
-        [[0, 0, ushortMax, 0], [ushortMax, 0, 0, 0], [ushortMax, 0, 0, ushortMax]],
-        [[ushortMax, 0, ushortMax, 0], [ushortMax, 0, 0, 0], [0, 0, ushortMax, ushortMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_16UC4);
     });
 
     it('should initialize CV_16SC1 with correct data', () => {
-      const type = matTypes.CV_16SC1;
-      const matData = [
-        [shortMax, shortMin, shortMin],
-        [shortMin, shortMax, shortMin],
-        [shortMin, shortMin, shortMax],
-        [shortMax, shortMin, shortMin]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_16SC1);
     });
 
     it('should initialize CV_16SC2 with correct data', () => {
-      const type = matTypes.CV_16SC2;
-      const matData = [
-        [[shortMax, shortMin], [shortMin, shortMin], [shortMin, shortMax]],
-        [[shortMin, shortMin], [shortMax, shortMin], [shortMin, shortMax]],
-        [[shortMin, shortMin], [shortMin, shortMin], [shortMax, shortMin]],
-        [[shortMax, shortMin], [shortMin, shortMin], [shortMin, shortMin]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_16SC2);
     });
 
     it('should initialize CV_16SC3 with correct data', () => {
-      const type = matTypes.CV_16SC3;
-      const matData = [
-        [[shortMax, shortMin, shortMin], [shortMin, shortMin, shortMin], [shortMin, shortMax, shortMax]],
-        [[shortMin, shortMin, shortMax], [shortMax, shortMin, shortMin], [shortMax, shortMin, shortMax]],
-        [[shortMin, shortMin, shortMax], [shortMin, shortMin, shortMin], [shortMax, shortMin, shortMin]],
-        [[shortMax, shortMin, shortMax], [shortMin, shortMin, shortMin], [shortMin, shortMin, shortMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_16SC3);
     });
 
     it('should initialize CV_16SC4 with correct data', () => {
-      const type = matTypes.CV_16SC4;
-      const matData = [
-        [[shortMax, shortMin, shortMin, shortMin], [shortMax, shortMin, shortMin, shortMin], [shortMin, shortMax, shortMax, shortMax]],
-        [[shortMin, shortMin, shortMax, shortMin], [shortMax, shortMax, shortMin, shortMin], [shortMax, shortMin, shortMax, shortMax]],
-        [[shortMin, shortMin, shortMax, shortMin], [shortMax, shortMin, shortMin, shortMin], [shortMax, shortMin, shortMin, shortMax]],
-        [[shortMax, shortMin, shortMax, shortMin], [shortMax, shortMin, shortMin, shortMin], [shortMin, shortMin, shortMax, shortMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_16SC4);
     });
 
     it('should initialize CV_32SC1 with correct data', () => {
-      const type = matTypes.CV_32SC1;
-      const matData = [
-        [intMax, intMin, intMin],
-        [intMin, intMax, intMin],
-        [intMin, intMin, intMax],
-        [intMax, intMin, intMin]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_32SC1);
     });
 
     it('should initialize CV_32SC2 with correct data', () => {
-      const type = matTypes.CV_32SC2;
-      const matData = [
-        [[intMax, intMin], [intMin, intMin], [intMin, intMax]],
-        [[intMin, intMin], [intMax, intMin], [intMin, intMax]],
-        [[intMin, intMin], [intMin, intMin], [intMax, intMin]],
-        [[intMax, intMin], [intMin, intMin], [intMin, intMin]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_32SC2);
     });
 
     it('should initialize CV_32SC3 with correct data', () => {
-      const type = matTypes.CV_32SC3;
-      const matData = [
-        [[intMax, intMin, intMin], [intMin, intMin, intMin], [intMin, intMax, intMax]],
-        [[intMin, intMin, intMax], [intMax, intMin, intMin], [intMax, intMin, intMax]],
-        [[intMin, intMin, intMax], [intMin, intMin, intMin], [intMax, intMin, intMin]],
-        [[intMax, intMin, intMax], [intMin, intMin, intMin], [intMin, intMin, intMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_32SC3);
     });
 
     it('should initialize CV_32SC4 with correct data', () => {
-      const type = matTypes.CV_32SC4;
-      const matData = [
-        [[intMax, intMin, intMin, intMin], [intMax, intMin, intMin, intMin], [intMin, intMax, intMax, intMax]],
-        [[intMin, intMin, intMax, intMin], [intMax, intMax, intMin, intMin], [intMax, intMin, intMax, intMax]],
-        [[intMin, intMin, intMax, intMin], [intMax, intMin, intMin, intMin], [intMax, intMin, intMin, intMax]],
-        [[intMax, intMin, intMax, intMin], [intMax, intMin, intMin, intMin], [intMin, intMin, intMax, intMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_32SC4);
     });
 
     it('should initialize CV_32FC1 with correct data', () => {
-      const type = matTypes.CV_32FC1;
-      const matData = [
-        [floatMax, floatMin, floatMin],
-        [floatMin, -floatMax, -floatMin],
-        [floatMin, -floatMin, -floatMax],
-        [floatMax, floatMin, floatMin]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, matTypes.CV_64FC1);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_32FC1);
     });
 
     it('should initialize CV_32FC2 with correct data', () => {
-      const type = matTypes.CV_32FC2;
-      const matData = [
-        [[floatMax, floatMin], [floatMin, floatMin], [floatMin, -floatMax]],
-        [[floatMin, -floatMin], [floatMax, -floatMin], [-floatMin, floatMax]],
-        [[floatMin, floatMin], [floatMin, -floatMin], [-floatMax, floatMin]],
-        [[floatMax, -floatMin], [floatMin, floatMin], [floatMin, floatMin]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, matTypes.CV_64FC2);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_32FC2);
     });
 
     it('should initialize CV_32FC3 with correct data', () => {
-      const type = matTypes.CV_32FC3;
-      const matData = [
-        [[floatMax, -floatMin, floatMin], [floatMin, -floatMin, floatMin], [floatMin, -floatMax, floatMax]],
-        [[floatMin, floatMin, -floatMax], [floatMax, floatMin, floatMin], [floatMax, floatMin, floatMax]],
-        [[floatMin, floatMin, floatMax], [-floatMin, -floatMin, -floatMin], [floatMax, -floatMin, floatMin]],
-        [[-floatMax, floatMin, floatMax], [floatMin, -floatMin, -floatMin], [floatMin, floatMin, floatMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, matTypes.CV_64FC3);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_32FC3);
     });
 
     it('should initialize CV_32FC4 with correct data', () => {
-      const type = matTypes.CV_32FC4;
-      const matData = [
-        [[floatMax, -floatMin, -floatMin, floatMin], [floatMax, floatMin, floatMin, floatMin], [-floatMin, -floatMax, floatMax, floatMax]],
-        [[floatMin, floatMin, floatMax, floatMin], [-floatMax, -floatMax, -floatMin, -floatMin], [floatMax, floatMin, floatMax, floatMax]],
-        [[floatMin, floatMin, floatMax, -floatMin], [floatMax, floatMin, -floatMin, floatMin], [-floatMax, -floatMin, floatMin, floatMax]],
-        [[-floatMax, floatMin, floatMax, floatMin], [floatMax, floatMin, floatMin, -floatMin], [-floatMin, floatMin, floatMax, floatMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, matTypes.CV_64FC4);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_32FC4);
     });
 
     it('should initialize CV_64FC1 with correct data', () => {
-      const type = matTypes.CV_64FC1;
-      const matData = [
-        [doubleMax, doubleMin, doubleMin],
-        [doubleMin, -doubleMax, -doubleMin],
-        [doubleMin, -doubleMin, -doubleMax],
-        [doubleMax, doubleMin, doubleMin]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_64FC1);
     });
 
     it('should initialize CV_64FC2 with correct data', () => {
-      const type = matTypes.CV_64FC2;
-      const matData = [
-        [[doubleMax, doubleMin], [doubleMin, doubleMin], [doubleMin, -doubleMax]],
-        [[doubleMin, -doubleMin], [doubleMax, -doubleMin], [-doubleMin, doubleMax]],
-        [[doubleMin, doubleMin], [doubleMin, -doubleMin], [-doubleMax, doubleMin]],
-        [[doubleMax, -doubleMin], [doubleMin, doubleMin], [doubleMin, doubleMin]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_64FC2);
     });
 
     it('should initialize CV_64FC3 with correct data', () => {
-      const type = matTypes.CV_64FC3;
-      const matData = [
-        [[doubleMax, -doubleMin, doubleMin], [doubleMin, -doubleMin, doubleMin], [doubleMin, -doubleMax, doubleMax]],
-        [[doubleMin, doubleMin, -doubleMax], [doubleMax, doubleMin, doubleMin], [doubleMax, doubleMin, doubleMax]],
-        [[doubleMin, doubleMin, doubleMax], [-doubleMin, -doubleMin, -doubleMin], [doubleMax, -doubleMin, doubleMin]],
-        [[-doubleMax, doubleMin, doubleMax], [doubleMin, -doubleMin, -doubleMin], [doubleMin, doubleMin, doubleMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_64FC3);
     });
 
     it('should initialize CV_64FC4 with correct data', () => {
-      const type = matTypes.CV_64FC4;
-      const matData = [
-        [[doubleMax, -doubleMin, -doubleMin, doubleMin], [doubleMax, doubleMin, doubleMin, doubleMin], [-doubleMin, -doubleMax, doubleMax, doubleMax]],
-        [[doubleMin, doubleMin, doubleMax, doubleMin], [-doubleMax, -doubleMax, -doubleMin, -doubleMin], [doubleMax, doubleMin, doubleMax, doubleMax]],
-        [[doubleMin, doubleMin, doubleMax, -doubleMin], [doubleMax, doubleMin, -doubleMin, doubleMin], [-doubleMax, -doubleMin, doubleMin, doubleMax]],
-        [[-doubleMax, doubleMin, doubleMax, doubleMin], [doubleMax, doubleMin, doubleMin, -doubleMin], [-doubleMin, doubleMin, doubleMax, doubleMax]]
-      ];
-      const mat = new Mat(matData, type);
-      assertMetaData(mat)(4, 3, type);
-      assertDataDeepEquals(matData, mat.getDataAsArray());
+      createAndAssertMatDataEquals(matTypes.CV_64FC4);
     });
   });

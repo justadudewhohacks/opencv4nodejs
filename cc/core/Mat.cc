@@ -43,8 +43,8 @@ NAN_MODULE_INIT(Mat::Init) {
 // TODO type undefined throw error
 NAN_METHOD(Mat::New) {
 	Mat* self = new Mat();
-	/* data, type */
-	if (info[0]->IsArray() && info[1]->IsInt32()) {
+	/* data array, type */
+	if (info.Length() == 2 && info[0]->IsArray() && info[1]->IsInt32()) {
 		v8::Local<v8::Array> rowArray = v8::Local<v8::Array>::Cast(info[0]);
 		int type = FF::reassignMatTypeIfFloat(info[1]->Int32Value());
 
@@ -84,6 +84,15 @@ NAN_METHOD(Mat::New) {
 		}
 		self->setNativeProps(mat);
 	}
+	/* raw data, row, col, type */
+	else if (info.Length() == 4 && info[1]->IsNumber() && info[2]->IsNumber() && info[3]->IsInt32()) {
+		int type = FF::reassignMatTypeIfFloat(info[3]->Int32Value());
+		char *data = static_cast<char *>(node::Buffer::Data(info[0]->ToObject()));
+		cv::Mat mat(info[1]->Int32Value(), info[2]->Int32Value(), type);
+		size_t size = mat.rows * mat.cols * mat.elemSize();
+		memcpy(mat.data, data, size);
+		self->setNativeProps(mat);
+	}
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }
@@ -92,7 +101,6 @@ NAN_METHOD(Mat::At) {
 	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
 	FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.rows - 1, "Mat::At row");
 	FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.cols - 1, "Mat::At col");
-
 	v8::Local<v8::Value> val;
 	FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
 	v8::Local<v8::Value> jsVal;
@@ -109,7 +117,7 @@ NAN_METHOD(Mat::At) {
 		}
 		else {
 			jsVec = FF_NEW(Vec4::constructor);
-			FF_UNWRAP_VEC4(jsVec)->vec = cv::Vec4d(vec->Get(0)->NumberValue(), vec->Get(1)->NumberValue(), vec->Get(2)->NumberValue());
+			FF_UNWRAP_VEC4(jsVec)->vec = cv::Vec4d(vec->Get(0)->NumberValue(), vec->Get(1)->NumberValue(), vec->Get(2)->NumberValue(), vec->Get(3)->NumberValue());
 		}
 		jsVal = jsVec;
 	}
