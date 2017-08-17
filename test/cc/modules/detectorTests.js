@@ -1,4 +1,4 @@
-import { features2d } from 'dut';
+import opencv from 'dut';
 import { assert, expect } from 'chai';
 import { assertError, assertPropsWithValue, readTestImage } from 'utils';
 
@@ -41,7 +41,7 @@ exports.detectorTests = (defaults, customProps, Detector, implementsCompute = tr
     it('should return an array of KeyPoints', () => {
       expect(keyPoints).to.be.a('array');
       assert(keyPoints.length > 0, 'no KeyPoints detected');
-      keyPoints.forEach(kp => assert(kp instanceof features2d.KeyPoint));
+      keyPoints.forEach(kp => assert(kp instanceof opencv.KeyPoint));
     });
   });
 

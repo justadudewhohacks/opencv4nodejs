@@ -4,9 +4,7 @@
 #include "Mat.h"
 
 NAN_MODULE_INIT(Imgproc::Init) {
-  v8::Local<v8::Object> module = Nan::New<v8::Object>();
-	Nan::SetMethod(module, "getStructuringElement", GetStructuringElement);
-  target->Set(FF_V8STRING("imgproc"), module);
+	Nan::SetMethod(target, "getStructuringElement", GetStructuringElement);
 };
 
 NAN_METHOD(Imgproc::GetStructuringElement) {

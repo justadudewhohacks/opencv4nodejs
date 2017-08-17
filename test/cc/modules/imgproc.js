@@ -1,5 +1,7 @@
-import { Mat, Point, Size, imgproc, cvTypes } from 'dut';
+import opencv from 'dut';
 import { assertError, assertPropsWithValue, funcRequiresArgsObject } from 'utils';
+
+const { Mat, Point, Size, cvTypes } = opencv;
 
 describe('imgproc', () => {
   describe('getStructuringElement', () => {
@@ -7,7 +9,7 @@ describe('imgproc', () => {
     const cols = 3;
     const size = new Size(cols, rows);
 
-    funcRequiresArgsObject(imgproc.getStructuringElement);
+    funcRequiresArgsObject(opencv.getStructuringElement);
 
     it('should throw if type invalid', () => {
       assertError(() => new Mat().convertTo({ type: undefined }), 'Invalid type for type');
@@ -15,7 +17,7 @@ describe('imgproc', () => {
     });
 
     it('should be constructable with required args', () => {
-      const kernel = imgproc.getStructuringElement({
+      const kernel = opencv.getStructuringElement({
         shape: cvTypes.morphShapes.MORPH_CROSS,
         size
       });
@@ -23,7 +25,7 @@ describe('imgproc', () => {
     });
 
     it('should be constructable with anchor', () => {
-      const kernel = imgproc.getStructuringElement({
+      const kernel = opencv.getStructuringElement({
         shape: cvTypes.morphShapes.MORPH_CROSS,
         size,
         anchor: new Point(0, 1)

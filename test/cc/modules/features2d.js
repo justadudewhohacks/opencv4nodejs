@@ -1,4 +1,4 @@
-import { features2d } from 'dut';
+import opencv from 'dut';
 import { detectorTests } from './detectorTests';
 
 describe('features2d', () => {
@@ -13,7 +13,7 @@ describe('features2d', () => {
       nonmaxSuppression: false,
       threshold: 50
     };
-    const Detector = features2d.AGASTDetector;
+    const Detector = opencv.AGASTDetector;
     detectorTests(defaults, customProps, Detector, false);
   });
 
@@ -36,7 +36,7 @@ describe('features2d', () => {
       descriptorSize: 1,
       descriptorType: 1
     };
-    const Detector = features2d.AKAZEDetector;
+    const Detector = opencv.AKAZEDetector;
     detectorTests(defaults, customProps, Detector);
   });
 
@@ -51,7 +51,7 @@ describe('features2d', () => {
       octaves: 6,
       thresh: 60
     };
-    const Detector = features2d.BRISKDetector;
+    const Detector = opencv.BRISKDetector;
     detectorTests(defaults, customProps, Detector);
   });
 
@@ -66,7 +66,7 @@ describe('features2d', () => {
       nonmaxSuppression: false,
       threshold: 20
     };
-    const Detector = features2d.FASTDetector;
+    const Detector = opencv.FASTDetector;
     detectorTests(defaults, customProps, Detector, false);
   });
 
@@ -87,7 +87,7 @@ describe('features2d', () => {
       qualityLevel: 0.04,
       maxCorners: 2000
     };
-    const Detector = features2d.GFTTDetector;
+    const Detector = opencv.GFTTDetector;
     detectorTests(defaults, customProps, Detector, false);
   });
 
@@ -108,7 +108,7 @@ describe('features2d', () => {
       upright: true,
       extended: true
     };
-    const Detector = features2d.KAZEDetector;
+    const Detector = opencv.KAZEDetector;
     detectorTests(defaults, customProps, Detector);
   });
 
@@ -135,7 +135,7 @@ describe('features2d', () => {
       minArea: 120,
       delta: 10
     };
-    const Detector = features2d.MSERDetector;
+    const Detector = opencv.MSERDetector;
     detectorTests(defaults, customProps, Detector, false);
   });
 
@@ -162,8 +162,7 @@ describe('features2d', () => {
       scaleFactor: 2 * 1.2000000476837158,
       nfeatures: 1000
     };
-    const Detector = features2d.ORBDetector;
+    const Detector = opencv.ORBDetector;
     detectorTests(defaults, customProps, Detector);
   });
-
 });

@@ -6,6 +6,13 @@
 #ifndef FF_KEYPOINT_H_
 #define FF_KEYPOINT_H_
 
+#define FF_UNWRAP_KEYPOINT_ARRAY(jsKps, kps)																										\
+	for (uint i = 0; i < jsKps->Length(); i++) {																									\
+		cv::KeyPoint kp;																																						\
+		FF_REQUIRE_INSTANCE(KeyPoint::constructor, jsKps->Get(i), "expected instance of KeyPoint"); \
+		kps.push_back(FF_UNWRAP(FF_CAST_OBJ(jsKps->Get(i)), KeyPoint)->keyPoint);										\
+	}
+
 class KeyPoint : public Nan::ObjectWrap {
 public:
   uint localId;
@@ -24,15 +31,6 @@ public:
 	static FF_GETTER(KeyPoint, GetOctave, keyPoint.octave);
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-  static std::vector<cv::KeyPoint> unwrapJSKeyPointArray(v8::Local<v8::Array> jsKps) {
-    std::vector<cv::KeyPoint> kps;
-    for (uint i = 0; i < jsKps->Length(); i++) {
-      KeyPoint* kp = Nan::ObjectWrap::Unwrap<KeyPoint>(Nan::To<v8::Object>(jsKps->Get(i)).ToLocalChecked());
-      kps.push_back(kp->keyPoint);
-    }
-    return kps;
-  };
 
   void setNativeProps(uint, cv::KeyPoint);
 };

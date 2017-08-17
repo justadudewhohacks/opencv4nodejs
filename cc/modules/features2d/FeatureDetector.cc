@@ -30,9 +30,9 @@ NAN_METHOD(FeatureDetector::Compute) {
     return Nan::ThrowError("required arguments image, keyPoints");      
   }
 	FeatureDetector* self = Nan::ObjectWrap::Unwrap<FeatureDetector>(info.This());
-	cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
-	std::vector<cv::KeyPoint> kps = KeyPoint::unwrapJSKeyPointArray(v8::Local<v8::Array>::Cast(info[1]));
-
+	cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info[0]->ToObject());
+	std::vector<cv::KeyPoint> kps;
+	FF_UNWRAP_KEYPOINT_ARRAY(FF_CAST_ARRAY(info[1]), kps);
 	cv::Mat desc;
 	FF_TRY(self->getDetector()->compute(mat, kps, desc);)
 

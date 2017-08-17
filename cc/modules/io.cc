@@ -1,17 +1,12 @@
 #include "io.h"
 #include "Mat.h"
-#include "features2d/KeyPointMatch.h"
-#include<iostream>
+#include <iostream>
 
 
 NAN_MODULE_INIT(Io::Init) {
-  v8::Local<v8::Object> obj = Nan::New<v8::Object>();
-  Nan::SetMethod(obj, "imread", Imread);
-  Nan::SetMethod(obj, "imshow", Imshow);
-  Nan::SetMethod(obj, "imsave", Imsave);
-  Nan::SetMethod(obj, "drawKeyPoints", DrawKeyPoints);
-  Nan::SetMethod(obj, "drawMatches", DrawMatches);
-  target->Set(Nan::New("io").ToLocalChecked(), obj);
+  Nan::SetMethod(target, "imread", Imread);
+  Nan::SetMethod(target, "imshow", Imshow);
+  Nan::SetMethod(target, "imsave", Imsave);
 };
 
 NAN_METHOD(Io::Imread) {
@@ -83,48 +78,4 @@ NAN_METHOD(Io::Imshow) {
     std::cout << "... Exception" << std::endl;
     Nan::ThrowError("... Exception");
   }
-}
-
-NAN_METHOD(Io::DrawKeyPoints) {
-  if (!info[0]->IsObject() || !info[1]->IsObject()) {
-    return Nan::ThrowError("usage: drawKeyPoints(Mat img, KeyPoints[] kps)");      
-  }
-  cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
-  v8::Local<v8::Array> jsKps = v8::Local<v8::Array>::Cast(info[1]);
-
-  std::vector<cv::KeyPoint> kps;
-  for (uint i = 0; i < jsKps->Length(); i++) {
-    KeyPoint* kp = Nan::ObjectWrap::Unwrap<KeyPoint>(Nan::To<v8::Object>(jsKps->Get(i)).ToLocalChecked());
-    kps.push_back(kp->keyPoint);
-  }
-
-  cv::Mat drawImg;
-  cv::drawKeypoints(mat, kps, drawImg);
-  v8::Local<v8::Object> handle = Nan::NewInstance(Nan::New(Mat::constructor)->GetFunction()).ToLocalChecked();
-  Nan::ObjectWrap::Unwrap<Mat>(handle)->mat = drawImg;
-  info.GetReturnValue().Set(handle);
-}
-
-NAN_METHOD(Io::DrawMatches) {
-  if (!info[0]->IsObject() || !info[1]->IsObject() || !info[2]->IsObject()) {
-    return Nan::ThrowError("usage: drawKeyPoints(Mat imgFrom, Mat imgTo, KeyPointMatches[] matches)");      
-  }
-  cv::Mat imgFrom = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
-  cv::Mat imgTo = Nan::ObjectWrap::Unwrap<Mat>(info[1]->ToObject())->mat;
-  v8::Local<v8::Array> jsMatches = v8::Local<v8::Array>::Cast(info[2]);
-
-  std::vector<cv::KeyPoint> kpsFrom, kpsTo;
-  std::vector<cv::DMatch> dMatches;
-  for (uint i = 0; i < jsMatches->Length(); i++) {
-    KeyPointMatch* match = Nan::ObjectWrap::Unwrap<KeyPointMatch>(Nan::To<v8::Object>(jsMatches->Get(i)).ToLocalChecked());
-    kpsFrom.push_back(match->getKpFrom()->keyPoint);
-    kpsTo.push_back(match->getKpTo()->keyPoint);
-    dMatches.push_back(cv::DMatch(i, i, match->distance));
-  }
-
-  cv::Mat drawImg;
-  cv::drawMatches(imgFrom, kpsFrom, imgTo, kpsTo, dMatches, drawImg);
-  v8::Local<v8::Object> handle = Nan::NewInstance(Nan::New(Mat::constructor)->GetFunction()).ToLocalChecked();
-  Nan::ObjectWrap::Unwrap<Mat>(handle)->mat = drawImg;
-  info.GetReturnValue().Set(handle);
 }

@@ -1,4 +1,4 @@
-import { xfeatures2d } from 'dut';
+import opencv from 'dut';
 import { detectorTests } from './detectorTests';
 
 describe('xfeatures2d', () => {
@@ -17,7 +17,7 @@ describe('xfeatures2d', () => {
       nOctaveLayers: 6,
       nFeatures: 500
     };
-    const Detector = xfeatures2d.SIFTDetector;
+    const Detector = opencv.SIFTDetector;
     detectorTests(defaults, customProps, Detector);
   });
 
@@ -36,8 +36,7 @@ describe('xfeatures2d', () => {
       nOctaves: 8,
       hessianThreshold: 1000
     };
-    const Detector = xfeatures2d.SURFDetector;
+    const Detector = opencv.SURFDetector;
     detectorTests(defaults, customProps, Detector);
   });
-
 });

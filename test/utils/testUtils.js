@@ -1,7 +1,5 @@
 import { assert } from 'chai';
-import { io } from 'dut';
-
-const fs = require('fs');
+import opencv from 'dut';
 
 const assertError = (func, msg) => {
   let errMsg = '';
@@ -32,16 +30,7 @@ exports.funcRequiresArgsObject = (func) => {
 };
 
 exports.readTestImage = () => new Promise((resolve, reject) => {
-  io.imread('../data/Lenna.png', (err, img) => {
-    if (err) {
-      return reject(err);
-    }
-    return resolve(img);
-  });
-});
-
-exports.readTestFile = () => new Promise((resolve, reject) => {
-  fs.readFile('../data/labels0.json', (err, img) => {
+  opencv.imread('../data/Lenna.png', (err, img) => {
     if (err) {
       return reject(err);
     }

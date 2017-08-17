@@ -189,7 +189,7 @@ NAN_METHOD(Mat::Copy) {
 	Nan::ObjectWrap::Unwrap<Mat>(jsMatDst)->setNativeProps(matDst);
 	if (info[0]->IsObject()) {
 		/* with mask*/
-		FF_REQUIRE_INSTANCE(constructor, info[0], "expected mask to be an instance of Mat");
+		FF_REQUIRE_INSTANCE(constructor, info[0], "mask", "Mat");
 		matSelf.copyTo(matDst, FF_UNWRAP_MAT_AND_GET(info[0]->ToObject()));
 	}
 	else {

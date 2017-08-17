@@ -8,6 +8,4 @@ public:
   static NAN_METHOD(Imread);
   static NAN_METHOD(Imsave);
   static NAN_METHOD(Imshow);
-  static NAN_METHOD(DrawKeyPoints);
-  static NAN_METHOD(DrawMatches);
 };

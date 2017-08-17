@@ -10,6 +10,12 @@
 #define FF_NEW(ctor) \
 	Nan::NewInstance(Nan::New(ctor)->GetFunction()).ToLocalChecked()
 
+#define FF_CAST_ARRAY(val) \
+	v8::Local<v8::Array>::Cast(val)
+
+#define FF_CAST_OBJ(val) \
+	Nan::To<v8::Object>(val).ToLocalChecked()
+
 #define FF_JS_VAL_TO_STRING(s) \
 	std::string(*Nan::Utf8String(s->ToString()))
 
@@ -158,6 +164,5 @@
 
 #define FF_UNWRAP_SIZE(obj)	FF_UNWRAP(obj, Size)
 #define FF_UNWRAP_SIZE_AND_GET(obj)	FF_UNWRAP_SIZE(obj)->size
-
 
 #endif
