@@ -22,6 +22,7 @@ public:
 
 	static NAN_METHOD(At);
 	static NAN_METHOD(AtRaw);
+	static NAN_METHOD(Set);
 	static NAN_METHOD(GetData);
 	static NAN_METHOD(GetDataAsArray);
 	static NAN_METHOD(Row);

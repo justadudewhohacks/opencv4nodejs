@@ -13,6 +13,7 @@ NAN_MODULE_INIT(Mat::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "at", At);
 	Nan::SetPrototypeMethod(ctor, "atRaw", AtRaw);
+	Nan::SetPrototypeMethod(ctor, "set", Set);
 	Nan::SetPrototypeMethod(ctor, "getData", GetData);
 	Nan::SetPrototypeMethod(ctor, "getDataAsArray", GetDataAsArray);
 	Nan::SetPrototypeMethod(ctor, "row", Row);
@@ -134,6 +135,37 @@ NAN_METHOD(Mat::AtRaw) {
 	v8::Local<v8::Value> val;
 	FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
 	info.GetReturnValue().Set(val);
+}
+
+NAN_METHOD(Mat::Set) {
+	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+	FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.rows - 1, "Mat::Set row");
+	FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.cols - 1, "Mat::Set col");
+
+	int cn = matSelf.channels();
+	if (info[2]->IsArray()) {
+		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[2]);
+		FF_ASSERT_CHANNELS(cn, vec->Length(), "Mat::Set");
+		FF_MAT_APPLY_TYPED_OPERATOR(matSelf, vec, matSelf.type(), FF_MAT_SET, FF::matPut);
+	}
+	else if (FF_IS_INSTANCE(Vec2::constructor, info[2])) {
+		FF_ASSERT_CHANNELS(cn, 2, "Mat::Set");
+		FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<2>(FF_UNWRAP_VEC2_AND_GET(info[2]->ToObject())), matSelf.type(), FF_MAT_SET, FF::matPut);
+	}
+	else if (FF_IS_INSTANCE(Vec3::constructor, info[2])) {
+		FF_ASSERT_CHANNELS(cn, 3, "Mat::Set");
+		FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<3>(FF_UNWRAP_VEC3_AND_GET(info[2]->ToObject())), matSelf.type(), FF_MAT_SET, FF::matPut);
+	}
+	else if (FF_IS_INSTANCE(Vec4::constructor, info[2])) {
+		FF_ASSERT_CHANNELS(cn, 4, "Mat::Set");
+		FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<4>(FF_UNWRAP_VEC4_AND_GET(info[2]->ToObject())), matSelf.type(), FF_MAT_SET, FF::matPut);
+	}
+	else if (info[2]->IsNumber()) {
+		FF_MAT_APPLY_TYPED_OPERATOR(matSelf, info[2], matSelf.type(), FF_MAT_SET, FF::matPut);
+	}
+	else {
+		return Nan::ThrowError(FF_V8STRING("Mat::Set - unexpected argument 2"));
+	}
 }
 
 NAN_METHOD(Mat::GetData) {
@@ -303,12 +335,12 @@ NAN_METHOD(Mat::BgrToGray) {
 
 NAN_METHOD(Mat::WarpPerspective) {
 	FF_REQUIRE_ARGS_OBJ("Mat::WarpPerspective");
-	
+
 	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
 	cv::Mat transformationMatrix;
 	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, transformationMatrix, constructor, FF_UNWRAP_MAT_AND_GET, Mat);
-	
-	
+
+
 	cv::Size size = cv::Size(matSelf.cols, matSelf.rows);
 	if (FF_HAS_JS_PROP(args, size)) {
 		Nan::ObjectWrap::Unwrap<Size>(FF_GET_JSPROP(args, size)->ToObject())->size;
@@ -329,13 +361,13 @@ NAN_METHOD(Mat::WarpPerspective) {
 
 void Mat::dilateOrErode(Nan::NAN_METHOD_ARGS_TYPE info, char* methodName, bool isErode = false) {
 	FF_REQUIRE_ARGS_OBJ(methodName);
-	v8::Local<v8::Object> jsKernel;																																						
-	cv::Point2i anchor(-1, -1);																																								
-	cv::Scalar borderValue = cv::morphologyDefaultBorderValue();																							
-	int iterations = 1, borderType = 0;																																				
-	FF_GET_JSPROP_REQUIRED(args, jsKernel, kernel, ToObject);																									
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, iterations, IsInt32, Int32Value);														
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, borderType, IsInt32, Int32Value);														
+	v8::Local<v8::Object> jsKernel;
+	cv::Point2i anchor(-1, -1);
+	cv::Scalar borderValue = cv::morphologyDefaultBorderValue();
+	int iterations = 1, borderType = 0;
+	FF_GET_JSPROP_REQUIRED(args, jsKernel, kernel, ToObject);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, iterations, IsInt32, Int32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, borderType, IsInt32, Int32Value);
 	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
 	v8::Local<v8::Object> jsMatDst = FF_NEW(constructor);
 	if (isErode) {

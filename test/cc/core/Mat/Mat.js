@@ -2,7 +2,7 @@ import { Mat, matTypes } from 'dut';
 import { assertError, funcRequiresArgsObject } from 'utils';
 import { expect } from 'chai';
 import { assertMetaData, assertDataDeepEquals } from './matTestUtils';
-import atTests from './atTests';
+import accessorTests from './accessorTests';
 import constructorTestsFromJsArray from './constructorTestsFromJsArray';
 import constructorTestsFromFillVector from './constructorTestsFromFillVector';
 import operatorTests from './operatorTests';
@@ -29,7 +29,7 @@ describe('Mat', () => {
   constructorTestsFromJsArray();
   constructorTestsFromFillVector();
   operatorTests();
-  atTests();
+  accessorTests();
   imgprocTests();
 
   describe('copy', () => {
@@ -90,18 +90,6 @@ describe('Mat', () => {
 
   describe('getData', () => {
     it('getData', () => {
-      expect(true).to.be.false;
-    });
-  });
-
-  describe('at', () => {
-    it('at', () => {
-      expect(true).to.be.false;
-    });
-  });
-
-  describe('atRaw', () => {
-    it('atRaw', () => {
       expect(true).to.be.false;
     });
   });

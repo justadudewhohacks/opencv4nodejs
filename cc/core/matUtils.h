@@ -7,6 +7,9 @@
 #define FF_MAT_AT(mat, val, get)	\
 	val = get(mat, info[0]->Int32Value(), info[1]->Int32Value());
 
+#define FF_MAT_SET(mat, val, put)	\
+	put(mat, val, info[0]->Int32Value(), info[1]->Int32Value());
+
 #define FF_MAT_FILL(mat, vec, put)				\
 	for (int r = 0; r < mat.rows; r++) {		\
 		for (int c = 0; c < mat.cols; c++) {	\
@@ -113,6 +116,13 @@
 
 #define FF_MAT_DILATE_OR_ERODE(func)	\
 	func(matSelf, FF_UNWRAP_MAT_AND_GET(jsMatDst), FF_UNWRAP_MAT_AND_GET(jsKernel), anchor, iterations, borderType, borderValue);
+
+#define FF_ASSERT_CHANNELS(cn, have, what)																						\
+	if (cn != have) {																																		\
+		return Nan::ThrowError(FF_V8STRING(std::string(what) + " - expected vector with "	\
+			+ std::to_string(cn) + " channels, have " + std::to_string(have)));							\
+	}
+
 
 namespace FF {
 	template<typename type>

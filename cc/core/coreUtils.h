@@ -157,4 +157,13 @@
 #define FF_INIT_VEC3_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec3, vec, FF_UNWRAP_VEC3_AND_GET);
 #define FF_INIT_VEC4_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec4, vec, FF_UNWRAP_VEC4_AND_GET);
 
+namespace FF {
+	template<int cn>
+	static v8::Local<v8::Array> vecToJsArr(cv::Vec<double, cn> vec) {
+		v8::Local<v8::Array> jsVec = Nan::New<v8::Array>(cn);
+		for (int i = 0; i < cn; i++) jsVec->Set(i, Nan::New(vec[i]));
+		return jsVec;
+	}
+}
+
 #endif
