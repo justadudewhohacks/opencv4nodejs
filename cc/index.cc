@@ -3,6 +3,7 @@
 #include "Point.h"
 #include "Vec.h"
 #include "Size.h"
+#include "cvTypes/cvTypes.h"
 
 #include "modules/io.h"
 #include "modules/photo.h"
@@ -12,8 +13,8 @@
 #include "modules/features2d/features2d.h"
 #include "modules/xfeatures2d/xfeatures2d.h"
 
-// TODO core index
 void init(v8::Local<v8::Object> target) {
+  CvTypes::Init(target);
   Mat::Init(target);
 	Point::Init(target);
 	Vec::Init(target);

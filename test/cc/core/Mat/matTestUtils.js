@@ -1,4 +1,4 @@
-import { matTypes } from 'dut';
+import { cvTypes } from 'dut';
 import { assert } from 'chai';
 import { assertPropsWithValue } from 'utils';
 
@@ -17,7 +17,7 @@ const matTypeNames = [
 
 exports.generateIts = (msg, testFunc, exclusions = new Set()) =>
   matTypeNames.filter(type => !exclusions.has(type)).forEach((type) => {
-    it(`${type} ${msg}`, () => testFunc(matTypes[type]));
+    it(`${type} ${msg}`, () => testFunc(cvTypes[type]));
   });
 
 exports.dangerousDeepEquals = dangerousDeepEquals;

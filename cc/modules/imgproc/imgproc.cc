@@ -1,12 +1,10 @@
 #include "imgproc.h"
-#include "imgprocConstants.h"
 #include "Point2.h"
 #include "Size.h"
 #include "Mat.h"
 
 NAN_MODULE_INIT(Imgproc::Init) {
   v8::Local<v8::Object> module = Nan::New<v8::Object>();
-	ImgprocConstants::init(module);
 	Nan::SetMethod(module, "getStructuringElement", GetStructuringElement);
   target->Set(FF_V8STRING("imgproc"), module);
 };

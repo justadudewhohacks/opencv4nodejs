@@ -1,4 +1,4 @@
-import { Mat, matTypes, Vec } from 'dut';
+import { Mat, cvTypes, Vec } from 'dut';
 import { assertError } from 'utils';
 import { expect } from 'chai';
 import { getExampleMatData } from './exampleData';
@@ -42,7 +42,7 @@ const createAndAssertSetsCorrectVecValues = (type) => {
 module.exports = () => {
   describe('at', () => {
     it('should throw index out of bounds', () => {
-      const type = matTypes.CV_8U;
+      const type = cvTypes.CV_8U;
       const mat = new Mat(getExampleMatData(type), type);
       assertError(() => mat.at(-1, 0), 'Index out of bounds');
       assertError(() => mat.at(0, -1), 'Index out of bounds');

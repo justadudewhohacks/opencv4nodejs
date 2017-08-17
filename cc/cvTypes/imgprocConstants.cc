@@ -2,13 +2,13 @@
 
 using namespace cv;
 
-void ImgprocConstants::init(v8::Local<v8::Object> module) {
+void ImgprocConstants::Init(v8::Local<v8::Object> module) {
 	v8::Local<v8::Object> morphShapes = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(morphShapes, MORPH_RECT);
 	FF_SET_CV_CONSTANT(morphShapes, MORPH_CROSS);
 	FF_SET_CV_CONSTANT(morphShapes, MORPH_ELLIPSE);
 	module->Set(FF_V8STRING("morphShapes"), morphShapes);
-	
+
 	v8::Local<v8::Object> borderTypes = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(borderTypes, BORDER_CONSTANT);
 	FF_SET_CV_CONSTANT(borderTypes, BORDER_REPLICATE);

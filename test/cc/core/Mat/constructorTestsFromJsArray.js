@@ -1,4 +1,4 @@
-import { Mat, matTypes } from 'dut';
+import { Mat, cvTypes } from 'dut';
 import { assert } from 'chai';
 import { assertDataDeepEquals, assertMetaData } from './matTestUtils';
 import { getExampleMatData } from './exampleData';
@@ -8,7 +8,7 @@ const createAndAssertMatDataEquals = (type) => {
   const mat = new Mat(matData, type);
   let assertType = type;
   // assert float type to become double type
-  if ([matTypes.CV_32FC1, matTypes.CV_32FC2, matTypes.CV_32FC3, matTypes.CV_32FC4].some(matType => matType === type)) {
+  if ([cvTypes.CV_32FC1, cvTypes.CV_32FC2, cvTypes.CV_32FC3, cvTypes.CV_32FC4].some(matType => matType === type)) {
     assertType = type + 1;
   }
   assertMetaData(mat)(4, 3, assertType);
@@ -21,7 +21,7 @@ module.exports = () =>
       let errMsg = '';
       try {
         const matData = [1, 1, 1];
-        new Mat(matData, matTypes.CV_8U);
+        new Mat(matData, cvTypes.CV_8U);
       } catch (err) {
         errMsg = err.toString();
       }
@@ -36,7 +36,7 @@ module.exports = () =>
           [0, 1, 0],
           [0, 0]
         ];
-        new Mat(matData, matTypes.CV_8U);
+        new Mat(matData, cvTypes.CV_8U);
       } catch (err) {
         errMsg = err.toString();
       }
@@ -60,114 +60,114 @@ module.exports = () =>
     });
 
     it('should initialize CV_8UC1 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_8UC1);
+      createAndAssertMatDataEquals(cvTypes.CV_8UC1);
     });
 
     it('should initialize CV_8UC2 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_8UC2);
+      createAndAssertMatDataEquals(cvTypes.CV_8UC2);
     });
 
     it('should initialize CV_8UC3 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_8UC3);
+      createAndAssertMatDataEquals(cvTypes.CV_8UC3);
     });
 
     it('should initialize CV_8UC4 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_8UC4);
+      createAndAssertMatDataEquals(cvTypes.CV_8UC4);
     });
 
     it('should initialize CV_8SC1 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_8SC1);
+      createAndAssertMatDataEquals(cvTypes.CV_8SC1);
     });
 
     it('should initialize CV_8SC2 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_8SC2);
+      createAndAssertMatDataEquals(cvTypes.CV_8SC2);
     });
 
     it('should initialize CV_8SC3 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_8SC3);
+      createAndAssertMatDataEquals(cvTypes.CV_8SC3);
     });
 
     it('should initialize CV_8SC4 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_8SC4);
+      createAndAssertMatDataEquals(cvTypes.CV_8SC4);
     });
 
     it('should initialize CV_16UC1 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_16UC1);
+      createAndAssertMatDataEquals(cvTypes.CV_16UC1);
     });
 
     it('should initialize CV_16UC2 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_16UC2);
+      createAndAssertMatDataEquals(cvTypes.CV_16UC2);
     });
 
     it('should initialize CV_16UC3 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_16UC3);
+      createAndAssertMatDataEquals(cvTypes.CV_16UC3);
     });
 
     it('should initialize CV_16UC4 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_16UC4);
+      createAndAssertMatDataEquals(cvTypes.CV_16UC4);
     });
 
     it('should initialize CV_16SC1 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_16SC1);
+      createAndAssertMatDataEquals(cvTypes.CV_16SC1);
     });
 
     it('should initialize CV_16SC2 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_16SC2);
+      createAndAssertMatDataEquals(cvTypes.CV_16SC2);
     });
 
     it('should initialize CV_16SC3 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_16SC3);
+      createAndAssertMatDataEquals(cvTypes.CV_16SC3);
     });
 
     it('should initialize CV_16SC4 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_16SC4);
+      createAndAssertMatDataEquals(cvTypes.CV_16SC4);
     });
 
     it('should initialize CV_32SC1 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_32SC1);
+      createAndAssertMatDataEquals(cvTypes.CV_32SC1);
     });
 
     it('should initialize CV_32SC2 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_32SC2);
+      createAndAssertMatDataEquals(cvTypes.CV_32SC2);
     });
 
     it('should initialize CV_32SC3 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_32SC3);
+      createAndAssertMatDataEquals(cvTypes.CV_32SC3);
     });
 
     it('should initialize CV_32SC4 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_32SC4);
+      createAndAssertMatDataEquals(cvTypes.CV_32SC4);
     });
 
     it('should initialize CV_32FC1 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_32FC1);
+      createAndAssertMatDataEquals(cvTypes.CV_32FC1);
     });
 
     it('should initialize CV_32FC2 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_32FC2);
+      createAndAssertMatDataEquals(cvTypes.CV_32FC2);
     });
 
     it('should initialize CV_32FC3 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_32FC3);
+      createAndAssertMatDataEquals(cvTypes.CV_32FC3);
     });
 
     it('should initialize CV_32FC4 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_32FC4);
+      createAndAssertMatDataEquals(cvTypes.CV_32FC4);
     });
 
     it('should initialize CV_64FC1 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_64FC1);
+      createAndAssertMatDataEquals(cvTypes.CV_64FC1);
     });
 
     it('should initialize CV_64FC2 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_64FC2);
+      createAndAssertMatDataEquals(cvTypes.CV_64FC2);
     });
 
     it('should initialize CV_64FC3 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_64FC3);
+      createAndAssertMatDataEquals(cvTypes.CV_64FC3);
     });
 
     it('should initialize CV_64FC4 with correct data', () => {
-      createAndAssertMatDataEquals(matTypes.CV_64FC4);
+      createAndAssertMatDataEquals(cvTypes.CV_64FC4);
     });
   });

@@ -1,4 +1,4 @@
-import { Mat, matTypes } from 'dut';
+import { Mat, cvTypes } from 'dut';
 import { assertError, funcRequiresArgsObject } from 'utils';
 import { expect } from 'chai';
 import { assertMetaData, assertDataDeepEquals } from './matTestUtils';
@@ -15,15 +15,15 @@ const srcMatData = [
   [-doubleMax, 0, doubleMin],
   [doubleMin, -doubleMax, 0]
 ];
-const srcMat = new Mat(srcMatData, matTypes.CV_64F);
+const srcMat = new Mat(srcMatData, cvTypes.CV_64F);
 const mask = new Mat([
   [0, 0, 0],
   [1, 1, 1],
   [0, 0, 0],
   [1, 1, 1]
-], matTypes.CV_8U);
+], cvTypes.CV_8U);
 const expectedCopyData = srcMatData.map((row, r) => row.map(val => ((r % 2) ? val : 0)));
-const expectedCopy = new Mat(expectedCopyData, matTypes.CV_64F);
+const expectedCopy = new Mat(expectedCopyData, cvTypes.CV_64F);
 
 describe('Mat', () => {
   constructorTestsFromJsArray();
@@ -77,8 +77,8 @@ describe('Mat', () => {
     });
 
     it('should convert mat', () => {
-      const dstMat = srcMat.convertTo({ type: matTypes.CV_32S });
-      assertMetaData(dstMat)(srcMat.rows, srcMat.cols, matTypes.CV_32S);
+      const dstMat = srcMat.convertTo({ type: cvTypes.CV_32S });
+      assertMetaData(dstMat)(srcMat.rows, srcMat.cols, cvTypes.CV_32S);
     });
   });
 

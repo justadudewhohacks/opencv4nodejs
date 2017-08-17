@@ -1,6 +1,5 @@
 #include <nan.h>
 #include <opencv2/imgproc.hpp>
-#include "matTypes.h"
 #include "Size.h"
 #include "macros.h"
 #include "coreUtils.h"
@@ -34,7 +33,7 @@ public:
 	static NAN_METHOD(Dot) {
 		FF_OPERATOR_RET_SCALAR(&cv::Mat::dot, FF_APPLY_CLASS_FUNC, FF_UNWRAP_MAT_AND_GET, Mat);
 	}
-	
+
 	/* #IFDEF IMGPROC */
   static NAN_METHOD(Rescale);
   static NAN_METHOD(Resize);

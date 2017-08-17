@@ -36,7 +36,6 @@ NAN_MODULE_INIT(Mat::Init) {
 	/* #ENDIF IMGPROC */
 
 	v8::Local<v8::Object> matTypesModule = Nan::New<v8::Object>();
-  initMatTypes(matTypesModule);
 	target->Set(Nan::New("matTypes").ToLocalChecked(), matTypesModule);
   target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
 };

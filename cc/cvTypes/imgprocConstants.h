@@ -11,7 +11,7 @@
 
 class ImgprocConstants {
 public:
-  static void init(v8::Local<v8::Object> module);
+  static void Init(v8::Local<v8::Object> module);
 };
 
 #endif

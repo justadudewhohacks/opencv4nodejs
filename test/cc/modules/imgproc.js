@@ -1,7 +1,5 @@
-import { Mat, Point, Size, imgproc } from 'dut';
+import { Mat, Point, Size, imgproc, cvTypes } from 'dut';
 import { assertError, assertPropsWithValue, funcRequiresArgsObject } from 'utils';
-
-const { morphShapes } = imgproc;
 
 describe('imgproc', () => {
   describe('getStructuringElement', () => {
@@ -18,7 +16,7 @@ describe('imgproc', () => {
 
     it('should be constructable with required args', () => {
       const kernel = imgproc.getStructuringElement({
-        shape: morphShapes.MORPH_CROSS,
+        shape: cvTypes.morphShapes.MORPH_CROSS,
         size
       });
       assertPropsWithValue(kernel)({ rows, cols });
@@ -26,7 +24,7 @@ describe('imgproc', () => {
 
     it('should be constructable with anchor', () => {
       const kernel = imgproc.getStructuringElement({
-        shape: morphShapes.MORPH_CROSS,
+        shape: cvTypes.morphShapes.MORPH_CROSS,
         size,
         anchor: new Point(0, 1)
       });

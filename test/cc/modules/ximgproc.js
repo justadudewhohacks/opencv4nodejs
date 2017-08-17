@@ -1,4 +1,4 @@
-import { matTypes, ximgproc } from 'dut';
+import { cvTypes, ximgproc } from 'dut';
 import { assertPropsWithValue, funcRequiresArgsObject, readTestImage } from 'utils';
 import { assert } from 'chai';
 
@@ -45,7 +45,7 @@ describe('ximgproc', () => {
         superpixelSeeds.iterate();
         assert(superpixelSeeds.numCalculatedSuperpixels > 0, 'no superpixels calculated');
         assertPropsWithValue(superpixelSeeds.labels)({
-          rows: testImg.rows, cols: testImg.cols, type: matTypes.CV_32S
+          rows: testImg.rows, cols: testImg.cols, type: cvTypes.CV_32S
         });
       });
     });
