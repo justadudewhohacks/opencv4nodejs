@@ -20,6 +20,7 @@ public:
 	static FF_GETTER(Mat, GetType, mat.type());
 	static FF_GETTER(Mat, GetChannels, mat.channels());
 	static FF_GETTER(Mat, GetDims, mat.dims);
+	static FF_GETTER(Mat, GetDepth, mat.depth());
 
 	static NAN_METHOD(At);
 	static NAN_METHOD(AtRaw);

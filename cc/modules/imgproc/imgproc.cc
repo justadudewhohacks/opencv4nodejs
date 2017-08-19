@@ -50,6 +50,11 @@ NAN_METHOD(Imgproc::CalcHist) {
 
 	cv::Mat img;
 	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, img, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+	cv::Mat inputImg = img;
+	int inputType = CV_MAKETYPE(CV_32F, img.channels());
+	if (inputType != img.type()) {
+		img.convertTo(inputImg, inputType);
+	}
 
 	cv::Mat mask = cv::noArray().getMat();
 	if (FF_HAS_JS_PROP(args, mask)) {
@@ -82,16 +87,16 @@ NAN_METHOD(Imgproc::CalcHist) {
 
 	cv::MatND hist;
 	if (dims == 1) {
-		hist = calcHist1(img, mask, channels, histSize, ranges);
+		hist = calcHist1(inputImg, mask, channels, histSize, ranges);
 	}
 	else if (dims == 2) {
-		hist = calcHist2(img, mask, channels, histSize, ranges);
+		hist = calcHist2(inputImg, mask, channels, histSize, ranges);
 	}
 	else if (dims == 3) {
-		hist = calcHist3(img, mask, channels, histSize, ranges);
+		hist = calcHist3(inputImg, mask, channels, histSize, ranges);
 	}
 	else if (dims == 4) {
-		hist = calcHist4(img, mask, channels, histSize, ranges);
+		hist = calcHist4(inputImg, mask, channels, histSize, ranges);
 	}
 
 	for (int i = 0; i < dims; ++i) {
@@ -101,10 +106,11 @@ NAN_METHOD(Imgproc::CalcHist) {
 	delete[] histSize;
 
 	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
-	int type = FF::reassignMatTypeIfFloat(info[1]->Int32Value());
-	if (hist.type() != type) {
-		hist.convertTo(hist, type);
+	int outputType = CV_MAKETYPE(CV_64F, img.channels());
+	if (outputType != hist.type()) {
+		hist.convertTo(hist, outputType);
 	}
+
 	FF_UNWRAP_MAT(jsMat)->setNativeProps(hist);
 	info.GetReturnValue().Set(jsMat);
 }
@@ -122,7 +128,7 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 
 	cv::Mat plot;
 	if (FF_HAS_JS_PROP(args, plotTo)) {
-		FF_DESTRUCTURE_JSOBJ_REQUIRED(args, plot, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+		FF_GET_JSOBJ_REQUIRED(args, plot, plotTo, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
 	}
 	else {
 		if (!FF_HAS_JS_PROP(args, height) || !FF_HAS_JS_PROP(args, width)) {
@@ -134,29 +140,25 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 		plot = cv::Mat(height, width, CV_8UC3, cv::Scalar(255, 255, 255));
 	}
 
-	cv::Vec3d drawColor = cv::Vec3d(0, 0, 0);
-	if (FF_HAS_JS_PROP(args, drawColor)) {
-		FF_DESTRUCTURE_JSOBJ_REQUIRED(args, drawColor, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
+	cv::Vec3d lineColor = cv::Vec3d(0, 0, 0);
+	if (FF_HAS_JS_PROP(args, lineColor)) {
+		FF_DESTRUCTURE_JSOBJ_REQUIRED(args, lineColor, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
 	}
-
-
-
 
 	double binWidth = ((double)plot.cols / (double)hist.rows);
 	int plotHeight = cv::max(256, plot.rows - 20);
 	cv::Mat normHist = hist;
 	if (hist.type() != CV_64F) {
-		cv::cvtColor(hist, normHist, CV_64F);
+		hist.convertTo(normHist, CV_64F);
 	}
 	cv::normalize(normHist, normHist, 0, 256, cv::NORM_MINMAX);
 
 	for (int i = 1; i < hist.rows; i++) {
-		std::cout << std::to_string(binWidth*i + binWidth) << std::endl;
 		cv::line(
 			plot, 
 			cv::Point(binWidth*(i - 1), plotHeight - normHist.at<double>(i - 1)),
 			cv::Point(binWidth*i, plotHeight - normHist.at<double>(i)),
-			cv::Vec3d(255, 0, 0), 
+			lineColor,
 			2, 
 			8, 
 			0
