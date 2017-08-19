@@ -1,6 +1,6 @@
 import { Mat, cvTypes } from 'dut';
 import { assert } from 'chai';
-import { assertDataDeepEquals, assertMetaData } from './matTestUtils';
+import { assertDataDeepEquals, assertMetaData } from 'utils';
 import { getExampleMatData } from './exampleData';
 
 const createAndAssertMatDataEquals = (type) => {

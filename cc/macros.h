@@ -57,14 +57,6 @@
 
 /* checked js prop getters */
 
-#define FF_GET_JSPROP_IFDEF(obj, var, prop, castType)	\
-	if (FF_HAS_JS_PROP(obj, prop)) {										\
-		FF_GET_JSPROP(obj, var, prop, castType)						\
-	}
-
-#define FF_DESTRUCTURE_JSPROP_IFDEF(obj, prop, castType)	\
-	FF_GET_JSPROP_IFDEF(obj, prop, prop, castType)
-
 #define FF_GET_JSPROP_REQUIRED(obj, var, prop, castType)																	\
 	if (!FF_HAS_JS_PROP(obj, prop)) {																												\
 		return Nan::ThrowError(FF_V8STRING("Object has no property: " + std::string(#prop)));	\
@@ -101,6 +93,11 @@
 #define FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(obj, prop, assertType, castType)	\
 	FF_GET_TYPECHECKED_JSPROP_IFDEF(obj, prop, prop, assertType, castType)
 
+#define FF_ASSERT_EQUALS(expected, have, what, atmsg)															\
+	if (expected != have) {																													\
+		return Nan::ThrowError(FF_V8STRING(std::string(what) + " mismatch, expected "	\
+			+ std::to_string(expected) + ", have " + std::to_string(have) + atmsg));		\
+	}
 
 #define FF_TRY(work)																					\
 	try {																												\
@@ -137,6 +134,25 @@
 			+ " is not an instance of " + std::string(#clazz)));								\
 		var = unwrapper(obj);																									\
 	} while (0);																														\
+
+#define FF_GET_JSARR_REQUIRED(args, var, prop)							\
+	do {																											\
+		v8::Local<v8::Value> val = FF_GET_JSPROP(args, prop);		\
+		if (!val->IsArray()) {																	\
+			return Nan::ThrowError(FF_V8STRING("expected "				\
+				+ std::string(#prop) + "to be an array"));					\
+		}																												\
+		var = FF_CAST_ARRAY(val);																\
+	} while (0);																												
+
+#define FF_GET_JSARR_REQUIRED_WITH_LENGTH(args, var, prop, length)	\
+	FF_GET_JSARR_REQUIRED(args, var, prop)														\
+	if (!var->Length() == length) {																		\
+		return Nan::ThrowError(FF_V8STRING("expected "									\
+			+ std::string(#prop) + "to be an array of length "						\
+			+ std::to_string(length)));																		\
+	}
+
 
 #define FF_DESTRUCTURE_JSOBJ_REQUIRED(args, prop, objCtor, unwrapper, clazz)	\
 	FF_GET_JSOBJ_REQUIRED(args, prop, prop, objCtor, unwrapper, clazz)

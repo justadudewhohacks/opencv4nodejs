@@ -1,7 +1,13 @@
 import { Mat, cvTypes } from 'dut';
-import { assertError, funcRequiresArgsObject, readTestImage } from 'utils';
+import {
+  assertError,
+  funcRequiresArgsObject,
+  readTestImage,
+  assertMetaData,
+  assertDataDeepEquals,
+  dangerousDeepEquals
+} from 'utils';
 import { expect } from 'chai';
-import { assertMetaData, assertDataDeepEquals, dangerousDeepEquals } from './matTestUtils';
 
 const rgbMatData = [
   Array(5).fill([255, 125, 0]),

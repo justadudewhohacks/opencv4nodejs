@@ -4,12 +4,14 @@ Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
 
 NAN_MODULE_INIT(Mat::Init) {
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Mat::New);
-  constructor.Reset(ctor);
+  constructor.Reset(ctor);cv::Mat mat;
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("Mat").ToLocalChecked());
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("rows").ToLocalChecked(), Mat::GetRows);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("cols").ToLocalChecked(), Mat::GetCols);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("type").ToLocalChecked(), Mat::GetType);
+	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("channels").ToLocalChecked(), Mat::GetChannels);
+	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("dims").ToLocalChecked(), Mat::GetDims);
 
 	Nan::SetPrototypeMethod(ctor, "at", At);
 	Nan::SetPrototypeMethod(ctor, "atRaw", AtRaw);
@@ -20,6 +22,9 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "copy", Copy);
 	Nan::SetPrototypeMethod(ctor, "copyTo", CopyTo);
 	Nan::SetPrototypeMethod(ctor, "convertTo", ConvertTo);
+	Nan::SetPrototypeMethod(ctor, "norm", Norm);
+	Nan::SetPrototypeMethod(ctor, "normalize", Normalize);
+	Nan::SetPrototypeMethod(ctor, "splitChannels", SplitChannels);
 
 	FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
@@ -43,8 +48,27 @@ NAN_MODULE_INIT(Mat::Init) {
 // TODO type undefined throw error
 NAN_METHOD(Mat::New) {
 	Mat* self = new Mat();
+	/* from channels */
+	if (info.Length() == 1 && info[0]->IsArray()) {
+		v8::Local<v8::Array> jsChannelMats = v8::Local<v8::Array>::Cast(info[0]);
+		std::vector<cv::Mat> channels;
+		for (int i = 0; i < jsChannelMats->Length(); i++) {
+			v8::Local<v8::Object> jsChannelMat = FF_CAST_OBJ(jsChannelMats->Get(i));
+			FF_REQUIRE_INSTANCE(constructor, jsChannelMat, 
+				FF_V8STRING("expected channel " + std::to_string(i) + " to be an instance of Mat"));
+			cv::Mat channelMat = FF_UNWRAP_MAT_AND_GET(jsChannelMat);
+			channels.push_back(channelMat);
+			if (i > 0) {
+				FF_ASSERT_EQUALS(channels.at(i - 1).rows, channelMat.rows, "Mat::New - rows", " at channel " + std::to_string(i));
+				FF_ASSERT_EQUALS(channels.at(i - 1).cols, channelMat.cols, "Mat::New - cols", " at channel " + std::to_string(i));
+			}
+		}
+		cv::Mat mat;
+		cv::merge(channels, mat);
+		self->setNativeProps(mat);
+	}
 	/* data array, type */
-	if (info.Length() == 2 && info[0]->IsArray() && info[1]->IsInt32()) {
+	else if (info.Length() == 2 && info[0]->IsArray() && info[1]->IsInt32()) {
 		v8::Local<v8::Array> rowArray = v8::Local<v8::Array>::Cast(info[0]);
 		int type = FF::reassignMatTypeIfFloat(info[1]->Int32Value());
 
@@ -74,7 +98,7 @@ NAN_METHOD(Mat::New) {
 			if (mat.channels() != vec->Length()) {
 				return Nan::ThrowError(FF_V8STRING(
 					std::string("Mat::New - number of channels (") + std::to_string(mat.channels())
-					+ std::string(") dont match fill vector length ") + std::to_string(vec->Length()))
+					+ std::string(") do not match fill vector length ") + std::to_string(vec->Length()))
 				);
 			}
 			FF_MAT_APPLY_TYPED_OPERATOR(mat, vec, type, FF_MAT_FILL, FF::matPut);
@@ -231,6 +255,66 @@ NAN_METHOD(Mat::ConvertTo) {
 		beta
 	);
 	info.GetReturnValue().Set(jsMatConverted);
+}
+
+
+NAN_METHOD(Mat::Norm) {
+	int normType = 4;
+	cv::Mat mask = cv::noArray().getMat();
+	double norm;
+	if (info.Length() != 0) {
+		FF_REQUIRE_ARGS_OBJ("Mat::Norm");
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, normType, IsUint32, Uint32Value);
+		if (FF_HAS_JS_PROP(args, mask)) {
+			/* with mask*/
+			v8::Local<v8::Object> jsMask = FF_GET_JSPROP(args, mask)->ToObject();
+			FF_REQUIRE_INSTANCE(constructor, jsMask, "mask", "Mat");
+			mask = FF_UNWRAP_MAT_AND_GET(jsMask);
+		}
+		if (FF_HAS_JS_PROP(args, src2)) {
+			v8::Local<v8::Object> jsSrc2 = FF_GET_JSPROP(args, src2)->ToObject();
+			FF_REQUIRE_INSTANCE(constructor, jsSrc2, "src2", "Mat");
+			norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), FF_UNWRAP_MAT_AND_GET(jsSrc2), normType, mask);
+			return info.GetReturnValue().Set(norm);
+		}
+	}
+	norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), normType, mask);
+	info.GetReturnValue().Set(norm);
+}
+
+NAN_METHOD(Mat::Normalize) {
+	int normType = 4;
+	int dtype = -1;
+	double alpha = 1.0, beta = 0.0;
+	cv::Mat mask = cv::noArray().getMat();
+	if (info.Length() != 0) {
+		FF_REQUIRE_ARGS_OBJ("Mat::Normalize");
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, normType, IsUint32, Uint32Value);
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, dtype, IsInt32, Int32Value);
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, alpha, IsNumber, NumberValue);
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, beta, IsNumber, NumberValue);
+		if (FF_HAS_JS_PROP(args, mask)) {
+			/* with mask*/
+			v8::Local<v8::Object> jsMask = FF_GET_JSPROP(args, mask)->ToObject();
+			FF_REQUIRE_INSTANCE(constructor, jsMask, "mask", "Mat");
+			mask = FF_UNWRAP_MAT_AND_GET(jsMask);
+		}
+	}
+	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
+	cv::normalize(FF_UNWRAP_MAT_AND_GET(info.This()), FF_UNWRAP_MAT_AND_GET(jsMat), alpha, beta, normType, dtype, mask);
+	info.GetReturnValue().Set(jsMat);
+}
+
+NAN_METHOD(Mat::SplitChannels) {
+	std::vector<cv::Mat> channels;
+	cv::split(FF_UNWRAP_MAT_AND_GET(info.This()), channels);
+	v8::Local<v8::Array> jsChannelMats = Nan::New<v8::Array>(channels.size());
+	for (int i = 0; i < channels.size(); i++) {
+		v8::Local<v8::Object> jsChannelMat = FF_NEW(constructor);
+		FF_UNWRAP_MAT_AND_GET(jsChannelMat) = channels.at(i);
+		jsChannelMats->Set(i, jsChannelMat);
+	}
+	info.GetReturnValue().Set(jsChannelMats);
 }
 
 /* #IFDEC IMGPROC */

@@ -121,7 +121,6 @@
 		FF_SELF_OPERATOR(cv::sqrt, unwrapper);															\
 	}																																			\
 
-
 #define FF_INIT_MAT_OPERATIONS()																						\
 	FF_INIT_MATRIX_OPERATIONS(Mat, mat, FF_UNWRAP_MAT_AND_GET);								\
 	static NAN_METHOD(And) {																									\

@@ -1,5 +1,5 @@
 import { Mat, cvTypes } from 'dut';
-import { assertDataDeepEquals, assertMetaData } from './matTestUtils';
+import { assertDataDeepEquals, assertMetaData } from 'utils';
 import { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
   intMin, floatMin, floatMax, doubleMin, doubleMax } from './typeRanges';
 

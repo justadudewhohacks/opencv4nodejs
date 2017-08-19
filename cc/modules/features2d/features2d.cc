@@ -34,11 +34,9 @@ NAN_METHOD(Features2d::DrawKeyPoints) {
 	cv::Mat img;
 	std::vector<cv::KeyPoint> kps;
 	FF_GET_JSOBJ_REQUIRED(args, img, image, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
-	v8::Local<v8::Value> keypoints = FF_GET_JSPROP(args, keypoints);
-	if (!keypoints->IsArray()) {
-		return Nan::ThrowError("DrawKeyPoints - expected keypoints to be an Array of Keypoints");
-	}
-	FF_UNWRAP_KEYPOINT_ARRAY(FF_CAST_ARRAY(keypoints), kps);
+	v8::Local<v8::Array> jsKeyPoints;
+	FF_GET_JSARR_REQUIRED(args, jsKeyPoints, keypoints);
+	FF_UNWRAP_KEYPOINT_ARRAY(jsKeyPoints, kps);
 
 	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
 	cv::drawKeypoints(img, kps, Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat);
@@ -48,29 +46,21 @@ NAN_METHOD(Features2d::DrawKeyPoints) {
 NAN_METHOD(Features2d::DrawMatches) {
 	FF_REQUIRE_ARGS_OBJ("DrawMatches");
 	cv::Mat imgFrom, imgTo;
-	v8::Local<v8::Value> keypoints1 = FF_GET_JSPROP(args, keypoints1);
-	v8::Local<v8::Value> keypoints2 = FF_GET_JSPROP(args, keypoints2);
+	v8::Local<v8::Array> jsKeyPoints1, jsKeyPoints2, jsMatches;
 	std::vector<cv::KeyPoint> kpsFrom, kpsTo;
-	v8::Local<v8::Value> jsMatches = FF_GET_JSPROP(args, matches1to2);
 
 	FF_GET_JSOBJ_REQUIRED(args, imgFrom, img1, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
 	FF_GET_JSOBJ_REQUIRED(args, imgTo, img2, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
-	if (!keypoints1->IsArray()) {
-		return Nan::ThrowError("DrawMatches - expected keypoints1 to be an Array of Keypoints");
-	}
-	if (!keypoints2->IsArray()) {
-		return Nan::ThrowError("DrawMatches - expected keypoints2 to be an Array of Keypoints");
-	}
-	if (!jsMatches->IsArray()) {
-		return Nan::ThrowError("DrawMatches - expected matches1to2 to be an Array of DescriptorMatches");
-	}
-	FF_UNWRAP_KEYPOINT_ARRAY(FF_CAST_ARRAY(keypoints1), kpsFrom);
-	FF_UNWRAP_KEYPOINT_ARRAY(FF_CAST_ARRAY(keypoints2), kpsTo);
+	FF_GET_JSARR_REQUIRED(args, jsKeyPoints1, keypoints1);
+	FF_GET_JSARR_REQUIRED(args, jsKeyPoints2, keypoints2);
+	FF_GET_JSARR_REQUIRED(args, jsMatches, matches1to2);
 
-	v8::Local<v8::Array> jsMatchesArray = FF_CAST_ARRAY(jsMatches);
+	FF_UNWRAP_KEYPOINT_ARRAY(jsKeyPoints1, kpsFrom);
+	FF_UNWRAP_KEYPOINT_ARRAY(jsKeyPoints2, kpsTo);
+
 	std::vector<cv::DMatch> dMatches;
-	for (uint i = 0; i < jsMatchesArray->Length(); i++) {
-		DescriptorMatch* match = FF_UNWRAP(FF_CAST_OBJ(jsMatchesArray->Get(i)), DescriptorMatch);
+	for (uint i = 0; i < jsMatches->Length(); i++) {
+		DescriptorMatch* match = FF_UNWRAP(FF_CAST_OBJ(jsMatches->Get(i)), DescriptorMatch);
 		dMatches.push_back(cv::DMatch(match->queryIdx, match->trainIdx, match->distance));
 	}
 

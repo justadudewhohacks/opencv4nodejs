@@ -1,7 +1,10 @@
 import { Mat, cvTypes } from 'dut';
-import { assertError } from 'utils';
+import {
+  assertError,
+  assertDataDeepEquals,
+  assertMetaData
+} from 'utils';
 import { expect } from 'chai';
-import { assertDataDeepEquals, assertMetaData } from './matTestUtils';
 
 const operatorRequiresArg = (func, isScalar) => {
   it('should throw if no args', () => {

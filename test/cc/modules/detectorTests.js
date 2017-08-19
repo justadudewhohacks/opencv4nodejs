@@ -35,7 +35,7 @@ exports.detectorTests = (defaults, customProps, Detector, implementsCompute = tr
 
   describe('detect', () => {
     it('should throw if no args', () => {
-      assertError(() => (new Detector()).detect(), 'required argument image');
+      assertError(() => (new Detector()).detect(), 'expected arg0 to be instance of Mat');
     });
 
     it('should return an array of KeyPoints', () => {
@@ -48,7 +48,7 @@ exports.detectorTests = (defaults, customProps, Detector, implementsCompute = tr
   if (implementsCompute) {
     describe('compute', () => {
       it('should throw if no args', () => {
-        assertError(() => (new Detector()).compute(), 'required arguments image, keyPoints');
+        assertError(() => (new Detector()).compute(), 'expected arg0 to be instance of Mat');
       });
 
       it('should return a Mat with descriptors for each KeyPoint', () => {

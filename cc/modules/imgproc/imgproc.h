@@ -11,6 +11,9 @@ public:
   static NAN_MODULE_INIT(Init);
 
 	static NAN_METHOD(GetStructuringElement);
+	static NAN_METHOD(CalcHist);
+	static NAN_METHOD(Plot1DHist);
+
 };
 
 #endif

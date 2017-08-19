@@ -1,6 +1,6 @@
 import { cvTypes } from 'dut';
 import { assert } from 'chai';
-import { assertPropsWithValue } from 'utils';
+import { assertPropsWithValue } from './testUtils';
 
 // TODO: proper deepEquals
 const dangerousDeepEquals = (obj0, obj1) => JSON.stringify(obj0) === JSON.stringify(obj1);
@@ -45,8 +45,31 @@ exports.assertMatValueEquals = (val0, val1) => {
   }
 };
 
-exports.assertMetaData = mat => (rows, cols, type) => {
-  assertPropsWithValue(mat)({
-    rows, cols, type
-  });
+exports.MatValuesComparator = (mat0, mat1) => (cmpFunc) => {
+  assert(mat0.rows === mat1.rows, 'mat rows mismatch');
+  assert(mat0.cols === mat1.cols, 'mat cols mismatch');
+  for (let r = 0; r < mat0.rows; r += 1) {
+    for (let c = 0; c < mat0.cols; c += 1) {
+      cmpFunc(mat0.at(r, c), mat1.at(r, c));
+    }
+  }
+};
+
+exports.isZeroMat = mat =>
+  mat.getDataAsArray().every(r => r.every(val => val === 0));
+
+
+exports.assertMetaData = mat => (arg0, cols, type) => {
+  let propsWithValues = {
+    rows: arg0, cols, type
+  };
+  const propsFromArg0 = {
+    rows: arg0.rows,
+    cols: arg0.cols,
+    type: arg0.type
+  };
+  if (['rows', 'cols', 'type'].every(prop => !isNaN(propsFromArg0[prop]))) {
+    propsWithValues = propsFromArg0;
+  }
+  assertPropsWithValue(mat)(propsWithValues);
 };

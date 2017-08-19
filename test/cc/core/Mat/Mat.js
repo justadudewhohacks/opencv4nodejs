@@ -1,13 +1,22 @@
 import { Mat, cvTypes } from 'dut';
-import { assertError, funcRequiresArgsObject } from 'utils';
+import {
+  assertError,
+  assertPropsWithValue,
+  funcRequiresArgsObject,
+  assertMetaData,
+  assertDataDeepEquals,
+  MatValuesComparator,
+  isZeroMat
+} from 'utils';
 import { expect } from 'chai';
-import { assertMetaData, assertDataDeepEquals } from './matTestUtils';
 import accessorTests from './accessorTests';
 import constructorTestsFromJsArray from './constructorTestsFromJsArray';
 import constructorTestsFromFillVector from './constructorTestsFromFillVector';
 import operatorTests from './operatorTests';
 import imgprocTests from './imgprocTests';
 import { doubleMin, doubleMax } from './typeRanges';
+
+const { normTypes } = cvTypes;
 
 const srcMatData = [
   [doubleMin, doubleMax, 0],
@@ -32,16 +41,67 @@ describe('Mat', () => {
   accessorTests();
   imgprocTests();
 
+  describe('constructor from channels', () => {
+    const matEmpty8U = new Mat(4, 3, cvTypes.CV_8U);
+    const matEmpty8UC2 = new Mat(4, 3, cvTypes.CV_8UC2);
+
+    it('should throw if rows mismatch', () => {
+      assertError(
+        () => new Mat([matEmpty8U, new Mat(5, 3, matEmpty8U.type)]),
+        'rows mismatch'
+      );
+    });
+
+    it('should throw if cols mismatch', () => {
+      assertError(
+        () => new Mat([matEmpty8U, new Mat(4, 2, matEmpty8U.type)]),
+        'cols mismatch'
+      );
+    });
+
+    it('should throw if channel is not a Mat', () => {
+      assertError(
+        () => new Mat([matEmpty8U, matEmpty8U, 'foo']),
+        'expected channel 2 to be an instance of Mat'
+      );
+    });
+
+    it('should work constructable from single channel', () => {
+      assertMetaData(new Mat([matEmpty8U]))(matEmpty8U);
+    });
+
+    it('should be constructable from 2 single channels', () => {
+      assertMetaData(new Mat([matEmpty8U, matEmpty8U]))(4, 3, cvTypes.CV_8UC2);
+    });
+
+    it('should be constructable from 3 single channels', () => {
+      assertMetaData(new Mat([matEmpty8U, matEmpty8U, matEmpty8U]))(4, 3, cvTypes.CV_8UC3);
+    });
+
+    it('should be constructable from more then 4 single channels', () => {
+      const channels = 10;
+      assertPropsWithValue(new Mat(Array(channels).fill(0).map(() => matEmpty8U)))({ channels });
+    });
+
+    it('should be constructable from double channeled', () => {
+      assertMetaData(new Mat([matEmpty8UC2]))(matEmpty8UC2);
+    });
+
+    it('should be constructable from mixed channels', () => {
+      assertPropsWithValue(new Mat([matEmpty8UC2, matEmpty8U]))({ channels: 3 });
+    });
+  });
+
   describe('copy', () => {
     it('should copy data', () => {
       const dstMat = srcMat.copy();
-      assertMetaData(dstMat)(srcMat.rows, srcMat.cols, srcMat.type);
+      assertMetaData(dstMat)(srcMat);
       assertDataDeepEquals(srcMat.getDataAsArray(), dstMat.getDataAsArray());
     });
 
     it('should copy masked data', () => {
       const dstMat = srcMat.copy(mask);
-      assertMetaData(dstMat)(expectedCopy.rows, expectedCopy.cols, expectedCopy.type);
+      assertMetaData(dstMat)(expectedCopy);
       assertDataDeepEquals(expectedCopyData, dstMat.getDataAsArray());
     });
   });
@@ -57,13 +117,13 @@ describe('Mat', () => {
 
     it('should copy data', () => {
       const dstMat = srcMat.copyTo(new Mat(srcMat.rows, srcMat.cols, srcMat.type));
-      assertMetaData(dstMat)(srcMat.rows, srcMat.cols, srcMat.type);
+      assertMetaData(dstMat)(srcMat);
       assertDataDeepEquals(srcMat.getDataAsArray(), dstMat.getDataAsArray());
     });
 
     it('should copy masked data', () => {
       const dstMat = srcMat.copyTo(new Mat(srcMat.rows, srcMat.cols, srcMat.type, 0), mask);
-      assertMetaData(dstMat)(expectedCopy.rows, expectedCopy.cols, expectedCopy.type);
+      assertMetaData(dstMat)(expectedCopy);
       assertDataDeepEquals(expectedCopyData, dstMat.getDataAsArray());
     });
   });
@@ -82,13 +142,77 @@ describe('Mat', () => {
     });
   });
 
-  describe('new from node buffer', () => {
-    it('new from node buffer', () => {
+  describe('norm', () => {
+    it('should use calculate default normal value if no args passed', () => {
+      const mat = new Mat([
+        [0, Math.sqrt(4), Math.sqrt(4)],
+        [Math.sqrt(8), Math.sqrt(16), Math.sqrt(32)]
+      ], cvTypes.CV_64F);
+      expect(mat.norm()).to.equal(8);
+    });
 
+    it('should calculate norm to other mat', () => {
+      const mat = new Mat([
+        [0, -0.5, 1.5]
+      ], cvTypes.CV_64F);
+      const mat2 = new Mat([
+        [1.0, 0.5, 0.5]
+      ], cvTypes.CV_64F);
+      expect(mat.norm({ src2: mat2 })).to.equal(Math.sqrt(3));
     });
   });
 
-  describe('getData', () => {
+  describe('normalize', () => {
+    it('should use default normalization if no args passed', () => {
+      assertMetaData(srcMat.normalize())(srcMat);
+    });
+
+    it('should normalize range of CV_8U', () => {
+      const mat = new Mat([
+        [0, 127, 255],
+        [63, 195, 7]
+      ], cvTypes.CV_8U);
+      const normMat = mat.normalize({ normType: normTypes.NORM_MINMAX, alpha: 0, beta: 100 });
+      const cmpVals = MatValuesComparator(mat, normMat);
+      assertMetaData(normMat)(2, 3, cvTypes.CV_8U);
+      expect(isZeroMat(normMat)).to.be.false;
+      cmpVals((_, normVal) => {
+        expect(normVal).to.be.a('number');
+        expect(normVal).to.be.within(0, 100);
+      });
+    });
+
+    it('should normalize range of CV_64F', () => {
+      const mat = new Mat([
+        [0.5, 1000.12345, 1000],
+        [-1000.12345, 123.456, -123.456]
+      ], cvTypes.CV_64F);
+      const normMat = mat.normalize({ normType: normTypes.NORM_MINMAX, alpha: 0, beta: 10 });
+      const cmpVals = MatValuesComparator(mat, normMat);
+      assertMetaData(normMat)(2, 3, cvTypes.CV_64F);
+      expect(isZeroMat(normMat)).to.be.false;
+      cmpVals((_, normVal) => {
+        expect(normVal).to.be.a('number');
+        expect(normVal).to.be.within(0, 10);
+      });
+    });
+  });
+
+  describe('splitChannels', () => {
+    it('should return an array of all channels', () => {
+      const channels = new Mat(4, 3, cvTypes.CV_8UC3).splitChannels();
+      expect(channels).to.be.an('array').lengthOf(3);
+      channels.forEach(channel => assertMetaData(channel)(4, 3, cvTypes.CV_8U));
+    });
+  });
+
+  describe.skip('new from node buffer', () => {
+    it('new from node buffer', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe.skip('getData', () => {
     it('getData', () => {
       expect(true).to.be.false;
     });

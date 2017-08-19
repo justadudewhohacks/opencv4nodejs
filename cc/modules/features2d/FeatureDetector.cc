@@ -6,12 +6,9 @@ void FeatureDetector::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(FeatureDetector::Detect) {
-  if (!info[0]->IsObject()) {
-    return Nan::ThrowError("required argument image");      
-  }
-	FeatureDetector* self = Nan::ObjectWrap::Unwrap<FeatureDetector>(info.This());
-	// TODO check instanceof Mat
-	cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
+	FeatureDetector* self = FF_UNWRAP(info.This(), FeatureDetector);
+	FF_REQUIRE_INSTANCE(Mat::constructor, info[0], "expected arg0 to be instance of Mat");
+	cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info[0]->ToObject());
 	std::vector<cv::KeyPoint> kps;
 	FF_TRY(self->getDetector()->detect(mat, kps);)
 
@@ -26,10 +23,8 @@ NAN_METHOD(FeatureDetector::Detect) {
 }
 
 NAN_METHOD(FeatureDetector::Compute) {
-  if (!info[0]->IsObject() || !info[1]->IsObject()) {
-    return Nan::ThrowError("required arguments image, keyPoints");      
-  }
-	FeatureDetector* self = Nan::ObjectWrap::Unwrap<FeatureDetector>(info.This());
+	FeatureDetector* self = FF_UNWRAP(info.This(), FeatureDetector);
+	FF_REQUIRE_INSTANCE(Mat::constructor, info[0], "expected arg0 to be instance of Mat");
 	cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info[0]->ToObject());
 	std::vector<cv::KeyPoint> kps;
 	FF_UNWRAP_KEYPOINT_ARRAY(FF_CAST_ARRAY(info[1]), kps);

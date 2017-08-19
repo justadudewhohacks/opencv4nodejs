@@ -18,6 +18,8 @@ public:
 	static FF_GETTER(Mat, GetRows, mat.rows);
 	static FF_GETTER(Mat, GetCols, mat.cols);
 	static FF_GETTER(Mat, GetType, mat.type());
+	static FF_GETTER(Mat, GetChannels, mat.channels());
+	static FF_GETTER(Mat, GetDims, mat.dims);
 
 	static NAN_METHOD(At);
 	static NAN_METHOD(AtRaw);
@@ -28,6 +30,9 @@ public:
 	static NAN_METHOD(Copy);
 	static NAN_METHOD(CopyTo);
 	static NAN_METHOD(ConvertTo);
+	static NAN_METHOD(Norm);
+	static NAN_METHOD(Normalize);
+	static NAN_METHOD(SplitChannels);
 
 	FF_INIT_MAT_OPERATIONS();
 	static NAN_METHOD(Dot) {
