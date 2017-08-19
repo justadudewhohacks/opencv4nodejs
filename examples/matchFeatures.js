@@ -1,7 +1,5 @@
-const opencv = require('../');
+const cv = require('../');
 const { imreadPromised } = require('./utils');
-
-const { Mat, ORBDetector, SIFTDetector, matchBruteForceHamming, matchFlannBased, drawMatches, imshow } = opencv;
 
 const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   // detect keypoints
@@ -17,9 +15,11 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
 
   // only keep good matches
   const bestN = 40;
-  const bestMatches = matches.sort((match1, match2) => match1.distance - match2.distance).slice(0, bestN);
+  const bestMatches = matches.sort(
+    (match1, match2) => match1.distance - match2.distance
+  ).slice(0, bestN);
 
-  return drawMatches({
+  return cv.drawMatches({
     img1,
     img2,
     keypoints1: keyPoints1,
@@ -31,21 +31,21 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
 Promise.all([imreadPromised('../data/s0.jpg'), imreadPromised('../data/s1.jpg')])
   .then(([img1, img2]) => {
     // check if opencv compiled with extra modules and nonfree
-    if (SIFTDetector) {
+    if (cv.SIFTDetector) {
       const siftMatchesImg = matchFeatures({
         img1,
         img2,
-        detector: new SIFTDetector({ nFeatures: 2000 }),
-        matchFunc: matchFlannBased
+        detector: new cv.SIFTDetector({ nFeatures: 2000 }),
+        matchFunc: cv.matchFlannBased
       });
-      imshow('SIFT matches', siftMatchesImg);
+      cv.imshow('SIFT matches', siftMatchesImg);
     }
 
     const orbMatchesImg = matchFeatures({
       img1,
       img2,
-      detector: new ORBDetector(),
-      matchFunc: matchBruteForceHamming
+      detector: new cv.ORBDetector(),
+      matchFunc: cv.matchBruteForceHamming
     });
-    imshow('ORB matches', orbMatchesImg);
+    cv.imshow('ORB matches', orbMatchesImg);
   });
