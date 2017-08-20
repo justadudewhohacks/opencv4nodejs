@@ -60,7 +60,7 @@ NAN_METHOD(Imgproc::CalcHist) {
 	if (FF_HAS_JS_PROP(args, mask)) {
 		/* with mask*/
 		v8::Local<v8::Object> jsMask = FF_GET_JSPROP(args, mask)->ToObject();
-		FF_REQUIRE_INSTANCE(Mat::constructor, jsMask, "mask", "Mat");
+		FF_REQUIRE_INSTANCE(Mat::constructor, jsMask, "expected mask to be an instance of Mat");
 		mask = FF_UNWRAP_MAT_AND_GET(jsMask);
 	}
 

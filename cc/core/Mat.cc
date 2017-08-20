@@ -216,7 +216,7 @@ NAN_METHOD(Mat::Copy) {
 	Nan::ObjectWrap::Unwrap<Mat>(jsMatDst)->setNativeProps(matDst);
 	if (info[0]->IsObject()) {
 		/* with mask*/
-		FF_REQUIRE_INSTANCE(constructor, info[0], "mask", "Mat");
+		FF_REQUIRE_INSTANCE(constructor, info[0], "expected mask to be an instance of Mat");
 		matSelf.copyTo(matDst, FF_UNWRAP_MAT_AND_GET(info[0]->ToObject()));
 	}
 	else {
@@ -271,12 +271,12 @@ NAN_METHOD(Mat::Norm) {
 		if (FF_HAS_JS_PROP(args, mask)) {
 			/* with mask*/
 			v8::Local<v8::Object> jsMask = FF_GET_JSPROP(args, mask)->ToObject();
-			FF_REQUIRE_INSTANCE(constructor, jsMask, "mask", "Mat");
+			FF_REQUIRE_INSTANCE(constructor, jsMask, "expected mask to be an instance of Mat");
 			mask = FF_UNWRAP_MAT_AND_GET(jsMask);
 		}
 		if (FF_HAS_JS_PROP(args, src2)) {
 			v8::Local<v8::Object> jsSrc2 = FF_GET_JSPROP(args, src2)->ToObject();
-			FF_REQUIRE_INSTANCE(constructor, jsSrc2, "src2", "Mat");
+			FF_REQUIRE_INSTANCE(constructor, jsSrc2, "expected src2 to be an instance of Mat");
 			norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), FF_UNWRAP_MAT_AND_GET(jsSrc2), normType, mask);
 			return info.GetReturnValue().Set(norm);
 		}
@@ -299,7 +299,7 @@ NAN_METHOD(Mat::Normalize) {
 		if (FF_HAS_JS_PROP(args, mask)) {
 			/* with mask*/
 			v8::Local<v8::Object> jsMask = FF_GET_JSPROP(args, mask)->ToObject();
-			FF_REQUIRE_INSTANCE(constructor, jsMask, "mask", "Mat");
+			FF_REQUIRE_INSTANCE(constructor, jsMask, "expected mask to be an instance of Mat");
 			mask = FF_UNWRAP_MAT_AND_GET(jsMask);
 		}
 	}
