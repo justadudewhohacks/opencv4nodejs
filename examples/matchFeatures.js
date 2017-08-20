@@ -31,7 +31,7 @@ const img1 = cv.imread('../data/s0.jpg');
 const img2 = cv.imread('../data/s1.jpg');
 
 // check if opencv compiled with extra modules and nonfree
-if (cv.SIFTDetector) {
+if (cv.xmodules.xfeatures2d) {
   const siftMatchesImg = matchFeatures({
     img1,
     img2,
@@ -39,6 +39,8 @@ if (cv.SIFTDetector) {
     matchFunc: cv.matchFlannBased
   });
   cv.imshowWait('SIFT matches', siftMatchesImg);
+} else {
+  console.log('skipping SIFT matches');
 }
 
 const orbMatchesImg = matchFeatures({

@@ -1,3 +1,5 @@
+#ifdef HAVE_XIMGPROC
+
 #include "SuperpixelSEEDS.h"
 
 Nan::Persistent<v8::FunctionTemplate> SuperpixelSEEDS::constructor;
@@ -68,3 +70,5 @@ NAN_METHOD(SuperpixelSEEDS::Iterate) {
 	self->superpixelSeeds->getLabels(Nan::ObjectWrap::Unwrap<Mat>(Nan::New(self->jsLabels))->mat);
 	self->numCalculatedSuperpixels = self->superpixelSeeds->getNumberOfSuperpixels();
 }
+
+#endif // HAVE_XIMGPROC

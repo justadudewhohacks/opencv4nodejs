@@ -1,3 +1,5 @@
+#ifdef HAVE_XFEATURES2D
+
 #include "SURFDetector.h"
 
 Nan::Persistent<v8::FunctionTemplate> SURFDetector::constructor;
@@ -45,3 +47,5 @@ NAN_METHOD(SURFDetector::New) {
 	self->detector = cv::xfeatures2d::SURF::create(hessianThreshold, nOctaves, nOctaveLayers, extended, upright);
   info.GetReturnValue().Set(info.Holder());
 }
+
+#endif // HAVE_XFEATURES2D

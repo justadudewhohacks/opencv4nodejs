@@ -1,3 +1,5 @@
+#ifdef HAVE_XFEATURES2D
+
 #include "SIFTDetector.h"
 
 Nan::Persistent<v8::FunctionTemplate> SIFTDetector::constructor;
@@ -38,3 +40,5 @@ NAN_METHOD(SIFTDetector::New) {
 	self->detector = cv::xfeatures2d::SIFT::create(self->nFeatures, self->nOctaveLayers, self->contrastThreshold, self->edgeThreshold, self->sigma);
   info.GetReturnValue().Set(info.Holder());
 }
+
+#endif // HAVE_XFEATURES2D
