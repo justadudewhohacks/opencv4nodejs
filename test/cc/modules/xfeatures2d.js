@@ -2,6 +2,11 @@ import opencv from 'dut';
 import { detectorTests } from './detectorTests';
 
 describe('xfeatures2d', () => {
+  if (!opencv.xmodules.xfeatures2d) {
+    it('compiled without xfeatures2d');
+    return;
+  }
+
   describe('SIFTDetector', () => {
     const defaults = {
       sigma: 1.6,

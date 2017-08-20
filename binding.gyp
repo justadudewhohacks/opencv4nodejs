@@ -1,25 +1,18 @@
 {
 	"targets": [{
 		"target_name": "opencv4nodejs",
+		"defines": [
+			"<!@(node ./lib/defines.js)",
+		],
 		"include_dirs" : [
-			"$(OPENCV_DIR)/include",
+			"<!@(node ./lib/includes.js)",
 			"cc",
 			"cc/core",
 			"cc/modules",
 			"<!(node -e \"require('nan')\")"
 		],
 		"libraries": [
-			"$(OPENCV_LIB_DIR)/opencv_core320.lib",
-			"$(OPENCV_LIB_DIR)/opencv_highgui320.lib",
-			"$(OPENCV_LIB_DIR)/opencv_imgcodecs320.lib",
-			"$(OPENCV_LIB_DIR)/opencv_imgproc320.lib",
-			"$(OPENCV_LIB_DIR)/opencv_ximgproc320.lib",
-			"$(OPENCV_LIB_DIR)/opencv_features2d320.lib",
-			"$(OPENCV_LIB_DIR)/opencv_xfeatures2d320.lib",
-			"$(OPENCV_LIB_DIR)/opencv_calib3d320.lib",
-			"$(OPENCV_LIB_DIR)/opencv_photo320.lib",
-			"$(OPENCV_LIB_DIR)/opencv_videoio320.lib",
-			"$(OPENCV_LIB_DIR)/opencv_videostab320.lib"
+			"<!@(node ./lib/libs.js)"
 		],
 		"sources": [
 			"cc/index.cc",

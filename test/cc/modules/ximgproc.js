@@ -3,6 +3,11 @@ import { assertPropsWithValue, funcRequiresArgsObject, readTestImage } from 'uti
 import { assert } from 'chai';
 
 describe('ximgproc', () => {
+  if (!opencv.xmodules.ximgproc) {
+    it('compiled without  ximgproc');
+    return;
+  }
+
   let testImg;
 
   before(async () => {
