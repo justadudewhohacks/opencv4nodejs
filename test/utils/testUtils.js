@@ -29,11 +29,4 @@ exports.funcRequiresArgsObject = (func) => {
   });
 };
 
-exports.readTestImage = () => new Promise((resolve, reject) => {
-  opencv.imread('../data/Lenna.png', (err, img) => {
-    if (err) {
-      return reject(err);
-    }
-    return resolve(img);
-  });
-});
+exports.readTestImage = () => opencv.imread('../data/Lenna.png');

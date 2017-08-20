@@ -18,6 +18,7 @@
 			"$(OPENCV_LIB_DIR)/opencv_xfeatures2d320.lib",
 			"$(OPENCV_LIB_DIR)/opencv_calib3d320.lib",
 			"$(OPENCV_LIB_DIR)/opencv_photo320.lib",
+			"$(OPENCV_LIB_DIR)/opencv_videoio320.lib",
 			"$(OPENCV_LIB_DIR)/opencv_videostab320.lib"
 		],
 		"sources": [
@@ -29,6 +30,7 @@
 			"cc/core/Vec.cc",
 			"cc/core/Size.cc",
 			"cc/modules/io.cc",
+			"cc/modules/VideoCapture.cc",
 			"cc/modules/photo.cc",
 			"cc/modules/calib3d/calib3d.cc",
 			"cc/modules/imgproc/imgproc.cc",

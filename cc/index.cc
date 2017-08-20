@@ -6,6 +6,7 @@
 #include "cvTypes/cvTypes.h"
 
 #include "modules/io.h"
+#include "modules/VideoCapture.h"
 #include "modules/photo.h"
 #include "modules/calib3d/calib3d.h"
 #include "modules/imgproc/imgproc.h"
@@ -20,6 +21,7 @@ void init(v8::Local<v8::Object> target) {
 	Vec::Init(target);
 	Size::Init(target);
   Io::Init(target);
+	VideoCapture::Init(target);
   Photo::Init(target);
   Calib3d::Init(target);
   Imgproc::Init(target);

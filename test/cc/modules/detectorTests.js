@@ -9,7 +9,7 @@ exports.detectorTests = (defaults, customProps, Detector, implementsCompute = tr
   let keyPoints;
 
   before(async () => {
-    testImg = (await readTestImage()).resizeToMax(250);
+    testImg = readTestImage().resizeToMax(250);
     keyPoints = (new Detector()).detect(testImg);
   });
 

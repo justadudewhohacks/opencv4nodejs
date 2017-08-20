@@ -83,7 +83,7 @@ module.exports = () => {
     })());
 
     it('should warp image perspective', async () => {
-      const img = await readTestImage();
+      const img = readTestImage();
       const transformationMatrix = new Mat(
         [
           [0.5, 0, 0],

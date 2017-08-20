@@ -6,7 +6,7 @@ describe('ximgproc', () => {
   let testImg;
 
   before(async () => {
-    testImg = (await readTestImage()).resizeToMax(250);
+    testImg = readTestImage().resizeToMax(250);
   });
 
   describe('SuperpixelSEEDS', () => {

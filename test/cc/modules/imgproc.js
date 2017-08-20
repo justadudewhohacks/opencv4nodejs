@@ -1,13 +1,13 @@
 import opencv from 'dut';
 import { assertError, assertPropsWithValue, funcRequiresArgsObject, readTestImage } from 'utils';
 
-const { Mat, Vec, Point, Size, cvTypes, plot1DHist } = opencv;
+const { Mat, Point, Size, cvTypes } = opencv;
 
 describe('imgproc', () => {
   let testImg;
 
   before(async () => {
-    testImg = (await readTestImage()).resizeToMax(250);
+    testImg = readTestImage().resizeToMax(250);
   });
 
   describe('getStructuringElement', () => {
