@@ -15,8 +15,12 @@
     "module_path": "./build/Release/",
     "host": "none"
   },
-  "author": "Vincent Mühler",
+  "author": "justadudewhohacks",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justadudewhohacks/opencv4nodejs"
+  },
   "gypfile": true,
   "dependencies": {
     "nan": "^2.6.2",

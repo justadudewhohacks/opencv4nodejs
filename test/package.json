@@ -4,7 +4,7 @@
   "scripts": {
     "test": "set NODE_ENV=TEST&& mocha ./cc --require babel-core/register --require babel-polyfill --compilers js:babel-core/register --recursive"
   },
-  "author": "Vincent Mühler",
+  "author": "justadudewhohacks",
   "license": "ISC",
   "dependencies": {
     "babel-core": "^6.18.2",
