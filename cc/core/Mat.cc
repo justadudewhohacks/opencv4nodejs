@@ -37,6 +37,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "cvtColor", CvtColor);
 	Nan::SetPrototypeMethod(ctor, "bgrToGray", BgrToGray);
 	Nan::SetPrototypeMethod(ctor, "threshold", Threshold);
+	Nan::SetPrototypeMethod(ctor, "inRange", InRange);
 	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
 	Nan::SetPrototypeMethod(ctor, "dilate", Dilate);
 	Nan::SetPrototypeMethod(ctor, "erode", Erode);
@@ -387,6 +388,21 @@ NAN_METHOD(Mat::Threshold) {
 		thresh,
 		maxVal,
 		type
+	);
+	info.GetReturnValue().Set(jsMat);
+}
+
+NAN_METHOD(Mat::InRange) {
+	FF_REQUIRE_INSTANCE(Vec3::constructor, info[0], "Mat::InRange - expected arg0 lower bound to be an instance of Vec3");
+	FF_REQUIRE_INSTANCE(Vec3::constructor, info[1], "Mat::InRange - expected arg1 upper bound to be an instance of Vec3");
+	cv::Vec3d lower = FF_UNWRAP_VEC3_AND_GET(info[0]->ToObject());
+	cv::Vec3d upper = FF_UNWRAP_VEC3_AND_GET(info[1]->ToObject());
+	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
+	cv::inRange(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		lower,
+		upper,
+		FF_UNWRAP_MAT_AND_GET(jsMat)
 	);
 	info.GetReturnValue().Set(jsMat);
 }

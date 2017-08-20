@@ -46,6 +46,7 @@ public:
   static NAN_METHOD(Resize);
   static NAN_METHOD(ResizeToMax);
 	static NAN_METHOD(Threshold);
+	static NAN_METHOD(InRange);
 	static NAN_METHOD(CvtColor);
 	static NAN_METHOD(BgrToGray);
 	static NAN_METHOD(WarpPerspective);

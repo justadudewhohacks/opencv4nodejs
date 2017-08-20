@@ -27,19 +27,19 @@ NAN_METHOD(VideoCapture::New) {
 	if (!self->cap.isOpened()) {
 		return Nan::ThrowError("VideoCapture::New failed to open capture");
 	}
-	
+
 	self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());
 }
 
-NAN_METHOD(VideoCapture::Read) { 
+NAN_METHOD(VideoCapture::Read) {
 	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
 	FF_UNWRAP(info.This(), VideoCapture)->cap.read(FF_UNWRAP_MAT_AND_GET(jsMat));
 	info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(VideoCapture::Reset) {
-	VideoCapture* self = FF_UNWRAP(info.This(), VideoCapture); 
+	VideoCapture* self = FF_UNWRAP(info.This(), VideoCapture);
 	self->cap.release();
 	self->cap.open(self->path);
 	if (!self->cap.isOpened()) {
