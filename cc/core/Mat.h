@@ -52,6 +52,18 @@ public:
 	static NAN_METHOD(WarpPerspective);
 	static NAN_METHOD(Dilate);
 	static NAN_METHOD(Erode);
+	static NAN_METHOD(ConnectedComponents);
+	static NAN_METHOD(ConnectedComponentsWithStats);
+	static NAN_METHOD(FindContours);
+	static NAN_METHOD(DrawContours);
+	static NAN_METHOD(ContourArea);
+	static NAN_METHOD(IsContourConvex);
+	static NAN_METHOD(ConvexHull);
+	static NAN_METHOD(DrawLine);
+	static NAN_METHOD(DrawCircle);
+	static NAN_METHOD(DrawRectangle);
+	static NAN_METHOD(DrawEllipse);
+
 	/* #ENDIF IMGPROC */
 
 	static void dilateOrErode(Nan::NAN_METHOD_ARGS_TYPE, char*, bool);

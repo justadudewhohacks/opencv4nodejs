@@ -55,9 +55,12 @@ exports.MatValuesComparator = (mat0, mat1) => (cmpFunc) => {
   }
 };
 
-exports.isZeroMat = mat =>
-  mat.getDataAsArray().every(r => r.every(val => val === 0));
-
+exports.isZeroMat = (mat) => {
+  if (mat.channels === 1) {
+    return mat.getDataAsArray().every(r => r.every(val => val === 0));
+  }
+  return mat.getDataAsArray().every(r => r.every(vec => vec.every(val => val === 0)));
+};
 
 exports.assertMetaData = mat => (arg0, cols, type) => {
   let propsWithValues = {

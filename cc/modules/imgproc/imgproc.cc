@@ -3,29 +3,6 @@
 #include "Size.h"
 #include "Mat.h"
 
-NAN_MODULE_INIT(Imgproc::Init) {
-	Nan::SetMethod(target, "getStructuringElement", GetStructuringElement);
-	Nan::SetMethod(target, "calcHist", CalcHist);
-	Nan::SetMethod(target, "plot1DHist", Plot1DHist);
-};
-
-NAN_METHOD(Imgproc::GetStructuringElement) {
-	FF_REQUIRE_ARGS_OBJ("GetStructuringElement");
-	int shape;
-	v8::Local<v8::Object> jsSize;
-	cv::Point2i anchor = cv::Point2i(-1, -1);
-	FF_DESTRUCTURE_JSPROP_REQUIRED(args, shape, Int32Value);
-	FF_GET_JSPROP_REQUIRED(args, jsSize, size, ToObject);
-	if (FF_HAS_JS_PROP(args, anchor)) {
-		anchor = Nan::ObjectWrap::Unwrap<Point2>(FF_GET_JSPROP(args, anchor)->ToObject())->pt;
-	}
-	v8::Local<v8::Object> jsKernel = FF_NEW(Mat::constructor);
-	FF_UNWRAP_MAT(jsKernel)->setNativeProps(
-		cv::getStructuringElement(shape, FF_UNWRAP_SIZE_AND_GET(jsSize), anchor)
-	);
-	info.GetReturnValue().Set(jsKernel);
-}
-
 #define FF_DEFINE_CALC_HIST(name, n, constRangesArray)																												\
 	cv::MatND name(cv::Mat img, cv::Mat mask, int channels[], int histSize[], std::vector<float*> rangesVec) {	\
 		const float* ranges[] = constRangesArray;																																	\
@@ -44,6 +21,29 @@ FF_DEFINE_CALC_HIST(calcHist2, 2, FF_HIST_RANGE_2);
 FF_DEFINE_CALC_HIST(calcHist3, 3, FF_HIST_RANGE_3);
 FF_DEFINE_CALC_HIST(calcHist4, 4, FF_HIST_RANGE_4);
 
+NAN_MODULE_INIT(Imgproc::Init) {
+	Nan::SetMethod(target, "getStructuringElement", GetStructuringElement);
+	Nan::SetMethod(target, "calcHist", CalcHist);
+	Nan::SetMethod(target, "plot1DHist", Plot1DHist);
+	Nan::SetMethod(target, "canny", Canny);
+};
+
+NAN_METHOD(Imgproc::GetStructuringElement) {
+	FF_REQUIRE_ARGS_OBJ("GetStructuringElement");
+	int shape;
+	v8::Local<v8::Object> jsSize;
+	cv::Point2i anchor = cv::Point2i(-1, -1);
+	FF_DESTRUCTURE_JSPROP_REQUIRED(args, shape, Int32Value);
+	FF_GET_JSPROP_REQUIRED(args, jsSize, size, ToObject);
+	if (FF_HAS_JS_PROP(args, anchor)) {
+		anchor = Nan::ObjectWrap::Unwrap<Point2>(FF_GET_JSPROP(args, anchor)->ToObject())->pt;
+	}
+	v8::Local<v8::Object> jsKernel = FF_NEW(Mat::constructor);
+	FF_UNWRAP_MAT(jsKernel)->setNativeProps(
+		cv::getStructuringElement(shape, FF_UNWRAP_SIZE_AND_GET(jsSize), anchor)
+	);
+	info.GetReturnValue().Set(jsKernel);
+}
 
 NAN_METHOD(Imgproc::CalcHist) { 
 	FF_REQUIRE_ARGS_OBJ("CalcHist");
@@ -167,5 +167,24 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 
 	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
 	FF_UNWRAP_MAT(jsMat)->setNativeProps(plot);
+	info.GetReturnValue().Set(jsMat);
+}
+
+
+NAN_METHOD(Imgproc::Canny) {
+	FF_REQUIRE_ARGS_OBJ("Canny");
+
+	cv::Mat dx, dy;
+	double threshold1, threshold2;
+	FF_GET_JSOBJ_REQUIRED(args, dx, dx, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+	FF_GET_JSOBJ_REQUIRED(args, dy, dy, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, threshold1, IsNumber, NumberValue);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, threshold2, IsNumber, NumberValue);
+
+	bool L2gradient = false;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, L2gradient, IsBoolean, BooleanValue);
+
+	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
+	cv::Canny(dx, dy, FF_UNWRAP_MAT_AND_GET(jsMat), threshold1, threshold2, L2gradient);
 	info.GetReturnValue().Set(jsMat);
 }

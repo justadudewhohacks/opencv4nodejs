@@ -13,6 +13,7 @@ public:
 	static NAN_METHOD(GetStructuringElement);
 	static NAN_METHOD(CalcHist);
 	static NAN_METHOD(Plot1DHist);
+	static NAN_METHOD(Canny);
 
 };
 

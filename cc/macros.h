@@ -178,6 +178,9 @@
 #define FF_UNWRAP_VEC4(obj) FF_UNWRAP(obj, Vec4)
 #define FF_UNWRAP_VEC4_AND_GET(obj) FF_UNWRAP_VEC4(obj)->vec
 
+#define FF_UNWRAP_PT2(obj) FF_UNWRAP(obj, Point2)
+#define FF_UNWRAP_PT2_AND_GET(obj) FF_UNWRAP_PT2(obj)->pt
+
 #define FF_UNWRAP_SIZE(obj)	FF_UNWRAP(obj, Size)
 #define FF_UNWRAP_SIZE_AND_GET(obj)	FF_UNWRAP_SIZE(obj)->size
 

@@ -1,4 +1,5 @@
 #include "Mat.h"
+#include "Point2.h"
 
 Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
 
@@ -41,6 +42,17 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
 	Nan::SetPrototypeMethod(ctor, "dilate", Dilate);
 	Nan::SetPrototypeMethod(ctor, "erode", Erode);
+	Nan::SetPrototypeMethod(ctor, "connectedComponents", ConnectedComponents);
+	Nan::SetPrototypeMethod(ctor, "connectedComponentsWithStats", ConnectedComponentsWithStats);
+	Nan::SetPrototypeMethod(ctor, "findContours", FindContours);
+	Nan::SetPrototypeMethod(ctor, "drawContours", DrawContours);
+	Nan::SetPrototypeMethod(ctor, "contourArea", ContourArea);
+	Nan::SetPrototypeMethod(ctor, "isContourConvex", IsContourConvex);
+	Nan::SetPrototypeMethod(ctor, "convexHull", ConvexHull);
+	Nan::SetPrototypeMethod(ctor, "drawLine", DrawLine);
+	Nan::SetPrototypeMethod(ctor, "drawCircle", DrawCircle);
+	Nan::SetPrototypeMethod(ctor, "drawRectangle", DrawRectangle);
+	Nan::SetPrototypeMethod(ctor, "drawEllipse", DrawEllipse);
 	/* #ENDIF IMGPROC */
 
 	v8::Local<v8::Object> matTypesModule = Nan::New<v8::Object>();
@@ -96,6 +108,7 @@ NAN_METHOD(Mat::New) {
 		int type = FF::reassignMatTypeIfFloat(info[2]->Int32Value());
 		cv::Mat mat(info[0]->Int32Value(), info[1]->Int32Value(), type);
 		/* fill vector */
+		// TODO by Vec
 		if (info[3]->IsArray()) {
 			v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[3]);
 			if (mat.channels() != vec->Length()) {
@@ -436,7 +449,6 @@ NAN_METHOD(Mat::BgrToGray) {
 
 NAN_METHOD(Mat::WarpPerspective) {
 	FF_REQUIRE_ARGS_OBJ("Mat::WarpPerspective");
-
 	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
 	cv::Mat transformationMatrix;
 	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, transformationMatrix, constructor, FF_UNWRAP_MAT_AND_GET, Mat);
@@ -486,6 +498,270 @@ NAN_METHOD(Mat::Dilate) {
 
 NAN_METHOD(Mat::Erode) {
 	dilateOrErode(info, "Mat::Erode", true);
+}
+
+NAN_METHOD(Mat::ConnectedComponents) {
+	int connectivity = 8;
+	int ltype = CV_32S;
+	if (info.Length() > 0) {
+		FF_REQUIRE_ARGS_OBJ("Mat::ConnectedComponents");
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, connectivity, IsUint32, Uint32Value);
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, ltype, IsUint32, Uint32Value);
+	}
+	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
+	cv::connectedComponents(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
+		connectivity,
+		ltype
+	);
+	info.GetReturnValue().Set(jsMat);
+}
+
+NAN_METHOD(Mat::ConnectedComponentsWithStats) {
+	int connectivity = 8;
+	int ltype = CV_32S;
+	if (info.Length() > 0) {
+		FF_REQUIRE_ARGS_OBJ("Mat::ConnctedComponents");
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, connectivity, IsUint32, Uint32Value);
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, ltype, IsUint32, Uint32Value);
+	}
+	v8::Local<v8::Object> jsLabels = FF_NEW(constructor);
+	v8::Local<v8::Object> jsStats = FF_NEW(constructor);
+	v8::Local<v8::Object> jsCentroids = FF_NEW(constructor);
+	cv::connectedComponentsWithStats(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsLabels),
+		FF_UNWRAP_MAT_AND_GET(jsStats),
+		FF_UNWRAP_MAT_AND_GET(jsCentroids),
+		connectivity,
+		ltype
+	);
+
+	v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+	Nan::Set(ret, FF_V8STRING("labels"), jsLabels);
+	Nan::Set(ret, FF_V8STRING("stats"), jsStats);
+	Nan::Set(ret, FF_V8STRING("centroids"), jsCentroids);
+	info.GetReturnValue().Set(ret);
+}
+
+NAN_METHOD(Mat::FindContours) {
+	FF_REQUIRE_ARGS_OBJ("Mat::FindContours");
+
+	int mode, method;
+	cv::Point2d offset = cv::Point2d();
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, mode, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, method, IsUint32, Uint32Value);
+	if (FF_HAS_JS_PROP(args, offset)) {
+		FF_GET_JSOBJ_REQUIRED(args, offset, offset, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
+	}
+
+	v8::Local<v8::Object> jsContours = FF_NEW(constructor);
+	v8::Local<v8::Object> jsHierarchy = FF_NEW(constructor);
+	cv::findContours(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsContours),
+		FF_UNWRAP_MAT_AND_GET(jsHierarchy),
+		mode,
+		method,
+		offset
+	);
+
+	v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+	Nan::Set(ret, FF_V8STRING("contours"), jsContours);
+	Nan::Set(ret, FF_V8STRING("hierarchy"), jsHierarchy);
+	info.GetReturnValue().Set(ret);
+}
+
+NAN_METHOD(Mat::DrawContours) {
+	FF_REQUIRE_ARGS_OBJ("Mat::DrawContours");
+
+	cv::Mat toImg;
+	int contourIdx;
+	cv::Vec3d color;
+	FF_GET_JSOBJ_REQUIRED(args, toImg, toImg, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, contourIdx, IsUint32, Uint32Value);
+	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
+
+	cv::Mat hierarchy = cv::noArray().getMat();
+	int maxLevel = INT_MAX;
+	cv::Point2d offset = cv::Point2d();
+	int lineType = cv::LINE_8;
+	int thickness = 1;
+	int shift = 0;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, maxLevel, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, shift, IsInt32, Int32Value);
+	if (FF_HAS_JS_PROP(args, hierarchy)) {
+		FF_GET_JSOBJ_REQUIRED(args, hierarchy, hierarchy, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+	}
+	if (FF_HAS_JS_PROP(args, offset)) {
+		FF_GET_JSOBJ_REQUIRED(args, offset, offset, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
+	}
+
+	cv::drawContours(
+		toImg,
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		contourIdx,
+		color,
+		thickness,
+		lineType,
+		hierarchy,
+		maxLevel,
+		offset
+	);
+	info.GetReturnValue().Set(FF_GET_JSPROP_OBJECT(args, toImg));
+}
+
+NAN_METHOD(Mat::ContourArea) {
+	bool oriented = false;
+	if (info[0]->IsBoolean()) {
+		oriented = info[0]->BooleanValue();
+	}
+
+	double contourArea = cv::contourArea(FF_UNWRAP_MAT_AND_GET(info.This()), oriented);
+	info.GetReturnValue().Set(Nan::New(contourArea));
+}
+
+NAN_METHOD(Mat::IsContourConvex) {
+	bool isConvex = cv::isContourConvex(FF_UNWRAP_MAT_AND_GET(info.This()));
+	info.GetReturnValue().Set(Nan::New(isConvex));
+}
+
+NAN_METHOD(Mat::ConvexHull) {
+	bool clockwise = false; 
+	bool returnPoints = true;
+
+	if (info.Length() > 0) {
+		FF_REQUIRE_ARGS_OBJ("Mat::ConvexHull");
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, clockwise, IsBoolean, BooleanValue);
+		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, returnPoints, IsBoolean, BooleanValue);
+	}
+
+	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
+	cv::convexHull(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
+		clockwise,
+		returnPoints
+	);
+
+	info.GetReturnValue().Set(jsMat);
+}
+
+NAN_METHOD(Mat::DrawLine) {
+	FF_REQUIRE_ARGS_OBJ("Mat::DrawLine");
+
+	cv::Point2d pt1, pt2;
+	cv::Vec3d color;
+	FF_GET_JSOBJ_REQUIRED(args, pt1, pt1, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
+	FF_GET_JSOBJ_REQUIRED(args, pt2, pt2, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
+	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
+
+	int lineType = cv::LINE_8;
+	int thickness = 1;
+	int shift = 0;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, shift, IsInt32, Int32Value);
+
+	cv::line(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		pt1,
+		pt2,
+		color,
+		thickness,
+		lineType,
+		shift
+	);
+	info.GetReturnValue().Set(info.This());
+}
+
+NAN_METHOD(Mat::DrawCircle) {
+	FF_REQUIRE_ARGS_OBJ("Mat::DrawCircle");
+
+	cv::Point2d center;
+	cv::Vec3d color;
+	int radius;
+	FF_GET_JSOBJ_REQUIRED(args, center, center, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
+	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, radius, IsUint32, Uint32Value);
+
+	int lineType = cv::LINE_8;
+	int thickness = 1;
+	int shift = 0;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, shift, IsInt32, Int32Value);
+
+	cv::circle(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		center,
+		radius,
+		color,
+		thickness,
+		lineType,
+		shift
+	);
+	info.GetReturnValue().Set(info.This());
+}
+
+NAN_METHOD(Mat::DrawRectangle) {
+	FF_REQUIRE_ARGS_OBJ("Mat::DrawRectangle");
+
+	cv::Point2d pt1, pt2;
+	cv::Vec3d color;
+	FF_GET_JSOBJ_REQUIRED(args, pt1, pt1, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
+	FF_GET_JSOBJ_REQUIRED(args, pt2, pt2, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
+	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
+
+	int lineType = cv::LINE_8;
+	int thickness = 1;
+	int shift = 0;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, shift, IsInt32, Int32Value);
+
+	cv::rectangle(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		pt1,
+		pt2,
+		color,
+		thickness,
+		lineType,
+		shift
+	);
+	info.GetReturnValue().Set(info.This());
+}
+
+NAN_METHOD(Mat::DrawEllipse) {
+	FF_REQUIRE_ARGS_OBJ("Mat::DrawEllipse");
+
+	cv::Point2d center;
+	cv::Vec3d color;
+	cv::Size2d boundingRectSize;
+	double angle;
+	FF_GET_JSOBJ_REQUIRED(args, center, center, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
+	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
+	FF_GET_JSOBJ_REQUIRED(args, boundingRectSize, boundingRectSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, angle, IsNumber, NumberValue);
+
+	int lineType = cv::LINE_8;
+	int thickness = 1;
+	int shift = 0;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, shift, IsInt32, Int32Value);
+	
+	cv::ellipse(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		cv::RotatedRect(center, boundingRectSize, angle),
+		color,
+		thickness,
+		lineType
+	);
+	info.GetReturnValue().Set(info.This());
 }
 
 /* #ENDIF IMGPROC */

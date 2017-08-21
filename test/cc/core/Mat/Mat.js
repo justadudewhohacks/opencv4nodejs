@@ -1,7 +1,8 @@
-import { Mat, cvTypes } from 'dut';
+import { Mat, Vec, Point, Size, cvTypes } from 'dut';
 import {
   assertError,
   assertPropsWithValue,
+  assertMatValueEquals,
   funcRequiresArgsObject,
   assertMetaData,
   assertDataDeepEquals,
@@ -16,7 +17,7 @@ import operatorTests from './operatorTests';
 import imgprocTests from './imgprocTests';
 import { doubleMin, doubleMax } from './typeRanges';
 
-const { normTypes } = cvTypes;
+const { normTypes, connectedComponentsTypes } = cvTypes;
 
 const srcMatData = [
   [doubleMin, doubleMax, 0],
@@ -206,8 +207,160 @@ describe('Mat', () => {
     });
   });
 
-  describe.skip('new from node buffer', () => {
-    it('new from node buffer', () => {
+  const zeros = new Mat(
+    Array(5).fill(0).map(() => Array(5).fill(0)),
+    cvTypes.CV_8U
+  );
+  const connectedComponentsMat = new Mat([
+    [0, 255, 255, 255, 0],
+    [0, 255, 255, 255, 0],
+    [0, 255, 255, 255, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
+  ], cvTypes.CV_8U);
+
+  describe('connectedComponents', () => {
+    it('should not find any connected components', () => {
+      const contours = zeros.connectedComponents();
+      assertMetaData(contours)(zeros.rows, zeros.cols, cvTypes.CV_32S);
+      expect(isZeroMat(contours)).to.be.true;
+    });
+
+    it('should find connected component', () => {
+      const mat = connectedComponentsMat;
+      const contours = mat.connectedComponents();
+      assertMetaData(contours)(mat.rows, mat.cols, cvTypes.CV_32S);
+      expect(isZeroMat(contours)).to.be.false;
+    });
+  });
+
+  describe('connectedComponentsWithStats', () => {
+    const {
+      CC_STAT_LEFT,
+      CC_STAT_TOP,
+      CC_STAT_WIDTH,
+      CC_STAT_HEIGHT,
+      CC_STAT_AREA
+    } = connectedComponentsTypes;
+    const zerosRetObj = zeros.connectedComponentsWithStats();
+    const matRetObj = connectedComponentsMat.connectedComponentsWithStats();
+
+    it('should return labels, stats and centroids', () => {
+      expect(zerosRetObj).to.have.property('labels').instanceOf(Mat);
+      expect(zerosRetObj).to.have.property('stats').instanceOf(Mat);
+      expect(zerosRetObj).to.have.property('centroids').instanceOf(Mat);
+    });
+
+    it('should not find any connected components', () => {
+      assertMetaData(zerosRetObj.labels)(zeros.rows, zeros.cols, cvTypes.CV_32S);
+      expect(isZeroMat(zerosRetObj.labels)).to.be.true;
+    });
+
+    it('should not find any connected components', () => {
+      assertMetaData(zeros.rows, zeros.cols, cvTypes.CV_32S);
+      expect(isZeroMat(zerosRetObj.labels)).to.be.true;
+    });
+
+    it('should find connected component', () => {
+      const mat = connectedComponentsMat;
+      assertMetaData(mat.rows, mat.cols, cvTypes.CV_32S);
+      expect(isZeroMat(matRetObj.labels)).to.be.false;
+    });
+
+    it('should find correct centroid', () => {
+      const label255 = matRetObj.labels.at(0, 1);
+      const centroid = [
+        matRetObj.centroids.at(label255, 0),
+        matRetObj.centroids.at(label255, 1)
+      ];
+      const expectedCenter = [2, 1];
+      assertMatValueEquals(centroid, expectedCenter);
+    });
+
+    it('should return correct stats', () => {
+      const { stats } = matRetObj;
+      const label0 = matRetObj.labels.at(0, 0);
+      const label255 = matRetObj.labels.at(0, 1);
+      expect(stats.at(label255, CC_STAT_LEFT)).to.equal(1);
+      expect(stats.at(label255, CC_STAT_TOP)).to.equal(0);
+      expect(stats.at(label255, CC_STAT_WIDTH)).to.equal(3);
+      expect(stats.at(label255, CC_STAT_HEIGHT)).to.equal(3);
+      expect(stats.at(label255, CC_STAT_AREA)).to.equal(9);
+      expect(stats.at(label0, CC_STAT_LEFT)).to.equal(0);
+      expect(stats.at(label0, CC_STAT_TOP)).to.equal(0);
+      expect(stats.at(label0, CC_STAT_WIDTH)).to.equal(5);
+      expect(stats.at(label0, CC_STAT_HEIGHT)).to.equal(5);
+      expect(stats.at(label0, CC_STAT_AREA)).to.equal(16);
+    });
+  });
+
+  describe('drawing', () => {
+    it('drawLine', () => {
+      const mat = new Mat(10, 10, cvTypes.CV_8UC3, [0, 0, 0]);
+      const ret = mat.drawLine({
+        pt1: new Point(0, 0),
+        pt2: new Point(9, 9),
+        color: new Vec(255, 255, 255)
+      });
+      expect(ret).to.equal(mat);
+      expect(isZeroMat(mat)).to.be.false;
+    });
+
+    it('drawCircle', () => {
+      const mat = new Mat(10, 10, cvTypes.CV_8UC3, [0, 0, 0]);
+      const ret = mat.drawCircle({
+        center: new Point(4, 4),
+        radius: 2,
+        color: new Vec(255, 255, 255)
+      });
+      expect(ret).to.equal(mat);
+      expect(isZeroMat(mat)).to.be.false;
+    });
+
+    it('drawRectangle', () => {
+      const mat = new Mat(10, 10, cvTypes.CV_8UC3, [0, 0, 0]);
+      const ret = mat.drawRectangle({
+        pt1: new Point(2, 2),
+        pt2: new Point(8, 8),
+        color: new Vec(255, 255, 255)
+      });
+      expect(ret).to.equal(mat);
+      expect(isZeroMat(mat)).to.be.false;
+    });
+
+    it('drawEllipse', () => {
+      const mat = new Mat(10, 10, cvTypes.CV_8UC3, [0, 0, 0]);
+      const ret = mat.drawEllipse({
+        center: new Point(4, 4),
+        boundingRectSize: new Size(4, 4),
+        angle: Math.PI / 4,
+        color: new Vec(255, 255, 255)
+      });
+      expect(ret).to.equal(mat);
+      expect(isZeroMat(mat)).to.be.false;
+    });
+  });
+
+  describe.skip('FindContours', () => {
+    it('FindContours', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe.skip('ContourArea', () => {
+    it('ContourArea', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe.skip('IsContourConvex', () => {
+    it('IsContourConvex', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe.skip('ConvexHull', () => {
+    it('ConvexHull', () => {
       expect(true).to.be.false;
     });
   });
