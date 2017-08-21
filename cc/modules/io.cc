@@ -57,9 +57,11 @@ NAN_METHOD(Io::ImshowWait) {
 }
 
 NAN_METHOD(Io::WaitKey) {
-	if (!info[0]->IsNumber()) {
-		cv::waitKey(info[0]->NumberValue());
+	int key;
+	if (info[0]->IsNumber()) {
+		key = cv::waitKey(info[0]->NumberValue());
 	} else{
-		cv::waitKey();
+		key = cv::waitKey();
 	}
+	info.GetReturnValue().Set(Nan::New(key));
 }

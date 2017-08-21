@@ -1,5 +1,6 @@
 import opencv from 'dut';
 import { assertError, assertPropsWithValue, funcRequiresArgsObject, readTestImage } from 'utils';
+import { expect } from 'chai';
 
 const { Mat, Point, Size, cvTypes } = opencv;
 
@@ -98,4 +99,11 @@ describe('imgproc', () => {
       assertPropsWithValue(hist)({ dims: 3 });
     });
   });
+
+  describe.skip('Canny', () => {
+    it('Canny', () => {
+      expect(true).to.be.false;
+    });
+  });
+
 });
