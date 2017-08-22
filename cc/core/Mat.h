@@ -52,6 +52,9 @@ public:
 	static NAN_METHOD(WarpPerspective);
 	static NAN_METHOD(Dilate);
 	static NAN_METHOD(Erode);
+	static NAN_METHOD(Blur);
+	static NAN_METHOD(GaussianBlur);
+	static NAN_METHOD(MedianBlur);
 	static NAN_METHOD(ConnectedComponents);
 	static NAN_METHOD(ConnectedComponentsWithStats);
 	static NAN_METHOD(FindContours);

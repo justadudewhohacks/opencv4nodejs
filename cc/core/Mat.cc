@@ -42,6 +42,9 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
 	Nan::SetPrototypeMethod(ctor, "dilate", Dilate);
 	Nan::SetPrototypeMethod(ctor, "erode", Erode);
+	Nan::SetPrototypeMethod(ctor, "blur", Blur);
+	Nan::SetPrototypeMethod(ctor, "gaussianBlur", GaussianBlur);
+	Nan::SetPrototypeMethod(ctor, "medianBlur", MedianBlur);
 	Nan::SetPrototypeMethod(ctor, "connectedComponents", ConnectedComponents);
 	Nan::SetPrototypeMethod(ctor, "connectedComponentsWithStats", ConnectedComponentsWithStats);
 	Nan::SetPrototypeMethod(ctor, "findContours", FindContours);
@@ -498,6 +501,70 @@ NAN_METHOD(Mat::Dilate) {
 
 NAN_METHOD(Mat::Erode) {
 	dilateOrErode(info, "Mat::Erode", true);
+}
+
+NAN_METHOD(Mat::Blur) {
+	FF_REQUIRE_ARGS_OBJ("Mat::GaussianBlur");
+
+	cv::Size ksize;
+	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, ksize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
+
+	cv::Point2d anchor = cv::Point2d(-1, -1);
+	int borderType = cv::BORDER_DEFAULT;
+	if (FF_HAS_JS_PROP(args, anchor)) {
+		FF_DESTRUCTURE_JSOBJ_REQUIRED(args, anchor, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
+	}
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, borderType, IsUint32, Uint32Value);
+
+	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
+	cv::blur(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
+		ksize,
+		anchor,
+		borderType
+	);
+	info.GetReturnValue().Set(jsMat);
+}
+
+NAN_METHOD(Mat::GaussianBlur) {
+	FF_REQUIRE_ARGS_OBJ("Mat::GaussianBlur");
+
+	cv::Size ksize;
+	double sigmaX; 
+	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, ksize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, sigmaX, IsNumber, NumberValue);
+
+	double sigmaY = 0;
+	int borderType = cv::BORDER_DEFAULT;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, sigmaY, IsNumber, NumberValue);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, borderType, IsUint32, Uint32Value);
+
+	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
+	cv::GaussianBlur(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
+		ksize,
+		sigmaX, 
+		sigmaY, 
+		borderType
+	);
+	info.GetReturnValue().Set(jsMat);
+}
+
+NAN_METHOD(Mat::MedianBlur) {
+	if (!info[0]->IsUint32()) {
+		Nan::ThrowError("Mat::MedianBlur - expected arg0 to be an Integer");
+	}
+	int ksize = info[0]->Uint32Value();
+
+	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
+	cv::medianBlur(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
+		ksize
+	);
+	info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(Mat::ConnectedComponents) {

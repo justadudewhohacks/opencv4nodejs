@@ -341,26 +341,44 @@ describe('Mat', () => {
     });
   });
 
-  describe.skip('FindContours', () => {
-    it('FindContours', () => {
+  describe.skip('blur', () => {
+    it('blur', () => {
       expect(true).to.be.false;
     });
   });
 
-  describe.skip('ContourArea', () => {
-    it('ContourArea', () => {
+  describe.skip('gaussianBlur', () => {
+    it('gaussianBlur', () => {
       expect(true).to.be.false;
     });
   });
 
-  describe.skip('IsContourConvex', () => {
-    it('IsContourConvex', () => {
+  describe.skip('medianBlur', () => {
+    it('medianBlur', () => {
       expect(true).to.be.false;
     });
   });
 
-  describe.skip('ConvexHull', () => {
-    it('ConvexHull', () => {
+  describe.skip('findContours', () => {
+    it('findContours', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe.skip('contourArea', () => {
+    it('contourArea', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe.skip('isContourConvex', () => {
+    it('isContourConvex', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe.skip('convexHull', () => {
+    it('convexHull', () => {
       expect(true).to.be.false;
     });
   });

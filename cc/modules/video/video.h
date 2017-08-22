@@ -1,0 +1,14 @@
+#include <nan.h>
+#include <opencv2/core.hpp>
+#include <opencv2/video.hpp>
+#include "macros.h"
+
+#ifndef __FF_VIDEO_H__
+#define __FF_VIDEO_H__
+
+class Video {
+public:
+  static NAN_MODULE_INIT(Init);
+};
+
+#endif
