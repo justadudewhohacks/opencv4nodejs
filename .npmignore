@@ -1,0 +1,10 @@
+vs
+.vs
+.vscode
+build
+bin
+node_modules
+
+./data
+./test
+./examples
