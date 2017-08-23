@@ -37,6 +37,23 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(contourApproximationModes, CHAIN_APPROX_TC89_KCOS);
 	cvTypes->Set(FF_V8STRING("contourApproximationModes"), contourApproximationModes);
 
+	v8::Local<v8::Object> distanceTypes = Nan::New<v8::Object>();
+	FF_SET_CV_CONSTANT(distanceTypes, DIST_USER);
+	FF_SET_CV_CONSTANT(distanceTypes, DIST_L1);
+	FF_SET_CV_CONSTANT(distanceTypes, DIST_L2);
+	FF_SET_CV_CONSTANT(distanceTypes, DIST_C);
+	FF_SET_CV_CONSTANT(distanceTypes, DIST_L12);
+	FF_SET_CV_CONSTANT(distanceTypes, DIST_FAIR);
+	FF_SET_CV_CONSTANT(distanceTypes, DIST_WELSCH);
+	FF_SET_CV_CONSTANT(distanceTypes, DIST_HUBER);
+	cvTypes->Set(FF_V8STRING("distanceTypes"), distanceTypes);
+
+	v8::Local<v8::Object> distanceTransformMasks = Nan::New<v8::Object>();
+	FF_SET_CV_CONSTANT(distanceTransformMasks, DIST_MASK_3);
+	FF_SET_CV_CONSTANT(distanceTransformMasks, DIST_MASK_5);
+	FF_SET_CV_CONSTANT(distanceTransformMasks, DIST_MASK_PRECISE);
+	cvTypes->Set(FF_V8STRING("distanceTransformMasks"), distanceTransformMasks);
+
 	v8::Local<v8::Object> retrievalModes = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(retrievalModes, RETR_EXTERNAL);
 	FF_SET_CV_CONSTANT(retrievalModes, RETR_LIST);

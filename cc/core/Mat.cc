@@ -42,6 +42,8 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
 	Nan::SetPrototypeMethod(ctor, "dilate", Dilate);
 	Nan::SetPrototypeMethod(ctor, "erode", Erode);
+	Nan::SetPrototypeMethod(ctor, "distanceTransform", DistanceTransform);
+	Nan::SetPrototypeMethod(ctor, "distanceTransformWithLabels", DistanceTransformWithLabels);
 	Nan::SetPrototypeMethod(ctor, "blur", Blur);
 	Nan::SetPrototypeMethod(ctor, "gaussianBlur", GaussianBlur);
 	Nan::SetPrototypeMethod(ctor, "medianBlur", MedianBlur);
@@ -501,6 +503,55 @@ NAN_METHOD(Mat::Dilate) {
 
 NAN_METHOD(Mat::Erode) {
 	dilateOrErode(info, "Mat::Erode", true);
+}
+
+
+NAN_METHOD(Mat::DistanceTransform) {
+	FF_REQUIRE_ARGS_OBJ("Mat::DistanceTransform");
+
+	int distanceType, maskSize; 
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, distanceType, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, maskSize, IsUint32, Uint32Value);
+
+	int dstType = CV_32F;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, dstType, IsUint32, Uint32Value);
+
+	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
+	cv::distanceTransform(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
+		distanceType,
+		maskSize,
+		dstType
+	);
+	info.GetReturnValue().Set(jsMat);
+}
+
+NAN_METHOD(Mat::DistanceTransformWithLabels) {
+	FF_REQUIRE_ARGS_OBJ("Mat::DistanceTransform");
+
+	int distanceType, maskSize;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, distanceType, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, maskSize, IsUint32, Uint32Value);
+
+	int labelType = cv::DIST_LABEL_CCOMP;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, labelType, IsUint32, Uint32Value);
+
+	v8::Local<v8::Object> jsDst = FF_NEW(constructor);
+	v8::Local<v8::Object> jsLabels = FF_NEW(constructor);
+	cv::distanceTransform(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsDst),
+		FF_UNWRAP_MAT_AND_GET(jsLabels),
+		distanceType,
+		maskSize,
+		labelType
+	);
+
+	v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+	Nan::Set(ret, FF_V8STRING("dist"), jsDst);
+	Nan::Set(ret, FF_V8STRING("labels"), jsLabels);
+	info.GetReturnValue().Set(ret);
 }
 
 NAN_METHOD(Mat::Blur) {

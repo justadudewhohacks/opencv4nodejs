@@ -341,6 +341,18 @@ describe('Mat', () => {
     });
   });
 
+  describe.skip('distanceTransform', () => {
+    it('distanceTransform', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe.skip('distanceTransformWithLabels', () => {
+    it('distanceTransformWithLabels', () => {
+      expect(true).to.be.false;
+    });
+  });
+
   describe.skip('blur', () => {
     it('blur', () => {
       expect(true).to.be.false;
