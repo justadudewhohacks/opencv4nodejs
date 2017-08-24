@@ -28,6 +28,7 @@ public:
 	static NAN_METHOD(Set);
 	static NAN_METHOD(GetData);
 	static NAN_METHOD(GetDataAsArray);
+	static NAN_METHOD(GetRegion);
 	static NAN_METHOD(Row);
 	static NAN_METHOD(Copy);
 	static NAN_METHOD(CopyTo);

@@ -4,8 +4,15 @@ const { haarCascades } = cv.cvTypes;
 
 const image = cv.imread('../data/got.jpg');
 const classifier = new cv.CascadeClassifier(haarCascades.HAAR_FRONTALFACE_ALT2);
+
+// detect faces
 const { objects, numDetections } = classifier.detectMultiScale({ image: image.bgrToGray() });
 
+if (!objects.length) {
+  throw new Error('No faces detected!');
+}
+
+// draw detection
 const numDetectionsTh = 10;
 objects.forEach((rect, i) => {
   let thickness = 2;

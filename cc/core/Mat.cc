@@ -1,5 +1,6 @@
 #include "Mat.h"
 #include "Point2.h"
+#include "Rect.h"
 
 Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
 
@@ -21,6 +22,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "set", Set);
 	Nan::SetPrototypeMethod(ctor, "getData", GetData);
 	Nan::SetPrototypeMethod(ctor, "getDataAsArray", GetDataAsArray);
+	Nan::SetPrototypeMethod(ctor, "getRegion", GetRegion);
 	Nan::SetPrototypeMethod(ctor, "row", Row);
 	Nan::SetPrototypeMethod(ctor, "copy", Copy);
 	Nan::SetPrototypeMethod(ctor, "copyTo", CopyTo);
@@ -223,6 +225,16 @@ NAN_METHOD(Mat::GetDataAsArray) {
 	v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(mat.rows);
 	FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT, FF::matGet);
 	info.GetReturnValue().Set(rowArray);
+}
+
+NAN_METHOD(Mat::GetRegion) {
+	if (!FF_IS_INSTANCE(Rect::constructor, info[0])) {
+		Nan::ThrowError("Mat::GetRegion expected arg0 to be an instance of Rect");
+	}
+	cv::Rect2d rect = FF_UNWRAP(info[0]->ToObject(), Rect)->rect;
+	v8::Local<v8::Object> jsRegion = FF_NEW(constructor);
+	FF_UNWRAP_MAT_AND_GET(jsRegion) = FF_UNWRAP_MAT_AND_GET(info.This())(rect);
+	info.GetReturnValue().Set(jsRegion);
 }
 
 NAN_METHOD(Mat::Copy) {
