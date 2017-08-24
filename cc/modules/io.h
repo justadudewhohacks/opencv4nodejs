@@ -6,7 +6,7 @@ class Io {
 public:
   static NAN_MODULE_INIT(Init);
   static NAN_METHOD(Imread);
-  static NAN_METHOD(Imsave);
+  static NAN_METHOD(Imwrite);
   static NAN_METHOD(Imshow);
 	static NAN_METHOD(ImshowWait);
 	static NAN_METHOD(WaitKey);

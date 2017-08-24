@@ -6,7 +6,7 @@ NAN_MODULE_INIT(Io::Init) {
   Nan::SetMethod(target, "imread", Imread);
   Nan::SetMethod(target, "imshow", Imshow);
 	Nan::SetMethod(target, "imshowWait", ImshowWait);
-  Nan::SetMethod(target, "imsave", Imsave);
+  Nan::SetMethod(target, "imwrite", Imwrite);
 	Nan::SetMethod(target, "waitKey", WaitKey);
 };
 
@@ -25,7 +25,7 @@ NAN_METHOD(Io::Imread) {
 	info.GetReturnValue().Set(jsMat);
 }
 
-NAN_METHOD(Io::Imsave) {
+NAN_METHOD(Io::Imwrite) {
   if (!info[0]->IsString()) {
     return Nan::ThrowError("Imsave expected arg0 to be path");
 	}
