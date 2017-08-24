@@ -60,8 +60,6 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "drawEllipse", DrawEllipse);
 	/* #ENDIF IMGPROC */
 
-	v8::Local<v8::Object> matTypesModule = Nan::New<v8::Object>();
-	target->Set(Nan::New("matTypes").ToLocalChecked(), matTypesModule);
   target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
 };
 

@@ -1,11 +1,11 @@
 #include "BackgroundSubtractor.h"
 #include "Mat.h"
+
 void BackgroundSubtractor::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "apply", BackgroundSubtractor::Apply);
 };
 
 NAN_METHOD(BackgroundSubtractor::Apply) {
-	cv::Mat image, backgroundImage;
 	double learningRate = -1;
 	FF_REQUIRE_INSTANCE(Mat::constructor, info[0], "expected arg0 to be instance of Mat");
 	cv::Mat frame = FF_UNWRAP_MAT_AND_GET(info[0]->ToObject());

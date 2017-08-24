@@ -3,6 +3,7 @@
 #include "Point.h"
 #include "Vec.h"
 #include "Size.h"
+#include "Rect.h"
 #include "cvTypes/cvTypes.h"
 
 #include "modules/io.h"
@@ -12,6 +13,7 @@
 #include "modules/calib3d/calib3d.h"
 #include "modules/imgproc/imgproc.h"
 #include "modules/features2d/features2d.h"
+#include "modules/objdetect/objdetect.h"
 #ifdef HAVE_XIMGPROC
 #include "modules/ximgproc/ximgproc.h"
 #endif // HAVE_XIMGPROC
@@ -27,6 +29,7 @@ void init(v8::Local<v8::Object> target) {
 	Point::Init(target);
 	Vec::Init(target);
 	Size::Init(target);
+	Rect::Init(target);
   Io::Init(target);
 	VideoCapture::Init(target);
 	Video::Init(target);
@@ -34,6 +37,7 @@ void init(v8::Local<v8::Object> target) {
   Calib3d::Init(target);
   Imgproc::Init(target);
   Features2d::Init(target);
+  Objdetect::Init(target);
 #ifdef HAVE_XIMGPROC
 	Nan::Set(xmodules, FF_V8STRING("ximgproc"), Nan::New(true));
 	XImgproc::Init(target);
@@ -42,7 +46,7 @@ void init(v8::Local<v8::Object> target) {
 	Nan::Set(xmodules, FF_V8STRING("xfeatures2d"), Nan::New(true));
 	XFeatures2d::Init(target);
 #endif // HAVE_XFEATURES2D
-	
+
 };
 
 NODE_MODULE(opencv4nodejs, init)

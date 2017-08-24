@@ -62,5 +62,25 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(retrievalModes, RETR_FLOODFILL);
 	cvTypes->Set(FF_V8STRING("retrievalModes"), retrievalModes);
 
+	v8::Local<v8::Object> haarCascades = Nan::New<v8::Object>();
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE, FF_V8STRING("./haarcascade_eye.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE_TREE_EYEGLASSES, FF_V8STRING("./haarcascade_eye_tree_eyeglasses.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALCATFACE, FF_V8STRING("./haarcascade_frontalcatface.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALCATFACE_EXTENDED, FF_V8STRING("./haarcascade_frontalcatface_extended.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_ALT, FF_V8STRING("./haarcascade_frontalface_alt.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_ALT2, FF_V8STRING("./haarcascade_frontalface_alt2.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_ALT_TREE, FF_V8STRING("./haarcascade_frontalface_alt_tree.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_DEFAULT, FF_V8STRING("./haarcascade_frontalface_default.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FULLBODY, FF_V8STRING("./haarcascade_fullbody.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_LEFTEYE_2SPLITS, FF_V8STRING("./haarcascade_lefteye_2splits.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_LICENCE_PLATE_RUS_16STAGES, FF_V8STRING("./haarcascade_licence_plate_rus_16stages.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_LOWERBODY, FF_V8STRING("./haarcascade_lowerbody.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_PROFILEFACE, FF_V8STRING("./haarcascade_profileface.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_RIGHTEYE_2SPLITS, FF_V8STRING("./haarcascade_righteye_2splits.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_RUSSIAN_PLATE_NUMBER, FF_V8STRING("./haarcascade_russian_plate_number.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_SMILE, FF_V8STRING("./haarcascade_smile.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_UPPERBODY, FF_V8STRING("./haarcascade_upperbody.xml"));
+	cvTypes->Set(FF_V8STRING("haarCascades"), haarCascades);
+
 	target->Set(FF_V8STRING("cvTypes"), cvTypes);
 }

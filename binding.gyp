@@ -22,6 +22,7 @@
 			"cc/core/Point.cc",
 			"cc/core/Vec.cc",
 			"cc/core/Size.cc",
+			"cc/core/Rect.cc",
 			"cc/modules/io.cc",
 			"cc/modules/VideoCapture.cc",
 			"cc/modules/photo.cc",
@@ -47,6 +48,8 @@
 			"cc/modules/features2d/detectors/KAZEDetector.cc",
 			"cc/modules/features2d/detectors/MSERDetector.cc",
 			"cc/modules/features2d/detectors/ORBDetector.cc",
+			"cc/modules/objdetect/objdetect.cc",
+			"cc/modules/objdetect/CascadeClassifier.cc",
 			"cc/modules/xfeatures2d/xfeatures2d.cc",
 			"cc/modules/xfeatures2d/SIFTDetector.cc",
 			"cc/modules/xfeatures2d/SURFDetector.cc"
