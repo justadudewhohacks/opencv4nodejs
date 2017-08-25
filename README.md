@@ -1,7 +1,7 @@
 opencv4nodejs
 =============
 
-**Brings lots of features of OpenCV 3.x to nodejs to use as a service, integrate into your electron app or to simply play around with the OpenCV API in Javascript instead of C++.**
+**Brings lots of features of OpenCV 3.x to nodejs to use as a service, integrate into your Electron app or simply to play around with the OpenCV API in Javascript instead of C++.**
 
 ## How to install
 
@@ -15,7 +15,7 @@ Make sure to have OpenCV 3+ ( extra modules are optional ) installed on your Sys
 
 If you are running into issues also check the requirements for node-gyp specific to your OS https://github.com/nodejs/node-gyp.
 
-## Usage with electron
+## Usage with Electron
 
 ``` bash
 $ npm install --save electron-rebuild
@@ -23,10 +23,10 @@ $ npm install --save electron-rebuild
 
 Add the following script to your package.json:
 ``` python
-"electron-rebuild": "electron-rebuild -w opencv4nodejs -m ./node_modules/opencv4nodejs" ...
+"electron-rebuild": "electron-rebuild -w opencv4nodejs"
 ```
 
-Run the script after installing the library:
+Run the script:
 ``` bash
 $ npm run electron-rebuild
 ```
@@ -101,6 +101,53 @@ const vec3 = new cv.Vec(100, 100, 0.5);
 const vec4 = new cv.Vec(100, 100, 0.5, 0.5);
 ```
 
+### Mat and Vec operations
+
+``` javascript
+const mat0 = new cv.Mat(...);
+const mat1 = new cv.Mat(...);
+
+const matMultipliedByScalar = mat0.mul(0.5);  // scalar multiplication
+const matDividedByScalar = mat0.div(2);       // scalar division
+const mat0PlusMat1 = mat0.add(mat1);          // addition
+const mat0MinusMat1 = mat0.sub(mat1);         // subtraction
+const mat0MulMat1 = mat0.hMul(mat1);          // elementwise multiplication
+const mat0DivMat1 = mat0.hDiv(mat1);          // elementwise division
+const mat0AndMat1 = mat0.and(mat1);           // logical and
+const mat0OrMat1 = mat0.or(mat1);             // logical or
+
+...
+```
+
+### Accessing Mat data
+
+``` javascript
+const matBGR = new cv.Mat(..., cv.cvTypes.CV_8UC3);
+const matGray = new cv.Mat(..., cv.cvTypes.CV_8UC1);
+
+// get pixel value as vector or number value
+const vec3 = matBGR.at(200, 100);
+const g = matGray.at(200, 100);
+
+// get raw pixel value as array
+const [b, g, r] = matBGR.atRaw(200, 100);
+
+// set single pixel values
+matBGR.set(200, 100, [255, 0, 0]);
+matBGR.set(200, 100, new Vec(255, 0, 0));
+
+// get a 100x100 sub region of the Mat at offset (200, 100)
+const width = 100;
+const height = 100;
+const region = matBGR.getRegion(new cv.Rect(200, 100, width, height));
+
+// get a node buffer with raw Mat data
+const matAsArray = matBGR.getData();
+
+// get entire Mat data as JS array
+const matAsArray = matBGR.getDataAsArray();
+```
+
 ### IO
 
 ``` javascript
@@ -114,3 +161,56 @@ cv.imwrite('./path/img.png', mat);
 cv.imshow('a window name', mat);
 cv.waitKey();
 ```
+
+### Useful Mat methods
+
+``` javascript
+const matBGR = new cv.Mat(..., cv.cvTypes.CV_8UC3);
+
+// convert types
+const matSignedInt = matBGR.convertTo({
+  type: cv.cvTypes.CV_32SC3
+});
+const matDoublePrecision = matBGR.convertTo({
+  type: cv.cvTypes.CV_64FC3
+});
+
+// convert color space
+const { COLOR_BGR2HSV, COLOR_BGR2Lab } = cv.cvTypes;
+const matGray = matBGR.bgrToGray();
+const matHSV = matBGR.cvtColor({
+  code: COLOR_BGR2HSV
+});
+const matLab = matBGR.cvtColor({
+  code: COLOR_BGR2Lab
+});
+
+// resize
+const matHalfSize = matBGR.rescale(0.5);
+const mat100x100 = matBGR.resize(100, 100);
+const matMaxDimIs100 = matBGR.resizeToMax(100);
+
+```
+
+### Drawing a Mat into HTML Canvas
+
+``` javascript
+    const matBGR = ...;
+    // convert your Mat to rgba space
+    const matRGBA = matBGR.cvtColor({
+      type: cv.cvTypes.colorConversionCodes.COLOR_BGR2RGBA
+    });
+    // get raw Mat data
+    const matDataRaw = matRGBA.getData();
+
+    // fill canvas pixels
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    const imgData = ctx.getImageData(0, 0, matRGBA.cols, matRGBA.rows);
+    for (let i = 0; i < matDataRaw.length; i += 1) {
+      matDataRaw.data[i] = matDataRaw[i];
+    }
+    ctx.putImageData(imgData, 0, 0);
+```
+
+For more documentation refer to examples or have a look into the tests for method invocation.
