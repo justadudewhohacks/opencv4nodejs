@@ -5,9 +5,31 @@ NAN_MODULE_INIT(DescriptorMatching::Init) {
 	Nan::SetMethod(target, "matchBruteForce", MatchBruteForce);
 	Nan::SetMethod(target, "matchBruteForceL1", MatchBruteForceL1);
 	Nan::SetMethod(target, "matchBruteForceHamming", MatchBruteForceHamming);
+#if 2 <= CV_VERSION_MINOR
 	Nan::SetMethod(target, "matchBruteForceHammingLut", MatchBruteForceHammingLut);
 	Nan::SetMethod(target, "matchBruteForceSL2", MatchBruteForceSL2);
+#endif
 };
+
+#if CV_VERSION_MINOR < 2
+
+NAN_METHOD(DescriptorMatching::MatchFlannBased) {
+	match(info, "FlannBased");
+}
+
+NAN_METHOD(DescriptorMatching::MatchBruteForce) {
+	match(info, "BruteForce");
+}
+
+NAN_METHOD(DescriptorMatching::MatchBruteForceL1) {
+	match(info, "BruteForce-L1");
+}
+
+NAN_METHOD(DescriptorMatching::MatchBruteForceHamming) {
+	match(info, "BruteForce-Hamming");
+}
+
+#else
 
 NAN_METHOD(DescriptorMatching::MatchFlannBased) {
 	match(info, cv::DescriptorMatcher::FLANNBASED);
@@ -33,7 +55,13 @@ NAN_METHOD(DescriptorMatching::MatchBruteForceSL2) {
 	match(info, cv::DescriptorMatcher::BRUTEFORCE_SL2);
 }
 
+#endif
+
+#if CV_VERSION_MINOR < 2
+void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
+#else
 void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
+#endif
 	if (!info[0]->IsObject() || !info[1]->IsObject()) {
 		return Nan::ThrowError("required argument descriptorsFrom, descriptorsTo");
 	}

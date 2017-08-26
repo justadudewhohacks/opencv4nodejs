@@ -22,6 +22,11 @@
 #endif // HAVE_XFEATURES2D
 
 void init(v8::Local<v8::Object> target) {
+	v8::Local<v8::Object> version = Nan::New<v8::Object>();
+	Nan::Set(version, FF_V8STRING("major"), Nan::New(CV_MAJOR_VERSION));
+	Nan::Set(version, FF_V8STRING("minor"), Nan::New(CV_MINOR_VERSION));
+	Nan::Set(target, FF_V8STRING("version"), version);
+
 	v8::Local<v8::Object> xmodules = Nan::New<v8::Object>();
 	Nan::Set(target, FF_V8STRING("xmodules"), xmodules);
   CvTypes::Init(target);

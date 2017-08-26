@@ -174,10 +174,7 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 NAN_METHOD(Imgproc::Canny) {
 	FF_REQUIRE_ARGS_OBJ("Canny");
 
-	cv::Mat dx, dy;
 	double threshold1, threshold2;
-	FF_GET_JSOBJ_REQUIRED(args, dx, dx, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
-	FF_GET_JSOBJ_REQUIRED(args, dy, dy, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, threshold1, IsNumber, NumberValue);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, threshold2, IsNumber, NumberValue);
 
@@ -185,6 +182,19 @@ NAN_METHOD(Imgproc::Canny) {
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, L2gradient, IsBoolean, BooleanValue);
 
 	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
+
+#if CV_VERSION_MINOR < 2
+	cv::Mat image;
+	FF_GET_JSOBJ_REQUIRED(args, image, image, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+	int apertureSize = 3;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, apertureSize, IsUint32, Uint32Value);
+	cv::Canny(image, FF_UNWRAP_MAT_AND_GET(jsMat), threshold1, threshold2, apertureSize, L2gradient);
+#else
+	cv::Mat dx, dy;
+	FF_GET_JSOBJ_REQUIRED(args, dx, dx, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+	FF_GET_JSOBJ_REQUIRED(args, dy, dy, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
 	cv::Canny(dx, dy, FF_UNWRAP_MAT_AND_GET(jsMat), threshold1, threshold2, L2gradient);
+#endif
+
 	info.GetReturnValue().Set(jsMat);
 }

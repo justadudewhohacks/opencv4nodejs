@@ -22,29 +22,5 @@ describe('calib3d', () => {
       const homography = calib3d.findHomography({ srcPoints, dstPoints });
       assertPropsWithValue(homography)({ type: cvTypes.CV_64F, rows: 3, cols: 3 });
     });
-
-    /*
-    it('should catch cv exception if set of points is empty', () => {
-      let errMsg = '';
-      try {
-        calib3d.findHomography({ srcPoints: [], dstPoints: [] });
-      } catch (err) {
-        errMsg = err.toString();
-      }
-      assert.include(errMsg, 'findHomography');
-    });
-
-    it('should catch cv exception if number of points mismatch', () => {
-      const srcPoints = [{ x: 0, y: 0 }, { x: 1000, y: 0 }];
-      const dstPoints = [{ x: 0, y: 0 }];
-      let errMsg = '';
-      try {
-        calib3d.findHomography({ srcPoints, dstPoints });
-      } catch (err) {
-        errMsg = err.toString();
-      }
-      assert.include(errMsg, 'findHomography');
-    });
-    */
   });
 });

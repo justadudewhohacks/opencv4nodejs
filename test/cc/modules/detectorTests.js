@@ -2,8 +2,6 @@ import opencv from 'dut';
 import { assert, expect } from 'chai';
 import { assertError, assertPropsWithValue, readTestImage } from 'utils';
 
-// TODO test return values of compute, detect
-
 exports.detectorTests = (defaults, customProps, Detector, implementsCompute = true) => {
   let testImg;
   let keyPoints;

@@ -183,6 +183,7 @@ describe('Mat', () => {
       });
     });
 
+    // TODO figure out whats wrong with 3.3.0
     it('should normalize range of CV_64F', () => {
       const mat = new Mat([
         [0.5, 1000.12345, 1000],

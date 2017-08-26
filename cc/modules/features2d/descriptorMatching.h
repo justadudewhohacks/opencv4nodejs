@@ -18,8 +18,11 @@ public:
 	static NAN_METHOD(MatchBruteForceHamming);
 	static NAN_METHOD(MatchBruteForceHammingLut);
 	static NAN_METHOD(MatchBruteForceSL2);
-
+#if CV_VERSION_MINOR < 2
+	static void match(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType);
+#else
 	static void match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType);
+#endif
 };
 
 #endif

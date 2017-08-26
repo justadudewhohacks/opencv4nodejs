@@ -4,3 +4,4 @@ vs
 build
 bin
 node_modules
+crash.log

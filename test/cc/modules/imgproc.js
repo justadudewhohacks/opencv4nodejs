@@ -1,8 +1,8 @@
-import opencv from 'dut';
+import cv from 'dut';
 import { assertError, assertPropsWithValue, funcRequiresArgsObject, readTestImage } from 'utils';
 import { expect } from 'chai';
 
-const { Mat, Point, Size, cvTypes } = opencv;
+const { Mat, Point, Size, cvTypes } = cv;
 
 describe('imgproc', () => {
   let testImg;
@@ -16,7 +16,7 @@ describe('imgproc', () => {
     const cols = 3;
     const size = new Size(cols, rows);
 
-    funcRequiresArgsObject(opencv.getStructuringElement);
+    funcRequiresArgsObject(cv.getStructuringElement);
 
     it('should throw if type invalid', () => {
       assertError(() => new Mat().convertTo({ type: undefined }), 'Invalid type for type');
@@ -24,7 +24,7 @@ describe('imgproc', () => {
     });
 
     it('should be constructable with required args', () => {
-      const kernel = opencv.getStructuringElement({
+      const kernel = cv.getStructuringElement({
         shape: cvTypes.morphShapes.MORPH_CROSS,
         size
       });
@@ -32,7 +32,7 @@ describe('imgproc', () => {
     });
 
     it('should be constructable with anchor', () => {
-      const kernel = opencv.getStructuringElement({
+      const kernel = cv.getStructuringElement({
         shape: cvTypes.morphShapes.MORPH_CROSS,
         size,
         anchor: new Point(0, 1)
@@ -43,7 +43,7 @@ describe('imgproc', () => {
 
   describe('calcHist', () => {
     it('should return 1 dimensional hist', () => {
-      const hist = opencv.calcHist({
+      const hist = cv.calcHist({
         img: testImg,
         histAxes: [
           {
@@ -57,7 +57,7 @@ describe('imgproc', () => {
     });
 
     it('should return 2 dimensional hist', () => {
-      const hist = opencv.calcHist({
+      const hist = cv.calcHist({
         img: testImg,
         histAxes: [
           {
@@ -75,8 +75,9 @@ describe('imgproc', () => {
       assertPropsWithValue(hist)({ rows: 8, cols: 32, dims: 2 });
     });
 
-    it('should return 3 dimensional hist', () => {
-      const hist = opencv.calcHist({
+    // TODO causes sigsegv on 3.0.0 and 3.1.0
+    (cv.version.minor < 2 ? it.skip : it)('should return 3 dimensional hist', () => {
+      const hist = cv.calcHist({
         img: testImg,
         histAxes: [
           {
@@ -105,5 +106,4 @@ describe('imgproc', () => {
       expect(true).to.be.false;
     });
   });
-
 });

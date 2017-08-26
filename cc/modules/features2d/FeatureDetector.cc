@@ -11,7 +11,6 @@ NAN_METHOD(FeatureDetector::Detect) {
 	cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info[0]->ToObject());
 	std::vector<cv::KeyPoint> kps;
 	FF_TRY(self->getDetector()->detect(mat, kps);)
-
 	v8::Local<v8::Array> jsKps = Nan::New<v8::Array>(kps.size());
 	uint i = 0;
 	for (auto kp : kps) {
