@@ -1,5 +1,35 @@
-language: node_js
-node_js:
-  - "7"
+language:
+  - cpp
 
-script: cd ./test && npm install && npm test
+compiler:
+  - gcc
+
+before_install:
+  - sudo apt-get update
+
+install:
+  - ls
+  - sudo apt-get install -y build-essential
+  - sudo apt-get install -y cmake git
+
+  # setup opencv 3.2 with extra modules
+  - curl -sL https://github.com/Itseez/opencv/archive/3.2.0.zip > opencv.zip
+  - unzip opencv.zip
+  - curl -sL https://github.com/Itseez/opencv_contrib/archive/3.2.0.zip > opencv_contrib.zip
+  - unzip opencv_contrib.zip
+
+  - cd opencv-3.2.0
+  - mkdir build
+  - cd build
+  - cmake -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.2.0/modules CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local
+  - make -j5
+  - sudo make install
+  - sudo sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
+  - sudo ldconfig
+  - cd ../../
+
+  # setup opencv4nodejs
+  - curl -sL https://github.com/justadudewhohacks/opencv4nodejs > opencv4nodejs.zip
+  - unzip opencv4nodejs.zip
+
+script: cd ./opencv4nodejs/test && npm install && npm test
