@@ -6,6 +6,6 @@ bin
 node_modules
 crash.log
 
-./data
-./test
-./examples
+data
+test
+examples
