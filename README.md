@@ -9,7 +9,7 @@ opencv4nodejs
 $ npm install --save opencv4nodejs
 ```
 
-Make sure to have OpenCV 3+ ( extra modules are optional ) installed on your System. In case you are running Windows or have OpenCV setup in a custom directory make sure to set the following environment variables:
+Make sure to have OpenCV 3+ ( extra modules are optional ) installed on your System https://github.com/opencv/opencv/releases/. In case you are running Windows or have OpenCV set up in a custom directory make sure to set the following environment variables:
 1. OPENCV_DIR pointing to the root path containing include directory or set OPENCV_INCLUDE_DIR explicitly.
 2. OPENCV_LIB_DIR pointing to the static library dir containing the OpenCV .lib or .so files.
 
@@ -89,7 +89,8 @@ const matData = [
 const matFromArray = new cv.Mat(matData, cv.cvTypes.CV_8UC3);
 
 // from node buffer
-...
+const charData = [255, 0, ...];
+const matFromArray = new cv.Mat(new Buffer.from(charData), rows, cols, cv.cvTypes.CV_8UC3);
 
 // Point
 const pt2 = new cv.Point(100, 100);
@@ -107,16 +108,21 @@ const vec4 = new cv.Vec(100, 100, 0.5, 0.5);
 const mat0 = new cv.Mat(...);
 const mat1 = new cv.Mat(...);
 
+// arithmetic operations for Mats and Vecs
 const matMultipliedByScalar = mat0.mul(0.5);  // scalar multiplication
 const matDividedByScalar = mat0.div(2);       // scalar division
 const mat0PlusMat1 = mat0.add(mat1);          // addition
 const mat0MinusMat1 = mat0.sub(mat1);         // subtraction
 const mat0MulMat1 = mat0.hMul(mat1);          // elementwise multiplication
 const mat0DivMat1 = mat0.hDiv(mat1);          // elementwise division
-const mat0AndMat1 = mat0.and(mat1);           // logical and
-const mat0OrMat1 = mat0.or(mat1);             // logical or
 
-...
+// logical operations Mat only
+const mat0AndMat1 = mat0.and(mat1);
+const mat0OrMat1 = mat0.or(mat1);
+const mat0bwAndMat1 = mat0.bitwiseAnd(mat1);
+const mat0bwOrMat1 = mat0.bitwiseOr(mat1);
+const mat0bwXorMat1 = mat0.bitwiseXor(mat1);
+const mat0bwNot = mat0.bitwiseNot();
 ```
 
 ### Accessing Mat data
@@ -127,19 +133,20 @@ const matGray = new cv.Mat(..., cv.cvTypes.CV_8UC1);
 
 // get pixel value as vector or number value
 const vec3 = matBGR.at(200, 100);
-const g = matGray.at(200, 100);
+const grayVal = matGray.at(200, 100);
 
 // get raw pixel value as array
 const [b, g, r] = matBGR.atRaw(200, 100);
 
 // set single pixel values
-matBGR.set(200, 100, [255, 0, 0]);
-matBGR.set(200, 100, new Vec(255, 0, 0));
+matBGR.set(50, 50, [255, 0, 0]);
+matBGR.set(50, 50, new Vec(255, 0, 0));
+matGray.set(50, 50, 255);
 
-// get a 100x100 sub region of the Mat at offset (200, 100)
-const width = 100;
-const height = 100;
-const region = matBGR.getRegion(new cv.Rect(200, 100, width, height));
+// get a 25x25 sub region of the Mat at offset (50, 50)
+const width = 25;
+const height = 25;
+const region = matBGR.getRegion(new cv.Rect(50, 50, width, height));
 
 // get a node buffer with raw Mat data
 const matAsArray = matBGR.getData();
@@ -190,6 +197,9 @@ const matHalfSize = matBGR.rescale(0.5);
 const mat100x100 = matBGR.resize(100, 100);
 const matMaxDimIs100 = matBGR.resizeToMax(100);
 
+// extract channels and create Mat from channels
+const [matB, matG, matR] = matBGR.splitChannels();
+const matRGB = new cv.Mat([matR, matB, matG]);
 ```
 
 ### Drawing a Mat into HTML Canvas
@@ -208,9 +218,33 @@ const matMaxDimIs100 = matBGR.resizeToMax(100);
     const ctx = canvas.getContext('2d');
     const imgData = ctx.getImageData(0, 0, matRGBA.cols, matRGBA.rows);
     for (let i = 0; i < matDataRaw.length; i += 1) {
-      matDataRaw.data[i] = matDataRaw[i];
+      imgData.data[i] = matDataRaw[i];
     }
     ctx.putImageData(imgData, 0, 0);
+```
+
+### Method Interface
+
+OpenCV method interface from official docs or src:
+``` c++
+void GaussianBlur(InputArray src, OutputArray dst, Size ksize, double sigmaX, double sigmaY = 0, int borderType = BORDER_DEFAULT);
+```
+
+translates to:
+
+``` javascript
+const src = new cv.Mat(...);
+// invoke with required arguments
+const dst0 = src.gaussianBlur({
+  ksize: new cv.Size(5, 5),
+  sigmaX: 1.2
+});
+// or pass optional parameters
+const dst1 = src.gaussianBlur({
+  ksize: new cv.Size(5, 5),
+  sigmaX: 1.2,
+  borderType: cv.cvTypes.borderTypes.BORDER_CONSTANT
+});
 ```
 
 For more documentation refer to examples or have a look into the tests for method invocation.
