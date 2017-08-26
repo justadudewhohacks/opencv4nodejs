@@ -4,7 +4,7 @@
 #ifndef __FF_BACKGROUNDSUBTRACTORMOG2_H__
 #define __FF_BACKGROUNDSUBTRACTORMOG2_H__
 
-class BackgroundSubtractorMOG2 : BackgroundSubtractor {
+class BackgroundSubtractorMOG2 : public BackgroundSubtractor {
 public:
 	cv::Ptr<cv::BackgroundSubtractorMOG2> subtractor;
 

@@ -4,7 +4,7 @@
 #ifndef __FF_BACKGROUNDSUBTRACTORKNN_H__
 #define __FF_BACKGROUNDSUBTRACTORKNN_H__
 
-class BackgroundSubtractorKNN  : BackgroundSubtractor {
+class BackgroundSubtractorKNN : public BackgroundSubtractor {
 public:
 	cv::Ptr<cv::BackgroundSubtractorKNN> subtractor;
 
