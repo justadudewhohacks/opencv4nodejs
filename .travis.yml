@@ -1,6 +1,9 @@
 language:
   - cpp
 
+cache:
+  - ccache
+
 compiler:
   - gcc
 
@@ -26,7 +29,7 @@ install:
   - sudo sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
   - sudo ldconfig
   - cd ../../
-  - npm install mocha
+  - npm install -g mocha
 
 script:
   - npm install
