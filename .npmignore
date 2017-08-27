@@ -8,3 +8,4 @@ crash.log
 data
 test
 examples
+.travis.yml
