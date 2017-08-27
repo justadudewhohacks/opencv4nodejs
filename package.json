@@ -2,6 +2,18 @@
   "name": "opencv4nodejs",
   "version": "1.1.1",
   "description": "",
+  "keywords": [
+    "opencv",
+    "cv",
+    "computer vision",
+    "image",
+    "processing",
+    "detection",
+    "recognition",
+    "tracking",
+    "matching",
+    "face"
+  ],
   "main": "./lib/opencv4nodejs.js",
   "scripts": {
     "install": "node-gyp rebuild",
