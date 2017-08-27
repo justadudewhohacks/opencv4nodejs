@@ -16,7 +16,7 @@
   ],
   "main": "./lib/opencv4nodejs.js",
   "scripts": {
-    "install": "node-gyp build",
+    "install": "node-gyp rebuild",
     "configure": "node-gyp configure",
     "build": "node-gyp configure build",
     "rebuild": "node-gyp rebuild"
