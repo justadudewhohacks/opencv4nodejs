@@ -18,9 +18,7 @@ describe('ximgproc', () => {
     describe('constructor', () => {
       funcRequiresArgsObject(args => new opencv.SuperpixelSEEDS(args));
 
-      it('should throw if image is no Mat instance', () => {
-        // TODO
-        // assert(false, 'not implemented yet');
+      it.skip('should throw if image is no Mat instance', () => {
       });
 
       it('should be constructable with required args', () => {

@@ -2,7 +2,7 @@
   "name": "opencv4nodejs_test",
   "version": "1.0.0",
   "scripts": {
-    "test": "set NODE_ENV=TEST&& mocha ./cc --require babel-core/register --require babel-polyfill --compilers js:babel-core/register --recursive"
+    "test": "set NODE_ENV=TEST&& mocha ./cc --require babel-core/register --require babel-polyfill --compilers js:babel-core/register --recursive --timeout 5000"
   },
   "author": "justadudewhohacks",
   "license": "ISC",
