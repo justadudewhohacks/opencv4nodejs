@@ -1,5 +1,6 @@
 opencv4nodejs
 =============
+[![Build Status](https://travis-ci.org/justadudewhohacks/opencv4nodejs.svg?branch=master)](http://travis-ci.org/justadudewhohacks/opencv4nodejs)
 
 **Brings lots of features of OpenCV 3.x to nodejs to use as a service, integrate into your Electron app or simply to play around with the OpenCV API in Javascript instead of C++.**
 
