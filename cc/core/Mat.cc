@@ -1,6 +1,7 @@
 #include "Mat.h"
 #include "Point2.h"
 #include "Rect.h"
+#include "RotatedRect.h"
 #include "imgproc/Contour.h"
 
 Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
@@ -836,14 +837,10 @@ NAN_METHOD(Mat::DrawRectangle) {
 NAN_METHOD(Mat::DrawEllipse) {
 	FF_REQUIRE_ARGS_OBJ("Mat::DrawEllipse");
 
-	cv::Point2d center;
 	cv::Vec3d color;
-	cv::Size2d boundingRectSize;
-	double angle;
-	FF_GET_JSOBJ_REQUIRED(args, center, center, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
+	cv::RotatedRect box;
+	FF_GET_JSOBJ_REQUIRED(args, box, box, RotatedRect::constructor, FF_UNWRAP_ROTATEDRECT_AND_GET, RotatedRect);
 	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
-	FF_GET_JSOBJ_REQUIRED(args, boundingRectSize, boundingRectSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, angle, IsNumber, NumberValue);
 
 	int lineType = cv::LINE_8;
 	int thickness = 1;
@@ -854,7 +851,7 @@ NAN_METHOD(Mat::DrawEllipse) {
 
 	cv::ellipse(
 		FF_UNWRAP_MAT_AND_GET(info.This()),
-		cv::RotatedRect(center, boundingRectSize, angle),
+		box,
 		color,
 		thickness,
 		lineType

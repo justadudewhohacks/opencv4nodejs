@@ -104,7 +104,6 @@ module.exports = () => {
       });
     });
 
-    // TODO
     describe('convexityDefects', () => {
       it('should return convexityDefects', () => {
         const hullIndices = convexityDefectsContours[0].convexHull({
@@ -143,6 +142,18 @@ module.exports = () => {
       });
     });
 
+    describe('minAreaRect', () => {
+      it('should return minAreaRect', () => {
+        expect(contours[0].minAreaRect()).to.be.instanceOf(cv.RotatedRect);
+      });
+    });
+
+    describe('fitEllipse', () => {
+      it('should return fitEllipse', () => {
+        expect(contours[0].fitEllipse()).to.be.instanceOf(cv.RotatedRect);
+      });
+    });
+
     describe('pointPolygonTest', () => {
       it('distance should be positive if point inside', () => {
         expect(contours[2].pointPolygonTest(new cv.Point(1, 1))).to.be.above(0);
@@ -172,6 +183,23 @@ module.exports = () => {
           method: cv.cvTypes.shapeMatchModes.CV_CONTOURS_MATCH_I1
         });
         expect(similarity).not.to.equal(0);
+      });
+    });
+
+    describe.only('moments', () => {
+      let moments;
+
+      before(() => {
+        moments = contours[2].moments();
+      });
+
+      it('should return moments', () => {
+        expect(moments).to.be.instanceOf(cv.Moments);
+      });
+
+      it('should return hu moments', () => {
+        const huMoments = moments.huMoments();
+        expect(huMoments).to.be.an('array').lengthOf(7);
       });
     });
   });

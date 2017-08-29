@@ -21,7 +21,7 @@ public:
 	}
 
 	static NAN_GETTER(GetNumPoints) {
-		info.GetReturnValue().Set(Nan::New((uint)FF_UNWRAP(info.This(), Contour)->contour.size()));
+		info.GetReturnValue().Set(Nan::New((uint)FF_UNWRAP_CONTOUR_AND_GET(info.This()).size()));
 	}
 
 	static NAN_GETTER(GetHierarchy) {
@@ -31,11 +31,11 @@ public:
 	}
 
 	static NAN_GETTER(GetArea) {
-		info.GetReturnValue().Set(Nan::New(cv::contourArea(FF_UNWRAP(info.This(), Contour)->contour, false)));
+		info.GetReturnValue().Set(Nan::New(cv::contourArea(FF_UNWRAP_CONTOUR_AND_GET(info.This()), false)));
 	}
 
 	static NAN_GETTER(GetIsConvex) {
-		info.GetReturnValue().Set(Nan::New(cv::isContourConvex(FF_UNWRAP(info.This(), Contour)->contour)));
+		info.GetReturnValue().Set(Nan::New(cv::isContourConvex(FF_UNWRAP_CONTOUR_AND_GET(info.This()))));
 	}
 
 	static NAN_METHOD(GetPoints);
@@ -47,8 +47,11 @@ public:
 	static NAN_METHOD(MinEnclosingCircle);
 	static NAN_METHOD(PointPolygonTest);
 	static NAN_METHOD(MatchShapes);
-	
-	// TODO FitEllipse, FitLine, MinAreaRect, Moments, HuMoments
+	static NAN_METHOD(FitEllipse);
+	static NAN_METHOD(MinAreaRect);
+	static NAN_METHOD(_Moments);
+
+	// TODO FitLine, minEnclosingTriangle
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 };

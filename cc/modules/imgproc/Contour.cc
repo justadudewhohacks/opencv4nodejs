@@ -2,6 +2,8 @@
 #include "Mat.h"
 #include "Point.h"
 #include "Rect.h"
+#include "RotatedRect.h"
+#include "Moments.h"
 
 Nan::Persistent<v8::FunctionTemplate> Contour::constructor;
 
@@ -22,13 +24,16 @@ void Contour::Init() {
 	Nan::SetPrototypeMethod(ctor, "boundingRect", BoundingRect);
 	Nan::SetPrototypeMethod(ctor, "convexHull", ConvexHull);
 	Nan::SetPrototypeMethod(ctor, "convexityDefects", ConvexityDefects);
+	Nan::SetPrototypeMethod(ctor, "minAreaRect", MinAreaRect);
 	Nan::SetPrototypeMethod(ctor, "minEnclosingCircle", MinEnclosingCircle);
 	Nan::SetPrototypeMethod(ctor, "pointPolygonTest", PointPolygonTest);
 	Nan::SetPrototypeMethod(ctor, "matchShapes", MatchShapes);
+	Nan::SetPrototypeMethod(ctor, "fitEllipse", FitEllipse);
+	Nan::SetPrototypeMethod(ctor, "moments", _Moments);
 };
 
 NAN_METHOD(Contour::GetPoints) {
-	info.GetReturnValue().Set(Point::packJSPoint2Array(FF_UNWRAP(info.This(), Contour)->contour));
+	info.GetReturnValue().Set(Point::packJSPoint2Array(FF_UNWRAP_CONTOUR_AND_GET(info.This())));
 }
 
 NAN_METHOD(Contour::ApproxPolyDP) {
@@ -39,7 +44,7 @@ NAN_METHOD(Contour::ApproxPolyDP) {
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, closed, IsBoolean, BooleanValue);
 
 	std::vector<cv::Point> curve;
-	cv::approxPolyDP(FF_UNWRAP(info.This(), Contour)->contour, curve, epsilon, closed);
+	cv::approxPolyDP(FF_UNWRAP_CONTOUR_AND_GET(info.This()), curve, epsilon, closed);
 
 	info.GetReturnValue().Set(Point::packJSPoint2Array(curve));
 }
@@ -50,13 +55,13 @@ NAN_METHOD(Contour::ArcLength) {
 		closed = info[0]->BooleanValue();
 	}
 	
-	double arcLength = cv::arcLength(FF_UNWRAP(info.This(), Contour)->contour, closed);
+	double arcLength = cv::arcLength(FF_UNWRAP_CONTOUR_AND_GET(info.This()), closed);
 	info.GetReturnValue().Set(Nan::New(arcLength));
 }
 
 NAN_METHOD(Contour::BoundingRect) {
 	v8::Local<v8::Object> jsRect = FF_NEW(Rect::constructor);
-	FF_UNWRAP(jsRect, Rect)->rect = cv::boundingRect(FF_UNWRAP(info.This(), Contour)->contour);
+	FF_UNWRAP(jsRect, Rect)->rect = cv::boundingRect(FF_UNWRAP_CONTOUR_AND_GET(info.This()));
 	info.GetReturnValue().Set(jsRect);
 }
 
@@ -111,7 +116,7 @@ NAN_METHOD(Contour::ConvexityDefects) {
 
 	std::vector<cv::Vec4d> defects;
 	cv::convexityDefects(
-		FF_UNWRAP(info.This(), Contour)->contour,
+		FF_UNWRAP_CONTOUR_AND_GET(info.This()),
 		hull,
 		defects
 	);
@@ -122,7 +127,7 @@ NAN_METHOD(Contour::ConvexityDefects) {
 NAN_METHOD(Contour::MinEnclosingCircle) {
 	cv::Point2f center;
 	float radius;
-	cv::minEnclosingCircle(FF_UNWRAP(info.This(), Contour)->contour, center, radius);
+	cv::minEnclosingCircle(FF_UNWRAP_CONTOUR_AND_GET(info.This()), center, radius);
 
 	v8::Local<v8::Object> jsCircle = Nan::New<v8::Object>();
 	v8::Local<v8::Object> jsCenter = FF_NEW(Point2::constructor);
@@ -138,7 +143,7 @@ NAN_METHOD(Contour::PointPolygonTest) {
 	}
 	
 	double dist = cv::pointPolygonTest(
-		FF_UNWRAP(info.This(), Contour)->contour,
+		FF_UNWRAP_CONTOUR_AND_GET(info.This()),
 		FF_UNWRAP_PT2_AND_GET(info[0]->ToObject()),
 		true
 	);
@@ -157,7 +162,7 @@ NAN_METHOD(Contour::MatchShapes) {
 	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, contour2, Contour::constructor, FF_UNWRAP_CONTOUR_AND_GET, Contour);
 
 	double cmp = cv::matchShapes(
-		FF_UNWRAP(info.This(), Contour)->contour,
+		FF_UNWRAP_CONTOUR_AND_GET(info.This()),
 		contour2,
 		method,
 		parameter
@@ -166,4 +171,20 @@ NAN_METHOD(Contour::MatchShapes) {
 	info.GetReturnValue().Set(Nan::New(cmp));
 }
 
+NAN_METHOD(Contour::MinAreaRect) {
+	v8::Local<v8::Object> jsRotatedRect = FF_NEW(RotatedRect::constructor);
+	FF_UNWRAP_ROTATEDRECT_AND_GET(jsRotatedRect) = cv::minAreaRect(FF_UNWRAP_CONTOUR_AND_GET(info.This()));
+	info.GetReturnValue().Set(jsRotatedRect);
+}
 
+NAN_METHOD(Contour::FitEllipse) {
+	v8::Local<v8::Object> jsRotatedRect = FF_NEW(RotatedRect::constructor);
+	FF_UNWRAP_ROTATEDRECT_AND_GET(jsRotatedRect) = cv::fitEllipse(FF_UNWRAP_CONTOUR_AND_GET(info.This()));
+	info.GetReturnValue().Set(jsRotatedRect);
+}
+
+NAN_METHOD(Contour::_Moments) {
+	v8::Local<v8::Object> jsMoments = FF_NEW(Moments::constructor);
+	FF_UNWRAP(jsMoments, Moments)->moments = cv::moments(FF_UNWRAP_CONTOUR_AND_GET(info.This()));
+	info.GetReturnValue().Set(jsMoments);
+}

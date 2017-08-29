@@ -141,9 +141,7 @@ module.exports = () => {
     it('drawEllipse', () => {
       const mat = new Mat(10, 10, cvTypes.CV_8UC3, [0, 0, 0]);
       const ret = mat.drawEllipse({
-        center: new cv.Point(4, 4),
-        boundingRectSize: new cv.Size(4, 4),
-        angle: Math.PI / 4,
+        box: new cv.RotatedRect(new cv.Point(4, 4), new cv.Size(4, 4), Math.PI / 4),
         color: new cv.Vec(255, 255, 255)
       });
       expect(ret).to.equal(mat);

@@ -23,6 +23,8 @@
 			"cc/core/Vec.cc",
 			"cc/core/Size.cc",
 			"cc/core/Rect.cc",
+			"cc/core/RotatedRect.cc",
+			"cc/core/Moments.cc",
 			"cc/modules/io.cc",
 			"cc/modules/VideoCapture.cc",
 			"cc/modules/photo.cc",

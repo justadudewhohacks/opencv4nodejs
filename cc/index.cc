@@ -4,6 +4,8 @@
 #include "Vec.h"
 #include "Size.h"
 #include "Rect.h"
+#include "RotatedRect.h"
+#include "Moments.h"
 #include "cvTypes/cvTypes.h"
 
 #include "modules/io.h"
@@ -35,6 +37,8 @@ void init(v8::Local<v8::Object> target) {
 	Vec::Init(target);
 	Size::Init(target);
 	Rect::Init(target);
+	RotatedRect::Init(target);
+	Moments::Init(target);
   Io::Init(target);
 	VideoCapture::Init(target);
 	Video::Init(target);
