@@ -2,6 +2,7 @@
 #include "Point2.h"
 #include "Size.h"
 #include "Mat.h"
+#include "Contour.h"
 
 #define FF_DEFINE_CALC_HIST(name, n, constRangesArray)																												\
 	cv::MatND name(cv::Mat img, cv::Mat mask, int channels[], int histSize[], std::vector<float*> rangesVec) {	\
@@ -26,6 +27,7 @@ NAN_MODULE_INIT(Imgproc::Init) {
 	Nan::SetMethod(target, "calcHist", CalcHist);
 	Nan::SetMethod(target, "plot1DHist", Plot1DHist);
 	Nan::SetMethod(target, "canny", Canny);
+	Contour::Init();
 };
 
 NAN_METHOD(Imgproc::GetStructuringElement) {

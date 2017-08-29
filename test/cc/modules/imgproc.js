@@ -2,6 +2,8 @@ import cv from 'dut';
 import { assertError, assertPropsWithValue, funcRequiresArgsObject, readTestImage } from 'utils';
 import { expect } from 'chai';
 
+import contourTests from './contourTests';
+
 const { Mat, Point, Size, cvTypes } = cv;
 
 describe('imgproc', () => {
@@ -10,6 +12,8 @@ describe('imgproc', () => {
   before(async () => {
     testImg = readTestImage().resizeToMax(250);
   });
+
+  contourTests();
 
   describe('getStructuringElement', () => {
     const rows = 4;

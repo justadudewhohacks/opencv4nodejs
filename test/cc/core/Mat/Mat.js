@@ -372,27 +372,30 @@ describe('Mat', () => {
     });
   });
 
-  describe.skip('findContours', () => {
-    it('findContours', () => {
-      expect(true).to.be.false;
-    });
-  });
+  describe('contours', () => {
+    const contourImgData = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ];
+    const contourImg = new Mat(contourImgData, cvTypes.CV_8U);
 
-  describe.skip('contourArea', () => {
-    it('contourArea', () => {
-      expect(true).to.be.false;
-    });
-  });
-
-  describe.skip('isContourConvex', () => {
-    it('isContourConvex', () => {
-      expect(true).to.be.false;
-    });
-  });
-
-  describe.skip('convexHull', () => {
-    it('convexHull', () => {
-      expect(true).to.be.false;
+    describe('findContours', () => {
+      it.only('should find contour', () => {
+        console.log(cvTypes.retrievalModes);
+        console.log(cvTypes.contourApproximationModes);
+        contourImg.findContours({
+          mode: cvTypes.retrievalModes.RETR_EXTERNAL,
+          method: cvTypes.contourApproximationModes.CHAIN_APPROX_NONE
+        });
+      });
     });
   });
 

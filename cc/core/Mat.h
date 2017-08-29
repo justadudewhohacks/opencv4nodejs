@@ -62,9 +62,6 @@ public:
 	static NAN_METHOD(ConnectedComponentsWithStats);
 	static NAN_METHOD(FindContours);
 	static NAN_METHOD(DrawContours);
-	static NAN_METHOD(ContourArea);
-	static NAN_METHOD(IsContourConvex);
-	static NAN_METHOD(ConvexHull);
 	static NAN_METHOD(DrawLine);
 	static NAN_METHOD(DrawCircle);
 	static NAN_METHOD(DrawRectangle);

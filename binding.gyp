@@ -32,6 +32,7 @@
 			"cc/modules/video/BackgroundSubtractorKNN.cc",
 			"cc/modules/calib3d/calib3d.cc",
 			"cc/modules/imgproc/imgproc.cc",
+			"cc/modules/imgproc/Contour.cc",
 			"cc/modules/ximgproc/ximgproc.cc",
 			"cc/modules/ximgproc/SuperpixelSEEDS.cc",
 			"cc/modules/features2d/features2d.cc",

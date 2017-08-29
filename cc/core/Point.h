@@ -24,6 +24,15 @@ public:
 		}
 	};
 
+	static v8::Local<v8::Array> packJSPoint2Array(std::vector<cv::Point2d> pts) {
+		v8::Local<v8::Array> jsPts = Nan::New<v8::Array>(pts.size());
+		for (int i = 0; i < jsPts->Length(); i++) {
+			v8::Local<v8::Object> jsPt2 = FF_NEW(Point2::constructor);
+			FF_UNWRAP_PT2_AND_GET(jsPt2) = pts.at(i);
+			jsPts->Set(i, jsPt2);
+		}
+	}
+
 	static void unpackJSPoint3Array(std::vector<cv::Point3d> &pts, v8::Local<v8::Array> jsPts) {
 		for (uint i = 0; i < jsPts->Length(); i++) {
 			v8::Local<v8::Object> obj = Nan::To<v8::Object>(jsPts->Get(i)).ToLocalChecked();

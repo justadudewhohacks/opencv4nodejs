@@ -62,6 +62,13 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(retrievalModes, RETR_FLOODFILL);
 	cvTypes->Set(FF_V8STRING("retrievalModes"), retrievalModes);
 
+	v8::Local<v8::Object> shapeMatchModes = Nan::New<v8::Object>();
+	FF_SET_CV_CONSTANT(shapeMatchModes, CV_CONTOURS_MATCH_I1);
+	FF_SET_CV_CONSTANT(shapeMatchModes, CV_CONTOURS_MATCH_I2);
+	FF_SET_CV_CONSTANT(shapeMatchModes, CV_CONTOURS_MATCH_I3);
+	cvTypes->Set(FF_V8STRING("shapeMatchModes"), shapeMatchModes);
+	
+
 	v8::Local<v8::Object> haarCascades = Nan::New<v8::Object>();
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE, FF_V8STRING("./haarcascade_eye.xml"));
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE_TREE_EYEGLASSES, FF_V8STRING("./haarcascade_eye_tree_eyeglasses.xml"));
