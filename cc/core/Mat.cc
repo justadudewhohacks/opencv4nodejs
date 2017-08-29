@@ -755,7 +755,7 @@ NAN_METHOD(Mat::DrawContours) {
 		FF_GET_JSOBJ_REQUIRED(args, offset, offset, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
 	}
 
-	std::vector<std::vector<cv::Point2d>> contours;
+	std::vector<std::vector<cv::Point>> contours;
 	std::vector<cv::Vec4d> hierarchy;
 	for (int i = 0; i < jsContours->Length(); i++) {
 		contours.push_back(FF_UNWRAP_CONTOUR_AND_GET(jsContours));

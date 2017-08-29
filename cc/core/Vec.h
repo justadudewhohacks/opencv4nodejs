@@ -24,6 +24,7 @@ public:
 			FF_UNWRAP_VEC4_AND_GET(jsVec4) = vecs.at(i);
 			jsVecs->Set(i, jsVec4);
 		}
+		return jsVecs;
 	}
 
 

@@ -1,13 +1,17 @@
-import { Mat, cvTypes } from 'dut';
+import cv from 'dut';
+
 import {
   assertError,
   funcRequiresArgsObject,
   readTestImage,
   assertMetaData,
   assertDataDeepEquals,
-  dangerousDeepEquals
+  dangerousDeepEquals,
+  isZeroMat
 } from 'utils';
 import { expect } from 'chai';
+
+const { Mat, cvTypes } = cv;
 
 const rgbMatData = [
   Array(5).fill([255, 125, 0]),
@@ -96,6 +100,84 @@ module.exports = () => {
       const warped = img.warpPerspective({ transformationMatrix });
       assertMetaData(warped)(img.rows, img.cols, img.type);
       expect(dangerousDeepEquals(warped.getDataAsArray(), img.getDataAsArray())).to.be.false;
+    });
+  });
+
+
+  describe('drawing', () => {
+    it('drawLine', () => {
+      const mat = new Mat(10, 10, cvTypes.CV_8UC3, [0, 0, 0]);
+      const ret = mat.drawLine({
+        pt1: new cv.Point(0, 0),
+        pt2: new cv.Point(9, 9),
+        color: new cv.Vec(255, 255, 255)
+      });
+      expect(ret).to.equal(mat);
+      expect(isZeroMat(mat)).to.be.false;
+    });
+
+    it('drawCircle', () => {
+      const mat = new Mat(10, 10, cvTypes.CV_8UC3, [0, 0, 0]);
+      const ret = mat.drawCircle({
+        center: new cv.Point(4, 4),
+        radius: 2,
+        color: new cv.Vec(255, 255, 255)
+      });
+      expect(ret).to.equal(mat);
+      expect(isZeroMat(mat)).to.be.false;
+    });
+
+    it('drawRectangle', () => {
+      const mat = new Mat(10, 10, cvTypes.CV_8UC3, [0, 0, 0]);
+      const ret = mat.drawRectangle({
+        pt1: new cv.Point(2, 2),
+        pt2: new cv.Point(8, 8),
+        color: new cv.Vec(255, 255, 255)
+      });
+      expect(ret).to.equal(mat);
+      expect(isZeroMat(mat)).to.be.false;
+    });
+
+    it('drawEllipse', () => {
+      const mat = new Mat(10, 10, cvTypes.CV_8UC3, [0, 0, 0]);
+      const ret = mat.drawEllipse({
+        center: new cv.Point(4, 4),
+        boundingRectSize: new cv.Size(4, 4),
+        angle: Math.PI / 4,
+        color: new cv.Vec(255, 255, 255)
+      });
+      expect(ret).to.equal(mat);
+      expect(isZeroMat(mat)).to.be.false;
+    });
+  });
+
+  describe.skip('distanceTransform', () => {
+    it('distanceTransform', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe.skip('distanceTransformWithLabels', () => {
+    it('distanceTransformWithLabels', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe.skip('blur', () => {
+    it('blur', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe.skip('gaussianBlur', () => {
+    it('gaussianBlur', () => {
+      expect(true).to.be.false;
+    });
+  });
+
+  describe.skip('medianBlur', () => {
+    it('medianBlur', () => {
+      expect(true).to.be.false;
     });
   });
 };

@@ -1,7 +1,6 @@
 #include "Contour.h"
 #include "Mat.h"
 #include "Point.h"
-#include "Vec.h"
 #include "Rect.h"
 
 Nan::Persistent<v8::FunctionTemplate> Contour::constructor;
@@ -10,19 +9,27 @@ void Contour::Init() {
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Contour::New);
   constructor.Reset(ctor);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
-  ctor->SetClassName(Nan::New("Contours").ToLocalChecked());
+  ctor->SetClassName(Nan::New("Contour").ToLocalChecked());
 
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("isConvex"), GetIsConvex);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("area"), GetArea);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("numPoints"), GetNumPoints);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("hierarchy"), GetHierarchy);
+
+	Nan::SetPrototypeMethod(ctor, "getPoints", GetPoints);
 	Nan::SetPrototypeMethod(ctor, "approxPolyDP", ApproxPolyDP);
 	Nan::SetPrototypeMethod(ctor, "arcLength", ArcLength);
 	Nan::SetPrototypeMethod(ctor, "boundingRect", BoundingRect);
-	Nan::SetPrototypeMethod(ctor, "contourArea", ContourArea);
-	Nan::SetPrototypeMethod(ctor, "isContourConvex", IsContourConvex);
 	Nan::SetPrototypeMethod(ctor, "convexHull", ConvexHull);
 	Nan::SetPrototypeMethod(ctor, "convexityDefects", ConvexityDefects);
 	Nan::SetPrototypeMethod(ctor, "minEnclosingCircle", MinEnclosingCircle);
 	Nan::SetPrototypeMethod(ctor, "pointPolygonTest", PointPolygonTest);
 	Nan::SetPrototypeMethod(ctor, "matchShapes", MatchShapes);
 };
+
+NAN_METHOD(Contour::GetPoints) {
+	info.GetReturnValue().Set(Point::packJSPoint2Array(FF_UNWRAP(info.This(), Contour)->contour));
+}
 
 NAN_METHOD(Contour::ApproxPolyDP) {
 	FF_REQUIRE_ARGS_OBJ("Contour::ApproxPolyDP");
@@ -31,7 +38,7 @@ NAN_METHOD(Contour::ApproxPolyDP) {
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, epsilon, IsNumber, NumberValue);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, closed, IsBoolean, BooleanValue);
 
-	std::vector<cv::Point2d> curve;
+	std::vector<cv::Point> curve;
 	cv::approxPolyDP(FF_UNWRAP(info.This(), Contour)->contour, curve, epsilon, closed);
 
 	info.GetReturnValue().Set(Point::packJSPoint2Array(curve));
@@ -53,16 +60,6 @@ NAN_METHOD(Contour::BoundingRect) {
 	info.GetReturnValue().Set(jsRect);
 }
 
-NAN_METHOD(Contour::ContourArea) {
-	bool oriented = false;
-	if (info[0]->IsBoolean()) {
-		oriented = info[0]->BooleanValue();
-	}
-
-	double contourArea = cv::contourArea(FF_UNWRAP(info.This(), Contour)->contour, oriented);
-	info.GetReturnValue().Set(Nan::New(contourArea));
-}
-
 NAN_METHOD(Contour::ConvexHull) {
 	bool clockwise = false;
 	bool returnPoints = true;
@@ -73,25 +70,46 @@ NAN_METHOD(Contour::ConvexHull) {
 		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, returnPoints, IsBoolean, BooleanValue);
 	}
 
-	std::vector<cv::Point2d> hull;
-	cv::convexHull(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		hull,
-		clockwise,
-		returnPoints
-	);
+	v8::Local<v8::Array> jsHull;
+	if (returnPoints) {
+		std::vector<cv::Point> hullPoints;
+		cv::convexHull(
+			FF_UNWRAP_CONTOUR_AND_GET(info.This()),
+			hullPoints,
+			clockwise,
+			returnPoints
+		);
+		jsHull = Point::packJSPoint2Array(hullPoints);
+	}
+	else {
+		std::vector<int> hullIndices;
+		cv::convexHull(
+			FF_UNWRAP_CONTOUR_AND_GET(info.This()),
+			hullIndices,
+			clockwise,
+			returnPoints
+		);
+		jsHull = Nan::New<v8::Array>(hullIndices.size());
+		for (int i = 0; i < jsHull->Length(); i++) {
+			jsHull->Set(i, Nan::New(hullIndices.at(i)));
+		}
+	}
 
-	info.GetReturnValue().Set(Point::packJSPoint2Array(hull));
+	info.GetReturnValue().Set(jsHull);
 }
 
 NAN_METHOD(Contour::ConvexityDefects) {
 	if (!info[0]->IsArray()) {
-		Nan::ThrowError("Contour::ConvexityDefects - expected arg0 to be an array of points");
+		return Nan::ThrowError("Contour::ConvexityDefects - expected arg0 to be an array of points");
 	}
-	std::vector<cv::Point2d> hull;
+
+	std::vector<int> hull;
+	v8::Local<v8::Array> jsHull = FF_CAST_ARRAY(info[0]);
+	for (int i = 0; i < jsHull->Length(); i++) {
+		hull.push_back(jsHull->Get(i)->Uint32Value());
+	}
+
 	std::vector<cv::Vec4d> defects;
-	Point::unpackJSPoint2Array(hull, FF_CAST_ARRAY(info[0]));
-	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
 	cv::convexityDefects(
 		FF_UNWRAP(info.This(), Contour)->contour,
 		hull,
@@ -99,11 +117,6 @@ NAN_METHOD(Contour::ConvexityDefects) {
 	);
 
 	info.GetReturnValue().Set(Vec::packJSVec4Array(defects));
-}
-
-NAN_METHOD(Contour::IsContourConvex) {
-	bool isConvex = cv::isContourConvex(FF_UNWRAP(info.This(), Contour)->contour);
-	info.GetReturnValue().Set(Nan::New(isConvex));
 }
 
 NAN_METHOD(Contour::MinEnclosingCircle) {
@@ -121,7 +134,7 @@ NAN_METHOD(Contour::MinEnclosingCircle) {
 
 NAN_METHOD(Contour::PointPolygonTest) {
 	if (!FF_IS_INSTANCE(Point2::constructor, info[0])) {
-		Nan::ThrowError("Contour::PointPolygonTest - expected arg0 to be an isntance of Point2");
+		return Nan::ThrowError("Contour::PointPolygonTest - expected arg0 to be an isntance of Point2");
 	}
 	
 	double dist = cv::pointPolygonTest(
@@ -138,9 +151,9 @@ NAN_METHOD(Contour::MatchShapes) {
 
 	int method;
 	double parameter;
-	std::vector<cv::Point2d> contour2;
+	std::vector<cv::Point> contour2;
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, method, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, parameter, IsNumber, NumberValue);
+	//FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, parameter, IsNumber, NumberValue);
 	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, contour2, Contour::constructor, FF_UNWRAP_CONTOUR_AND_GET, Contour);
 
 	double cmp = cv::matchShapes(
