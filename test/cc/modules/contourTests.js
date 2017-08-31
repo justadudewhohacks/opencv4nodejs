@@ -87,7 +87,9 @@ module.exports = () => {
 
     describe('convexHull', () => {
       it('should return convexHull points', () => {
-        const hullPoints = contours[0].convexHull();
+        const hull = contours[0].convexHull();
+        expect(hull).to.have.property('getPoints').to.be.a('function');
+        const hullPoints = hull.getPoints();
         expect(hullPoints).to.be.an('array').lengthOf(4);
         hullPoints.forEach((pt2) => {
           expect(pt2).to.have.property('x');
@@ -186,7 +188,7 @@ module.exports = () => {
       });
     });
 
-    describe.only('moments', () => {
+    describe('moments', () => {
       let moments;
 
       before(() => {

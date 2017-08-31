@@ -10,7 +10,7 @@
 class Contour: public Nan::ObjectWrap {
 public:
   std::vector<cv::Point2i> contour;
-  cv::Vec4d hierarchy;
+  cv::Vec4i hierarchy;
 
 	static void Init();
 

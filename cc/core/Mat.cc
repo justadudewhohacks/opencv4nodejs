@@ -705,6 +705,51 @@ NAN_METHOD(Mat::FindContours) {
 	info.GetReturnValue().Set(jsContours);
 }
 
+NAN_METHOD(Mat::DrawContours) {
+	FF_REQUIRE_ARGS_OBJ("Mat::DrawContours");
+
+	v8::Local<v8::Array> jsContours;
+	cv::Vec3d color;
+	FF_GET_JSARR_REQUIRED(args, jsContours, contours);
+	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
+
+	int contourIdx = 0;
+	int maxLevel = INT_MAX;
+	cv::Point2d offset = cv::Point2d();
+	int lineType = cv::LINE_8;
+	int thickness = 1;
+	int shift = 0;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, contourIdx, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, maxLevel, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, shift, IsInt32, Int32Value);
+	if (FF_HAS_JS_PROP(args, offset)) {
+		FF_GET_JSOBJ_REQUIRED(args, offset, offset, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
+	}
+
+	std::vector<std::vector<cv::Point>> contours;
+	std::vector<cv::Vec4i> hierarchy;
+	for (int i = 0; i < jsContours->Length(); i++) {
+		v8::Local<v8::Object> jsContour = jsContours->Get(i)->ToObject();
+		contours.push_back(FF_UNWRAP_CONTOUR_AND_GET(jsContour));
+		hierarchy.push_back(FF_UNWRAP_CONTOUR(jsContour)->hierarchy);
+	}
+
+	cv::drawContours(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		contours,
+		contourIdx,
+		color,
+		thickness,
+		lineType,
+		hierarchy,
+		maxLevel,
+		offset
+	);
+	info.GetReturnValue().Set(info.This());
+}
+
 NAN_METHOD(Mat::DrawLine) {
 	FF_REQUIRE_ARGS_OBJ("Mat::DrawLine");
 
@@ -731,50 +776,6 @@ NAN_METHOD(Mat::DrawLine) {
 		shift
 	);
 	info.GetReturnValue().Set(info.This());
-}
-
-NAN_METHOD(Mat::DrawContours) {
-	FF_REQUIRE_ARGS_OBJ("Mat::DrawContours");
-
-	v8::Local<v8::Array> jsContours;
-	int contourIdx;
-	cv::Vec3d color;
-	FF_GET_JSARR_REQUIRED(args, jsContours, contours);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, contourIdx, IsUint32, Uint32Value);
-	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
-
-	int maxLevel = INT_MAX;
-	cv::Point2d offset = cv::Point2d();
-	int lineType = cv::LINE_8;
-	int thickness = 1;
-	int shift = 0;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, maxLevel, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, shift, IsInt32, Int32Value);
-	if (FF_HAS_JS_PROP(args, offset)) {
-		FF_GET_JSOBJ_REQUIRED(args, offset, offset, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
-	}
-
-	std::vector<std::vector<cv::Point>> contours;
-	std::vector<cv::Vec4d> hierarchy;
-	for (int i = 0; i < jsContours->Length(); i++) {
-		contours.push_back(FF_UNWRAP_CONTOUR_AND_GET(jsContours));
-		hierarchy.push_back(FF_UNWRAP_CONTOUR(jsContours)->hierarchy);
-	}
-
-	cv::drawContours(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		contours,
-		contourIdx,
-		color,
-		thickness,
-		lineType,
-		hierarchy,
-		maxLevel,
-		offset
-	);
-	info.GetReturnValue().Set(FF_GET_JSPROP_OBJECT(args, toImg));
 }
 
 NAN_METHOD(Mat::DrawCircle) {

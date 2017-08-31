@@ -29,6 +29,9 @@ public:
 	static NAN_METHOD(Dot) {
 		FF_OPERATOR_RET_SCALAR(&cv::Vec4d::dot, FF_APPLY_CLASS_FUNC, FF_UNWRAP_VEC4_AND_GET, Vec4);
 	}
+	static NAN_METHOD(Norm) {
+		info.GetReturnValue().Set(Nan::New(cv::norm(FF_UNWRAP_VEC4_AND_GET(info.This()))));
+	}
 
 	static NAN_METHOD(At) {
 		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 3, "Vec4");

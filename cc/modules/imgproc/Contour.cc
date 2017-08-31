@@ -75,7 +75,7 @@ NAN_METHOD(Contour::ConvexHull) {
 		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, returnPoints, IsBoolean, BooleanValue);
 	}
 
-	v8::Local<v8::Array> jsHull;
+	v8::Local<v8::Object> jsHull;
 	if (returnPoints) {
 		std::vector<cv::Point> hullPoints;
 		cv::convexHull(
@@ -84,7 +84,9 @@ NAN_METHOD(Contour::ConvexHull) {
 			clockwise,
 			returnPoints
 		);
-		jsHull = Point::packJSPoint2Array(hullPoints);
+		jsHull = FF_NEW(Contour::constructor);
+		FF_UNWRAP_CONTOUR_AND_GET(jsHull) = hullPoints;
+		FF_UNWRAP(jsHull, Contour)->hierarchy = cv::Vec4i(-1, -1, -1, -1);
 	}
 	else {
 		std::vector<int> hullIndices;
@@ -94,10 +96,11 @@ NAN_METHOD(Contour::ConvexHull) {
 			clockwise,
 			returnPoints
 		);
-		jsHull = Nan::New<v8::Array>(hullIndices.size());
-		for (int i = 0; i < jsHull->Length(); i++) {
-			jsHull->Set(i, Nan::New(hullIndices.at(i)));
+		v8::Local<v8::Array> jsHullIndices = Nan::New<v8::Array>(hullIndices.size());
+		for (int i = 0; i < jsHullIndices->Length(); i++) {
+			jsHullIndices->Set(i, Nan::New(hullIndices.at(i)));
 		}
+		jsHull = jsHullIndices;
 	}
 
 	info.GetReturnValue().Set(jsHull);

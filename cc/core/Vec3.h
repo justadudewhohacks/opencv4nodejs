@@ -31,6 +31,9 @@ public:
 	static NAN_METHOD(Cross) {
 		FF_OPERATOR(&cv::Vec3d::cross, FF_APPLY_CLASS_FUNC, FF_UNWRAP_VEC3_AND_GET, Vec3);
 	}
+	static NAN_METHOD(Norm) {
+		info.GetReturnValue().Set(Nan::New(cv::norm(FF_UNWRAP_VEC3_AND_GET(info.This()))));
+	}
 
 	static NAN_METHOD(At) {
 		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 2, "Vec3");

@@ -12,7 +12,9 @@
     "recognition",
     "tracking",
     "matching",
-    "face"
+    "face",
+    "hand",
+    "gesture"
   ],
   "main": "./lib/opencv4nodejs.js",
   "scripts": {
