@@ -64,9 +64,12 @@
 	);																																							\
 	return info.GetReturnValue().Set(ret);
 
-#define FF_PROTO_SET_MATRIX_OPERATIONS(ctor)								\
+#define FF_PROTO_SET_ADD_SUB_OPERATIONS(ctor)								\
 	Nan::SetPrototypeMethod(ctor, "add", Add);								\
-	Nan::SetPrototypeMethod(ctor, "sub", Sub);								\
+	Nan::SetPrototypeMethod(ctor, "sub", Sub);								
+
+#define FF_PROTO_SET_MATRIX_OPERATIONS(ctor)								\
+	FF_PROTO_SET_ADD_SUB_OPERATIONS(ctor)											\
 	Nan::SetPrototypeMethod(ctor, "mul", Mul);								\
 	Nan::SetPrototypeMethod(ctor, "div", Div);								\
 	Nan::SetPrototypeMethod(ctor, "hMul", HMul);							\
@@ -89,13 +92,16 @@
 	Nan::SetPrototypeMethod(ctor, "transpose", Transpose);		\
 	Nan::SetPrototypeMethod(ctor, "determinant", Determinant);
 
-#define FF_INIT_MATRIX_OPERATIONS(clazz, accessor, unwrapper)						\
-	static NAN_METHOD(Add) {																							\
-		FF_OPERATOR(+, FF_APPLY_OPERATOR, unwrapper, clazz);								\
-	}																																			\
-	static NAN_METHOD(Sub) {																							\
-		FF_OPERATOR(-, FF_APPLY_OPERATOR, unwrapper, clazz);								\
-	}																																			\
+#define FF_INIT_ADD_SUB_OPERATIONS(clazz, unwrapper)			\
+	static NAN_METHOD(Add) {																\
+		FF_OPERATOR(+, FF_APPLY_OPERATOR, unwrapper, clazz);	\
+	}																												\
+	static NAN_METHOD(Sub) {																\
+		FF_OPERATOR(-, FF_APPLY_OPERATOR, unwrapper, clazz);	\
+	}	
+
+#define FF_INIT_MATRIX_OPERATIONS(clazz, unwrapper)											\
+	FF_INIT_ADD_SUB_OPERATIONS(clazz, unwrapper)													\
 	static NAN_METHOD(Mul) {																							\
 		FF_SCALAR_OPERATOR(*, FF_APPLY_OPERATOR, unwrapper, clazz);					\
 	}																																			\
@@ -122,7 +128,7 @@
 	}																																			\
 
 #define FF_INIT_MAT_OPERATIONS()																						\
-	FF_INIT_MATRIX_OPERATIONS(Mat, mat, FF_UNWRAP_MAT_AND_GET);								\
+	FF_INIT_MATRIX_OPERATIONS(Mat, FF_UNWRAP_MAT_AND_GET);										\
 	static NAN_METHOD(And) {																									\
 		FF_OPERATOR(&, FF_APPLY_OPERATOR, FF_UNWRAP_MAT_AND_GET, Mat);					\
 	}																																					\
@@ -152,9 +158,9 @@
 		FF_SELF_OPERATOR(cv::transpose, FF_UNWRAP_MAT_AND_GET);									\
 	}																																					
 
-#define FF_INIT_VEC2_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec2, vec, FF_UNWRAP_VEC2_AND_GET);
-#define FF_INIT_VEC3_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec3, vec, FF_UNWRAP_VEC3_AND_GET);
-#define FF_INIT_VEC4_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec4, vec, FF_UNWRAP_VEC4_AND_GET);
+#define FF_INIT_VEC2_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec2, FF_UNWRAP_VEC2_AND_GET);
+#define FF_INIT_VEC3_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec3, FF_UNWRAP_VEC3_AND_GET);
+#define FF_INIT_VEC4_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec4, FF_UNWRAP_VEC4_AND_GET);
 
 namespace FF {
 	template<int cn>

@@ -1,7 +1,7 @@
 import cv from 'dut';
 import { expect } from 'chai';
 
-describe.only('core', () => {
+describe('core', () => {
   describe('partition', () => {
     describe('Point2 input', () => {
       it('should return labels and numLabels', () => {

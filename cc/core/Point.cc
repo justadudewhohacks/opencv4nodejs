@@ -12,6 +12,7 @@ NAN_MODULE_INIT(Point::Init) {
 	Nan::SetAccessor(pt2Ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Point2::GetY);
 	Nan::SetPrototypeMethod(pt2Ctor, "norm", Point2::Norm);
 	Nan::SetPrototypeMethod(pt2Ctor, "at", Point2::At);
+	Point2::Init(pt2Ctor);
 
 	v8::Local<v8::FunctionTemplate> pt3Ctor = Nan::New<v8::FunctionTemplate>(Point3::New);
 	Point3::constructor.Reset(pt3Ctor);
@@ -22,6 +23,7 @@ NAN_MODULE_INIT(Point::Init) {
 	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("z").ToLocalChecked(), Point3::GetZ);
 	Nan::SetPrototypeMethod(pt3Ctor, "norm", Point3::Norm);
 	Nan::SetPrototypeMethod(pt3Ctor, "at", Point3::At);
+	Point3::Init(pt3Ctor);
 
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Point::New);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);

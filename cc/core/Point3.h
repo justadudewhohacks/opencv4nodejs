@@ -10,6 +10,10 @@ class Point3 : public Nan::ObjectWrap {
 public:
 	cv::Point3d pt;
 
+	static void Init(v8::Local<v8::FunctionTemplate> ctor) {
+		FF_PROTO_SET_ADD_SUB_OPERATIONS(ctor);
+	}
+
 	static NAN_METHOD(New) {
 		Point3* self = new Point3();
 		self->Wrap(info.Holder());
@@ -19,6 +23,8 @@ public:
 	static FF_GETTER(Point3, GetX, pt.x);
 	static FF_GETTER(Point3, GetY, pt.y);
 	static FF_GETTER(Point3, GetZ, pt.z);
+
+	FF_INIT_ADD_SUB_OPERATIONS(Point3, FF_UNWRAP_PT3_AND_GET);
 
 	static NAN_METHOD(Norm) {
 		info.GetReturnValue().Set(Nan::New(cv::norm(FF_UNWRAP_PT3_AND_GET(info.This()))));

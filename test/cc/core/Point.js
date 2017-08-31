@@ -2,6 +2,15 @@ import { Point } from 'dut';
 import { assertError, assertPropsWithValue } from 'utils';
 import { expect } from 'chai';
 
+const OperatorRequiresArg = pt => (func) => {
+  it('should throw if no args', () => {
+    assertError(
+      () => pt[func].bind(pt)(),
+      'expected arg to be an instance of Point'
+    );
+  });
+};
+
 describe('Point', () => {
   describe('constructor', () => {
     it('should throw if args empty', () => {
@@ -52,9 +61,31 @@ describe('Point', () => {
         });
       });
 
-      describe('norm', () => {
-        it('should return magnitude', () => {
-          expect(new Point(Math.sqrt(8), Math.sqrt(8)).norm()).to.equal(4);
+      describe('operators', () => {
+        const pt0 = new Point(1, 1);
+        const pt1 = new Point(2, 3);
+        const operatorRequiresArg = OperatorRequiresArg(pt0);
+
+        describe('add', () => {
+          operatorRequiresArg('add');
+
+          it('add points', () => {
+            assertPropsWithValue(pt0.add(pt1))({ x: 3, y: 4 });
+          });
+        });
+
+        describe('sub', () => {
+          operatorRequiresArg('sub');
+
+          it('subtract points', () => {
+            assertPropsWithValue(pt0.sub(pt1))({ x: -1, y: -2 });
+          });
+        });
+
+        describe('norm', () => {
+          it('should return magnitude', () => {
+            expect(new Point(Math.sqrt(8), Math.sqrt(8)).norm()).to.equal(4);
+          });
         });
       });
     });
@@ -106,9 +137,30 @@ describe('Point', () => {
         });
       });
 
-      describe('norm', () => {
-        it('should return magnitude', () => {
-          expect(new Point(Math.sqrt(4), Math.sqrt(4), Math.sqrt(8)).norm()).to.equal(4);
+      describe('operators', () => {
+        const pt0 = new Point(1, 1, 1);
+        const pt1 = new Point(2, 3, 4);
+        const operatorRequiresArg = OperatorRequiresArg(pt0);
+        describe('add', () => {
+          operatorRequiresArg('add');
+
+          it('add points', () => {
+            assertPropsWithValue(pt0.add(pt1))({ x: 3, y: 4, z: 5 });
+          });
+        });
+
+        describe('sub', () => {
+          operatorRequiresArg('sub');
+
+          it('subtract points', () => {
+            assertPropsWithValue(pt0.sub(pt1))({ x: -1, y: -2, z: -3 });
+          });
+        });
+
+        describe('norm', () => {
+          it('should return magnitude', () => {
+            expect(new Point(Math.sqrt(4), Math.sqrt(4), Math.sqrt(8)).norm()).to.equal(4);
+          });
         });
       });
     });
