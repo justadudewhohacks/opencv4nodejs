@@ -96,11 +96,7 @@ NAN_METHOD(Contour::ConvexHull) {
 			clockwise,
 			returnPoints
 		);
-		v8::Local<v8::Array> jsHullIndices = Nan::New<v8::Array>(hullIndices.size());
-		for (int i = 0; i < jsHullIndices->Length(); i++) {
-			jsHullIndices->Set(i, Nan::New(hullIndices.at(i)));
-		}
-		jsHull = jsHullIndices;
+		jsHull = FF::stdVecToJSArray<int>(hullIndices);
 	}
 
 	info.GetReturnValue().Set(jsHull);

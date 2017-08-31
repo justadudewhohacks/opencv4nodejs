@@ -51,6 +51,12 @@ describe('Point', () => {
           expect(pt2.at(1)).to.equal(20);
         });
       });
+
+      describe('norm', () => {
+        it('should return magnitude', () => {
+          expect(new Point(Math.sqrt(8), Math.sqrt(8)).norm()).to.equal(4);
+        });
+      });
     });
 
     describe('Point3', () => {
@@ -97,6 +103,12 @@ describe('Point', () => {
           expect(pt3.at(0)).to.equal(10);
           expect(pt3.at(1)).to.equal(20);
           expect(pt3.at(2)).to.equal(30);
+        });
+      });
+
+      describe('norm', () => {
+        it('should return magnitude', () => {
+          expect(new Point(Math.sqrt(4), Math.sqrt(4), Math.sqrt(8)).norm()).to.equal(4);
         });
       });
     });

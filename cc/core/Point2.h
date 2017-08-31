@@ -19,6 +19,10 @@ public:
 	static FF_GETTER(Point2, GetX, pt.x);
 	static FF_GETTER(Point2, GetY, pt.y);
 
+	static NAN_METHOD(Norm) {
+		info.GetReturnValue().Set(Nan::New(cv::norm(FF_UNWRAP_PT2_AND_GET(info.This()))));
+	}
+
 	static NAN_METHOD(At) {
 		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 1, "Point2");
 		cv::Point2d ptSelf = Nan::ObjectWrap::Unwrap<Point2>(info.This())->pt;

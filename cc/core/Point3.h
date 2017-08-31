@@ -20,6 +20,10 @@ public:
 	static FF_GETTER(Point3, GetY, pt.y);
 	static FF_GETTER(Point3, GetZ, pt.z);
 
+	static NAN_METHOD(Norm) {
+		info.GetReturnValue().Set(Nan::New(cv::norm(FF_UNWRAP_PT3_AND_GET(info.This()))));
+	}
+
 	static NAN_METHOD(At) {
 		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 2, "Point3");
 		cv::Point3d ptSelf = Nan::ObjectWrap::Unwrap<Point3>(info.This())->pt;

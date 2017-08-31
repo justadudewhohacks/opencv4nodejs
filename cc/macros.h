@@ -181,6 +181,9 @@
 #define FF_UNWRAP_PT2(obj) FF_UNWRAP(obj, Point2)
 #define FF_UNWRAP_PT2_AND_GET(obj) FF_UNWRAP_PT2(obj)->pt
 
+#define FF_UNWRAP_PT3(obj) FF_UNWRAP(obj, Point3)
+#define FF_UNWRAP_PT3_AND_GET(obj) FF_UNWRAP_PT3(obj)->pt
+
 #define FF_UNWRAP_SIZE(obj)	FF_UNWRAP(obj, Size)
 #define FF_UNWRAP_SIZE_AND_GET(obj)	FF_UNWRAP_SIZE(obj)->size
 
@@ -189,5 +192,16 @@
 
 #define FF_UNWRAP_ROTATEDRECT(obj) FF_UNWRAP(obj, RotatedRect)
 #define FF_UNWRAP_ROTATEDRECT_AND_GET(obj)	FF_UNWRAP_ROTATEDRECT(obj)->rect
+
+namespace FF {
+	template<typename type>
+	static inline v8::Local<v8::Array> stdVecToJSArray(std::vector<type> vec) {
+		v8::Local<v8::Array> jsArray = Nan::New<v8::Array>(vec.size());
+		for (int i = 0; i < jsArray->Length(); i++) {
+			jsArray->Set(i, Nan::New(vec.at(i)));
+		}
+		return jsArray;
+	}
+}
 
 #endif

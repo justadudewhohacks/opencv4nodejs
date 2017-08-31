@@ -93,6 +93,12 @@ module.exports = () => {
           assertPropsWithValue(new Vec(4, 16).sqrt())({ x: 2, y: 4 });
         });
       });
+
+      describe('norm', () => {
+        it('should return magnitude', () => {
+          expect(new Vec(Math.sqrt(8), Math.sqrt(8)).norm()).to.equal(4);
+        });
+      });
     });
 
     describe('Vec3', () => {
@@ -173,6 +179,12 @@ module.exports = () => {
       describe('sqrt', () => {
         it('apply sqrt to vector', () => {
           assertPropsWithValue(new Vec(4, 16, 64).sqrt())({ x: 2, y: 4, z: 8 });
+        });
+      });
+
+      describe('norm', () => {
+        it('should return magnitude', () => {
+          expect(new Vec(Math.sqrt(4), Math.sqrt(4), Math.sqrt(8)).norm()).to.equal(4);
         });
       });
 
@@ -266,6 +278,11 @@ module.exports = () => {
         });
       });
 
+      describe('norm', () => {
+        it('should return magnitude', () => {
+          expect(new Vec(Math.sqrt(4), Math.sqrt(4), Math.sqrt(4), Math.sqrt(4)).norm()).to.equal(4);
+        });
+      });
     });
   });
 };

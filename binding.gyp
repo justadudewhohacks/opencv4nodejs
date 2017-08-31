@@ -18,6 +18,7 @@
 			"cc/index.cc",
 			"cc/cvTypes/cvTypes.cc",
 			"cc/cvTypes/imgprocConstants.cc",
+			"cc/core/core.cc",
 			"cc/core/Mat.cc",
 			"cc/core/Point.cc",
 			"cc/core/Vec.cc",

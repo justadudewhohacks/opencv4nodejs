@@ -10,6 +10,7 @@ NAN_MODULE_INIT(Point::Init) {
 	pt2Ctor->SetClassName(Nan::New("Point2").ToLocalChecked());
 	Nan::SetAccessor(pt2Ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Point2::GetX);
 	Nan::SetAccessor(pt2Ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Point2::GetY);
+	Nan::SetPrototypeMethod(pt2Ctor, "norm", Point2::Norm);
 	Nan::SetPrototypeMethod(pt2Ctor, "at", Point2::At);
 
 	v8::Local<v8::FunctionTemplate> pt3Ctor = Nan::New<v8::FunctionTemplate>(Point3::New);
@@ -19,6 +20,7 @@ NAN_MODULE_INIT(Point::Init) {
 	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Point3::GetX);
 	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Point3::GetY);
 	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("z").ToLocalChecked(), Point3::GetZ);
+	Nan::SetPrototypeMethod(pt3Ctor, "norm", Point3::Norm);
 	Nan::SetPrototypeMethod(pt3Ctor, "at", Point3::At);
 
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Point::New);

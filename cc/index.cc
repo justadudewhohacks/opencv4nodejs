@@ -1,13 +1,7 @@
 #include <node.h>
-#include "Mat.h"
-#include "Point.h"
-#include "Vec.h"
-#include "Size.h"
-#include "Rect.h"
-#include "RotatedRect.h"
-#include "Moments.h"
 #include "cvTypes/cvTypes.h"
 
+#include "core.h"
 #include "modules/io.h"
 #include "modules/VideoCapture.h"
 #include "modules/video/video.h"
@@ -31,14 +25,9 @@ void init(v8::Local<v8::Object> target) {
 
 	v8::Local<v8::Object> xmodules = Nan::New<v8::Object>();
 	Nan::Set(target, FF_V8STRING("xmodules"), xmodules);
-  CvTypes::Init(target);
-  Mat::Init(target);
-	Point::Init(target);
-	Vec::Init(target);
-	Size::Init(target);
-	Rect::Init(target);
-	RotatedRect::Init(target);
-	Moments::Init(target);
+
+	CvTypes::Init(target);
+	Core::Init(target);
   Io::Init(target);
 	VideoCapture::Init(target);
 	Video::Init(target);
