@@ -150,8 +150,9 @@ module.exports = () => {
       });
     });
 
+    // TODO min 5 points inputs cv exception
     describe('fitEllipse', () => {
-      it('should return fitEllipse', () => {
+      (cv.version.minor < 2 ? it.skip : it)('should return fitEllipse', () => {
         expect(contours[0].fitEllipse()).to.be.instanceOf(cv.RotatedRect);
       });
     });
