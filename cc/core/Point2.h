@@ -11,7 +11,7 @@ public:
 	cv::Point2d pt;
 
 	static void Init(v8::Local<v8::FunctionTemplate> ctor) {
-		FF_PROTO_SET_ADD_SUB_OPERATIONS(ctor);
+		FF_PROTO_SET_ARITHMETIC_OPERATIONS(ctor);
 	}
 
 	static NAN_METHOD(New) {
@@ -23,7 +23,7 @@ public:
 	static FF_GETTER(Point2, GetX, pt.x);
 	static FF_GETTER(Point2, GetY, pt.y);
 
-	FF_INIT_ADD_SUB_OPERATIONS(Point2, FF_UNWRAP_PT2_AND_GET);
+	FF_INIT_ARITHMETIC_OPERATIONS(Point2, FF_UNWRAP_PT2_AND_GET);
 
 	static NAN_METHOD(Norm) {
 		info.GetReturnValue().Set(Nan::New(cv::norm(FF_UNWRAP_PT2_AND_GET(info.This()))));

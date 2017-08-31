@@ -64,14 +64,14 @@
 	);																																							\
 	return info.GetReturnValue().Set(ret);
 
-#define FF_PROTO_SET_ADD_SUB_OPERATIONS(ctor)								\
+#define FF_PROTO_SET_ARITHMETIC_OPERATIONS(ctor)						\
 	Nan::SetPrototypeMethod(ctor, "add", Add);								\
-	Nan::SetPrototypeMethod(ctor, "sub", Sub);								
-
-#define FF_PROTO_SET_MATRIX_OPERATIONS(ctor)								\
-	FF_PROTO_SET_ADD_SUB_OPERATIONS(ctor)											\
+	Nan::SetPrototypeMethod(ctor, "sub", Sub);								\
 	Nan::SetPrototypeMethod(ctor, "mul", Mul);								\
 	Nan::SetPrototypeMethod(ctor, "div", Div);								\
+
+#define FF_PROTO_SET_MATRIX_OPERATIONS(ctor)								\
+	FF_PROTO_SET_ARITHMETIC_OPERATIONS(ctor)									\
 	Nan::SetPrototypeMethod(ctor, "hMul", HMul);							\
 	Nan::SetPrototypeMethod(ctor, "hDiv", HDiv);							\
 	Nan::SetPrototypeMethod(ctor, "absdiff", Absdiff);				\
@@ -92,22 +92,22 @@
 	Nan::SetPrototypeMethod(ctor, "transpose", Transpose);		\
 	Nan::SetPrototypeMethod(ctor, "determinant", Determinant);
 
-#define FF_INIT_ADD_SUB_OPERATIONS(clazz, unwrapper)			\
-	static NAN_METHOD(Add) {																\
-		FF_OPERATOR(+, FF_APPLY_OPERATOR, unwrapper, clazz);	\
-	}																												\
-	static NAN_METHOD(Sub) {																\
-		FF_OPERATOR(-, FF_APPLY_OPERATOR, unwrapper, clazz);	\
-	}	
+#define FF_INIT_ARITHMETIC_OPERATIONS(clazz, unwrapper)					\
+	static NAN_METHOD(Add) {																			\
+		FF_OPERATOR(+, FF_APPLY_OPERATOR, unwrapper, clazz);				\
+	}																															\
+	static NAN_METHOD(Sub) {																			\
+		FF_OPERATOR(-, FF_APPLY_OPERATOR, unwrapper, clazz);				\
+	}																															\
+	static NAN_METHOD(Mul) {																			\
+		FF_SCALAR_OPERATOR(*, FF_APPLY_OPERATOR, unwrapper, clazz);	\
+	}																															\
+	static NAN_METHOD(Div) {																			\
+		FF_SCALAR_OPERATOR(/, FF_APPLY_OPERATOR, unwrapper, clazz);	\
+	}																															\
 
 #define FF_INIT_MATRIX_OPERATIONS(clazz, unwrapper)											\
-	FF_INIT_ADD_SUB_OPERATIONS(clazz, unwrapper)													\
-	static NAN_METHOD(Mul) {																							\
-		FF_SCALAR_OPERATOR(*, FF_APPLY_OPERATOR, unwrapper, clazz);					\
-	}																																			\
-	static NAN_METHOD(Div) {																							\
-		FF_SCALAR_OPERATOR(/, FF_APPLY_OPERATOR, unwrapper, clazz);					\
-	}																																			\
+	FF_INIT_ARITHMETIC_OPERATIONS(clazz, unwrapper)												\
 	static NAN_METHOD(HMul) {																							\
 		FF_OPERATOR(cv::multiply, FF_APPLY_FUNC, unwrapper, clazz);					\
 	}																																			\

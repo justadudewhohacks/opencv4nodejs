@@ -2,11 +2,11 @@ import { Point } from 'dut';
 import { assertError, assertPropsWithValue } from 'utils';
 import { expect } from 'chai';
 
-const OperatorRequiresArg = pt => (func) => {
+const OperatorRequiresArg = pt => (func, isScalar) => {
   it('should throw if no args', () => {
     assertError(
       () => pt[func].bind(pt)(),
-      'expected arg to be an instance of Point'
+      `expected arg to be ${isScalar ? 'a Scalar' : 'an instance of Point'}`
     );
   });
 };
@@ -82,6 +82,22 @@ describe('Point', () => {
           });
         });
 
+        describe('mul', () => {
+          operatorRequiresArg('mul', true);
+
+          it('multiply point by scalar', () => {
+            assertPropsWithValue(pt1.mul(2))({ x: 4, y: 6 });
+          });
+        });
+
+        describe('div', () => {
+          operatorRequiresArg('div', true);
+
+          it('divide point by scalar', () => {
+            assertPropsWithValue(pt1.div(2))({ x: 1.0, y: 1.5 });
+          });
+        });
+
         describe('norm', () => {
           it('should return magnitude', () => {
             expect(new Point(Math.sqrt(8), Math.sqrt(8)).norm()).to.equal(4);
@@ -154,6 +170,22 @@ describe('Point', () => {
 
           it('subtract points', () => {
             assertPropsWithValue(pt0.sub(pt1))({ x: -1, y: -2, z: -3 });
+          });
+        });
+
+        describe('mul', () => {
+          operatorRequiresArg('mul', true);
+
+          it('multiply point by scalar', () => {
+            assertPropsWithValue(pt1.mul(2))({ x: 4, y: 6, z: 8 });
+          });
+        });
+
+        describe('div', () => {
+          operatorRequiresArg('div', true);
+
+          it('divide point by scalar', () => {
+            assertPropsWithValue(pt1.div(2))({ x: 1.0, y: 1.5, z: 2 });
           });
         });
 
