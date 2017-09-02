@@ -59,6 +59,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "drawCircle", DrawCircle);
 	Nan::SetPrototypeMethod(ctor, "drawRectangle", DrawRectangle);
 	Nan::SetPrototypeMethod(ctor, "drawEllipse", DrawEllipse);
+	Nan::SetPrototypeMethod(ctor, "putText", PutText);
 	/* #ENDIF IMGPROC */
 
   target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
@@ -856,6 +857,39 @@ NAN_METHOD(Mat::DrawEllipse) {
 		color,
 		thickness,
 		lineType
+	);
+	info.GetReturnValue().Set(info.This());
+}
+
+NAN_METHOD(Mat::PutText) {
+	FF_REQUIRE_ARGS_OBJ("Mat::PutText");
+
+	std::string text = FF_JS_VAL_TO_STRING(FF_GET_JSPROP(args, text));
+	cv::Point org;
+	int fontFace; 
+	double fontScale; 
+	cv::Scalar color;
+	FF_GET_JSOBJ_REQUIRED(args, org, org, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, fontFace, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, fontScale, IsNumber, NumberValue);
+	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
+
+	int thickness = 1; 
+	int lineType = cv::LINE_8;
+	bool bottomLeftOrigin = false;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, bottomLeftOrigin, IsBoolean, BooleanValue);
+	cv::putText(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		text,
+		org,
+		fontFace,
+		fontScale,
+		color,
+		thickness,
+		lineType,
+		bottomLeftOrigin
 	);
 	info.GetReturnValue().Set(info.This());
 }

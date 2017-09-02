@@ -68,6 +68,17 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(shapeMatchModes, CV_CONTOURS_MATCH_I3);
 	cvTypes->Set(FF_V8STRING("shapeMatchModes"), shapeMatchModes);
 	
+	v8::Local<v8::Object> hersheyFonts = Nan::New<v8::Object>();
+	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_SIMPLEX);
+	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_PLAIN);
+	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_DUPLEX);
+	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_COMPLEX);
+	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_TRIPLEX);
+	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_COMPLEX_SMALL);
+	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_SCRIPT_SIMPLEX);
+	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_SCRIPT_COMPLEX);
+	FF_SET_CV_CONSTANT(hersheyFonts, FONT_ITALIC);
+	cvTypes->Set(FF_V8STRING("hersheyFonts"), hersheyFonts);
 
 	v8::Local<v8::Object> haarCascades = Nan::New<v8::Object>();
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE, FF_V8STRING("./haarcascade_eye.xml"));

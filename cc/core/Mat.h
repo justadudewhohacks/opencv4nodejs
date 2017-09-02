@@ -66,6 +66,7 @@ public:
 	static NAN_METHOD(DrawCircle);
 	static NAN_METHOD(DrawRectangle);
 	static NAN_METHOD(DrawEllipse);
+	static NAN_METHOD(PutText);
 
 	/* #ENDIF IMGPROC */
 

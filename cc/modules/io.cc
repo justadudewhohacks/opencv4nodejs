@@ -18,7 +18,7 @@ NAN_METHOD(Io::Imread) {
   std::string path = FF_JS_VAL_TO_STRING(info[0]);
 	cv::Mat mat = cv::imread(path);
 	if (mat.rows == 0 && mat.cols == 0) {
-		return Nan::ThrowError("imread empty mat");
+		return Nan::ThrowError("Imread empty mat");
 	}
 	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
 	FF_UNWRAP_MAT_AND_GET(jsMat) = mat;
@@ -27,10 +27,10 @@ NAN_METHOD(Io::Imread) {
 
 NAN_METHOD(Io::Imwrite) {
   if (!info[0]->IsString()) {
-    return Nan::ThrowError("Imsave expected arg0 to be path");
+    return Nan::ThrowError("Imwrite expected arg0 to be path");
 	}
 	if (!FF_IS_INSTANCE(Mat::constructor, info[1])) {
-		return Nan::ThrowError("Imsave expected arg1 to be an instance of Mat");
+		return Nan::ThrowError("Imwrite expected arg1 to be an instance of Mat");
 	}
 	cv::imwrite(FF_JS_VAL_TO_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject()));
 }
