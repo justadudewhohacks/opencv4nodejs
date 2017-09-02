@@ -139,16 +139,19 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
   // draw bounding box and center line
   resizedImg.drawContours({
     contours: [handContour],
+    thickness: 2,
     color: new cv.Vec(255, 0, 0)
   });
   resizedImg.drawRectangle({
     pt1: rectPt1,
     pt2: rectPt2,
+    thickness: 2,
     color: new cv.Vec(255, 0, 0)
   });
   resizedImg.drawLine({
     pt1: new cv.Point(rectPt1.x, rectCenter.y),
     pt2: new cv.Point(rectPt2.x, rectCenter.y),
+    thickness: 2,
     color: new cv.Vec(255, 0, 0)
   });
 
@@ -158,11 +161,13 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
     resizedImg.drawLine({
       pt1: v.pt,
       pt2: v.d1,
+      thickness: 2,
       color: new cv.Vec(0, 255, 0)
     });
     resizedImg.drawLine({
       pt1: v.pt,
       pt2: v.d2,
+      thickness: 2,
       color: new cv.Vec(0, 255, 0)
     });
     resizedImg.drawEllipse({
@@ -194,8 +199,11 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
     color: new cv.Vec(0, 255, 0)
   });
 
-  cv.imshow('handMask', handMask);
-  cv.imshow('intermediate', resizedImg);
-  cv.imshow('result', result);
-});
+  const { rows, cols } = result;
+  const sideBySide = new cv.Mat(rows, cols * 2, cv.cvTypes.CV_8UC3);
+  result.copyTo(sideBySide.getRegion(new cv.Rect(0, 0, cols, rows)));
+  resizedImg.copyTo(sideBySide.getRegion(new cv.Rect(cols, 0, cols, rows)));
 
+  cv.imshow('handMask', handMask);
+  cv.imshow('result', sideBySide);
+});

@@ -5,6 +5,34 @@ opencv4nodejs
 
 **Brings lots of features of OpenCV 3.x to nodejs to use as a service, integrate into your Electron app or simply to play around with the OpenCV API in Javascript instead of C++.**
 
+## Examples
+
+See examples folder for implementation.
+
+### Face Detection
+
+![face0](https://user-images.githubusercontent.com/31125521/29702727-c796acc4-8972-11e7-8043-117dd2761833.jpg)
+![face1](https://user-images.githubusercontent.com/31125521/29702730-c79d3904-8972-11e7-8ccb-e8c467244ad8.jpg)
+
+### Hand Gesture Recognition
+
+![gesture-rec](https://user-images.githubusercontent.com/31125521/29995055-fee4ef88-8fdf-11e7-8463-891e2566cbbf.gif)
+
+
+### Object Tracking
+
+![trackbgsubtract](https://user-images.githubusercontent.com/31125521/29702733-c7b59864-8972-11e7-996b-d28cb508f3b8.gif)
+![trackbycolor](https://user-images.githubusercontent.com/31125521/29702735-c8057686-8972-11e7-9c8d-13e30ab74628.gif)
+
+### Feature Matching
+
+![matchsift](https://user-images.githubusercontent.com/31125521/29702731-c79e3142-8972-11e7-947e-db109d415469.jpg)
+
+### Image Histogram
+
+![plotbgr](https://user-images.githubusercontent.com/31125521/29995016-1b847970-8fdf-11e7-9316-4eb0fd550adc.jpg)
+![plotgray](https://user-images.githubusercontent.com/31125521/29995015-1b83e06e-8fdf-11e7-8fa8-5d18326b9cd3.jpg)
+
 ## How to install
 
 ``` bash
@@ -38,30 +66,6 @@ Require it in the application:
 const electron = require('electron');
 const cv = electron.remote.require('opencv4nodejs');
 ```
-
-## Examples
-
-See examples folder for implementation.
-
-### Face Detection
-
-![face0](https://user-images.githubusercontent.com/31125521/29702727-c796acc4-8972-11e7-8043-117dd2761833.jpg)
-![face1](https://user-images.githubusercontent.com/31125521/29702730-c79d3904-8972-11e7-8ccb-e8c467244ad8.jpg)
-
-### Object Tracking
-
-![trackbgsubtract](https://user-images.githubusercontent.com/31125521/29702733-c7b59864-8972-11e7-996b-d28cb508f3b8.gif)
-![trackbycolor](https://user-images.githubusercontent.com/31125521/29702735-c8057686-8972-11e7-9c8d-13e30ab74628.gif)
-
-### Feature Matching
-
-![matchorb](https://user-images.githubusercontent.com/31125521/29702728-c7983be8-8972-11e7-8773-e1f01631a1eb.jpg)
-![matchsift](https://user-images.githubusercontent.com/31125521/29702731-c79e3142-8972-11e7-947e-db109d415469.jpg)
-
-### Image Histogram
-
-![plotbgr](https://user-images.githubusercontent.com/31125521/29702729-c798f83a-8972-11e7-9b40-b42829cc2bb7.jpg)
-![plotgray](https://user-images.githubusercontent.com/31125521/29702732-c7a42746-8972-11e7-9f9f-945edc20045e.jpg)
 
 ## Documentation
 
