@@ -5,9 +5,15 @@ opencv4nodejs
 
 **Brings lots of features of OpenCV 3.x to nodejs to use as a service, integrate into your Electron app or simply to play around with the OpenCV API in Javascript instead of C++.**
 
+ * **[Examples](#examples)**
+ * **[How to install](#how-to-install)**
+ * **[Usage with Electron](#usage-with-electron)**
+ * **[API documentation](#doc)**
+
+<a name="examples"></a>
 ## Examples
 
-See examples folder for implementation.
+See <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/examples"><b>examples</b></a> for implementation.
 
 ### Face Detection
 
@@ -33,6 +39,7 @@ See examples folder for implementation.
 ![plotbgr](https://user-images.githubusercontent.com/31125521/29995016-1b847970-8fdf-11e7-9316-4eb0fd550adc.jpg)
 ![plotgray](https://user-images.githubusercontent.com/31125521/29995015-1b83e06e-8fdf-11e7-8fa8-5d18326b9cd3.jpg)
 
+<a name="how-to-install"></a>
 ## How to install
 
 ``` bash
@@ -45,6 +52,7 @@ Make sure to have OpenCV 3+ ( extra modules are optional ) installed on your Sys
 
 If you are running into issues also check the requirements for node-gyp specific to your OS https://github.com/nodejs/node-gyp.
 
+<a name="usage-with-electron"></a>
 ## Usage with Electron
 
 ``` bash
@@ -67,6 +75,7 @@ const electron = require('electron');
 const cv = electron.remote.require('opencv4nodejs');
 ```
 
+<a name="doc"></a>
 ## Documentation
 
 ``` javascript
@@ -155,7 +164,7 @@ const height = 25;
 const region = matBGR.getRegion(new cv.Rect(50, 50, width, height));
 
 // get a node buffer with raw Mat data
-const matAsArray = matBGR.getData();
+const matAsBuffer = matBGR.getData();
 
 // get entire Mat data as JS array
 const matAsArray = matBGR.getDataAsArray();
