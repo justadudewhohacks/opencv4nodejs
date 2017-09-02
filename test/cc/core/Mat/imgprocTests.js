@@ -147,6 +147,20 @@ module.exports = () => {
       expect(ret).to.equal(mat);
       expect(isZeroMat(mat)).to.be.false;
     });
+
+    // TODO
+    it('putText', () => {
+      const mat = new Mat(20, 20, cvTypes.CV_8UC3, [0, 0, 0]);
+      const ret = mat.putText({
+        text: 'a',
+        org: new cv.Point(0, 20),
+        fontFace: cv.cvTypes.hersheyFonts.FONT_ITALIC,
+        fontScale: 1,
+        color: new cv.Vec(255, 255, 255)
+      });
+      expect(ret).to.equal(mat);
+      expect(isZeroMat(mat)).to.be.false;
+    });
   });
 
   describe.skip('distanceTransform', () => {

@@ -7,7 +7,7 @@
       "module-resolver",
       {
         "alias": {
-          "dut": "../",
+          "dut": "./dut",
           "utils": "./utils"
         }
       }
