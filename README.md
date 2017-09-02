@@ -173,6 +173,30 @@ cv.imwrite('./path/img.png', mat);
 // show image
 cv.imshow('a window name', mat);
 cv.waitKey();
+
+// open capture from webcam
+const devicePort = 0;
+const wCap = new cv.VideoCapture(devicePort);
+
+// open video capture
+const vCap = new cv.VideoCapture('./path/video.mp4');
+
+// read frames from capture
+const delay = 10;
+let done = false;
+while (!done) {
+  let frame = vCap.read();
+  // loop back to start on end of stream reached
+  if (frame.empty) {
+    vCap.reset();
+    frame = vCap.read();
+  }
+
+  // ...
+
+  const key = cv.waitKey(delay);
+  done = key !== 255;
+}
 ```
 
 ### Useful Mat methods

@@ -5,6 +5,7 @@ exports.grabFrames = (videoFile, delay, onFrame) => {
   let done = false;
   while (!done) {
     let frame = cap.read();
+    // loop back to start on end of stream reached
     if (frame.empty) {
       cap.reset();
       frame = cap.read();
