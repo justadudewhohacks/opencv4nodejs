@@ -83,16 +83,29 @@ const getRoughHull = (contour, maxDist) => {
 const getHullDefectVertices = (handContour, hullIndices) => {
   const defects = handContour.convexityDefects(hullIndices);
   const handContourPoints = handContour.getPoints();
-  const hullPoints = defects.map(defect => handContourPoints[defect.at(0)]);
 
-  // get vertex points of hull point to its defect points
-  const prevIdx = idx => (idx - 1 < 0 ? defects.length - 1 : idx - 1);
-  const hullVertices = hullPoints.map((pt, i) => {
-    const d1 = handContourPoints[defects[i].at(2)];
-    const d2 = handContourPoints[defects[prevIdx(i)].at(2)];
-    return { pt, d1, d2 };
+  // get neighbor defect points of each hull point
+  const hullPointDefectNeighbors = new Map(hullIndices.map(idx => [idx, []]));
+  defects.forEach((defect) => {
+    const startPointIdx = defect.at(0);
+    const endPointIdx = defect.at(1);
+    const defectPointIdx = defect.at(2);
+    hullPointDefectNeighbors.get(startPointIdx).push(defectPointIdx);
+    hullPointDefectNeighbors.get(endPointIdx).push(defectPointIdx);
   });
-  return hullVertices;
+
+  return Array.from(hullPointDefectNeighbors.keys())
+    // only consider hull points that have 2 neighbor defects
+    .filter(hullIndex => hullPointDefectNeighbors.get(hullIndex).length > 1)
+    // return vertex points
+    .map((hullIndex) => {
+      const defectNeighborsIdx = hullPointDefectNeighbors.get(hullIndex);
+      return ({
+        pt: handContourPoints[hullIndex],
+        d1: handContourPoints[defectNeighborsIdx[0]],
+        d2: handContourPoints[defectNeighborsIdx[1]]
+      });
+    });
 };
 
 const filterVerticesByAngle = (vertices, maxAngleDeg) =>
@@ -127,14 +140,6 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
   const maxAngleDeg = 60;
   const verticesWithValidAngle = filterVerticesByAngle(vertices, maxAngleDeg);
 
-  // get bounding box of contour to filter noisy points,
-  // assume fingertips lie in upper half of the box
-  const rect = handContour.boundingRect();
-  const rectPt1 = new cv.Point(rect.x, rect.y);
-  const rectPt2 = new cv.Point(rect.x + rect.width, rect.y + rect.height);
-  const rectCenter = getCenterPt([rectPt1, rectPt2]);
-  const verticesAtFingerTip = verticesWithValidAngle.filter(v => v.pt.y < rectCenter.y);
-
   const result = resizedImg.copy();
   // draw bounding box and center line
   resizedImg.drawContours({
@@ -142,22 +147,9 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
     thickness: 2,
     color: new cv.Vec(255, 0, 0)
   });
-  resizedImg.drawRectangle({
-    pt1: rectPt1,
-    pt2: rectPt2,
-    thickness: 2,
-    color: new cv.Vec(255, 0, 0)
-  });
-  resizedImg.drawLine({
-    pt1: new cv.Point(rectPt1.x, rectCenter.y),
-    pt2: new cv.Point(rectPt2.x, rectCenter.y),
-    thickness: 2,
-    color: new cv.Vec(255, 0, 0)
-  });
 
   // draw points and vertices
-  verticesAtFingerTip.forEach((v) => {
-    if (rectCenter.y < v.pt.y) return;
+  verticesWithValidAngle.forEach((v) => {
     resizedImg.drawLine({
       pt1: v.pt,
       pt2: v.d1,
@@ -183,7 +175,7 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
   });
 
   // display detection result
-  const numFingersUp = verticesAtFingerTip.length;
+  const numFingersUp = verticesWithValidAngle.length;
   result.drawRectangle({
     pt1: new cv.Point(10, 10),
     pt2: new cv.Point(70, 70),
