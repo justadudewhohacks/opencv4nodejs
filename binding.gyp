@@ -54,6 +54,7 @@
 			"cc/modules/features2d/detectors/ORBDetector.cc",
 			"cc/modules/objdetect/objdetect.cc",
 			"cc/modules/objdetect/CascadeClassifier.cc",
+			"cc/modules/objdetect/HOGDescriptor.cc",
 			"cc/modules/xfeatures2d/xfeatures2d.cc",
 			"cc/modules/xfeatures2d/SIFTDetector.cc",
 			"cc/modules/xfeatures2d/SURFDetector.cc"

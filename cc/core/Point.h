@@ -14,13 +14,14 @@ public:
 	static NAN_METHOD(NewPoint2);
 	static NAN_METHOD(NewPoint3);
 
-	static void unpackJSPoint2Array(std::vector<cv::Point2d> &pts, v8::Local<v8::Array> jsPts) {
+	template<typename type>
+	static void unpackJSPoint2Array(std::vector<cv::Point_<type>> &pts, v8::Local<v8::Array> jsPts) {
 		for (uint i = 0; i < jsPts->Length(); i++) {
 			v8::Local<v8::Object> obj = Nan::To<v8::Object>(jsPts->Get(i)).ToLocalChecked();
 			double x, y;
 			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, x, NumberValue)
 			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, y, NumberValue)
-			pts.push_back(cv::Point2d(x, y));
+			pts.push_back(cv::Point_<type>(x, y));
 		}
 	};
 

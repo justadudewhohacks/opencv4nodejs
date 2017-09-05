@@ -157,6 +157,7 @@ NAN_METHOD(Contour::MatchShapes) {
 	double parameter;
 	std::vector<cv::Point> contour2;
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, method, IsUint32, Uint32Value);
+	// not supported
 	//FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, parameter, IsNumber, NumberValue);
 	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, contour2, Contour::constructor, FF_UNWRAP_CONTOUR_AND_GET, Contour);
 

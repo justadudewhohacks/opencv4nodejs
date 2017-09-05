@@ -22,6 +22,13 @@
 #define FF_GETTER(clazz, name, value)	\
 	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->value); }
 
+#define FF_GETTER_JSOBJ(clazz, name, value, unrwapper, ctor)	\
+	NAN_GETTER(name) {																					\
+		v8::Local<v8::Object> jsObj = FF_NEW(ctor);								\
+		unrwapper(jsObj) = FF_UNWRAP(info.This(), clazz)->value;	\
+		info.GetReturnValue().Set(jsObj);													\
+	}
+
 #define FF_SET_JS_PROP(obj, prop, val) \
 	Nan::Set(obj, FF_V8STRING(#prop), val)
 
@@ -135,6 +142,16 @@
 		var = unwrapper(obj);																									\
 	} while (0);																														\
 
+#define FF_GET_JSOBJ_IFDEF(args, var, prop, objCtor, unwrapper, clazz)	\
+	if (FF_HAS_JS_PROP(args, prop)) {																			\
+		FF_GET_JSOBJ_REQUIRED(args, var, prop, objCtor, unwrapper, clazz)		\
+	}
+
+#define FF_DESTRUCTURE_JSOBJ_IFDEF(args, prop, objCtor, unwrapper, clazz)	\
+	if (FF_HAS_JS_PROP(args, prop)) {																				\
+		FF_GET_JSOBJ_REQUIRED(args, prop, prop, objCtor, unwrapper, clazz)		\
+	}
+
 #define FF_GET_JSARR_REQUIRED(args, var, prop)							\
 	do {																											\
 		v8::Local<v8::Value> val = FF_GET_JSPROP(args, prop);		\
@@ -194,11 +211,11 @@
 #define FF_UNWRAP_ROTATEDRECT_AND_GET(obj)	FF_UNWRAP_ROTATEDRECT(obj)->rect
 
 namespace FF {
-	template<typename type>
+	template<typename toType, typename type>
 	static inline v8::Local<v8::Array> stdVecToJSArray(std::vector<type> vec) {
 		v8::Local<v8::Array> jsArray = Nan::New<v8::Array>(vec.size());
 		for (int i = 0; i < jsArray->Length(); i++) {
-			jsArray->Set(i, Nan::New(vec.at(i)));
+			jsArray->Set(i, Nan::New((toType)vec.at(i)));
 		}
 		return jsArray;
 	}

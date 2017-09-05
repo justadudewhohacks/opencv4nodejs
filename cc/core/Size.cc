@@ -14,14 +14,15 @@ NAN_MODULE_INIT(Size::Init) {
 };
 
 NAN_METHOD(Size::New) {
-	if (info.Length() < 2) {
-		return Nan::ThrowError("Size::New - expected arguments width, height");
-	}
-	double width = info[0]->NumberValue();
-	double height = info[1]->NumberValue();
-
 	Size* self = new Size();
-	self->size = cv::Size2d(width, height);
+	if (info.Length() > 0) {
+		if (info.Length() < 2) {
+			return Nan::ThrowError("Size::New - expected arguments width, height");
+		}
+		double width = info[0]->NumberValue();
+		double height = info[1]->NumberValue();
+		self->size = cv::Size2d(width, height);
+	}
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }
