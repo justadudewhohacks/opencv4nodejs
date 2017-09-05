@@ -438,7 +438,8 @@ NAN_METHOD(Mat::InRange) {
 NAN_METHOD(Mat::CvtColor) {
 	FF_REQUIRE_ARGS_OBJ("Mat::CvtColor");
 
-	int code, dstCn;
+	int code;
+	int dstCn = 0;
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, code, IsInt32, Int32Value);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, dstCn, IsInt32, Int32Value);
 	v8::Local<v8::Object> jsMat = FF_NEW(constructor);
