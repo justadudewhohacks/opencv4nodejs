@@ -22,7 +22,7 @@ See <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/exam
 
 ### Hand Gesture Recognition
 
-![gesture-rec](https://user-images.githubusercontent.com/31125521/29995055-fee4ef88-8fdf-11e7-8463-891e2566cbbf.gif)
+![gesture-rec_sm](https://user-images.githubusercontent.com/31125521/30052864-41bd5680-9227-11e7-8a62-6205f3d99d5c.gif)
 
 
 ### Object Tracking
