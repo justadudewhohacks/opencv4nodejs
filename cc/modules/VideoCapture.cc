@@ -15,7 +15,7 @@ NAN_MODULE_INIT(VideoCapture::Init) {
 NAN_METHOD(VideoCapture::New) {
 	VideoCapture* self = new VideoCapture();
 	if (info[0]->IsString()) {
-		self->path = FF_JS_VAL_TO_STRING(info[0]);
+		self->path = FF_TO_STRING(info[0]);
 		self->cap.open(self->path);
 	}
 	else if (info[0]->IsUint32()) {

@@ -22,7 +22,7 @@ NAN_METHOD(CascadeClassifier::New) {
 		return Nan::ThrowError("CascadeClassifier::New - expected arg0 to be path to a cascade.xml file");
 	}
 	CascadeClassifier* self = new CascadeClassifier();
-	self->classifier = cv::CascadeClassifier(FF_JS_VAL_TO_STRING(info[0]));
+	self->classifier = cv::CascadeClassifier(FF_TO_STRING(info[0]));
 	if (self->classifier.empty()) {
 		return Nan::ThrowError("CascadeClassifier::New - failed to load cascade.xml file");
 	}

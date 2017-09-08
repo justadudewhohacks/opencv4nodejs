@@ -1,6 +1,7 @@
 #include <nan.h>
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
+#include <opencv2/ml.hpp>
 #include "macros.h"
 
 #ifndef __FF_IMGPROCCONSTANTS_H__

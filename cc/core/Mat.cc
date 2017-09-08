@@ -865,7 +865,7 @@ NAN_METHOD(Mat::DrawEllipse) {
 NAN_METHOD(Mat::PutText) {
 	FF_REQUIRE_ARGS_OBJ("Mat::PutText");
 
-	std::string text = FF_JS_VAL_TO_STRING(FF_GET_JSPROP(args, text));
+	std::string text = FF_TO_STRING(FF_GET_JSPROP(args, text));
 	cv::Point org;
 	int fontFace; 
 	double fontScale; 

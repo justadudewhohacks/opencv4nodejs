@@ -79,6 +79,21 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_SCRIPT_COMPLEX);
 	FF_SET_CV_CONSTANT(hersheyFonts, FONT_ITALIC);
 	cvTypes->Set(FF_V8STRING("hersheyFonts"), hersheyFonts);
+	
+	v8::Local<v8::Object> svmKernelTypes = Nan::New<v8::Object>();
+	FF_SET_JS_PROP(svmKernelTypes, CUSTOM, Nan::New<v8::Integer>(ml::SVM::KernelTypes:: CUSTOM));
+	FF_SET_JS_PROP(svmKernelTypes, LINEAR, Nan::New<v8::Integer>(ml::SVM::KernelTypes::LINEAR));
+	FF_SET_JS_PROP(svmKernelTypes, POLY, Nan::New<v8::Integer>(ml::SVM::KernelTypes::POLY));
+	FF_SET_JS_PROP(svmKernelTypes, RBF, Nan::New<v8::Integer>(ml::SVM::KernelTypes::RBF));
+	FF_SET_JS_PROP(svmKernelTypes, SIGMOID, Nan::New<v8::Integer>(ml::SVM::KernelTypes::SIGMOID));
+	FF_SET_JS_PROP(svmKernelTypes, CHI2, Nan::New<v8::Integer>(ml::SVM::KernelTypes::CHI2));
+	FF_SET_JS_PROP(svmKernelTypes, INTER, Nan::New<v8::Integer>(ml::SVM::KernelTypes::INTER));
+	cvTypes->Set(FF_V8STRING("svmKernelTypes"), svmKernelTypes);
+
+	v8::Local<v8::Object> sampleTypes = Nan::New<v8::Object>();
+	FF_SET_JS_PROP(svmKernelTypes, COL_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::COL_SAMPLE));
+	FF_SET_JS_PROP(svmKernelTypes, ROW_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::ROW_SAMPLE));
+	cvTypes->Set(FF_V8STRING("sampleTypes"), sampleTypes);
 
 	v8::Local<v8::Object> haarCascades = Nan::New<v8::Object>();
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE, FF_V8STRING("./haarcascade_eye.xml"));

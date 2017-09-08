@@ -2,7 +2,7 @@ import cv from 'dut';
 import { expect } from 'chai';
 
 module.exports = () => {
-  describe('contour', () => {
+  describe('Contour', () => {
     // apparently minor < 2 does not consider image borders
     const contoursData = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],

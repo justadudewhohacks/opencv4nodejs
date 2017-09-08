@@ -15,7 +15,7 @@ NAN_METHOD(Io::Imread) {
     return Nan::ThrowError("Imread expected arg0 to be path");
   }
 
-  std::string path = FF_JS_VAL_TO_STRING(info[0]);
+  std::string path = FF_TO_STRING(info[0]);
 	cv::Mat mat = cv::imread(path);
 	if (mat.rows == 0 && mat.cols == 0) {
 		return Nan::ThrowError("Imread empty mat");
@@ -32,7 +32,7 @@ NAN_METHOD(Io::Imwrite) {
 	if (!FF_IS_INSTANCE(Mat::constructor, info[1])) {
 		return Nan::ThrowError("Imwrite expected arg1 to be an instance of Mat");
 	}
-	cv::imwrite(FF_JS_VAL_TO_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject()));
+	cv::imwrite(FF_TO_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject()));
 }
 
 NAN_METHOD(Io::Imshow) {
@@ -42,7 +42,7 @@ NAN_METHOD(Io::Imshow) {
 	if (!FF_IS_INSTANCE(Mat::constructor, info[1])) {
 		return Nan::ThrowError("Imshow expected arg1 to be an instance of Mat");
 	}
-	cv::imshow(FF_JS_VAL_TO_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject()));
+	cv::imshow(FF_TO_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject()));
 }
 
 NAN_METHOD(Io::ImshowWait) {
@@ -52,7 +52,7 @@ NAN_METHOD(Io::ImshowWait) {
 	if (!FF_IS_INSTANCE(Mat::constructor, info[1])) {
 		return Nan::ThrowError("Imshow expected arg1 to be an instance of Mat");
 	}
-	cv::imshow(FF_JS_VAL_TO_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject()));
+	cv::imshow(FF_TO_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject()));
 	cv::waitKey();
 }
 
