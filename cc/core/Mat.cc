@@ -90,7 +90,7 @@ NAN_METHOD(Mat::New) {
 	/* data array, type */
 	else if (info.Length() == 2 && info[0]->IsArray() && info[1]->IsInt32()) {
 		v8::Local<v8::Array> rowArray = v8::Local<v8::Array>::Cast(info[0]);
-		int type = FF::reassignMatTypeIfFloat(info[1]->Int32Value());
+		int type = info[1]->Int32Value();
 
 		int numCols = -1;
 		for (uint i = 0; i < rowArray->Length(); i++) {
@@ -110,7 +110,7 @@ NAN_METHOD(Mat::New) {
 	}
 	/* row, col, type */
 	else if (info[0]->IsNumber() && info[1]->IsNumber() && info[2]->IsInt32()) {
-		int type = FF::reassignMatTypeIfFloat(info[2]->Int32Value());
+		int type = info[2]->Int32Value();
 		cv::Mat mat(info[0]->Int32Value(), info[1]->Int32Value(), type);
 		/* fill vector */
 		// TODO by Vec
@@ -131,7 +131,7 @@ NAN_METHOD(Mat::New) {
 	}
 	/* raw data, row, col, type */
 	else if (info.Length() == 4 && info[1]->IsNumber() && info[2]->IsNumber() && info[3]->IsInt32()) {
-		int type = FF::reassignMatTypeIfFloat(info[3]->Int32Value());
+		int type = info[3]->Int32Value();
 		char *data = static_cast<char *>(node::Buffer::Data(info[0]->ToObject()));
 		cv::Mat mat(info[1]->Int32Value(), info[2]->Int32Value(), type);
 		size_t size = mat.rows * mat.cols * mat.elemSize();

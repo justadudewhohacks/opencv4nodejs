@@ -1,5 +1,5 @@
 import { Mat, cvTypes } from 'dut';
-import { assertDataDeepEquals, assertMetaData } from 'utils';
+import { assertDataDeepEquals, assertDataAlmostDeepEquals, assertMetaData } from 'utils';
 import { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
   intMin, floatMin, floatMax, doubleMin, doubleMax } from './typeRanges';
 
@@ -8,13 +8,13 @@ const cols = 3;
 const matDataFromValue = val => Array(rows).fill(Array(cols).fill(val));
 const createAndAssertMatFilled = (type, value) => {
   const mat = new Mat(rows, cols, type, value);
-  let assertType = type;
-  // assert float type to become double type
+
+  assertMetaData(mat)(rows, cols, type);
   if ([cvTypes.CV_32FC1, cvTypes.CV_32FC2, cvTypes.CV_32FC3, cvTypes.CV_32FC4].some(matType => matType === type)) {
-    assertType = type + 1;
+    assertDataAlmostDeepEquals(matDataFromValue(value), mat.getDataAsArray());
+  } else {
+    assertDataDeepEquals(matDataFromValue(value), mat.getDataAsArray());
   }
-  assertMetaData(mat)(rows, cols, assertType);
-  assertDataDeepEquals(matDataFromValue(value), mat.getDataAsArray());
 };
 
 

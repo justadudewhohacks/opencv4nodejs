@@ -1,18 +1,18 @@
 import { Mat, cvTypes } from 'dut';
 import { assert } from 'chai';
-import { assertDataDeepEquals, assertMetaData } from 'utils';
+import { assertDataDeepEquals, assertDataAlmostDeepEquals, assertMetaData } from 'utils';
 import { getExampleMatData } from './exampleData';
 
 const createAndAssertMatDataEquals = (type) => {
   const matData = getExampleMatData(type);
   const mat = new Mat(matData, type);
-  let assertType = type;
-  // assert float type to become double type
+
+  assertMetaData(mat)(4, 3, type);
   if ([cvTypes.CV_32FC1, cvTypes.CV_32FC2, cvTypes.CV_32FC3, cvTypes.CV_32FC4].some(matType => matType === type)) {
-    assertType = type + 1;
+    assertDataAlmostDeepEquals(matData, mat.getDataAsArray());
+  } else {
+    assertDataDeepEquals(matData, mat.getDataAsArray());
   }
-  assertMetaData(mat)(4, 3, assertType);
-  assertDataDeepEquals(matData, mat.getDataAsArray());
 };
 
 module.exports = () =>

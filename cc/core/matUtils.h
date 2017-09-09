@@ -96,16 +96,28 @@
 	case CV_32SC4:\
 		ITERATOR(mat, arg, OPERATOR##Vec4<int>)\
 			break;\
-	case CV_32FC1: case CV_64FC1:\
+	case CV_32FC1:\
+		ITERATOR(mat, arg, OPERATOR##Val<float>)\
+			break;\
+	case CV_32FC2:\
+		ITERATOR(mat, arg, OPERATOR##Vec2<float>)\
+			break;\
+	case CV_32FC3:\
+		ITERATOR(mat, arg, OPERATOR##Vec3<float>)\
+			break;\
+	case CV_32FC4:\
+		ITERATOR(mat, arg, OPERATOR##Vec4<float>)\
+			break;\
+	case CV_64FC1:\
 		ITERATOR(mat, arg, OPERATOR##Val<double>)\
 			break;\
-	case CV_32FC2: case CV_64FC2:\
+	case CV_64FC2:\
 		ITERATOR(mat, arg, OPERATOR##Vec2<double>)\
 			break;\
-	case CV_32FC3: case CV_64FC3:\
+	case CV_64FC3:\
 		ITERATOR(mat, arg, OPERATOR##Vec3<double>)\
 			break;\
-	case CV_32FC4: case CV_64FC4:\
+	case CV_64FC4:\
 		ITERATOR(mat, arg, OPERATOR##Vec4<double>)\
 			break;\
 	default:\
@@ -189,16 +201,6 @@ namespace FF {
 		vec->Set(2, Nan::New(mat.at< cv::Vec<type, 4> >(r, c)[2]));
 		vec->Set(3, Nan::New(mat.at< cv::Vec<type, 4> >(r, c)[3]));
 		return vec;
-	}
-
-	static int reassignMatTypeIfFloat(int type) {
-		switch (type) {
-		case CV_32FC1: return CV_64FC1;
-		case CV_32FC2: return CV_64FC2;
-		case CV_32FC3: return CV_64FC3;
-		case CV_32FC4: return CV_64FC4;
-		default: return type;
-		}
 	}
 }
 

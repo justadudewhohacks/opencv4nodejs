@@ -2,18 +2,25 @@ import { Mat, cvTypes, Vec } from 'dut';
 import {
   assertError,
   assertMatValueEquals,
+  assertMatValueAlmostEquals,
   assertDataDeepEquals,
+  assertDataAlmostDeepEquals,
   generateIts
 } from 'utils';
 import { expect } from 'chai';
 import { getExampleMatData } from './exampleData';
 
+const isFloatType = type =>
+  [cvTypes.CV_32FC1, cvTypes.CV_32FC2, cvTypes.CV_32FC3, cvTypes.CV_32FC4]
+  .some(matType => matType === type);
+
 const createAndAssertAtReturnsCorrectValues = (type) => {
   const matData = getExampleMatData(type);
   const mat = new Mat(matData, type);
+  const assertCmp = isFloatType(type) ? assertMatValueAlmostEquals : assertMatValueEquals;
   for (let r = 0; r < 4; r += 1) {
     for (let c = 0; c < 3; c += 1) {
-      assertMatValueEquals(mat.at(r, c), matData[r][c]);
+      assertCmp(mat.at(r, c), matData[r][c]);
     }
   }
 };
@@ -26,7 +33,11 @@ const createAndAssertSetsCorrectArrayValues = (type) => {
       mat.set(r, c, matData[r][c]);
     }
   }
-  assertDataDeepEquals(matData, mat.getDataAsArray());
+  if (isFloatType(type)) {
+    assertDataAlmostDeepEquals(matData, mat.getDataAsArray());
+  } else {
+    assertDataDeepEquals(matData, mat.getDataAsArray());
+  }
 };
 
 const createAndAssertSetsCorrectVecValues = (type) => {
@@ -40,7 +51,11 @@ const createAndAssertSetsCorrectVecValues = (type) => {
       mat.set(r, c, vec);
     }
   }
-  assertDataDeepEquals(matData, mat.getDataAsArray());
+  if (isFloatType(type)) {
+    assertDataAlmostDeepEquals(matData, mat.getDataAsArray());
+  } else {
+    assertDataDeepEquals(matData, mat.getDataAsArray());
+  }
 };
 
 module.exports = () => {

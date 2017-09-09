@@ -15,6 +15,29 @@ const matTypeNames = [
   'CV_64FC1', 'CV_64FC2', 'CV_64FC3', 'CV_64FC4'
 ];
 
+const normalizeValue = val =>
+(val.x !== undefined ? [val.w, val.x, val.y, val.z] :
+  (val.length !== 4 ? [undefined, val[0], val[1], val[2]] : val)
+);
+
+const AssertMatValueEquals = cmpFunc => (val0, val1) => {
+  assert(typeof val0 === typeof val1, 'expected mat values to have same type');
+  if (typeof val0 === 'number') {
+    assert(cmpFunc(val0, val1), 'expected mat flat values to be equal');
+  } else {
+    assert(typeof val0 === 'object', 'expected val0 to be an object');
+    assert(typeof val1 === 'object', 'expected val1 to be an object');
+
+    const v0 = normalizeValue(val0);
+    const v1 = normalizeValue(val1);
+    [0, 1, 2, 3].forEach(n => assert(cmpFunc(v0[n], v1[n]), `expected mat values to be equal at index ${n}`));
+  }
+};
+
+const assertMatValueAlmostEquals = AssertMatValueEquals(
+  (v0, v1) => (!v0 && !v1) || (((v0 - 0.0001) < v1) && (v1 < (v0 + 0.0001)))
+);
+
 exports.generateIts = (msg, testFunc, exclusions = new Set()) =>
   matTypeNames.filter(type => !exclusions.has(type)).forEach((type) => {
     it(`${type} ${msg}`, () => testFunc(cvTypes[type]));
@@ -22,27 +45,16 @@ exports.generateIts = (msg, testFunc, exclusions = new Set()) =>
 
 exports.dangerousDeepEquals = dangerousDeepEquals;
 
+exports.assertMatValueEquals = AssertMatValueEquals((v0, v1) => v0 === v1);
+
+exports.assertMatValueAlmostEquals = assertMatValueAlmostEquals;
+
+/* compare float values differently as there will be slight precision loss */
+exports.assertDataAlmostDeepEquals = (data0, data1) =>
+  data0.forEach((row, r) => row.forEach((val, c) => assertMatValueAlmostEquals(val, data1[r][c])));
+
 exports.assertDataDeepEquals = (data0, data1) => {
   assert(dangerousDeepEquals(data0, data1), 'mat data not equal');
-};
-
-const normalizeValue = val =>
-  (val.x !== undefined ? [val.w, val.x, val.y, val.z] :
-    (val.length !== 4 ? [undefined, val[0], val[1], val[2]] : val)
-  );
-
-exports.assertMatValueEquals = (val0, val1) => {
-  assert(typeof val0 === typeof val1, 'expected mat values to have same type');
-  if (typeof val0 === 'number') {
-    assert(val0 === val1, 'expected mat flat values to be equal');
-  } else {
-    assert(typeof val0 === 'object', 'expected val0 to be an object');
-    assert(typeof val1 === 'object', 'expected val1 to be an object');
-
-    const v0 = normalizeValue(val0);
-    const v1 = normalizeValue(val1);
-    [0, 1, 2, 3].forEach(n => assert(v0[n] === v1[n], `expected mat values to be equal at index ${n}`));
-  }
 };
 
 exports.MatValuesComparator = (mat0, mat1) => (cmpFunc) => {
