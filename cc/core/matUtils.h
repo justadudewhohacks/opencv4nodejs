@@ -123,7 +123,6 @@
 			+ std::to_string(cn) + " channels, have " + std::to_string(have)));							\
 	}
 
-
 namespace FF {
 	template<typename type>
 	static inline void matPutVal(cv::Mat mat, v8::Local<v8::Value> value, int r, int c) {

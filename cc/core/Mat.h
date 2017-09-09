@@ -1,4 +1,3 @@
-#include <nan.h>
 #include <opencv2/imgproc.hpp>
 #include "Size.h"
 #include "macros.h"
@@ -71,7 +70,7 @@ public:
 	/* #ENDIF IMGPROC */
 
 	static void dilateOrErode(Nan::NAN_METHOD_ARGS_TYPE, char*, bool);
-
+	
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
   void setNativeProps(cv::Mat);

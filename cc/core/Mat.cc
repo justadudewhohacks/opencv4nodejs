@@ -389,7 +389,7 @@ NAN_METHOD(Mat::ResizeToMax) {
   cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info.This());
   double ratioY = (double)maxRowsOrCols / (double)mat.rows;
   double ratioX = (double)maxRowsOrCols / (double)mat.cols;
-	double scale = std::min(ratioY, ratioX);
+	double scale = (std::min)(ratioY, ratioX);
 
   v8::Local<v8::Object> jsMat = FF_NEW(constructor);
   cv::resize(

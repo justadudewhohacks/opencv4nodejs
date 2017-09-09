@@ -90,9 +90,19 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_JS_PROP(svmKernelTypes, INTER, Nan::New<v8::Integer>(ml::SVM::KernelTypes::INTER));
 	cvTypes->Set(FF_V8STRING("svmKernelTypes"), svmKernelTypes);
 
+	v8::Local<v8::Object> svmParamTypes = Nan::New<v8::Object>();
+	FF_SET_JS_PROP(svmParamTypes, C, Nan::New<v8::Integer>(ml::SVM::ParamTypes::C));
+	FF_SET_JS_PROP(svmParamTypes, COEF, Nan::New<v8::Integer>(ml::SVM::ParamTypes::COEF));
+	FF_SET_JS_PROP(svmParamTypes, DEGREE, Nan::New<v8::Integer>(ml::SVM::ParamTypes::DEGREE));
+	FF_SET_JS_PROP(svmParamTypes, GAMMA, Nan::New<v8::Integer>(ml::SVM::ParamTypes::GAMMA));
+	FF_SET_JS_PROP(svmParamTypes, NU, Nan::New<v8::Integer>(ml::SVM::ParamTypes::NU));
+	FF_SET_JS_PROP(svmParamTypes, P, Nan::New<v8::Integer>(ml::SVM::ParamTypes::P));
+	cvTypes->Set(FF_V8STRING("svmParamTypes"), svmParamTypes);
+	
+
 	v8::Local<v8::Object> sampleTypes = Nan::New<v8::Object>();
-	FF_SET_JS_PROP(svmKernelTypes, COL_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::COL_SAMPLE));
-	FF_SET_JS_PROP(svmKernelTypes, ROW_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::ROW_SAMPLE));
+	FF_SET_JS_PROP(sampleTypes, COL_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::COL_SAMPLE));
+	FF_SET_JS_PROP(sampleTypes, ROW_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::ROW_SAMPLE));
 	cvTypes->Set(FF_V8STRING("sampleTypes"), sampleTypes);
 
 	v8::Local<v8::Object> haarCascades = Nan::New<v8::Object>();

@@ -9,8 +9,8 @@ NAN_MODULE_INIT(ParamGrid::Init) {
   ctor->SetClassName(FF_V8STRING("ParamGrid"));
 
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("minVal"), minVal);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("minVal"), maxVal);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("minVal"), logStep);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("maxVal"), maxVal);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("logStep"), logStep);
 
 	target->Set(FF_V8STRING("ParamGrid"), ctor->GetFunction());
 };

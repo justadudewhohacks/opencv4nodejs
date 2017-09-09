@@ -17,12 +17,12 @@
 
 /* argument checking and casting */
 
-#define FF_REQUIRE_ARG_TYPE(argN, typeName, assertType, orThrow)																	\
-  if (orThrow || !info[argN]->assertType()) {																											\
-    FF_THROW("expected arg" + std::to_string(argN) + " to be of type: " + std::string(typeName));	\
+#define FF_REQUIRE_ARG_TYPE(argN, typeName, assertType, orThrow)																		\
+  if (orThrow || !info[argN]->assertType()) {																												\
+    FF_THROW("expected arg " + std::to_string(argN) + " to be of type: " + std::string(typeName));	\
   }
 
-#define FF_HAS_ARG(argN) info.Length() >= argN
+#define FF_HAS_ARG(argN) ( argN < info.Length() )
 
 #define FF_ARG(argN, var, type, assertType, castType)							\
   FF_REQUIRE_ARG_TYPE(argN, #type, assertType, !FF_HAS_ARG(argN))	\
@@ -34,7 +34,7 @@
 
 #define FF_ARG_OBJ(argN, var, ctor, unwrapper)																											\
   if (!FF_HAS_ARG(argN) || !FF_IS_INSTANCE(ctor, info[argN])) {																			\
-    FF_THROW("expected arg" + std::to_string(argN) + " to be instance of: " + std::string(#ctor));	\
+    FF_THROW("expected arg " + std::to_string(argN) + " to be instance of: " + std::string(#ctor));	\
   }																																																	\
   var = unwrapper(info[argN]->ToObject());
 

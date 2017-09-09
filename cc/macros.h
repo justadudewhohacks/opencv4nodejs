@@ -13,10 +13,10 @@
 #define FF_GETTER(clazz, name, value)	\
 	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->value); }
 
-#define FF_GETTER_JSOBJ(clazz, name, value, unrwapper, ctor)	\
+#define FF_GETTER_JSOBJ(clazz, name, value, unwrapper, ctor)	\
 	NAN_GETTER(name) {																					\
 		v8::Local<v8::Object> jsObj = FF_NEW(ctor);								\
-		unrwapper(jsObj) = FF_UNWRAP(info.This(), clazz)->value;	\
+		unwrapper(jsObj) = FF_UNWRAP(info.This(), clazz)->value;	\
 		info.GetReturnValue().Set(jsObj);													\
 	}
 

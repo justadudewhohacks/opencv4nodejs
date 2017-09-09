@@ -9,6 +9,10 @@ NAN_MODULE_INIT(TrainData::Init) {
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(FF_V8STRING("TrainData"));
 
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("varIdx"), varIdx);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("sampleWeights"), sampleWeights);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("varType"), varType);
+
 	target->Set(FF_V8STRING("TrainData"), ctor->GetFunction());
 };
 
@@ -18,8 +22,8 @@ NAN_METHOD(TrainData::New) {
 	if (info.Length() > 0) {
 		// required args
 		FF_ARG_OBJ(0, cv::Mat samples, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-		FF_ARG_OBJ(1, cv::Mat responses, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-		FF_ARG_UINT(2, unsigned int layout);
+		FF_ARG_UINT(1, unsigned int layout);
+		FF_ARG_OBJ(2, cv::Mat responses, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 
 		// optional args
 		FF_OBJ optArgs = (info.Length() == 4 && info[3]->IsObject() && !FF_IS_INSTANCE(Mat::constructor, info[3]) ? info[3]->ToObject() : FF_NEW_OBJ());
