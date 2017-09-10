@@ -12,6 +12,9 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
+	static FF_GETTER(TrainData, layout, trainData->getLayout());
+	static FF_GETTER_JSOBJ(TrainData, samples, trainData->getSamples(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
+	static FF_GETTER_JSOBJ(TrainData, responses, trainData->getResponses(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
 	static FF_GETTER_JSOBJ(TrainData, varIdx, trainData->getVarIdx(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
 	static FF_GETTER_JSOBJ(TrainData, sampleWeights, trainData->getSampleWeights(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
 	static FF_GETTER_JSOBJ(TrainData, varType, trainData->getVarType(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);

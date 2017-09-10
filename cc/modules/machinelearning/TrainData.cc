@@ -9,6 +9,9 @@ NAN_MODULE_INIT(TrainData::Init) {
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(FF_V8STRING("TrainData"));
 
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("layout"), layout);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("samples"), samples);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("responses"), responses);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("varIdx"), varIdx);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("sampleWeights"), sampleWeights);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("varType"), varType);

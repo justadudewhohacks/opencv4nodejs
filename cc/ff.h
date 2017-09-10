@@ -69,6 +69,7 @@
 	if (!FF_HAS(obj, prop)) {																		\
 		FF_THROW("object has no property: " + std::string(prop)); \
 	}
+
 #define FF_REQUIRE_PROP_TYPE(obj, prop, type, assertType)																					\
 	if (!FF_GET(obj, prop)->assertType()) {																													\
 		FF_THROW("expected property: " + std::string(prop) + " to be of type: " + std::string(#type));\
@@ -81,12 +82,17 @@
 
 #define FF_GET(obj, prop) Nan::Get(obj, FF_V8STRING(prop)).ToLocalChecked()
 
-
 /* get js prop, throw if undefined or invalid type */
 #define FF_GET_REQUIRED(obj, var, prop, type, assertType, castType)	\
 	FF_REQUIRE_PROP(obj, prop)																				\
 	FF_REQUIRE_PROP_TYPE(obj, prop, type, assertType)									\
 	var = FF_GET(obj, prop)->castType();
+
+/* unpack object, throw if undefined or not instance */
+#define FF_GET_OBJ_REQUIRED(obj, var, prop, ctor, unwrapper, clazz)	\
+	FF_REQUIRE_PROP(obj, prop)																				\
+	FF_REQUIRE_PROP_INSTANCE(obj, prop, ctor, clazz)									\
+	var = unwrapper(obj);
 
 /* get js prop if defined, throw if invalid type */
 #define FF_GET_IFDEF(obj, var, prop, type, assertType, castType, defaultValue)	\
@@ -94,12 +100,6 @@
 		FF_REQUIRE_PROP_TYPE(obj, prop, type, assertType)														\
 	}																																							\
 	var = (FF_HAS(obj, prop) ? FF_GET(obj, prop)->castType() : defaultValue);
-
-/* unpack object, throw if undefined or not instance */
-#define FF_GET_OBJ_REQUIRED(obj, var, prop, ctor, unwrapper, clazz)	\
-	FF_REQUIRE_PROP(obj, prop)																				\
-	FF_REQUIRE_PROP_INSTANCE(obj, prop, ctor, clazz)									\
-	var = unwrapper(obj);
 
 /* unpack object if defined if not instance */
 #define FF_GET_OBJ_IFDEF(obj, var, prop, ctor, unwrapper, clazz, defaultValue)	\
