@@ -9,8 +9,8 @@
 			"cc",
 			"cc/core",
 			"cc/modules",
-			"<!(node -e \"require('nan')\")"
-		#	"<!(node -e \"require('macro-inferno')\")"
+			"<!(node -e \"require('nan')\")",
+			"<!(node -e \"require('macro-inferno')\")"
 		],
 		"libraries": [
 			"<!@(node ./lib/libs.js)"

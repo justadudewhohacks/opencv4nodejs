@@ -19,7 +19,7 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(normTypes, NORM_TYPE_MASK);
 	FF_SET_CV_CONSTANT(normTypes, NORM_RELATIVE);
 	FF_SET_CV_CONSTANT(normTypes, NORM_MINMAX);
-	cvTypes->Set(FF_V8STRING("normTypes"), normTypes);
+	cvTypes->Set(FF_NEW_STRING("normTypes"), normTypes);
 
 	v8::Local<v8::Object> connectedComponentsTypes = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(connectedComponentsTypes, CC_STAT_LEFT);
@@ -28,14 +28,14 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(connectedComponentsTypes, CC_STAT_HEIGHT);
 	FF_SET_CV_CONSTANT(connectedComponentsTypes, CC_STAT_AREA);
 	FF_SET_CV_CONSTANT(connectedComponentsTypes, CC_STAT_MAX);
-	cvTypes->Set(FF_V8STRING("connectedComponentsTypes"), connectedComponentsTypes);
+	cvTypes->Set(FF_NEW_STRING("connectedComponentsTypes"), connectedComponentsTypes);
 
 	v8::Local<v8::Object> contourApproximationModes = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(contourApproximationModes, CHAIN_APPROX_NONE);
 	FF_SET_CV_CONSTANT(contourApproximationModes, CHAIN_APPROX_SIMPLE);
 	FF_SET_CV_CONSTANT(contourApproximationModes, CHAIN_APPROX_TC89_L1);
 	FF_SET_CV_CONSTANT(contourApproximationModes, CHAIN_APPROX_TC89_KCOS);
-	cvTypes->Set(FF_V8STRING("contourApproximationModes"), contourApproximationModes);
+	cvTypes->Set(FF_NEW_STRING("contourApproximationModes"), contourApproximationModes);
 
 	v8::Local<v8::Object> distanceTypes = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(distanceTypes, DIST_USER);
@@ -46,13 +46,13 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(distanceTypes, DIST_FAIR);
 	FF_SET_CV_CONSTANT(distanceTypes, DIST_WELSCH);
 	FF_SET_CV_CONSTANT(distanceTypes, DIST_HUBER);
-	cvTypes->Set(FF_V8STRING("distanceTypes"), distanceTypes);
+	cvTypes->Set(FF_NEW_STRING("distanceTypes"), distanceTypes);
 
 	v8::Local<v8::Object> distanceTransformMasks = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(distanceTransformMasks, DIST_MASK_3);
 	FF_SET_CV_CONSTANT(distanceTransformMasks, DIST_MASK_5);
 	FF_SET_CV_CONSTANT(distanceTransformMasks, DIST_MASK_PRECISE);
-	cvTypes->Set(FF_V8STRING("distanceTransformMasks"), distanceTransformMasks);
+	cvTypes->Set(FF_NEW_STRING("distanceTransformMasks"), distanceTransformMasks);
 
 	v8::Local<v8::Object> retrievalModes = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(retrievalModes, RETR_EXTERNAL);
@@ -60,13 +60,13 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(retrievalModes, RETR_CCOMP);
 	FF_SET_CV_CONSTANT(retrievalModes, RETR_TREE);
 	FF_SET_CV_CONSTANT(retrievalModes, RETR_FLOODFILL);
-	cvTypes->Set(FF_V8STRING("retrievalModes"), retrievalModes);
+	cvTypes->Set(FF_NEW_STRING("retrievalModes"), retrievalModes);
 
 	v8::Local<v8::Object> shapeMatchModes = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(shapeMatchModes, CV_CONTOURS_MATCH_I1);
 	FF_SET_CV_CONSTANT(shapeMatchModes, CV_CONTOURS_MATCH_I2);
 	FF_SET_CV_CONSTANT(shapeMatchModes, CV_CONTOURS_MATCH_I3);
-	cvTypes->Set(FF_V8STRING("shapeMatchModes"), shapeMatchModes);
+	cvTypes->Set(FF_NEW_STRING("shapeMatchModes"), shapeMatchModes);
 	
 	v8::Local<v8::Object> hersheyFonts = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_SIMPLEX);
@@ -78,7 +78,7 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_SCRIPT_SIMPLEX);
 	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_SCRIPT_COMPLEX);
 	FF_SET_CV_CONSTANT(hersheyFonts, FONT_ITALIC);
-	cvTypes->Set(FF_V8STRING("hersheyFonts"), hersheyFonts);
+	cvTypes->Set(FF_NEW_STRING("hersheyFonts"), hersheyFonts);
 	
 	v8::Local<v8::Object> svmKernelTypes = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(svmKernelTypes, CUSTOM, Nan::New<v8::Integer>(ml::SVM::KernelTypes:: CUSTOM));
@@ -88,7 +88,7 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_JS_PROP(svmKernelTypes, SIGMOID, Nan::New<v8::Integer>(ml::SVM::KernelTypes::SIGMOID));
 	FF_SET_JS_PROP(svmKernelTypes, CHI2, Nan::New<v8::Integer>(ml::SVM::KernelTypes::CHI2));
 	FF_SET_JS_PROP(svmKernelTypes, INTER, Nan::New<v8::Integer>(ml::SVM::KernelTypes::INTER));
-	cvTypes->Set(FF_V8STRING("svmKernelTypes"), svmKernelTypes);
+	cvTypes->Set(FF_NEW_STRING("svmKernelTypes"), svmKernelTypes);
 
 	v8::Local<v8::Object> svmParamTypes = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(svmParamTypes, C, Nan::New<v8::Integer>(ml::SVM::ParamTypes::C));
@@ -97,33 +97,33 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_JS_PROP(svmParamTypes, GAMMA, Nan::New<v8::Integer>(ml::SVM::ParamTypes::GAMMA));
 	FF_SET_JS_PROP(svmParamTypes, NU, Nan::New<v8::Integer>(ml::SVM::ParamTypes::NU));
 	FF_SET_JS_PROP(svmParamTypes, P, Nan::New<v8::Integer>(ml::SVM::ParamTypes::P));
-	cvTypes->Set(FF_V8STRING("svmParamTypes"), svmParamTypes);
+	cvTypes->Set(FF_NEW_STRING("svmParamTypes"), svmParamTypes);
 	
 
 	v8::Local<v8::Object> sampleTypes = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(sampleTypes, COL_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::COL_SAMPLE));
 	FF_SET_JS_PROP(sampleTypes, ROW_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::ROW_SAMPLE));
-	cvTypes->Set(FF_V8STRING("sampleTypes"), sampleTypes);
+	cvTypes->Set(FF_NEW_STRING("sampleTypes"), sampleTypes);
 
 	v8::Local<v8::Object> haarCascades = Nan::New<v8::Object>();
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE, FF_V8STRING("./haarcascade_eye.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE_TREE_EYEGLASSES, FF_V8STRING("./haarcascade_eye_tree_eyeglasses.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALCATFACE, FF_V8STRING("./haarcascade_frontalcatface.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALCATFACE_EXTENDED, FF_V8STRING("./haarcascade_frontalcatface_extended.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_ALT, FF_V8STRING("./haarcascade_frontalface_alt.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_ALT2, FF_V8STRING("./haarcascade_frontalface_alt2.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_ALT_TREE, FF_V8STRING("./haarcascade_frontalface_alt_tree.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_DEFAULT, FF_V8STRING("./haarcascade_frontalface_default.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FULLBODY, FF_V8STRING("./haarcascade_fullbody.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_LEFTEYE_2SPLITS, FF_V8STRING("./haarcascade_lefteye_2splits.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_LICENCE_PLATE_RUS_16STAGES, FF_V8STRING("./haarcascade_licence_plate_rus_16stages.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_LOWERBODY, FF_V8STRING("./haarcascade_lowerbody.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_PROFILEFACE, FF_V8STRING("./haarcascade_profileface.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_RIGHTEYE_2SPLITS, FF_V8STRING("./haarcascade_righteye_2splits.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_RUSSIAN_PLATE_NUMBER, FF_V8STRING("./haarcascade_russian_plate_number.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_SMILE, FF_V8STRING("./haarcascade_smile.xml"));
-	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_UPPERBODY, FF_V8STRING("./haarcascade_upperbody.xml"));
-	cvTypes->Set(FF_V8STRING("haarCascades"), haarCascades);
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE, FF_NEW_STRING("./haarcascade_eye.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE_TREE_EYEGLASSES, FF_NEW_STRING("./haarcascade_eye_tree_eyeglasses.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALCATFACE, FF_NEW_STRING("./haarcascade_frontalcatface.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALCATFACE_EXTENDED, FF_NEW_STRING("./haarcascade_frontalcatface_extended.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_ALT, FF_NEW_STRING("./haarcascade_frontalface_alt.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_ALT2, FF_NEW_STRING("./haarcascade_frontalface_alt2.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_ALT_TREE, FF_NEW_STRING("./haarcascade_frontalface_alt_tree.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_DEFAULT, FF_NEW_STRING("./haarcascade_frontalface_default.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FULLBODY, FF_NEW_STRING("./haarcascade_fullbody.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_LEFTEYE_2SPLITS, FF_NEW_STRING("./haarcascade_lefteye_2splits.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_LICENCE_PLATE_RUS_16STAGES, FF_NEW_STRING("./haarcascade_licence_plate_rus_16stages.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_LOWERBODY, FF_NEW_STRING("./haarcascade_lowerbody.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_PROFILEFACE, FF_NEW_STRING("./haarcascade_profileface.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_RIGHTEYE_2SPLITS, FF_NEW_STRING("./haarcascade_righteye_2splits.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_RUSSIAN_PLATE_NUMBER, FF_NEW_STRING("./haarcascade_russian_plate_number.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_SMILE, FF_NEW_STRING("./haarcascade_smile.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_UPPERBODY, FF_NEW_STRING("./haarcascade_upperbody.xml"));
+	cvTypes->Set(FF_NEW_STRING("haarCascades"), haarCascades);
 
-	target->Set(FF_V8STRING("cvTypes"), cvTypes);
+	target->Set(FF_NEW_STRING("cvTypes"), cvTypes);
 }

@@ -131,7 +131,7 @@
 
 #define FF_ASSERT_CHANNELS(cn, have, what)																						\
 	if (cn != have) {																																		\
-		return Nan::ThrowError(FF_V8STRING(std::string(what) + " - expected vector with "	\
+		return Nan::ThrowError(FF_NEW_STRING(std::string(what) + " - expected vector with "	\
 			+ std::to_string(cn) + " channels, have " + std::to_string(have)));							\
 	}
 

@@ -31,7 +31,7 @@ NAN_METHOD(SuperpixelSEEDS::New) {
 	}
 	if (!info[0]->IsObject()) {
 		// TODO usage messages
-		return Nan::ThrowError(FF_V8STRING("SuperpixelSEEDS::New - args object required"));
+		return Nan::ThrowError(FF_NEW_STRING("SuperpixelSEEDS::New - args object required"));
 	}
 	SuperpixelSEEDS* self = new SuperpixelSEEDS();
 	v8::Local<v8::Object> args = info[0]->ToObject();
@@ -42,7 +42,7 @@ NAN_METHOD(SuperpixelSEEDS::New) {
 	self->jsImg.Reset(img->persistent());
 
 	if (img->mat.cols < 1 || img->mat.rows < 1 || img->mat.channels() > 3) {
-		return Nan::ThrowError(FF_V8STRING("SuperpixelSEEDS::New - empty image"));
+		return Nan::ThrowError(FF_NEW_STRING("SuperpixelSEEDS::New - empty image"));
 	}
 
 	Mat* _jsLabels = Nan::ObjectWrap::Unwrap<Mat>(Nan::NewInstance(Nan::New(Mat::constructor)->GetFunction()).ToLocalChecked());

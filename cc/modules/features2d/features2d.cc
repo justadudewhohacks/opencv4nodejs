@@ -30,20 +30,22 @@ NAN_MODULE_INIT(Features2d::Init) {
 };
 
 NAN_METHOD(Features2d::DrawKeyPoints) {
+	FF_METHOD_CONTEXT("DrawKeyPoints");
 	FF_REQUIRE_ARGS_OBJ("DrawKeyPoints");
 	cv::Mat img;
 	std::vector<cv::KeyPoint> kps;
 	FF_GET_JSOBJ_REQUIRED(args, img, image, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
 	v8::Local<v8::Array> jsKeyPoints;
-	FF_GET_JSARR_REQUIRED(args, jsKeyPoints, keypoints);
+	FF_GET_ARRAY_REQUIRED(args, jsKeyPoints, "keypoints");
 	FF_UNWRAP_KEYPOINT_ARRAY(jsKeyPoints, kps);
 
-	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
+	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
 	cv::drawKeypoints(img, kps, Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat);
 	info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(Features2d::DrawMatches) {
+	FF_METHOD_CONTEXT("DrawMatches");
 	FF_REQUIRE_ARGS_OBJ("DrawMatches");
 	cv::Mat imgFrom, imgTo;
 	v8::Local<v8::Array> jsKeyPoints1, jsKeyPoints2, jsMatches;
@@ -51,9 +53,9 @@ NAN_METHOD(Features2d::DrawMatches) {
 
 	FF_GET_JSOBJ_REQUIRED(args, imgFrom, img1, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
 	FF_GET_JSOBJ_REQUIRED(args, imgTo, img2, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
-	FF_GET_JSARR_REQUIRED(args, jsKeyPoints1, keypoints1);
-	FF_GET_JSARR_REQUIRED(args, jsKeyPoints2, keypoints2);
-	FF_GET_JSARR_REQUIRED(args, jsMatches, matches1to2);
+	FF_GET_ARRAY_REQUIRED(args, jsKeyPoints1, "keypoints1");
+	FF_GET_ARRAY_REQUIRED(args, jsKeyPoints2, "keypoints2");
+	FF_GET_ARRAY_REQUIRED(args, jsMatches, "matches1to2");
 
 	FF_UNWRAP_KEYPOINT_ARRAY(jsKeyPoints1, kpsFrom);
 	FF_UNWRAP_KEYPOINT_ARRAY(jsKeyPoints2, kpsTo);
@@ -64,7 +66,7 @@ NAN_METHOD(Features2d::DrawMatches) {
 		dMatches.push_back(cv::DMatch(match->queryIdx, match->trainIdx, match->distance));
 	}
 
-	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
+	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
 	cv::drawMatches(imgFrom, kpsFrom, imgTo, kpsTo, dMatches, Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat);
 	info.GetReturnValue().Set(jsMat);
 }

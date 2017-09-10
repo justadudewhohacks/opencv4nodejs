@@ -28,8 +28,8 @@ struct Predicate {
 
 	bool operator()(const cv::Point2d& a, const cv::Point2d& b) {
 		v8::Local<v8::Value> cbArgs[2];
-		cbArgs[0] = FF_NEW(Point2::constructor);
-		cbArgs[1] = FF_NEW(Point2::constructor);
+		cbArgs[0] = FF_NEW_INSTANCE(Point2::constructor);
+		cbArgs[1] = FF_NEW_INSTANCE(Point2::constructor);
 		FF_UNWRAP_PT2_AND_GET(cbArgs[0]->ToObject()) = a;
 		FF_UNWRAP_PT2_AND_GET(cbArgs[1]->ToObject()) = b;
 		return cb->Call(Nan::GetCurrentContext()->Global(), 2, cbArgs)->BooleanValue();
@@ -53,7 +53,7 @@ NAN_METHOD(Core::Partition) {
 	int numLabels = cv::partition(pts, labels, Predicate(cb));
 
 	v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-	Nan::Set(ret, FF_V8STRING("labels"), FF::stdVecToJSArray<int>(labels));
-	Nan::Set(ret, FF_V8STRING("numLabels"), Nan::New(numLabels));
+	Nan::Set(ret, FF_NEW_STRING("labels"), FF::stdVecToJSArray<int>(labels));
+	Nan::Set(ret, FF_NEW_STRING("numLabels"), Nan::New(numLabels));
 	info.GetReturnValue().Set(ret);
 }

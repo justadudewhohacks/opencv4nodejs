@@ -16,7 +16,7 @@ NAN_METHOD(BackgroundSubtractor::Apply) {
 	BackgroundSubtractor* self = FF_UNWRAP(info.This(), BackgroundSubtractor);
 	self->getSubtractor()->apply(frame, self->fgMask, learningRate);
 
-	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
+	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP_MAT_AND_GET(jsMat) = self->fgMask;
 	info.GetReturnValue().Set(jsMat);
 }

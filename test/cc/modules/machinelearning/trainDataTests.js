@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { assertMetaData } from 'utils';
 
 module.exports = () => {
-  describe.only('TrainData', () => {
+  describe.skip('TrainData', () => {
     describe('constructor', () => {
       it('should be constructable without args', () => {
         expect(new cv.TrainData()).to.be.instanceOf(cv.TrainData);
@@ -46,7 +46,7 @@ module.exports = () => {
         assertMetaData(trainData.varType)(varType);
       });
 
-      it.only('should be constructable with some optional args', () => {
+      it('should be constructable with some optional args', () => {
         const varIdx = new cv.Mat(3, 3, cv.cvTypes.CV_8U);
         const trainData = new cv.TrainData(
           new cv.Mat(3, 3, cv.cvTypes.CV_32F),

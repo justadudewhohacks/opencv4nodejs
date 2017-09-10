@@ -7,9 +7,9 @@ NAN_MODULE_INIT(RotatedRect::Init) {
 	RotatedRect::constructor.Reset(ctor);
 	ctor->InstanceTemplate()->SetInternalFieldCount(1);
 	ctor->SetClassName(Nan::New("RotatedRect").ToLocalChecked());
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("angle"), RotatedRect::GetAngle);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("center"), RotatedRect::GetCenter);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("size"), RotatedRect::GetSize);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("angle"), RotatedRect::GetAngle);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("center"), RotatedRect::GetCenter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("size"), RotatedRect::GetSize);
 
 	Nan::SetPrototypeMethod(ctor, "boundingRect", RotatedRect::BoundingRect);
 

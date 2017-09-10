@@ -9,12 +9,12 @@ NAN_MODULE_INIT(CascadeClassifier::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_V8STRING("CascadeClassifier"));
+	ctor->SetClassName(FF_NEW_STRING("CascadeClassifier"));
 	instanceTemplate->SetInternalFieldCount(1);
 
 	Nan::SetPrototypeMethod(ctor, "detectMultiScale", DetectMultiScale);
 
-	target->Set(FF_V8STRING("CascadeClassifier"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("CascadeClassifier"), ctor->GetFunction());
 };
 
 NAN_METHOD(CascadeClassifier::New) {
@@ -22,7 +22,7 @@ NAN_METHOD(CascadeClassifier::New) {
 		return Nan::ThrowError("CascadeClassifier::New - expected arg0 to be path to a cascade.xml file");
 	}
 	CascadeClassifier* self = new CascadeClassifier();
-	self->classifier = cv::CascadeClassifier(FF_TO_STRING(info[0]));
+	self->classifier = cv::CascadeClassifier(FF_CAST_STRING(info[0]));
 	if (self->classifier.empty()) {
 		return Nan::ThrowError("CascadeClassifier::New - failed to load cascade.xml file");
 	}
@@ -44,10 +44,10 @@ NAN_METHOD(CascadeClassifier::DetectMultiScale) {
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, minNeighbors, IsUint32, Uint32Value);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, flags, IsUint32, Uint32Value);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, outputRejectLevels, IsBoolean, BooleanValue);
-	if (FF_HAS_JS_PROP(args, minSize)) {
+	if (FF_HAS(args, "minSize")) {
 		FF_DESTRUCTURE_JSOBJ_REQUIRED(args, minSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
 	}
-	if (FF_HAS_JS_PROP(args, maxSize)) {
+	if (FF_HAS(args, "maxSize")) {
 		FF_DESTRUCTURE_JSOBJ_REQUIRED(args, maxSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
 	}
 
@@ -79,8 +79,8 @@ NAN_METHOD(CascadeClassifier::DetectMultiScale) {
 		for (int i = 0; i < levelWeights.size(); i++) {
 			jsLevelWeights->Set(i, Nan::New(levelWeights.at(i)));
 		}
-		Nan::Set(ret, FF_V8STRING("rejectLevels"), jsRejectLevels);
-		Nan::Set(ret, FF_V8STRING("levelWeights"), jsLevelWeights);
+		Nan::Set(ret, FF_NEW_STRING("rejectLevels"), jsRejectLevels);
+		Nan::Set(ret, FF_NEW_STRING("levelWeights"), jsLevelWeights);
 	}
 	else {
 		self->classifier.detectMultiScale(
@@ -98,15 +98,15 @@ NAN_METHOD(CascadeClassifier::DetectMultiScale) {
 		for (int i = 0; i < numDetections.size(); i++) {
 			jsNumDetections->Set(i, Nan::New(numDetections.at(i)));
 		}
-		Nan::Set(ret, FF_V8STRING("numDetections"), jsNumDetections);
+		Nan::Set(ret, FF_NEW_STRING("numDetections"), jsNumDetections);
 	}
 
 	v8::Local<v8::Array> jsObjects = Nan::New<v8::Array>(objects.size());
 	for (int i = 0; i < objects.size(); i++) {
-		v8::Local<v8::Object> jsObject = FF_NEW(Rect::constructor);
+		v8::Local<v8::Object> jsObject = FF_NEW_INSTANCE(Rect::constructor);
 		FF_UNWRAP(jsObject, Rect)->rect = objects.at(i);
 		jsObjects->Set(i, jsObject);
 	}
-	Nan::Set(ret, FF_V8STRING("objects"), jsObjects);
+	Nan::Set(ret, FF_NEW_STRING("objects"), jsObjects);
 	info.GetReturnValue().Set(ret);
 };

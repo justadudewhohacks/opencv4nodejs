@@ -10,25 +10,25 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_V8STRING("HOGDescriptor"));
+	ctor->SetClassName(FF_NEW_STRING("HOGDescriptor"));
 	instanceTemplate->SetInternalFieldCount(1);
 	
-	Nan::SetAccessor(instanceTemplate, FF_V8STRING("winSize"), winSize);
-	Nan::SetAccessor(instanceTemplate, FF_V8STRING("blockSize"), blockSize);
-	Nan::SetAccessor(instanceTemplate, FF_V8STRING("blockStride"), blockStride);
-	Nan::SetAccessor(instanceTemplate, FF_V8STRING("cellSize"), cellSize);
-	Nan::SetAccessor(instanceTemplate, FF_V8STRING("nbins"), nbins);
-	Nan::SetAccessor(instanceTemplate, FF_V8STRING("derivAperture"), derivAperture);
-	Nan::SetAccessor(instanceTemplate, FF_V8STRING("histogramNormType"), histogramNormType);
-	Nan::SetAccessor(instanceTemplate, FF_V8STRING("nlevels"), nlevels);
-	Nan::SetAccessor(instanceTemplate, FF_V8STRING("winSigma"), winSigma);
-	Nan::SetAccessor(instanceTemplate, FF_V8STRING("L2HysThreshold"), L2HysThreshold);
-	Nan::SetAccessor(instanceTemplate, FF_V8STRING("gammaCorrection"), gammaCorrection);
-	Nan::SetAccessor(instanceTemplate, FF_V8STRING("signedGradient"), signedGradient);
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("winSize"), winSize);
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("blockSize"), blockSize);
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("blockStride"), blockStride);
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("cellSize"), cellSize);
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("nbins"), nbins);
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("derivAperture"), derivAperture);
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("histogramNormType"), histogramNormType);
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("nlevels"), nlevels);
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("winSigma"), winSigma);
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("L2HysThreshold"), L2HysThreshold);
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("gammaCorrection"), gammaCorrection);
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("signedGradient"), signedGradient);
 
 	Nan::SetPrototypeMethod(ctor, "compute", Compute);
 
-	target->Set(FF_V8STRING("HOGDescriptor"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("HOGDescriptor"), ctor->GetFunction());
 };
 
 NAN_METHOD(HOGDescriptor::New) {
@@ -76,6 +76,7 @@ NAN_METHOD(HOGDescriptor::New) {
 };
 
 NAN_METHOD(HOGDescriptor::Compute) {
+	FF_METHOD_CONTEXT("HOGDescriptor::Detect");
 	FF_REQUIRE_ARGS_OBJ("HOGDescriptor::Detect");
 
 	cv::Mat img;
@@ -86,9 +87,9 @@ NAN_METHOD(HOGDescriptor::Compute) {
 	FF_DESTRUCTURE_JSOBJ_IFDEF(args, padding, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
 
 	std::vector<cv::Point2i> locations; 
-	if (FF_HAS_JS_PROP(args, locations)) {
+	if (FF_HAS(args, "locations")) {
 		v8::Local<v8::Array> jsLocations;
-		FF_GET_JSARR_REQUIRED(args, jsLocations, locations);
+		FF_GET_ARRAY_REQUIRED(args, jsLocations, "locations");
 		Point::unpackJSPoint2Array(locations, jsLocations);
 	}
 

@@ -1,44 +1,40 @@
-#include "___ff.h"
+#include <macro-inferno.h>
 #include <iostream>
 
 #ifndef __FF_MACROS_H__
 #define __FF_MACROS_H__
 
-#define FF_V8STRING(s) Nan::New(s).ToLocalChecked()
-#define FF_NEW(ctor) Nan::NewInstance(Nan::New(ctor)->GetFunction()).ToLocalChecked()
-#define FF_CAST_ARRAY(val) v8::Local<v8::Array>::Cast(val)
-#define FF_CAST_OBJ(val) Nan::To<v8::Object>(val).ToLocalChecked()
+#define FF_NEW_INSTANCE(ctor) Nan::NewInstance(Nan::New(ctor)->GetFunction()).ToLocalChecked()
 
 #define FF_GETTER(clazz, name, value)	\
 	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->value); }
 
 #define FF_GETTER_JSOBJ(clazz, name, value, unwrapper, ctor)	\
 	NAN_GETTER(name) {																					\
-		v8::Local<v8::Object> jsObj = FF_NEW(ctor);								\
+		v8::Local<v8::Object> jsObj = FF_NEW_INSTANCE(ctor);								\
 		unwrapper(jsObj) = FF_UNWRAP(info.This(), clazz)->value;	\
 		info.GetReturnValue().Set(jsObj);													\
 	}
 
-#define FF_SET_JS_PROP(obj, prop, val) Nan::Set(obj, FF_V8STRING(#prop), val)
-#define FF_HAS_JS_PROP(obj, prop) Nan::HasOwnProperty(obj, FF_V8STRING(#prop)).FromJust()
+#define FF_SET_JS_PROP(obj, prop, val) Nan::Set(obj, FF_NEW_STRING(#prop), val)
 
 /* unchecked js prop getters */
 
-#define FF_GET_JSPROP(obj, prop) Nan::Get(obj, FF_V8STRING(#prop)).ToLocalChecked()
+#define FF_GET_JSPROP(obj, prop) Nan::Get(obj, FF_NEW_STRING(#prop)).ToLocalChecked()
 #define FF_GET_JSPROP_NUMBER(obj, prop) FF_GET_JSPROP(obj, prop)->NumberValue()
 #define FF_GET_JSPROP_OBJECT(obj, prop) FF_GET_JSPROP(obj, prop)->ToObject()
 #define FF_GET_JSPROP_FLOAT(obj, prop) (float)FF_GET_JSPROP_NUMBER(obj, prop)
 #define FF_GET_JSPROP_DOUBLE(obj, prop) (double)FF_GET_JSPROP_NUMBER(obj, prop)
 #define FF_GET_JSPROP_INT(obj, prop) (int)FF_GET_JSPROP(obj, prop)->IntegerValue()
 #define FF_GET_JSPROP_UINT(obj, prop) (uint)FF_GET_JSPROP(obj, prop)->Uint32Value()
-#define FF_GET_JSPROP_STRING(obj, prop) FF_TO_STRING(FF_GET_JSPROP(obj, prop)->ToString())
+#define FF_GET_JSPROP_STRING(obj, prop) FF_CAST_STRING(FF_GET_JSPROP(obj, prop)->ToString())
 
 
 /* checked js prop getters */
 
 #define FF_GET_JSPROP_REQUIRED(obj, var, prop, castType)																	\
-	if (!FF_HAS_JS_PROP(obj, prop)) {																												\
-		return Nan::ThrowError(FF_V8STRING("Object has no property: " + std::string(#prop)));	\
+	if (!FF_HAS(obj, #prop)) {																												\
+		return Nan::ThrowError(FF_NEW_STRING("Object has no property: " + std::string(#prop)));	\
 	}																																												\
 	var = FF_GET_JSPROP(obj, prop)->castType();
 
@@ -47,7 +43,7 @@
 
 #define FF_GET_TYPECHECKED_JSPROP(obj, var, prop, assertType, castType)			\
 	if (!FF_GET_JSPROP(obj, prop)->assertType()) {														\
-		return Nan::ThrowError(FF_V8STRING(																			\
+		return Nan::ThrowError(FF_NEW_STRING(																			\
 			"Invalid type for " + std::string(#prop) + " :"												\
 			+ FF_GET_JSPROP_STRING(obj, prop)																			\
 			+ ", expected: " + #assertType																				\
@@ -56,8 +52,8 @@
 	var = FF_GET_JSPROP(obj, prop)->castType();
 
 #define FF_GET_TYPECHECKED_JSPROP_REQUIRED(obj, var, prop, assertType, castType)					\
-	if (!FF_HAS_JS_PROP(obj, prop)) {																												\
-		return Nan::ThrowError(FF_V8STRING("Object has no property: " + std::string(#prop)));	\
+	if (!FF_HAS(obj, #prop)) {																												\
+		return Nan::ThrowError(FF_NEW_STRING("Object has no property: " + std::string(#prop)));	\
 	}																																												\
 	FF_GET_TYPECHECKED_JSPROP(obj, var, prop, assertType, castType)
 
@@ -65,7 +61,7 @@
 	FF_GET_TYPECHECKED_JSPROP_REQUIRED(obj, prop, prop, assertType, castType)
 
 #define FF_GET_TYPECHECKED_JSPROP_IFDEF(obj, var, prop, assertType, castType)	\
-	if (FF_HAS_JS_PROP(obj, prop)) {																						\
+	if (FF_HAS(obj, #prop)) {																						\
 		FF_GET_TYPECHECKED_JSPROP(obj, var, prop, assertType, castType)						\
 	}
 
@@ -74,70 +70,39 @@
 
 #define FF_ASSERT_EQUALS(expected, have, what, atmsg)															\
 	if (expected != have) {																													\
-		return Nan::ThrowError(FF_V8STRING(std::string(what) + " mismatch, expected "	\
+		return Nan::ThrowError(FF_NEW_STRING(std::string(what) + " mismatch, expected "	\
 			+ std::to_string(expected) + ", have " + std::to_string(have) + atmsg));		\
-	}
-
-#define FF_TRY(work)																					\
-	try {																												\
-		work																											\
-	} catch (std::exception &e) {																\
-		return info.GetReturnValue().Set(Nan::Error(e.what()));		\
-	} catch (...) {																							\
-		return info.GetReturnValue().Set(Nan::Error("SEGFAULT"));	\
-	}
-
-#define FF_TRY_CATCH(work)					\
-	try {															\
-		work														\
-	} catch (std::exception &e) {			\
-		Nan::ThrowError(e.what());			\
-	} catch (...) {										\
-		Nan::ThrowError("SEGFAULT");		\
 	}
 
 #define FF_REQUIRE_ARGS_OBJ(methodName)																												\
 	if (!info[0]->IsObject()) {																																	\
-		return Nan::ThrowError(FF_V8STRING(std::string(methodName) + " - args object required"));	\
+		return Nan::ThrowError(FF_NEW_STRING(std::string(methodName) + " - args object required"));	\
 	}																																														\
 	v8::Local<v8::Object> args = info[0]->ToObject()
-
-#define FF_IS_INSTANCE(ctor, obj)		\
-	Nan::New(ctor)->HasInstance(obj)
 
 #define FF_GET_JSOBJ_REQUIRED(args, var, prop, objCtor, unwrapper, clazz)	\
 	do {																																		\
 		v8::Local<v8::Object> obj;																						\
 		FF_GET_JSPROP_REQUIRED(args, obj, prop, ToObject);										\
-		FF_REQUIRE_INSTANCE(objCtor, obj, FF_V8STRING(std::string(#prop)			\
+		FF_REQUIRE_INSTANCE(objCtor, obj, FF_NEW_STRING(std::string(#prop)			\
 			+ " is not an instance of " + std::string(#clazz)));								\
 		var = unwrapper(obj);																									\
 	} while (0);																														\
 
-#define FF_GET_JSOBJ_IFDEF(args, var, prop, objCtor, unwrapper, clazz)	\
-	if (FF_HAS_JS_PROP(args, prop)) {																			\
-		FF_GET_JSOBJ_REQUIRED(args, var, prop, objCtor, unwrapper, clazz)		\
+#define FF_GET_JSOBJ_IFDEF(obj, var, prop, objCtor, unwrapper, clazz)	\
+	if (FF_HAS(obj, #prop)) {																			\
+		FF_GET_JSOBJ_REQUIRED(obj, var, prop, objCtor, unwrapper, clazz)		\
 	}
 
-#define FF_DESTRUCTURE_JSOBJ_IFDEF(args, prop, objCtor, unwrapper, clazz)	\
-	if (FF_HAS_JS_PROP(args, prop)) {																				\
-		FF_GET_JSOBJ_REQUIRED(args, prop, prop, objCtor, unwrapper, clazz)		\
+#define FF_DESTRUCTURE_JSOBJ_IFDEF(obj, prop, objCtor, unwrapper, clazz)	\
+	if (FF_HAS(obj, #prop)) {																				\
+		FF_GET_JSOBJ_REQUIRED(obj, prop, prop, objCtor, unwrapper, clazz)		\
 	}
-
-#define FF_GET_JSARR_REQUIRED(args, var, prop)							\
-	do {																											\
-		v8::Local<v8::Value> val = FF_GET_JSPROP(args, prop);		\
-		if (!val->IsArray()) {																	\
-			return Nan::ThrowError(FF_V8STRING("expected "				\
-				+ std::string(#prop) + "to be an array"));					\
-		}																												\
-		var = FF_CAST_ARRAY(val);																\
-	} while (0);
 
 #define FF_GET_JSARR_REQUIRED_WITH_LENGTH(args, var, prop, length)	\
-	FF_GET_JSARR_REQUIRED(args, var, prop)														\
+	FF_GET_ARRAY_REQUIRED(args, var, #prop)														\
 	if (!var->Length() == length) {																		\
-		return Nan::ThrowError(FF_V8STRING("expected "									\
+		return Nan::ThrowError(FF_NEW_STRING("expected "									\
 			+ std::string(#prop) + "to be an array of length "						\
 			+ std::to_string(length)));																		\
 	}
@@ -153,11 +118,8 @@
 
 #define FF_UNPACK_JSOBJ_REQUIRED(obj, var, objCtor, err)	\
 	FF_GET_JSPROP_REQUIRED(args, obj, prop, ToObject);			\
-	FF_REQUIRE_INSTANCE(objCtor, obj, FF_V8STRING(err);			\
+	FF_REQUIRE_INSTANCE(objCtor, obj, FF_NEW_STRING(err);			\
 	var = unwrapper(obj);
-
-/* unpackers */
-// TODO
 
 /* unwrappers */
 

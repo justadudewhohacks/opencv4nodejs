@@ -8,7 +8,7 @@ NAN_MODULE_INIT(Calib3d::Init) {
 	FF_SET_JS_PROP(alg, LMEDS, Nan::New<v8::Integer>(cv::LMEDS));
 	FF_SET_JS_PROP(alg, RANSAC, Nan::New<v8::Integer>(cv::RANSAC));
 	FF_SET_JS_PROP(alg, RHO, Nan::New<v8::Integer>(cv::RHO));
-	module->Set(FF_V8STRING("robustnessAlgorithm"), alg);
+	module->Set(FF_NEW_STRING("robustnessAlgorithm"), alg);
 
 	Nan::SetMethod(module, "findHomography", FindHomography);
 
@@ -16,11 +16,7 @@ NAN_MODULE_INIT(Calib3d::Init) {
 };
 
 NAN_METHOD(Calib3d::FindHomography) {
-	if (!info[0]->IsObject()) {
-		// TODO usage messages
-		return Nan::ThrowError(FF_V8STRING("findHomography - args object required"));
-	}
-	v8::Local<v8::Object> args = info[0]->ToObject();
+	FF_REQUIRE_ARGS_OBJ("FindHomography");
 
 	v8::Local<v8::Object> jsSrcPoints, jsDstPoints;
 	std::vector<cv::Point2d> srcPoints, dstPoints;
@@ -42,15 +38,12 @@ NAN_METHOD(Calib3d::FindHomography) {
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, maxIters, IsInt32, Int32Value)
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, confidence, IsNumber, NumberValue)
 
-	if (FF_HAS_JS_PROP(args, mask)) {
+	if (FF_HAS(args, "mask")) {
 		Nan::ObjectWrap::Unwrap<Mat>(FF_GET_JSPROP(args, mask)->ToObject())->mat.copyTo(mask);
 	}
 
 	cv::Mat homography;
-	FF_TRY_CATCH(homography = cv::findHomography(srcPoints, dstPoints, method, ransacReprojThreshold, mask, maxIters, confidence);)
-	if (tryCatch.HasCaught()) {
-		return info.GetReturnValue().Set(tryCatch.ReThrow());
-	}
+	homography = cv::findHomography(srcPoints, dstPoints, method, ransacReprojThreshold, mask, maxIters, confidence);
 	v8::Local<v8::Object> jsMat = Nan::NewInstance(Nan::New(Mat::constructor)->GetFunction()).ToLocalChecked();
 	Nan::ObjectWrap::Unwrap<Mat>(jsMat)->setNativeProps(homography);
 	info.GetReturnValue().Set(jsMat);

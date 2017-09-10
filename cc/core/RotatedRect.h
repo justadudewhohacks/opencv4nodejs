@@ -17,19 +17,19 @@ public:
 	static FF_GETTER(RotatedRect, GetAngle, rect.angle);
 
 	static NAN_GETTER(GetCenter) {
-		v8::Local<v8::Object> jsCenter = FF_NEW(Point2::constructor);
+		v8::Local<v8::Object> jsCenter = FF_NEW_INSTANCE(Point2::constructor);
 		FF_UNWRAP_PT2_AND_GET(jsCenter) = FF_UNWRAP(info.This(), RotatedRect)->rect.center;
 		info.GetReturnValue().Set(jsCenter);
 	}
 
 	static NAN_GETTER(GetSize) {
-		v8::Local<v8::Object> jsSize = FF_NEW(Size::constructor);
+		v8::Local<v8::Object> jsSize = FF_NEW_INSTANCE(Size::constructor);
 		FF_UNWRAP_SIZE_AND_GET(jsSize) = FF_UNWRAP(info.This(), RotatedRect)->rect.size;
 		info.GetReturnValue().Set(jsSize);
 	}
 
 	static NAN_METHOD(BoundingRect) {
-		v8::Local<v8::Object> jsRect = FF_NEW(Rect::constructor);
+		v8::Local<v8::Object> jsRect = FF_NEW_INSTANCE(Rect::constructor);
 		FF_UNWRAP(jsRect, Rect)->rect = FF_UNWRAP(info.This(), RotatedRect)->rect.boundingRect();
 		info.GetReturnValue().Set(jsRect);
 	}

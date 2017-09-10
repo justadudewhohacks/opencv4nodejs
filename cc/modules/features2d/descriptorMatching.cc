@@ -70,7 +70,7 @@ void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) 
 	cv::Mat descTo = Nan::ObjectWrap::Unwrap<Mat>(info[1]->ToObject())->mat;
 
 	std::vector<cv::DMatch> dmatches;
-	FF_TRY(cv::DescriptorMatcher::create(matcherType)->match(descFrom, descTo, dmatches););
+	cv::DescriptorMatcher::create(matcherType)->match(descFrom, descTo, dmatches);
 
 	v8::Local<v8::Array> jsMatches = Nan::New<v8::Array>(dmatches.size());
 	uint i = 0;

@@ -37,17 +37,18 @@ NAN_METHOD(Imgproc::GetStructuringElement) {
 	cv::Point2i anchor = cv::Point2i(-1, -1);
 	FF_DESTRUCTURE_JSPROP_REQUIRED(args, shape, Int32Value);
 	FF_GET_JSPROP_REQUIRED(args, jsSize, size, ToObject);
-	if (FF_HAS_JS_PROP(args, anchor)) {
+	if (FF_HAS(args, "anchor")) {
 		anchor = Nan::ObjectWrap::Unwrap<Point2>(FF_GET_JSPROP(args, anchor)->ToObject())->pt;
 	}
-	v8::Local<v8::Object> jsKernel = FF_NEW(Mat::constructor);
+	v8::Local<v8::Object> jsKernel = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP_MAT(jsKernel)->setNativeProps(
 		cv::getStructuringElement(shape, FF_UNWRAP_SIZE_AND_GET(jsSize), anchor)
 	);
 	info.GetReturnValue().Set(jsKernel);
 }
 
-NAN_METHOD(Imgproc::CalcHist) { 
+NAN_METHOD(Imgproc::CalcHist) {
+	FF_METHOD_CONTEXT("CalcHist");
 	FF_REQUIRE_ARGS_OBJ("CalcHist");
 
 	cv::Mat img;
@@ -59,7 +60,7 @@ NAN_METHOD(Imgproc::CalcHist) {
 	}
 
 	cv::Mat mask = cv::noArray().getMat();
-	if (FF_HAS_JS_PROP(args, mask)) {
+	if (FF_HAS(args, "mask")) {
 		/* with mask*/
 		v8::Local<v8::Object> jsMask = FF_GET_JSPROP(args, mask)->ToObject();
 		FF_REQUIRE_INSTANCE(Mat::constructor, jsMask, "expected mask to be an instance of Mat");
@@ -67,7 +68,7 @@ NAN_METHOD(Imgproc::CalcHist) {
 	}
 
 	v8::Local<v8::Array> histAxes;
-	FF_GET_JSARR_REQUIRED(args, histAxes, histAxes);
+	FF_GET_ARRAY_REQUIRED(args, histAxes, "histAxes");
 
 	int dims = histAxes->Length();
 	int* channels = new int[dims];
@@ -107,7 +108,7 @@ NAN_METHOD(Imgproc::CalcHist) {
 	delete[] channels;
 	delete[] histSize;
 
-	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
+	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
 	int outputType = CV_MAKETYPE(CV_64F, img.channels());
 	if (outputType != hist.type()) {
 		hist.convertTo(hist, outputType);
@@ -129,11 +130,11 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 	}
 
 	cv::Mat plot;
-	if (FF_HAS_JS_PROP(args, plotTo)) {
+	if (FF_HAS(args, "plotTo")) {
 		FF_GET_JSOBJ_REQUIRED(args, plot, plotTo, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
 	}
 	else {
-		if (!FF_HAS_JS_PROP(args, height) || !FF_HAS_JS_PROP(args, width)) {
+		if (!FF_HAS(args, "height") || !FF_HAS(args, "width")) {
 			return Nan::ThrowError("Plot1DHist - expected either plotTo of type Mat or height and width of the plot");
 		}
 		int height, width; 
@@ -143,7 +144,7 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 	}
 
 	cv::Vec3d lineColor = cv::Vec3d(0, 0, 0);
-	if (FF_HAS_JS_PROP(args, lineColor)) {
+	if (FF_HAS(args, "lineColor")) {
 		FF_DESTRUCTURE_JSOBJ_REQUIRED(args, lineColor, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
 	}
 
@@ -167,7 +168,7 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 		);
 	}
 
-	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
+	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP_MAT(jsMat)->setNativeProps(plot);
 	info.GetReturnValue().Set(jsMat);
 }
@@ -183,7 +184,7 @@ NAN_METHOD(Imgproc::Canny) {
 	bool L2gradient = false;
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, L2gradient, IsBoolean, BooleanValue);
 
-	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
+	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
 
 #if CV_VERSION_MINOR < 2
 	cv::Mat image;

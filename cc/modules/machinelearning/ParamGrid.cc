@@ -6,13 +6,13 @@ NAN_MODULE_INIT(ParamGrid::Init) {
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(ParamGrid::New);
   constructor.Reset(ctor);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
-  ctor->SetClassName(FF_V8STRING("ParamGrid"));
+  ctor->SetClassName(FF_NEW_STRING("ParamGrid"));
 
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("minVal"), minVal);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("maxVal"), maxVal);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("logStep"), logStep);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("minVal"), minVal);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("maxVal"), maxVal);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("logStep"), logStep);
 
-	target->Set(FF_V8STRING("ParamGrid"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("ParamGrid"), ctor->GetFunction());
 };
 
 NAN_METHOD(ParamGrid::New) {

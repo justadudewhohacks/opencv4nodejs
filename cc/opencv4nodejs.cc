@@ -20,12 +20,12 @@
 
 void init(v8::Local<v8::Object> target) {
 	v8::Local<v8::Object> version = Nan::New<v8::Object>();
-	Nan::Set(version, FF_V8STRING("major"), Nan::New(CV_MAJOR_VERSION));
-	Nan::Set(version, FF_V8STRING("minor"), Nan::New(CV_MINOR_VERSION));
-	Nan::Set(target, FF_V8STRING("version"), version);
+	Nan::Set(version, FF_NEW_STRING("major"), Nan::New(CV_MAJOR_VERSION));
+	Nan::Set(version, FF_NEW_STRING("minor"), Nan::New(CV_MINOR_VERSION));
+	Nan::Set(target, FF_NEW_STRING("version"), version);
 
 	v8::Local<v8::Object> xmodules = Nan::New<v8::Object>();
-	Nan::Set(target, FF_V8STRING("xmodules"), xmodules);
+	Nan::Set(target, FF_NEW_STRING("xmodules"), xmodules);
 
 	CvTypes::Init(target);
 	Core::Init(target);
@@ -39,11 +39,11 @@ void init(v8::Local<v8::Object> target) {
   Objdetect::Init(target);
 	MachineLearning::Init(target);
 #ifdef HAVE_XIMGPROC
-	Nan::Set(xmodules, FF_V8STRING("ximgproc"), Nan::New(true));
+	Nan::Set(xmodules, FF_NEW_STRING("ximgproc"), Nan::New(true));
 	XImgproc::Init(target);
 #endif // HAVE_XIMGPROC
 #ifdef HAVE_XFEATURES2D
-	Nan::Set(xmodules, FF_V8STRING("xfeatures2d"), Nan::New(true));
+	Nan::Set(xmodules, FF_NEW_STRING("xfeatures2d"), Nan::New(true));
 	XFeatures2d::Init(target);
 #endif // HAVE_XFEATURES2D
 

@@ -13,10 +13,10 @@ void Contour::Init() {
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("Contour").ToLocalChecked());
 
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("isConvex"), GetIsConvex);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("area"), GetArea);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("numPoints"), GetNumPoints);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_V8STRING("hierarchy"), GetHierarchy);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("isConvex"), GetIsConvex);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("area"), GetArea);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("numPoints"), GetNumPoints);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("hierarchy"), GetHierarchy);
 
 	Nan::SetPrototypeMethod(ctor, "getPoints", GetPoints);
 	Nan::SetPrototypeMethod(ctor, "approxPolyDP", ApproxPolyDP);
@@ -60,7 +60,7 @@ NAN_METHOD(Contour::ArcLength) {
 }
 
 NAN_METHOD(Contour::BoundingRect) {
-	v8::Local<v8::Object> jsRect = FF_NEW(Rect::constructor);
+	v8::Local<v8::Object> jsRect = FF_NEW_INSTANCE(Rect::constructor);
 	FF_UNWRAP(jsRect, Rect)->rect = cv::boundingRect(FF_UNWRAP_CONTOUR_AND_GET(info.This()));
 	info.GetReturnValue().Set(jsRect);
 }
@@ -84,7 +84,7 @@ NAN_METHOD(Contour::ConvexHull) {
 			clockwise,
 			returnPoints
 		);
-		jsHull = FF_NEW(Contour::constructor);
+		jsHull = FF_NEW_INSTANCE(Contour::constructor);
 		FF_UNWRAP_CONTOUR_AND_GET(jsHull) = hullPoints;
 		FF_UNWRAP(jsHull, Contour)->hierarchy = cv::Vec4i(-1, -1, -1, -1);
 	}
@@ -129,10 +129,10 @@ NAN_METHOD(Contour::MinEnclosingCircle) {
 	cv::minEnclosingCircle(FF_UNWRAP_CONTOUR_AND_GET(info.This()), center, radius);
 
 	v8::Local<v8::Object> jsCircle = Nan::New<v8::Object>();
-	v8::Local<v8::Object> jsCenter = FF_NEW(Point2::constructor);
+	v8::Local<v8::Object> jsCenter = FF_NEW_INSTANCE(Point2::constructor);
 	FF_UNWRAP_PT2_AND_GET(jsCenter) = center;
-	Nan::Set(jsCircle, FF_V8STRING("center"), jsCenter);
-	Nan::Set(jsCircle, FF_V8STRING("radius"), Nan::New((double)radius));
+	Nan::Set(jsCircle, FF_NEW_STRING("center"), jsCenter);
+	Nan::Set(jsCircle, FF_NEW_STRING("radius"), Nan::New((double)radius));
 	info.GetReturnValue().Set(jsCircle);
 }
 
@@ -172,19 +172,19 @@ NAN_METHOD(Contour::MatchShapes) {
 }
 
 NAN_METHOD(Contour::MinAreaRect) {
-	v8::Local<v8::Object> jsRotatedRect = FF_NEW(RotatedRect::constructor);
+	v8::Local<v8::Object> jsRotatedRect = FF_NEW_INSTANCE(RotatedRect::constructor);
 	FF_UNWRAP_ROTATEDRECT_AND_GET(jsRotatedRect) = cv::minAreaRect(FF_UNWRAP_CONTOUR_AND_GET(info.This()));
 	info.GetReturnValue().Set(jsRotatedRect);
 }
 
 NAN_METHOD(Contour::FitEllipse) {
-	v8::Local<v8::Object> jsRotatedRect = FF_NEW(RotatedRect::constructor);
+	v8::Local<v8::Object> jsRotatedRect = FF_NEW_INSTANCE(RotatedRect::constructor);
 	FF_UNWRAP_ROTATEDRECT_AND_GET(jsRotatedRect) = cv::fitEllipse(FF_UNWRAP_CONTOUR_AND_GET(info.This()));
 	info.GetReturnValue().Set(jsRotatedRect);
 }
 
 NAN_METHOD(Contour::_Moments) {
-	v8::Local<v8::Object> jsMoments = FF_NEW(Moments::constructor);
+	v8::Local<v8::Object> jsMoments = FF_NEW_INSTANCE(Moments::constructor);
 	FF_UNWRAP(jsMoments, Moments)->moments = cv::moments(FF_UNWRAP_CONTOUR_AND_GET(info.This()));
 	info.GetReturnValue().Set(jsMoments);
 }

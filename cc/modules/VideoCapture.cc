@@ -6,16 +6,16 @@ NAN_MODULE_INIT(VideoCapture::Init) {
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(VideoCapture::New);
   constructor.Reset(ctor);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
-  ctor->SetClassName(FF_V8STRING("VideoCapture"));
+  ctor->SetClassName(FF_NEW_STRING("VideoCapture"));
 	Nan::SetPrototypeMethod(ctor, "read", Read);
   Nan::SetPrototypeMethod(ctor, "reset", Reset);
-  target->Set(FF_V8STRING("VideoCapture"), ctor->GetFunction());
+  target->Set(FF_NEW_STRING("VideoCapture"), ctor->GetFunction());
 };
 
 NAN_METHOD(VideoCapture::New) {
 	VideoCapture* self = new VideoCapture();
 	if (info[0]->IsString()) {
-		self->path = FF_TO_STRING(info[0]);
+		self->path = FF_CAST_STRING(info[0]);
 		self->cap.open(self->path);
 	}
 	else if (info[0]->IsUint32()) {
@@ -33,7 +33,7 @@ NAN_METHOD(VideoCapture::New) {
 }
 
 NAN_METHOD(VideoCapture::Read) {
-	v8::Local<v8::Object> jsMat = FF_NEW(Mat::constructor);
+	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP(info.This(), VideoCapture)->cap.read(FF_UNWRAP_MAT_AND_GET(jsMat));
 	info.GetReturnValue().Set(jsMat);
 }

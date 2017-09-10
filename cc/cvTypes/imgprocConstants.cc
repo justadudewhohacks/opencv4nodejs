@@ -7,7 +7,7 @@ void ImgprocConstants::Init(v8::Local<v8::Object> module) {
 	FF_SET_CV_CONSTANT(morphShapes, MORPH_RECT);
 	FF_SET_CV_CONSTANT(morphShapes, MORPH_CROSS);
 	FF_SET_CV_CONSTANT(morphShapes, MORPH_ELLIPSE);
-	module->Set(FF_V8STRING("morphShapes"), morphShapes);
+	module->Set(FF_NEW_STRING("morphShapes"), morphShapes);
 
 	v8::Local<v8::Object> borderTypes = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(borderTypes, BORDER_CONSTANT);
@@ -18,7 +18,7 @@ void ImgprocConstants::Init(v8::Local<v8::Object> module) {
 	FF_SET_CV_CONSTANT(borderTypes, BORDER_TRANSPARENT);
 	FF_SET_CV_CONSTANT(borderTypes, BORDER_ISOLATED);
 	FF_SET_CV_CONSTANT(borderTypes, BORDER_DEFAULT);
-	module->Set(FF_V8STRING("borderTypes"), borderTypes);
+	module->Set(FF_NEW_STRING("borderTypes"), borderTypes);
 
 	v8::Local<v8::Object> interpolationFlags = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(interpolationFlags, INTER_NEAREST);
@@ -29,7 +29,7 @@ void ImgprocConstants::Init(v8::Local<v8::Object> module) {
 	FF_SET_CV_CONSTANT(interpolationFlags, INTER_MAX);
 	FF_SET_CV_CONSTANT(interpolationFlags, WARP_FILL_OUTLIERS);
 	FF_SET_CV_CONSTANT(interpolationFlags, WARP_INVERSE_MAP);
-	module->Set(FF_V8STRING("interpolationFlags"), interpolationFlags);
+	module->Set(FF_NEW_STRING("interpolationFlags"), interpolationFlags);
 
 	v8::Local<v8::Object> thresholdTypes = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(thresholdTypes, THRESH_BINARY);
@@ -40,7 +40,7 @@ void ImgprocConstants::Init(v8::Local<v8::Object> module) {
 	FF_SET_CV_CONSTANT(thresholdTypes, THRESH_MASK);
 	FF_SET_CV_CONSTANT(thresholdTypes, THRESH_OTSU);
 	FF_SET_CV_CONSTANT(thresholdTypes, THRESH_TRIANGLE);
-	module->Set(FF_V8STRING("thresholdTypes"), thresholdTypes);
+	module->Set(FF_NEW_STRING("thresholdTypes"), thresholdTypes);
 
 	v8::Local<v8::Object> colorConversionCodes = Nan::New<v8::Object>();
 	FF_SET_CV_CONSTANT(colorConversionCodes, COLOR_BGR2BGRA);
@@ -284,5 +284,5 @@ void ImgprocConstants::Init(v8::Local<v8::Object> module) {
 	FF_SET_CV_CONSTANT(colorConversionCodes, COLOR_BayerGR2RGB_EA);
 
 	FF_SET_CV_CONSTANT(colorConversionCodes, COLOR_COLORCVT_MAX);
-	module->Set(FF_V8STRING("colorConversionCodes"), colorConversionCodes);
+	module->Set(FF_NEW_STRING("colorConversionCodes"), colorConversionCodes);
 }
