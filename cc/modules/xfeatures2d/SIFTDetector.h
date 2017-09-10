@@ -1,6 +1,5 @@
-#include <nan.h>
-#include <opencv2/xfeatures2d.hpp>
 #include "macros.h"
+#include <opencv2/xfeatures2d.hpp>
 #include "features2d/FeatureDetector.h"
 
 #ifndef __FF_SIFTDETECTOR_H__

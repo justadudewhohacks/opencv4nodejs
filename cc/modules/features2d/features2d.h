@@ -1,4 +1,4 @@
-#include <nan.h>
+#include "macros.h"
 
 #ifndef __FF_FEATURES2D_H__
 #define __FF_FEATURES2D_H__

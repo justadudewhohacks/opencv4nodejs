@@ -1,6 +1,5 @@
-#include <nan.h>
-#include "../FeatureDetector.h"
 #include "macros.h"
+#include "../FeatureDetector.h"
 
 #ifndef __FF_BRISKDETECTOR_H__
 #define __FF_BRISKDETECTOR_H__

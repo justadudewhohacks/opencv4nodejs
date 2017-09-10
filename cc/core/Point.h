@@ -1,8 +1,7 @@
-#include <nan.h>
+#include "macros.h"
 #include <opencv2/core.hpp>
 #include "Point2.h"
 #include "Point3.h"
-#include "macros.h"
 
 #ifndef __FF_POINT_H__
 #define __FF_POINT_H__

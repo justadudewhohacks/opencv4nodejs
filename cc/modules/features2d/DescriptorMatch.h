@@ -1,5 +1,5 @@
-#include <nan.h>
 #include "macros.h"
+#include <opencv2\features2d.hpp>
 
 #ifndef __FF_DESCRIPTORMATCH_H__
 #define __FF_DESCRIPTORMATCH_H__

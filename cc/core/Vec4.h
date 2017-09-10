@@ -1,6 +1,5 @@
-#include <nan.h>
-#include <opencv2/core.hpp>
 #include "macros.h"
+#include <opencv2/core.hpp>
 #include "coreUtils.h"
 
 #ifndef __FF_VEC4_H__

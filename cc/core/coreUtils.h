@@ -1,5 +1,5 @@
-#ifndef FF_COREUTILS_H_
-#define FF_COREUTILS_H_
+#ifndef __FF_COREUTILS_H__
+#define __FF_COREUTILS_H__
 
 #define FF_ASSERT_INDEX_RANGE(idx, max, what)											\
 	if (idx < 0 || max < idx) {																			\

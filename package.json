@@ -31,6 +31,6 @@
   },
   "gypfile": true,
   "dependencies": {
-    "nan": "^2.6.2"
+    "macro-inferno": "0.0.1"
   }
 }

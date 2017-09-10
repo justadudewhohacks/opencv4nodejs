@@ -1,7 +1,6 @@
-#include <nan.h>
+#include "macros.h"
 #include <opencv2/core.hpp>
 #include <opencv2/objdetect.hpp>
-#include "macros.h"
 
 #ifndef __FF_OBJDETECT_H__
 #define __FF_OBJDETECT_H__

@@ -1,9 +1,8 @@
-#include "ff.h"
-#include "matUtils.h"
+#include "___ff.h"
 #include <iostream>
 
-#ifndef FF_MACROS_H_
-#define FF_MACROS_H_
+#ifndef __FF_MACROS_H__
+#define __FF_MACROS_H__
 
 #define FF_V8STRING(s) Nan::New(s).ToLocalChecked()
 #define FF_NEW(ctor) Nan::NewInstance(Nan::New(ctor)->GetFunction()).ToLocalChecked()

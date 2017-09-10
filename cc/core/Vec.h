@@ -1,9 +1,8 @@
-#include <nan.h>
+#include "macros.h"
 #include <opencv2/core.hpp>
 #include "Vec2.h"
 #include "Vec3.h"
 #include "Vec4.h"
-#include "macros.h"
 
 #ifndef __FF_VEC_H__
 #define __FF_VEC_H__

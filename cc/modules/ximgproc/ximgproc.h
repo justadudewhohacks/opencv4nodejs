@@ -1,4 +1,4 @@
-#include <nan.h>
+#include "macros.h"
 #include <opencv2/ximgproc.hpp>
 
 #ifndef __FF_XIMGPROC_H__

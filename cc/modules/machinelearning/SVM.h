@@ -1,5 +1,5 @@
-#include <opencv2/ml.hpp>
 #include "macros.h"
+#include <opencv2/ml.hpp>
 #include "Mat.h"
 
 #ifndef __FF_SVM_H__

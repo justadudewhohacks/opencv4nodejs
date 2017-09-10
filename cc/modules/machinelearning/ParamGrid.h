@@ -1,5 +1,5 @@
-#include <opencv2/ml.hpp>
 #include "macros.h"
+#include <opencv2/ml.hpp>
 
 #ifndef __FF_PARAMGRID_H__
 #define __FF_PARAMGRID_H__

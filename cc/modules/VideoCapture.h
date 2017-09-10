@@ -1,10 +1,9 @@
-#include <nan.h>
+#include "macros.h"
 #include <opencv2/highgui.hpp>
 #include "Mat.h"
-#include "macros.h"
 
-#ifndef __FF_SUPERPIXELSEEDS_H__
-#define __FF_SUPERPIXELSEEDS_H__
+#ifndef __FF_VIDEOCAPTURE_H__
+#define __FF_VIDEOCAPTURE_H__
 
 class VideoCapture : public Nan::ObjectWrap {
 public:

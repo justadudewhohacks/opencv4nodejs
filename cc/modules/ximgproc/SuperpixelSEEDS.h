@@ -1,4 +1,3 @@
-#include <nan.h>
 #include <opencv2/ximgproc.hpp>
 #include "Mat.h"
 #include "macros.h"

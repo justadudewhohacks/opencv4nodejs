@@ -1,11 +1,12 @@
+#include "macros.h"
 #include <opencv2/imgproc.hpp>
 #include "Size.h"
-#include "macros.h"
 #include "coreUtils.h"
+#include "matUtils.h"
 #include "Vec.h"
 
-#ifndef FF_MAT_H_
-#define FF_MAT_H_
+#ifndef __FF_MAT_H__
+#define __FF_MAT_H__
 
 class Mat : public Nan::ObjectWrap {
 public:

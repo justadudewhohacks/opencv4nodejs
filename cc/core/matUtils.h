@@ -1,8 +1,8 @@
-#include <nan.h>
+#include "macros.h"
 #include <opencv2/core.hpp>
 
-#ifndef FF_MATUTILS_H_
-#define FF_MATUTILS_H_
+#ifndef __FF_MATUTILS_H__
+#define __FF_MATUTILS_H__
 
 #define FF_MAT_AT(mat, val, get)	\
 	val = get(mat, info[0]->Int32Value(), info[1]->Int32Value());

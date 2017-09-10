@@ -1,6 +1,5 @@
-#include <nan.h>
-#include "../FeatureDetector.h"
 #include "macros.h"
+#include "../FeatureDetector.h"
 
 #ifndef __FF_AKAZEDETECTOR_H__
 #define __FF_AKAZEDETECTOR_H__

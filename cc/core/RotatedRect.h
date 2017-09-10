@@ -1,6 +1,5 @@
-#include <nan.h>
-#include <opencv2/core.hpp>
 #include "macros.h"
+#include <opencv2/core.hpp>
 #include "Point.h"
 #include "Size.h"
 #include "Rect.h"

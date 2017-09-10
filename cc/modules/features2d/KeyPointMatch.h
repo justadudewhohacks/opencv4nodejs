@@ -1,4 +1,4 @@
-#include <nan.h>
+#include "macros.h"
 #include <opencv2/imgproc.hpp>
 #include <iostream>
 #include "KeyPoint.h"

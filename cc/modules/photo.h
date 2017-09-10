@@ -1,6 +1,9 @@
-#include <nan.h>
+#include "macros.h"
 #include <opencv2/imgproc.hpp>
 #include <opencv2/photo.hpp>
+
+#ifndef __FF_PHOTO_H__
+#define __FF_PHOTO_H__
 
 class Photo {
 public:
@@ -8,3 +11,5 @@ public:
   static NAN_METHOD(FastNlMeansDenoisingColored);
 
 };
+
+#endif

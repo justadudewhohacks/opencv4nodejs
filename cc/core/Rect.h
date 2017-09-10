@@ -1,6 +1,5 @@
-#include <nan.h>
-#include <opencv2/core.hpp>
 #include "macros.h"
+#include <opencv2/core.hpp>
 
 #ifndef __FF_RECT_H__
 #define __FF_RECT_H__

@@ -1,7 +1,6 @@
-#include <nan.h>
+#include "macros.h"
 #include <opencv2/imgproc.hpp>
 #include <opencv2/features2d.hpp>
-#include "macros.h"
 
 #ifndef FF_KEYPOINT_H_
 #define FF_KEYPOINT_H_

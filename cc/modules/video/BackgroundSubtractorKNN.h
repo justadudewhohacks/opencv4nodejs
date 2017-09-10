@@ -1,4 +1,4 @@
-#include <nan.h>
+#include "macros.h"
 #include "BackgroundSubtractor.h"
 
 #ifndef __FF_BACKGROUNDSUBTRACTORKNN_H__

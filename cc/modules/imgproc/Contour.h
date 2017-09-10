@@ -1,6 +1,6 @@
+#include "macros.h"
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
-#include "macros.h"
 #include "Vec.h"
 
 #ifndef __FF_CONTOUR_H__

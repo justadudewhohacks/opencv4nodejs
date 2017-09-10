@@ -1,8 +1,8 @@
-#include <nan.h>
+#include "macros.h"
 #include <opencv2/core.hpp>
 
-#ifndef FF_MATTYPES_H_
-#define FF_MATTYPES_H_
+#ifndef __FF_MATTYPES_H__
+#define __FF_MATTYPES_H__
 
 #define FF_TYPE(CONST) \
   module->Set(Nan::New<v8::String>(#CONST).ToLocalChecked(), Nan::New<v8::Integer>(CONST));

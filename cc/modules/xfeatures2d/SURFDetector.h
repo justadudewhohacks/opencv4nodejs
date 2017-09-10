@@ -1,7 +1,6 @@
-#include <nan.h>
+#include "macros.h"
 #include <opencv2/xfeatures2d.hpp>
 #include "features2d/FeatureDetector.h"
-#include "macros.h"
 
 #ifndef __FF_SURFDETECTOR_H__
 #define __FF_SURFDETECTOR_H__

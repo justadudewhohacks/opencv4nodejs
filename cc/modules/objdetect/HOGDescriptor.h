@@ -1,7 +1,6 @@
-#include <nan.h>
+#include "macros.h"
 #include <opencv2/core.hpp>
 #include <opencv2/objdetect.hpp>
-#include "macros.h"
 #include "Size.h"
 
 #ifndef __FF_HOGDESCRIPTOR_H__

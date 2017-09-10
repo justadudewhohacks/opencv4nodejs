@@ -10,12 +10,13 @@
 			"cc/core",
 			"cc/modules",
 			"<!(node -e \"require('nan')\")"
+		#	"<!(node -e \"require('macro-inferno')\")"
 		],
 		"libraries": [
 			"<!@(node ./lib/libs.js)"
 		],
 		"sources": [
-			"cc/index.cc",
+			"cc/opencv4nodejs.cc",
 			"cc/cvTypes/cvTypes.cc",
 			"cc/cvTypes/imgprocConstants.cc",
 			"cc/core/core.cc",
