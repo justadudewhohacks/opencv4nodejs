@@ -1,5 +1,5 @@
 #include "macros.h"
-#include <opencv2\features2d.hpp>
+#include <opencv2/features2d.hpp>
 
 #ifndef __FF_DESCRIPTORMATCH_H__
 #define __FF_DESCRIPTORMATCH_H__
@@ -7,7 +7,7 @@
 class DescriptorMatch : public Nan::ObjectWrap {
 public:
 	int queryIdx;
-	int trainIdx; 
+	int trainIdx;
   float distance;
 
 	static NAN_MODULE_INIT(Init);
