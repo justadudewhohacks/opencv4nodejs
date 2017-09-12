@@ -3,7 +3,8 @@ import { expect } from 'chai';
 import { assertMetaData } from 'utils';
 
 module.exports = () => {
-  describe.skip('TrainData', () => {
+  describe('TrainData', () => {
+    const cvVarType = cv.cvTypes.variableTypes.VAR_ORDERED;
     describe('constructor', () => {
       it('should be constructable without args', () => {
         expect(new cv.TrainData()).to.be.instanceOf(cv.TrainData);
@@ -24,10 +25,10 @@ module.exports = () => {
       });
 
       it('should be constructable with all optional args', () => {
-        const varIdx = new cv.Mat(3, 1, cv.cvTypes.CV_8U);
-        const sampleIdx = new cv.Mat(3, 1, cv.cvTypes.CV_8U);
-        const sampleWeights = new cv.Mat(3, 1, cv.cvTypes.CV_32F);
-        const varType = new cv.Mat(3, 1, cv.cvTypes.CV_8U);
+        const varIdx = [0, 1, 2];
+        const sampleIdx = [0, 1, 2];
+        const sampleWeights = [0, 0.1, 0.5];
+        const varType = [cvVarType, cvVarType, cvVarType, cvVarType];
         const trainData = new cv.TrainData(
           new cv.Mat(3, 3, cv.cvTypes.CV_32F),
           cv.cvTypes.sampleTypes.ROW_SAMPLE,
@@ -38,16 +39,16 @@ module.exports = () => {
           varType
         );
         expect(trainData).to.be.instanceOf(cv.TrainData);
-        expect(trainData).to.have.property('sampleIdx');
+        expect(trainData).to.have.property('varIdx');
         expect(trainData).to.have.property('sampleWeights');
         expect(trainData).to.have.property('varType');
-        assertMetaData(trainData.sampleIdx)(sampleIdx);
-        assertMetaData(trainData.sampleWeights)(sampleWeights);
-        assertMetaData(trainData.varType)(varType);
+        assertMetaData(trainData.varIdx)(1, 3, cv.cvTypes.CV_32S);
+        assertMetaData(trainData.sampleWeights)(1, 3, cv.cvTypes.CV_32F);
+        assertMetaData(trainData.varType)(1, 4, cv.cvTypes.CV_8U);
       });
 
       it('should be constructable with some optional args', () => {
-        const varIdx = new cv.Mat(3, 3, cv.cvTypes.CV_8U);
+        const varIdx = [0, 1, 2];
         const trainData = new cv.TrainData(
           new cv.Mat(3, 3, cv.cvTypes.CV_32F),
           cv.cvTypes.sampleTypes.ROW_SAMPLE,
@@ -56,12 +57,12 @@ module.exports = () => {
         );
         expect(trainData).to.be.instanceOf(cv.TrainData);
         expect(trainData).to.have.property('varIdx');
-        assertMetaData(trainData.varIdx)(varIdx);
+        assertMetaData(trainData.varIdx)(1, 3, cv.cvTypes.CV_32S);
       });
 
       it('should be constructable with optional args object', () => {
         const opts = {
-          sampleWeights: new cv.Mat()
+          sampleWeights: [0, 0.1, 0.5]
         };
         const trainData = new cv.TrainData(
           new cv.Mat(3, 3, cv.cvTypes.CV_32F),
@@ -70,7 +71,8 @@ module.exports = () => {
           opts
         );
         expect(trainData).to.be.instanceOf(cv.TrainData);
-        expect(trainData).to.have.property('sampleWeights').to.equal(opts.sampleWeights);
+        expect(trainData).to.have.property('sampleWeights');
+        assertMetaData(trainData.sampleWeights)(1, 3, cv.cvTypes.CV_32F);
       });
     });
   });

@@ -29,16 +29,18 @@ NAN_METHOD(TrainData::New) {
 		FF_ARG_INSTANCE(2, cv::Mat responses, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 
 		// optional args
-		FF_OBJ optArgs = (info.Length() == 4 && info[3]->IsObject() && !FF_IS_INSTANCE(Mat::constructor, info[3]) ? info[3]->ToObject() : FF_NEW_OBJ());
-		FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat varIdx, "varIdx", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
-		FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat sampleIdx, "sampleIdx", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
-		FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat sampleWeights, "sampleWeights", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
-		FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat varType, "varType", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
-
-		FF_ARG_INSTANCE_IFDEF(3, varIdx, Mat::constructor, FF_UNWRAP_MAT_AND_GET, varIdx);
-		FF_ARG_INSTANCE_IFDEF(4, sampleIdx, Mat::constructor, FF_UNWRAP_MAT_AND_GET, sampleIdx);
-		FF_ARG_INSTANCE_IFDEF(5, sampleWeights, Mat::constructor, FF_UNWRAP_MAT_AND_GET, sampleWeights);
-		FF_ARG_INSTANCE_IFDEF(6, varType, Mat::constructor, FF_UNWRAP_MAT_AND_GET, varType);
+		bool hasOptArgsObj = FF_HAS_ARG(3) && !info[3]->IsArray();
+		FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
+		FF_GET_UNPACK_INT_ARRAY_IFDEF(optArgs, varIdx, "varIdx", varIdx);
+		FF_GET_UNPACK_INT_ARRAY_IFDEF(optArgs, sampleIdx, "sampleIdx", sampleIdx);
+		FF_GET_UNPACK_FLOAT_ARRAY_IFDEF(optArgs, sampleWeights, "sampleWeights", sampleWeights);
+		FF_GET_UNPACK_UCHAR_ARRAY_IFDEF(optArgs, varType, "varType", varType);
+		if (!hasOptArgsObj) {
+			FF_ARG_UNPACK_INT_ARRAY_TO_IFDEF(3, varIdx, varIdx);
+			FF_ARG_UNPACK_INT_ARRAY_TO_IFDEF(4, sampleIdx, sampleIdx);
+			FF_ARG_UNPACK_FLOAT_ARRAY_TO_IFDEF(5, sampleWeights, sampleWeights);
+			FF_ARG_UNPACK_UCHAR_ARRAY_TO_IFDEF(6, varType, varType);
+		}
 
 		self->trainData = cv::ml::TrainData::create(samples, layout, responses, varIdx, sampleIdx, sampleWeights, varType);
 	}

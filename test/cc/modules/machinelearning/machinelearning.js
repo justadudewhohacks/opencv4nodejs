@@ -4,7 +4,7 @@ import statModelTests from './statModelTests';
 import SVMTests from './SVMTests';
 import trainDataTests from './trainDataTests';
 
-describe('objdetect', () => {
+describe('machinelearning', () => {
   paramGridTests();
   statModelTests();
   SVMTests();

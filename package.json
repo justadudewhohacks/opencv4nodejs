@@ -13,15 +13,17 @@
     "tracking",
     "matching",
     "face",
-    "hand",
-    "gesture"
+    "gesture",
+    "machine",
+    "learning"
   ],
   "main": "./lib/opencv4nodejs.js",
   "scripts": {
     "install": "node-gyp rebuild",
     "configure": "node-gyp configure",
     "build": "node-gyp configure build",
-    "rebuild": "node-gyp rebuild"
+    "rebuild": "node-gyp rebuild",
+    "clean": "node-gyp clean"
   },
   "author": "justadudewhohacks",
   "license": "ISC",
@@ -31,6 +33,6 @@
   },
   "gypfile": true,
   "dependencies": {
-    "macro-inferno": "0.0.1"
+    "macro-inferno": "^0.2.1"
   }
 }

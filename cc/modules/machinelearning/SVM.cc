@@ -18,21 +18,28 @@ NAN_MODULE_INIT(SVM::Init) {
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("p"), p);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("kernelType"), kernelType);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("classWeights"), classWeights);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("varCount"), varCount);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("isTrained"), isTrained);
 
 	Nan::SetPrototypeMethod(ctor, "setParams", SetParams);
-	Nan::SetPrototypeMethod(ctor, "Train", Train);
-	Nan::SetPrototypeMethod(ctor, "TrainAuto", TrainAuto);
-	Nan::SetPrototypeMethod(ctor, "setParams", Predict);
-	Nan::SetPrototypeMethod(ctor, "setParams", PredictWithResults);
+	Nan::SetPrototypeMethod(ctor, "train", Train);
+	Nan::SetPrototypeMethod(ctor, "trainAuto", TrainAuto);
+	Nan::SetPrototypeMethod(ctor, "predict", Predict);
+
+	Nan::SetPrototypeMethod(ctor, "getSupportVectors", GetSupportVectors);
+	Nan::SetPrototypeMethod(ctor, "getUncompressedSupportVectors", GetUncompressedSupportVectors);
+	Nan::SetPrototypeMethod(ctor, "calcError", CalcError);
+	//Nan::SetPrototypeMethod(ctor, "save", Save);
 
 	target->Set(Nan::New("SVM").ToLocalChecked(), ctor->GetFunction());
 };
 
 NAN_METHOD(SVM::New) {
-	SVM* self = new SVM(); 
+	FF_METHOD_CONTEXT("SVM::New");
+	SVM* self = new SVM();
 	self->svm = cv::ml::SVM::create();
 	if (info.Length() > 0) {
-		FF_REQUIRE_ARGS_OBJ("SVM::New");
+		FF_ARG_OBJ(0, FF_OBJ args);
 
 		Nan::TryCatch tryCatch;
 		self->setParams(args);
@@ -41,7 +48,7 @@ NAN_METHOD(SVM::New) {
 		}
 	}
 	self->Wrap(info.Holder());
-	info.GetReturnValue().Set(info.Holder());
+	FF_RETURN(info.Holder());
 };
 
 NAN_METHOD(SVM::SetParams) {
@@ -52,15 +59,19 @@ NAN_METHOD(SVM::SetParams) {
 	if (tryCatch.HasCaught()) {
 		tryCatch.ReThrow();
 	}
-	info.GetReturnValue().Set(info.This());
+	FF_RETURN(info.This());
 };
 
 NAN_METHOD(SVM::Train) {
 	FF_METHOD_CONTEXT("SVM::Train");
 
+	if (!FF_IS_INSTANCE(TrainData::constructor, info[0]) && !FF_IS_INSTANCE(Mat::constructor, info[0])) {
+		FF_THROW("expected arg 0 to be an instance of TrainData or Mat");
+	}
+
 	SVM* self = FF_UNWRAP(info.This(), SVM);
 	FF_VAL ret;
-	if (FF_IS_INSTANCE(Mat::constructor, info[0])) {
+	if (FF_IS_INSTANCE(TrainData::constructor, info[0])) {
 		FF_ARG_INSTANCE(0, cv::Ptr<cv::ml::TrainData> trainData, TrainData::constructor, FF_UNWRAP_TRAINDATA_AND_GET);
 		FF_ARG_UINT_IFDEF(1, unsigned int flags, 0);
 		ret = Nan::New(self->svm->train(trainData, flags));
@@ -71,7 +82,7 @@ NAN_METHOD(SVM::Train) {
 		FF_ARG_INSTANCE(2, cv::Mat responses, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 		ret = Nan::New(self->svm->train(samples, (int)layout, responses));
 	}
-	info.GetReturnValue().Set(ret);
+	FF_RETURN(ret);
 }
 
 NAN_METHOD(SVM::TrainAuto) {
@@ -81,7 +92,8 @@ NAN_METHOD(SVM::TrainAuto) {
 	FF_ARG_INSTANCE(0, cv::Ptr<cv::ml::TrainData> trainData, TrainData::constructor, FF_UNWRAP_TRAINDATA_AND_GET);
 
 	// optional args
-	FF_OBJ optArgs = (info.Length() == 2 && info[1]->IsObject() && !info[1]->IsUint32() ? info[1]->ToObject() : FF_NEW_OBJ());
+	bool hasOptArgsObj = FF_HAS_ARG(1) && !info[1]->IsUint32();
+	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
 	FF_GET_UINT_IFDEF(optArgs, unsigned int kFold, "kFold", 10);
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::ml::ParamGrid cGrid, "cGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::C));
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::ml::ParamGrid gammaGrid, "gammaGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::GAMMA));
@@ -90,48 +102,87 @@ NAN_METHOD(SVM::TrainAuto) {
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::ml::ParamGrid coeffGrid, "coeffGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::COEF));
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::ml::ParamGrid degreeGrid, "degreeGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::DEGREE));
 	FF_GET_BOOL_IFDEF(optArgs, bool balanced, "balanced", false);
-
-	FF_ARG_UINT_IFDEF(1, kFold, kFold);
-	FF_ARG_INSTANCE_IFDEF(2, cGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, cGrid);
-	FF_ARG_INSTANCE_IFDEF(3, gammaGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, gammaGrid);
-	FF_ARG_INSTANCE_IFDEF(4, pGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, pGrid);
-	FF_ARG_INSTANCE_IFDEF(5, nuGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, nuGrid);
-	FF_ARG_INSTANCE_IFDEF(6, coeffGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, coeffGrid);
-	FF_ARG_INSTANCE_IFDEF(7, degreeGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, degreeGrid);
-	FF_ARG_BOOL_IFDEF(8, balanced, balanced);
+	if (!hasOptArgsObj) {
+		FF_ARG_UINT_IFDEF(1, kFold, kFold);
+		FF_ARG_INSTANCE_IFDEF(2, cGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, cGrid);
+		FF_ARG_INSTANCE_IFDEF(3, gammaGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, gammaGrid);
+		FF_ARG_INSTANCE_IFDEF(4, pGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, pGrid);
+		FF_ARG_INSTANCE_IFDEF(5, nuGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, nuGrid);
+		FF_ARG_INSTANCE_IFDEF(6, coeffGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, coeffGrid);
+		FF_ARG_INSTANCE_IFDEF(7, degreeGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, degreeGrid);
+		FF_ARG_BOOL_IFDEF(8, balanced, balanced);
+	}
 
 	bool ret = FF_UNWRAP(info.This(), SVM)->svm->trainAuto(trainData, (int)kFold, cGrid, gammaGrid, pGrid, nuGrid, coeffGrid, degreeGrid, balanced);
-	info.GetReturnValue().Set(Nan::New(ret));
+	FF_RETURN(Nan::New(ret));
 }
 
 NAN_METHOD(SVM::Predict) {
 	FF_METHOD_CONTEXT("SVM::Predict");
 
-	// required args
-	FF_ARG_INSTANCE(0, cv::Mat samples, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	if (!info[0]->IsArray() && !FF_IS_INSTANCE(Mat::constructor, info[0])) {
+		FF_THROW("expected arg 0 to be an ARRAY or an instance of Mat");
+	}
 
-	// optional args
-	FF_ARG_UINT_IFDEF(1, unsigned int flags, 0);
+	cv::Mat results;
+	if (info[0]->IsArray()) {
+		FF_ARG_UNPACK_FLOAT_ARRAY(0, samples);
+		FF_ARG_UINT_IFDEF(1, unsigned int flags, 0);
+		FF_UNWRAP(info.This(), SVM)->svm->predict(samples, results, (int)flags);
+	}
+	else {
+		FF_ARG_INSTANCE(0, cv::Mat samples, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+		FF_ARG_UINT_IFDEF(1, unsigned int flags, 0);
+		FF_UNWRAP(info.This(), SVM)->svm->predict(samples, results, (int)flags);
+	}
 
-	float probability = FF_UNWRAP(info.This(), SVM)->svm->predict(samples, cv::noArray(), (int)flags);
-	info.GetReturnValue().Set(Nan::New(probability));
+	FF_VAL jsResult;
+	if (results.cols == 1 && results.rows == 1) {
+		jsResult = Nan::New((double)results.at<float>(0, 0));
+	}
+	else {
+		std::vector<float> resultsVec;
+		results.col(0).copyTo(resultsVec);
+		FF_PACK_ARRAY(resultArray, resultsVec);
+		jsResult = resultArray;
+	}
+	FF_RETURN(jsResult);
 }
 
-NAN_METHOD(SVM::PredictWithResults) {
-	FF_METHOD_CONTEXT("SVM::PredictWithResults");
+NAN_METHOD(SVM::GetSupportVectors) {
+	FF_OBJ jsSupportVectors = FF_NEW_INSTANCE(Mat::constructor);
+	FF_UNWRAP_MAT_AND_GET(jsSupportVectors) = FF_UNWRAP(info.This(), SVM)->svm->getSupportVectors();
+	FF_RETURN(jsSupportVectors);
+}
 
-	// required args
-	FF_ARG_INSTANCE(0, cv::Mat samples, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+NAN_METHOD(SVM::GetUncompressedSupportVectors) {
+	FF_METHOD_CONTEXT("SVM::GetUncompressedSupportVectors");
+#if CV_VERSION_MINOR < 2
+	FF_THROW("getUncompressedSupportVectors not implemented for v3.0, v3.1");
+#else
+	FF_OBJ jsSupportVectors = FF_NEW_INSTANCE(Mat::constructor);
+	FF_UNWRAP_MAT_AND_GET(jsSupportVectors) = FF_UNWRAP(info.This(), SVM)->svm->getUncompressedSupportVectors();
+	FF_RETURN(jsSupportVectors);
+#endif
+}
 
-	// optional args
-	FF_ARG_UINT_IFDEF(1, unsigned int flags, 0);
+NAN_METHOD(SVM::CalcError) {
+	FF_METHOD_CONTEXT("SVM::CalcError");
+	FF_ARG_INSTANCE(0, cv::Ptr<cv::ml::TrainData> trainData, TrainData::constructor, FF_UNWRAP_TRAINDATA_AND_GET);
+	FF_ARG_BOOL(1, bool test);
 
-	FF_OBJ jsResults = FF_NEW_INSTANCE(Mat::constructor);
-	float probability = FF_UNWRAP(info.This(), SVM)->svm->predict(samples, FF_UNWRAP_MAT_AND_GET(jsResults), flags);
+	FF_OBJ jsResponses = FF_NEW_INSTANCE(Mat::constructor);
+	float error = FF_UNWRAP(info.This(), SVM)->svm->calcError(trainData, test, FF_UNWRAP_MAT_AND_GET(jsResponses));
+
 	FF_OBJ ret = FF_NEW_OBJ();
-	ret->Set(FF_NEW_STRING("results"), jsResults);
-	ret->Set(FF_NEW_STRING("probability"), Nan::New(probability));
-	info.GetReturnValue().Set(ret);
+	Nan::Set(ret, FF_NEW_STRING("error"), Nan::New((double)error));
+	Nan::Set(ret, FF_NEW_STRING("responses"), jsResponses);
+	FF_RETURN(ret);
+}
+
+NAN_METHOD(SVM::Save) {
+	FF_METHOD_CONTEXT("SVM::Save");
+	//FF_UNWRAP(info.This(), SVM)->svm->save();
 }
 
 void SVM::setParams(v8::Local<v8::Object> params) {

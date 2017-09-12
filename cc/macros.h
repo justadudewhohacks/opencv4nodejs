@@ -11,7 +11,7 @@
 
 #define FF_GETTER_JSOBJ(clazz, name, value, unwrapper, ctor)	\
 	NAN_GETTER(name) {																					\
-		v8::Local<v8::Object> jsObj = FF_NEW_INSTANCE(ctor);								\
+		v8::Local<v8::Object> jsObj = FF_NEW_INSTANCE(ctor);			\
 		unwrapper(jsObj) = FF_UNWRAP(info.This(), clazz)->value;	\
 		info.GetReturnValue().Set(jsObj);													\
 	}
@@ -102,7 +102,7 @@
 #define FF_GET_JSARR_REQUIRED_WITH_LENGTH(args, var, prop, length)	\
 	FF_GET_ARRAY_REQUIRED(args, var, #prop)														\
 	if (!var->Length() == length) {																		\
-		return Nan::ThrowError(FF_NEW_STRING("expected "									\
+		return Nan::ThrowError(FF_NEW_STRING("expected "								\
 			+ std::string(#prop) + "to be an array of length "						\
 			+ std::to_string(length)));																		\
 	}
@@ -118,8 +118,15 @@
 
 #define FF_UNPACK_JSOBJ_REQUIRED(obj, var, objCtor, err)	\
 	FF_GET_JSPROP_REQUIRED(args, obj, prop, ToObject);			\
-	FF_REQUIRE_INSTANCE(objCtor, obj, FF_NEW_STRING(err);			\
+	FF_REQUIRE_INSTANCE(objCtor, obj, FF_NEW_STRING(err);		\
 	var = unwrapper(obj);
+
+#define FF_GET_UNPACK_UCHAR_ARRAY_IFDEF(ff_obj, ff_var, ff_prop, ff_defaultValue) FF_GET_UNPACK_ARRAY_IFDEF(ff_obj, ff_var, ff_prop, uchar, ff_uint, ff_defaultValue)
+#define FF_ARG_UNPACK_UCHAR_ARRAY_TO_IFDEF(ff_argN, ff_var, ff_defaultValue) FF_ARG_UNPACK_ARRAY_TO_IFDEF(ff_argN, ff_var, ff_uint, ff_defaultValue)
+
+#define FF_ARG_UNPACK_FLOAT_ARRAY(ff_argN, ff_var) FF_ARG_UNPACK_ARRAY(ff_argN, ff_var, float, ff_number);
+#define FF_GET_UNPACK_FLOAT_ARRAY_IFDEF(ff_obj, ff_var, ff_prop, ff_defaultValue) FF_GET_UNPACK_ARRAY_IFDEF(ff_obj, ff_var, ff_prop, float, ff_number, ff_defaultValue)
+#define FF_ARG_UNPACK_FLOAT_ARRAY_TO_IFDEF(ff_argN, ff_var, ff_defaultValue) FF_ARG_UNPACK_ARRAY_TO_IFDEF(ff_argN, ff_var, ff_number, ff_defaultValue)
 
 /* unwrappers */
 

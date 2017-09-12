@@ -1,4 +1,4 @@
-import { cvTypes } from 'dut';
+import cv from 'dut';
 import { assert } from 'chai';
 import { assertPropsWithValue } from './testUtils';
 
@@ -40,7 +40,7 @@ const assertMatValueAlmostEquals = AssertMatValueEquals(
 
 exports.generateIts = (msg, testFunc, exclusions = new Set()) =>
   matTypeNames.filter(type => !exclusions.has(type)).forEach((type) => {
-    it(`${type} ${msg}`, () => testFunc(cvTypes[type]));
+    it(`${type} ${msg}`, () => testFunc(cv.cvTypes[type]));
   });
 
 exports.dangerousDeepEquals = dangerousDeepEquals;

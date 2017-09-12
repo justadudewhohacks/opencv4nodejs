@@ -14,11 +14,11 @@ module.exports = () => {
       });
 
       it('should be constructable from required args', () => {
-        const paramGrid = new cv.ParamGrid(0.5, 1.0, 0.1);
+        const paramGrid = new cv.ParamGrid(0.5, 1.0, 1.5);
         expect(paramGrid).to.be.instanceOf(cv.ParamGrid);
         expect(paramGrid).to.have.property('minVal').to.equal(0.5);
         expect(paramGrid).to.have.property('maxVal').to.equal(1.0);
-        expect(paramGrid).to.have.property('logStep').to.equal(0.1);
+        expect(paramGrid).to.have.property('logStep').to.equal(1.5);
       });
     });
   });

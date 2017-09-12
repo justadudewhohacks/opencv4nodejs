@@ -99,11 +99,23 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_JS_PROP(svmParamTypes, P, Nan::New<v8::Integer>(ml::SVM::ParamTypes::P));
 	cvTypes->Set(FF_NEW_STRING("svmParamTypes"), svmParamTypes);
 	
-
 	v8::Local<v8::Object> sampleTypes = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(sampleTypes, COL_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::COL_SAMPLE));
 	FF_SET_JS_PROP(sampleTypes, ROW_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::ROW_SAMPLE));
 	cvTypes->Set(FF_NEW_STRING("sampleTypes"), sampleTypes);
+
+	v8::Local<v8::Object> variableTypes = Nan::New<v8::Object>();
+	FF_SET_JS_PROP(variableTypes, VAR_CATEGORICAL, Nan::New<v8::Integer>(ml::VariableTypes::VAR_CATEGORICAL));
+	FF_SET_JS_PROP(variableTypes, VAR_NUMERICAL, Nan::New<v8::Integer>(ml::VariableTypes::VAR_NUMERICAL));
+	FF_SET_JS_PROP(variableTypes, VAR_ORDERED, Nan::New<v8::Integer>(ml::VariableTypes::VAR_ORDERED));
+	cvTypes->Set(FF_NEW_STRING("variableTypes"), variableTypes);
+
+	v8::Local<v8::Object> statModelFlags = Nan::New<v8::Object>();
+	FF_SET_JS_PROP(statModelFlags, COMPRESSED_INPUT, Nan::New<v8::Integer>(ml::StatModel::Flags::COMPRESSED_INPUT));
+	FF_SET_JS_PROP(statModelFlags, PREPROCESSED_INPUT, Nan::New<v8::Integer>(ml::StatModel::Flags::PREPROCESSED_INPUT));
+	FF_SET_JS_PROP(statModelFlags, RAW_OUTPUT, Nan::New<v8::Integer>(ml::StatModel::Flags::RAW_OUTPUT));
+	FF_SET_JS_PROP(statModelFlags, UPDATE_MODEL, Nan::New<v8::Integer>(ml::StatModel::Flags::UPDATE_MODEL));
+	cvTypes->Set(FF_NEW_STRING("statModelFlags"), statModelFlags);
 
 	v8::Local<v8::Object> haarCascades = Nan::New<v8::Object>();
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE, FF_NEW_STRING("./haarcascade_eye.xml"));
