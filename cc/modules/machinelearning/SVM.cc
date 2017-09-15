@@ -14,6 +14,7 @@ NAN_MODULE_INIT(SVM::Init) {
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("c"), c);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("coef0"), coef0);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("degree"), degree);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("gamma"), gamma);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("nu"), nu);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("p"), p);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("kernelType"), kernelType);
@@ -29,7 +30,8 @@ NAN_MODULE_INIT(SVM::Init) {
 	Nan::SetPrototypeMethod(ctor, "getSupportVectors", GetSupportVectors);
 	Nan::SetPrototypeMethod(ctor, "getUncompressedSupportVectors", GetUncompressedSupportVectors);
 	Nan::SetPrototypeMethod(ctor, "calcError", CalcError);
-	//Nan::SetPrototypeMethod(ctor, "save", Save);
+	Nan::SetPrototypeMethod(ctor, "save", Save);
+	Nan::SetPrototypeMethod(ctor, "load", Load);
 
 	target->Set(Nan::New("SVM").ToLocalChecked(), ctor->GetFunction());
 };
@@ -182,7 +184,14 @@ NAN_METHOD(SVM::CalcError) {
 
 NAN_METHOD(SVM::Save) {
 	FF_METHOD_CONTEXT("SVM::Save");
-	//FF_UNWRAP(info.This(), SVM)->svm->save();
+	FF_ARG_STRING(0, std::string path);
+	FF_UNWRAP(info.This(), SVM)->svm->save(path);
+}
+
+NAN_METHOD(SVM::Load) {
+	FF_METHOD_CONTEXT("SVM::Load");
+	FF_ARG_STRING(0, std::string path);
+	FF_UNWRAP(info.This(), SVM)->svm = FF_UNWRAP(info.This(), SVM)->svm->load(path);
 }
 
 void SVM::setParams(v8::Local<v8::Object> params) {
@@ -191,6 +200,7 @@ void SVM::setParams(v8::Local<v8::Object> params) {
 	FF_GET_NUMBER_IFDEF(params, double c, "c", this->svm->getC());
 	FF_GET_NUMBER_IFDEF(params, double coef0, "coef0", this->svm->getCoef0());
 	FF_GET_NUMBER_IFDEF(params, double degree, "degree", this->svm->getDegree());
+	FF_GET_NUMBER_IFDEF(params, double gamma, "gamma", this->svm->getGamma());
 	FF_GET_NUMBER_IFDEF(params, double nu, "nu", this->svm->getNu());
 	FF_GET_NUMBER_IFDEF(params, double p, "p", this->svm->getP());
 	FF_GET_NUMBER_IFDEF(params, unsigned int kernelType, "kernelType", this->svm->getKernelType());
@@ -199,6 +209,7 @@ void SVM::setParams(v8::Local<v8::Object> params) {
 	this->svm->setC(c);
 	this->svm->setCoef0(coef0);
 	this->svm->setDegree(degree);
+	this->svm->setGamma(gamma);
 	this->svm->setNu(nu);
 	this->svm->setP(p);
 	this->svm->setKernel(kernelType);

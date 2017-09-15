@@ -24,6 +24,7 @@ FF_DEFINE_CALC_HIST(calcHist4, 4, FF_HIST_RANGE_4);
 
 NAN_MODULE_INIT(Imgproc::Init) {
 	Nan::SetMethod(target, "getStructuringElement", GetStructuringElement);
+	Nan::SetMethod(target, "getRotationMatrix2D", GetRotationMatrix2D);
 	Nan::SetMethod(target, "calcHist", CalcHist);
 	Nan::SetMethod(target, "plot1DHist", Plot1DHist);
 	Nan::SetMethod(target, "canny", Canny);
@@ -46,6 +47,20 @@ NAN_METHOD(Imgproc::GetStructuringElement) {
 	);
 	info.GetReturnValue().Set(jsKernel);
 }
+
+NAN_METHOD(Imgproc::GetRotationMatrix2D) {
+	FF_METHOD_CONTEXT("GetRotationMatrix2D");
+
+	FF_ARG_INSTANCE(0, cv::Point2i center, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
+	FF_ARG_NUMBER(1, double angle);
+
+	FF_ARG_NUMBER_IFDEF(2, double scale, 1.0);
+
+	FF_OBJ jsRotationMat = FF_NEW_INSTANCE(Mat::constructor);
+	FF_UNWRAP_MAT_AND_GET(jsRotationMat) = cv::getRotationMatrix2D(center, angle, scale);
+	info.GetReturnValue().Set(jsRotationMat);
+}
+
 
 NAN_METHOD(Imgproc::CalcHist) {
 	FF_METHOD_CONTEXT("CalcHist");

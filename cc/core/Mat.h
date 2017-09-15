@@ -50,6 +50,7 @@ public:
 	static NAN_METHOD(InRange);
 	static NAN_METHOD(CvtColor);
 	static NAN_METHOD(BgrToGray);
+	static NAN_METHOD(WarpAffine);
 	static NAN_METHOD(WarpPerspective);
 	static NAN_METHOD(Dilate);
 	static NAN_METHOD(Erode);
@@ -60,6 +61,7 @@ public:
 	static NAN_METHOD(MedianBlur);
 	static NAN_METHOD(ConnectedComponents);
 	static NAN_METHOD(ConnectedComponentsWithStats);
+	static NAN_METHOD(_Moments);
 	static NAN_METHOD(FindContours);
 	static NAN_METHOD(DrawContours);
 	static NAN_METHOD(DrawLine);

@@ -2,6 +2,7 @@
 #include "Point2.h"
 #include "Rect.h"
 #include "RotatedRect.h"
+#include "Moments.h"
 #include "imgproc/Contour.h"
 
 Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
@@ -43,6 +44,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "bgrToGray", BgrToGray);
 	Nan::SetPrototypeMethod(ctor, "threshold", Threshold);
 	Nan::SetPrototypeMethod(ctor, "inRange", InRange);
+	Nan::SetPrototypeMethod(ctor, "warpAffine", WarpAffine);
 	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
 	Nan::SetPrototypeMethod(ctor, "dilate", Dilate);
 	Nan::SetPrototypeMethod(ctor, "erode", Erode);
@@ -53,6 +55,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "medianBlur", MedianBlur);
 	Nan::SetPrototypeMethod(ctor, "connectedComponents", ConnectedComponents);
 	Nan::SetPrototypeMethod(ctor, "connectedComponentsWithStats", ConnectedComponentsWithStats);
+	Nan::SetPrototypeMethod(ctor, "moments", _Moments);
 	Nan::SetPrototypeMethod(ctor, "findContours", FindContours);
 	Nan::SetPrototypeMethod(ctor, "drawContours", DrawContours);
 	Nan::SetPrototypeMethod(ctor, "drawLine", DrawLine);
@@ -466,6 +469,40 @@ NAN_METHOD(Mat::BgrToGray) {
 	info.GetReturnValue().Set(jsMat);
 }
 
+
+NAN_METHOD(Mat::WarpAffine) { 
+	FF_METHOD_CONTEXT("Mat::WarpAffine");
+	cv::Mat self = FF_UNWRAP_MAT_AND_GET(info.This());
+
+	FF_ARG_INSTANCE(0, cv::Mat transformationMatrix, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(1) && !FF_IS_INSTANCE(Size::constructor, info[1]);
+	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size size, "size", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size(self.cols, self.rows));
+	FF_GET_UINT_IFDEF(optArgs, int flags, "flags", cv::INTER_LINEAR);
+	FF_GET_UINT_IFDEF(optArgs, int borderMode, "borderMode", cv::BORDER_CONSTANT);
+	if (!hasOptArgsObj) {
+		FF_ARG_INSTANCE_IFDEF(1, size, Size::constructor, FF_UNWRAP_SIZE_AND_GET, size);
+		FF_ARG_UINT_IFDEF(2, flags, flags);
+		FF_ARG_UINT_IFDEF(3, borderMode, borderMode);
+	}
+	// TODO borderValue
+	const cv::Scalar& borderValue = cv::Scalar();
+
+	FF_OBJ jsWarped = FF_NEW_INSTANCE(constructor);
+	cv::warpAffine(
+		self,
+		FF_UNWRAP_MAT_AND_GET(jsWarped),
+		transformationMatrix,
+		size,
+		flags,
+		borderMode,
+		borderValue
+	);
+	FF_RETURN(jsWarped);
+}
+
 NAN_METHOD(Mat::WarpPerspective) {
 	FF_REQUIRE_ARGS_OBJ("Mat::WarpPerspective");
 	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
@@ -675,6 +712,12 @@ NAN_METHOD(Mat::ConnectedComponentsWithStats) {
 	Nan::Set(ret, FF_NEW_STRING("stats"), jsStats);
 	Nan::Set(ret, FF_NEW_STRING("centroids"), jsCentroids);
 	info.GetReturnValue().Set(ret);
+}
+
+NAN_METHOD(Mat::_Moments) {
+	FF_OBJ jsMoments = FF_NEW_INSTANCE(Moments::constructor);
+	FF_UNWRAP(jsMoments, Moments)->moments = cv::moments(FF_UNWRAP_MAT_AND_GET(info.This()));
+	info.GetReturnValue().Set(jsMoments);
 }
 
 NAN_METHOD(Mat::FindContours) {

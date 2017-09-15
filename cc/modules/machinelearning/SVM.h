@@ -19,10 +19,12 @@ public:
 	static NAN_METHOD(GetUncompressedSupportVectors);
 	static NAN_METHOD(CalcError);
 	static NAN_METHOD(Save);
+	static NAN_METHOD(Load);
 
 	static FF_GETTER(SVM, c, svm->getC());
 	static FF_GETTER(SVM, coef0, svm->getCoef0());
 	static FF_GETTER(SVM, degree, svm->getDegree());
+	static FF_GETTER(SVM, gamma, svm->getGamma());
 	static FF_GETTER(SVM, nu, svm->getNu());
 	static FF_GETTER(SVM, p, svm->getP());
 	static FF_GETTER(SVM, kernelType, svm->getKernelType());
