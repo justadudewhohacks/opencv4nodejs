@@ -479,7 +479,7 @@ NAN_METHOD(Mat::WarpAffine) {
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(1) && !FF_IS_INSTANCE(Size::constructor, info[1]);
 	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d size, "size", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size(self.cols, self.rows));
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d size, "size", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d(self.cols, self.rows));
 	FF_GET_UINT_IFDEF(optArgs, int flags, "flags", cv::INTER_LINEAR);
 	FF_GET_UINT_IFDEF(optArgs, int borderMode, "borderMode", cv::BORDER_CONSTANT);
 	if (!hasOptArgsObj) {
