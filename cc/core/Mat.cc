@@ -470,7 +470,7 @@ NAN_METHOD(Mat::BgrToGray) {
 }
 
 
-NAN_METHOD(Mat::WarpAffine) { 
+NAN_METHOD(Mat::WarpAffine) {
 	FF_METHOD_CONTEXT("Mat::WarpAffine");
 	cv::Mat self = FF_UNWRAP_MAT_AND_GET(info.This());
 
@@ -479,7 +479,7 @@ NAN_METHOD(Mat::WarpAffine) {
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(1) && !FF_IS_INSTANCE(Size::constructor, info[1]);
 	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size size, "size", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size(self.cols, self.rows));
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d size, "size", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size(self.cols, self.rows));
 	FF_GET_UINT_IFDEF(optArgs, int flags, "flags", cv::INTER_LINEAR);
 	FF_GET_UINT_IFDEF(optArgs, int borderMode, "borderMode", cv::BORDER_CONSTANT);
 	if (!hasOptArgsObj) {
@@ -495,7 +495,7 @@ NAN_METHOD(Mat::WarpAffine) {
 		self,
 		FF_UNWRAP_MAT_AND_GET(jsWarped),
 		transformationMatrix,
-		size,
+		(cv::Size)size,
 		flags,
 		borderMode,
 		borderValue
@@ -914,15 +914,15 @@ NAN_METHOD(Mat::PutText) {
 
 	std::string text = FF_CAST_STRING(FF_GET_JSPROP(args, text));
 	cv::Point org;
-	int fontFace; 
-	double fontScale; 
+	int fontFace;
+	double fontScale;
 	cv::Scalar color;
 	FF_GET_JSOBJ_REQUIRED(args, org, org, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, fontFace, IsUint32, Uint32Value);
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, fontScale, IsNumber, NumberValue);
 	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
 
-	int thickness = 1; 
+	int thickness = 1;
 	int lineType = cv::LINE_8;
 	bool bottomLeftOrigin = false;
 	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
