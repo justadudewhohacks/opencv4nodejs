@@ -1,6 +1,6 @@
 {
   "name": "opencv4nodejs",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Transparent OpenCV API for nodejs.",
   "keywords": [
     "opencv",
