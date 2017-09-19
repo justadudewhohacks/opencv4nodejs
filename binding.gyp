@@ -69,6 +69,13 @@
 		"cflags" : [
 			"-std=c++11"
 		],
+        "xcode_settings": {
+            "OTHER_CFLAGS": [
+                "-std=c++11",
+                "-stdlib=libc++"
+            ],
+            "GCC_ENABLE_CPP_EXCEPTIONS": "YES"
+        },
 		"cflags!" : [
 			"-fno-exceptions"
 		],
