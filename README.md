@@ -21,10 +21,14 @@ See <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/exam
 ![face1](https://user-images.githubusercontent.com/31125521/29702730-c79d3904-8972-11e7-8ccb-e8c467244ad8.jpg)
 
 ### Hand Gesture Recognition
-Check out my <a href="https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0"><b>article</b></a> for this example.
+Check out my <a href="https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0"><b>article</b></a> about fingertip detection.
 
 ![gesture-rec_sm](https://user-images.githubusercontent.com/31125521/30052864-41bd5680-9227-11e7-8a62-6205f3d99d5c.gif)
 
+### Machine Learning
+Check out my <a href="https://medium.com/@muehler.v/machine-learning-with-opencv-and-javascript-part-1-recognizing-handwritten-letters-using-hog-and-88719b70efaa"><b>article</b></a> about recognition of handwritten letters using Histogram of oriented Gradients (HOG) and Support Vector Machines (SVM).
+
+![resulttable](https://user-images.githubusercontent.com/31125521/30635645-5a466ea8-9df3-11e7-8498-527e1293c4fa.png)
 
 ### Object Tracking
 
