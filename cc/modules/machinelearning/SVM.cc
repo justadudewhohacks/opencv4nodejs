@@ -94,7 +94,7 @@ NAN_METHOD(SVM::TrainAuto) {
 	FF_ARG_INSTANCE(0, cv::Ptr<cv::ml::TrainData> trainData, TrainData::constructor, FF_UNWRAP_TRAINDATA_AND_GET);
 
 	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(1) && !info[1]->IsUint32();
+	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
 	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
 	FF_GET_UINT_IFDEF(optArgs, unsigned int kFold, "kFold", 10);
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::ml::ParamGrid cGrid, "cGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::C));

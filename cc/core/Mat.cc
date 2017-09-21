@@ -244,54 +244,64 @@ NAN_METHOD(Mat::GetRegion) {
 }
 
 NAN_METHOD(Mat::Copy) {
+	FF_METHOD_CONTEXT("Mat::Copy");
+
 	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-	v8::Local<v8::Object> jsMatDst = FF_NEW_INSTANCE(constructor);
 	cv::Mat matDst = cv::Mat::zeros(matSelf.size(), matSelf.type());
-	Nan::ObjectWrap::Unwrap<Mat>(jsMatDst)->setNativeProps(matDst);
-	if (info[0]->IsObject()) {
+	if (info.Length() > 0) {
 		/* with mask*/
-		FF_REQUIRE_INSTANCE(constructor, info[0], "expected mask to be an instance of Mat");
-		matSelf.copyTo(matDst, FF_UNWRAP_MAT_AND_GET(info[0]->ToObject()));
+		FF_ARG_INSTANCE(0, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+		matSelf.copyTo(matDst, mask);
 	}
 	else {
 		matSelf.copyTo(matDst);
 	}
-	info.GetReturnValue().Set(jsMatDst);
+	FF_OBJ jsMatDst = FF_NEW_INSTANCE(Mat::constructor);
+	FF_UNWRAP_MAT_AND_GET(jsMatDst) = matDst;
+	FF_RETURN(jsMatDst);
 }
 
 NAN_METHOD(Mat::CopyTo) {
-	if (!info[0]->IsObject()) {
-		return Nan::ThrowError("Mat::CopyTo - expected arg: destination mat");
-	}
-	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-	cv::Mat matDst = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
+	FF_METHOD_CONTEXT("Mat::CopyTo");
 
-	if (info[1]->IsObject()) {
+	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+	FF_ARG_INSTANCE(0, cv::Mat dst, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	if (info.Length() > 1) {
 		/* with mask*/
-		matSelf.copyTo(matDst, Nan::ObjectWrap::Unwrap<Mat>(info[1]->ToObject())->mat);
+		FF_ARG_INSTANCE(1, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+		matSelf.copyTo(dst, mask);
 	}
 	else {
-		matSelf.copyTo(matDst);
+		matSelf.copyTo(dst);
 	}
-	info.GetReturnValue().Set(info[0]);
+
+	FF_RETURN(info[0]);
 }
 
 NAN_METHOD(Mat::ConvertTo) {
-	FF_REQUIRE_ARGS_OBJ("Mat::ConvertTo");
+	FF_METHOD_CONTEXT("Mat::ConvertTo");
 
-	int type;
-	double alpha = 1.0, beta = 0.0;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, type, IsInt32, Int32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, alpha, IsNumber, NumberValue);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, beta, IsNumber, NumberValue);
-	v8::Local<v8::Object> jsMatConverted = FF_NEW_INSTANCE(constructor);
+	// required args
+	FF_ARG_UINT(0, uint type);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
+	FF_GET_UINT_IFDEF(optArgs, double alpha, "alpha", 1.0);
+	FF_GET_UINT_IFDEF(optArgs, double beta, "beta", 0.0);
+	if (!hasOptArgsObj) {
+		FF_ARG_NUMBER_IFDEF(1, double alpha, 1.0);
+		FF_ARG_NUMBER_IFDEF(2, double beta, 0.0);
+	}
+
+	FF_OBJ jsMatConverted = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP_MAT_AND_GET(info.This()).convertTo(
 		FF_UNWRAP_MAT_AND_GET(jsMatConverted),
-		type,
+		(int)type,
 		alpha,
 		beta
 	);
-	info.GetReturnValue().Set(jsMatConverted);
+	FF_RETURN(jsMatConverted);
 }
 
 
