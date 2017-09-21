@@ -7,8 +7,8 @@
 ## Accessors
 ``` javascript
 ParamGrid {
-  minVal: Number, 
-  maxVal: Number, 
+  minVal: Number,
+  maxVal: Number,
   logStep: Number
 }
 ```
@@ -29,11 +29,11 @@ ParamGrid : new ParamGrid(Number minVal, Number maxVal, Number logStep)
 ## Accessors
 ``` javascript
 TrainData {
- samples: Mat, 
- layout: Uint, 
- responses: Mat, 
+ samples: Mat,
+ layout: Uint,
+ responses: Mat,
  varIdx = [Int],
- sampleWeights = [Number], 
+ sampleWeights = [Number],
  varType: [Uchar]
 }
 ```
@@ -87,7 +87,7 @@ SVM : new SVM({
 
 ### setParams
 ``` javascript
-setParams({
+svm.setParams({
   c: Number = this.c,
   coef0: Number = this.coef0,
   degree: Number = this.degree,
@@ -103,49 +103,49 @@ setParams({
 
 ### train
 ``` javascript
-Boolean : train(TrainData trainData, Uint flags = 0)
-Boolean : train(Mat samples, Uint layout, Mat responses)
+Boolean : svm.train(TrainData trainData, Uint flags = 0)
+Boolean : svm.train(Mat samples, Uint layout, Mat responses)
 ```
 
 <a name="SVM.trainAuto"></a>
 
 ### trainAuto
 ``` javascript
-Mat : trainAuto(TrainData trainData, Uint kFold = 10, ParamGrid cGrid = ParamGrid(SVM.C), ParamGrid gammaGrid = ParamGrid(SVM.GAMMA), ParamGrid pGrid = ParamGrid(SVM.P), ParamGrid nuGrid = ParamGrid(SVM.NU), ParamGrid coeffGrid = ParamGrid(SVM.COEF), ParamGrid degreeGrid = ParamGrid(SVM.DEGREE), Boolean balanced = false)
+Mat : svm.trainAuto(TrainData trainData, Uint kFold = 10, ParamGrid cGrid = ParamGrid(SVM.C), ParamGrid gammaGrid = ParamGrid(SVM.GAMMA), ParamGrid pGrid = ParamGrid(SVM.P), ParamGrid nuGrid = ParamGrid(SVM.NU), ParamGrid coeffGrid = ParamGrid(SVM.COEF), ParamGrid degreeGrid = ParamGrid(SVM.DEGREE), Boolean balanced = false)
 ```
 
 <a name="SVM.predict"></a>
 
 ### predict
 ``` javascript
-Uint : predict([Number] sample, Uint flags = 0)
-[Uint] : predict(Mat samples, Uint flags = 0)
+Uint : svm.predict([Number] sample, Uint flags = 0)
+[Uint] : svm.predict(Mat samples, Uint flags = 0)
 ```
 
 <a name="SVM.save"></a>
 
 ### save
 ``` javascript
-save(String file)
+svm.save(String file)
 ```
 
 <a name="SVM.load"></a>
 
 ### load
 ``` javascript
-load(String file)
+svm.load(String file)
 ```
 
 <a name="SVM.getSupportVectors"></a>
 
 ### getSupportVectors
 ``` javascript
-Mat : getSupportVectors()
+Mat : svm.getSupportVectors()
 ```
 
 <a name="SVM.calcError"></a>
 
 ### calcError
 ``` javascript
-{ error: Number, responses: Mat } : calcError(TrainData trainData, Boolean test)
+{ error: Number, responses: Mat } : svm.calcError(TrainData trainData, Boolean test)
 ```

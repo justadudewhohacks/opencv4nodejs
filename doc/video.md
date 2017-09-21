@@ -25,7 +25,7 @@ BackgroundSubtractorMOG2 : new BackgroundSubtractorMOG2(Uint history = 500, Numb
 
 ### apply
 ``` javascript
-Mat : apply(Mat frame, Number learningRate = -1)
+Mat : bgsubtractor.apply(Mat frame, Number learningRate = -1)
 ```
 
 <a name="BackgroundSubtractorKNN"></a>
@@ -53,5 +53,5 @@ BackgroundSubtractorKNN : new BackgroundSubtractorKNN(Uint history = 500, Number
 
 ### apply
 ``` javascript
-Mat : apply(Mat frame, Number learningRate = -1)
+Mat : bgsubtractor.apply(Mat frame, Number learningRate = -1)
 ```

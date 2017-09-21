@@ -17,8 +17,8 @@ CascadeClassifier : new CascadeClassifier(String xmlFilePath)
 
 ### detectMultiScale
 ``` javascript
-[Rect] : detectMultiScale(Mat img, [Rect] objects, [Int] rejectLevels, [Number] levelWeigths, Number scaleFactor = 1.1, Int minNeighbors = 3, Uint flags = 0, Size minSize = Size(), Size maxSize = Size())
-[Rect] : detectMultiScale(Mat img, [Rect] objects, [Int] numDetections, Number scaleFactor = 1.1, Int minNeighbors = 3, Uint flags = 0, Size minSize = Size(), Size maxSize = Size())
+[Rect] : cc.detectMultiScale(Mat img, [Rect] objects, [Int] rejectLevels, [Number] levelWeigths, Number scaleFactor = 1.1, Int minNeighbors = 3, Uint flags = 0, Size minSize = Size(), Size maxSize = Size())
+[Rect] : cc.detectMultiScale(Mat img, [Rect] objects, [Int] numDetections, Number scaleFactor = 1.1, Int minNeighbors = 3, Uint flags = 0, Size minSize = Size(), Size maxSize = Size())
 ```
 
 <a name="HOGDescriptor"></a>
@@ -28,17 +28,17 @@ CascadeClassifier : new CascadeClassifier(String xmlFilePath)
 ## Accessors
 ``` javascript
 HOGDescriptor {
-  winSize: Size, 
-  blockSize: Size, 
-  blockStride: Size, 
-  cellSize: Size, 
-  nbins: Uint, 
+  winSize: Size,
+  blockSize: Size,
+  blockStride: Size,
+  cellSize: Size,
+  nbins: Uint,
   derivAperture: Int,
   histogramNormType: Uint,
-  nlevels: Int, 
-  winSigma: Number, 
-  L2HysThreshold: Number, 
-  gammaCorrection: Boolean, 
+  nlevels: Int,
+  winSigma: Number,
+  L2HysThreshold: Number,
+  gammaCorrection: Boolean,
   signedGradient: Boolean
 }
 ```
@@ -56,5 +56,5 @@ HOGDescriptor : new HOGDescriptor(Size winSize = Size(64, 128), Size blockSize =
 
 ### compute
 ``` javascript
-[Number] : compute(Mat img, Size winStride = Size(), Size padding = Size(), [Point2] locations = [])
+[Number] : hog.compute(Mat img, Size winStride = Size(), Size padding = Size(), [Point2] locations = [])
 ```

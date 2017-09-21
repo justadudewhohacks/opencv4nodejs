@@ -35,9 +35,9 @@ imshowWait(String winName, Mat img)
 // returns key pressed
 Number : waitKey(Uint delay)
 ```
-  
+
 <a name="VideoCapture"></a>
- 
+
 # VideoCapture
 
 <a name="VideoCapture.constructors"></a>
@@ -53,12 +53,12 @@ VideoCapture : new VideoCapture(Number devicePort)
 
 ### read
 ``` javascript
-Mat : read()
+Mat : cap.read()
 ```
 
 <a name="VideoCapture.reset"></a>
 
 ### reset
 ``` javascript
-reset()
+cap.reset()
 ```

@@ -1,4 +1,4 @@
-* <a href="./core"><b>core</b></a>
+* <a href="./core/core.md"><b>core</b></a>
   * <a href="./core/Mat.md"><b>Mat</b></a>
     * <a href="./core/Mat.md#operators">operators</a>
       * <a href="./core/Mat.md#operators">add</a>
@@ -11,7 +11,7 @@
       * <a href="./core/Mat.md#operators">exp</a>
       * <a href="./core/Mat.md#operators">mean</a>
       * <a href="./core/Mat.md#operators">sqrt</a>
-      * <a href="./core/Mat.md#operators">dot</a> 
+      * <a href="./core/Mat.md#operators">dot</a>
       * <a href="./core/Mat.md#operators">and</a>
       * <a href="./core/Mat.md#operators">or</a>
       * <a href="./core/Mat.md#operators">bitwiseAnd</a>
@@ -58,8 +58,31 @@
     * <a href="./core/Mat.md#drawRectangle">drawRectangle</a>
     * <a href="./core/Mat.md#drawEllipse">drawEllipse</a>
     * <a href="./core/Mat.md#putText">putText</a>
+  * <a href="./core/Vec.md"><b>Vec</b></a>
+    * <a href="./core/Vec.md#operators">operators</a>
+      * <a href="./core/Vec.md#operators">add</a>
+      * <a href="./core/Vec.md#operators">sub</a>
+      * <a href="./core/Vec.md#operators">mul</a>
+      * <a href="./core/Vec.md#operators">div</a>
+      * <a href="./core/Vec.md#operators">hMul</a>
+      * <a href="./core/Vec.md#operators">hDiv</a>
+      * <a href="./core/Vec.md#operators">absdiff</a>
+      * <a href="./core/Vec.md#operators">exp</a>
+      * <a href="./core/Vec.md#operators">mean</a>
+      * <a href="./core/Vec.md#operators">sqrt</a>
+      * <a href="./core/Vec.md#operators">norm</a>
+      * <a href="./core/Vec.md#operators">cross</a>
+    * <a href="./core/Vec.md#at">at</a>
+  * <a href="./core/Point.md"><b>Point</b></a>
+    * <a href="./core/Point.md#operators">operators</a>
+      * <a href="./core/Point.md#operators">add</a>
+      * <a href="./core/Point.md#operators">sub</a>
+      * <a href="./core/Point.md#operators">mul</a>
+      * <a href="./core/Point.md#operators">div</a>
+      * <a href="./core/Point.md#operators">norm</a>
+    * <a href="./core/Point.md#at">at</a>
 
-* highgui
+* <a href="./highgui.md"><b>highgui</b></a>
   * <a href="./highgui.md#VideoCapture"><b>VideoCapture</b></a>
     * <a href="./highgui.md#VideoCapture.read"><b>read</b></a>
     * <a href="./highgui.md#VideoCapture.reset"><b>reset</b></a>
@@ -69,25 +92,25 @@
   * <a href="./highgui.md#imshowWait">imshowWait</a>
   * <a href="./highgui.md#waitKey">waitKey</a>
 
-* video
+* <a href="./video.md"><b>video</b></a>
   * <a href="./video.md#BackgroundSubtractorMOG2"><b>BackgroundSubtractorMOG2</b></a>
     * <a href="./video.md#BackgroundSubtractorMOG2.apply">apply</a>
   * <a href="./video.md#BackgroundSubtractorKNN"><b>BackgroundSubtractorKNN</b></a>
     * <a href="./video.md#BackgroundSubtractorKNN.apply">apply</a>
 
-* calib3d
+* <a href="./calib3d.md"><b>calib3d</b></a>
   * <a href="./calib3d.md#findHomography">findHomography</a>
 
-* photo
+* <a href="./photo.md"><b>photo</b></a>
   * <a href="./photo.md#fastNlMeansDenoisingColored">fastNlMeansDenoisingColored</a>
 
-* objdetect
+* <a href="./objdetect.md"><b>objdetect</b></a>
   * <a href="./objdetect.md#CascadeClassifier"><b>CascadeClassifier</b></a>
     * <a href="./objdetect.md#CascadeClassifier.detectMultiScale">detectMultiScale</a>
   * <a href="./objdetect.md#HOGDescriptor"><b>HOGDescriptor</b></a>
     * <a href="./objdetect.md#HOGDescriptor.compute">compute</a>
 
-* machinelearning
+* <a href="./machinelearning.md"><b>machinelearning</b></a>
   * <a href="./machinelearning.md#ParamGrid"><b>ParamGrid</b></a>
   * <a href="./machinelearning.md#TrainData"><b>TrainData</b></a>
   * <a href="./machinelearning.md#SVM"><b>SVM</b></a>
