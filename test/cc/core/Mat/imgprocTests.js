@@ -403,21 +403,82 @@ module.exports = () => {
     });
   });
 
-  describe.skip('blur', () => {
-    it('blur', () => {
-      expect(true).to.be.false;
+  describe('blur', () => {
+    const kSize = new cv.Size(3, 3);
+    const anchor = new cv.Point(1, 1);
+    const borderType = cv.BORDER_CONSTANT;
+    funcShouldRequireArgs((() => rgbMat.blur.bind(rgbMat))());
+
+    it('can be called if required args passed', () => {
+      expect(() => rgbMat.blur(kSize)).to.not.throw();
+    });
+
+    it('can be called with optional args', () => {
+      expect(() => rgbMat.blur(
+        kSize,
+        anchor,
+        borderType
+      )).to.not.throw();
+    });
+
+    it('can be called with optional args object', () => {
+      expect(() => rgbMat.blur(
+        kSize,
+        { anchor, borderType }
+      )).to.not.throw();
+    });
+
+    it('should blur something', () => {
+      const blurred = rgbMat.blur(kSize);
+      assertMetaData(blurred)(rgbMat.rows, rgbMat.cols, rgbMat.type);
+      expect(dangerousDeepEquals(blurred.getDataAsArray(), rgbMat.getDataAsArray())).to.be.false;
     });
   });
 
-  describe.skip('gaussianBlur', () => {
-    it('gaussianBlur', () => {
-      expect(true).to.be.false;
+  describe('gaussianBlur', () => {
+    const kSize = new cv.Size(3, 3);
+    const sigmaX = 1.2;
+    const sigmaY = 0.8;
+    const borderType = cv.BORDER_CONSTANT;
+    funcShouldRequireArgs((() => rgbMat.gaussianBlur.bind(rgbMat))());
+
+    it('can be called if required args passed', () => {
+      expect(() => rgbMat.gaussianBlur(kSize, sigmaX)).to.not.throw();
+    });
+
+    it('can be called with optional args', () => {
+      expect(() => rgbMat.gaussianBlur(
+        kSize,
+        sigmaX,
+        sigmaY,
+        borderType
+      )).to.not.throw();
+    });
+
+    it('can be called with optional args object', () => {
+      expect(() => rgbMat.gaussianBlur(
+        kSize,
+        sigmaX,
+        { sigmaY, borderType }
+      )).to.not.throw();
+    });
+
+    it('should blur something', () => {
+      const blurred = rgbMat.gaussianBlur(kSize, sigmaX);
+      assertMetaData(blurred)(rgbMat.rows, rgbMat.cols, rgbMat.type);
+      expect(dangerousDeepEquals(blurred.getDataAsArray(), rgbMat.getDataAsArray())).to.be.false;
     });
   });
 
-  describe.skip('medianBlur', () => {
-    it('medianBlur', () => {
-      expect(true).to.be.false;
+  describe('medianBlur', () => {
+    const kSize = 3;
+
+    funcShouldRequireArgs((() => rgbMat.medianBlur.bind(rgbMat))());
+
+    it('should blur something', () => {
+      const blurred = rgbMat.medianBlur(kSize);
+      assertMetaData(blurred)(rgbMat.rows, rgbMat.cols, rgbMat.type);
+      expect(dangerousDeepEquals(blurred.getDataAsArray(), rgbMat.getDataAsArray())).to.be.false;
     });
   });
 };
