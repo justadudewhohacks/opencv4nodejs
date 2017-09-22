@@ -5,7 +5,6 @@
 #include "Size.h"
 #include "Rect.h"
 #include "RotatedRect.h"
-#include "Moments.h"
 
 NAN_MODULE_INIT(Core::Init) {
   Mat::Init(target);
@@ -14,7 +13,6 @@ NAN_MODULE_INIT(Core::Init) {
 	Size::Init(target);
 	Rect::Init(target);
 	RotatedRect::Init(target);
-	Moments::Init(target);
 
 	Nan::SetMethod(target, "partition", Partition);
 };

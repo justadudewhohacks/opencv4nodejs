@@ -45,11 +45,9 @@ NAN_METHOD(Moments::New) {
 }
 
 NAN_METHOD(Moments::HuMoments) {
+	FF_METHOD_CONTEXT("Moments::HuMoments");
 	std::vector<double> huMoments;
 	cv::HuMoments(FF_UNWRAP(info.This(), Moments)->moments, huMoments);
-	v8::Local<v8::Array> jsHuMoments = Nan::New<v8::Array>(huMoments.size());
-	for (int i = 0; i < jsHuMoments->Length(); i++) {
-		jsHuMoments->Set(i, Nan::New(huMoments.at(i)));
-	}
-	info.GetReturnValue().Set(jsHuMoments);
+	FF_PACK_ARRAY(jsHuMoments, huMoments);
+	FF_RETURN(jsHuMoments);
 }

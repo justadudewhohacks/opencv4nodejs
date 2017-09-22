@@ -83,15 +83,39 @@
       * <a href="./core/Point.md#operators">norm</a>
     * <a href="./core/Point.md#at">at</a>
 
+* <a href="./imgproc/imgproc.md"><b>imgproc</b></a>
+  * <a href="./imgproc/imgproc.md#getStructuringElement">getStructuringElement</a>
+  * <a href="./imgproc/imgproc.md#getRotationMatrix2D">getRotationMatrix2D</a>
+  * <a href="./imgproc/imgproc.md#calcHist">calcHist</a>
+  * <a href="./imgproc/imgproc.md#plot1DHist">plot1DHist</a>
+  * <a href="./imgproc/Moments.md"><b>Moments</b></a>
+    * <a href="./imgproc/Moments.md#huMoments">huMoments</a>
+  * <a href="./imgproc/Contour.md"><b>Contour</b></a>
+    * <a href="./imgproc/Contour.md#getPoints">getPoints</a>
+    * <a href="./imgproc/Contour.md#arcLength">arcLength</a>
+    * <a href="./imgproc/Contour.md#convexHull">convexHull</a>
+    * <a href="./imgproc/Contour.md#convexityDefects">convexityDefects</a>
+    * <a href="./imgproc/Contour.md#boundingRect">boundingRect</a>
+    * <a href="./imgproc/Contour.md#minEnclosingCircle">minEnclosingCircle</a>
+    * <a href="./imgproc/Contour.md#minAreaRect">minAreaRect</a>
+    * <a href="./imgproc/Contour.md#fitEllipse">fitEllipse</a>
+    * <a href="./imgproc/Contour.md#approxPolyDP">approxPolyDP</a>
+    * <a href="./imgproc/Contour.md#pointPolygonTest">pointPolygonTest</a>
+    * <a href="./imgproc/Contour.md#matchShapes">matchShapes</a>
+    * <a href="./imgproc/Contour.md#moments">moments</a>
+
+* ximgproc
+  * TODO
+
 * <a href="./highgui.md"><b>highgui</b></a>
-  * <a href="./highgui.md#VideoCapture"><b>VideoCapture</b></a>
-    * <a href="./highgui.md#VideoCapture.read"><b>read</b></a>
-    * <a href="./highgui.md#VideoCapture.reset"><b>reset</b></a>
   * <a href="./highgui.md#imread">imread</a>
   * <a href="./highgui.md#imwrite">imwrite</a>
   * <a href="./highgui.md#imshow">imshow</a>
   * <a href="./highgui.md#imshowWait">imshowWait</a>
   * <a href="./highgui.md#waitKey">waitKey</a>
+  * <a href="./highgui.md#VideoCapture"><b>VideoCapture</b></a>
+    * <a href="./highgui.md#VideoCapture.read"><b>read</b></a>
+    * <a href="./highgui.md#VideoCapture.reset"><b>reset</b></a>
 
 * <a href="./video.md"><b>video</b></a>
   * <a href="./video.md#BackgroundSubtractorMOG2"><b>BackgroundSubtractorMOG2</b></a>
@@ -123,10 +147,7 @@
     * <a href="./machinelearning.md#SVM.load">load</a>
     * <a href="./machinelearning.md#SVM.getSupportVectors">getSupportVectors</a>
     * <a href="./machinelearning.md#SVM.calcError">calcError</a>
-* imgproc
-  * TODO
-* ximgproc
-  * TODO
+
 * features2d
   * TODO
 * xfeatures2d
