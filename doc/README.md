@@ -82,6 +82,7 @@
       * <a href="./core/Point.md#operators">div</a>
       * <a href="./core/Point.md#operators">norm</a>
     * <a href="./core/Point.md#at">at</a>
+TODO doc Rect, RotatedRect, Size
 
 * <a href="./imgproc/imgproc.md"><b>imgproc</b></a>
   * <a href="./imgproc/imgproc.md#getStructuringElement">getStructuringElement</a>
@@ -106,19 +107,21 @@
     * <a href="./imgproc/Contour.md#matchShapes">matchShapes</a>
     * <a href="./imgproc/Contour.md#moments">moments</a>
 
-* ximgproc
-  * TODO
+* <a href="./ximgproc/ximgproc.md"><b>ximgproc</b></a>
+  * <a href="./ximgproc/SuperpixelSEEDS.md"><b>SuperpixelSEEDS</b></a>
+    * <a href="./ximgproc/SuperpixelSEEDS.md#iterate"><b>iterate</b></a>
 
-* <a href="./highgui.md"><b>highgui</b></a>
-  * <a href="./highgui.md#imread">imread</a>
-  * <a href="./highgui.md#imwrite">imwrite</a>
-  * <a href="./highgui.md#imshow">imshow</a>
-  * <a href="./highgui.md#imshowWait">imshowWait</a>
-  * <a href="./highgui.md#waitKey">waitKey</a>
-  * <a href="./highgui.md#VideoCapture"><b>VideoCapture</b></a>
-    * <a href="./highgui.md#VideoCapture.read"><b>read</b></a>
-    * <a href="./highgui.md#VideoCapture.reset"><b>reset</b></a>
+* <a href="./io/io.md"><b>highgui</b></a>
+  * <a href="./io/io.md#imread">imread</a>
+  * <a href="./io/io.md#imwrite">imwrite</a>
+  * <a href="./io/io.md#imshow">imshow</a>
+  * <a href="./io/io.md#imshowWait">imshowWait</a>
+  * <a href="./io/io.md#waitKey">waitKey</a>
+  * <a href="./io/VideoCapture.md"><b>VideoCapture</b></a>
+    * <a href="./io/VideoCapture.md#read">read</a>
+    * <a href="./io/VideoCapture.md#reset">reset</a>
 
+TODO API refactoring
 * <a href="./video.md"><b>video</b></a>
   * <a href="./video.md#BackgroundSubtractorMOG2"><b>BackgroundSubtractorMOG2</b></a>
     * <a href="./video.md#BackgroundSubtractorMOG2.apply">apply</a>
@@ -131,24 +134,25 @@
 * <a href="./photo.md"><b>photo</b></a>
   * <a href="./photo.md#fastNlMeansDenoisingColored">fastNlMeansDenoisingColored</a>
 
+TODO API refactoring
 * <a href="./objdetect.md"><b>objdetect</b></a>
   * <a href="./objdetect.md#CascadeClassifier"><b>CascadeClassifier</b></a>
     * <a href="./objdetect.md#CascadeClassifier.detectMultiScale">detectMultiScale</a>
   * <a href="./objdetect.md#HOGDescriptor"><b>HOGDescriptor</b></a>
     * <a href="./objdetect.md#HOGDescriptor.compute">compute</a>
 
-* <a href="./machinelearning.md"><b>machinelearning</b></a>
-  * <a href="./machinelearning.md#ParamGrid"><b>ParamGrid</b></a>
-  * <a href="./machinelearning.md#TrainData"><b>TrainData</b></a>
-  * <a href="./machinelearning.md#SVM"><b>SVM</b></a>
-    * <a href="./machinelearning.md#SVM.setParams">setParams</a>
-    * <a href="./machinelearning.md#SVM.train">train</a>
-    * <a href="./machinelearning.md#SVM.trainAuto">trainAuto</a>
-    * <a href="./machinelearning.md#SVM.predict">predict</a>
-    * <a href="./machinelearning.md#SVM.save">save</a>
-    * <a href="./machinelearning.md#SVM.load">load</a>
-    * <a href="./machinelearning.md#SVM.getSupportVectors">getSupportVectors</a>
-    * <a href="./machinelearning.md#SVM.calcError">calcError</a>
+* <a href="./machinelearning/machinelearning.md"><b>machinelearning</b></a>
+  * <a href="./machinelearning/ParamGrid.md"><b>ParamGrid</b></a>
+  * <a href="./machinelearning/TrainData.md"><b>TrainData</b></a>
+  * <a href="./machinelearning/SVM.md"><b>SVM</b></a>
+    * <a href="./machinelearning/SVM.md#setParams">setParams</a>
+    * <a href="./machinelearning/SVM.md#train">train</a>
+    * <a href="./machinelearning/SVM.md#trainAuto">trainAuto</a>
+    * <a href="./machinelearning/SVM.md#predict">predict</a>
+    * <a href="./machinelearning/SVM.md#save">save</a>
+    * <a href="./machinelearning/SVM.md#load">load</a>
+    * <a href="./machinelearning/SVM.md#getSupportVectors">getSupportVectors</a>
+    * <a href="./machinelearning/SVM.md#calcError">calcError</a>
 
 * features2d
   * TODO

@@ -1,53 +1,3 @@
-# machinelearning
-
-<a name="ParamGrid"></a>
-
-# ParamGrid
-
-## Accessors
-``` javascript
-ParamGrid {
-  minVal: Number,
-  maxVal: Number,
-  logStep: Number
-}
-```
-
-<a name="ParamGrid.constructors"></a>
-
-## Constructors
-``` javascript
-ParamGrid : new ParamGrid(Uint paramId)
-ParamGrid : new ParamGrid(Number minVal, Number maxVal, Number logStep)
-```
-
-
-<a name="TrainData"></a>
-
-# TrainData
-
-## Accessors
-``` javascript
-TrainData {
- samples: Mat,
- layout: Uint,
- responses: Mat,
- varIdx = [Int],
- sampleWeights = [Number],
- varType: [Uchar]
-}
-```
-
-<a name="TrainData.constructors"></a>
-
-## Constructors
-``` javascript
-TrainData : new TrainData(Mat samples, Uint layout, Mat responses, [Int] varIdx = [], [Int] sampleIdx = [], [Number] sampleWeights = [], [Uchar] varType = [])
-```
-
-
-<a name="SVM"></a>
-
 # SVM
 
 ## Accessors
@@ -66,7 +16,7 @@ SVM {
 }
 ```
 
-<a name="SVM.constructors"></a>
+<a name="constructors"></a>
 
 ## Constructors
 ``` javascript
@@ -81,9 +31,10 @@ SVM : new SVM({
   classWeights: Mat = Mat()
 })
 ```
+
 ## Methods
 
-<a name="SVM.setParams"></a>
+<a name="setParams"></a>
 
 ### setParams
 ``` javascript
@@ -99,7 +50,7 @@ svm.setParams({
 })
 ```
 
-<a name="SVM.train"></a>
+<a name="train"></a>
 
 ### train
 ``` javascript
@@ -107,14 +58,14 @@ Boolean : svm.train(TrainData trainData, Uint flags = 0)
 Boolean : svm.train(Mat samples, Uint layout, Mat responses)
 ```
 
-<a name="SVM.trainAuto"></a>
+<a name="trainAuto"></a>
 
 ### trainAuto
 ``` javascript
 Mat : svm.trainAuto(TrainData trainData, Uint kFold = 10, ParamGrid cGrid = ParamGrid(ml.SVM.C), ParamGrid gammaGrid = ParamGrid(ml.SVM.GAMMA), ParamGrid pGrid = ParamGrid(ml.SVM.P), ParamGrid nuGrid = ParamGrid(ml.SVM.NU), ParamGrid coeffGrid = ParamGrid(ml.SVM.COEF), ParamGrid degreeGrid = ParamGrid(ml.SVM.DEGREE), Boolean balanced = false)
 ```
 
-<a name="SVM.predict"></a>
+<a name="predict"></a>
 
 ### predict
 ``` javascript
@@ -122,28 +73,28 @@ Uint : svm.predict([Number] sample, Uint flags = 0)
 [Uint] : svm.predict(Mat samples, Uint flags = 0)
 ```
 
-<a name="SVM.save"></a>
+<a name="save"></a>
 
 ### save
 ``` javascript
 svm.save(String file)
 ```
 
-<a name="SVM.load"></a>
+<a name="load"></a>
 
 ### load
 ``` javascript
 svm.load(String file)
 ```
 
-<a name="SVM.getSupportVectors"></a>
+<a name="getSupportVectors"></a>
 
 ### getSupportVectors
 ``` javascript
 Mat : svm.getSupportVectors()
 ```
 
-<a name="SVM.calcError"></a>
+<a name="calcError"></a>
 
 ### calcError
 ``` javascript

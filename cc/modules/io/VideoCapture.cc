@@ -13,6 +13,7 @@ NAN_MODULE_INIT(VideoCapture::Init) {
 };
 
 NAN_METHOD(VideoCapture::New) {
+	FF_METHOD_CONTEXT("VideoCapture::New");
 	VideoCapture* self = new VideoCapture();
 	if (info[0]->IsString()) {
 		self->path = FF_CAST_STRING(info[0]);
@@ -22,27 +23,28 @@ NAN_METHOD(VideoCapture::New) {
 		self->cap.open(info[0]->Uint32Value());
 	}
 	else {
-		return Nan::ThrowError("VideoCapture::New expected arg0 to be path or device port");
+		FF_THROW("expected arg0 to be path or device port");
 	}
 	if (!self->cap.isOpened()) {
-		return Nan::ThrowError("VideoCapture::New failed to open capture");
+		FF_THROW("failed to open capture");
 	}
 
 	self->Wrap(info.Holder());
-  info.GetReturnValue().Set(info.Holder());
+	FF_RETURN(info.Holder());
 }
 
 NAN_METHOD(VideoCapture::Read) {
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
+	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP(info.This(), VideoCapture)->cap.read(FF_UNWRAP_MAT_AND_GET(jsMat));
-	info.GetReturnValue().Set(jsMat);
+	FF_RETURN(jsMat);
 }
 
 NAN_METHOD(VideoCapture::Reset) {
+	FF_METHOD_CONTEXT("VideoCapture::Reset");
 	VideoCapture* self = FF_UNWRAP(info.This(), VideoCapture);
 	self->cap.release();
 	self->cap.open(self->path);
 	if (!self->cap.isOpened()) {
-		return Nan::ThrowError("VideoCapture::Reset failed to reset capture");
+		FF_THROW("failed to reset capture");
 	}
 }

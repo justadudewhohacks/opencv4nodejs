@@ -26,48 +26,49 @@ NAN_MODULE_INIT(SuperpixelSEEDS::Init) {
 };
 
 NAN_METHOD(SuperpixelSEEDS::New) {
+	FF_METHOD_CONTEXT("SuperpixelSEEDS::New");
 	if (!info.IsConstructCall()) {
-		return Nan::ThrowError("SuperpixelSEEDS::New expected new key word");
-	}
-	if (!info[0]->IsObject()) {
-		// TODO usage messages
-		return Nan::ThrowError(FF_NEW_STRING("SuperpixelSEEDS::New - args object required"));
+		FF_THROW("expected new key word");
 	}
 	SuperpixelSEEDS* self = new SuperpixelSEEDS();
-	v8::Local<v8::Object> args = info[0]->ToObject();
-	v8::Local<v8::Object> _jsImg;
-	FF_GET_JSPROP_REQUIRED(args, _jsImg, img, ToObject);
-	// TODO check if Mat is passed
-	Mat* img = Nan::ObjectWrap::Unwrap<Mat>(_jsImg);
-	self->jsImg.Reset(img->persistent());
 
-	if (img->mat.cols < 1 || img->mat.rows < 1 || img->mat.channels() > 3) {
-		return Nan::ThrowError(FF_NEW_STRING("SuperpixelSEEDS::New - empty image"));
+	FF_ARG_INSTANCE(0, self->img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INT(1, self->numSuperpixels);
+	FF_ARG_INT(2, self->numLevels);
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
+
+	FF_GET_INT_IFDEF(optArgs, self->prior, "prior", 2);
+	FF_GET_INT_IFDEF(optArgs, self->histogramBins, "histogramBins", 5);
+	FF_GET_BOOL_IFDEF(optArgs, self->doubleStep, "doubleStep", false);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(3, self->prior, self->prior);
+		FF_ARG_INT_IFDEF(4, self->histogramBins, self->histogramBins);
+		FF_ARG_BOOL_IFDEF(5, self->doubleStep, self->doubleStep);
 	}
-
-	Mat* _jsLabels = Nan::ObjectWrap::Unwrap<Mat>(Nan::NewInstance(Nan::New(Mat::constructor)->GetFunction()).ToLocalChecked());
-	self->jsLabels.Reset(_jsLabels->persistent());
-
-	FF_GET_TYPECHECKED_JSPROP_REQUIRED(args, self->numSuperpixels, numSuperpixels, IsInt32, Int32Value);
-	FF_GET_TYPECHECKED_JSPROP_REQUIRED(args, self->numLevels, numLevels, IsInt32, Int32Value);
-	FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->prior, prior, IsInt32, Int32Value);
-	FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->histogramBins, histogramBins, IsInt32, Int32Value);
-	FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->doubleStep, doubleStep, IsBoolean, BooleanValue)
-
 	self->Wrap(info.Holder());
-	self->superpixelSeeds = cv::ximgproc::createSuperpixelSEEDS(img->mat.cols, img->mat.rows,
-		img->mat.channels(), self->numSuperpixels, self->numLevels, self->prior, self->histogramBins, self->doubleStep);
+	self->superpixelSeeds = cv::ximgproc::createSuperpixelSEEDS(
+		self->img.cols,
+		self->img.rows,
+		self->img.channels(),
+		self->numSuperpixels, 
+		self->numLevels, 
+		self->prior, 
+		self->histogramBins, 
+		self->doubleStep
+	);
   info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(SuperpixelSEEDS::Iterate) {
-	int iterations = 4;
-	if (info[0]->IsInt32()) {
-		iterations = info[0]->Int32Value();
-	}
-	SuperpixelSEEDS* self = Nan::ObjectWrap::Unwrap<SuperpixelSEEDS>(info.This());
-	self->superpixelSeeds->iterate(Nan::ObjectWrap::Unwrap<Mat>(Nan::New(self->jsImg))->mat, iterations);
-	self->superpixelSeeds->getLabels(Nan::ObjectWrap::Unwrap<Mat>(Nan::New(self->jsLabels))->mat);
+	FF_METHOD_CONTEXT("SuperpixelSEEDS::Iterate");
+
+	FF_ARG_UINT_IFDEF(0, uint iterations, 4);
+
+	SuperpixelSEEDS* self = FF_UNWRAP(info.This(), SuperpixelSEEDS);
+	self->superpixelSeeds->iterate(self->img, (int)iterations);
+	self->superpixelSeeds->getLabels(self->labels);
 	self->numCalculatedSuperpixels = self->superpixelSeeds->getNumberOfSuperpixels();
 }
 

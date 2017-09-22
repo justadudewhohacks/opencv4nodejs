@@ -38,5 +38,5 @@
 
 ### huMoments
 ``` javascript
-[Number] Moments.huMoments()
+[Number] moments.huMoments()
 ```

@@ -1,54 +1,43 @@
-const opencv = global.dut;
+const cv = global.dut;
 const { assertPropsWithValue, funcShouldRequireArgs, readTestImage } = global.utils;
 const { assert } = require('chai');
 
 describe('ximgproc', () => {
-  if (!opencv.xmodules.ximgproc) {
+  if (!cv.xmodules.ximgproc) {
     it('compiled without  ximgproc');
     return;
   }
 
   let testImg;
 
-  before(async () => {
+  before(() => {
     testImg = readTestImage().resizeToMax(250);
   });
 
   describe('SuperpixelSEEDS', () => {
+    const numSuperpixels = 100;
+    const numLevels = 2;
+
     describe('constructor', () => {
-      funcShouldRequireArgs(args => new opencv.SuperpixelSEEDS(args));
+      funcShouldRequireArgs(() => new cv.SuperpixelSEEDS());
 
-      it.skip('should throw if image is no Mat instance', () => {
-      });
-
-      it('should be constructable with = required args', () => {
-        const args = {
-          img: testImg,
-          numSuperpixels: 100,
-          numLevels: 2
-        };
-        const superpixelSeeds = new opencv.SuperpixelSEEDS(args);
-        assertPropsWithValue(superpixelSeeds)(args);
-        assert(superpixelSeeds.img === testImg, 'image not equal');
+      it('should be constructable with required args', () => {
+        const superpixelSeeds = new cv.SuperpixelSEEDS(testImg, numSuperpixels, numLevels);
+        assertPropsWithValue(superpixelSeeds)({
+          image: testImg,
+          numSuperpixels,
+          numLevels
+        });
       });
     });
 
     describe('iterate', () => {
-      let superpixelSeeds;
-
-      before(() => {
-        superpixelSeeds = new opencv.SuperpixelSEEDS({
-          img: testImg,
-          numSuperpixels: 100,
-          numLevels: 2
-        });
-      });
-
       it('should iterate with default values', () => {
+        const superpixelSeeds = new cv.SuperpixelSEEDS(testImg, numSuperpixels, numLevels);
         superpixelSeeds.iterate();
         assert(superpixelSeeds.numCalculatedSuperpixels > 0, 'no superpixels calculated');
         assertPropsWithValue(superpixelSeeds.labels)({
-          rows: testImg.rows, cols: testImg.cols, type: opencv.CV_32S
+          rows: testImg.rows, cols: testImg.cols, type: cv.CV_32S
         });
       });
     });
