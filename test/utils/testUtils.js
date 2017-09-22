@@ -1,4 +1,5 @@
 const { assert } = require('chai');
+
 const opencv = global.dut;
 
 const assertError = (func, msg) => {

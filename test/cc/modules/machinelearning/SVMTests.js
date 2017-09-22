@@ -70,10 +70,13 @@ module.exports = () => {
         };
         const svm = new cv.SVM(someArgs);
         svm.setParams(args);
-        assertPropsWithValue(svm)({
-          ...someArgs,
-          ...args
-        });
+        assertPropsWithValue(svm)(
+          Object.assign(
+            {},
+            someArgs,
+            args
+          )
+        );
       });
     });
 

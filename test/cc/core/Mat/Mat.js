@@ -3,7 +3,6 @@ const {
   assertError,
   assertPropsWithValue,
   assertMatValueEquals,
-  funcRequiresArgsObject,
   assertMetaData,
   assertDataDeepEquals,
   MatValuesComparator,
@@ -108,13 +107,15 @@ describe('Mat', () => {
   });
 
   describe('copyTo', () => {
-    assertError(
-      (() => {
-        const mat = new cv.Mat();
-        return mat.copyTo.bind(mat);
-      })(),
-      'expected arg: destination mat'
-    );
+    it('should throw if required args not passed', () => {
+      assertError(
+        (() => {
+          const mat = new cv.Mat();
+          return mat.copyTo.bind(mat);
+        })(),
+        'expected arg: destination mat'
+      );
+    });
 
     it('should copy data', () => {
       const dstMat = srcMat.copyTo(new cv.Mat(srcMat.rows, srcMat.cols, srcMat.type));
@@ -130,8 +131,6 @@ describe('Mat', () => {
   });
 
   describe('convertTo', () => {
-    funcRequiresArgsObject(args => new cv.Mat().convertTo(args));
-
     it('should throw if type invalid', () => {
       assertError(() => srcMat.convertTo({ type: undefined }), 'Invalid type for type');
       assertError(() => srcMat.convertTo({ type: null }), 'Invalid type for type');
