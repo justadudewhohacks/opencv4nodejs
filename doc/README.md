@@ -32,6 +32,7 @@
     * <a href="./core/Mat.md#copyTo">convertTo</a>
     * <a href="./core/Mat.md#norm">norm</a>
     * <a href="./core/Mat.md#normalize">normalize</a>
+    * <a href="./core/Mat.md#splitChannels">splitChannels</a>
     * <a href="./core/Mat.md#rescale">rescale</a>
     * <a href="./core/Mat.md#resize">resize</a>
     * <a href="./core/Mat.md#resizeToMax">resizeToMax</a>

@@ -154,6 +154,12 @@ Number : mat.norm(Uint normType = NORM_L2, : Mat mask = noArray())
 ### normalize
 ``` javascript
 Mat : mat.normalize(Number alpha = 1.0, Number beta = 0.0, Uint normType = NORM_L2, Int dtype = -1, : Mat mask = noArray())
+```
+
+<a name="splitChannels"></a>
+
+### splitChannels
+``` javascript
 [Mat] : mat.splitChannels()
 ```
 
@@ -224,14 +230,14 @@ Mat : mat.warpPerspective(Mat transforMationMatrix, Size size = new Size(this.co
 
 ### dilate
 ``` javascript
-Mat : mat.dilate(Mat kernel, Point2 anchor = new Point2(-1, -1), Uint iterations, Uint borderType = BORDER_CONSTANT)
+Mat : mat.dilate(Mat kernel, Point2 anchor = new Point2(-1, -1), Uint iterations = 1, Uint borderType = BORDER_CONSTANT)
 ```
 
 <a name="erode"></a>
 
 ### erode
 ``` javascript
-Mat : mat.erode(Mat kernel,Point2 anchor = new Point2(-1, -1), Uint iterations, Uint borderType = BORDER_CONSTANT)
+Mat : mat.erode(Mat kernel,Point2 anchor = new Point2(-1, -1), Uint iterations = 1, Uint borderType = BORDER_CONSTANT)
 ```
 
 <a name="distanceTransform"></a>
@@ -245,7 +251,7 @@ Mat : mat.distanceTransform(Uint distanceType, Uint maskSize, Uint dstType = CV_
 
 ### distanceTransformWithLabels
 ``` javascript
-{ labels: Mat, dist: Mat } : mat.distanceTransformWithLabels(Uint distanceType, Uint maskSize, Uint dstType = CV_32F)
+{ labels: Mat, dist: Mat } : mat.distanceTransformWithLabels(Uint distanceType, Uint maskSize, Uint labelType = DIST_LABEL_CCOMP)
 ```
 
 <a name="blur"></a>
