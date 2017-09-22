@@ -1,5 +1,5 @@
 #include "imgproc.h"
-#include "Point2.h"
+#include "Point.h"
 #include "Size.h"
 #include "Mat.h"
 #include "Contour.h"
@@ -28,6 +28,7 @@ NAN_MODULE_INIT(Imgproc::Init) {
 	Nan::SetMethod(target, "getRotationMatrix2D", GetRotationMatrix2D);
 	Nan::SetMethod(target, "calcHist", CalcHist);
 	Nan::SetMethod(target, "plot1DHist", Plot1DHist);
+	Nan::SetMethod(target, "fitLine", FitLine);
 	Moments::Init(target);
 	Contour::Init();
 };
@@ -54,7 +55,7 @@ NAN_METHOD(Imgproc::GetRotationMatrix2D) {
 
 	FF_OBJ jsRotationMat = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP_MAT_AND_GET(jsRotationMat) = cv::getRotationMatrix2D(center, angle, scale);
-	info.GetReturnValue().Set(jsRotationMat);
+	FF_RETURN(jsRotationMat);
 }
 
 
@@ -166,4 +167,47 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP_MAT_AND_GET(jsMat) = plot;
 	FF_RETURN(jsMat);
+}
+
+NAN_METHOD(Imgproc::FitLine) {
+	FF_METHOD_CONTEXT("FitLine");
+
+	FF_ARG_ARRAY(0, FF_ARR jsPoints);
+	if (jsPoints->Length() < 2) {
+		FF_THROW("expected arg0 to be an Array with atleast 2 Points");
+	}
+	FF_VAL jsPt1 = jsPoints->Get(0);
+	bool isPoint2 = FF_IS_INSTANCE(Point2::constructor, jsPt1);
+	bool isPoint3 = FF_IS_INSTANCE(Point3::constructor, jsPt1);
+	if (!isPoint2 && !isPoint3) {
+		FF_THROW("expected arg0 to be an Array containing instances of Point2 or Point3");
+	}
+
+	FF_ARG_UINT(1, uint distType);
+	FF_ARG_NUMBER(2, double param);
+	FF_ARG_NUMBER(3, double reps);
+	FF_ARG_NUMBER(4, double aeps);
+
+	FF_ARR jsLineParams;
+	if (isPoint2) {
+		std::vector<cv::Point2d> pts;
+		Point::unpackJSPoint2Array(pts, jsPoints);
+		cv::Vec4f lineParams;
+		cv::fitLine(pts, lineParams, (int)distType, param, reps, aeps);
+		jsLineParams = FF_NEW_ARRAY(4);
+		for (int i = 0; i < 4; i++) {
+			jsLineParams->Set(i, Nan::New(lineParams[i]));
+		}
+	}
+	else {
+		std::vector<cv::Point3d> pts;
+		Point::unpackJSPoint3Array(pts, jsPoints);
+		cv::Vec6f lineParams;
+		cv::fitLine(pts, lineParams, (int)distType, param, reps, aeps);
+		jsLineParams = FF_NEW_ARRAY(6);
+		for (int i = 0; i < 6; i++) {
+			jsLineParams->Set(i, Nan::New(lineParams[i]));
+		}
+	}
+	FF_RETURN(jsLineParams);
 }

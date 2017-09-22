@@ -88,6 +88,7 @@
   * <a href="./imgproc/imgproc.md#getRotationMatrix2D">getRotationMatrix2D</a>
   * <a href="./imgproc/imgproc.md#calcHist">calcHist</a>
   * <a href="./imgproc/imgproc.md#plot1DHist">plot1DHist</a>
+  * <a href="./imgproc/imgproc.md#fitLine">fitLine</a>
   * <a href="./imgproc/Moments.md"><b>Moments</b></a>
     * <a href="./imgproc/Moments.md#huMoments">huMoments</a>
   * <a href="./imgproc/Contour.md"><b>Contour</b></a>

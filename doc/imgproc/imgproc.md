@@ -27,3 +27,12 @@ Mat : calcHist(Mat img, [{ channel: Uint, bins: Uint, ranges: [2 Number] }] hist
 ``` javascript
 Mat : plot1DHist(Mat hist, Mat plotImg, Vec3 color, Uint lineType = LINE_8, Uint thickness = 1, Uint shift = 0)
 ```
+
+<a name="fitLine"></a>
+
+### fitLine
+``` javascript
+[4 Number] : fitLine([Point2] points, Uint distType, Number param, Number reps, Number aeps)
+[6 Number] : fitLine([Point3] points, Uint distType, Number param, Number reps, Number aeps)
+```
+

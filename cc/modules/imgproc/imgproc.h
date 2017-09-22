@@ -13,6 +13,7 @@ public:
 	static NAN_METHOD(GetRotationMatrix2D);
 	static NAN_METHOD(CalcHist);
 	static NAN_METHOD(Plot1DHist);
+	static NAN_METHOD(FitLine);
 
 };
 
