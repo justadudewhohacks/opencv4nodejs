@@ -138,7 +138,7 @@ module.exports = () => {
     describe('boundingRect', () => {
       it('should return boundingRect', () => {
         const rect = rightBottomContour.boundingRect();
-        expect(rect).to.have.instanceOf(cv.Rect);
+        expect(rect).to.be.instanceOf(cv.Rect);
         expect(rect.height).to.equal(3);
         expect(rect.width).to.equal(3);
         expect(rect.x).to.equal(5);
@@ -154,6 +154,17 @@ module.exports = () => {
         expect(circle.center.x).to.equal(6);
         expect(circle.center.y).to.equal(6);
         expect(circle.radius).to.be.within(1.4, 1.5);
+      });
+    });
+
+    describe('minEnclosingTriangle', () => {
+      it('should return minEnclosingTriangle', () => {
+        const triangle = rightBottomContour.minEnclosingTriangle();
+        expect(triangle).to.be.an('array').lengthOf(3);
+        triangle.forEach((pt) => {
+          expect(pt).to.have.property('x');
+          expect(pt).to.have.property('y');
+        });
       });
     });
 

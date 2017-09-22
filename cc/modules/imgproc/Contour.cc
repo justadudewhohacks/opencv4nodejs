@@ -126,17 +126,13 @@ NAN_METHOD(Contour::MinEnclosingCircle) {
 	FF_RETURN(jsCircle);
 }
 
-NAN_METHOD(Contour::MinEnclosingTriangle) { // TODO
-	cv::Point2f center;
-	float radius;
-	cv::minEnclosingCircle(FF_UNWRAP_CONTOUR_AND_GET(info.This()), center, radius);
-
-	FF_OBJ jsCircle = FF_NEW_OBJ();
-	FF_OBJ jsCenter = FF_NEW_INSTANCE(Point2::constructor);
-	FF_UNWRAP_PT2_AND_GET(jsCenter) = center;
-	Nan::Set(jsCircle, FF_NEW_STRING("center"), jsCenter);
-	Nan::Set(jsCircle, FF_NEW_STRING("radius"), Nan::New((double)radius));
-	FF_RETURN(jsCircle);
+NAN_METHOD(Contour::MinEnclosingTriangle) {
+	std::vector<cv::Point2f> triangle;
+	cv::minEnclosingTriangle(
+		FF_UNWRAP_CONTOUR_AND_GET(info.This()), 
+		triangle
+	);
+	FF_RETURN(Point::packJSPoint2Array(triangle));
 }
 
 NAN_METHOD(Contour::PointPolygonTest) {

@@ -61,6 +61,13 @@ Rect contour.boundingRect()
 { center: Point2, radius: Number } contour.minEnclosingCircle()
 ```
 
+<a name="minEnclosingTriangle"></a>
+
+### minEnclosingTriangle
+``` javascript
+[3 Point2] contour.minEnclosingTriangle()
+```
+
 <a name="minAreaRect"></a>
 
 ### minAreaRect

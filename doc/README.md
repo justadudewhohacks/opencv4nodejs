@@ -98,6 +98,7 @@
     * <a href="./imgproc/Contour.md#convexityDefects">convexityDefects</a>
     * <a href="./imgproc/Contour.md#boundingRect">boundingRect</a>
     * <a href="./imgproc/Contour.md#minEnclosingCircle">minEnclosingCircle</a>
+    * <a href="./imgproc/Contour.md#minEnclosingTriangle">minEnclosingTriangle</a>
     * <a href="./imgproc/Contour.md#minAreaRect">minAreaRect</a>
     * <a href="./imgproc/Contour.md#fitEllipse">fitEllipse</a>
     * <a href="./imgproc/Contour.md#approxPolyDP">approxPolyDP</a>
