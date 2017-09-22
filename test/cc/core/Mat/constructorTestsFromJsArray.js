@@ -1,7 +1,7 @@
-import { Mat, cvTypes } from 'dut';
-import { assert } from 'chai';
-import { assertDataDeepEquals, assertDataAlmostDeepEquals, assertMetaData } from 'utils';
-import { getExampleMatData } from './exampleData';
+const { Mat, cvTypes } = global.dut;
+const { assert } = require('chai');
+const { assertDataDeepEquals, assertDataAlmostDeepEquals, assertMetaData } = global.utils;
+const { getExampleMatData } = require('./exampleData');
 
 const createAndAssertMatDataEquals = (type) => {
   const matData = getExampleMatData(type);

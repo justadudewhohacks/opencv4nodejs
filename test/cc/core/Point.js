@@ -1,6 +1,6 @@
-import { Point } from 'dut';
-import { assertError, assertPropsWithValue } from 'utils';
-import { expect } from 'chai';
+const { Point } = global.dut;
+const { assertError, assertPropsWithValue } = global.utils;
+const { expect } = require('chai');
 
 const OperatorRequiresArg = pt => (func, isScalar) => {
   it('should throw if no args', () => {

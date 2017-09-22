@@ -1,8 +1,8 @@
-import cv from 'dut';
-import paramGridTests from './paramGridTests';
-import statModelTests from './statModelTests';
-import SVMTests from './SVMTests';
-import trainDataTests from './trainDataTests';
+const cv = global.dut;
+const paramGridTests = require('./paramGridTests');
+const statModelTests = require('./statModelTests');
+const SVMTests = require('./SVMTests');
+const trainDataTests = require('./trainDataTests');
 
 describe('machinelearning', () => {
   paramGridTests();

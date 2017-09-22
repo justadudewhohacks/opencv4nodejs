@@ -1,8 +1,8 @@
-import cv from 'dut';
-import { assertError, assertPropsWithValue, funcRequiresArgsObject, readTestImage } from 'utils';
-import { expect } from 'chai';
+const cv = global.dut;
+const { assertError, assertPropsWithValue, funcRequiresArgsObject, readTestImage } = global.utils;
+const { expect } = require('chai');
 
-import contourTests from './contourTests';
+const contourTests = require('./contourTests');
 
 const { Mat, Point, Size, cvTypes } = cv;
 
@@ -27,7 +27,7 @@ describe('imgproc', () => {
       assertError(() => new Mat().convertTo({ type: null }), 'Invalid type for type');
     });
 
-    it('should be constructable with required args', () => {
+    it('should be constructable with = required args', () => {
       const kernel = cv.getStructuringElement({
         shape: cvTypes.morphShapes.MORPH_CROSS,
         size

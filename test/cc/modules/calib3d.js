@@ -1,6 +1,6 @@
-import { cvTypes, calib3d } from 'dut';
-import { assertPropsWithValue, funcRequiresArgsObject } from 'utils';
-import { assert } from 'chai';
+const { cvTypes, calib3d } = global.dut;
+const { assertPropsWithValue, funcRequiresArgsObject } = global.utils;
+const { assert } = require('chai');
 
 describe('calib3d', () => {
   describe('findHomography', () => {

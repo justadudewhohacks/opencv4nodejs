@@ -1,10 +1,10 @@
-import { Mat, cvTypes } from 'dut';
-import {
+const { Mat, cvTypes } = global.dut;
+const {
   assertError,
   assertDataDeepEquals,
   assertMetaData
-} from 'utils';
-import { expect } from 'chai';
+} = global.utils;
+const { expect } = require('chai');
 
 const operatorRequiresArg = (func, isScalar) => {
   it('should throw if no args', () => {

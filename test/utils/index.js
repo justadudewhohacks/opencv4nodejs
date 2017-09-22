@@ -1,7 +1,8 @@
-import * as testUtils from './testUtils';
-import * as matTestUtils from './matTestUtils';
+const testUtils = require('./testUtils');
+const matTestUtils = require('./matTestUtils');
 
-module.exports = {
-  ...testUtils,
-  ...matTestUtils
-};
+module.exports = Object.assign(
+  {},
+  testUtils,
+  matTestUtils
+);

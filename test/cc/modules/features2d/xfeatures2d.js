@@ -1,5 +1,5 @@
-import opencv from 'dut';
-import { detectorTests } from './detectorTests';
+const opencv = global.dut;
+const { detectorTests } = require('./detectorTests');
 
 describe('xfeatures2d', () => {
   if (!opencv.xmodules.xfeatures2d) {

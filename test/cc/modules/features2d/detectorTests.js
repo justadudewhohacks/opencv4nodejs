@@ -1,6 +1,6 @@
-import opencv from 'dut';
-import { assert, expect } from 'chai';
-import { assertError, assertPropsWithValue, readTestImage } from 'utils';
+const opencv = global.dut;
+const { assert, expect } = require('chai');
+const { assertError, assertPropsWithValue, readTestImage } = global.utils;
 
 exports.detectorTests = (defaults, customProps, Detector, implementsCompute = true) => {
   let testImg;

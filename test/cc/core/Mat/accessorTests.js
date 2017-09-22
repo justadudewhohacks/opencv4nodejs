@@ -1,14 +1,14 @@
-import { Mat, cvTypes, Vec } from 'dut';
-import {
+const { Mat, cvTypes, Vec } = global.dut;
+const {
   assertError,
   assertMatValueEquals,
   assertMatValueAlmostEquals,
   assertDataDeepEquals,
   assertDataAlmostDeepEquals,
   generateIts
-} from 'utils';
-import { expect } from 'chai';
-import { getExampleMatData } from './exampleData';
+} = global.utils;
+const { expect } = require('chai');
+const { getExampleMatData } = require('./exampleData');
 
 const isFloatType = type =>
   [cvTypes.CV_32FC1, cvTypes.CV_32FC2, cvTypes.CV_32FC3, cvTypes.CV_32FC4]

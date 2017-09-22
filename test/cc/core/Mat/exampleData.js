@@ -1,6 +1,6 @@
-import { cvTypes } from 'dut';
-import { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
-  intMin, floatMin, floatMax, doubleMin, doubleMax } from './typeRanges';
+const { cvTypes } = global.dut;
+const { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
+  intMin, floatMin, floatMax, doubleMin, doubleMax } = require('./typeRanges');
 
 exports.getExampleMatData = (type) => {
   switch (type) {

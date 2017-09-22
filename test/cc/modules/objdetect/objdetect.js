@@ -1,5 +1,5 @@
-import cv from 'dut';
-import HOGDescriptorTests from './HOGDescriptorTests';
+const cv = global.dut;
+const HOGDescriptorTests = require('./HOGDescriptorTests');
 
 describe('objdetect', () => {
   HOGDescriptorTests();

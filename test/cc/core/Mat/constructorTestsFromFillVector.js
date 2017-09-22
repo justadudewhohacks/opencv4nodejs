@@ -1,7 +1,7 @@
-import { Mat, cvTypes } from 'dut';
-import { assertDataDeepEquals, assertDataAlmostDeepEquals, assertMetaData } from 'utils';
-import { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
-  intMin, floatMin, floatMax, doubleMin, doubleMax } from './typeRanges';
+const { Mat, cvTypes } = global.dut;
+const { assertDataDeepEquals, assertDataAlmostDeepEquals, assertMetaData } = global.utils;
+const { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
+  intMin, floatMin, floatMax, doubleMin, doubleMax } = require('./typeRanges');
 
 const rows = 4;
 const cols = 3;

@@ -1,5 +1,5 @@
-import cv from 'dut';
-import { expect } from 'chai';
+const cv = global.dut;
+const { expect } = require('chai');
 
 module.exports = () => {
   describe('StatModel', () => {

@@ -1,5 +1,5 @@
-import { Rect } from 'dut';
-import { expect } from 'chai';
+const { Rect } = global.dut;
+const { expect } = require('chai');
 
 describe('Rect', () => {
   describe('constructor', () => {

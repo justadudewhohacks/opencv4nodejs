@@ -1,6 +1,6 @@
-import cv from 'dut';
-import { expect } from 'chai';
-import { assertMetaData } from 'utils';
+const cv = global.dut;
+const { expect } = require('chai');
+const { assertMetaData } = global.utils;
 
 module.exports = () => {
   describe('TrainData', () => {

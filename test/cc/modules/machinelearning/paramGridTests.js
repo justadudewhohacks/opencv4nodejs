@@ -1,5 +1,5 @@
-import cv from 'dut';
-import { expect } from 'chai';
+const cv = global.dut;
+const { expect } = require('chai');
 
 module.exports = () => {
   describe('ParamGrid', () => {
@@ -13,7 +13,7 @@ module.exports = () => {
         expect(paramGrid).to.be.instanceOf(cv.ParamGrid);
       });
 
-      it('should be constructable from required args', () => {
+      it('should be constructable from = required args', () => {
         const paramGrid = new cv.ParamGrid(0.5, 1.0, 1.5);
         expect(paramGrid).to.be.instanceOf(cv.ParamGrid);
         expect(paramGrid).to.have.property('minVal').to.equal(0.5);

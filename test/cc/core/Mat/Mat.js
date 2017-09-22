@@ -1,5 +1,5 @@
-import cv from 'dut';
-import {
+const cv = global.dut;
+const {
   assertError,
   assertPropsWithValue,
   assertMatValueEquals,
@@ -8,14 +8,14 @@ import {
   assertDataDeepEquals,
   MatValuesComparator,
   isZeroMat
-} from 'utils';
-import { expect } from 'chai';
-import accessorTests from './accessorTests';
-import constructorTestsFromJsArray from './constructorTestsFromJsArray';
-import constructorTestsFromFillVector from './constructorTestsFromFillVector';
-import operatorTests from './operatorTests';
-import imgprocTests from './imgprocTests';
-import { doubleMin, doubleMax } from './typeRanges';
+} = global.utils;
+const { expect } = require('chai');
+const accessorTests = require('./accessorTests');
+const constructorTestsFromJsArray = require('./constructorTestsFromJsArray');
+const constructorTestsFromFillVector = require('./constructorTestsFromFillVector');
+const operatorTests = require('./operatorTests');
+const imgprocTests = require('./imgprocTests');
+const { doubleMin, doubleMax } = require('./typeRanges');
 
 const { normTypes, connectedComponentsTypes } = cv.cvTypes;
 

@@ -1,6 +1,6 @@
-import cv from 'dut';
-import { assert } from 'chai';
-import { assertPropsWithValue } from './testUtils';
+const cv = global.dut;
+const { assert } = require('chai');
+const { assertPropsWithValue } = require('./testUtils');
 
 // TODO: proper deepEquals
 const dangerousDeepEquals = (obj0, obj1) => JSON.stringify(obj0) === JSON.stringify(obj1);

@@ -1,6 +1,6 @@
-import cv from 'dut';
+const cv = global.dut;
 
-import {
+const {
   assertError,
   funcRequiresArgsObject,
   readTestImage,
@@ -8,8 +8,8 @@ import {
   assertDataDeepEquals,
   dangerousDeepEquals,
   isZeroMat
-} from 'utils';
-import { expect } from 'chai';
+} = global.utils;
+const { expect } = require('chai');
 
 const { Mat, cvTypes } = cv;
 

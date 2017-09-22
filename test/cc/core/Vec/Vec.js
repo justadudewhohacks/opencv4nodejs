@@ -1,8 +1,8 @@
-import { Vec } from 'dut';
-import { assertError } from 'utils';
-import { expect } from 'chai';
-import constructorTests from './constructorTests';
-import operatorTests from './operatorTests';
+const { Vec } = global.dut;
+const { assertError } = global.utils;
+const { expect } = require('chai');
+const constructorTests = require('./constructorTests');
+const operatorTests = require('./operatorTests');
 
 describe('Vec', () => {
   constructorTests();

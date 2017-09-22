@@ -1,6 +1,6 @@
-import cv from 'dut';
-import { expect } from 'chai';
-import { assertPropsWithValue } from 'utils';
+const cv = global.dut;
+const { expect } = require('chai');
+const { assertPropsWithValue } = global.utils;
 
 module.exports = () => {
   describe('SVM', () => {

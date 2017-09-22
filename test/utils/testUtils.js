@@ -1,5 +1,5 @@
-import { assert } from 'chai';
-import opencv from 'dut';
+const { assert } = require('chai');
+const opencv = global.dut;
 
 const assertError = (func, msg) => {
   let errMsg = '';
@@ -21,7 +21,7 @@ exports.assertPropsWithValue = obj => (props) => {
 
 exports.funcRequiresArgsObject = (func) => {
   it('should throw if no args', () => {
-    assertError(func, 'args object required');
+    assertError(func, 'args object = required');
   });
 
   it('should throw if args empty', () => {

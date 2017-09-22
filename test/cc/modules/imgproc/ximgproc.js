@@ -1,6 +1,6 @@
-import opencv from 'dut';
-import { assertPropsWithValue, funcRequiresArgsObject, readTestImage } from 'utils';
-import { assert } from 'chai';
+const opencv = global.dut;
+const { assertPropsWithValue, funcRequiresArgsObject, readTestImage } = global.utils;
+const { assert } = require('chai');
 
 describe('ximgproc', () => {
   if (!opencv.xmodules.ximgproc) {
@@ -21,7 +21,7 @@ describe('ximgproc', () => {
       it.skip('should throw if image is no Mat instance', () => {
       });
 
-      it('should be constructable with required args', () => {
+      it('should be constructable with = required args', () => {
         const args = {
           img: testImg,
           numSuperpixels: 100,
