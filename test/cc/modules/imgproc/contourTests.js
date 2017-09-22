@@ -73,11 +73,10 @@ module.exports = () => {
     });
 
     describe('approxPolyDP', () => {
+      const epsilon = 0.5;
+      const closed = true;
       it('should approximate polygon', () => {
-        const aprox = leftmostContour.approxPolyDP({
-          epsilon: 0.5,
-          closed: true
-        });
+        const aprox = leftmostContour.approxPolyDP(epsilon, closed);
         expect(aprox).to.be.an('array').lengthOf(4);
         aprox.forEach((pt2) => {
           expect(pt2).to.have.property('x');
@@ -106,11 +105,11 @@ module.exports = () => {
           expect(pt2).to.have.property('y');
         });
       });
+    });
 
+    describe('convexHullIndices', () => {
       it('should return convexHull indices', () => {
-        const hullIndices = rightBottomContour.convexHull({
-          returnPoints: false
-        });
+        const hullIndices = rightBottomContour.convexHullIndices();
         expect(hullIndices).to.be.an('array').lengthOf(4);
         hullIndices.forEach(ind => expect(ind).to.be.a('number'));
       });
@@ -118,10 +117,9 @@ module.exports = () => {
 
     describe('convexityDefects', () => {
       it('should return convexityDefects', () => {
-        const hullIndices = convexityDefectsContours[0].convexHull({
-          returnPoints: false
-        });
+        const hullIndices = convexityDefectsContours[0].convexHullIndices();
         const defects = convexityDefectsContours[0].convexityDefects(hullIndices);
+
         // TODO figure out whats wrong with defects in 3.0, 3.1
         if (cv.version.minor > 1) {
           expect(defects).to.be.an('array').lengthOf(2);
@@ -196,19 +194,14 @@ module.exports = () => {
     });
 
     describe('matchShapes', () => {
+      const method = cv.CV_CONTOURS_MATCH_I1;
       it('should return zero for same shapes', () => {
-        const similarity = leftmostContour.matchShapes({
-          contour2: leftmostContour,
-          method: cv.CV_CONTOURS_MATCH_I1
-        });
+        const similarity = leftmostContour.matchShapes(leftmostContour, method);
         expect(similarity).to.equal(0);
       });
 
       it('should return shape similariy', () => {
-        const similarity = leftmostContour.matchShapes({
-          contour2: rightBottomContour,
-          method: cv.CV_CONTOURS_MATCH_I1
-        });
+        const similarity = leftmostContour.matchShapes(rightBottomContour, method);
         expect(similarity).not.to.equal(0);
       });
     });
