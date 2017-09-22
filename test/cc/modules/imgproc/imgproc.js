@@ -1,10 +1,8 @@
 const cv = global.dut;
-const { assertError, assertPropsWithValue, funcRequiresArgsObject, readTestImage } = global.utils;
+const { assertError, assertPropsWithValue, funcShouldRequireArgs, readTestImage } = global.utils;
 const { expect } = require('chai');
 
 const contourTests = require('./contourTests');
-
-const { Mat, Point, Size, cvTypes } = cv;
 
 describe('imgproc', () => {
   let testImg;
@@ -18,18 +16,13 @@ describe('imgproc', () => {
   describe('getStructuringElement', () => {
     const rows = 4;
     const cols = 3;
-    const size = new Size(cols, rows);
+    const size = new cv.Size(cols, rows);
 
-    funcRequiresArgsObject(cv.getStructuringElement);
-
-    it('should throw if type invalid', () => {
-      assertError(() => new Mat().convertTo({ type: undefined }), 'Invalid type for type');
-      assertError(() => new Mat().convertTo({ type: null }), 'Invalid type for type');
-    });
+    funcShouldRequireArgs(cv.getStructuringElement);
 
     it('should be constructable with = required args', () => {
       const kernel = cv.getStructuringElement({
-        shape: cvTypes.morphShapes.MORPH_CROSS,
+        shape: cv.MORPH_CROSS,
         size
       });
       assertPropsWithValue(kernel)({ rows, cols });
@@ -37,9 +30,9 @@ describe('imgproc', () => {
 
     it('should be constructable with anchor', () => {
       const kernel = cv.getStructuringElement({
-        shape: cvTypes.morphShapes.MORPH_CROSS,
+        shape: cv.MORPH_CROSS,
         size,
-        anchor: new Point(0, 1)
+        anchor: new cv.Point(0, 1)
       });
       assertPropsWithValue(kernel)({ rows, cols });
     });

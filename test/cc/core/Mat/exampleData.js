@@ -1,10 +1,10 @@
-const { cvTypes } = global.dut;
+const cv = global.dut;
 const { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
   intMin, floatMin, floatMax, doubleMin, doubleMax } = require('./typeRanges');
 
 exports.getExampleMatData = (type) => {
   switch (type) {
-    case cvTypes.CV_8UC1: {
+    case cv.CV_8UC1: {
       return ([
         [ucharMax, 0, 0],
         [0, ucharMax, 0],
@@ -12,7 +12,7 @@ exports.getExampleMatData = (type) => {
         [ucharMax, 0, 0]
       ]);
     }
-    case cvTypes.CV_8UC2: {
+    case cv.CV_8UC2: {
       return ([
         [[ucharMax, 0], [0, 0], [0, ucharMax]],
         [[0, 0], [ucharMax, 0], [0, ucharMax]],
@@ -20,7 +20,7 @@ exports.getExampleMatData = (type) => {
         [[ucharMax, 0], [0, 0], [0, 0]]
       ]);
     }
-    case cvTypes.CV_8UC3: {
+    case cv.CV_8UC3: {
       return ([
         [[ucharMax, 0, 0], [0, 0, 0], [0, ucharMax, ucharMax]],
         [[0, 0, ucharMax], [ucharMax, 0, 0], [ucharMax, 0, ucharMax]],
@@ -28,7 +28,7 @@ exports.getExampleMatData = (type) => {
         [[ucharMax, 0, ucharMax], [0, 0, 0], [0, 0, ucharMax]]
       ]);
     }
-    case cvTypes.CV_8UC4: {
+    case cv.CV_8UC4: {
       return ([
         [[ucharMax, 0, 0, 0], [ucharMax, 0, 0, 0], [0, ucharMax, ucharMax, ucharMax]],
         [[0, 0, ucharMax, 0], [ucharMax, ucharMax, 0, 0], [ucharMax, 0, ucharMax, ucharMax]],
@@ -36,7 +36,7 @@ exports.getExampleMatData = (type) => {
         [[ucharMax, 0, ucharMax, 0], [ucharMax, 0, 0, 0], [0, 0, ucharMax, ucharMax]]
       ]);
     }
-    case cvTypes.CV_8SC1: {
+    case cv.CV_8SC1: {
       return ([
         [charMax, charMin, charMin],
         [charMin, charMax, charMin],
@@ -44,7 +44,7 @@ exports.getExampleMatData = (type) => {
         [charMax, charMin, charMin]
       ]);
     }
-    case cvTypes.CV_8SC2: {
+    case cv.CV_8SC2: {
       return ([
         [[charMax, charMin], [charMin, charMin], [charMin, charMax]],
         [[charMin, charMin], [charMax, charMin], [charMin, charMax]],
@@ -52,7 +52,7 @@ exports.getExampleMatData = (type) => {
         [[charMax, charMin], [charMin, charMin], [charMin, charMin]]
       ]);
     }
-    case cvTypes.CV_8SC3: {
+    case cv.CV_8SC3: {
       return ([
         [[charMax, charMin, charMin], [charMin, charMin, charMin], [charMin, charMax, charMax]],
         [[charMin, charMin, charMax], [charMax, charMin, charMin], [charMax, charMin, charMax]],
@@ -60,7 +60,7 @@ exports.getExampleMatData = (type) => {
         [[charMax, charMin, charMax], [charMin, charMin, charMin], [charMin, charMin, charMax]]
       ]);
     }
-    case cvTypes.CV_8SC4: {
+    case cv.CV_8SC4: {
       return ([
         [[charMax, charMin, charMin, charMin], [charMax, charMin, charMin, charMin], [charMin, charMax, charMax, charMax]],
         [[charMin, charMin, charMax, charMin], [charMax, charMax, charMin, charMin], [charMax, charMin, charMax, charMax]],
@@ -68,7 +68,7 @@ exports.getExampleMatData = (type) => {
         [[charMax, charMin, charMax, charMin], [charMax, charMin, charMin, charMin], [charMin, charMin, charMax, charMax]]
       ]);
     }
-    case cvTypes.CV_16UC1: {
+    case cv.CV_16UC1: {
       return ([
         [ushortMax, 0, 0],
         [0, ushortMax, 0],
@@ -76,7 +76,7 @@ exports.getExampleMatData = (type) => {
         [ushortMax, 0, 0]
       ]);
     }
-    case cvTypes.CV_16UC2: {
+    case cv.CV_16UC2: {
       return ([
         [[ushortMax, 0], [0, 0], [0, ushortMax]],
         [[0, 0], [ushortMax, 0], [0, ushortMax]],
@@ -84,7 +84,7 @@ exports.getExampleMatData = (type) => {
         [[ushortMax, 0], [0, 0], [0, 0]]
       ]);
     }
-    case cvTypes.CV_16UC3: {
+    case cv.CV_16UC3: {
       return ([
         [[ushortMax, 0, 0], [0, 0, 0], [0, ushortMax, ushortMax]],
         [[0, 0, ushortMax], [ushortMax, 0, 0], [ushortMax, 0, ushortMax]],
@@ -92,7 +92,7 @@ exports.getExampleMatData = (type) => {
         [[ushortMax, 0, ushortMax], [0, 0, 0], [0, 0, ushortMax]]
       ]);
     }
-    case cvTypes.CV_16UC4: {
+    case cv.CV_16UC4: {
       return ([
         [[ushortMax, 0, 0, 0], [ushortMax, 0, 0, 0], [0, ushortMax, ushortMax, ushortMax]],
         [[0, 0, ushortMax, 0], [ushortMax, ushortMax, 0, 0], [ushortMax, 0, ushortMax, ushortMax]],
@@ -100,7 +100,7 @@ exports.getExampleMatData = (type) => {
         [[ushortMax, 0, ushortMax, 0], [ushortMax, 0, 0, 0], [0, 0, ushortMax, ushortMax]]
       ]);
     }
-    case cvTypes.CV_16SC1: {
+    case cv.CV_16SC1: {
       return ([
         [shortMax, shortMin, shortMin],
         [shortMin, shortMax, shortMin],
@@ -108,7 +108,7 @@ exports.getExampleMatData = (type) => {
         [shortMax, shortMin, shortMin]
       ]);
     }
-    case cvTypes.CV_16SC2: {
+    case cv.CV_16SC2: {
       return ([
         [[shortMax, shortMin], [shortMin, shortMin], [shortMin, shortMax]],
         [[shortMin, shortMin], [shortMax, shortMin], [shortMin, shortMax]],
@@ -116,7 +116,7 @@ exports.getExampleMatData = (type) => {
         [[shortMax, shortMin], [shortMin, shortMin], [shortMin, shortMin]]
       ]);
     }
-    case cvTypes.CV_16SC3: {
+    case cv.CV_16SC3: {
       return ([
         [[shortMax, shortMin, shortMin], [shortMin, shortMin, shortMin], [shortMin, shortMax, shortMax]],
         [[shortMin, shortMin, shortMax], [shortMax, shortMin, shortMin], [shortMax, shortMin, shortMax]],
@@ -124,7 +124,7 @@ exports.getExampleMatData = (type) => {
         [[shortMax, shortMin, shortMax], [shortMin, shortMin, shortMin], [shortMin, shortMin, shortMax]]
       ]);
     }
-    case cvTypes.CV_16SC4: {
+    case cv.CV_16SC4: {
       return ([
         [[shortMax, shortMin, shortMin, shortMin], [shortMax, shortMin, shortMin, shortMin], [shortMin, shortMax, shortMax, shortMax]],
         [[shortMin, shortMin, shortMax, shortMin], [shortMax, shortMax, shortMin, shortMin], [shortMax, shortMin, shortMax, shortMax]],
@@ -132,7 +132,7 @@ exports.getExampleMatData = (type) => {
         [[shortMax, shortMin, shortMax, shortMin], [shortMax, shortMin, shortMin, shortMin], [shortMin, shortMin, shortMax, shortMax]]
       ]);
     }
-    case cvTypes.CV_32SC1: {
+    case cv.CV_32SC1: {
       return ([
         [intMax, intMin, intMin],
         [intMin, intMax, intMin],
@@ -140,7 +140,7 @@ exports.getExampleMatData = (type) => {
         [intMax, intMin, intMin]
       ]);
     }
-    case cvTypes.CV_32SC2: {
+    case cv.CV_32SC2: {
       return ([
         [[intMax, intMin], [intMin, intMin], [intMin, intMax]],
         [[intMin, intMin], [intMax, intMin], [intMin, intMax]],
@@ -148,7 +148,7 @@ exports.getExampleMatData = (type) => {
         [[intMax, intMin], [intMin, intMin], [intMin, intMin]]
       ]);
     }
-    case cvTypes.CV_32SC3: {
+    case cv.CV_32SC3: {
       return ([
         [[intMax, intMin, intMin], [intMin, intMin, intMin], [intMin, intMax, intMax]],
         [[intMin, intMin, intMax], [intMax, intMin, intMin], [intMax, intMin, intMax]],
@@ -156,7 +156,7 @@ exports.getExampleMatData = (type) => {
         [[intMax, intMin, intMax], [intMin, intMin, intMin], [intMin, intMin, intMax]]
       ]);
     }
-    case cvTypes.CV_32SC4: {
+    case cv.CV_32SC4: {
       return ([
         [[intMax, intMin, intMin, intMin], [intMax, intMin, intMin, intMin], [intMin, intMax, intMax, intMax]],
         [[intMin, intMin, intMax, intMin], [intMax, intMax, intMin, intMin], [intMax, intMin, intMax, intMax]],
@@ -164,7 +164,7 @@ exports.getExampleMatData = (type) => {
         [[intMax, intMin, intMax, intMin], [intMax, intMin, intMin, intMin], [intMin, intMin, intMax, intMax]]
       ]);
     }
-    case cvTypes.CV_32FC1: {
+    case cv.CV_32FC1: {
       return ([
         [floatMax, floatMin, floatMin],
         [floatMin, -floatMax, -floatMin],
@@ -172,7 +172,7 @@ exports.getExampleMatData = (type) => {
         [floatMax, floatMin, floatMin]
       ]);
     }
-    case cvTypes.CV_32FC2: {
+    case cv.CV_32FC2: {
       return ([
         [[floatMax, floatMin], [floatMin, floatMin], [floatMin, -floatMax]],
         [[floatMin, -floatMin], [floatMax, -floatMin], [-floatMin, floatMax]],
@@ -180,7 +180,7 @@ exports.getExampleMatData = (type) => {
         [[floatMax, -floatMin], [floatMin, floatMin], [floatMin, floatMin]]
       ]);
     }
-    case cvTypes.CV_32FC3: {
+    case cv.CV_32FC3: {
       return ([
         [[floatMax, -floatMin, floatMin], [floatMin, -floatMin, floatMin], [floatMin, -floatMax, floatMax]],
         [[floatMin, floatMin, -floatMax], [floatMax, floatMin, floatMin], [floatMax, floatMin, floatMax]],
@@ -188,7 +188,7 @@ exports.getExampleMatData = (type) => {
         [[-floatMax, floatMin, floatMax], [floatMin, -floatMin, -floatMin], [floatMin, floatMin, floatMax]]
       ]);
     }
-    case cvTypes.CV_32FC4: {
+    case cv.CV_32FC4: {
       return ([
         [[floatMax, -floatMin, -floatMin, floatMin], [floatMax, floatMin, floatMin, floatMin], [-floatMin, -floatMax, floatMax, floatMax]],
         [[floatMin, floatMin, floatMax, floatMin], [-floatMax, -floatMax, -floatMin, -floatMin], [floatMax, floatMin, floatMax, floatMax]],
@@ -196,7 +196,7 @@ exports.getExampleMatData = (type) => {
         [[-floatMax, floatMin, floatMax, floatMin], [floatMax, floatMin, floatMin, -floatMin], [-floatMin, floatMin, floatMax, floatMax]]
       ]);
     }
-    case cvTypes.CV_64FC1: {
+    case cv.CV_64FC1: {
       return ([
         [doubleMax, doubleMin, doubleMin],
         [doubleMin, -doubleMax, -doubleMin],
@@ -204,7 +204,7 @@ exports.getExampleMatData = (type) => {
         [doubleMax, doubleMin, doubleMin]
       ]);
     }
-    case cvTypes.CV_64FC2: {
+    case cv.CV_64FC2: {
       return ([
         [[doubleMax, doubleMin], [doubleMin, doubleMin], [doubleMin, -doubleMax]],
         [[doubleMin, -doubleMin], [doubleMax, -doubleMin], [-doubleMin, doubleMax]],
@@ -212,7 +212,7 @@ exports.getExampleMatData = (type) => {
         [[doubleMax, -doubleMin], [doubleMin, doubleMin], [doubleMin, doubleMin]]
       ]);
     }
-    case cvTypes.CV_64FC3: {
+    case cv.CV_64FC3: {
       return ([
         [[doubleMax, -doubleMin, doubleMin], [doubleMin, -doubleMin, doubleMin], [doubleMin, -doubleMax, doubleMax]],
         [[doubleMin, doubleMin, -doubleMax], [doubleMax, doubleMin, doubleMin], [doubleMax, doubleMin, doubleMax]],
@@ -220,7 +220,7 @@ exports.getExampleMatData = (type) => {
         [[-doubleMax, doubleMin, doubleMax], [doubleMin, -doubleMin, -doubleMin], [doubleMin, doubleMin, doubleMax]]
       ]);
     }
-    case cvTypes.CV_64FC4: {
+    case cv.CV_64FC4: {
       return ([
         [[doubleMax, -doubleMin, -doubleMin, doubleMin], [doubleMax, doubleMin, doubleMin, doubleMin], [-doubleMin, -doubleMax, doubleMax, doubleMax]],
         [[doubleMin, doubleMin, doubleMax, doubleMin], [-doubleMax, -doubleMax, -doubleMin, -doubleMin], [doubleMax, doubleMin, doubleMax, doubleMax]],

@@ -1,15 +1,35 @@
-const { cvTypes, calib3d } = global.dut;
-const { assertPropsWithValue, funcRequiresArgsObject } = global.utils;
-const { assert } = require('chai');
+const cv = global.dut;
+const { assertPropsWithValue, funcShouldRequireArgs } = global.utils;
+const { assert, expect } = require('chai');
 
 describe('calib3d', () => {
   describe('findHomography', () => {
-    funcRequiresArgsObject(calib3d.findHomography);
+    const srcPoints = [{ x: 100, y: 100 }, { x: 100, y: -100 }, { x: -100, y: 100 }, { x: -100, y: -100 }];
+    const dstPoints = srcPoints.map(srcPt => ({ x: srcPt.x * 2, y: srcPt.y * 2 }));
+    const method = cv.RANSAC;
+    const confidence = 0.9;
+
+    funcShouldRequireArgs(cv.findHomography);
+
+    it('can be called if required args passed', () => {
+      expect(() => cv.findHomography(srcPoints, dstPoints)).to.not.throw();
+    });
+
+    it('can be called with optional args', () => {
+      expect(() => cv.findHomography(srcPoints, dstPoints, method)).to.not.throw();
+    });
+
+    it('can be called with optional args object', () => {
+      expect(() => cv.findHomography(
+        srcPoints,
+        dstPoints,
+        { method, confidence })).to.not.throw();
+    });
 
     it('should throw if point validation fails', () => {
       let errMsg = '';
       try {
-        calib3d.findHomography({ srcPoints: [{ x: 100 }], dstPoints: [{ x: 100 }] });
+        cv.findHomography([{ x: 100 }], [{ x: 100 }]);
       } catch (err) {
         errMsg = err.toString();
       }
@@ -17,10 +37,8 @@ describe('calib3d', () => {
     });
 
     it('should calculate a valid homography', () => {
-      const srcPoints = [{ x: 100, y: 100 }, { x: 100, y: -100 }, { x: -100, y: 100 }, { x: -100, y: -100 }];
-      const dstPoints = srcPoints.map(srcPt => ({ x: srcPt.x * 2, y: srcPt.y * 2 }));
-      const homography = calib3d.findHomography({ srcPoints, dstPoints });
-      assertPropsWithValue(homography)({ type: cvTypes.CV_64F, rows: 3, cols: 3 });
+      const homography = cv.findHomography(srcPoints, dstPoints);
+      assertPropsWithValue(homography)({ type: cv.CV_64F, rows: 3, cols: 3 });
     });
   });
 });

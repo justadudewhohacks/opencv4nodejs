@@ -314,7 +314,7 @@ NAN_METHOD(Mat::Norm) {
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(i) && info[i]->IsObject();
 	FF_OBJ optArgs = hasOptArgsObj ? info[i]->ToObject() : FF_NEW_OBJ();
-	FF_GET_UINT_IFDEF(optArgs, uint normType, "normType", 4);
+	FF_GET_UINT_IFDEF(optArgs, uint normType, "normType", cv::NORM_L2);
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat mask, "mask", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
 	if (!hasOptArgsObj) {
 		FF_ARG_UINT_IFDEF(i, normType, normType);
@@ -323,10 +323,10 @@ NAN_METHOD(Mat::Norm) {
 
 	if (withSrc2) {
 		FF_ARG_INSTANCE(0, cv::Mat src2, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-		norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), src2, normType, mask);
+		norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), src2, (int)normType, mask);
 	}
 	else {
-		norm = norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), normType, mask);
+		norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), (int)normType, mask);
 	}
 	FF_RETURN(norm);
 }
@@ -457,7 +457,7 @@ NAN_METHOD(Mat::CvtColor) {
 	FF_METHOD_CONTEXT("Mat::CvtColor");
 
 	FF_ARG_UINT(0, uint code);
-	FF_ARG_UINT(1, uint dstCn);
+	FF_ARG_UINT_IFDEF(1, uint dstCn, 0);
 
 	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
 	cv::cvtColor(
@@ -724,8 +724,8 @@ NAN_METHOD(Mat::DrawContours) {
 	FF_GET_UINT_IFDEF(optArgs, uint contourIdx, "contourIdx", 0);
 	FF_GET_INT_IFDEF(optArgs, int maxLevel, "maxLevel", INT_MAX);
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::Point2d offset, "offset", Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2, cv::Point2d());
-	FF_GET_UINT_IFDEF(optArgs, uint lineType, "lineType", cv::LINE_8);
-	FF_GET_UINT_IFDEF(optArgs, uint thickness, "thickness", 1);
+	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
+	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
 	if (!hasOptArgsObj) {
 		FF_ARG_UINT_IFDEF(2, contourIdx, contourIdx);
 		FF_ARG_UINT_IFDEF(3, maxLevel, maxLevel);
@@ -747,8 +747,8 @@ NAN_METHOD(Mat::DrawContours) {
 		contours,
 		(int)contourIdx,
 		color,
-		(int)thickness,
-		(int)lineType,
+		thickness,
+		lineType,
 		hierarchy,
 		(int)maxLevel,
 		offset
@@ -766,24 +766,16 @@ NAN_METHOD(Mat::DrawLine) {
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
 	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
-	FF_GET_UINT_IFDEF(optArgs, uint lineType, "lineType", cv::LINE_8);
-	FF_GET_UINT_IFDEF(optArgs, uint thickness, "thickness", 1);
-	FF_GET_UINT_IFDEF(optArgs, uint shift, "shift", 0);
+	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
+	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
+	FF_GET_INT_IFDEF(optArgs, int shift, "shift", 0);
 	if (!hasOptArgsObj) {
 		FF_ARG_INT_IFDEF(3, lineType, lineType);
 		FF_ARG_INT_IFDEF(4, thickness, thickness);
 		FF_ARG_INT_IFDEF(5, shift, shift);
 	}
 
-	cv::line(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		pt1,
-		pt2,
-		color,
-		(int)thickness,
-		(int)lineType,
-		(int)shift
-	);
+	cv::line(FF_UNWRAP_MAT_AND_GET(info.This()), pt1, pt2, color, thickness, lineType, shift);
 	FF_RETURN(info.This());
 }
 
@@ -797,24 +789,16 @@ NAN_METHOD(Mat::DrawCircle) {
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
 	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
-	FF_GET_UINT_IFDEF(optArgs, uint lineType, "lineType", cv::LINE_8);
-	FF_GET_UINT_IFDEF(optArgs, uint thickness, "thickness", 1);
-	FF_GET_UINT_IFDEF(optArgs, uint shift, "shift", 0);
+	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
+	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
+	FF_GET_INT_IFDEF(optArgs, int shift, "shift", 0);
 	if (!hasOptArgsObj) {
 		FF_ARG_INT_IFDEF(3, lineType, lineType);
 		FF_ARG_INT_IFDEF(4, thickness, thickness);
 		FF_ARG_INT_IFDEF(5, shift, shift);
 	}
 
-	cv::circle(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		center,
-		(int)radius,
-		color,
-		(int)thickness,
-		(int)lineType,
-		(int)shift
-	);
+	cv::circle(FF_UNWRAP_MAT_AND_GET(info.This()), center, (int)radius, color, thickness, lineType, shift);
 	FF_RETURN(info.This());
 }
 
@@ -828,24 +812,16 @@ NAN_METHOD(Mat::DrawRectangle) {
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
 	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
-	FF_GET_UINT_IFDEF(optArgs, uint lineType, "lineType", cv::LINE_8);
-	FF_GET_UINT_IFDEF(optArgs, uint thickness, "thickness", 1);
-	FF_GET_UINT_IFDEF(optArgs, uint shift, "shift", 0);
+	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
+	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
+	FF_GET_INT_IFDEF(optArgs, int shift, "shift", 0);
 	if (!hasOptArgsObj) {
 		FF_ARG_INT_IFDEF(3, lineType, lineType);
 		FF_ARG_INT_IFDEF(4, thickness, thickness);
 		FF_ARG_INT_IFDEF(5, shift, shift);
 	}
 
-	cv::rectangle(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		pt1,
-		pt2,
-		color,
-		(int)thickness,
-		(int)lineType,
-		(int)shift
-	);
+	cv::rectangle(FF_UNWRAP_MAT_AND_GET(info.This()), pt1, pt2, color, thickness, lineType, shift);
 	FF_RETURN(info.This());
 }
 
@@ -858,20 +834,14 @@ NAN_METHOD(Mat::DrawEllipse) {
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
 	FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject() : FF_NEW_OBJ();
-	FF_GET_UINT_IFDEF(optArgs, uint lineType, "lineType", cv::LINE_8);
-	FF_GET_UINT_IFDEF(optArgs, uint thickness, "thickness", 1);
+	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
+	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
 	if (!hasOptArgsObj) {
 		FF_ARG_INT_IFDEF(2, lineType, lineType);
 		FF_ARG_INT_IFDEF(3, thickness, thickness);
 	}
 
-	cv::ellipse(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		box,
-		color,
-		(int)thickness,
-		(int)lineType
-	);
+	cv::ellipse(FF_UNWRAP_MAT_AND_GET(info.This()), box, color, thickness, lineType);
 	FF_RETURN(info.This());
 }
 
@@ -887,8 +857,8 @@ NAN_METHOD(Mat::PutText) {
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(5) && info[5]->IsObject();
 	FF_OBJ optArgs = hasOptArgsObj ? info[5]->ToObject() : FF_NEW_OBJ();
-	FF_GET_UINT_IFDEF(optArgs, uint lineType, "lineType", cv::LINE_8);
-	FF_GET_UINT_IFDEF(optArgs, uint thickness, "thickness", 1);
+	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
+	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
 	FF_GET_BOOL_IFDEF(optArgs, bool bottomLeftOrigin, "bottomLeftOrigin", false);
 	if (!hasOptArgsObj) {
 		FF_ARG_INT_IFDEF(5, lineType, lineType);
@@ -903,8 +873,8 @@ NAN_METHOD(Mat::PutText) {
 		(int)fontFace,
 		fontScale,
 		color,
-		(int)thickness,
-		(int)lineType,
+		thickness,
+		lineType,
 		bottomLeftOrigin
 	);
 	FF_RETURN(info.This());

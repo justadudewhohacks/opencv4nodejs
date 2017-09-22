@@ -49,14 +49,14 @@ module.exports = () => {
     describe('compute', () => {
       it('should be callable with single channel img', () => {
         const desc = new cv.HOGDescriptor().compute({
-          img: new cv.Mat(200, 200, cv.cvTypes.CV_8U)
+          img: new cv.Mat(200, 200, cv.CV_8U)
         });
         expect(desc).to.be.an('array');
       });
 
       it('should be callable with triple channel img', () => {
         const desc = new cv.HOGDescriptor().compute({
-          img: new cv.Mat(200, 200, cv.cvTypes.CV_8UC3)
+          img: new cv.Mat(200, 200, cv.CV_8UC3)
         });
         expect(desc).to.be.an('array');
       });

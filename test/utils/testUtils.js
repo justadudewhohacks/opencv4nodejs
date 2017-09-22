@@ -20,13 +20,9 @@ exports.assertPropsWithValue = obj => (props) => {
   );
 };
 
-exports.funcRequiresArgsObject = (func) => {
+exports.funcShouldRequireArgs = (func) => {
   it('should throw if no args', () => {
-    assertError(func, 'args object = required');
-  });
-
-  it('should throw if args empty', () => {
-    assertError(() => func({}), 'has no property');
+    assertError(func, 'expected arg 0 to be');
   });
 };
 

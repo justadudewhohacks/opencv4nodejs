@@ -63,6 +63,11 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(target, FONT_HERSHEY_SCRIPT_COMPLEX);
 	FF_SET_CV_CONSTANT(target, FONT_ITALIC);
 	
+	FF_SET_CV_CONSTANT(target, FILLED);
+	FF_SET_CV_CONSTANT(target, LINE_4);
+	FF_SET_CV_CONSTANT(target, LINE_8);
+	FF_SET_CV_CONSTANT(target, LINE_AA);
+
 	v8::Local<v8::Object> svmConstants = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(svmConstants, CUSTOM, Nan::New<v8::Integer>(ml::SVM::KernelTypes:: CUSTOM));
 	FF_SET_JS_PROP(svmConstants, LINEAR, Nan::New<v8::Integer>(ml::SVM::KernelTypes::LINEAR));
@@ -78,7 +83,6 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_JS_PROP(svmConstants, GAMMA, Nan::New<v8::Integer>(ml::SVM::ParamTypes::GAMMA));
 	FF_SET_JS_PROP(svmConstants, NU, Nan::New<v8::Integer>(ml::SVM::ParamTypes::NU));
 	FF_SET_JS_PROP(svmConstants, P, Nan::New<v8::Integer>(ml::SVM::ParamTypes::P));
-	target->Set(FF_NEW_STRING("SVM"), svmConstants);
 	
 	v8::Local<v8::Object> mlConstants = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(mlConstants, COL_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::COL_SAMPLE));
@@ -87,6 +91,7 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_JS_PROP(mlConstants, VAR_CATEGORICAL, Nan::New<v8::Integer>(ml::VariableTypes::VAR_CATEGORICAL));
 	FF_SET_JS_PROP(mlConstants, VAR_NUMERICAL, Nan::New<v8::Integer>(ml::VariableTypes::VAR_NUMERICAL));
 	FF_SET_JS_PROP(mlConstants, VAR_ORDERED, Nan::New<v8::Integer>(ml::VariableTypes::VAR_ORDERED));
+	mlConstants->Set(FF_NEW_STRING("SVM"), svmConstants);
 	target->Set(FF_NEW_STRING("ml"), mlConstants);
 
 	v8::Local<v8::Object> statModelCostants = Nan::New<v8::Object>();
@@ -96,21 +101,23 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_JS_PROP(statModelCostants, UPDATE_MODEL, Nan::New<v8::Integer>(ml::StatModel::Flags::UPDATE_MODEL));
 	target->Set(FF_NEW_STRING("statModel"), statModelCostants);
 
-	FF_SET_CONST_WITH_VALUE(target, HAAR_EYE, FF_NEW_STRING("./haarcascade_eye.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_EYE_TREE_EYEGLASSES, FF_NEW_STRING("./haarcascade_eye_tree_eyeglasses.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_FRONTALCATFACE, FF_NEW_STRING("./haarcascade_frontalcatface.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_FRONTALCATFACE_EXTENDED, FF_NEW_STRING("./haarcascade_frontalcatface_extended.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_FRONTALFACE_ALT, FF_NEW_STRING("./haarcascade_frontalface_alt.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_FRONTALFACE_ALT2, FF_NEW_STRING("./haarcascade_frontalface_alt2.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_FRONTALFACE_ALT_TREE, FF_NEW_STRING("./haarcascade_frontalface_alt_tree.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_FRONTALFACE_DEFAULT, FF_NEW_STRING("./haarcascade_frontalface_default.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_FULLBODY, FF_NEW_STRING("./haarcascade_fullbody.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_LEFTEYE_2SPLITS, FF_NEW_STRING("./haarcascade_lefteye_2splits.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_LICENCE_PLATE_RUS_16STAGES, FF_NEW_STRING("./haarcascade_licence_plate_rus_16stages.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_LOWERBODY, FF_NEW_STRING("./haarcascade_lowerbody.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_PROFILEFACE, FF_NEW_STRING("./haarcascade_profileface.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_RIGHTEYE_2SPLITS, FF_NEW_STRING("./haarcascade_righteye_2splits.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_RUSSIAN_PLATE_NUMBER, FF_NEW_STRING("./haarcascade_russian_plate_number.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_SMILE, FF_NEW_STRING("./haarcascade_smile.xml"));
-	FF_SET_CONST_WITH_VALUE(target, HAAR_UPPERBODY, FF_NEW_STRING("./haarcascade_upperbody.xml"));
+	v8::Local<v8::Object> haarCascades = Nan::New<v8::Object>();
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE, FF_NEW_STRING("./haarcascade_eye.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE_TREE_EYEGLASSES, FF_NEW_STRING("./haarcascade_eye_tree_eyeglasses.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALCATFACE, FF_NEW_STRING("./haarcascade_frontalcatface.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALCATFACE_EXTENDED, FF_NEW_STRING("./haarcascade_frontalcatface_extended.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_ALT, FF_NEW_STRING("./haarcascade_frontalface_alt.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_ALT2, FF_NEW_STRING("./haarcascade_frontalface_alt2.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_ALT_TREE, FF_NEW_STRING("./haarcascade_frontalface_alt_tree.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FRONTALFACE_DEFAULT, FF_NEW_STRING("./haarcascade_frontalface_default.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_FULLBODY, FF_NEW_STRING("./haarcascade_fullbody.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_LEFTEYE_2SPLITS, FF_NEW_STRING("./haarcascade_lefteye_2splits.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_LICENCE_PLATE_RUS_16STAGES, FF_NEW_STRING("./haarcascade_licence_plate_rus_16stages.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_LOWERBODY, FF_NEW_STRING("./haarcascade_lowerbody.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_PROFILEFACE, FF_NEW_STRING("./haarcascade_profileface.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_RIGHTEYE_2SPLITS, FF_NEW_STRING("./haarcascade_righteye_2splits.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_RUSSIAN_PLATE_NUMBER, FF_NEW_STRING("./haarcascade_russian_plate_number.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_SMILE, FF_NEW_STRING("./haarcascade_smile.xml"));
+	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_UPPERBODY, FF_NEW_STRING("./haarcascade_upperbody.xml"));
+	target->Set(FF_NEW_STRING("haarCascades"), haarCascades);
 }

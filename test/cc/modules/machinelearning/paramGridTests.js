@@ -9,7 +9,7 @@ module.exports = () => {
       });
 
       it('should be constructable from paramId', () => {
-        const paramGrid = new cv.ParamGrid(cv.cvTypes.svmParamTypes.C);
+        const paramGrid = new cv.ParamGrid(cv.ml.SVM.C);
         expect(paramGrid).to.be.instanceOf(cv.ParamGrid);
       });
 

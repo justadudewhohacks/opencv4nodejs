@@ -1,5 +1,5 @@
 const opencv = global.dut;
-const { assertPropsWithValue, funcRequiresArgsObject, readTestImage } = global.utils;
+const { assertPropsWithValue, funcShouldRequireArgs, readTestImage } = global.utils;
 const { assert } = require('chai');
 
 describe('ximgproc', () => {
@@ -16,7 +16,7 @@ describe('ximgproc', () => {
 
   describe('SuperpixelSEEDS', () => {
     describe('constructor', () => {
-      funcRequiresArgsObject(args => new opencv.SuperpixelSEEDS(args));
+      funcShouldRequireArgs(args => new opencv.SuperpixelSEEDS(args));
 
       it.skip('should throw if image is no Mat instance', () => {
       });
@@ -48,7 +48,7 @@ describe('ximgproc', () => {
         superpixelSeeds.iterate();
         assert(superpixelSeeds.numCalculatedSuperpixels > 0, 'no superpixels calculated');
         assertPropsWithValue(superpixelSeeds.labels)({
-          rows: testImg.rows, cols: testImg.cols, type: opencv.cvTypes.CV_32S
+          rows: testImg.rows, cols: testImg.cols, type: opencv.CV_32S
         });
       });
     });

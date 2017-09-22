@@ -111,7 +111,7 @@ Boolean : svm.train(Mat samples, Uint layout, Mat responses)
 
 ### trainAuto
 ``` javascript
-Mat : svm.trainAuto(TrainData trainData, Uint kFold = 10, ParamGrid cGrid = ParamGrid(SVM.C), ParamGrid gammaGrid = ParamGrid(SVM.GAMMA), ParamGrid pGrid = ParamGrid(SVM.P), ParamGrid nuGrid = ParamGrid(SVM.NU), ParamGrid coeffGrid = ParamGrid(SVM.COEF), ParamGrid degreeGrid = ParamGrid(SVM.DEGREE), Boolean balanced = false)
+Mat : svm.trainAuto(TrainData trainData, Uint kFold = 10, ParamGrid cGrid = ParamGrid(ml.SVM.C), ParamGrid gammaGrid = ParamGrid(ml.SVM.GAMMA), ParamGrid pGrid = ParamGrid(ml.SVM.P), ParamGrid nuGrid = ParamGrid(ml.SVM.NU), ParamGrid coeffGrid = ParamGrid(ml.SVM.COEF), ParamGrid degreeGrid = ParamGrid(ml.SVM.DEGREE), Boolean balanced = false)
 ```
 
 <a name="SVM.predict"></a>

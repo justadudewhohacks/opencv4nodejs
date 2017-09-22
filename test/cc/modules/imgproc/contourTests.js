@@ -26,8 +26,8 @@ module.exports = () => {
       [0, 1, 1, 1, 0, 1, 1, 1, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0]
     ];
-    const contoursImg = new cv.Mat(contoursData, cv.cvTypes.CV_8U);
-    const convexityDefectsImg = new cv.Mat(convexityDefectsData, cv.cvTypes.CV_8U);
+    const contoursImg = new cv.Mat(contoursData, cv.CV_8U);
+    const convexityDefectsImg = new cv.Mat(convexityDefectsData, cv.CV_8U);
 
     let contours;
     let convexityDefectsContours;
@@ -35,12 +35,11 @@ module.exports = () => {
     let rightBottomContour;
 
     before(() => {
-      const opts = {
-        mode: cv.cvTypes.retrievalModes.RETR_EXTERNAL,
-        method: cv.cvTypes.contourApproximationModes.CHAIN_APPROX_NONE
-      };
-      contours = contoursImg.findContours(opts);
-      convexityDefectsContours = convexityDefectsImg.findContours(opts);
+      const mode = cv.RETR_EXTERNAL;
+      const method = cv.CHAIN_APPROX_NONE;
+
+      contours = contoursImg.findContours(mode, method);
+      convexityDefectsContours = convexityDefectsImg.findContours(mode, method);
       const sortedByArea = contours.sort((c0, c1) => c1.area - c0.area);
       leftmostContour = sortedByArea[0];
       rightBottomContour = sortedByArea[1];
@@ -189,7 +188,7 @@ module.exports = () => {
       it('should return zero for same shapes', () => {
         const similarity = leftmostContour.matchShapes({
           contour2: leftmostContour,
-          method: cv.cvTypes.shapeMatchModes.CV_CONTOURS_MATCH_I1
+          method: cv.CV_CONTOURS_MATCH_I1
         });
         expect(similarity).to.equal(0);
       });
@@ -197,7 +196,7 @@ module.exports = () => {
       it('should return shape similariy', () => {
         const similarity = leftmostContour.matchShapes({
           contour2: rightBottomContour,
-          method: cv.cvTypes.shapeMatchModes.CV_CONTOURS_MATCH_I1
+          method: cv.CV_CONTOURS_MATCH_I1
         });
         expect(similarity).not.to.equal(0);
       });

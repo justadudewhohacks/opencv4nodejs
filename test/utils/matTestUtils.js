@@ -40,7 +40,7 @@ const assertMatValueAlmostEquals = AssertMatValueEquals(
 
 exports.generateIts = (msg, testFunc, exclusions = new Set()) =>
   matTypeNames.filter(type => !exclusions.has(type)).forEach((type) => {
-    it(`${type} ${msg}`, () => testFunc(cv.cvTypes[type]));
+    it(`${type} ${msg}`, () => testFunc(cv[type]));
   });
 
 exports.dangerousDeepEquals = dangerousDeepEquals;
