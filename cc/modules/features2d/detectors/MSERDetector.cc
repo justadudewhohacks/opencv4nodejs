@@ -25,26 +25,36 @@ NAN_MODULE_INIT(MSERDetector::Init) {
 };
 
 NAN_METHOD(MSERDetector::New) {
-	if (!info.IsConstructCall()) {
-		return Nan::ThrowError("MSERDetector::New expected new key word");
+	FF_METHOD_CONTEXT("MSERDetector::New");
+	MSERDetector* self = new MSERDetector();
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+
+	FF_GET_INT_IFDEF(optArgs, self->delta, "delta", 5);
+	FF_GET_INT_IFDEF(optArgs, self->minArea, "minArea", 60);
+	FF_GET_INT_IFDEF(optArgs, self->maxArea, "maxArea", 14400);
+	FF_GET_NUMBER_IFDEF(optArgs, self->maxVariation, "maxVariation", 0.25);
+	FF_GET_NUMBER_IFDEF(optArgs, self->minDiversity, "minDiversity", 0.2);
+	FF_GET_INT_IFDEF(optArgs, self->maxEvolution, "maxEvolution", 200);
+	FF_GET_NUMBER_IFDEF(optArgs, self->areaThreshold, "areaThreshold", 1.01);
+	FF_GET_NUMBER_IFDEF(optArgs, self->minMargin, "minMargin", 0.003);
+	FF_GET_INT_IFDEF(optArgs, self->edgeBlurSize, "edgeBlurSize", 5);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(0, self->delta, self->delta);
+		FF_ARG_INT_IFDEF(1, self->minArea, self->minArea);
+		FF_ARG_INT_IFDEF(2, self->maxArea, self->maxArea);
+		FF_ARG_NUMBER_IFDEF(3, self->maxVariation, self->maxVariation);
+		FF_ARG_NUMBER_IFDEF(4, self->minDiversity, self->minDiversity);
+		FF_ARG_INT_IFDEF(5, self->maxEvolution, self->maxEvolution);
+		FF_ARG_NUMBER_IFDEF(6, self->areaThreshold, self->areaThreshold);
+		FF_ARG_NUMBER_IFDEF(7, self->minMargin, self->minMargin);
+		FF_ARG_INT_IFDEF(8, self->edgeBlurSize, self->edgeBlurSize);
 	}
 
-	MSERDetector* self = new MSERDetector();
-	if (info[0]->IsObject()) {
-		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->delta, delta, IsInt32, Int32Value)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->minArea, minArea, IsInt32, Int32Value)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->maxArea, maxArea, IsInt32, Int32Value)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->maxVariation, maxVariation, IsNumber, NumberValue)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->minDiversity, minDiversity, IsNumber, NumberValue)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->maxEvolution, maxEvolution, IsInt32, Int32Value)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->areaThreshold, areaThreshold, IsNumber, NumberValue)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->minMargin, minMargin, IsNumber, NumberValue)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->edgeBlurSize, edgeBlurSize, IsInt32, Int32Value)
-	}
-	
 	self->Wrap(info.Holder());
 	self->detector = cv::MSER::create(self->delta, self->minArea, self->maxArea, self->maxVariation, 
 		self->minDiversity, self->maxEvolution, self->areaThreshold, self->minMargin, self->edgeBlurSize);
-  info.GetReturnValue().Set(info.Holder());
+  FF_RETURN(info.Holder());
 }

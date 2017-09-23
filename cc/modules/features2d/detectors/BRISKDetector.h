@@ -8,9 +8,9 @@ class BRISKDetector : public FeatureDetector {
 public:
 	cv::Ptr<cv::BRISK> detector;
 
-	int thresh = 30;
-	int octaves = 3;
-	double patternScale = 1.0;
+	int thresh;
+	int octaves;
+	double patternScale;
 
   static NAN_MODULE_INIT(Init); 
   static NAN_METHOD(New);

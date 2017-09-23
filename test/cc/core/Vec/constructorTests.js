@@ -1,5 +1,5 @@
-import { Vec } from 'dut';
-import { assertError, assertPropsWithValue } from 'utils';
+const { Vec } = global.dut;
+const { assertError, assertPropsWithValue } = global.utils;
 
 module.exports = () => {
   describe('constructor', () => {

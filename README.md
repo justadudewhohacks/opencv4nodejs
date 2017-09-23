@@ -1,16 +1,21 @@
 opencv4nodejs
 =============
 [![Build Status](https://travis-ci.org/justadudewhohacks/opencv4nodejs.svg?branch=master)](http://travis-ci.org/justadudewhohacks/opencv4nodejs)
-[![node version](https://img.shields.io/badge/node.js-%3E=_6-green.svg?style=flat-square)](http://nodejs.org/download/)
+[![npm download](https://img.shields.io/npm/dm/opencv4nodejs.svg?style=flat)](https://www.npmjs.com/package/opencv4nodejs)
+[![node version](https://img.shields.io/badge/node.js-%3E=_6-green.svg?style=flat)](http://nodejs.org/download/)
 
-**Brings lots of features of OpenCV 3.x to nodejs to use as a service, integrate into your Electron app or simply to play around with the OpenCV API in Javascript instead of C++.**
+**By it's nature, JavaScript lacks the performance to implement Computer Vision tasks efficiently. Therefore this package brings the performance of the native OpenCV C++ library to your Node.js application.**
 
  * **[Examples](#examples)**
+ * **[API Documentation](https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/README.md)**
  * **[How to install](#how-to-install)**
  * **[Usage with Electron](#usage-with-electron)**
- * **[API documentation](#doc)**
+ * **[Quick Start](#quick-start)**
+ * **[Available Modules](#available-modules)**
 
+### <a href=""><b>API doc overview</b></a>
 <a name="examples"></a>
+
 ## Examples
 
 See <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/examples"><b>examples</b></a> for implementation.
@@ -45,6 +50,7 @@ Check out my <a href="https://medium.com/@muehler.v/machine-learning-with-opencv
 ![plotgray](https://user-images.githubusercontent.com/31125521/29995015-1b83e06e-8fdf-11e7-8fa8-5d18326b9cd3.jpg)
 
 <a name="how-to-install"></a>
+
 ## How to install
 
 ``` bash
@@ -58,6 +64,7 @@ Make sure to have OpenCV 3+ ( extra modules are optional ) installed on your Sys
 If you are running into issues also check the requirements for node-gyp specific to your OS https://github.com/nodejs/node-gyp.
 
 <a name="usage-with-electron"></a>
+
 ## Usage with Electron
 
 ``` bash
@@ -80,8 +87,9 @@ const electron = require('electron');
 const cv = electron.remote.require('opencv4nodejs');
 ```
 
-<a name="doc"></a>
-## Documentation
+<a name="quick-start"></a>
+
+## Quick Start
 
 ``` javascript
 const cv = require('opencv4nodejs');
@@ -94,11 +102,11 @@ const rows = 100; // height
 const cols = 100; // width
 
 // empty Mat
-const emptyMat = new cv.Mat(rows, cols, cv.cvTypes.CV_8UC3);
+const emptyMat = new cv.Mat(rows, cols, cv.CV_8UC3);
 
 // fill the Mat with default value
-const whiteMat = new cv.Mat(rows, cols, cv.cvTypes.CV_8UC1, 255);
-const blueMat = new cv.Mat(rows, cols, cv.cvTypes.CV_8UC3, [255, 0, 0]);
+const whiteMat = new cv.Mat(rows, cols, cv.CV_8UC1, 255);
+const blueMat = new cv.Mat(rows, cols, cv.CV_8UC3, [255, 0, 0]);
 
 // from array (3x3 Matrix, 3 channels)
 const matData = [
@@ -106,11 +114,11 @@ const matData = [
   [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
   [[255, 0, 0], [255, 0, 0], [255, 0, 0]]
 ];
-const matFromArray = new cv.Mat(matData, cv.cvTypes.CV_8UC3);
+const matFromArray = new cv.Mat(matData, cv.CV_8UC3);
 
 // from node buffer
 const charData = [255, 0, ...];
-const matFromArray = new cv.Mat(new Buffer.from(charData), rows, cols, cv.cvTypes.CV_8UC3);
+const matFromArray = new cv.Mat(new Buffer.from(charData), rows, cols, cv.CV_8UC3);
 
 // Point
 const pt2 = new cv.Point(100, 100);
@@ -148,8 +156,8 @@ const mat0bwNot = mat0.bitwiseNot();
 ### Accessing Mat data
 
 ``` javascript
-const matBGR = new cv.Mat(..., cv.cvTypes.CV_8UC3);
-const matGray = new cv.Mat(..., cv.cvTypes.CV_8UC1);
+const matBGR = new cv.Mat(..., cv.CV_8UC3);
+const matGray = new cv.Mat(..., cv.CV_8UC1);
 
 // get pixel value as vector or number value
 const vec3 = matBGR.at(200, 100);
@@ -216,25 +224,16 @@ while (!done) {
 ### Useful Mat methods
 
 ``` javascript
-const matBGR = new cv.Mat(..., cv.cvTypes.CV_8UC3);
+const matBGR = new cv.Mat(..., cv.CV_8UC3);
 
 // convert types
-const matSignedInt = matBGR.convertTo({
-  type: cv.cvTypes.CV_32SC3
-});
-const matDoublePrecision = matBGR.convertTo({
-  type: cv.cvTypes.CV_64FC3
-});
+const matSignedInt = matBGR.convertTo(cv.CV_32SC3);
+const matDoublePrecision = matBGR.convertTo(cv.CV_64FC3);
 
 // convert color space
-const { COLOR_BGR2HSV, COLOR_BGR2Lab } = cv.cvTypes;
 const matGray = matBGR.bgrToGray();
-const matHSV = matBGR.cvtColor({
-  code: COLOR_BGR2HSV
-});
-const matLab = matBGR.cvtColor({
-  code: COLOR_BGR2Lab
-});
+const matHSV = matBGR.cvtColor(cv.COLOR_BGR2HSV);
+const matLab = matBGR.cvtColor(cv.COLOR_BGR2Lab);
 
 // resize
 const matHalfSize = matBGR.rescale(0.5);
@@ -249,22 +248,20 @@ const matRGB = new cv.Mat([matR, matB, matG]);
 ### Drawing a Mat into HTML Canvas
 
 ``` javascript
-    const matBGR = ...;
-    // convert your Mat to rgba space
-    const matRGBA = matBGR.cvtColor({
-      type: cv.cvTypes.colorConversionCodes.COLOR_BGR2RGBA
-    });
-    // get raw Mat data
-    const matDataRaw = matRGBA.getData();
+const matBGR = ...;
+// convert your Mat to rgba space
+const matRGBA = matBGR.cvtColor(cv.COLOR_BGR2RGBA);
+// get raw Mat data
+const matDataRaw = matRGBA.getData();
 
-    // fill canvas pixels
-    const canvas = document.getElementById('myCanvas');
-    const ctx = canvas.getContext('2d');
-    const imgData = ctx.getImageData(0, 0, matRGBA.cols, matRGBA.rows);
-    for (let i = 0; i < matDataRaw.length; i += 1) {
-      imgData.data[i] = matDataRaw[i];
-    }
-    ctx.putImageData(imgData, 0, 0);
+// fill canvas pixels
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+const imgData = ctx.getImageData(0, 0, matRGBA.cols, matRGBA.rows);
+for (let i = 0; i < matDataRaw.length; i += 1) {
+  imgData.data[i] = matDataRaw[i];
+}
+ctx.putImageData(imgData, 0, 0);
 ```
 
 ### Method Interface
@@ -279,16 +276,30 @@ translates to:
 ``` javascript
 const src = new cv.Mat(...);
 // invoke with required arguments
-const dst0 = src.gaussianBlur({
-  ksize: new cv.Size(5, 5),
-  sigmaX: 1.2
-});
-// or pass optional parameters
-const dst1 = src.gaussianBlur({
-  ksize: new cv.Size(5, 5),
-  sigmaX: 1.2,
-  borderType: cv.cvTypes.borderTypes.BORDER_CONSTANT
-});
+const dst0 = src.gaussianBlur(new cv.Size(5, 5), 1.2);
+// with optional paramaters
+const dst2 = src.gaussianBlur(new cv.Size(5, 5), 1.2, 0.8, cv.BORDER_REFLECT);
+// or pass specific optional parameters
+const optionalArgs = {
+  borderType: cv.BORDER_CONSTANT
+};
+const dst2 = src.gaussianBlur(new cv.Size(5, 5), 1.2, optionalArgs);
 ```
 
-For more documentation refer to examples or have a look into the tests for method invocation.
+<a name="available-modules"></a>
+
+## Available Modules
+
+### <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/README.md"><b>API doc overview</b></a>
+
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/core/core.md"><b>core</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/io/io.md"><b>io</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/imgproc/imgproc.md"><b>imgproc</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/ximgproc/ximgproc.md"><b>ximgproc</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/objdetect/objdetect.md"><b>objdetect</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/machinelearning/machinelearning.md"><b>machinelearning</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/video/video.md"><b>video</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/calib3d.md"><b>calib3d</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/photo.md"><b>photo</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/features2d/features2d.md"><b>features2d</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/xfeatures2d/xfeatures2d.md"><b>xfeatures2d</b></a>

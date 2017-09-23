@@ -1,6 +1,6 @@
-import cv from 'dut';
-import { expect } from 'chai';
-import { assertPropsWithValue } from 'utils';
+const cv = global.dut;
+const { expect } = require('chai');
+const { assertPropsWithValue } = global.utils;
 
 module.exports = () => {
   describe('SVM', () => {
@@ -17,11 +17,11 @@ module.exports = () => {
       [15, 15, 20],
       [10, 10, 20],
       [10, 10, 10]
-    ], cv.cvTypes.CV_32F);
-    const labels = new cv.Mat([[0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]], cv.cvTypes.CV_32S);
+    ], cv.CV_32F);
+    const labels = new cv.Mat([[0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]], cv.CV_32S);
     const trainData = new cv.TrainData(
       samples,
-      cv.cvTypes.sampleTypes.ROW_SAMPLE,
+      cv.ml.ROW_SAMPLE,
       labels
     );
     const someArgs = {
@@ -30,7 +30,7 @@ module.exports = () => {
       degree: Math.PI,
       nu: 0.4,
       p: 0.5,
-      kernelType: cv.cvTypes.svmKernelTypes.SIGMOID
+      kernelType: cv.ml.SVM.SIGMOID
     };
 
     describe('constructor', () => {
@@ -70,10 +70,13 @@ module.exports = () => {
         };
         const svm = new cv.SVM(someArgs);
         svm.setParams(args);
-        assertPropsWithValue(svm)({
-          ...someArgs,
-          ...args
-        });
+        assertPropsWithValue(svm)(
+          Object.assign(
+            {},
+            someArgs,
+            args
+          )
+        );
       });
     });
 
@@ -92,7 +95,7 @@ module.exports = () => {
           const svm = new cv.SVM();
           const ret = svm.train(
             trainData,
-            cv.cvTypes.statModelFlags.RAW_OUTPUT
+            cv.statModel.RAW_OUTPUT
           );
           expect(ret).to.be.a('boolean');
           expect(svm).to.have.property('isTrained').to.be.true;
@@ -103,7 +106,7 @@ module.exports = () => {
           const svm = new cv.SVM();
           const ret = svm.train(
             samples,
-            cv.cvTypes.sampleTypes.ROW_SAMPLE,
+            cv.ml.ROW_SAMPLE,
             labels
           );
           expect(ret).to.be.a('boolean');
@@ -114,12 +117,12 @@ module.exports = () => {
 
       describe('trainAuto', () => {
         const kFold = 20;
-        const cGrid = new cv.ParamGrid(cv.cvTypes.svmParamTypes.C);
-        const gammaGrid = new cv.ParamGrid(cv.cvTypes.svmParamTypes.GAMMA);
-        const pGrid = new cv.ParamGrid(cv.cvTypes.svmParamTypes.P);
-        const nuGrid = new cv.ParamGrid(cv.cvTypes.svmParamTypes.NU);
-        const coeffGrid = new cv.ParamGrid(cv.cvTypes.svmParamTypes.COEF);
-        const degreeGrid = new cv.ParamGrid(cv.cvTypes.svmParamTypes.DEGREE);
+        const cGrid = new cv.ParamGrid(cv.ml.SVM.C);
+        const gammaGrid = new cv.ParamGrid(cv.ml.SVM.GAMMA);
+        const pGrid = new cv.ParamGrid(cv.ml.SVM.P);
+        const nuGrid = new cv.ParamGrid(cv.ml.SVM.NU);
+        const coeffGrid = new cv.ParamGrid(cv.ml.SVM.COEF);
+        const degreeGrid = new cv.ParamGrid(cv.ml.SVM.DEGREE);
         const balanced = true;
 
         it('should be trainable with trainData', () => {
@@ -194,7 +197,7 @@ module.exports = () => {
     describe('trained model tests', () => {
       let svm;
       const predictSample = [10, 10.5, 10.5];
-      const predictSamplesMat = new cv.Mat([[10, 20, 15], [100, 200, 200]], cv.cvTypes.CV_32F);
+      const predictSamplesMat = new cv.Mat([[10, 20, 15], [100, 200, 200]], cv.CV_32F);
 
       before(() => {
         svm = new cv.SVM();

@@ -126,9 +126,6 @@
 	}\
 }
 
-#define FF_MAT_DILATE_OR_ERODE(func)	\
-	func(matSelf, FF_UNWRAP_MAT_AND_GET(jsMatDst), FF_UNWRAP_MAT_AND_GET(jsKernel), anchor, iterations, borderType, borderValue);
-
 #define FF_ASSERT_CHANNELS(cn, have, what)																						\
 	if (cn != have) {																																		\
 		return Nan::ThrowError(FF_NEW_STRING(std::string(what) + " - expected vector with "	\

@@ -22,29 +22,29 @@ NAN_MODULE_INIT(KAZEDetector::Init) {
 };
 
 NAN_METHOD(KAZEDetector::New) {
-	if (!info.IsConstructCall()) {
-		return Nan::ThrowError("KAZEDetector::New expected new key word");
-	}
+	FF_METHOD_CONTEXT("KAZEDetector::New");
 
-	bool extended = false;
-	bool upright = false;
-	float threshold = 0.001f;
-	int nOctaves = 4;
-	int nOctaveLayers = 4;
-	int diffusivity = cv::KAZE::DIFF_PM_G2;
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
 
-	if (info[0]->IsObject()) {
-		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, extended, IsBoolean, BooleanValue)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, upright, IsBoolean, BooleanValue)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, threshold, IsNumber, NumberValue)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nOctaves, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nOctaveLayers, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, diffusivity, IsInt32, Int32Value)
+	FF_GET_BOOL_IFDEF(optArgs, bool extended, "extended", false);
+	FF_GET_BOOL_IFDEF(optArgs, bool upright, "upright", false);
+	FF_GET_NUMBER_IFDEF(optArgs, double threshold, "threshold", 0.001f);
+	FF_GET_INT_IFDEF(optArgs, int nOctaves, "nOctaves", 4);
+	FF_GET_INT_IFDEF(optArgs, int nOctaveLayers, "nOctaveLayers", 4);
+	FF_GET_INT_IFDEF(optArgs, int diffusivity, "diffusivity", cv::KAZE::DIFF_PM_G2);
+	if (!hasOptArgsObj) {
+		FF_ARG_BOOL_IFDEF(0, extended, extended);
+		FF_ARG_BOOL_IFDEF(1, upright, upright);
+		FF_ARG_NUMBER_IFDEF(2, threshold, threshold);
+		FF_ARG_INT_IFDEF(3, nOctaves, nOctaves);
+		FF_ARG_INT_IFDEF(4, nOctaveLayers, nOctaveLayers);
+		FF_ARG_INT_IFDEF(5, diffusivity, diffusivity);
 	}
 
 	KAZEDetector* self = new KAZEDetector();
 	self->Wrap(info.Holder());
 	self->detector = cv::KAZE::create(extended, upright, threshold, nOctaves, nOctaveLayers, diffusivity);
-  info.GetReturnValue().Set(info.Holder());
+  FF_RETURN(info.Holder());
 }

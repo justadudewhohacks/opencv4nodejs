@@ -23,7 +23,7 @@ const hog = new cv.HOGDescriptor({
 });
 
 const svm = new cv.SVM({
-  kernelType: cv.cvTypes.svmKernelTypes.RBF,
+  kernelType: cv.ml.SVM.RBF,
   c: 12.5,
   gamma: 0.50625
 });
@@ -40,7 +40,7 @@ const computeHOGDescriptorFromImage = (img, isIorJ) => {
     return null;
   }
 
-  return hog.compute({ img: im });
+  return hog.compute(im);
 };
 
 const trainSVM = (trainDataFiles, isAuto = false) => {
@@ -65,9 +65,9 @@ const trainSVM = (trainDataFiles, isAuto = false) => {
   // train the SVM
   console.log('training');
   const trainData = new cv.TrainData(
-    new cv.Mat(samples, cv.cvTypes.CV_32F),
-    cv.cvTypes.sampleTypes.ROW_SAMPLE,
-    new cv.Mat([labels], cv.cvTypes.CV_32S)
+    new cv.Mat(samples, cv.CV_32F),
+    cv.ml.ROW_SAMPLE,
+    new cv.Mat([labels], cv.CV_32S)
   );
   svm[isAuto ? 'trainAuto' : 'train'](trainData);
 };

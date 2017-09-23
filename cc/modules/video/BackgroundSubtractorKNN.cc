@@ -19,17 +19,23 @@ NAN_MODULE_INIT(BackgroundSubtractorKNN::Init) {
 };
 
 NAN_METHOD(BackgroundSubtractorKNN::New) {
-	BackgroundSubtractorKNN* self = new BackgroundSubtractorKNN();
-	int history = 500;
-	double dist2Threshold = 400;
-	bool detectShadows = true;
-	if (info.Length() > 0) {
-		FF_REQUIRE_ARGS_OBJ("BackgroundSubtractorKNN::New");
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, history, IsUint32, Uint32Value);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, dist2Threshold, IsNumber, NumberValue);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, history, IsBoolean, BooleanValue);
+	FF_METHOD_CONTEXT("BackgroundSubtractorKNN::New");
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+
+	FF_GET_UINT_IFDEF(optArgs, uint history, "history", 500);
+	FF_GET_NUMBER_IFDEF(optArgs, double dist2Threshold, "dist2Threshold", 400);
+	FF_GET_BOOL_IFDEF(optArgs, bool detectShadows, "detectShadows", true);
+	if (!hasOptArgsObj) {
+		FF_ARG_UINT_IFDEF(0, history, history);
+		FF_ARG_NUMBER_IFDEF(1, dist2Threshold, dist2Threshold);
+		FF_ARG_BOOL_IFDEF(2, detectShadows, detectShadows);
 	}
-	self->subtractor = cv::createBackgroundSubtractorKNN(history, dist2Threshold, detectShadows);
+
+	BackgroundSubtractorKNN* self = new BackgroundSubtractorKNN();
+	self->subtractor = cv::createBackgroundSubtractorKNN((int)history, dist2Threshold, detectShadows);
 	self->Wrap(info.Holder());
-	info.GetReturnValue().Set(info.Holder());
+	FF_RETURN(info.Holder());
 };

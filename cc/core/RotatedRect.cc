@@ -25,7 +25,7 @@ NAN_METHOD(RotatedRect::New) {
 			return Nan::ThrowError("RotatedRect::New - expected arguments center, size, angle");
 		}
 		if (!FF_IS_INSTANCE(Point2::constructor, info[0])) {
-			return Nan::ThrowError("RotatedRect::New - expected arg2 to be an instance of Point2");
+			return Nan::ThrowError("RotatedRect::New - expected arg0 to be an instance of Point2");
 		}
 		if (!FF_IS_INSTANCE(Size::constructor, info[1])) {
 			return Nan::ThrowError("RotatedRect::New - expected arg1 to be an instance of Size");

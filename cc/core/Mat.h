@@ -72,11 +72,12 @@ public:
 
 	/* #ENDIF IMGPROC */
 
-	static void dilateOrErode(Nan::NAN_METHOD_ARGS_TYPE, char*, bool);
+	static void warp(Nan::NAN_METHOD_ARGS_TYPE, const char*, void(*)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Size, int, int, const cv::Scalar&));
+	static void morph(Nan::NAN_METHOD_ARGS_TYPE, const char*, void(*)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Point, int, int, const cv::Scalar&));
 	
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-  void setNativeProps(cv::Mat);
+	void setNativeProps(cv::Mat);
 };
 
 #endif

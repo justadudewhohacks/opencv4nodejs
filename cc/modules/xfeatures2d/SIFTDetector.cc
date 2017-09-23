@@ -23,22 +23,35 @@ NAN_MODULE_INIT(SIFTDetector::Init) {
 };
 
 NAN_METHOD(SIFTDetector::New) {
-	if (!info.IsConstructCall()) {
-		return Nan::ThrowError("SIFTDetector::New expected new key word");
-	}
+	FF_METHOD_CONTEXT("SIFTDetector::New");
 	SIFTDetector* self = new SIFTDetector();
-	if (info[0]->IsObject()) {
-		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->nFeatures, nFeatures, IsInt32, Int32Value)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->nOctaveLayers, nOctaveLayers, IsInt32, Int32Value)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->contrastThreshold, contrastThreshold, IsNumber, NumberValue)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->edgeThreshold, edgeThreshold, IsNumber, NumberValue)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->sigma, sigma, IsNumber, NumberValue)
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+
+	FF_GET_INT_IFDEF(optArgs, self->nFeatures, "nFeatures", 0);
+	FF_GET_INT_IFDEF(optArgs, self->nOctaveLayers, "nOctaveLayers", 3);
+	FF_GET_NUMBER_IFDEF(optArgs, self->contrastThreshold, "contrastThreshold", 0.04);
+	FF_GET_NUMBER_IFDEF(optArgs, self->edgeThreshold, "edgeThreshold", 10);
+	FF_GET_NUMBER_IFDEF(optArgs, self->sigma, "sigma", 1.6);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(0, self->nFeatures, self->nFeatures);
+		FF_ARG_INT_IFDEF(1, self->nOctaveLayers, self->nOctaveLayers);
+		FF_ARG_NUMBER_IFDEF(2, self->contrastThreshold, self->contrastThreshold);
+		FF_ARG_NUMBER_IFDEF(3, self->edgeThreshold, self->edgeThreshold);
+		FF_ARG_NUMBER_IFDEF(4, self->sigma, self->sigma);
 	}
 
 	self->Wrap(info.Holder());
-	self->detector = cv::xfeatures2d::SIFT::create(self->nFeatures, self->nOctaveLayers, self->contrastThreshold, self->edgeThreshold, self->sigma);
-  info.GetReturnValue().Set(info.Holder());
+	self->detector = cv::xfeatures2d::SIFT::create(
+		self->nFeatures, 
+		self->nOctaveLayers, 
+		self->contrastThreshold, 
+		self->edgeThreshold, 
+		self->sigma
+	);
+  FF_RETURN(info.Holder());
 }
 
 #endif // HAVE_XFEATURES2D

@@ -23,31 +23,31 @@ NAN_MODULE_INIT(AKAZEDetector::Init) {
 };
 
 NAN_METHOD(AKAZEDetector::New) {
-	if (!info.IsConstructCall()) {
-		return Nan::ThrowError("AKAZEDetector::New expected new key word");
-	}
+	FF_METHOD_CONTEXT("AKAZEDetector::New");
 
-	int descriptorType = cv::AKAZE::DESCRIPTOR_MLDB;
-	int descriptorSize = 0; 
-	int descriptorChannels = 3;
-	float threshold = 0.001f; 
-	int nOctaves = 4;
-	int nOctaveLayers = 4; 
-	int diffusivity = cv::KAZE::DIFF_PM_G2;
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
 
-	if (info[0]->IsObject()) {
-		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, descriptorType, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, descriptorSize, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, descriptorChannels, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, threshold, IsNumber, NumberValue)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nOctaves, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nOctaveLayers, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, diffusivity, IsInt32, Int32Value)
+	FF_GET_INT_IFDEF(optArgs, int descriptorType, "descriptorType", cv::AKAZE::DESCRIPTOR_MLDB);
+	FF_GET_INT_IFDEF(optArgs, int descriptorSize, "descriptorSize", 0);
+	FF_GET_INT_IFDEF(optArgs, int descriptorChannels, "descriptorChannels", 3);
+	FF_GET_NUMBER_IFDEF(optArgs, double threshold, "threshold", 0.001f);
+	FF_GET_INT_IFDEF(optArgs, int nOctaves, "nOctaves", 4);
+	FF_GET_INT_IFDEF(optArgs, int nOctaveLayers, "nOctaveLayers", 4);
+	FF_GET_INT_IFDEF(optArgs, int diffusivity, "diffusivity", cv::KAZE::DIFF_PM_G2);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(0, descriptorType, descriptorType);
+		FF_ARG_INT_IFDEF(1, descriptorSize, descriptorSize);
+		FF_ARG_INT_IFDEF(2, descriptorChannels, descriptorChannels);
+		FF_ARG_NUMBER_IFDEF(3, threshold, threshold);
+		FF_ARG_INT_IFDEF(4, nOctaves, nOctaves);
+		FF_ARG_INT_IFDEF(5, nOctaveLayers, nOctaveLayers);
+		FF_ARG_INT_IFDEF(6, diffusivity, diffusivity);
 	}
 
 	AKAZEDetector* self = new AKAZEDetector();
 	self->Wrap(info.Holder());
 	self->detector = cv::AKAZE::create(descriptorType, descriptorSize, descriptorChannels, threshold, nOctaves, nOctaveLayers, diffusivity);
-  info.GetReturnValue().Set(info.Holder());
+  FF_RETURN(info.Holder());
 }

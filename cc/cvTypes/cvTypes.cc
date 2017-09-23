@@ -5,117 +5,101 @@
 using namespace cv;
 
 void CvTypes::Init(v8::Local<v8::Object> target) {
-	v8::Local<v8::Object> cvTypes = Nan::New<v8::Object>();
-	initMatTypes(cvTypes);
-	ImgprocConstants::Init(cvTypes);
+	initMatTypes(target);
+	ImgprocConstants::Init(target);
 
-	v8::Local<v8::Object> normTypes = Nan::New<v8::Object>();
-	FF_SET_CV_CONSTANT(normTypes, NORM_INF);
-	FF_SET_CV_CONSTANT(normTypes, NORM_L1);
-	FF_SET_CV_CONSTANT(normTypes, NORM_L2);
-	FF_SET_CV_CONSTANT(normTypes, NORM_L2SQR);
-	FF_SET_CV_CONSTANT(normTypes, NORM_HAMMING);
-	FF_SET_CV_CONSTANT(normTypes, NORM_HAMMING2);
-	FF_SET_CV_CONSTANT(normTypes, NORM_TYPE_MASK);
-	FF_SET_CV_CONSTANT(normTypes, NORM_RELATIVE);
-	FF_SET_CV_CONSTANT(normTypes, NORM_MINMAX);
-	cvTypes->Set(FF_NEW_STRING("normTypes"), normTypes);
+	FF_SET_CV_CONSTANT(target, NORM_INF);
+	FF_SET_CV_CONSTANT(target, NORM_L1);
+	FF_SET_CV_CONSTANT(target, NORM_L2);
+	FF_SET_CV_CONSTANT(target, NORM_L2SQR);
+	FF_SET_CV_CONSTANT(target, NORM_HAMMING);
+	FF_SET_CV_CONSTANT(target, NORM_HAMMING2);
+	FF_SET_CV_CONSTANT(target, NORM_TYPE_MASK);
+	FF_SET_CV_CONSTANT(target, NORM_RELATIVE);
+	FF_SET_CV_CONSTANT(target, NORM_MINMAX);
 
-	v8::Local<v8::Object> connectedComponentsTypes = Nan::New<v8::Object>();
-	FF_SET_CV_CONSTANT(connectedComponentsTypes, CC_STAT_LEFT);
-	FF_SET_CV_CONSTANT(connectedComponentsTypes, CC_STAT_TOP);
-	FF_SET_CV_CONSTANT(connectedComponentsTypes, CC_STAT_WIDTH);
-	FF_SET_CV_CONSTANT(connectedComponentsTypes, CC_STAT_HEIGHT);
-	FF_SET_CV_CONSTANT(connectedComponentsTypes, CC_STAT_AREA);
-	FF_SET_CV_CONSTANT(connectedComponentsTypes, CC_STAT_MAX);
-	cvTypes->Set(FF_NEW_STRING("connectedComponentsTypes"), connectedComponentsTypes);
+	FF_SET_CV_CONSTANT(target, CC_STAT_LEFT);
+	FF_SET_CV_CONSTANT(target, CC_STAT_TOP);
+	FF_SET_CV_CONSTANT(target, CC_STAT_WIDTH);
+	FF_SET_CV_CONSTANT(target, CC_STAT_HEIGHT);
+	FF_SET_CV_CONSTANT(target, CC_STAT_AREA);
+	FF_SET_CV_CONSTANT(target, CC_STAT_MAX);
 
-	v8::Local<v8::Object> contourApproximationModes = Nan::New<v8::Object>();
-	FF_SET_CV_CONSTANT(contourApproximationModes, CHAIN_APPROX_NONE);
-	FF_SET_CV_CONSTANT(contourApproximationModes, CHAIN_APPROX_SIMPLE);
-	FF_SET_CV_CONSTANT(contourApproximationModes, CHAIN_APPROX_TC89_L1);
-	FF_SET_CV_CONSTANT(contourApproximationModes, CHAIN_APPROX_TC89_KCOS);
-	cvTypes->Set(FF_NEW_STRING("contourApproximationModes"), contourApproximationModes);
+	FF_SET_CV_CONSTANT(target, CHAIN_APPROX_NONE);
+	FF_SET_CV_CONSTANT(target, CHAIN_APPROX_SIMPLE);
+	FF_SET_CV_CONSTANT(target, CHAIN_APPROX_TC89_L1);
+	FF_SET_CV_CONSTANT(target, CHAIN_APPROX_TC89_KCOS);
 
-	v8::Local<v8::Object> distanceTypes = Nan::New<v8::Object>();
-	FF_SET_CV_CONSTANT(distanceTypes, DIST_USER);
-	FF_SET_CV_CONSTANT(distanceTypes, DIST_L1);
-	FF_SET_CV_CONSTANT(distanceTypes, DIST_L2);
-	FF_SET_CV_CONSTANT(distanceTypes, DIST_C);
-	FF_SET_CV_CONSTANT(distanceTypes, DIST_L12);
-	FF_SET_CV_CONSTANT(distanceTypes, DIST_FAIR);
-	FF_SET_CV_CONSTANT(distanceTypes, DIST_WELSCH);
-	FF_SET_CV_CONSTANT(distanceTypes, DIST_HUBER);
-	cvTypes->Set(FF_NEW_STRING("distanceTypes"), distanceTypes);
+	FF_SET_CV_CONSTANT(target, DIST_USER);
+	FF_SET_CV_CONSTANT(target, DIST_L1);
+	FF_SET_CV_CONSTANT(target, DIST_L2);
+	FF_SET_CV_CONSTANT(target, DIST_C);
+	FF_SET_CV_CONSTANT(target, DIST_L12);
+	FF_SET_CV_CONSTANT(target, DIST_FAIR);
+	FF_SET_CV_CONSTANT(target, DIST_WELSCH);
+	FF_SET_CV_CONSTANT(target, DIST_HUBER);
 
-	v8::Local<v8::Object> distanceTransformMasks = Nan::New<v8::Object>();
-	FF_SET_CV_CONSTANT(distanceTransformMasks, DIST_MASK_3);
-	FF_SET_CV_CONSTANT(distanceTransformMasks, DIST_MASK_5);
-	FF_SET_CV_CONSTANT(distanceTransformMasks, DIST_MASK_PRECISE);
-	cvTypes->Set(FF_NEW_STRING("distanceTransformMasks"), distanceTransformMasks);
+	FF_SET_CV_CONSTANT(target, DIST_MASK_3);
+	FF_SET_CV_CONSTANT(target, DIST_MASK_5);
+	FF_SET_CV_CONSTANT(target, DIST_MASK_PRECISE);
 
-	v8::Local<v8::Object> retrievalModes = Nan::New<v8::Object>();
-	FF_SET_CV_CONSTANT(retrievalModes, RETR_EXTERNAL);
-	FF_SET_CV_CONSTANT(retrievalModes, RETR_LIST);
-	FF_SET_CV_CONSTANT(retrievalModes, RETR_CCOMP);
-	FF_SET_CV_CONSTANT(retrievalModes, RETR_TREE);
-	FF_SET_CV_CONSTANT(retrievalModes, RETR_FLOODFILL);
-	cvTypes->Set(FF_NEW_STRING("retrievalModes"), retrievalModes);
+	FF_SET_CV_CONSTANT(target, RETR_EXTERNAL);
+	FF_SET_CV_CONSTANT(target, RETR_LIST);
+	FF_SET_CV_CONSTANT(target, RETR_CCOMP);
+	FF_SET_CV_CONSTANT(target, RETR_TREE);
+	FF_SET_CV_CONSTANT(target, RETR_FLOODFILL);
 
-	v8::Local<v8::Object> shapeMatchModes = Nan::New<v8::Object>();
-	FF_SET_CV_CONSTANT(shapeMatchModes, CV_CONTOURS_MATCH_I1);
-	FF_SET_CV_CONSTANT(shapeMatchModes, CV_CONTOURS_MATCH_I2);
-	FF_SET_CV_CONSTANT(shapeMatchModes, CV_CONTOURS_MATCH_I3);
-	cvTypes->Set(FF_NEW_STRING("shapeMatchModes"), shapeMatchModes);
+	FF_SET_CV_CONSTANT(target, CV_CONTOURS_MATCH_I1);
+	FF_SET_CV_CONSTANT(target, CV_CONTOURS_MATCH_I2);
+	FF_SET_CV_CONSTANT(target, CV_CONTOURS_MATCH_I3);
 	
-	v8::Local<v8::Object> hersheyFonts = Nan::New<v8::Object>();
-	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_SIMPLEX);
-	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_PLAIN);
-	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_DUPLEX);
-	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_COMPLEX);
-	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_TRIPLEX);
-	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_COMPLEX_SMALL);
-	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_SCRIPT_SIMPLEX);
-	FF_SET_CV_CONSTANT(hersheyFonts, FONT_HERSHEY_SCRIPT_COMPLEX);
-	FF_SET_CV_CONSTANT(hersheyFonts, FONT_ITALIC);
-	cvTypes->Set(FF_NEW_STRING("hersheyFonts"), hersheyFonts);
+	FF_SET_CV_CONSTANT(target, FONT_HERSHEY_SIMPLEX);
+	FF_SET_CV_CONSTANT(target, FONT_HERSHEY_PLAIN);
+	FF_SET_CV_CONSTANT(target, FONT_HERSHEY_DUPLEX);
+	FF_SET_CV_CONSTANT(target, FONT_HERSHEY_COMPLEX);
+	FF_SET_CV_CONSTANT(target, FONT_HERSHEY_TRIPLEX);
+	FF_SET_CV_CONSTANT(target, FONT_HERSHEY_COMPLEX_SMALL);
+	FF_SET_CV_CONSTANT(target, FONT_HERSHEY_SCRIPT_SIMPLEX);
+	FF_SET_CV_CONSTANT(target, FONT_HERSHEY_SCRIPT_COMPLEX);
+	FF_SET_CV_CONSTANT(target, FONT_ITALIC);
 	
-	v8::Local<v8::Object> svmKernelTypes = Nan::New<v8::Object>();
-	FF_SET_JS_PROP(svmKernelTypes, CUSTOM, Nan::New<v8::Integer>(ml::SVM::KernelTypes:: CUSTOM));
-	FF_SET_JS_PROP(svmKernelTypes, LINEAR, Nan::New<v8::Integer>(ml::SVM::KernelTypes::LINEAR));
-	FF_SET_JS_PROP(svmKernelTypes, POLY, Nan::New<v8::Integer>(ml::SVM::KernelTypes::POLY));
-	FF_SET_JS_PROP(svmKernelTypes, RBF, Nan::New<v8::Integer>(ml::SVM::KernelTypes::RBF));
-	FF_SET_JS_PROP(svmKernelTypes, SIGMOID, Nan::New<v8::Integer>(ml::SVM::KernelTypes::SIGMOID));
-	FF_SET_JS_PROP(svmKernelTypes, CHI2, Nan::New<v8::Integer>(ml::SVM::KernelTypes::CHI2));
-	FF_SET_JS_PROP(svmKernelTypes, INTER, Nan::New<v8::Integer>(ml::SVM::KernelTypes::INTER));
-	cvTypes->Set(FF_NEW_STRING("svmKernelTypes"), svmKernelTypes);
+	FF_SET_CV_CONSTANT(target, FILLED);
+	FF_SET_CV_CONSTANT(target, LINE_4);
+	FF_SET_CV_CONSTANT(target, LINE_8);
+	FF_SET_CV_CONSTANT(target, LINE_AA);
 
-	v8::Local<v8::Object> svmParamTypes = Nan::New<v8::Object>();
-	FF_SET_JS_PROP(svmParamTypes, C, Nan::New<v8::Integer>(ml::SVM::ParamTypes::C));
-	FF_SET_JS_PROP(svmParamTypes, COEF, Nan::New<v8::Integer>(ml::SVM::ParamTypes::COEF));
-	FF_SET_JS_PROP(svmParamTypes, DEGREE, Nan::New<v8::Integer>(ml::SVM::ParamTypes::DEGREE));
-	FF_SET_JS_PROP(svmParamTypes, GAMMA, Nan::New<v8::Integer>(ml::SVM::ParamTypes::GAMMA));
-	FF_SET_JS_PROP(svmParamTypes, NU, Nan::New<v8::Integer>(ml::SVM::ParamTypes::NU));
-	FF_SET_JS_PROP(svmParamTypes, P, Nan::New<v8::Integer>(ml::SVM::ParamTypes::P));
-	cvTypes->Set(FF_NEW_STRING("svmParamTypes"), svmParamTypes);
+	v8::Local<v8::Object> svmConstants = Nan::New<v8::Object>();
+	FF_SET_JS_PROP(svmConstants, CUSTOM, Nan::New<v8::Integer>(ml::SVM::KernelTypes:: CUSTOM));
+	FF_SET_JS_PROP(svmConstants, LINEAR, Nan::New<v8::Integer>(ml::SVM::KernelTypes::LINEAR));
+	FF_SET_JS_PROP(svmConstants, POLY, Nan::New<v8::Integer>(ml::SVM::KernelTypes::POLY));
+	FF_SET_JS_PROP(svmConstants, RBF, Nan::New<v8::Integer>(ml::SVM::KernelTypes::RBF));
+	FF_SET_JS_PROP(svmConstants, SIGMOID, Nan::New<v8::Integer>(ml::SVM::KernelTypes::SIGMOID));
+	FF_SET_JS_PROP(svmConstants, CHI2, Nan::New<v8::Integer>(ml::SVM::KernelTypes::CHI2));
+	FF_SET_JS_PROP(svmConstants, INTER, Nan::New<v8::Integer>(ml::SVM::KernelTypes::INTER));
+
+	FF_SET_JS_PROP(svmConstants, C, Nan::New<v8::Integer>(ml::SVM::ParamTypes::C));
+	FF_SET_JS_PROP(svmConstants, COEF, Nan::New<v8::Integer>(ml::SVM::ParamTypes::COEF));
+	FF_SET_JS_PROP(svmConstants, DEGREE, Nan::New<v8::Integer>(ml::SVM::ParamTypes::DEGREE));
+	FF_SET_JS_PROP(svmConstants, GAMMA, Nan::New<v8::Integer>(ml::SVM::ParamTypes::GAMMA));
+	FF_SET_JS_PROP(svmConstants, NU, Nan::New<v8::Integer>(ml::SVM::ParamTypes::NU));
+	FF_SET_JS_PROP(svmConstants, P, Nan::New<v8::Integer>(ml::SVM::ParamTypes::P));
 	
-	v8::Local<v8::Object> sampleTypes = Nan::New<v8::Object>();
-	FF_SET_JS_PROP(sampleTypes, COL_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::COL_SAMPLE));
-	FF_SET_JS_PROP(sampleTypes, ROW_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::ROW_SAMPLE));
-	cvTypes->Set(FF_NEW_STRING("sampleTypes"), sampleTypes);
+	v8::Local<v8::Object> mlConstants = Nan::New<v8::Object>();
+	FF_SET_JS_PROP(mlConstants, COL_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::COL_SAMPLE));
+	FF_SET_JS_PROP(mlConstants, ROW_SAMPLE, Nan::New<v8::Integer>(ml::SampleTypes::ROW_SAMPLE));
 
-	v8::Local<v8::Object> variableTypes = Nan::New<v8::Object>();
-	FF_SET_JS_PROP(variableTypes, VAR_CATEGORICAL, Nan::New<v8::Integer>(ml::VariableTypes::VAR_CATEGORICAL));
-	FF_SET_JS_PROP(variableTypes, VAR_NUMERICAL, Nan::New<v8::Integer>(ml::VariableTypes::VAR_NUMERICAL));
-	FF_SET_JS_PROP(variableTypes, VAR_ORDERED, Nan::New<v8::Integer>(ml::VariableTypes::VAR_ORDERED));
-	cvTypes->Set(FF_NEW_STRING("variableTypes"), variableTypes);
+	FF_SET_JS_PROP(mlConstants, VAR_CATEGORICAL, Nan::New<v8::Integer>(ml::VariableTypes::VAR_CATEGORICAL));
+	FF_SET_JS_PROP(mlConstants, VAR_NUMERICAL, Nan::New<v8::Integer>(ml::VariableTypes::VAR_NUMERICAL));
+	FF_SET_JS_PROP(mlConstants, VAR_ORDERED, Nan::New<v8::Integer>(ml::VariableTypes::VAR_ORDERED));
+	mlConstants->Set(FF_NEW_STRING("SVM"), svmConstants);
+	target->Set(FF_NEW_STRING("ml"), mlConstants);
 
-	v8::Local<v8::Object> statModelFlags = Nan::New<v8::Object>();
-	FF_SET_JS_PROP(statModelFlags, COMPRESSED_INPUT, Nan::New<v8::Integer>(ml::StatModel::Flags::COMPRESSED_INPUT));
-	FF_SET_JS_PROP(statModelFlags, PREPROCESSED_INPUT, Nan::New<v8::Integer>(ml::StatModel::Flags::PREPROCESSED_INPUT));
-	FF_SET_JS_PROP(statModelFlags, RAW_OUTPUT, Nan::New<v8::Integer>(ml::StatModel::Flags::RAW_OUTPUT));
-	FF_SET_JS_PROP(statModelFlags, UPDATE_MODEL, Nan::New<v8::Integer>(ml::StatModel::Flags::UPDATE_MODEL));
-	cvTypes->Set(FF_NEW_STRING("statModelFlags"), statModelFlags);
+	v8::Local<v8::Object> statModelCostants = Nan::New<v8::Object>();
+	FF_SET_JS_PROP(statModelCostants, COMPRESSED_INPUT, Nan::New<v8::Integer>(ml::StatModel::Flags::COMPRESSED_INPUT));
+	FF_SET_JS_PROP(statModelCostants, PREPROCESSED_INPUT, Nan::New<v8::Integer>(ml::StatModel::Flags::PREPROCESSED_INPUT));
+	FF_SET_JS_PROP(statModelCostants, RAW_OUTPUT, Nan::New<v8::Integer>(ml::StatModel::Flags::RAW_OUTPUT));
+	FF_SET_JS_PROP(statModelCostants, UPDATE_MODEL, Nan::New<v8::Integer>(ml::StatModel::Flags::UPDATE_MODEL));
+	target->Set(FF_NEW_STRING("statModel"), statModelCostants);
 
 	v8::Local<v8::Object> haarCascades = Nan::New<v8::Object>();
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE, FF_NEW_STRING("./haarcascade_eye.xml"));
@@ -135,7 +119,5 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_RUSSIAN_PLATE_NUMBER, FF_NEW_STRING("./haarcascade_russian_plate_number.xml"));
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_SMILE, FF_NEW_STRING("./haarcascade_smile.xml"));
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_UPPERBODY, FF_NEW_STRING("./haarcascade_upperbody.xml"));
-	cvTypes->Set(FF_NEW_STRING("haarCascades"), haarCascades);
-
-	target->Set(FF_NEW_STRING("cvTypes"), cvTypes);
+	target->Set(FF_NEW_STRING("haarCascades"), haarCascades);
 }

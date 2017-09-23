@@ -62,22 +62,20 @@ void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, std::string match
 #else
 void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	if (!info[0]->IsObject() || !info[1]->IsObject()) {
-		return Nan::ThrowError("required argument descriptorsFrom, descriptorsTo");
-	}
-
-	cv::Mat descFrom = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
-	cv::Mat descTo = Nan::ObjectWrap::Unwrap<Mat>(info[1]->ToObject())->mat;
+	FF_METHOD_CONTEXT("match");
+	
+	FF_ARG_INSTANCE(0, cv::Mat descFrom, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INSTANCE(1, cv::Mat descTo, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 
 	std::vector<cv::DMatch> dmatches;
 	cv::DescriptorMatcher::create(matcherType)->match(descFrom, descTo, dmatches);
 
-	v8::Local<v8::Array> jsMatches = Nan::New<v8::Array>(dmatches.size());
+	FF_ARR jsMatches = FF_NEW_ARRAY(dmatches.size());
 	uint i = 0;
 	for (auto dmatch : dmatches) {
-		v8::Local<v8::Object> jsMatch = Nan::NewInstance(Nan::New(DescriptorMatch::constructor)->GetFunction()).ToLocalChecked();
-		Nan::ObjectWrap::Unwrap<DescriptorMatch>(jsMatch)->setNativeProps(dmatch);
+		FF_OBJ jsMatch = FF_NEW_INSTANCE(DescriptorMatch::constructor);
+		FF_UNWRAP(jsMatch, DescriptorMatch)->setNativeProps(dmatch);
 		jsMatches->Set(i++, jsMatch);
 	}
-	info.GetReturnValue().Set(jsMatches);
+	FF_RETURN(jsMatches);
 }

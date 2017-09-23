@@ -7,15 +7,15 @@
 class MSERDetector : public FeatureDetector {
 public:
 	cv::Ptr<cv::MSER> detector;
-	int delta = 5;
-	int minArea = 60;
-	int maxArea = 14400;
-	double maxVariation = 0.25;
-	double minDiversity = .2;
-	int maxEvolution = 200;
-	double areaThreshold = 1.01;
-	double minMargin = 0.003;
-	int edgeBlurSize = 5;
+	int delta ;
+	int minArea;
+	int maxArea;
+	double maxVariation;
+	double minDiversity;
+	int maxEvolution;
+	double areaThreshold;
+	double minMargin;
+	int edgeBlurSize;
 
   static NAN_MODULE_INIT(Init); 
   static NAN_METHOD(New);

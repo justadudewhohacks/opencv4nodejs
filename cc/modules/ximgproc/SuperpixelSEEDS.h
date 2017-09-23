@@ -8,8 +8,8 @@
 class SuperpixelSEEDS : public Nan::ObjectWrap {
 public:
 	cv::Ptr<cv::ximgproc::SuperpixelSEEDS> superpixelSeeds;
-	Nan::Persistent<v8::Object> jsImg;
-	Nan::Persistent<v8::Object> jsLabels;
+	cv::Mat img;
+	cv::Mat labels;
 	int numSuperpixels;
 	int numLevels;
 	int prior = 2;
@@ -21,12 +21,8 @@ public:
   static NAN_METHOD(New);
 	static NAN_METHOD(Iterate);
 
-	static NAN_GETTER(GetImg) {
-		info.GetReturnValue().Set(Nan::New(Nan::ObjectWrap::Unwrap<SuperpixelSEEDS>(info.This())->jsImg));
-	}
-	static NAN_GETTER(GetLabels) {
-		info.GetReturnValue().Set(Nan::New(Nan::ObjectWrap::Unwrap<SuperpixelSEEDS>(info.This())->jsLabels));
-	}
+	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetImg, img, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
+	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetLabels, labels, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
 	static FF_GETTER(SuperpixelSEEDS, GetNumSuperpixels, numSuperpixels);
 	static FF_GETTER(SuperpixelSEEDS, GeNumLevels, numLevels);
 	static FF_GETTER(SuperpixelSEEDS, GetPrior, prior);

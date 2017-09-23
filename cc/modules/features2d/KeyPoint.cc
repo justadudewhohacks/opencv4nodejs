@@ -11,8 +11,7 @@ NAN_MODULE_INIT(KeyPoint::Init) {
   ctor->SetClassName(Nan::New("KeyPoint").ToLocalChecked());
 
   Nan::SetAccessor(instanceTemplate, Nan::New("localId").ToLocalChecked(), GetLocalId);
-  Nan::SetAccessor(instanceTemplate, Nan::New("x").ToLocalChecked(), GetX);
-  Nan::SetAccessor(instanceTemplate, Nan::New("y").ToLocalChecked(), GetY);
+  Nan::SetAccessor(instanceTemplate, Nan::New("point").ToLocalChecked(), GetPoint);
   Nan::SetAccessor(instanceTemplate, Nan::New("angle").ToLocalChecked(), GetAngle);
   Nan::SetAccessor(instanceTemplate, Nan::New("classId").ToLocalChecked(), GetClassId);
   Nan::SetAccessor(instanceTemplate, Nan::New("response").ToLocalChecked(), GetResponse);
@@ -23,27 +22,19 @@ NAN_MODULE_INIT(KeyPoint::Init) {
 };
 
 NAN_METHOD(KeyPoint::New) {
+	FF_METHOD_CONTEXT("KeyPoint::New");
+	KeyPoint* self = new KeyPoint();
   if (info.Length() > 0) {
-    // TODO check args
-    KeyPoint *keyPoint = new KeyPoint();
-    v8::Local<v8::Object> jsKp = info[0]->ToObject();
-    keyPoint->setNativeProps(
-      (uint)Nan::Get(jsKp, Nan::New("localId").ToLocalChecked()).ToLocalChecked()->NumberValue(),
-      cv::KeyPoint(
-				FF_GET_JSPROP_FLOAT(jsKp, x),
-				FF_GET_JSPROP_FLOAT(jsKp, y),
-				FF_GET_JSPROP_FLOAT(jsKp, size),
-				FF_GET_JSPROP_FLOAT(jsKp, angle),
-				FF_GET_JSPROP_FLOAT(jsKp, response),
-				FF_GET_JSPROP_INT(jsKp, octave),
-				FF_GET_JSPROP_INT(jsKp, classId)
-      )
-    );
-    keyPoint->Wrap(info.Holder());
-  } else {
-    (new KeyPoint())->Wrap(info.Holder());
+		FF_ARG_INSTANCE(0, cv::Point2d pt, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
+		FF_ARG_NUMBER(1, double size);
+		FF_ARG_NUMBER(2, double angle);
+		FF_ARG_NUMBER(3, double response);
+		FF_ARG_INT(4, int octave);
+		FF_ARG_INT(5, int classId);
+		self->keyPoint = cv::KeyPoint(pt, size, angle, response, octave, classId);
   }
-  info.GetReturnValue().Set(info.Holder());
+	self->Wrap(info.Holder());
+  FF_RETURN(info.Holder());
 }
 
 void KeyPoint::setNativeProps(uint localId, cv::KeyPoint keyPoint) {

@@ -1,22 +1,13 @@
 {
   "name": "opencv4nodejs_test",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
-    "test": "set NODE_ENV=TEST&& mocha ./cc --require babel-core/register --require babel-polyfill --compilers js:babel-core/register --recursive --timeout 5000"
+    "test": "set NODE_ENV=TEST&& mocha cc/**/*.test.js --require ./globals --recursive --timeout 5000"
   },
   "author": "justadudewhohacks",
   "license": "ISC",
   "dependencies": {
-    "babel-core": "^6.18.2",
-    "babel-plugin-module-resolver": "^2.7.1",
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.22.0",
-    "babel-polyfill": "^6.23.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-es2017": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "chai": "^4.1.0",
-    "sinon": "^2.3.8"
+    "chai": "^4.1.0"
   },
   "devDependencies": {
     "eslint": "^3.18.0",

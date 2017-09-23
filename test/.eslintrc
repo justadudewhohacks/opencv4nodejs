@@ -17,7 +17,8 @@
     // unit tests only
     "max-len" : 0,
     "no-new" : 0,
-    "no-unused-expressions": 0
+    "no-unused-expressions": 0,
+    "prefer-spread": 0
 
   },
   "env": {

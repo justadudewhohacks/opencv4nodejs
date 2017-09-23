@@ -38,15 +38,15 @@ public:
 	static NAN_METHOD(ArcLength);
 	static NAN_METHOD(BoundingRect);
 	static NAN_METHOD(ConvexHull);
+	static NAN_METHOD(ConvexHullIndices);
 	static NAN_METHOD(ConvexityDefects);
 	static NAN_METHOD(MinEnclosingCircle);
+	static NAN_METHOD(MinEnclosingTriangle);
 	static NAN_METHOD(PointPolygonTest);
 	static NAN_METHOD(MatchShapes);
 	static NAN_METHOD(FitEllipse);
 	static NAN_METHOD(MinAreaRect);
 	static NAN_METHOD(_Moments);
-
-	// TODO FitLine, minEnclosingTriangle
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 };

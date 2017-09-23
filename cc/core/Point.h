@@ -24,7 +24,8 @@ public:
 		}
 	};
 
-	static v8::Local<v8::Array> packJSPoint2Array(std::vector<cv::Point> pts) {
+	template<typename type>
+	static v8::Local<v8::Array> packJSPoint2Array(std::vector<cv::Point_<type>> pts) {
 		v8::Local<v8::Array> jsPts = Nan::New<v8::Array>(pts.size());
 		for (int i = 0; i < jsPts->Length(); i++) {
 			v8::Local<v8::Object> jsPt2 = FF_NEW_INSTANCE(Point2::constructor);

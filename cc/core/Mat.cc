@@ -2,7 +2,7 @@
 #include "Point2.h"
 #include "Rect.h"
 #include "RotatedRect.h"
-#include "Moments.h"
+#include "imgproc/Moments.h"
 #include "imgproc/Contour.h"
 
 Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
@@ -73,10 +73,10 @@ NAN_METHOD(Mat::New) {
 	Mat* self = new Mat();
 	/* from channels */
 	if (info.Length() == 1 && info[0]->IsArray()) {
-		v8::Local<v8::Array> jsChannelMats = v8::Local<v8::Array>::Cast(info[0]);
+		FF_ARR jsChannelMats = FF_ARR::Cast(info[0]);
 		std::vector<cv::Mat> channels;
 		for (int i = 0; i < jsChannelMats->Length(); i++) {
-			v8::Local<v8::Object> jsChannelMat = FF_CAST_OBJ(jsChannelMats->Get(i));
+			FF_OBJ jsChannelMat = FF_CAST_OBJ(jsChannelMats->Get(i));
 			FF_REQUIRE_INSTANCE(constructor, jsChannelMat,
 				FF_NEW_STRING("expected channel " + std::to_string(i) + " to be an instance of Mat"));
 			cv::Mat channelMat = FF_UNWRAP_MAT_AND_GET(jsChannelMat);
@@ -92,7 +92,7 @@ NAN_METHOD(Mat::New) {
 	}
 	/* data array, type */
 	else if (info.Length() == 2 && info[0]->IsArray() && info[1]->IsInt32()) {
-		v8::Local<v8::Array> rowArray = v8::Local<v8::Array>::Cast(info[0]);
+		FF_ARR rowArray = FF_ARR::Cast(info[0]);
 		int type = info[1]->Int32Value();
 
 		int numCols = -1;
@@ -100,7 +100,7 @@ NAN_METHOD(Mat::New) {
 			if (!rowArray->Get(i)->IsArray()) {
 				return Nan::ThrowError(Nan::New("Mat::New - Column should be an array, at column: " + std::to_string(i)).ToLocalChecked());
 			}
-			v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(rowArray->Get(i));
+			FF_ARR colArray = FF_ARR::Cast(rowArray->Get(i));
 			if (numCols != -1 && numCols != colArray->Length()) {
 				return Nan::ThrowError(Nan::New("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i)).ToLocalChecked());
 			}
@@ -118,7 +118,7 @@ NAN_METHOD(Mat::New) {
 		/* fill vector */
 		// TODO by Vec
 		if (info[3]->IsArray()) {
-			v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[3]);
+			FF_ARR vec = FF_ARR::Cast(info[3]);
 			if (mat.channels() != vec->Length()) {
 				return Nan::ThrowError(FF_NEW_STRING(
 					std::string("Mat::New - number of channels (") + std::to_string(mat.channels())
@@ -142,7 +142,7 @@ NAN_METHOD(Mat::New) {
 		self->setNativeProps(mat);
 	}
 	self->Wrap(info.Holder());
-	info.GetReturnValue().Set(info.Holder());
+	FF_RETURN(info.Holder());
 }
 
 NAN_METHOD(Mat::At) {
@@ -154,8 +154,8 @@ NAN_METHOD(Mat::At) {
 	FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
 	v8::Local<v8::Value> jsVal;
 	if (val->IsArray()) {
-		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(val);
-		v8::Local<v8::Object> jsVec;
+		FF_ARR vec = FF_ARR::Cast(val);
+		FF_OBJ jsVec;
 		if (vec->Length() == 2) {
 			jsVec = FF_NEW_INSTANCE(Vec2::constructor);
 			FF_UNWRAP_VEC2(jsVec)->vec = cv::Vec2d(vec->Get(0)->NumberValue(), vec->Get(1)->NumberValue());
@@ -173,7 +173,7 @@ NAN_METHOD(Mat::At) {
 	else {
 		jsVal = v8::Local<v8::Value>::Cast(val);
 	}
-	info.GetReturnValue().Set(jsVal);
+	FF_RETURN(jsVal);
 }
 
 NAN_METHOD(Mat::AtRaw) {
@@ -183,7 +183,7 @@ NAN_METHOD(Mat::AtRaw) {
 	FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.cols - 1, "Mat::At col");
 	v8::Local<v8::Value> val;
 	FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
-	info.GetReturnValue().Set(val);
+	FF_RETURN(val);
 }
 
 NAN_METHOD(Mat::Set) {
@@ -194,7 +194,7 @@ NAN_METHOD(Mat::Set) {
 
 	int cn = matSelf.channels();
 	if (info[2]->IsArray()) {
-		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[2]);
+		FF_ARR vec = FF_ARR::Cast(info[2]);
 		FF_ASSERT_CHANNELS(cn, vec->Length(), "Mat::Set");
 		FF_MAT_APPLY_TYPED_OPERATOR(matSelf, vec, matSelf.type(), FF_MAT_SET, FF::matPut);
 	}
@@ -223,14 +223,14 @@ NAN_METHOD(Mat::GetData) {
 	size_t size = matSelf.rows * matSelf.cols * matSelf.elemSize();
 	char *data = static_cast<char *>(malloc(size));
 	memcpy(data, matSelf.data, size);
-	info.GetReturnValue().Set(Nan::NewBuffer(data, size).ToLocalChecked());
+	FF_RETURN(Nan::NewBuffer(data, size).ToLocalChecked());
 }
 
 NAN_METHOD(Mat::GetDataAsArray) {
 	cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info.This());
-	v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(mat.rows);
+	FF_ARR rowArray = FF_NEW_ARRAY(mat.rows);
 	FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT, FF::matGet);
-	info.GetReturnValue().Set(rowArray);
+	FF_RETURN(rowArray);
 }
 
 NAN_METHOD(Mat::GetRegion) {
@@ -238,130 +238,143 @@ NAN_METHOD(Mat::GetRegion) {
 		Nan::ThrowError("Mat::GetRegion expected arg0 to be an instance of Rect");
 	}
 	cv::Rect2d rect = FF_UNWRAP(info[0]->ToObject(), Rect)->rect;
-	v8::Local<v8::Object> jsRegion = FF_NEW_INSTANCE(constructor);
+	FF_OBJ jsRegion = FF_NEW_INSTANCE(constructor);
 	FF_UNWRAP_MAT_AND_GET(jsRegion) = FF_UNWRAP_MAT_AND_GET(info.This())(rect);
-	info.GetReturnValue().Set(jsRegion);
+	FF_RETURN(jsRegion);
 }
 
 NAN_METHOD(Mat::Copy) {
+	FF_METHOD_CONTEXT("Mat::Copy");
+
 	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-	v8::Local<v8::Object> jsMatDst = FF_NEW_INSTANCE(constructor);
 	cv::Mat matDst = cv::Mat::zeros(matSelf.size(), matSelf.type());
-	Nan::ObjectWrap::Unwrap<Mat>(jsMatDst)->setNativeProps(matDst);
-	if (info[0]->IsObject()) {
+	if (info.Length() > 0) {
 		/* with mask*/
-		FF_REQUIRE_INSTANCE(constructor, info[0], "expected mask to be an instance of Mat");
-		matSelf.copyTo(matDst, FF_UNWRAP_MAT_AND_GET(info[0]->ToObject()));
+		FF_ARG_INSTANCE(0, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+		matSelf.copyTo(matDst, mask);
 	}
 	else {
 		matSelf.copyTo(matDst);
 	}
-	info.GetReturnValue().Set(jsMatDst);
+	FF_OBJ jsMatDst = FF_NEW_INSTANCE(Mat::constructor);
+	FF_UNWRAP_MAT_AND_GET(jsMatDst) = matDst;
+	FF_RETURN(jsMatDst);
 }
 
 NAN_METHOD(Mat::CopyTo) {
-	if (!info[0]->IsObject()) {
-		return Nan::ThrowError("Mat::CopyTo - expected arg: destination mat");
-	}
-	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-	cv::Mat matDst = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
+	FF_METHOD_CONTEXT("Mat::CopyTo");
 
-	if (info[1]->IsObject()) {
+	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+	FF_ARG_INSTANCE(0, cv::Mat dst, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	if (info.Length() > 1) {
 		/* with mask*/
-		matSelf.copyTo(matDst, Nan::ObjectWrap::Unwrap<Mat>(info[1]->ToObject())->mat);
+		FF_ARG_INSTANCE(1, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+		matSelf.copyTo(dst, mask);
 	}
 	else {
-		matSelf.copyTo(matDst);
+		matSelf.copyTo(dst);
 	}
-	info.GetReturnValue().Set(info[0]);
+	FF_RETURN(info[0]);
 }
 
 NAN_METHOD(Mat::ConvertTo) {
-	FF_REQUIRE_ARGS_OBJ("Mat::ConvertTo");
+	FF_METHOD_CONTEXT("Mat::ConvertTo");
 
-	int type;
-	double alpha = 1.0, beta = 0.0;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, type, IsInt32, Int32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, alpha, IsNumber, NumberValue);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, beta, IsNumber, NumberValue);
-	v8::Local<v8::Object> jsMatConverted = FF_NEW_INSTANCE(constructor);
+	// required args
+	FF_ARG_UINT(0, uint type);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
+	FF_GET_NUMBER_IFDEF(optArgs, double alpha, "alpha", 1.0);
+	FF_GET_NUMBER_IFDEF(optArgs, double beta, "beta", 0.0);
+	if (!hasOptArgsObj) {
+		FF_ARG_NUMBER_IFDEF(1, alpha, 1.0);
+		FF_ARG_NUMBER_IFDEF(2, beta, 0.0);
+	}
+
+	FF_OBJ jsMatConverted = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP_MAT_AND_GET(info.This()).convertTo(
 		FF_UNWRAP_MAT_AND_GET(jsMatConverted),
-		type,
+		(int)type,
 		alpha,
 		beta
 	);
-	info.GetReturnValue().Set(jsMatConverted);
+	FF_RETURN(jsMatConverted);
 }
 
 
 NAN_METHOD(Mat::Norm) {
-	int normType = 4;
-	cv::Mat mask = cv::noArray().getMat();
+	FF_METHOD_CONTEXT("Mat::Norm");
+
+	bool withSrc2 = FF_HAS_ARG(0) && FF_IS_INSTANCE(Mat::constructor, info[0]);
+	uint i = withSrc2 ? 1 : 0;
 	double norm;
-	if (info.Length() != 0) {
-		FF_REQUIRE_ARGS_OBJ("Mat::Norm");
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, normType, IsUint32, Uint32Value);
-		if (FF_HAS(args, "mask")) {
-			/* with mask*/
-			v8::Local<v8::Object> jsMask = FF_GET_JSPROP(args, mask)->ToObject();
-			FF_REQUIRE_INSTANCE(constructor, jsMask, "expected mask to be an instance of Mat");
-			mask = FF_UNWRAP_MAT_AND_GET(jsMask);
-		}
-		if (FF_HAS(args, "src2")) {
-			v8::Local<v8::Object> jsSrc2 = FF_GET_JSPROP(args, src2)->ToObject();
-			FF_REQUIRE_INSTANCE(constructor, jsSrc2, "expected src2 to be an instance of Mat");
-			norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), FF_UNWRAP_MAT_AND_GET(jsSrc2), normType, mask);
-			return info.GetReturnValue().Set(norm);
-		}
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(i) && info[i]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[i]->ToObject() : FF_NEW_OBJ();
+	FF_GET_UINT_IFDEF(optArgs, uint normType, "normType", cv::NORM_L2);
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat mask, "mask", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
+	if (!hasOptArgsObj) {
+		FF_ARG_UINT_IFDEF(i, normType, normType);
+		FF_ARG_INSTANCE_IFDEF(i + 1, mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
 	}
-	norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), normType, mask);
-	info.GetReturnValue().Set(norm);
+
+	if (withSrc2) {
+		FF_ARG_INSTANCE(0, cv::Mat src2, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+		norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), src2, (int)normType, mask);
+	}
+	else {
+		norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), (int)normType, mask);
+	}
+	FF_RETURN(norm);
 }
 
 NAN_METHOD(Mat::Normalize) {
-	int normType = 4;
-	int dtype = -1;
-	double alpha = 1.0, beta = 0.0;
-	cv::Mat mask = cv::noArray().getMat();
-	if (info.Length() != 0) {
-		FF_REQUIRE_ARGS_OBJ("Mat::Normalize");
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, normType, IsUint32, Uint32Value);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, dtype, IsInt32, Int32Value);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, alpha, IsNumber, NumberValue);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, beta, IsNumber, NumberValue);
-		if (FF_HAS(args, "mask")) {
-			/* with mask*/
-			v8::Local<v8::Object> jsMask = FF_GET_JSPROP(args, mask)->ToObject();
-			FF_REQUIRE_INSTANCE(constructor, jsMask, "expected mask to be an instance of Mat");
-			mask = FF_UNWRAP_MAT_AND_GET(jsMask);
-		}
+	FF_METHOD_CONTEXT("Mat::Normalize");
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+	FF_GET_NUMBER_IFDEF(optArgs, double alpha, "alpha", 1.0);
+	FF_GET_NUMBER_IFDEF(optArgs, double beta, "beta", 0.0);
+	FF_GET_UINT_IFDEF(optArgs, uint normType, "normType", cv::NORM_L2);
+	FF_GET_UINT_IFDEF(optArgs, int dtype, "dtype", -1);
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat mask, "mask", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
+	if (!hasOptArgsObj) {
+		FF_ARG_NUMBER_IFDEF(0, alpha, 1.0);
+		FF_ARG_NUMBER_IFDEF(1, beta, 0.0);
+		FF_ARG_UINT_IFDEF(3, normType, normType);
+		FF_ARG_INT_IFDEF(4, dtype, dtype);
+		FF_ARG_INSTANCE_IFDEF(5, mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
 	}
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
 	cv::normalize(FF_UNWRAP_MAT_AND_GET(info.This()), FF_UNWRAP_MAT_AND_GET(jsMat), alpha, beta, normType, dtype, mask);
-	info.GetReturnValue().Set(jsMat);
+	FF_RETURN(jsMat);
 }
 
 NAN_METHOD(Mat::SplitChannels) {
 	std::vector<cv::Mat> channels;
 	cv::split(FF_UNWRAP_MAT_AND_GET(info.This()), channels);
-	v8::Local<v8::Array> jsChannelMats = Nan::New<v8::Array>(channels.size());
+	FF_ARR jsChannelMats = FF_NEW_ARRAY(channels.size());
 	for (int i = 0; i < channels.size(); i++) {
-		v8::Local<v8::Object> jsChannelMat = FF_NEW_INSTANCE(constructor);
+		FF_OBJ jsChannelMat = FF_NEW_INSTANCE(constructor);
 		FF_UNWRAP_MAT_AND_GET(jsChannelMat) = channels.at(i);
 		jsChannelMats->Set(i, jsChannelMat);
 	}
-	info.GetReturnValue().Set(jsChannelMats);
+	FF_RETURN(jsChannelMats);
 }
 
 /* #IFDEC IMGPROC */
 
 NAN_METHOD(Mat::Rescale) {
-  if (!info[0]->IsNumber()) {
-    return Nan::ThrowError("Mat::Rescale - expected arg: factor");
-  }
-  double factor = (double)info[0]->NumberValue();
-  v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
+	FF_METHOD_CONTEXT("Mat::Rescale");
+
+	FF_ARG_NUMBER(0, double factor);
+
+  FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
   cv::resize(
 		FF_UNWRAP_MAT_AND_GET(info.This()),
 		FF_UNWRAP_MAT_AND_GET(jsMat),
@@ -369,108 +382,577 @@ NAN_METHOD(Mat::Rescale) {
     factor,
     factor
   );
-  info.GetReturnValue().Set(jsMat);
+  FF_RETURN(jsMat);
 }
 
 NAN_METHOD(Mat::Resize) {
-  if (!info[0]->IsNumber() || !info[1]->IsNumber()) {
-    return Nan::ThrowError("Mat::Resize - expected args: rows, cols");
-  }
-  int rows = (int)info[0]->NumberValue();
-  int cols = (int)info[1]->NumberValue();
-  v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
+	FF_METHOD_CONTEXT("Mat::Resize");
+
+	FF_ARG_UINT(0, uint rows);
+	FF_ARG_UINT(1, uint cols);
+
+  FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
   cv::resize(
 		FF_UNWRAP_MAT_AND_GET(info.This()),
 		FF_UNWRAP_MAT_AND_GET(jsMat),
-    cv::Size(rows, cols)
+    cv::Size((int)rows, (int)cols)
   );
-  info.GetReturnValue().Set(jsMat);
+  FF_RETURN(jsMat);
 }
 
 NAN_METHOD(Mat::ResizeToMax) {
-  if (!info[0]->IsNumber()) {
-    return Nan::ThrowError("Mat::ResizeToMax - expected arg: maxRowsOrCols");
-  }
-  int maxRowsOrCols = (int)info[0]->NumberValue();
+	FF_METHOD_CONTEXT("Mat::ResizeToMax");
+
+	FF_ARG_UINT(0, uint maxRowsOrCols);
   cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info.This());
   double ratioY = (double)maxRowsOrCols / (double)mat.rows;
   double ratioX = (double)maxRowsOrCols / (double)mat.cols;
 	double scale = (std::min)(ratioY, ratioX);
 
-  v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
+  FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
   cv::resize(
     mat,
 		FF_UNWRAP_MAT_AND_GET(jsMat),
     cv::Size((int)(mat.cols * scale), (int)(mat.rows * scale))
   );
-  info.GetReturnValue().Set(jsMat);
+  FF_RETURN(jsMat);
 }
 
 NAN_METHOD(Mat::Threshold) {
-	FF_REQUIRE_ARGS_OBJ("Mat::Threshold");
+	FF_METHOD_CONTEXT("Mat::Threshold");
 
-	double thresh, maxVal;
-	int type;
-	FF_DESTRUCTURE_JSPROP_REQUIRED(args, thresh, NumberValue);
-	FF_DESTRUCTURE_JSPROP_REQUIRED(args, maxVal, NumberValue);
-	FF_DESTRUCTURE_JSPROP_REQUIRED(args, type, Int32Value);
 
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
+	FF_ARG_NUMBER(0, double thresh);
+	FF_ARG_NUMBER(1, double maxVal);
+	FF_ARG_UINT(2, uint type);
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
 	cv::threshold(
 		FF_UNWRAP_MAT_AND_GET(info.This()),
 		FF_UNWRAP_MAT_AND_GET(jsMat),
 		thresh,
 		maxVal,
-		type
+		(int)type
 	);
-	info.GetReturnValue().Set(jsMat);
+	FF_RETURN(jsMat);
 }
 
 NAN_METHOD(Mat::InRange) {
-	FF_REQUIRE_INSTANCE(Vec3::constructor, info[0], "Mat::InRange - expected arg0 lower bound to be an instance of Vec3");
-	FF_REQUIRE_INSTANCE(Vec3::constructor, info[1], "Mat::InRange - expected arg1 upper bound to be an instance of Vec3");
-	cv::Vec3d lower = FF_UNWRAP_VEC3_AND_GET(info[0]->ToObject());
-	cv::Vec3d upper = FF_UNWRAP_VEC3_AND_GET(info[1]->ToObject());
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
+	FF_METHOD_CONTEXT("Mat::InRange");
+
+	FF_ARG_INSTANCE(0, cv::Vec3d lower, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
+	FF_ARG_INSTANCE(1, cv::Vec3d upper, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
 	cv::inRange(
 		FF_UNWRAP_MAT_AND_GET(info.This()),
 		lower,
 		upper,
 		FF_UNWRAP_MAT_AND_GET(jsMat)
 	);
-	info.GetReturnValue().Set(jsMat);
+	FF_RETURN(jsMat);
 }
 
 NAN_METHOD(Mat::CvtColor) {
-	FF_REQUIRE_ARGS_OBJ("Mat::CvtColor");
+	FF_METHOD_CONTEXT("Mat::CvtColor");
 
-	int code;
-	int dstCn = 0;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, code, IsInt32, Int32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, dstCn, IsInt32, Int32Value);
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
+	FF_ARG_UINT(0, uint code);
+	FF_ARG_UINT_IFDEF(1, uint dstCn, 0);
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
 	cv::cvtColor(
 		FF_UNWRAP_MAT_AND_GET(info.This()),
 		FF_UNWRAP_MAT_AND_GET(jsMat),
-		code,
-		dstCn
+		(int)code,
+		(int)dstCn
 	);
-	info.GetReturnValue().Set(jsMat);
+	FF_RETURN(jsMat);
 }
 
 NAN_METHOD(Mat::BgrToGray) {
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
+	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
 	cv::cvtColor(
 		FF_UNWRAP_MAT_AND_GET(info.This()),
 		FF_UNWRAP_MAT_AND_GET(jsMat),
 		CV_BGR2GRAY
 	);
 
-	info.GetReturnValue().Set(jsMat);
+	FF_RETURN(jsMat);
 }
 
-
 NAN_METHOD(Mat::WarpAffine) {
+	Nan::TryCatch tryCatch;
+	warp(info, "Mat::WarpAffine", &cv::warpAffine);
+	if (tryCatch.HasCaught()) {
+		tryCatch.ReThrow();
+	}
+}
+
+NAN_METHOD(Mat::WarpPerspective) {
+	Nan::TryCatch tryCatch;
+	warp(info, "Mat::WarpPerspective", &cv::warpPerspective);
+	if (tryCatch.HasCaught()) {
+		tryCatch.ReThrow();
+	}
+}
+
+NAN_METHOD(Mat::Dilate) {
+	Nan::TryCatch tryCatch;
+	morph(info, "Mat::Dilate", cv::dilate);
+	if (tryCatch.HasCaught()) {
+		tryCatch.ReThrow();
+	}
+}
+
+NAN_METHOD(Mat::Erode) {
+	Nan::TryCatch tryCatch;
+	morph(info, "Mat::Erode", cv::erode);
+	if (tryCatch.HasCaught()) {
+		tryCatch.ReThrow();
+	}
+}
+
+NAN_METHOD(Mat::DistanceTransform) {
+	FF_METHOD_CONTEXT("Mat::DistanceTransform");
+
+	FF_ARG_UINT(0, uint distanceType);
+	FF_ARG_UINT(1, uint maskSize);
+	FF_ARG_UINT_IFDEF(2, uint dstType, CV_32F);
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
+	cv::distanceTransform(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
+		(int)distanceType,
+		(int)maskSize,
+		(int)dstType
+	);
+	FF_RETURN(jsMat);
+}
+
+NAN_METHOD(Mat::DistanceTransformWithLabels) {
+	FF_METHOD_CONTEXT("Mat::DistanceTransformWithLabels");
+
+	FF_ARG_UINT(0, uint distanceType);
+	FF_ARG_UINT(1, uint maskSize);
+	FF_ARG_UINT_IFDEF(2, uint labelType, cv::DIST_LABEL_CCOMP);
+
+	FF_OBJ jsDst = FF_NEW_INSTANCE(constructor);
+	FF_OBJ jsLabels = FF_NEW_INSTANCE(constructor);
+	cv::distanceTransform(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsDst),
+		FF_UNWRAP_MAT_AND_GET(jsLabels),
+		(int)distanceType,
+		(int)maskSize,
+		(int)labelType
+	);
+
+	FF_OBJ ret = FF_NEW_OBJ();
+	Nan::Set(ret, FF_NEW_STRING("labels"), jsLabels);
+	Nan::Set(ret, FF_NEW_STRING("dist"), jsDst);
+	FF_RETURN(ret);
+}
+
+NAN_METHOD(Mat::Blur) {
+	FF_METHOD_CONTEXT("Mat::Blur");
+
+	FF_ARG_INSTANCE(0, cv::Size kSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Point2d anchor, "anchor", Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2, cv::Point2d(-1, -1));
+	FF_GET_UINT_IFDEF(optArgs, uint borderType, "borderType", cv::BORDER_CONSTANT);
+	if (!hasOptArgsObj) {
+		FF_ARG_INSTANCE_IFDEF(1, anchor, Point2::constructor, FF_UNWRAP_PT2_AND_GET, anchor);
+		FF_ARG_UINT_IFDEF(2, borderType, borderType);
+	}
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
+	cv::blur(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
+		kSize,
+		anchor,
+		borderType
+	);
+	FF_RETURN(jsMat);
+}
+
+NAN_METHOD(Mat::GaussianBlur) {
+	FF_METHOD_CONTEXT("Mat::GaussianBlur");
+
+	FF_ARG_INSTANCE(0, cv::Size kSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET);
+	FF_ARG_NUMBER(1, double sigmaX);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject() : FF_NEW_OBJ();
+	FF_GET_NUMBER_IFDEF(optArgs, double sigmaY, "sigmaY", 0.0);
+	FF_GET_UINT_IFDEF(optArgs, uint borderType, "borderType", cv::BORDER_CONSTANT);
+	if (!hasOptArgsObj) {
+		FF_ARG_NUMBER_IFDEF(2, sigmaY, sigmaY);
+		FF_ARG_NUMBER_IFDEF(3, borderType, borderType);
+	}
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
+	cv::GaussianBlur(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
+		kSize,
+		sigmaX,
+		sigmaY,
+		borderType
+	);
+	FF_RETURN(jsMat);
+}
+
+NAN_METHOD(Mat::MedianBlur) {
+	FF_METHOD_CONTEXT("Mat::MedianBlur");
+
+	FF_ARG_UINT(0, uint kSize);
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
+	cv::medianBlur(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
+		(int)kSize
+	);
+	FF_RETURN(jsMat);
+}
+
+NAN_METHOD(Mat::ConnectedComponents) {
+	FF_METHOD_CONTEXT("Mat::ConnectedComponents");
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+	FF_GET_UINT_IFDEF(optArgs, uint connectivity, "connectivity", 8);
+	FF_GET_UINT_IFDEF(optArgs, uint ltype, "ltype", CV_32S);
+	if (!hasOptArgsObj) {
+		FF_ARG_UINT_IFDEF(0, connectivity, connectivity);
+		FF_ARG_UINT_IFDEF(1, ltype, ltype);
+	}
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
+	cv::connectedComponents(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
+		(int)connectivity,
+		(int)ltype
+	);
+	FF_RETURN(jsMat);
+}
+
+NAN_METHOD(Mat::ConnectedComponentsWithStats) {
+	FF_METHOD_CONTEXT("Mat::ConnectedComponentsWithStats");
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+	FF_GET_UINT_IFDEF(optArgs, uint connectivity, "connectivity", 8);
+	FF_GET_UINT_IFDEF(optArgs, uint ltype, "ltype", CV_32S);
+	if (!hasOptArgsObj) {
+		FF_ARG_UINT_IFDEF(0, connectivity, connectivity);
+		FF_ARG_UINT_IFDEF(1, ltype, ltype);
+	}
+
+	FF_OBJ jsLabels = FF_NEW_INSTANCE(constructor);
+	FF_OBJ jsStats = FF_NEW_INSTANCE(constructor);
+	FF_OBJ jsCentroids = FF_NEW_INSTANCE(constructor);
+	cv::connectedComponentsWithStats(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsLabels),
+		FF_UNWRAP_MAT_AND_GET(jsStats),
+		FF_UNWRAP_MAT_AND_GET(jsCentroids),
+		(int)connectivity,
+		(int)ltype
+	);
+
+	FF_OBJ ret = FF_NEW_OBJ();
+	Nan::Set(ret, FF_NEW_STRING("labels"), jsLabels);
+	Nan::Set(ret, FF_NEW_STRING("stats"), jsStats);
+	Nan::Set(ret, FF_NEW_STRING("centroids"), jsCentroids);
+	FF_RETURN(ret);
+}
+
+NAN_METHOD(Mat::_Moments) {
+	FF_OBJ jsMoments = FF_NEW_INSTANCE(Moments::constructor);
+	FF_UNWRAP(jsMoments, Moments)->moments = cv::moments(FF_UNWRAP_MAT_AND_GET(info.This()));
+	FF_RETURN(jsMoments);
+}
+
+NAN_METHOD(Mat::FindContours) {
+	FF_METHOD_CONTEXT("Mat::FindContours");
+
+	FF_ARG_UINT(0, uint mode);
+	FF_ARG_UINT(1, uint method);
+	FF_ARG_INSTANCE_IFDEF(2, cv::Point2d offset, Point2::constructor, FF_UNWRAP_PT2_AND_GET, cv::Point2d());
+
+	std::vector<cv::Mat> contours;
+	std::vector<cv::Vec4i> hierarchy;
+	cv::findContours(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		contours,
+		hierarchy,
+		(int)mode,
+		(int)method,
+		offset
+	);
+
+	FF_ARR jsContours = FF_NEW_ARRAY(contours.size());
+	for (uint i = 0; i < jsContours->Length(); i++) {
+		FF_OBJ jsContour = FF_NEW_INSTANCE(Contour::constructor);
+		FF_UNWRAP(jsContour, Contour)->contour = contours.at(i);
+		FF_UNWRAP(jsContour, Contour)->hierarchy = hierarchy.at(i);
+		jsContours->Set(i, jsContour);
+	}
+
+	FF_RETURN(jsContours);
+}
+
+NAN_METHOD(Mat::DrawContours) {
+	FF_METHOD_CONTEXT("Mat::DrawContours");
+
+	FF_ARG_ARRAY(0, FF_ARR jsContours);
+	FF_ARG_INSTANCE(1, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject() : FF_NEW_OBJ();
+	FF_GET_UINT_IFDEF(optArgs, uint contourIdx, "contourIdx", 0);
+	FF_GET_INT_IFDEF(optArgs, int maxLevel, "maxLevel", INT_MAX);
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Point2d offset, "offset", Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2, cv::Point2d());
+	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
+	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
+	if (!hasOptArgsObj) {
+		FF_ARG_UINT_IFDEF(2, contourIdx, contourIdx);
+		FF_ARG_UINT_IFDEF(3, maxLevel, maxLevel);
+		FF_ARG_INSTANCE_IFDEF(4, offset, Point2::constructor, FF_UNWRAP_PT2_AND_GET, offset);
+		FF_ARG_INT_IFDEF(5, lineType, lineType);
+		FF_ARG_INT_IFDEF(6, thickness, thickness);
+	}
+
+	std::vector<std::vector<cv::Point>> contours;
+	std::vector<cv::Vec4i> hierarchy;
+	for (int i = 0; i < jsContours->Length(); i++) {
+		FF_OBJ jsContour = jsContours->Get(i)->ToObject();
+		contours.push_back(FF_UNWRAP_CONTOUR_AND_GET(jsContour));
+		hierarchy.push_back(FF_UNWRAP_CONTOUR(jsContour)->hierarchy);
+	}
+
+	cv::drawContours(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		contours,
+		(int)contourIdx,
+		color,
+		thickness,
+		lineType,
+		hierarchy,
+		(int)maxLevel,
+		offset
+	);
+	FF_RETURN(info.This());
+}
+
+NAN_METHOD(Mat::DrawLine) {
+	FF_METHOD_CONTEXT("Mat::DrawLine");
+
+	FF_ARG_INSTANCE(0, cv::Point2d pt1, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
+	FF_ARG_INSTANCE(1, cv::Point2d pt2, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
+	FF_ARG_INSTANCE(2, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
+	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
+	FF_GET_INT_IFDEF(optArgs, int shift, "shift", 0);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(3, lineType, lineType);
+		FF_ARG_INT_IFDEF(4, thickness, thickness);
+		FF_ARG_INT_IFDEF(5, shift, shift);
+	}
+
+	cv::line(FF_UNWRAP_MAT_AND_GET(info.This()), pt1, pt2, color, thickness, lineType, shift);
+	FF_RETURN(info.This());
+}
+
+NAN_METHOD(Mat::DrawCircle) {
+	FF_METHOD_CONTEXT("Mat::DrawCircle");
+
+	FF_ARG_INSTANCE(0, cv::Point2d center, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
+	FF_ARG_UINT(1, uint radius);
+	FF_ARG_INSTANCE(2, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
+	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
+	FF_GET_INT_IFDEF(optArgs, int shift, "shift", 0);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(3, lineType, lineType);
+		FF_ARG_INT_IFDEF(4, thickness, thickness);
+		FF_ARG_INT_IFDEF(5, shift, shift);
+	}
+
+	cv::circle(FF_UNWRAP_MAT_AND_GET(info.This()), center, (int)radius, color, thickness, lineType, shift);
+	FF_RETURN(info.This());
+}
+
+NAN_METHOD(Mat::DrawRectangle) {
+	FF_METHOD_CONTEXT("Mat::DrawRectangle");
+
+	FF_ARG_INSTANCE(0, cv::Point2d pt1, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
+	FF_ARG_INSTANCE(1, cv::Point2d pt2, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
+	FF_ARG_INSTANCE(2, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
+	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
+	FF_GET_INT_IFDEF(optArgs, int shift, "shift", 0);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(3, lineType, lineType);
+		FF_ARG_INT_IFDEF(4, thickness, thickness);
+		FF_ARG_INT_IFDEF(5, shift, shift);
+	}
+
+	cv::rectangle(FF_UNWRAP_MAT_AND_GET(info.This()), pt1, pt2, color, thickness, lineType, shift);
+	FF_RETURN(info.This());
+}
+
+NAN_METHOD(Mat::DrawEllipse) {
+	FF_METHOD_CONTEXT("Mat::DrawEllipse");
+
+	FF_ARG_INSTANCE(0, cv::RotatedRect box, RotatedRect::constructor, FF_UNWRAP_ROTATEDRECT_AND_GET);
+	FF_ARG_INSTANCE(1, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
+	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(2, lineType, lineType);
+		FF_ARG_INT_IFDEF(3, thickness, thickness);
+	}
+
+	cv::ellipse(FF_UNWRAP_MAT_AND_GET(info.This()), box, color, thickness, lineType);
+	FF_RETURN(info.This());
+}
+
+NAN_METHOD(Mat::PutText) {
+	FF_METHOD_CONTEXT("Mat::PutText");
+
+	FF_ARG_STRING(0, std::string text);
+	FF_ARG_INSTANCE(1, cv::Point2d org, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
+	FF_ARG_UINT(2, uint fontFace);
+	FF_ARG_NUMBER(3, double fontScale);
+	FF_ARG_INSTANCE(4, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(5) && info[5]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[5]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
+	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
+	FF_GET_BOOL_IFDEF(optArgs, bool bottomLeftOrigin, "bottomLeftOrigin", false);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(5, lineType, lineType);
+		FF_ARG_INT_IFDEF(6, thickness, thickness);
+		FF_ARG_INT_IFDEF(7, bottomLeftOrigin, bottomLeftOrigin);
+	}
+
+	cv::putText(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		text,
+		org,
+		(int)fontFace,
+		fontScale,
+		color,
+		thickness,
+		lineType,
+		bottomLeftOrigin
+	);
+	FF_RETURN(info.This());
+}
+
+/*TODO
+NAN_METHOD(Imgproc::Canny) {
+	FF_METHOD_CONTEXT("Canny");
+
+	FF_ARG_INSTANCE(0, cv::Mat dx, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INSTANCE(1, cv::Mat dy, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+
+
+	double threshold1, threshold2;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, threshold1, IsNumber, NumberValue);
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, threshold2, IsNumber, NumberValue);
+
+	bool L2gradient = false;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, L2gradient, IsBoolean, BooleanValue);
+
+	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
+
+#if CV_VERSION_MINOR < 2
+	cv::Mat image;
+	FF_GET_JSOBJ_REQUIRED(args, image, image, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+	int apertureSize = 3;
+	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, apertureSize, IsUint32, Uint32Value);
+	cv::Canny(image, FF_UNWRAP_MAT_AND_GET(jsMat), threshold1, threshold2, apertureSize, L2gradient);
+#else
+	cv::Mat dx, dy;
+	FF_GET_JSOBJ_REQUIRED(args, dx, dx, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+	FF_GET_JSOBJ_REQUIRED(args, dy, dy, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+	cv::Canny(dx, dy, FF_UNWRAP_MAT_AND_GET(jsMat), threshold1, threshold2, L2gradient);
+#endif
+
+	info.GetReturnValue().Set(jsMat);
+}
+*/
+
+/* #ENDIF IMGPROC */
+
+NAN_METHOD(Mat::Row) {
+  if (!info[0]->IsNumber()) {
+    return Nan::ThrowError("usage: row(int r)");
+  }
+  int r = (int)info[0]->NumberValue();
+  cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;
+  FF_ARR row = FF_NEW_ARRAY(mat.cols);
+  try {
+    if (mat.type() == CV_32FC1) {
+      for (int c = 0;  c < mat.cols; c++) {
+        row->Set(c, Nan::New(mat.at<float>(r, c)));
+      }
+    } else if (mat.type() == CV_8UC1) {
+      for (int c = 0;  c < mat.cols; c++) {
+        row->Set(c, Nan::New((uint)mat.at<uchar>(r, c)));
+      }
+    } else if (mat.type() == CV_8UC3) {
+      for (int c = 0;  c < mat.cols; c++) {
+        cv::Vec3b vec = mat.at<cv::Vec3b>(r, c);
+        FF_ARR jsVec = FF_NEW_ARRAY(3);
+        for (int i = 0; i < 3; i++) {
+          jsVec->Set(i, Nan::New(vec[i]));
+        }
+        row->Set(c, jsVec);
+      }
+    } else {
+      return Nan::ThrowError(Nan::New("not implemented yet - mat type:" + mat.type()).ToLocalChecked());
+    }
+  } catch(std::exception &e) {
+    return Nan::ThrowError(e.what());
+  } catch(...) {
+    return Nan::ThrowError("... Exception");
+  }
+  FF_RETURN(row);
+}
+
+void Mat::warp(Nan::NAN_METHOD_ARGS_TYPE info, const char* methodName, void(*func)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Size, int, int, const cv::Scalar&)) {
 	FF_METHOD_CONTEXT("Mat::WarpAffine");
 	cv::Mat self = FF_UNWRAP_MAT_AND_GET(info.This());
 
@@ -490,8 +972,8 @@ NAN_METHOD(Mat::WarpAffine) {
 	// TODO borderValue
 	const cv::Scalar& borderValue = cv::Scalar();
 
-	FF_OBJ jsWarped = FF_NEW_INSTANCE(constructor);
-	cv::warpAffine(
+	FF_OBJ jsWarped = FF_NEW_INSTANCE(Mat::constructor);
+	func(
 		self,
 		FF_UNWRAP_MAT_AND_GET(jsWarped),
 		transformationMatrix,
@@ -503,481 +985,28 @@ NAN_METHOD(Mat::WarpAffine) {
 	FF_RETURN(jsWarped);
 }
 
-NAN_METHOD(Mat::WarpPerspective) {
-	FF_REQUIRE_ARGS_OBJ("Mat::WarpPerspective");
-	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-	cv::Mat transformationMatrix;
-	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, transformationMatrix, constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+void Mat::morph(Nan::NAN_METHOD_ARGS_TYPE info, const char* methodName, void(*func)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Point, int, int, const cv::Scalar&)) {
+	FF_METHOD_CONTEXT(methodName);
+	FF_ARG_INSTANCE(0, cv::Mat kernel, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Point2d anchor, "anchor", Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2, cv::Point2d(-1, -1));
+	FF_GET_UINT_IFDEF(optArgs, uint iterations, "iterations", 1);
+	FF_GET_UINT_IFDEF(optArgs, uint borderType, "borderType", cv::BORDER_CONSTANT);
 
-	cv::Size size = cv::Size(matSelf.cols, matSelf.rows);
-	if (FF_HAS(args, "size")) {
-		Nan::ObjectWrap::Unwrap<Size>(FF_GET_JSPROP(args, size)->ToObject())->size;
+	if (!hasOptArgsObj) {
+		FF_ARG_INSTANCE_IFDEF(1, anchor, Point2::constructor, FF_UNWRAP_PT2_AND_GET, anchor);
+		FF_ARG_UINT_IFDEF(2, iterations, iterations);
+		FF_ARG_UINT_IFDEF(3, borderType, borderType);
 	}
-	int flags = cv::INTER_LINEAR;
-	int borderMode = cv::BORDER_CONSTANT;
-	// TODO borderValue
-	const cv::Scalar& borderValue = cv::Scalar();
 
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, flags, IsInt32, Int32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, borderMode, IsInt32, Int32Value);
-
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
-	cv::warpPerspective(matSelf, FF_UNWRAP_MAT_AND_GET(jsMat), transformationMatrix, size, flags, borderMode, borderValue);
-
-	info.GetReturnValue().Set(jsMat);
-}
-
-void Mat::dilateOrErode(Nan::NAN_METHOD_ARGS_TYPE info, char* methodName, bool isErode = false) {
-	FF_REQUIRE_ARGS_OBJ(methodName);
-	v8::Local<v8::Object> jsKernel;
-	cv::Point2i anchor(-1, -1);
 	cv::Scalar borderValue = cv::morphologyDefaultBorderValue();
-	int iterations = 1, borderType = 0;
-	FF_GET_JSPROP_REQUIRED(args, jsKernel, kernel, ToObject);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, iterations, IsInt32, Int32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, borderType, IsInt32, Int32Value);
 	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-	v8::Local<v8::Object> jsMatDst = FF_NEW_INSTANCE(constructor);
-	if (isErode) {
-		FF_MAT_DILATE_OR_ERODE(cv::erode);
-	}
-	else {
-		FF_MAT_DILATE_OR_ERODE(cv::dilate);
-	}
-	info.GetReturnValue().Set(jsMatDst);
-}
-
-NAN_METHOD(Mat::Dilate) {
-	dilateOrErode(info, "Mat::Dilate");
-}
-
-NAN_METHOD(Mat::Erode) {
-	dilateOrErode(info, "Mat::Erode", true);
-}
-
-
-NAN_METHOD(Mat::DistanceTransform) {
-	FF_REQUIRE_ARGS_OBJ("Mat::DistanceTransform");
-
-	int distanceType, maskSize;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, distanceType, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, maskSize, IsUint32, Uint32Value);
-
-	int dstType = CV_32F;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, dstType, IsUint32, Uint32Value);
-
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
-	cv::distanceTransform(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		distanceType,
-		maskSize,
-		dstType
-	);
-	info.GetReturnValue().Set(jsMat);
-}
-
-NAN_METHOD(Mat::DistanceTransformWithLabels) {
-	FF_REQUIRE_ARGS_OBJ("Mat::DistanceTransformWithLabels");
-
-	int distanceType, maskSize;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, distanceType, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, maskSize, IsUint32, Uint32Value);
-
-	int labelType = cv::DIST_LABEL_CCOMP;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, labelType, IsUint32, Uint32Value);
-
-	v8::Local<v8::Object> jsDst = FF_NEW_INSTANCE(constructor);
-	v8::Local<v8::Object> jsLabels = FF_NEW_INSTANCE(constructor);
-	cv::distanceTransform(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsDst),
-		FF_UNWRAP_MAT_AND_GET(jsLabels),
-		distanceType,
-		maskSize,
-		labelType
-	);
-
-	v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-	Nan::Set(ret, FF_NEW_STRING("dist"), jsDst);
-	Nan::Set(ret, FF_NEW_STRING("labels"), jsLabels);
-	info.GetReturnValue().Set(ret);
-}
-
-NAN_METHOD(Mat::Blur) {
-	FF_REQUIRE_ARGS_OBJ("Mat::Blur");
-
-	cv::Size ksize;
-	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, ksize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
-
-	cv::Point2d anchor = cv::Point2d(-1, -1);
-	int borderType = cv::BORDER_DEFAULT;
-	if (FF_HAS(args, "anchor")) {
-		FF_DESTRUCTURE_JSOBJ_REQUIRED(args, anchor, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
-	}
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, borderType, IsUint32, Uint32Value);
-
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
-	cv::blur(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		ksize,
-		anchor,
-		borderType
-	);
-	info.GetReturnValue().Set(jsMat);
-}
-
-NAN_METHOD(Mat::GaussianBlur) {
-	FF_REQUIRE_ARGS_OBJ("Mat::GaussianBlur");
-
-	cv::Size ksize;
-	double sigmaX;
-	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, ksize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, sigmaX, IsNumber, NumberValue);
-
-	double sigmaY = 0;
-	int borderType = cv::BORDER_DEFAULT;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, sigmaY, IsNumber, NumberValue);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, borderType, IsUint32, Uint32Value);
-
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
-	cv::GaussianBlur(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		ksize,
-		sigmaX,
-		sigmaY,
-		borderType
-	);
-	info.GetReturnValue().Set(jsMat);
-}
-
-NAN_METHOD(Mat::MedianBlur) {
-	if (!info[0]->IsUint32()) {
-		Nan::ThrowError("Mat::MedianBlur - expected arg0 to be an Integer");
-	}
-	int ksize = info[0]->Uint32Value();
-
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
-	cv::medianBlur(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		ksize
-	);
-	info.GetReturnValue().Set(jsMat);
-}
-
-NAN_METHOD(Mat::ConnectedComponents) {
-	int connectivity = 8;
-	int ltype = CV_32S;
-	if (info.Length() > 0) {
-		FF_REQUIRE_ARGS_OBJ("Mat::ConnectedComponents");
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, connectivity, IsUint32, Uint32Value);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, ltype, IsUint32, Uint32Value);
-	}
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(constructor);
-	cv::connectedComponents(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		connectivity,
-		ltype
-	);
-	info.GetReturnValue().Set(jsMat);
-}
-
-NAN_METHOD(Mat::ConnectedComponentsWithStats) {
-	int connectivity = 8;
-	int ltype = CV_32S;
-	if (info.Length() > 0) {
-		FF_REQUIRE_ARGS_OBJ("Mat::ConnectedComponentsWithStats");
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, connectivity, IsUint32, Uint32Value);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, ltype, IsUint32, Uint32Value);
-	}
-	v8::Local<v8::Object> jsLabels = FF_NEW_INSTANCE(constructor);
-	v8::Local<v8::Object> jsStats = FF_NEW_INSTANCE(constructor);
-	v8::Local<v8::Object> jsCentroids = FF_NEW_INSTANCE(constructor);
-	cv::connectedComponentsWithStats(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsLabels),
-		FF_UNWRAP_MAT_AND_GET(jsStats),
-		FF_UNWRAP_MAT_AND_GET(jsCentroids),
-		connectivity,
-		ltype
-	);
-
-	v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-	Nan::Set(ret, FF_NEW_STRING("labels"), jsLabels);
-	Nan::Set(ret, FF_NEW_STRING("stats"), jsStats);
-	Nan::Set(ret, FF_NEW_STRING("centroids"), jsCentroids);
-	info.GetReturnValue().Set(ret);
-}
-
-NAN_METHOD(Mat::_Moments) {
-	FF_OBJ jsMoments = FF_NEW_INSTANCE(Moments::constructor);
-	FF_UNWRAP(jsMoments, Moments)->moments = cv::moments(FF_UNWRAP_MAT_AND_GET(info.This()));
-	info.GetReturnValue().Set(jsMoments);
-}
-
-NAN_METHOD(Mat::FindContours) {
-	FF_REQUIRE_ARGS_OBJ("Mat::FindContours");
-
-	int mode, method;
-	cv::Point2d offset = cv::Point2d();
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, mode, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, method, IsUint32, Uint32Value);
-	if (FF_HAS(args, "offset")) {
-		FF_GET_JSOBJ_REQUIRED(args, offset, offset, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
-	}
-
-	std::vector<cv::Mat> contours;
-	std::vector<cv::Vec4i> hierarchy;
-	cv::findContours(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		contours,
-		hierarchy,
-		mode,
-		method,
-		offset
-	);
-
-	v8::Local<v8::Array> jsContours = Nan::New<v8::Array>(contours.size());
-	for (uint i = 0; i < jsContours->Length(); i++) {
-		v8::Local<v8::Object> jsContour = FF_NEW_INSTANCE(Contour::constructor);
-		FF_UNWRAP(jsContour, Contour)->contour = contours.at(i);
-		FF_UNWRAP(jsContour, Contour)->hierarchy = hierarchy.at(i);
-		jsContours->Set(i, jsContour);
-	}
-
-	info.GetReturnValue().Set(jsContours);
-}
-
-NAN_METHOD(Mat::DrawContours) {
-	FF_METHOD_CONTEXT("Mat::DrawContours");
-	FF_REQUIRE_ARGS_OBJ("Mat::DrawContours");
-
-	v8::Local<v8::Array> jsContours;
-	cv::Vec3d color;
-	FF_GET_ARRAY_REQUIRED(args, jsContours, "contours");
-	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
-
-	int contourIdx = 0;
-	int maxLevel = INT_MAX;
-	cv::Point2d offset = cv::Point2d();
-	int lineType = cv::LINE_8;
-	int thickness = 1;
-	int shift = 0;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, contourIdx, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, maxLevel, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, shift, IsInt32, Int32Value);
-	if (FF_HAS(args, "offset")) {
-		FF_GET_JSOBJ_REQUIRED(args, offset, offset, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
-	}
-
-	std::vector<std::vector<cv::Point>> contours;
-	std::vector<cv::Vec4i> hierarchy;
-	for (int i = 0; i < jsContours->Length(); i++) {
-		v8::Local<v8::Object> jsContour = jsContours->Get(i)->ToObject();
-		contours.push_back(FF_UNWRAP_CONTOUR_AND_GET(jsContour));
-		hierarchy.push_back(FF_UNWRAP_CONTOUR(jsContour)->hierarchy);
-	}
-
-	cv::drawContours(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		contours,
-		contourIdx,
-		color,
-		thickness,
-		lineType,
-		hierarchy,
-		maxLevel,
-		offset
-	);
-	info.GetReturnValue().Set(info.This());
-}
-
-NAN_METHOD(Mat::DrawLine) {
-	FF_REQUIRE_ARGS_OBJ("Mat::DrawLine");
-
-	cv::Point2d pt1, pt2;
-	cv::Vec3d color;
-	FF_GET_JSOBJ_REQUIRED(args, pt1, pt1, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
-	FF_GET_JSOBJ_REQUIRED(args, pt2, pt2, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
-	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
-
-	int lineType = cv::LINE_8;
-	int thickness = 1;
-	int shift = 0;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, shift, IsInt32, Int32Value);
-
-	cv::line(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		pt1,
-		pt2,
-		color,
-		thickness,
-		lineType,
-		shift
-	);
-	info.GetReturnValue().Set(info.This());
-}
-
-NAN_METHOD(Mat::DrawCircle) {
-	FF_REQUIRE_ARGS_OBJ("Mat::DrawCircle");
-
-	cv::Point2d center;
-	cv::Vec3d color;
-	int radius;
-	FF_GET_JSOBJ_REQUIRED(args, center, center, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
-	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, radius, IsUint32, Uint32Value);
-
-	int lineType = cv::LINE_8;
-	int thickness = 1;
-	int shift = 0;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, shift, IsInt32, Int32Value);
-
-	cv::circle(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		center,
-		radius,
-		color,
-		thickness,
-		lineType,
-		shift
-	);
-	info.GetReturnValue().Set(info.This());
-}
-
-NAN_METHOD(Mat::DrawRectangle) {
-	FF_REQUIRE_ARGS_OBJ("Mat::DrawRectangle");
-
-	cv::Point2d pt1, pt2;
-	cv::Vec3d color;
-	FF_GET_JSOBJ_REQUIRED(args, pt1, pt1, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
-	FF_GET_JSOBJ_REQUIRED(args, pt2, pt2, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
-	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
-
-	int lineType = cv::LINE_8;
-	int thickness = 1;
-	int shift = 0;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, shift, IsInt32, Int32Value);
-
-	cv::rectangle(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		pt1,
-		pt2,
-		color,
-		thickness,
-		lineType,
-		shift
-	);
-	info.GetReturnValue().Set(info.This());
-}
-
-NAN_METHOD(Mat::DrawEllipse) {
-	FF_REQUIRE_ARGS_OBJ("Mat::DrawEllipse");
-
-	cv::Vec3d color;
-	cv::RotatedRect box;
-	FF_GET_JSOBJ_REQUIRED(args, box, box, RotatedRect::constructor, FF_UNWRAP_ROTATEDRECT_AND_GET, RotatedRect);
-	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
-
-	int lineType = cv::LINE_8;
-	int thickness = 1;
-	int shift = 0;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, shift, IsInt32, Int32Value);
-
-	cv::ellipse(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		box,
-		color,
-		thickness,
-		lineType
-	);
-	info.GetReturnValue().Set(info.This());
-}
-
-NAN_METHOD(Mat::PutText) {
-	FF_REQUIRE_ARGS_OBJ("Mat::PutText");
-
-	std::string text = FF_CAST_STRING(FF_GET_JSPROP(args, text));
-	cv::Point org;
-	int fontFace;
-	double fontScale;
-	cv::Scalar color;
-	FF_GET_JSOBJ_REQUIRED(args, org, org, Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, fontFace, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, fontScale, IsNumber, NumberValue);
-	FF_GET_JSOBJ_REQUIRED(args, color, color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET, Vec3);
-
-	int thickness = 1;
-	int lineType = cv::LINE_8;
-	bool bottomLeftOrigin = false;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, thickness, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, lineType, IsUint32, Uint32Value);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, bottomLeftOrigin, IsBoolean, BooleanValue);
-	cv::putText(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		text,
-		org,
-		fontFace,
-		fontScale,
-		color,
-		thickness,
-		lineType,
-		bottomLeftOrigin
-	);
-	info.GetReturnValue().Set(info.This());
-}
-
-/* #ENDIF IMGPROC */
-
-NAN_METHOD(Mat::Row) {
-  if (!info[0]->IsNumber()) {
-    return Nan::ThrowError("usage: row(int r)");
-  }
-  int r = (int)info[0]->NumberValue();
-  cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;
-  v8::Local<v8::Array> row = Nan::New<v8::Array>(mat.cols);
-  try {
-    if (mat.type() == CV_32FC1) {
-      for (int c = 0;  c < mat.cols; c++) {
-        row->Set(c, Nan::New(mat.at<float>(r, c)));
-      }
-    } else if (mat.type() == CV_8UC1) {
-      for (int c = 0;  c < mat.cols; c++) {
-        row->Set(c, Nan::New((uint)mat.at<uchar>(r, c)));
-      }
-    } else if (mat.type() == CV_8UC3) {
-      for (int c = 0;  c < mat.cols; c++) {
-        cv::Vec3b vec = mat.at<cv::Vec3b>(r, c);
-        v8::Local<v8::Array> jsVec = Nan::New<v8::Array>(3);
-        for (int i = 0; i < 3; i++) {
-          jsVec->Set(i, Nan::New(vec[i]));
-        }
-        row->Set(c, jsVec);
-      }
-    } else {
-      return Nan::ThrowError(Nan::New("not implemented yet - mat type:" + mat.type()).ToLocalChecked());
-    }
-  } catch(std::exception &e) {
-    return Nan::ThrowError(e.what());
-  } catch(...) {
-    return Nan::ThrowError("... Exception");
-  }
-  info.GetReturnValue().Set(row);
+	FF_OBJ jsMatDst = FF_NEW_INSTANCE(constructor);
+	func(matSelf, FF_UNWRAP_MAT_AND_GET(jsMatDst), kernel, anchor, iterations, borderType, borderValue);
+	FF_RETURN(jsMatDst);
 }
 
 void Mat::setNativeProps(cv::Mat mat) {

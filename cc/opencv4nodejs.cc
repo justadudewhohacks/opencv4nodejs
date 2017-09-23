@@ -2,8 +2,7 @@
 #include "cvTypes/cvTypes.h"
 
 #include "core.h"
-#include "modules/io.h"
-#include "modules/VideoCapture.h"
+#include "modules/io/io.h"
 #include "modules/video/video.h"
 #include "modules/photo.h"
 #include "modules/calib3d/calib3d.h"
@@ -30,7 +29,6 @@ void init(v8::Local<v8::Object> target) {
 	CvTypes::Init(target);
 	Core::Init(target);
   Io::Init(target);
-	VideoCapture::Init(target);
 	Video::Init(target);
   Photo::Init(target);
   Calib3d::Init(target);

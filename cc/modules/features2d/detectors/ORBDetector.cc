@@ -25,35 +25,35 @@ NAN_MODULE_INIT(ORBDetector::Init) {
 };
 
 NAN_METHOD(ORBDetector::New) {
-	if (!info.IsConstructCall()) {
-		return Nan::ThrowError("ORBDetector::New expected new key word");
-	}
+	FF_METHOD_CONTEXT("ORBDetector::New");
 
-	int nfeatures = 500; 
-	float scaleFactor = 1.2f; 
-	int nlevels = 8; 
-	int edgeThreshold = 31;
-	int firstLevel = 0;
-	int WTA_K = 2;
-	int scoreType = cv::ORB::HARRIS_SCORE; 
-	int patchSize = 31;
-	int fastThreshold = 20;
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
 
-	if (info[0]->IsObject()) {
-		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nfeatures, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, scaleFactor, IsNumber, NumberValue)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nlevels, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, edgeThreshold, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, firstLevel, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, WTA_K, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, scoreType, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, patchSize, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, fastThreshold, IsInt32, Int32Value)
+	FF_GET_INT_IFDEF(optArgs, int nfeatures, "nfeatures", 500);
+	FF_GET_NUMBER_IFDEF(optArgs, double scaleFactor, "scaleFactor", 1.2f);
+	FF_GET_INT_IFDEF(optArgs, int nlevels, "nlevels", 8);
+	FF_GET_INT_IFDEF(optArgs, int edgeThreshold, "edgeThreshold", 31);
+	FF_GET_INT_IFDEF(optArgs, int firstLevel, "firstLevel", 0);
+	FF_GET_INT_IFDEF(optArgs, int WTA_K, "WTA_K", 2);
+	FF_GET_INT_IFDEF(optArgs, int scoreType, "scoreType", cv::ORB::HARRIS_SCORE);
+	FF_GET_INT_IFDEF(optArgs, int patchSize, "patchSize", 31);
+	FF_GET_INT_IFDEF(optArgs, int fastThreshold, "fastThreshold", 20);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(0, nfeatures, nfeatures);
+		FF_ARG_NUMBER_IFDEF(1, scaleFactor, scaleFactor);
+		FF_ARG_INT_IFDEF(2, nlevels, nlevels);
+		FF_ARG_INT_IFDEF(3, edgeThreshold, edgeThreshold);
+		FF_ARG_INT_IFDEF(4, firstLevel, firstLevel);
+		FF_ARG_INT_IFDEF(5, WTA_K, WTA_K);
+		FF_ARG_INT_IFDEF(6, scoreType, scoreType);
+		FF_ARG_INT_IFDEF(7, patchSize, patchSize);
+		FF_ARG_INT_IFDEF(8, fastThreshold, fastThreshold);
 	}
 
 	ORBDetector* self = new ORBDetector();
 	self->Wrap(info.Holder());
 	self->detector = cv::ORB::create(nfeatures, scaleFactor, nlevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize, fastThreshold);
-  info.GetReturnValue().Set(info.Holder());
+  FF_RETURN(info.Holder());
 }

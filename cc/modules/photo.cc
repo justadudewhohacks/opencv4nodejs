@@ -5,28 +5,30 @@
 #include <opencv2/videostab.hpp>
 
 NAN_MODULE_INIT(Photo::Init) {
-  v8::Local<v8::Object> obj = Nan::New<v8::Object>();
-
-  Nan::SetMethod(obj, "fastNlMeansDenoisingColored", FastNlMeansDenoisingColored);
-  target->Set(Nan::New("photo").ToLocalChecked(), obj);
+  Nan::SetMethod(target, "fastNlMeansDenoisingColored", FastNlMeansDenoisingColored);
 };
 
 NAN_METHOD(Photo::FastNlMeansDenoisingColored) {
-  if (!info[0]->IsObject()) {
-    return Nan::ThrowError("usage: fastNlMeansDenoisingColored(Mat src, float h=3, float hColor=3, int templateWindowSize=7, int searchWindowSize=21 )");      
-  }
-  cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info[0]->ToObject())->mat;
+	FF_METHOD_CONTEXT("Photo::FastNlMeansDenoisingColored");
 
-  cv::Mat dst;
-  try {
-    cv::fastNlMeansDenoisingColored(mat, dst);
-  } catch(std::exception &e) {
-    return Nan::ThrowError(e.what());
-  } catch(...) {
-    return Nan::ThrowError("... Exception");
-  }
+	FF_ARG_INSTANCE(0, cv::Mat src, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 
-  v8::Local<v8::Object> handle = Nan::NewInstance(Nan::New(Mat::constructor)->GetFunction()).ToLocalChecked();
-  Nan::ObjectWrap::Unwrap<Mat>(handle)->mat = dst;
-  info.GetReturnValue().Set(handle);
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
+
+	FF_GET_NUMBER_IFDEF(optArgs, double h, "h", 3.0);
+	FF_GET_NUMBER_IFDEF(optArgs, double hColor, "hColor", 3.0);
+	FF_GET_UINT_IFDEF(optArgs, uint templateWindowSize, "templateWindowSize", 7);
+	FF_GET_UINT_IFDEF(optArgs, uint searchWindowSize, "searchWindowSize", 21);
+	if (!hasOptArgsObj) {
+		FF_ARG_NUMBER_IFDEF(1, h, h);
+		FF_ARG_NUMBER_IFDEF(2, hColor, hColor);
+		FF_ARG_UINT_IFDEF(3, templateWindowSize, templateWindowSize);
+		FF_ARG_UINT_IFDEF(4, searchWindowSize, searchWindowSize);
+	}
+
+	FF_OBJ jsDst = FF_NEW_INSTANCE(Mat::constructor);
+	cv::fastNlMeansDenoisingColored(src, FF_UNWRAP_MAT_AND_GET(jsDst), h, hColor, templateWindowSize, searchWindowSize);
+  FF_RETURN(jsDst);
 }

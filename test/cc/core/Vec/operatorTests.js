@@ -1,6 +1,6 @@
-import { Vec } from 'dut';
-import { assertError, assertPropsWithValue } from 'utils';
-import { expect } from 'chai';
+const { Vec } = global.dut;
+const { assertError, assertPropsWithValue } = global.utils;
+const { expect } = require('chai');
 
 const OperatorRequiresArg = vec => (func, isScalar) => {
   it('should throw if no args', () => {

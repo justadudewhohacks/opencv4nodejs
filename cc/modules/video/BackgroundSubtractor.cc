@@ -6,17 +6,14 @@ void BackgroundSubtractor::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(BackgroundSubtractor::Apply) {
-	double learningRate = -1;
-	FF_REQUIRE_INSTANCE(Mat::constructor, info[0], "expected arg0 to be instance of Mat");
-	cv::Mat frame = FF_UNWRAP_MAT_AND_GET(info[0]->ToObject());
-	if (info[1]->IsNumber()) {
-		learningRate = info[1]->NumberValue();
-	}
+	FF_METHOD_CONTEXT("BackgroundSubtractorKNN::Apply");
+
+	FF_ARG_INSTANCE(0, cv::Mat frame, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_NUMBER_IFDEF(1, double learningRate, -1);
 
 	BackgroundSubtractor* self = FF_UNWRAP(info.This(), BackgroundSubtractor);
 	self->getSubtractor()->apply(frame, self->fgMask, learningRate);
-
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
+	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP_MAT_AND_GET(jsMat) = self->fgMask;
-	info.GetReturnValue().Set(jsMat);
+	FF_RETURN(jsMat);
 }
