@@ -4,7 +4,7 @@ opencv4nodejs
 [![npm download](https://img.shields.io/npm/dm/opencv4nodejs.svg?style=flat)](https://www.npmjs.com/package/opencv4nodejs)
 [![node version](https://img.shields.io/badge/node.js-%3E=_6-green.svg?style=flat)](http://nodejs.org/download/)
 
-**Brings lots of features of OpenCV 3.x to nodejs to use as a service, integrate into your Electron app or simply to play around with the OpenCV API in Javascript instead of C++.**
+**By it's nature, JavaScript lacks the performance to implement Computer Vision tasks efficiently. Therefore this package brings the performance of the native OpenCV C++ library to your Node.js application.**
 
  * **[Examples](#examples)**
  * **[API Documentation](https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/README.md)**
