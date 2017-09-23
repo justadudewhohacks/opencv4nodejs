@@ -1,6 +1,15 @@
 const opencv = global.dut;
 const { assert, expect } = require('chai');
+
 const { assertError, assertPropsWithValue, readTestImage } = global.utils;
+
+var Test = class {
+  constructor(a, b, c) {
+    console.log('a', a)
+    console.log('b', b)
+    console.log('c', c)
+  }
+};
 
 exports.detectorTests = (defaults, customProps, Detector, implementsCompute = true) => {
   let testImg;
@@ -20,7 +29,21 @@ exports.detectorTests = (defaults, customProps, Detector, implementsCompute = tr
   });
 
   it('should be constructable with custom props', () => {
-    assertPropsWithValue(new Detector(customProps))(customProps);
+    const props = {};
+    customProps.args.forEach((arg, i) => {
+      props[arg] = customProps.values[i];
+    });
+    /* eslint-disable new-parens */
+    const detector = new (Detector.bind.apply(Detector, [null].concat(customProps.values)));
+    assertPropsWithValue(detector)(props);
+  });
+
+  it('should be constructable with custom props object', () => {
+    const props = {};
+    customProps.args.forEach((arg, i) => {
+      props[arg] = customProps.values[i];
+    });
+    assertPropsWithValue(new Detector(props))(props);
   });
 
   it('should have function detect', () => {
@@ -33,7 +56,7 @@ exports.detectorTests = (defaults, customProps, Detector, implementsCompute = tr
 
   describe('detect', () => {
     it('should throw if no args', () => {
-      assertError(() => (new Detector()).detect(), 'expected arg0 to be instance of Mat');
+      assertError(() => (new Detector()).detect(), 'expected arg 0 to be instance of: Mat');
     });
 
     it('should return an array of KeyPoints', () => {
@@ -46,7 +69,7 @@ exports.detectorTests = (defaults, customProps, Detector, implementsCompute = tr
   if (implementsCompute) {
     describe('compute', () => {
       it('should throw if no args', () => {
-        assertError(() => (new Detector()).compute(), 'expected arg0 to be instance of Mat');
+        assertError(() => (new Detector()).compute(), 'expected arg 0 to be instance of: Mat');
       });
 
       it('should return a Mat with descriptors for each KeyPoint', () => {

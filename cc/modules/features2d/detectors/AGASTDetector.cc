@@ -19,23 +19,23 @@ NAN_MODULE_INIT(AGASTDetector::Init) {
 };
 
 NAN_METHOD(AGASTDetector::New) {
-	if (!info.IsConstructCall()) {
-		return Nan::ThrowError("AGASTDetector::New expected new key word");
-	}
+	FF_METHOD_CONTEXT("AGASTDetector::New");
 
-	int threshold = 10;
-	bool nonmaxSuppression = true;
-	int type = cv::AgastFeatureDetector::OAST_9_16;
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
 
-	if (info[0]->IsObject()) {
-		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, threshold, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nonmaxSuppression, IsBoolean, BooleanValue)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, type, IsInt32, Int32Value)
+	FF_GET_INT_IFDEF(optArgs, int threshold, "threshold", 10);
+	FF_GET_BOOL_IFDEF(optArgs, bool nonmaxSuppression, "nonmaxSuppression", true);
+	FF_GET_INT_IFDEF(optArgs, int type, "type", cv::AgastFeatureDetector::OAST_9_16);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(0, threshold, threshold);
+		FF_ARG_BOOL_IFDEF(1, nonmaxSuppression, nonmaxSuppression);
+		FF_ARG_INT_IFDEF(2, type, type);
 	}
 
 	AGASTDetector* self = new AGASTDetector();
 	self->Wrap(info.Holder());
 	self->detector = cv::AgastFeatureDetector::create(threshold, nonmaxSuppression, type);
-  info.GetReturnValue().Set(info.Holder());
+  FF_RETURN(info.Holder());
 }

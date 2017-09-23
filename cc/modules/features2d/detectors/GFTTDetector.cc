@@ -22,28 +22,29 @@ NAN_MODULE_INIT(GFTTDetector::Init) {
 };
 
 NAN_METHOD(GFTTDetector::New) {
-	if (!info.IsConstructCall()) {
-		return Nan::ThrowError("GFTTDetector::New expected new key word");
+	FF_METHOD_CONTEXT("GFTTDetector::New");
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+
+	FF_GET_INT_IFDEF(optArgs, int maxCorners, "maxCorners", 1000);
+	FF_GET_NUMBER_IFDEF(optArgs, double qualityLevel, "qualityLevel", 0.01);
+	FF_GET_NUMBER_IFDEF(optArgs, double minDistance, "minDistance", 1);
+	FF_GET_INT_IFDEF(optArgs, int blockSize, "blockSize", 3);
+	FF_GET_BOOL_IFDEF(optArgs, bool useHarrisDetector, "useHarrisDetector", false);
+	FF_GET_NUMBER_IFDEF(optArgs, double k, "k", 0.04);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(0, maxCorners, maxCorners);
+		FF_ARG_NUMBER_IFDEF(1, qualityLevel, qualityLevel);
+		FF_ARG_NUMBER_IFDEF(2, minDistance, minDistance);
+		FF_ARG_INT_IFDEF(3, blockSize, blockSize);
+		FF_ARG_BOOL_IFDEF(4, useHarrisDetector, useHarrisDetector);
+		FF_ARG_NUMBER_IFDEF(5, k, k);
 	}
 
-	int maxCorners = 1000;
-	double qualityLevel = 0.01;
-	double minDistance = 1;
-	int blockSize = 3;
-	bool useHarrisDetector = false;
-	double k = 0.04;
-
-	if (info[0]->IsObject()) {
-		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, maxCorners, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, qualityLevel, IsNumber, NumberValue)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, minDistance, IsNumber, NumberValue)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, blockSize, IsInt32, Int32Value)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, useHarrisDetector, IsBoolean, BooleanValue)
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, k, IsNumber, NumberValue)
-	}
 	GFTTDetector* self = new GFTTDetector();
 	self->Wrap(info.Holder());
 	self->detector = cv::GFTTDetector::create(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
-  info.GetReturnValue().Set(info.Holder());
+  FF_RETURN(info.Holder());
 }

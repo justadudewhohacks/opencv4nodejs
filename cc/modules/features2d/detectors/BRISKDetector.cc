@@ -19,19 +19,23 @@ NAN_MODULE_INIT(BRISKDetector::Init) {
 };
 
 NAN_METHOD(BRISKDetector::New) {
-	if (!info.IsConstructCall()) {
-		return Nan::ThrowError("BRISKDetector::New expected new key word");
+	FF_METHOD_CONTEXT("BRISKDetector::New");
+	BRISKDetector* self = new BRISKDetector();
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+
+	FF_GET_INT_IFDEF(optArgs, self->thresh, "thresh", 30);
+	FF_GET_INT_IFDEF(optArgs, self->octaves, "octaves", 3);
+	FF_GET_NUMBER_IFDEF(optArgs, self->patternScale, "patternScale", 1.0);
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(0, self->thresh, self->thresh);
+		FF_ARG_INT_IFDEF(1, self->octaves, self->octaves);
+		FF_ARG_NUMBER_IFDEF(2, self->patternScale, self->patternScale);
 	}
 
-	BRISKDetector* self = new BRISKDetector();
-	if (info[0]->IsObject()) {
-		v8::Local<v8::Object> args = info[0]->ToObject();	
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->thresh, thresh, IsInt32, Int32Value)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->octaves, octaves, IsInt32, Int32Value)
-		FF_GET_TYPECHECKED_JSPROP_IFDEF(args, self->patternScale, patternScale, IsNumber, NumberValue)
-	}
-	
 	self->Wrap(info.Holder());
 	self->detector = cv::BRISK::create(self->thresh, self->octaves, (float)self->patternScale);
-  info.GetReturnValue().Set(info.Holder());
+  FF_RETURN(info.Holder());
 }

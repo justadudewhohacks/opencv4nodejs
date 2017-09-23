@@ -147,8 +147,32 @@
   * <a href="./calib3d.md#findHomography">findHomography</a>
 * <a href="./photo.md"><b>photo</b></a>
   * <a href="./photo.md#fastNlMeansDenoisingColored">fastNlMeansDenoisingColored</a>
-* features2d
-  * TODO
-* xfeatures2d
-  * TODO
+* <a href="./features2d/features2d.md"><b>features2d</b></a>
+  * <a href="./features2d/AGASTDetector.md"><b>AGASTDetector</b></a>
+    * <a href="./features2d/AGASTDetector.md#detect">detect</a>
+  * <a href="./features2d/AKAZEDetector.md"><b>AKAZEDetector</b></a>
+    * <a href="./features2d/AKAZEDetector.md#detect">detect</a>
+    * <a href="./features2d/AKAZEDetector.md#compute">compute</a>
+  * <a href="./features2d/BRISKDetector.md"><b>BRISKDetector</b></a>
+    * <a href="./features2d/BRISKDetector.md#detect">detect</a>
+    * <a href="./features2d/BRISKDetector.md#compute">compute</a>
+  * <a href="./features2d/FASTDetector.md"><b>FASTDetector</b></a>
+    * <a href="./features2d/FASTDetector.md#detect">detect</a>
+  * <a href="./features2d/KAZEDetector.md"><b>KAZEDetector</b></a>
+    * <a href="./features2d/KAZEDetector.md#detect">detect</a>
+    * <a href="./features2d/KAZEDetector.md#compute">compute</a>
+  * <a href="./features2d/GFTTDetector.md"><b>GFTTDetector</b></a>
+    * <a href="./features2d/GFTTDetector.md#detect">detect</a>
+  * <a href="./features2d/MSERDetector.md"><b>MSERDetector</b></a>
+    * <a href="./features2d/MSERDetector.md#detect">detect</a>
+  * <a href="./features2d/ORBDetector.md"><b>ORBDetector</b></a>
+    * <a href="./features2d/ORBDetector.md#detect">detect</a>
+    * <a href="./features2d/ORBDetector.md#compute">compute</a>
+* <a href="./xfeatures2d/xfeatures2d.md"><b>xfeatures2d</b></a>
+  * <a href="./xfeatures2d/SIFTDetector.md"><b>SIFTDetector</b></a>
+    * <a href="./xfeatures2d/SIFTDetector.md#detect">detect</a>
+    * <a href="./xfeatures2d/SIFTDetector.md#compute">compute</a>
+  * <a href="./xfeatures2d/SURFDetector.md"><b>SURFDetector</b></a>
+    * <a href="./xfeatures2d/SURFDetector.md#detect">detect</a>
+    * <a href="./xfeatures2d/SURFDetector.md#compute">compute</a>
 

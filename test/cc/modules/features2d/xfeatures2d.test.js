@@ -16,11 +16,8 @@ describe('xfeatures2d', () => {
       nFeatures: 0
     };
     const customProps = {
-      sigma: 3.2,
-      edgeThreshold: 20,
-      contrastThreshold: 0.16,
-      nOctaveLayers: 6,
-      nFeatures: 500
+      args: ['nFeatures', 'nOctaveLayers', 'contrastThreshold', 'edgeThreshold', 'sigma'],
+      values: [500, 6, 0.16, 20, 3.2]
     };
     const Detector = opencv.SIFTDetector;
     detectorTests(defaults, customProps, Detector);
@@ -35,11 +32,8 @@ describe('xfeatures2d', () => {
       hessianThreshold: 100
     };
     const customProps = {
-      upright: true,
-      extended: true,
-      nOctaveLayers: 6,
-      nOctaves: 8,
-      hessianThreshold: 1000
+      args: ['hessianThreshold', 'nOctaves', 'nOctaveLayers', 'extended', 'upright'],
+      values: [1000, 8, 6, true, true]
     };
     const Detector = opencv.SURFDetector;
     detectorTests(defaults, customProps, Detector);

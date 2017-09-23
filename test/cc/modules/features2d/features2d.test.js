@@ -9,9 +9,8 @@ describe('features2d', () => {
       threshold: 10
     };
     const customProps = {
-      type: 1,
-      nonmaxSuppression: false,
-      threshold: 50
+      args: ['threshold', 'nonmaxSuppression', 'type'],
+      values: [1, false, 50]
     };
     const Detector = opencv.AGASTDetector;
     detectorTests(defaults, customProps, Detector, false);
@@ -28,13 +27,8 @@ describe('features2d', () => {
       descriptorType: 5
     };
     const customProps = {
-      diffusivity: 2,
-      nOctaveLayers: 8,
-      nOctaves: 8,
-      threshold: 2 * 0.0010000000474974513,
-      descriptorChannels: 6,
-      descriptorSize: 1,
-      descriptorType: 1
+      args: ['descriptorType', 'descriptorSize', 'descriptorChannels', 'threshold', 'nOctaves', 'nOctaveLayers', 'diffusivity'],
+      values: [2, 8, 8, 2 * 0.0010000000474974513, 6, 1, 1]
     };
     const Detector = opencv.AKAZEDetector;
     detectorTests(defaults, customProps, Detector);
@@ -47,9 +41,8 @@ describe('features2d', () => {
       thresh: 30
     };
     const customProps = {
-      patternScale: 2.4,
-      octaves: 6,
-      thresh: 60
+      args: ['thresh', 'octaves', 'patternScale'],
+      values: [50, 6, 2.4]
     };
     const Detector = opencv.BRISKDetector;
     detectorTests(defaults, customProps, Detector);
@@ -62,9 +55,8 @@ describe('features2d', () => {
       threshold: 10
     };
     const customProps = {
-      type: 1,
-      nonmaxSuppression: false,
-      threshold: 20
+      args: ['threshold', 'nonmaxSuppression', 'type'],
+      values: [1, false, 20]
     };
     const Detector = opencv.FASTDetector;
     detectorTests(defaults, customProps, Detector, false);
@@ -80,12 +72,8 @@ describe('features2d', () => {
       maxCorners: 1000
     };
     const customProps = {
-      k: 0.16,
-      useHarrisDetector: true,
-      blockSize: 6,
-      minDistance: 2,
-      qualityLevel: 0.04,
-      maxCorners: 2000
+      args: ['maxCorners', 'qualityLevel', 'minDistance', 'blockSize', 'useHarrisDetector', 'k'],
+      values: [2000, 0.04, 2, 6, true, 0.16]
     };
     const Detector = opencv.GFTTDetector;
     detectorTests(defaults, customProps, Detector, false);
@@ -101,12 +89,8 @@ describe('features2d', () => {
       extended: false
     };
     const customProps = {
-      diffusivity: 2,
-      nOctaveLayers: 8,
-      nOctaves: 8,
-      threshold: 2 * 0.0010000000474974513,
-      upright: true,
-      extended: true
+      args: ['extended', 'upright', 'threshold', 'nOctaves', 'nOctaveLayers', 'diffusivity'],
+      values: [true, true, 0.0020000000949949026, 8, 8, 2]
     };
     const Detector = opencv.KAZEDetector;
     detectorTests(defaults, customProps, Detector);
@@ -125,15 +109,8 @@ describe('features2d', () => {
       delta: 5
     };
     const customProps = {
-      edgeBlurSize: 10,
-      minMargin: 0.006,
-      areaThreshold: 2.02,
-      maxEvolution: 400,
-      minDiversity: 0.4,
-      maxVariation: 0.75,
-      maxArea: 28800,
-      minArea: 120,
-      delta: 10
+      args: ['delta', 'minArea', 'maxArea', 'maxVariation', 'minDiversity', 'maxEvolution', 'areaThreshold', 'minMargin', 'edgeBlurSize'],
+      values: [10, 120, 28800, 0.75, 0.4, 400, 2.02, 0.006, 10]
     };
     const Detector = opencv.MSERDetector;
     detectorTests(defaults, customProps, Detector, false);
@@ -152,15 +129,8 @@ describe('features2d', () => {
       nfeatures: 500
     };
     const customProps = {
-      fastThreshold: 40,
-      patchSize: 62,
-      scoreType: 1,
-      WTA_K: 3,
-      firstLevel: 2,
-      edgeThreshold: 62,
-      nlevels: 16,
-      scaleFactor: 2 * 1.2000000476837158,
-      nfeatures: 1000
+      args: ['nfeatures', 'scaleFactor', 'nlevels', 'edgeThreshold', 'firstLevel', 'WTA_K', 'scoreType', 'patchSize', 'fastThreshold'],
+      values: [1000, 2 * 1.2000000476837158, 16, 62, 2, 3, 1, 62, 40]
     };
     const Detector = opencv.ORBDetector;
     detectorTests(defaults, customProps, Detector);
