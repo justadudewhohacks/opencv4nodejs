@@ -16,12 +16,12 @@ NAN_MODULE_INIT(DescriptorMatch::Init) {
 };
 
 NAN_METHOD(DescriptorMatch::New) {
+	FF_METHOD_CONTEXT("DescriptorMatch::New");
 	DescriptorMatch* self = new DescriptorMatch();
   if (info.Length() > 0) {
-		v8::Local<v8::Object> args = info[0]->ToObject();
-		FF_GET_TYPECHECKED_JSPROP_REQUIRED(args, self->queryIdx, queryIdx, IsInt32, Int32Value);
-		FF_GET_TYPECHECKED_JSPROP_REQUIRED(args, self->trainIdx, trainIdx, IsInt32, Int32Value);
-		FF_GET_TYPECHECKED_JSPROP_REQUIRED(args, self->distance, distance, IsNumber, NumberValue);
+		FF_ARG_INT(0, self->queryIdx);
+		FF_ARG_INT(1, self->trainIdx);
+		FF_ARG_NUMBER(2, self->distance);
   }
 	self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());

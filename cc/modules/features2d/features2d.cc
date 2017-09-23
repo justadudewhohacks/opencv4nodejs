@@ -69,41 +69,33 @@ NAN_MODULE_INIT(Features2d::Init) {
 
 NAN_METHOD(Features2d::DrawKeyPoints) {
 	FF_METHOD_CONTEXT("DrawKeyPoints");
-	FF_REQUIRE_ARGS_OBJ("DrawKeyPoints");
-	cv::Mat img;
 
-	FF_GET_JSOBJ_REQUIRED(args, img, image, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
-	v8::Local<v8::Array> jsKeyPoints;
-	FF_GET_ARRAY_REQUIRED(args, jsKeyPoints, "keypoints");
-	FF_UNPACK_KEYPOINT_ARRAY(kps, jsKeyPoints);
+	FF_ARG_INSTANCE(0, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_ARRAY(1, FF_ARR jsKps);
+	FF_UNPACK_KEYPOINT_ARRAY(kps, jsKps);
 
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
-	cv::drawKeypoints(img, kps, Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat);
-	info.GetReturnValue().Set(jsMat);
+	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+	cv::drawKeypoints(img, kps, FF_UNWRAP_MAT_AND_GET(jsMat));
+	FF_RETURN(jsMat);
 }
 
 NAN_METHOD(Features2d::DrawMatches) {
 	FF_METHOD_CONTEXT("DrawMatches");
-	FF_REQUIRE_ARGS_OBJ("DrawMatches");
-	cv::Mat imgFrom, imgTo;
-	v8::Local<v8::Array> jsKeyPoints1, jsKeyPoints2, jsMatches;
 
-	FF_GET_JSOBJ_REQUIRED(args, imgFrom, img1, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
-	FF_GET_JSOBJ_REQUIRED(args, imgTo, img2, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
-	FF_GET_ARRAY_REQUIRED(args, jsKeyPoints1, "keypoints1");
-	FF_GET_ARRAY_REQUIRED(args, jsKeyPoints2, "keypoints2");
-	FF_GET_ARRAY_REQUIRED(args, jsMatches, "matches1to2");
-
-	FF_UNPACK_KEYPOINT_ARRAY(kpsFrom, jsKeyPoints1);
-	FF_UNPACK_KEYPOINT_ARRAY(kpsTo, jsKeyPoints2);
-
+	FF_ARG_INSTANCE(0, cv::Mat img1, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INSTANCE(1, cv::Mat img2, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_ARRAY(2, FF_ARR jsKps1);
+	FF_ARG_ARRAY(3, FF_ARR jsKps2);
+	FF_ARG_ARRAY(4, FF_ARR jsMatches);
+	FF_UNPACK_KEYPOINT_ARRAY(kps1, jsKps1);
+	FF_UNPACK_KEYPOINT_ARRAY(kps2, jsKps2);
 	std::vector<cv::DMatch> dMatches;
-	for (uint i = 0; i < jsMatches->Length(); i++) {
+	for (int i = 0; i < jsMatches->Length(); i++) {
 		DescriptorMatch* match = FF_UNWRAP(FF_CAST_OBJ(jsMatches->Get(i)), DescriptorMatch);
 		dMatches.push_back(cv::DMatch(match->queryIdx, match->trainIdx, match->distance));
 	}
 
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
-	cv::drawMatches(imgFrom, kpsFrom, imgTo, kpsTo, dMatches, Nan::ObjectWrap::Unwrap<Mat>(jsMat)->mat);
-	info.GetReturnValue().Set(jsMat);
+	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+	cv::drawMatches(img1, img2, kps1, kps2, dMatches, FF_UNWRAP_MAT_AND_GET(jsMat));
+	FF_RETURN(jsMat);
 }

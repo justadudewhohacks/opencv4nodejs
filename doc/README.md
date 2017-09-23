@@ -148,6 +148,16 @@
 * <a href="./photo.md"><b>photo</b></a>
   * <a href="./photo.md#fastNlMeansDenoisingColored">fastNlMeansDenoisingColored</a>
 * <a href="./features2d/features2d.md"><b>features2d</b></a>
+  * <a href="./features2d/features2d.md#matchFlannBased">matchFlannBased</a>
+  * <a href="./features2d/features2d.md#matchBruteForce">matchBruteForce</a>
+  * <a href="./features2d/features2d.md#matchBruteForceL1">matchBruteForceL1</a>
+  * <a href="./features2d/features2d.md#matchBruteForceHamming">matchBruteForceHamming</a>
+  * <a href="./features2d/features2d.md#matchBruteForceHammingLut">matchBruteForceHammingLut</a>
+  * <a href="./features2d/features2d.md#matchBruteForceSL2">matchBruteForceSL2</a>
+  * <a href="./features2d/features2d.md#drawKeyPoints">drawKeyPoints</a>
+  * <a href="./features2d/features2d.md#drawMatches">drawMatches</a>
+  * <a href="./features2d/KeyPoint.md"><b>KeyPoint</b></a>
+  * <a href="./features2d/DescriptorMatch.md"><b>DescriptorMatch</b></a>
   * <a href="./features2d/AGASTDetector.md"><b>AGASTDetector</b></a>
     * <a href="./features2d/AGASTDetector.md#detect">detect</a>
   * <a href="./features2d/AKAZEDetector.md"><b>AKAZEDetector</b></a>

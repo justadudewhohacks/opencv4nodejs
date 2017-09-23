@@ -1,6 +1,7 @@
 #include "macros.h"
 #include <opencv2/imgproc.hpp>
 #include <opencv2/features2d.hpp>
+#include "Point2.h"
 
 #ifndef FF_KEYPOINT_H_
 #define FF_KEYPOINT_H_
@@ -23,15 +24,14 @@
 
 class KeyPoint : public Nan::ObjectWrap {
 public:
-  uint localId;
+  int localId = -1;
   cv::KeyPoint keyPoint;
 
   static NAN_MODULE_INIT(Init);
   static NAN_METHOD(New);
 
+	static FF_GETTER_JSOBJ(KeyPoint, GetPoint, keyPoint.pt, FF_UNWRAP_PT2_AND_GET, Point2::constructor);
   static FF_GETTER(KeyPoint, GetLocalId, localId);
-	static FF_GETTER(KeyPoint, GetX, keyPoint.pt.x);
-	static FF_GETTER(KeyPoint, GetY, keyPoint.pt.y);
 	static FF_GETTER(KeyPoint, GetAngle, keyPoint.angle);
 	static FF_GETTER(KeyPoint, GetClassId, keyPoint.class_id);
 	static FF_GETTER(KeyPoint, GetResponse, keyPoint.response);
