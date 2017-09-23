@@ -93,8 +93,8 @@ NAN_METHOD(HOGDescriptor::Compute) {
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
 	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d winStride, "winStride", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size());
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d padding, "padding", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size());
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d winStride, "winStride", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d padding, "padding", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
 	FF_GET_ARRAY_IFDEF(optArgs, FF_ARR jsLocations, "locations", FF_NEW_ARRAY());
 	if (!hasOptArgsObj) {
 		FF_ARG_INSTANCE_IFDEF(1, winStride, Size::constructor, FF_UNWRAP_SIZE_AND_GET, winStride);
