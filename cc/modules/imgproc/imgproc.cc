@@ -38,7 +38,7 @@ NAN_METHOD(Imgproc::GetStructuringElement) {
 
 	FF_ARG_UINT(0, uint shape);
 	FF_ARG_INSTANCE(1, cv::Size2d size, Size::constructor, FF_UNWRAP_SIZE_AND_GET);
-	FF_ARG_INSTANCE_IFDEF(2, cv::Point2d anchor, Point2::constructor, FF_UNWRAP_PT2_AND_GET, cv::Point2i(-1, -1));
+	FF_ARG_INSTANCE_IFDEF(2, cv::Point2d anchor, Point2::constructor, FF_UNWRAP_PT2_AND_GET, cv::Point2d(-1, -1));
 
 	FF_OBJ jsKernel = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP_MAT_AND_GET(jsKernel) = cv::getStructuringElement(shape, size, anchor);
