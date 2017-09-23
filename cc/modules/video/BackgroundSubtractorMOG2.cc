@@ -19,17 +19,23 @@ NAN_MODULE_INIT(BackgroundSubtractorMOG2::Init) {
 };
 
 NAN_METHOD(BackgroundSubtractorMOG2::New) {
-	BackgroundSubtractorMOG2* self = new BackgroundSubtractorMOG2();
-	int history = 500; 
-	double varThreshold = 16;
-	bool detectShadows = true;
-	if (info.Length() > 0) {
-		FF_REQUIRE_ARGS_OBJ("BackgroundSubtractorMOG2::New");
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, history, IsUint32, Uint32Value);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, varThreshold, IsNumber, NumberValue);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, history, IsBoolean, BooleanValue);
+	FF_METHOD_CONTEXT("BackgroundSubtractorMOG2::New");
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+
+	FF_GET_UINT_IFDEF(optArgs, uint history, "history", 500);
+	FF_GET_NUMBER_IFDEF(optArgs, double varThreshold, "varThreshold", 16);
+	FF_GET_BOOL_IFDEF(optArgs, bool detectShadows, "detectShadows", true);
+	if (!hasOptArgsObj) {
+		FF_ARG_UINT_IFDEF(0, history, history);
+		FF_ARG_NUMBER_IFDEF(1, varThreshold, varThreshold);
+		FF_ARG_BOOL_IFDEF(2, detectShadows, detectShadows);
 	}
-	self->subtractor = cv::createBackgroundSubtractorMOG2(history, varThreshold, detectShadows);
+
+	BackgroundSubtractorMOG2* self = new BackgroundSubtractorMOG2();
+	self->subtractor = cv::createBackgroundSubtractorMOG2((int)history, varThreshold, detectShadows);
 	self->Wrap(info.Holder());
-	info.GetReturnValue().Set(info.Holder());
+	FF_RETURN(info.Holder());
 };

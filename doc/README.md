@@ -121,12 +121,11 @@ TODO doc Rect, RotatedRect, Size
     * <a href="./io/VideoCapture.md#read">read</a>
     * <a href="./io/VideoCapture.md#reset">reset</a>
 
-TODO API refactoring
-* <a href="./video.md"><b>video</b></a>
-  * <a href="./video.md#BackgroundSubtractorMOG2"><b>BackgroundSubtractorMOG2</b></a>
-    * <a href="./video.md#BackgroundSubtractorMOG2.apply">apply</a>
-  * <a href="./video.md#BackgroundSubtractorKNN"><b>BackgroundSubtractorKNN</b></a>
-    * <a href="./video.md#BackgroundSubtractorKNN.apply">apply</a>
+* <a href="./video/video.md"><b>video</b></a>
+  * <a href="./video/BackgroundSubtractorMOG2.md"><b>BackgroundSubtractorMOG2</b></a>
+    * <a href="./video/BackgroundSubtractorMOG2.md#apply">apply</a>
+  * <a href="./video/BackgroundSubtractorKNN.md"><b>BackgroundSubtractorKNN</b></a>
+    * <a href="./video/BackgroundSubtractorKNN.md#apply">apply</a>
 
 * <a href="./calib3d.md"><b>calib3d</b></a>
   * <a href="./calib3d.md#findHomography">findHomography</a>
@@ -134,7 +133,6 @@ TODO API refactoring
 * <a href="./photo.md"><b>photo</b></a>
   * <a href="./photo.md#fastNlMeansDenoisingColored">fastNlMeansDenoisingColored</a>
 
-TODO API refactoring
 * <a href="./objdetect/objdetect.md"><b>objdetect</b></a>
   * <a href="./objdetect/CascadeClassifier.md"><b>CascadeClassifier</b></a>
     * <a href="./objdetect/CascadeClassifier.md#detectMultiScale">detectMultiScale</a>
