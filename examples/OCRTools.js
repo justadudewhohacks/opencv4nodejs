@@ -5,31 +5,19 @@ const cv = require('../');
 const lccs = Array(26).fill(97).map((v, i) => v + i).map(ascii => String.fromCharCode(ascii));
 exports.lccs = lccs;
 
-const {
-  CC_STAT_LEFT,
-  CC_STAT_TOP,
-  CC_STAT_WIDTH,
-  CC_STAT_HEIGHT,
-  CC_STAT_AREA
-} = cv.cvTypes.connectedComponentsTypes;
-
-const invert = img => img.threshold({
-  thresh: 254,
-  maxVal: 255,
-  type: cv.cvTypes.thresholdTypes.THRESH_BINARY_INV
-});
+const invert = img => img.threshold(254, 255, cv.THRESH_BINARY_INV);
 
 const getBoundingRect = component => new cv.Rect(
-  component[CC_STAT_LEFT],
-  component[CC_STAT_TOP],
-  component[CC_STAT_WIDTH],
-  component[CC_STAT_HEIGHT]
+  component[cv.CC_STAT_LEFT],
+  component[cv.CC_STAT_TOP],
+  component[cv.CC_STAT_WIDTH],
+  component[cv.CC_STAT_HEIGHT]
 );
 
 const getLetterBoundingRect = (img, isIorJ) => {
   const { stats } = invert(img).bgrToGray().connectedComponentsWithStats();
   const componentsOrderedBySize =
-    stats.getDataAsArray().sort((s0, s1) => s1[CC_STAT_AREA] - s0[CC_STAT_AREA]);
+    stats.getDataAsArray().sort((s0, s1) => s1[cv.CC_STAT_AREA] - s0[cv.CC_STAT_AREA]);
 
   if (componentsOrderedBySize.length < 2) {
     return null;
@@ -42,21 +30,21 @@ const getLetterBoundingRect = (img, isIorJ) => {
   if (isIorJ && componentsOrderedBySize.length > 2) {
     let dotComponent = componentsOrderedBySize[2];
 
-    if (largestComponent[CC_STAT_TOP] < dotComponent[CC_STAT_TOP]) {
+    if (largestComponent[cv.CC_STAT_TOP] < dotComponent[cv.CC_STAT_TOP]) {
       largestComponent = componentsOrderedBySize[2];
       dotComponent = componentsOrderedBySize[1];
       letterRect = getBoundingRect(largestComponent);
     }
 
-    const dotRectXRight = dotComponent[CC_STAT_LEFT] + dotComponent[CC_STAT_WIDTH];
-    const xLeft = Math.min(letterRect.x, dotComponent[CC_STAT_LEFT]);
+    const dotRectXRight = dotComponent[cv.CC_STAT_LEFT] + dotComponent[cv.CC_STAT_WIDTH];
+    const xLeft = Math.min(letterRect.x, dotComponent[cv.CC_STAT_LEFT]);
     const letterRectYBottom = letterRect.y + letterRect.height;
 
     letterRect = new cv.Rect(
       xLeft,
-      dotComponent[CC_STAT_TOP],
+      dotComponent[cv.CC_STAT_TOP],
       Math.max(letterRect.width, dotRectXRight - xLeft),
-      (letterRectYBottom - dotComponent[CC_STAT_TOP])
+      (letterRectYBottom - dotComponent[cv.CC_STAT_TOP])
     );
   }
 
@@ -90,7 +78,7 @@ exports.saveConfusionMatrix = (
   numTestImagesPerClass,
   outputFile
 ) => {
-  const confusionMat = new cv.Mat(26, 26, cv.cvTypes.CV_64F, 0);
+  const confusionMat = new cv.Mat(26, 26, cv.CV_64F, 0);
   testDataFiles.forEach((files, label) => {
     files.forEach((file) => {
       const img = cv.imread(file);

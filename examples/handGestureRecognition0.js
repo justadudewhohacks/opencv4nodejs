@@ -7,27 +7,20 @@ const skinColorLower = hue => new cv.Vec(hue, 0.1 * 255, 0.05 * 255);
 
 const makeHandMask = (img) => {
   // filter by skin color
-  const imgHLS = img.cvtColor({ code: cv.cvTypes.colorConversionCodes.COLOR_BGR2HLS });
+  const imgHLS = img.cvtColor(cv.COLOR_BGR2HLS);
   const rangeMask = imgHLS.inRange(skinColorLower(0), skinColorUpper(15));
 
   // remove noise
-  const blurred = rangeMask.blur({
-    ksize: new cv.Size(10, 10)
-  });
-  const thresholded = blurred.threshold({
-    thresh: 200,
-    maxVal: 255,
-    type: cv.cvTypes.thresholdTypes.THRESH_BINARY
-  });
+  const blurred = rangeMask.blur(new cv.Size(10, 10));
+  const thresholded = blurred.threshold(200, 255, cv.THRESH_BINARY);
 
   return thresholded;
 };
 
 const getHandContour = (handMask) => {
-  const contours = handMask.findContours({
-    mode: cv.cvTypes.retrievalModes.RETR_EXTERNAL,
-    method: cv.cvTypes.contourApproximationModes.CHAIN_APPROX_SIMPLE
-  });
+  const mode = cv.RETR_EXTERNAL;
+  const method = cv.CHAIN_APPROX_SIMPLE;
+  const contours = handMask.findContours(mode, method);
   // largest contour
   return contours.sort((c0, c1) => c1.area - c0.area)[0];
 };
@@ -45,9 +38,7 @@ const getCenterPt = pts => pts.reduce(
 // will be only a single hull point for a local neighborhood
 const getRoughHull = (contour, maxDist) => {
   // get hull indices and hull points
-  const hullIndices = contour.convexHull({
-    returnPoints: false
-  });
+  const hullIndices = contour.convexHullIndices();
   const contourPoints = contour.getPoints();
   const hullPointsWithIdx = hullIndices.map(idx => ({
     pt: contourPoints[idx],
@@ -117,6 +108,10 @@ const filterVerticesByAngle = (vertices, maxAngleDeg) =>
     return angleDeg < maxAngleDeg;
   });
 
+const blue = new cv.Vec(255, 0, 0);
+const green = new cv.Vec(0, 255, 0);
+const red = new cv.Vec(0, 0, 255);
+
 // main
 const delay = 20;
 grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
@@ -141,57 +136,59 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
 
   const result = resizedImg.copy();
   // draw bounding box and center line
-  resizedImg.drawContours({
-    contours: [handContour],
-    thickness: 2,
-    color: new cv.Vec(255, 0, 0)
-  });
+  resizedImg.drawContours(
+    [handContour],
+    blue,
+    { thickness: 2 }
+  );
 
   // draw points and vertices
   verticesWithValidAngle.forEach((v) => {
-    resizedImg.drawLine({
-      pt1: v.pt,
-      pt2: v.d1,
-      thickness: 2,
-      color: new cv.Vec(0, 255, 0)
-    });
-    resizedImg.drawLine({
-      pt1: v.pt,
-      pt2: v.d2,
-      thickness: 2,
-      color: new cv.Vec(0, 255, 0)
-    });
-    resizedImg.drawEllipse({
-      box: new cv.RotatedRect(v.pt, new cv.Size(20, 20), 0),
-      thickness: 2,
-      color: new cv.Vec(0, 0, 255)
-    });
-    result.drawEllipse({
-      box: new cv.RotatedRect(v.pt, new cv.Size(20, 20), 0),
-      thickness: 2,
-      color: new cv.Vec(0, 0, 255)
-    });
+    resizedImg.drawLine(
+      v.pt,
+      v.d1,
+      green,
+      { thickness: 2 }
+    );
+    resizedImg.drawLine(
+      v.pt,
+      v.d2,
+      green,
+      { thickness: 2 }
+    );
+    resizedImg.drawEllipse(
+      new cv.RotatedRect(v.pt, new cv.Size(20, 20), 0),
+      red,
+      { thickness: 2 }
+    );
+    result.drawEllipse(
+      new cv.RotatedRect(v.pt, new cv.Size(20, 20), 0),
+      red,
+      { thickness: 2 }
+    );
   });
 
   // display detection result
   const numFingersUp = verticesWithValidAngle.length;
-  result.drawRectangle({
-    pt1: new cv.Point(10, 10),
-    pt2: new cv.Point(70, 70),
-    thickness: 2,
-    color: new cv.Vec(0, 255, 0)
-  });
-  result.putText({
-    text: numFingersUp,
-    org: new cv.Point(20, 60),
-    fontFace: cv.cvTypes.hersheyFonts.FONT_ITALIC,
-    fontScale: 2,
-    thickness: 2,
-    color: new cv.Vec(0, 255, 0)
-  });
+  result.drawRectangle(
+    new cv.Point(10, 10),
+    new cv.Point(70, 70),
+    green,
+    { thickness: 2 }
+  );
+
+  const fontScale = 2;
+  result.putText(
+    String(numFingersUp),
+    new cv.Point(20, 60),
+    cv.FONT_ITALIC,
+    fontScale,
+    green,
+    { thickness: 2 }
+  );
 
   const { rows, cols } = result;
-  const sideBySide = new cv.Mat(rows, cols * 2, cv.cvTypes.CV_8UC3);
+  const sideBySide = new cv.Mat(rows, cols * 2, cv.CV_8UC3);
   result.copyTo(sideBySide.getRegion(new cv.Rect(0, 0, cols, rows)));
   resizedImg.copyTo(sideBySide.getRegion(new cv.Rect(cols, 0, cols, rows)));
 

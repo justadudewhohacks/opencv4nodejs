@@ -12,52 +12,28 @@ const getHistAxis = channel => ([
 ]);
 
 // calc histogram for blue, green, red channel
-const bHist = cv.calcHist({
-  img,
-  histAxes: getHistAxis(0)
-});
-const gHist = cv.calcHist({
-  img,
-  histAxes: getHistAxis(1)
-});
-const rHist = cv.calcHist({
-  img,
-  histAxes: getHistAxis(2)
-});
+const bHist = cv.calcHist(img, getHistAxis(0));
+const gHist = cv.calcHist(img, getHistAxis(1));
+const rHist = cv.calcHist(img, getHistAxis(2));
 
-// plot blue channel histogram
-let plot = cv.plot1DHist({
-  hist: bHist,
-  height: 300,
-  width: 600,
-  lineColor: new cv.Vec(255, 0, 0)
-});
-// add green and red channel histograms to the plot
-plot = cv.plot1DHist({
-  hist: gHist,
-  plotTo: plot,
-  lineColor: new cv.Vec(0, 255, 0)
-});
-plot = cv.plot1DHist({
-  hist: rHist,
-  plotTo: plot,
-  lineColor: new cv.Vec(0, 0, 255)
-});
+const blue = new cv.Vec(255, 0, 0);
+const green = new cv.Vec(0, 255, 0);
+const red = new cv.Vec(0, 0, 255);
+
+// plot channel histograms
+const plot = new cv.Mat(300, 600, cv.CV_8UC3, [255, 255, 255]);
+cv.plot1DHist(bHist, plot, blue, { thickness: 2 });
+cv.plot1DHist(gHist, plot, green, { thickness: 2 });
+cv.plot1DHist(rHist, plot, red, { thickness: 2 });
 
 cv.imshow('rgb image', img);
 cv.imshow('rgb histogram', plot);
 cv.waitKey();
 
 const grayImg = img.bgrToGray();
-const grayHist = cv.calcHist({
-  img: grayImg,
-  histAxes: getHistAxis(0)
-});
-const grayHistPlot = cv.plot1DHist({
-  hist: grayHist,
-  height: 300,
-  width: 600
-});
+const grayHist = cv.calcHist(grayImg, getHistAxis(0));
+const grayHistPlot = new cv.Mat(300, 600, cv.CV_8UC3, [255, 255, 255]);
+cv.plot1DHist(grayHist, grayHistPlot, new cv.Vec(0, 0, 0));
 
 cv.imshow('grayscale image', grayImg);
 cv.imshow('grayscale histogram', grayHistPlot);

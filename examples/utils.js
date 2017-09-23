@@ -20,33 +20,26 @@ exports.grabFrames = (videoFile, delay, onFrame) => {
 
 exports.drawRectAroundBlobs = (binaryImg, dstImg, minPxSize, fixedRectWidth) => {
   const {
-    CC_STAT_LEFT,
-    CC_STAT_TOP,
-    CC_STAT_WIDTH,
-    CC_STAT_HEIGHT,
-    CC_STAT_AREA
-  } = cv.cvTypes.connectedComponentsTypes;
-
-  const {
     centroids,
     stats
   } = binaryImg.connectedComponentsWithStats();
 
   // pretend label 0 is background
   for (let label = 1; label < centroids.rows; label += 1) {
-    const [x1, y1] = [stats.at(label, CC_STAT_LEFT), stats.at(label, CC_STAT_TOP)];
+    const [x1, y1] = [stats.at(label, cv.CC_STAT_LEFT), stats.at(label, cv.CC_STAT_TOP)];
     const [x2, y2] = [
-      x1 + (fixedRectWidth || stats.at(label, CC_STAT_WIDTH)),
-      y1 + (fixedRectWidth || stats.at(label, CC_STAT_HEIGHT))
+      x1 + (fixedRectWidth || stats.at(label, cv.CC_STAT_WIDTH)),
+      y1 + (fixedRectWidth || stats.at(label, cv.CC_STAT_HEIGHT))
     ];
-    const size = stats.at(label, CC_STAT_AREA);
+    const size = stats.at(label, cv.CC_STAT_AREA);
+    const blue = new cv.Vec(255, 0, 0);
     if (minPxSize < size) {
-      dstImg.drawRectangle({
-        pt1: new cv.Point(x1, y1),
-        pt2: new cv.Point(x2, y2),
-        color: new cv.Vec(255, 0, 0),
-        thickness: 2
-      });
+      dstImg.drawRectangle(
+        new cv.Point(x1, y1),
+        new cv.Point(x2, y2),
+        blue,
+        { thickness: 2 }
+      );
     }
   }
 };

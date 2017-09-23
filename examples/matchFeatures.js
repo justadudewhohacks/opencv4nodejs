@@ -18,13 +18,13 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
     (match1, match2) => match1.distance - match2.distance
   ).slice(0, bestN);
 
-  return cv.drawMatches({
+  return cv.drawMatches(
     img1,
     img2,
-    keypoints1: keyPoints1,
-    keypoints2: keyPoints2,
-    matches1to2: bestMatches
-  });
+    keyPoints1,
+    keyPoints2,
+    bestMatches
+  );
 };
 
 const img1 = cv.imread('../data/s0.jpg');

@@ -96,6 +96,6 @@ NAN_METHOD(Features2d::DrawMatches) {
 	}
 
 	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
-	cv::drawMatches(img1, img2, kps1, kps2, dMatches, FF_UNWRAP_MAT_AND_GET(jsMat));
+	cv::drawMatches(img1, kps1, img2, kps2, dMatches, FF_UNWRAP_MAT_AND_GET(jsMat));
 	FF_RETURN(jsMat);
 }

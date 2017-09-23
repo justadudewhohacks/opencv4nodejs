@@ -6,17 +6,9 @@ const outputDataPath = '../data/ocr-nocommit/letters_generated';
 
 const lccs = Array(26).fill(97).map((v, i) => v + i).map(a => String.fromCharCode(a));
 
-const blur = img => img.blur({
-  ksize: new cv.Size(8, 8),
-  sigmaX: 1,
-  sigmaY: 1
-});
+const blur = img => img.blur(new cv.Size(8, 8), 1, 1);
 
-const invert = img => img.threshold({
-  thresh: 254,
-  maxVal: 255,
-  type: cv.cvTypes.thresholdTypes.THRESH_BINARY_INV
-});
+const invert = img => img.threshold(254, 255, cv.THRESH_BINARY_INV);
 
 const generate = (img, clazz, nr) => {
   for (let angle = 0; angle <= 60; angle += 10) {
@@ -25,11 +17,8 @@ const generate = (img, clazz, nr) => {
     const rotated = invert(img).warpAffine(rotMat);
     for (let weight = 0; weight <= 3; weight += 1) {
       const threshWeight = 200 - (weight * 50);
-      const result = blur(rotated).threshold({
-        thresh: threshWeight,
-        maxVal: 255,
-        type: cv.cvTypes.thresholdTypes.THRESH_BINARY_INV
-      });
+      const result = blur(rotated)
+        .threshold(threshWeight, 255, cv.THRESH_BINARY_INV);
       cv.imwrite(`${outputDataPath}/${clazz}/${clazz}_${nr}_w${weight}_r${angle}.png`, result.resize(40, 40));
     }
   }
