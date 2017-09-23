@@ -6,7 +6,7 @@ const {
 const { expect } = require('chai');
 
 module.exports = () => {
-  describe.only('CascadeClassifier', () => {
+  describe('CascadeClassifier', () => {
     const xmlHaarFile = cv.HAAR_FRONTALFACE_DEFAULT;
 
     describe('constructor', () => {
@@ -43,7 +43,7 @@ module.exports = () => {
       const maxSize = new cv.Size(250, 250);
 
       describe('detectMultiScale', () => {
-        funcShouldRequireArgs(() => cc.detectMultiScale(cc));
+        funcShouldRequireArgs(() => cc.detectMultiScale());
 
         it('can be called if required args passed', () => {
           expect(() => cc.detectMultiScale(testImg)).to.not.throw();
@@ -83,7 +83,7 @@ module.exports = () => {
       });
 
       describe('detectMultiScaleWithRejectLevels', () => {
-        funcShouldRequireArgs(() => cc.detectMultiScaleWithRejectLevels(cc));
+        funcShouldRequireArgs(() => cc.detectMultiScaleWithRejectLevels());
 
         it('can be called if required args passed', () => {
           expect(() => cc.detectMultiScaleWithRejectLevels(testImg)).to.not.throw();

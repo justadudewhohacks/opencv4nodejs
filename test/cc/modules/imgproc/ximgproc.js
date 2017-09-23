@@ -1,6 +1,6 @@
 const cv = global.dut;
-const { assertPropsWithValue, funcShouldRequireArgs, readTestImage } = global.utils;
-const { assert } = require('chai');
+const { assertMetaData, assertPropsWithValue, funcShouldRequireArgs, readTestImage } = global.utils;
+const { assert, expect } = require('chai');
 
 describe('ximgproc', () => {
   if (!cv.xmodules.ximgproc) {
@@ -23,8 +23,9 @@ describe('ximgproc', () => {
 
       it('should be constructable with required args', () => {
         const superpixelSeeds = new cv.SuperpixelSEEDS(testImg, numSuperpixels, numLevels);
+        expect(superpixelSeeds).to.have.property('img').instanceOf(cv.Mat);
+        assertMetaData(testImg)(superpixelSeeds.img);
         assertPropsWithValue(superpixelSeeds)({
-          image: testImg,
           numSuperpixels,
           numLevels
         });

@@ -32,65 +32,82 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
 };
 
 NAN_METHOD(HOGDescriptor::New) {
-	HOGDescriptor* self = new HOGDescriptor();
-	cv::Size winSize = cv::Size(64, 128), blockSize = cv::Size(16, 16), blockStride = cv::Size(8, 8), cellSize = cv::Size(8, 8);
-	int nbins = 9, derivAperture = 1;
-	int histogramNormType = cv::HOGDescriptor::L2Hys;
-	int nlevels = cv::HOGDescriptor::DEFAULT_NLEVELS;
-	double winSigma = -1, L2HysThreshold = 0.2;
-	bool gammaCorrection = false, signedGradient = false;
+	FF_METHOD_CONTEXT("HOGDescriptor::New");
 
-	if (info[0]->IsObject()) {
-		FF_REQUIRE_ARGS_OBJ("HOGDescriptor::New");
-		FF_DESTRUCTURE_JSOBJ_IFDEF(args, winSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
-		FF_DESTRUCTURE_JSOBJ_IFDEF(args, blockSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
-		FF_DESTRUCTURE_JSOBJ_IFDEF(args, blockStride, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
-		FF_DESTRUCTURE_JSOBJ_IFDEF(args, cellSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nbins, IsUint32, Uint32Value);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, derivAperture, IsUint32, Uint32Value);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, histogramNormType, IsUint32, Uint32Value);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, nlevels, IsUint32, Uint32Value);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, winSigma, IsNumber,NumberValue);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, L2HysThreshold, IsNumber, NumberValue);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, gammaCorrection, IsBoolean, BooleanValue);
-		FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, signedGradient, IsBoolean, BooleanValue);
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject() && !FF_IS_INSTANCE(Size::constructor, info[1]);
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d winSize, "winSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d(64, 128));
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d blockSize, "blockSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d(16, 16));
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d blockStride, "blockStride", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d(8, 8));
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d cellSize, "cellSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d(8, 8));
+	FF_GET_UINT_IFDEF(optArgs, uint nbins, "nbins", 9);
+	FF_GET_INT_IFDEF(optArgs, int derivAperture, "derivAperture", 1);
+	FF_GET_NUMBER_IFDEF(optArgs, double winSigma, "winSigma", -1);
+	FF_GET_UINT_IFDEF(optArgs, uint histogramNormType, "histogramNormType", cv::HOGDescriptor::L2Hys);
+	FF_GET_NUMBER_IFDEF(optArgs, double L2HysThreshold, "L2HysThreshold", 0.2);
+	FF_GET_BOOL_IFDEF(optArgs, bool gammaCorrection, "gammaCorrection", false);
+	FF_GET_UINT_IFDEF(optArgs, uint nlevels, "nlevels", cv::HOGDescriptor::DEFAULT_NLEVELS);
+	FF_GET_BOOL_IFDEF(optArgs, bool signedGradient, "signedGradient", false);
+	if (!hasOptArgsObj) {
+		FF_ARG_INSTANCE_IFDEF(0, winSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, winSize);
+		FF_ARG_INSTANCE_IFDEF(1, blockSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, blockSize);
+		FF_ARG_INSTANCE_IFDEF(2, blockStride, Size::constructor, FF_UNWRAP_SIZE_AND_GET, blockStride);
+		FF_ARG_INSTANCE_IFDEF(3, cellSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, cellSize);
+		FF_ARG_UINT_IFDEF(4, nbins, nbins);
+		FF_ARG_INT_IFDEF(5, derivAperture, derivAperture);
+		FF_ARG_NUMBER_IFDEF(6, winSigma, winSigma);
+		FF_ARG_UINT_IFDEF(7, histogramNormType, histogramNormType);
+		FF_ARG_NUMBER_IFDEF(8, L2HysThreshold, L2HysThreshold);
+		FF_ARG_BOOL_IFDEF(9, gammaCorrection, gammaCorrection);
+		FF_ARG_UINT_IFDEF(10, nlevels, nlevels);
+		FF_ARG_BOOL_IFDEF(11, signedGradient, signedGradient);
 	}
 
+	HOGDescriptor* self = new HOGDescriptor();
 	self->hog = cv::HOGDescriptor(
 		winSize, 
 		blockSize, 
 		blockStride,
 		cellSize, 
-		nbins, 
+		(int)nbins, 
 		derivAperture, 
 		winSigma,
-		histogramNormType,
+		(int)histogramNormType,
 		L2HysThreshold,
 		gammaCorrection,
-		nlevels,
+		(int)nlevels,
 		signedGradient
 	);
 
 	self->Wrap(info.Holder());
-	info.GetReturnValue().Set(info.Holder());
+	FF_RETURN(info.Holder());
 };
 
 NAN_METHOD(HOGDescriptor::Compute) {
 	FF_METHOD_CONTEXT("HOGDescriptor::Detect");
-	FF_REQUIRE_ARGS_OBJ("HOGDescriptor::Detect");
 
-	cv::Mat img;
-	FF_DESTRUCTURE_JSOBJ_REQUIRED(args, img, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
+	FF_ARG_INSTANCE(0, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 
-	cv::Size winStride = cv::Size(), padding = cv::Size();
-	FF_DESTRUCTURE_JSOBJ_IFDEF(args, winStride, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
-	FF_DESTRUCTURE_JSOBJ_IFDEF(args, padding, Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size);
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d winStride, "winStride", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size());
+	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d padding, "padding", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size());
+	FF_GET_ARRAY_IFDEF(optArgs, FF_ARR jsLocations, "locations", FF_NEW_ARRAY());
+	if (!hasOptArgsObj) {
+		FF_ARG_INSTANCE_IFDEF(1, winStride, Size::constructor, FF_UNWRAP_SIZE_AND_GET, winStride);
+		FF_ARG_INSTANCE_IFDEF(2, padding, Size::constructor, FF_UNWRAP_SIZE_AND_GET, padding);
+		FF_ARG_ARRAY_IFDEF(3, jsLocations, jsLocations);
+	}
 
 	std::vector<cv::Point2i> locations; 
-	if (FF_HAS(args, "locations")) {
-		v8::Local<v8::Array> jsLocations;
-		FF_GET_ARRAY_REQUIRED(args, jsLocations, "locations");
-		Point::unpackJSPoint2Array(locations, jsLocations);
+	Nan::TryCatch tryCatch;
+	Point::unpackJSPoint2Array(locations, jsLocations);
+	if (tryCatch.HasCaught()) {
+		tryCatch.ReThrow();
+		return;
 	}
 
 	std::vector<float> descriptors;
@@ -101,5 +118,5 @@ NAN_METHOD(HOGDescriptor::Compute) {
 		padding,
 		locations
 	);
-	info.GetReturnValue().Set(FF::stdVecToJSArray<double>(descriptors));
+	FF_RETURN(FF::stdVecToJSArray<double>(descriptors));
 };

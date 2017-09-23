@@ -22,7 +22,7 @@ HOGDescriptor {
 
 ## Constructors
 ``` javascript
-HOGDescriptor : new HOGDescriptor(Size winSize = Size(64, 128), Size blockSize = Size(16, 16), Size blockStride = Size(8, 8), Size cellSize = Size(8, 8), Uint nbins = 9, Int derivAperture = 1, Uint histogramNormType = HOGDescriptor.L2Hys, Int nlevels = HOGDescriptor.DEFAULT_NLEVELS, Number winSigma = -1, Number L2HysThreshold = 0.2, Boolean gammaCorrection = false, Boolean signedGradient = false)
+HOGDescriptor : new HOGDescriptor(Size winSize = Size(64, 128), Size blockSize = Size(16, 16), Size blockStride = Size(8, 8), Size cellSize = Size(8, 8), Uint nbins = 9, Int derivAperture = 1, Number winSigma = -1, Uint histogramNormType = L2Hys, Number L2HysThreshold = 0.2, Boolean gammaCorrection = false, Int nlevels = HOGDescriptor.DEFAULT_NLEVELS, Boolean signedGradient = false)
 ```
 
 ## Methods
