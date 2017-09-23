@@ -82,8 +82,19 @@
       * <a href="./core/Point.md#operators">div</a>
       * <a href="./core/Point.md#operators">norm</a>
     * <a href="./core/Point.md#at">at</a>
-TODO doc Rect, RotatedRect, Size
-
+  * <a href="./core/Size.md"><b>Size</b></a>
+  * <a href="./core/Rect.md"><b>Rect</b></a>
+  * <a href="./core/RotatedRect.md"><b>RotatedRect</b></a>
+    * <a href="./core/RotatedRect.md#boundingRect">boundingRect</a>
+* <a href="./io/io.md"><b>io</b></a>
+  * <a href="./io/io.md#imread">imread</a>
+  * <a href="./io/io.md#imwrite">imwrite</a>
+  * <a href="./io/io.md#imshow">imshow</a>
+  * <a href="./io/io.md#imshowWait">imshowWait</a>
+  * <a href="./io/io.md#waitKey">waitKey</a>
+  * <a href="./io/VideoCapture.md"><b>VideoCapture</b></a>
+    * <a href="./io/VideoCapture.md#read">read</a>
+    * <a href="./io/VideoCapture.md#reset">reset</a>
 * <a href="./imgproc/imgproc.md"><b>imgproc</b></a>
   * <a href="./imgproc/imgproc.md#getStructuringElement">getStructuringElement</a>
   * <a href="./imgproc/imgproc.md#getRotationMatrix2D">getRotationMatrix2D</a>
@@ -106,40 +117,15 @@ TODO doc Rect, RotatedRect, Size
     * <a href="./imgproc/Contour.md#pointPolygonTest">pointPolygonTest</a>
     * <a href="./imgproc/Contour.md#matchShapes">matchShapes</a>
     * <a href="./imgproc/Contour.md#moments">moments</a>
-
 * <a href="./ximgproc/ximgproc.md"><b>ximgproc</b></a>
   * <a href="./ximgproc/SuperpixelSEEDS.md"><b>SuperpixelSEEDS</b></a>
-    * <a href="./ximgproc/SuperpixelSEEDS.md#iterate"><b>iterate</b></a>
-
-* <a href="./io/io.md"><b>highgui</b></a>
-  * <a href="./io/io.md#imread">imread</a>
-  * <a href="./io/io.md#imwrite">imwrite</a>
-  * <a href="./io/io.md#imshow">imshow</a>
-  * <a href="./io/io.md#imshowWait">imshowWait</a>
-  * <a href="./io/io.md#waitKey">waitKey</a>
-  * <a href="./io/VideoCapture.md"><b>VideoCapture</b></a>
-    * <a href="./io/VideoCapture.md#read">read</a>
-    * <a href="./io/VideoCapture.md#reset">reset</a>
-
-* <a href="./video/video.md"><b>video</b></a>
-  * <a href="./video/BackgroundSubtractorMOG2.md"><b>BackgroundSubtractorMOG2</b></a>
-    * <a href="./video/BackgroundSubtractorMOG2.md#apply">apply</a>
-  * <a href="./video/BackgroundSubtractorKNN.md"><b>BackgroundSubtractorKNN</b></a>
-    * <a href="./video/BackgroundSubtractorKNN.md#apply">apply</a>
-
-* <a href="./calib3d.md"><b>calib3d</b></a>
-  * <a href="./calib3d.md#findHomography">findHomography</a>
-
-* <a href="./photo.md"><b>photo</b></a>
-  * <a href="./photo.md#fastNlMeansDenoisingColored">fastNlMeansDenoisingColored</a>
-
+    * <a href="./ximgproc/SuperpixelSEEDS.md#iterate">iterate</a>
 * <a href="./objdetect/objdetect.md"><b>objdetect</b></a>
   * <a href="./objdetect/CascadeClassifier.md"><b>CascadeClassifier</b></a>
     * <a href="./objdetect/CascadeClassifier.md#detectMultiScale">detectMultiScale</a>
     * <a href="./objdetect/CascadeClassifier.md#detectMultiScaleWithRejectLevels">detectMultiScaleWithRejectLevels</a>
   * <a href="./objdetect/HOGDescriptor.md"><b>HOGDescriptor</b></a>
     * <a href="./objdetect/HOGDescriptor.md#.compute">compute</a>
-
 * <a href="./machinelearning/machinelearning.md"><b>machinelearning</b></a>
   * <a href="./machinelearning/ParamGrid.md"><b>ParamGrid</b></a>
   * <a href="./machinelearning/TrainData.md"><b>TrainData</b></a>
@@ -152,7 +138,15 @@ TODO doc Rect, RotatedRect, Size
     * <a href="./machinelearning/SVM.md#load">load</a>
     * <a href="./machinelearning/SVM.md#getSupportVectors">getSupportVectors</a>
     * <a href="./machinelearning/SVM.md#calcError">calcError</a>
-
+* <a href="./video/video.md"><b>video</b></a>
+  * <a href="./video/BackgroundSubtractorMOG2.md"><b>BackgroundSubtractorMOG2</b></a>
+    * <a href="./video/BackgroundSubtractorMOG2.md#apply">apply</a>
+  * <a href="./video/BackgroundSubtractorKNN.md"><b>BackgroundSubtractorKNN</b></a>
+    * <a href="./video/BackgroundSubtractorKNN.md#apply">apply</a>
+* <a href="./calib3d.md"><b>calib3d</b></a>
+  * <a href="./calib3d.md#findHomography">findHomography</a>
+* <a href="./photo.md"><b>photo</b></a>
+  * <a href="./photo.md#fastNlMeansDenoisingColored">fastNlMeansDenoisingColored</a>
 * features2d
   * TODO
 * xfeatures2d
