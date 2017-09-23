@@ -135,11 +135,12 @@ TODO API refactoring
   * <a href="./photo.md#fastNlMeansDenoisingColored">fastNlMeansDenoisingColored</a>
 
 TODO API refactoring
-* <a href="./objdetect.md"><b>objdetect</b></a>
-  * <a href="./objdetect.md#CascadeClassifier"><b>CascadeClassifier</b></a>
-    * <a href="./objdetect.md#CascadeClassifier.detectMultiScale">detectMultiScale</a>
-  * <a href="./objdetect.md#HOGDescriptor"><b>HOGDescriptor</b></a>
-    * <a href="./objdetect.md#HOGDescriptor.compute">compute</a>
+* <a href="./objdetect/objdetect.md"><b>objdetect</b></a>
+  * <a href="./objdetect/CascadeClassifier.md"><b>CascadeClassifier</b></a>
+    * <a href="./objdetect/CascadeClassifier.md#detectMultiScale">detectMultiScale</a>
+    * <a href="./objdetect/CascadeClassifier.md#detectMultiScaleWithRejectLevels">detectMultiScaleWithRejectLevels</a>
+  * <a href="./objdetect/HOGDescriptor.md"><b>HOGDescriptor</b></a>
+    * <a href="./objdetect/HOGDescriptor.md#.compute">compute</a>
 
 * <a href="./machinelearning/machinelearning.md"><b>machinelearning</b></a>
   * <a href="./machinelearning/ParamGrid.md"><b>ParamGrid</b></a>

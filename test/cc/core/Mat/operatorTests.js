@@ -264,7 +264,7 @@ module.exports = () => {
         [[12, 12], [3, 3]]
       ], cv.CV_8UC2);
       const expectedResult = [
-        [[0, 15],  [15, 15]],
+        [[0, 15], [15, 15]],
         [[3, 3], [12, 12]]
       ];
       const res = mat0.bitwiseXor(mat1);
