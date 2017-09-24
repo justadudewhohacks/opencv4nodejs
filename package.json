@@ -30,7 +30,8 @@
     "configure": "node-gyp configure",
     "build": "node-gyp configure build",
     "rebuild": "node-gyp rebuild",
-    "clean": "node-gyp clean"
+    "clean": "node-gyp clean",
+    "build-debug": "node-gyp rebuild --debug"
   },
   "gypfile": true,
   "dependencies": {

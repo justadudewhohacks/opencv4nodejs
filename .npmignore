@@ -10,3 +10,4 @@ test
 examples
 .travis.yml
 doc
+coverage
