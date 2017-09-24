@@ -30,8 +30,13 @@ install:
   - sudo sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
   - sudo ldconfig
   - cd ../../
-  - npm install -g mocha
 
 script:
   - npm install
-  - cd ./test && npm install && npm test
+  - cd ./test && npm install && npm run build-debug && npm run cover
+
+after_success:
+  - lcov --capture --directory ../build --output-file coverage/capture.info
+  - lcov --extract coverage/capture.info '*opencv4nodejs/cc/*' --output-file coverage/extracted.info
+  - lcov --test-name opencv4nodejs --add-tracefile coverage/lcov.info --add-tracefile coverage/extracted.info --output-file coverage/opencv4nodejs.info
+  - genhtml --output-directory coverage coverage/opencv4nodejs.info

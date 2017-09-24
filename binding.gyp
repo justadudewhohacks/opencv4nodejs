@@ -100,6 +100,14 @@
 					},
 				}
 			}]
-		]
+		],
+
+		"configurations": {
+			"Debug": {
+				"cflags": ["-coverage"],
+				"ldflags": ["-coverage"]
+			},
+    }
+
 	}]
 }
