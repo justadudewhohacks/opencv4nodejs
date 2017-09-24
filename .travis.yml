@@ -33,7 +33,8 @@ install:
 
 script:
   - npm install && npm run build-debug
-  - cd ./test && npm install && npm install codecov && npm run cover
+  - cd ./test && npm install && npm install codecov
+  - npm run cover
 
 after_success:
   - lcov --capture --directory ../build --output-file coverage/capture.info

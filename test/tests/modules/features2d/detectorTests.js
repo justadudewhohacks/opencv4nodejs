@@ -3,19 +3,11 @@ const { assert, expect } = require('chai');
 
 const { assertError, assertPropsWithValue, readTestImage } = global.utils;
 
-var Test = class {
-  constructor(a, b, c) {
-    console.log('a', a)
-    console.log('b', b)
-    console.log('c', c)
-  }
-};
-
 exports.detectorTests = (defaults, customProps, Detector, implementsCompute = true) => {
   let testImg;
   let keyPoints;
 
-  before(async () => {
+  before(() => {
     testImg = readTestImage().resizeToMax(250);
     keyPoints = (new Detector()).detect(testImg);
   });
