@@ -13,6 +13,7 @@ before_install:
 install:
   - sudo apt-get install -y build-essential
   - sudo apt-get install -y cmake git
+  - sudo apt-get install -y lcov
 
   # setup opencv 3.2 with extra modules
   - curl -sL https://github.com/Itseez/opencv/archive/3.2.0.zip > opencv.zip
