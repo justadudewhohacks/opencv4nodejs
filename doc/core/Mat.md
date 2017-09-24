@@ -131,7 +131,7 @@ Mat : mat.copy(Mat mask = null)
 
 ### copyTo
 ``` javascript
-Mat : mat.copyTo(Mat dst, : Mat mask = null)
+Mat : mat.copyTo(Mat dst, Mat mask = null)
 ```
 
 <a name="convertTo"></a>
@@ -145,15 +145,15 @@ Mat : mat.convertTo(Uint type, Number alpha = 1.0, Number beta = 0.0)
 
 ### norm
 ``` javascript
-Number : mat.norm(Mat src2, Uint normType = NORM_L2, : Mat mask = noArray())
-Number : mat.norm(Uint normType = NORM_L2, : Mat mask = noArray())
+Number : mat.norm(Mat src2, Uint normType = NORM_L2, Mat mask = noArray())
+Number : mat.norm(Uint normType = NORM_L2, Mat mask = noArray())
 ```
 
 <a name="normalize"></a>
 
 ### normalize
 ``` javascript
-Mat : mat.normalize(Number alpha = 1.0, Number beta = 0.0, Uint normType = NORM_L2, Int dtype = -1, : Mat mask = noArray())
+Mat : mat.normalize(Number alpha = 1.0, Number beta = 0.0, Uint normType = NORM_L2, Int dtype = -1, Mat mask = noArray())
 ```
 
 <a name="splitChannels"></a>
