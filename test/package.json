@@ -2,8 +2,8 @@
   "name": "opencv4nodejs_test",
   "version": "1.1.0",
   "scripts": {
-    "test": "mocha cc/**/*.test.js --require ./globals --recursive --timeout 5000",
-    "cover": "istanbul cover mocha cc/**/*.test.js --report lcovonly --require ./globals --recursive --timeout 5000"
+    "test": "mocha --require ./globals --recursive --timeout 5000 cc/**/*.test.js ",
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly --require ./globals --recursive --timeout 5000 cc/**/*.test.js "
   },
   "author": "justadudewhohacks",
   "license": "ISC",
