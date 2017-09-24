@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "scripts": {
     "test": "mocha --require ./globals --recursive --timeout 5000 cc/**/*.test.js ",
-    "cover": "set BINDINGS_DEBUG=true &&istanbul cover node_modules/mocha/bin/_mocha --report lcovonly --require ./globals --recursive --timeout 5000 cc/**/**/*.test.js "
+    "cover": "BINDINGS_DEBUG=true istanbul cover node_modules/mocha/bin/_mocha --report lcovonly --require ./globals --recursive --timeout 5000 tests/**/**/*.test.js "
   },
   "author": "justadudewhohacks",
   "license": "ISC",
