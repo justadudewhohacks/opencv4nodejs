@@ -77,11 +77,11 @@
 			"-fno-exceptions"
 		],
 		"xcode_settings": {
-				"OTHER_CFLAGS": [
-						"-std=c++11",
-						"-stdlib=libc++"
-				],
-				"GCC_ENABLE_CPP_EXCEPTIONS": "YES"
+			"OTHER_CFLAGS": [
+				"-std=c++11",
+				"-stdlib=libc++"
+			],
+			"GCC_ENABLE_CPP_EXCEPTIONS": "YES"
 		},
 
 		"conditions": [
