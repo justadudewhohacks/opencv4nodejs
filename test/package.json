@@ -4,7 +4,7 @@
   "scripts": {
     "test": "mocha --require ./globals --recursive --timeout 5000 cc/**/*.test.js ",
     "cover": "BINDINGS_DEBUG=true istanbul cover node_modules/mocha/bin/_mocha --report lcovonly --require ./globals --recursive --timeout 5000 tests/**/**/*.test.js ",
-    "codecov": "codecov --token=f821e623-6da2-4b62-acd5-67b64169604b"
+    "codecov": "codecov -f ./coverage/opencv4nodejs.info -t f821e623-6da2-4b62-acd5-67b64169604b"
   },
   "author": "justadudewhohacks",
   "license": "ISC",
