@@ -32,11 +32,12 @@ install:
   - cd ../../
 
 script:
-  - npm install
-  - cd ./test && npm install && npm run build-debug && npm run cover
+  - npm install && npm run build-debug
+  - cd ./test && npm install && npm install codecov && npm run cover
 
 after_success:
   - lcov --capture --directory ../build --output-file coverage/capture.info
   - lcov --extract coverage/capture.info '*opencv4nodejs/cc/*' --output-file coverage/extracted.info
   - lcov --test-name opencv4nodejs --add-tracefile coverage/lcov.info --add-tracefile coverage/extracted.info --output-file coverage/opencv4nodejs.info
   - genhtml --output-directory coverage coverage/opencv4nodejs.info
+  - codecov --token=:f821e623-6da2-4b62-acd5-67b64169604b
