@@ -104,8 +104,8 @@
 
 		"configurations": {
 			"Debug": {
-				"cflags": ["-coverage"],
-				"ldflags": ["-coverage"]
+				"cflags": ["--coverage"],
+				"ldflags": ["--coverage"]
 			},
     }
 
