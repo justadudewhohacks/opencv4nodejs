@@ -45,14 +45,14 @@ module.exports = (getTestImg) => {
       matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
     });
 
-    (cv.version.mindor < 2 ? it.skip : it)('matchBruteForceHammingLut', () => {
+    (cv.version.minor < 2 ? it.skip : it)('matchBruteForceHammingLut', () => {
       const matches = cv.matchBruteForceHammingLut(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
       matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
     });
 
-    (cv.version.mindor < 2 ? it.skip : it)('matchBruteForceSL2', () => {
+    (cv.version.minor < 2 ? it.skip : it)('matchBruteForceSL2', () => {
       const matches = cv.matchBruteForceSL2(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
