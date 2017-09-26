@@ -37,5 +37,9 @@ exports.getTmpDataFilePath = (file) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
-  return `${dir}/${file}`;
+  const filePath = `${dir}/${file}`;
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+  }
+  return filePath;
 };
