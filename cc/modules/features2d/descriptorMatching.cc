@@ -74,7 +74,7 @@ void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) 
 	uint i = 0;
 	for (auto dmatch : dmatches) {
 		FF_OBJ jsMatch = FF_NEW_INSTANCE(DescriptorMatch::constructor);
-		FF_UNWRAP(jsMatch, DescriptorMatch)->setNativeProps(dmatch);
+		FF_UNWRAP(jsMatch, DescriptorMatch)->dmatch = dmatch;
 		jsMatches->Set(i++, jsMatch);
 	}
 	FF_RETURN(jsMatches);

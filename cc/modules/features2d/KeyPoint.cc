@@ -36,8 +36,3 @@ NAN_METHOD(KeyPoint::New) {
 	self->Wrap(info.Holder());
   FF_RETURN(info.Holder());
 }
-
-void KeyPoint::setNativeProps(uint localId, cv::KeyPoint keyPoint) {
-  this->localId = localId;
-  this->keyPoint = keyPoint;
-};

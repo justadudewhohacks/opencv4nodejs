@@ -6,20 +6,16 @@
 
 class DescriptorMatch : public Nan::ObjectWrap {
 public:
-	int queryIdx;
-	int trainIdx;
-  float distance;
+	cv::DMatch dmatch;
 
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	static FF_GETTER(DescriptorMatch, GetQueryIdx, queryIdx)
-	static FF_GETTER(DescriptorMatch, GetTrainIdx, trainIdx)
-	static FF_GETTER(DescriptorMatch, GetDistance, distance)
+	static FF_GETTER(DescriptorMatch, GetQueryIdx, dmatch.queryIdx)
+	static FF_GETTER(DescriptorMatch, GetTrainIdx, dmatch.trainIdx)
+	static FF_GETTER(DescriptorMatch, GetDistance, dmatch.distance)
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	void setNativeProps(cv::DMatch dmatch);
 };
 
 #endif

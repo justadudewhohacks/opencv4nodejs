@@ -92,7 +92,7 @@ NAN_METHOD(Features2d::DrawMatches) {
 	std::vector<cv::DMatch> dMatches;
 	for (int i = 0; i < jsMatches->Length(); i++) {
 		DescriptorMatch* match = FF_UNWRAP(FF_CAST_OBJ(jsMatches->Get(i)), DescriptorMatch);
-		dMatches.push_back(cv::DMatch(match->queryIdx, match->trainIdx, match->distance));
+		dMatches.push_back(match->dmatch);
 	}
 
 	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);

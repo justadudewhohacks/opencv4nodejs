@@ -39,8 +39,6 @@ public:
 	static FF_GETTER(KeyPoint, GetOctave, keyPoint.octave);
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-  void setNativeProps(uint, cv::KeyPoint);
 };
 
 #endif

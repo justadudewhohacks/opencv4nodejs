@@ -1,7 +1,21 @@
-const opencv = global.dut;
-const { detectorTests } = require('./detectorTests');
+const cv = global.dut;
+const { assertMetaData, isZeroMat, readTestImage } = global.utils;
+const { assert, expect } = require('chai');
+const detectorTests = require('./detectorTests');
+const KeyPointTests = require('./KeyPointTests');
+const DescriptorMatchTests = require('./DescriptorMatchTests');
+const descriptorMatchingTests = require('./descriptorMatchingTests');
 
 describe('features2d', () => {
+  let testImg;
+  before(() => {
+    testImg = readTestImage().resizeToMax(250);
+  });
+
+  KeyPointTests();
+  DescriptorMatchTests();
+  descriptorMatchingTests(() => testImg);
+
   describe('AGASTDetector', () => {
     const defaults = {
       type: 3,
@@ -12,8 +26,8 @@ describe('features2d', () => {
       args: ['threshold', 'nonmaxSuppression', 'type'],
       values: [1, false, 50]
     };
-    const Detector = opencv.AGASTDetector;
-    detectorTests(defaults, customProps, Detector, false);
+    const Detector = cv.AGASTDetector;
+    detectorTests(() => testImg, defaults, customProps, Detector, false);
   });
 
   describe('AKAZEDetector', () => {
@@ -30,8 +44,8 @@ describe('features2d', () => {
       args: ['descriptorType', 'descriptorSize', 'descriptorChannels', 'threshold', 'nOctaves', 'nOctaveLayers', 'diffusivity'],
       values: [2, 8, 8, 2 * 0.0010000000474974513, 6, 1, 1]
     };
-    const Detector = opencv.AKAZEDetector;
-    detectorTests(defaults, customProps, Detector);
+    const Detector = cv.AKAZEDetector;
+    detectorTests(() => testImg, defaults, customProps, Detector);
   });
 
   describe('BRISKDetector', () => {
@@ -44,8 +58,8 @@ describe('features2d', () => {
       args: ['thresh', 'octaves', 'patternScale'],
       values: [50, 6, 2.4]
     };
-    const Detector = opencv.BRISKDetector;
-    detectorTests(defaults, customProps, Detector);
+    const Detector = cv.BRISKDetector;
+    detectorTests(() => testImg, defaults, customProps, Detector);
   });
 
   describe('FASTDetector', () => {
@@ -58,8 +72,8 @@ describe('features2d', () => {
       args: ['threshold', 'nonmaxSuppression', 'type'],
       values: [1, false, 20]
     };
-    const Detector = opencv.FASTDetector;
-    detectorTests(defaults, customProps, Detector, false);
+    const Detector = cv.FASTDetector;
+    detectorTests(() => testImg, defaults, customProps, Detector, false);
   });
 
   describe('GFTTDetector', () => {
@@ -75,8 +89,8 @@ describe('features2d', () => {
       args: ['maxCorners', 'qualityLevel', 'minDistance', 'blockSize', 'useHarrisDetector', 'k'],
       values: [2000, 0.04, 2, 6, true, 0.16]
     };
-    const Detector = opencv.GFTTDetector;
-    detectorTests(defaults, customProps, Detector, false);
+    const Detector = cv.GFTTDetector;
+    detectorTests(() => testImg, defaults, customProps, Detector, false);
   });
 
   describe('KAZEDetector', () => {
@@ -92,8 +106,8 @@ describe('features2d', () => {
       args: ['extended', 'upright', 'threshold', 'nOctaves', 'nOctaveLayers', 'diffusivity'],
       values: [true, true, 0.0020000000949949026, 8, 8, 2]
     };
-    const Detector = opencv.KAZEDetector;
-    detectorTests(defaults, customProps, Detector);
+    const Detector = cv.KAZEDetector;
+    detectorTests(() => testImg, defaults, customProps, Detector);
   });
 
   describe('MSERDetector', () => {
@@ -112,8 +126,8 @@ describe('features2d', () => {
       args: ['delta', 'minArea', 'maxArea', 'maxVariation', 'minDiversity', 'maxEvolution', 'areaThreshold', 'minMargin', 'edgeBlurSize'],
       values: [10, 120, 28800, 0.75, 0.4, 400, 2.02, 0.006, 10]
     };
-    const Detector = opencv.MSERDetector;
-    detectorTests(defaults, customProps, Detector, false);
+    const Detector = cv.MSERDetector;
+    detectorTests(() => testImg, defaults, customProps, Detector, false);
   });
 
   describe('ORBDetector', () => {
@@ -132,7 +146,33 @@ describe('features2d', () => {
       args: ['nfeatures', 'scaleFactor', 'nlevels', 'edgeThreshold', 'firstLevel', 'WTA_K', 'scoreType', 'patchSize', 'fastThreshold'],
       values: [1000, 2 * 1.2000000476837158, 16, 62, 2, 3, 1, 62, 40]
     };
-    const Detector = opencv.ORBDetector;
-    detectorTests(defaults, customProps, Detector);
+    const Detector = cv.ORBDetector;
+    detectorTests(() => testImg, defaults, customProps, Detector);
+  });
+
+  describe('drawing', () => {
+    let kps;
+
+    before(() => {
+      kps = new cv.ORBDetector().detect(testImg);
+    });
+
+    it('drawKeyPoints', () => {
+      const img = new cv.Mat(testImg.rows, testImg.cols, cv.CV_8UC3, [0, 0, 0]);
+      const dst = cv.drawKeyPoints(img, kps);
+      expect(dst).instanceOf(cv.Mat);
+      assertMetaData(dst)(testImg);
+      assert(isZeroMat(dst) === false, 'dst Mat contains zeros only');
+    });
+
+    it('drawMatches', () => {
+      const desc = new cv.ORBDetector().compute(testImg, kps);
+      const matches = cv.matchBruteForce(desc, desc);
+      const img = new cv.Mat(testImg.rows, testImg.cols, cv.CV_8UC3, [0, 0, 0]);
+      const dst = cv.drawMatches(img, img, kps, kps, matches);
+      expect(dst).instanceOf(cv.Mat);
+      assertMetaData(dst)(img.rows, img.cols * 2, img.type);
+      assert(isZeroMat(dst) === false, 'dst Mat contains zeros only');
+    });
   });
 });

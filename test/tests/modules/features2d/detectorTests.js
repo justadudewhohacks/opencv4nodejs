@@ -1,14 +1,14 @@
 const opencv = global.dut;
 const { assert, expect } = require('chai');
 
-const { assertError, assertPropsWithValue, readTestImage } = global.utils;
+const { assertError, assertPropsWithValue } = global.utils;
 
-exports.detectorTests = (defaults, customProps, Detector, implementsCompute = true) => {
+module.exports = (getTestImg, defaults, customProps, Detector, implementsCompute = true) => {
   let testImg;
   let keyPoints;
 
   before(() => {
-    testImg = readTestImage().resizeToMax(250);
+    testImg = getTestImg();
     keyPoints = (new Detector()).detect(testImg);
   });
 

@@ -19,16 +19,11 @@ NAN_METHOD(DescriptorMatch::New) {
 	FF_METHOD_CONTEXT("DescriptorMatch::New");
 	DescriptorMatch* self = new DescriptorMatch();
   if (info.Length() > 0) {
-		FF_ARG_INT(0, self->queryIdx);
-		FF_ARG_INT(1, self->trainIdx);
-		FF_ARG_NUMBER(2, self->distance);
+		FF_ARG_INT(0, int queryIdx);
+		FF_ARG_INT(1, int trainIdx);
+		FF_ARG_NUMBER(2, double distance);
+		self->dmatch = cv::DMatch(queryIdx, trainIdx, distance);
   }
 	self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());
-}
-
-void DescriptorMatch::setNativeProps(cv::DMatch dmatch) {
-	this->queryIdx = dmatch.queryIdx;
-	this->trainIdx = dmatch.trainIdx;
-	this->distance = dmatch.distance;
 }

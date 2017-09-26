@@ -1,11 +1,17 @@
 const opencv = global.dut;
-const { detectorTests } = require('./detectorTests');
+const { readTestImage } = global.utils;
+const detectorTests = require('./detectorTests');
 
 describe('xfeatures2d', () => {
   if (!opencv.xmodules.xfeatures2d) {
     it('compiled without xfeatures2d');
     return;
   }
+
+  let testImg;
+  before(() => {
+    testImg = readTestImage().resizeToMax(250);
+  });
 
   describe('SIFTDetector', () => {
     const defaults = {
@@ -20,7 +26,7 @@ describe('xfeatures2d', () => {
       values: [500, 6, 0.16, 20, 3.2]
     };
     const Detector = opencv.SIFTDetector;
-    detectorTests(defaults, customProps, Detector);
+    detectorTests(() => testImg, defaults, customProps, Detector);
   });
 
   describe('SURFDetector', () => {
@@ -36,6 +42,6 @@ describe('xfeatures2d', () => {
       values: [1000, 8, 6, true, true]
     };
     const Detector = opencv.SURFDetector;
-    detectorTests(defaults, customProps, Detector);
+    detectorTests(() => testImg, defaults, customProps, Detector);
   });
 });
