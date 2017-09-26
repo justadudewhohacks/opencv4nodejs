@@ -11,3 +11,4 @@ examples
 .travis.yml
 doc
 coverage
+tmpdata

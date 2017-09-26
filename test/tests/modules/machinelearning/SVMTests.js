@@ -1,6 +1,7 @@
-const cv = global.dut;
 const { expect } = require('chai');
-const { assertPropsWithValue } = global.utils;
+
+const cv = global.dut;
+const { assertPropsWithValue, getTmpDataFilePath } = global.utils;
 
 module.exports = () => {
   describe('SVM', () => {
@@ -238,6 +239,21 @@ module.exports = () => {
 
       describe('calcError', () => {
         it.skip('calcError', () => {});
+      });
+
+      describe('save and load', () => {
+        it('should save and load from xml', () => {
+          const file = getTmpDataFilePath('testSVM.xml');
+          svm.save(file);
+          const svmNew = new cv.SVM();
+          svmNew.load(file);
+
+          const svm1 = Object.assign({}, svm);
+          const svm2 = Object.assign({}, svmNew);
+          svm1.classWeights = null;
+          svm2.classWeights = null;
+          assertPropsWithValue(svm1)(svm2);
+        });
       });
     });
   });

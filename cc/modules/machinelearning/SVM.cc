@@ -190,10 +190,10 @@ NAN_METHOD(SVM::Save) {
 
 NAN_METHOD(SVM::Load) {
 	FF_METHOD_CONTEXT("SVM::Load");
-#if CV_VERSION_MINOR < 2
-	FF_THROW("SVM::Load fix for v3.0, v3.1 required");
-#else
 	FF_ARG_STRING(0, std::string path);
+#if CV_VERSION_MINOR < 2
+	FF_UNWRAP(info.This(), SVM)->svm = FF_UNWRAP(info.This(), SVM)->svm->load<SVM>(path);
+#else
 	FF_UNWRAP(info.This(), SVM)->svm = FF_UNWRAP(info.This(), SVM)->svm->load(path);
 #endif
 }

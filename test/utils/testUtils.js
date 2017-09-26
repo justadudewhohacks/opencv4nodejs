@@ -1,6 +1,7 @@
 const { assert, expect } = require('chai');
+const fs = require('fs');
 
-const opencv = global.dut;
+const cv = global.dut;
 
 const assertError = (func, msg) => {
   let errMsg = '';
@@ -26,7 +27,15 @@ exports.funcShouldRequireArgs = (func) => {
   });
 };
 
-exports.readTestImage = () => opencv.imread('../data/Lenna.png');
-
 exports.expectFloat = (val, expected) =>
   expect(val).to.be.a('number').above(expected - 0.01).below(expected + 0.01);
+
+exports.readTestImage = () => cv.imread('../data/Lenna.png');
+
+exports.getTmpDataFilePath = (file) => {
+  const dir = './tmpdata';
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+  return `${dir}/${file}`;
+};
