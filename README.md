@@ -10,6 +10,7 @@ opencv4nodejs
  * **[Examples](#examples)**
  * **[API Documentation](https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/README.md)**
  * **[How to install](#how-to-install)**
+ * **[Usage with Docker](#usage-with-docker)**
  * **[Usage with Electron](#usage-with-electron)**
  * **[Quick Start](#quick-start)**
  * **[Available Modules](#available-modules)**
@@ -63,13 +64,23 @@ Make sure to have OpenCV 3+ ( extra modules are optional ) installed on your Sys
 
 If you are running into issues also check the requirements for node-gyp specific to your OS https://github.com/nodejs/node-gyp.
 
+<a name="usage-with-docker"></a>
+
+## Usage with Docker
+
+### [opencv-express](https://github.com/justadudewhohacks/opencv-express) - example for opencv4nodejs with express.js and docker
+
+Or simply pull from [justadudewhohacks/opencv-nodejs](https://hub.docker.com/r/justadudewhohacks/opencv-nodejs/) for opencv-3.2 + contrib-3.2 with opencv4nodejs globally installed:
+
+``` docker
+FROM justadudewhohacks/opencv-nodejs
+```
+
+Different OpenCV 3.x base images can be found here: https://hub.docker.com/r/justadudewhohacks/.
+
 <a name="usage-with-electron"></a>
 
 ## Usage with Electron
-
-``` bash
-$ npm install --save electron-rebuild
-```
 
 Add the following script to your package.json:
 ``` python
