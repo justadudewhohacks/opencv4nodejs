@@ -10,4 +10,6 @@ public:
   static NAN_METHOD(Imshow);
 	static NAN_METHOD(ImshowWait);
 	static NAN_METHOD(WaitKey);
+	static NAN_METHOD(Imencode);
+	static NAN_METHOD(Imdecode);
 };
