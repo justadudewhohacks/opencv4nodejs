@@ -30,7 +30,7 @@ exports.funcShouldRequireArgs = (func) => {
 exports.expectFloat = (val, expected) =>
   expect(val).to.be.a('number').above(expected - 0.01).below(expected + 0.01);
 
-exports.readTestImage = () => cv.imread('../data/Lenna.png');
+exports.readTestImage = (isPng = true) => (isPng ? cv.imread('../data/Lenna.png') : cv.imread('../data/got.jpg'));
 
 exports.getTmpDataFilePath = (file) => {
   const dir = './tmpdata';
