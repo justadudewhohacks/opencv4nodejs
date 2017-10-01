@@ -35,3 +35,17 @@ imshowWait(String winName, Mat img)
 // returns key pressed
 Number : waitKey(Uint delay)
 ```
+
+<a name="imencode"></a>
+
+### imencode
+``` javascript
+[Uchar] : imencode(String fileExt, Mat img, [Int] flags)
+```
+
+<a name="imdecode"></a>
+
+### imdecode
+``` javascript
+Mat : imdecode([Uchar] buffer, Int flags)
+```

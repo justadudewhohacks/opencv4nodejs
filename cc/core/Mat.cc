@@ -378,7 +378,7 @@ NAN_METHOD(Mat::AddWeighted) {
 	FF_ARG_INSTANCE(1, cv::Mat src2, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 	FF_ARG_NUMBER(2, double beta);
 	FF_ARG_NUMBER(3, double gamma);
-	FF_ARG_INT(4, int dtype);
+	FF_ARG_INT_IFDEF(4, int dtype, -1);
 
 	FF_OBJ jsDstMat = FF_NEW_INSTANCE(constructor);
 	cv::addWeighted(
@@ -960,10 +960,10 @@ NAN_METHOD(Mat::Canny) {
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
 	FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INT_IFDEF(optArgs, bool apertureSize, "apertureSize", 3);
+	FF_GET_INT_IFDEF(optArgs, int apertureSize, "apertureSize", 3);
 	FF_GET_BOOL_IFDEF(optArgs, bool L2gradient, "L2gradient", false);
 	if (!hasOptArgsObj) {
-		FF_ARG_BOOL_IFDEF(2, apertureSize, apertureSize);
+		FF_ARG_INT_IFDEF(2, apertureSize, apertureSize);
 		FF_ARG_BOOL_IFDEF(3, L2gradient, L2gradient);
 	}
 
