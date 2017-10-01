@@ -2,6 +2,7 @@ const cv = global.dut;
 const {
   assertError,
   assertPropsWithValue,
+  assertMetaData,
   funcShouldRequireArgs,
   readTestImage
 } = global.utils;
@@ -146,6 +147,34 @@ describe('imgproc', () => {
       const lineParams = cv.fitLine(points3D, distType, param, reps, aeps);
       expect(lineParams).to.be.an('array').lengthOf(6);
       expect(lineParams).to.not.have.members(Array(6).fill(0));
+    });
+  });
+
+  (cv.version.minor < 2 ? describe.skip : describe)('canny', () => {
+    const th1 = 2.8;
+    const th2 = 0.8;
+    const L2gradient = true;
+    const dx = new cv.Mat([
+      [0, 0, 0, 0],
+      [0, 9.9, 9.9, 0],
+      [0, 0, 0, 0]
+    ], cv.CV_16S);
+    const dy = new cv.Mat([
+      [0, 0, 0, 0],
+      [0, 4.9, 4.9, 0],
+      [0, 0, 0, 0]
+    ], cv.CV_16S);
+
+    funcShouldRequireArgs(() => cv.canny());
+
+    it('can be called with required args', () => {
+      const canny = cv.canny(dx, dy, th1, th2);
+      assertMetaData(canny)(3, 4, cv.CV_8U);
+    });
+
+    it('can be called with optional args', () => {
+      const canny = cv.canny(dx, dy, th1, th2, L2gradient);
+      assertMetaData(canny)(3, 4, cv.CV_8U);
     });
   });
 });

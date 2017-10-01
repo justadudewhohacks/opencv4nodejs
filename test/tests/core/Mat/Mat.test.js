@@ -284,6 +284,43 @@ describe('Mat', () => {
     });
   });
 
+  describe('addWeighted', () => {
+    const alpha = 1;
+    const beta = 0.5;
+    const gamma = 100;
+
+    const mat1 = new cv.Mat([
+      [10, 20, 30],
+      [40, 50, 60]
+    ], cv.CV_8U);
+    const mat2 = new cv.Mat([
+      [20, 40, 60],
+      [80, 100, 120]
+    ], cv.CV_8U);
+
+    funcShouldRequireArgs((() => new cv.Mat().convertTo.bind(new cv.Mat()))());
+
+    it('can be called with required args', () => {
+      const weighted = mat1.addWeighted(alpha, mat2, beta, gamma);
+      assertMetaData(weighted)(2, 3, cv.CV_8U);
+    });
+
+    it('can be called with optional args', () => {
+      const weighted = mat1.addWeighted(alpha, mat2, beta, gamma, 2);
+      assertMetaData(weighted)(2, 3, cv.CV_16U);
+    });
+
+    it('should calculate the weighted sum', () => {
+      const expected = [
+        [120, 140, 160],
+        [180, 200, 220]
+      ];
+
+      const weighted = mat1.addWeighted(alpha, mat2, beta, gamma);
+      assertDataDeepEquals(expected, weighted.getDataAsArray());
+    });
+  });
+
   describe.skip('getData', () => {
     it('getData', () => {
       expect(true).to.be.false;

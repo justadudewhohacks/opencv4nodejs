@@ -481,4 +481,118 @@ module.exports = () => {
       expect(dangerousDeepEquals(blurred.getDataAsArray(), rgbMat.getDataAsArray())).to.be.false;
     });
   });
+
+  describe('canny', () => {
+    const th1 = 2.8;
+    const th2 = 0.8;
+    const apertureSize = 5;
+    const L2gradient = true;
+
+    funcShouldRequireArgs((() => rgbMat.canny.bind(rgbMat))());
+
+    it('can be called with required args', () => {
+      const canny = rgbMat.canny(th1, th2);
+      assertMetaData(canny)(rgbMat.rows, rgbMat.cols, cv.CV_8U);
+    });
+
+    it('can be called with optional args', () => {
+      const canny = rgbMat.canny(th1, th2, apertureSize, L2gradient);
+      assertMetaData(canny)(rgbMat.rows, rgbMat.cols, cv.CV_8U);
+    });
+
+    it('can be called with optional args object', () => {
+      const canny = rgbMat.canny(th1, th2, { L2gradient });
+      assertMetaData(canny)(rgbMat.rows, rgbMat.cols, cv.CV_8U);
+    });
+  });
+
+  describe('thresholding', () => {
+    const mat = new cv.Mat([
+      [255, 255, 255],
+      [0, 100, 101]
+    ], cv.CV_8U);
+
+    describe('threshold', () => {
+      const th = 100;
+      const maxVal = 255;
+      const thresholdType = cv.THRESH_BINARY;
+
+      funcShouldRequireArgs((() => mat.threshold.bind(mat))());
+
+      it('can be called with required args', () => {
+        const thresholded = mat.threshold(th, maxVal, thresholdType);
+        assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+      });
+
+      it('should return correct binary mat', () => {
+        const expected = [
+          [255, 255, 255],
+          [0, 0, 255]
+        ];
+
+        const thresholded = mat.threshold(th, maxVal, thresholdType);
+        assertDataDeepEquals(expected, thresholded.getDataAsArray());
+      });
+    });
+
+    describe('adaptiveThreshold', () => {
+      const maxVal = 255;
+      const adaptiveMethod = cv.ADAPTIVE_THRESH_MEAN_C;
+      const thresholdType = cv.THRESH_BINARY;
+      const blockSize = 3;
+      const C = 0.9;
+
+      funcShouldRequireArgs((() => mat.adaptiveThreshold.bind(mat))());
+
+      it('can be called with required args', () => {
+        const thresholded = mat.adaptiveThreshold(maxVal, adaptiveMethod, thresholdType, blockSize, C);
+        assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+      });
+    });
+  });
+
+  describe('grabCut', () => {
+    const img = new cv.Mat([
+      [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
+      [[0, 0, 0], [255, 255, 255], [255, 255, 255], [255, 255, 255], [0, 0, 0]],
+      [[0, 0, 0], [255, 255, 255], [255, 255, 255], [255, 255, 255], [0, 0, 0]],
+      [[0, 0, 0], [255, 255, 255], [255, 255, 255], [255, 255, 255], [0, 0, 0]],
+      [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+    ], cv.CV_8UC3);
+
+    funcShouldRequireArgs((() => img.grabCut.bind(rgbMat))());
+
+    it('can be called with mask', () => {
+      const mask = new cv.Mat([
+        [cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD],
+        [cv.GC_BGD, cv.GC_FGD, cv.GC_FGD, cv.GC_FGD, cv.GC_BGD],
+        [cv.GC_BGD, cv.GC_FGD, cv.GC_FGD, cv.GC_FGD, cv.GC_BGD],
+        [cv.GC_BGD, cv.GC_FGD, cv.GC_FGD, cv.GC_FGD, cv.GC_BGD],
+        [cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD]
+      ], cv.CV_8U);
+      const rect = new cv.Rect();
+      const bgdModel = new cv.Mat(1, 65, cv.CV_64F, 0);
+      const fgdModel = new cv.Mat(1, 65, cv.CV_64F, 0);
+      const iterCount = 4;
+      const mode = cv.GC_INIT_WITH_MASK;
+
+      img.grabCut(mask, rect, bgdModel, fgdModel, iterCount, mode);
+      expect(isZeroMat(bgdModel)).to.be.false;
+      expect(isZeroMat(fgdModel)).to.be.false;
+    });
+
+    it('can be called with roi rect', () => {
+      const mask = new cv.Mat(img.rows, img.cols, cv.CV_8U);
+      const rect = new cv.Rect(1, 1, 3, 3);
+      const bgdModel = new cv.Mat(1, 65, cv.CV_64F, 0);
+      const fgdModel = new cv.Mat(1, 65, cv.CV_64F, 0);
+      const iterCount = 4;
+      const mode = cv.GC_INIT_WITH_RECT;
+
+      img.grabCut(mask, rect, bgdModel, fgdModel, iterCount, mode);
+      expect(isZeroMat(mask)).to.be.false;
+      expect(isZeroMat(bgdModel)).to.be.false;
+      expect(isZeroMat(fgdModel)).to.be.false;
+    });
+  });
 };
