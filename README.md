@@ -60,7 +60,7 @@ $ npm install --save opencv4nodejs
 
 Make sure to have OpenCV 3+ ( extra modules are optional ) installed on your System https://github.com/opencv/opencv/releases/. In case you are running Windows or have OpenCV set up in a custom directory make sure to set the following environment variables:
 1. OPENCV_DIR pointing to the root path containing include directory or set OPENCV_INCLUDE_DIR explicitly.
-2. OPENCV_LIB_DIR pointing to the static library dir containing the OpenCV .lib or .so files.
+2. OPENCV_LIB_DIR pointing to the library dir containing the OpenCV .lib or .so files.
 
 If you are running into issues also check the requirements for node-gyp specific to your OS https://github.com/nodejs/node-gyp.
 

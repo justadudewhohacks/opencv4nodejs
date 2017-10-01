@@ -2,35 +2,59 @@ const cv = global.dut;
 const { funcShouldRequireArgs } = global.utils;
 const { expect } = require('chai');
 
+const partitionTests = (createInstance) => {
+  it('should return labels and numLabels', () => {
+    const { labels, numLabels } = cv.partition([createInstance(), createInstance()], () => true);
+
+    expect(labels).to.be.an('array').lengthOf(2);
+    expect(numLabels).be.a('number');
+  });
+
+  it('should assign every point to same cluster', () => {
+    const num = 5;
+    const instances = Array(num).fill(0).map(() => createInstance());
+    const { labels, numLabels } = cv.partition(instances, () => true);
+
+    expect(numLabels).to.equal(1);
+    expect(new Set(labels).size).to.equal(1);
+  });
+
+  it('should assign every point to different cluster', () => {
+    const num = 5;
+    const instances = Array(num).fill(0).map(() => createInstance());
+    const { labels, numLabels } = cv.partition(instances, () => false);
+
+    expect(numLabels).to.equal(num);
+    expect(new Set(labels).size).to.equal(num);
+  });
+};
+
 describe('core', () => {
   describe('partition', () => {
+    funcShouldRequireArgs(() => cv.partition());
+
     describe('Point2 input', () => {
-      funcShouldRequireArgs(() => cv.partition());
+      partitionTests(() => new cv.Point(0, 0));
+    });
 
-      it('should return labels and numLabels', () => {
-        const { labels, numLabels } = cv.partition([new cv.Point(0, 0), new cv.Point(0, 0)], () => true);
+    describe('Point3 input', () => {
+      partitionTests(() => new cv.Point(0, 0, 0));
+    });
 
-        expect(labels).to.be.an('array').lengthOf(2);
-        expect(numLabels).be.a('number');
-      });
+    describe('Vec2 input', () => {
+      partitionTests(() => new cv.Vec(0, 0));
+    });
 
-      it('should assign every point to same cluster', () => {
-        const num = 5;
-        const pts = Array(num).fill(0).map(() => new cv.Point(0, 0));
-        const { labels, numLabels } = cv.partition(pts, () => true);
+    describe('Vec3 input', () => {
+      partitionTests(() => new cv.Vec(0, 0, 0));
+    });
 
-        expect(numLabels).to.equal(1);
-        expect(new Set(labels).size).to.equal(1);
-      });
+    describe('Vec4 input', () => {
+      partitionTests(() => new cv.Vec(0, 0, 0, 0));
+    });
 
-      it('should assign every point to different cluster', () => {
-        const num = 5;
-        const pts = Array(num).fill(0).map(() => new cv.Point(0, 0));
-        const { labels, numLabels } = cv.partition(pts, () => false);
-
-        expect(numLabels).to.equal(num);
-        expect(new Set(labels).size).to.equal(num);
-      });
+    describe('Mat input', () => {
+      partitionTests(() => new cv.Mat());
     });
   });
 
