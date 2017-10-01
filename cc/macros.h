@@ -154,19 +154,23 @@
 #define FF_UNWRAP_SIZE_AND_GET(obj)	FF_UNWRAP_SIZE(obj)->size
 
 #define FF_UNWRAP_CONTOUR(obj) FF_UNWRAP(obj, Contour)
-#define FF_UNWRAP_CONTOUR_AND_GET(obj)	FF_UNWRAP_CONTOUR(obj)->contour
+#define FF_UNWRAP_CONTOUR_AND_GET(obj) FF_UNWRAP_CONTOUR(obj)->contour
 
 #define FF_UNWRAP_RECT(obj) FF_UNWRAP(obj, Rect)
 #define FF_UNWRAP_RECT_AND_GET(obj)	FF_UNWRAP_RECT(obj)->rect
 
 #define FF_UNWRAP_ROTATEDRECT(obj) FF_UNWRAP(obj, RotatedRect)
-#define FF_UNWRAP_ROTATEDRECT_AND_GET(obj)	FF_UNWRAP_ROTATEDRECT(obj)->rect
+#define FF_UNWRAP_ROTATEDRECT_AND_GET(obj) FF_UNWRAP_ROTATEDRECT(obj)->rect
 
 #define FF_UNWRAP_TRAINDATA(obj) FF_UNWRAP(obj, TrainData)
-#define FF_UNWRAP_TRAINDATA_AND_GET(obj)	FF_UNWRAP_TRAINDATA(obj)->trainData
+#define FF_UNWRAP_TRAINDATA_AND_GET(obj) FF_UNWRAP_TRAINDATA(obj)->trainData
 
 #define FF_UNWRAP_PARAMGRID(obj) FF_UNWRAP(obj, ParamGrid)
-#define FF_UNWRAP_PARAMGRID_AND_GET(obj)	FF_UNWRAP_PARAMGRID(obj)->paramGrid
+#define FF_UNWRAP_PARAMGRID_AND_GET(obj) FF_UNWRAP_PARAMGRID(obj)->paramGrid
+
+#define FF_UNWRAP_TERMCRITERA(obj) FF_UNWRAP(obj, TermCriteria)
+#define FF_UNWRAP_TERMCRITERA_AND_GET(obj) FF_UNWRAP_TERMCRITERA(obj)->termCriteria
+
 
 namespace FF {
 	template<typename toType, typename type>

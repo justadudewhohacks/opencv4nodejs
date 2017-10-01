@@ -1,4 +1,6 @@
 * <a href="./core/core.md"><b>core</b></a>
+  * <a href="./io/io.md#partition">partition</a>
+  * <a href="./io/io.md#kmeans">kmeans</a>
   * <a href="./core/Mat.md"><b>Mat</b></a>
     * <a href="./core/Mat.md#operators">operators</a>
       * <a href="./core/Mat.md#operators">add</a>
