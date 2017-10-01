@@ -163,6 +163,13 @@ Mat : mat.normalize(Number alpha = 1.0, Number beta = 0.0, Uint normType = NORM_
 [Mat] : mat.splitChannels()
 ```
 
+<a name="addWeighted"></a>
+
+### addWeighted
+``` javascript
+Mat : mat.addWeighted(Number alpha, Mat mat2, Number beta,  Number gamma, Int dtype = -1)
+```
+
 <a name="rescale"></a>
 
 ### rescale
@@ -189,6 +196,13 @@ Mat : mat.resizeToMax(Uint maxRowsOrCols)
 ### threshold
 ``` javascript
 Mat : mat.threshold(Number thresh, Number maxVal, Uint type)
+```
+
+<a name="adaptiveThreshold"></a>
+
+### adaptiveThreshold
+``` javascript
+Mat : mat.adaptiveThreshold(Number maxVal, Int adaptiveMethod, Int thresholdType, Int blockSize, Number C)
 ```
 
 <a name="inRange"></a>
@@ -289,6 +303,13 @@ Mat : mat.connectedComponents(Uint connectivity = 8, Uint ltype = CV_32S)
 { labels: Mat, stats: Mat, centroids: Mat } : mat.connectedComponentsWithStats(Uint connectivity = 8, Uint ltype = CV_32S)
 ```
 
+<a name="grabCut"></a>
+
+### grabCut
+``` javascript
+mat.grabCut(Mat mask, Rect rect, Mat bgdModel, Mat fgdModel, Int iterCount, Int mode)
+```
+
 <a name="findContours"></a>
 
 ### findContours
@@ -343,4 +364,11 @@ mat.drawEllipse(RotatedRect box, Vec3 color, Uint lineType = LINE_8, Uint thickn
 ### putText
 ``` javascript
 mat.putText(String text, Point2 origin, Uint fontFace, Number fontScale, Vec3 color, Uint lineType = LINE_8, Uint thickness = 1, Boolean bottomLeftOrigin = false)
+```
+
+<a name="canny"></a>
+
+### canny
+``` javascript
+Mat : mat.canny(Number threshold1, Number threshold2, Int apertureSize = 3, Boolean L2gradient = false)
 ```

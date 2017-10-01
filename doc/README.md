@@ -1,4 +1,6 @@
 * <a href="./core/core.md"><b>core</b></a>
+  * <a href="./io/io.md#partition">partition</a>
+  * <a href="./io/io.md#kmeans">kmeans</a>
   * <a href="./core/Mat.md"><b>Mat</b></a>
     * <a href="./core/Mat.md#operators">operators</a>
       * <a href="./core/Mat.md#operators">add</a>
@@ -33,10 +35,12 @@
     * <a href="./core/Mat.md#norm">norm</a>
     * <a href="./core/Mat.md#normalize">normalize</a>
     * <a href="./core/Mat.md#splitChannels">splitChannels</a>
+    * <a href="./core/Mat.md#addWeighted">addWeighted</a>
     * <a href="./core/Mat.md#rescale">rescale</a>
     * <a href="./core/Mat.md#resize">resize</a>
     * <a href="./core/Mat.md#resizeToMax">resizeToMax</a>
     * <a href="./core/Mat.md#threshold">threshold</a>
+    * <a href="./core/Mat.md#adaptiveThreshold">adaptiveThreshold</a>
     * <a href="./core/Mat.md#inRange">inRange</a>
     * <a href="./core/Mat.md#cvtColor">cvtColor</a>
     * <a href="./core/Mat.md#bgrToGray">bgrToGray</a>
@@ -46,6 +50,7 @@
     * <a href="./core/Mat.md#erode">erode</a>
     * <a href="./core/Mat.md#distanceTransform">distanceTransform</a>
     * <a href="./core/Mat.md#distanceTransformWithLabels">distanceTransformWithLabels</a>
+    * <a href="./core/Mat.md#grabCut">grabCut</a>
     * <a href="./core/Mat.md#blur">blur</a>
     * <a href="./core/Mat.md#gaussianBlur">gaussianBlur</a>
     * <a href="./core/Mat.md#medianBlur">medianBlur</a>
@@ -59,6 +64,7 @@
     * <a href="./core/Mat.md#drawRectangle">drawRectangle</a>
     * <a href="./core/Mat.md#drawEllipse">drawEllipse</a>
     * <a href="./core/Mat.md#putText">putText</a>
+    * <a href="./core/Mat.md#canny">canny</a>
   * <a href="./core/Vec.md"><b>Vec</b></a>
     * <a href="./core/Vec.md#operators">operators</a>
       * <a href="./core/Vec.md#operators">add</a>
@@ -92,6 +98,8 @@
   * <a href="./io/io.md#imshow">imshow</a>
   * <a href="./io/io.md#imshowWait">imshowWait</a>
   * <a href="./io/io.md#waitKey">waitKey</a>
+  * <a href="./io/io.md#imencode">imencode</a>
+  * <a href="./io/io.md#imdecode">imdecode</a>
   * <a href="./io/VideoCapture.md"><b>VideoCapture</b></a>
     * <a href="./io/VideoCapture.md#read">read</a>
     * <a href="./io/VideoCapture.md#reset">reset</a>
@@ -101,6 +109,7 @@
   * <a href="./imgproc/imgproc.md#calcHist">calcHist</a>
   * <a href="./imgproc/imgproc.md#plot1DHist">plot1DHist</a>
   * <a href="./imgproc/imgproc.md#fitLine">fitLine</a>
+  * <a href="./imgproc/imgproc.md#canny">canny</a>
   * <a href="./imgproc/Moments.md"><b>Moments</b></a>
     * <a href="./imgproc/Moments.md#huMoments">huMoments</a>
   * <a href="./imgproc/Contour.md"><b>Contour</b></a>

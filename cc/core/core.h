@@ -9,6 +9,7 @@ public:
 	static NAN_MODULE_INIT(Init);
 
 	static NAN_METHOD(Partition);
+	static NAN_METHOD(Kmeans);
 };
 
 #endif

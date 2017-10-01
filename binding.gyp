@@ -26,6 +26,7 @@
 			"cc/core/Size.cc",
 			"cc/core/Rect.cc",
 			"cc/core/RotatedRect.cc",
+			"cc/core/TermCriteria.cc",
 			"cc/modules/io/io.cc",
 			"cc/modules/io/VideoCapture.cc",
 			"cc/modules/photo.cc",

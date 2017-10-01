@@ -36,3 +36,9 @@ Mat : plot1DHist(Mat hist, Mat plotImg, Vec3 color, Uint lineType = LINE_8, Uint
 [6 Number] : fitLine([Point3] points, Uint distType, Number param, Number reps, Number aeps)
 ```
 
+<a name="canny"></a>
+
+### canny (v3.2, v3.3)
+``` javascript
+Mat : canny(Mat dx, Mat dy, Number threshold1, Number threshold2, Boolean L2gradient = false)
+```

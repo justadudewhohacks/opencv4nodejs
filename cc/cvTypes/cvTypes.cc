@@ -68,6 +68,16 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(target, LINE_8);
 	FF_SET_CV_CONSTANT(target, LINE_AA);
 
+	FF_SET_CV_CONSTANT(target, KMEANS_RANDOM_CENTERS);
+	FF_SET_CV_CONSTANT(target, KMEANS_PP_CENTERS);
+	FF_SET_CV_CONSTANT(target, KMEANS_USE_INITIAL_LABELS);
+
+	v8::Local<v8::Object> termCriteriaTypes = Nan::New<v8::Object>();
+	FF_SET_JS_PROP(termCriteriaTypes, COUNT, Nan::New<v8::Integer>(cv::TermCriteria::COUNT));
+	FF_SET_JS_PROP(termCriteriaTypes, MAX_ITER, Nan::New<v8::Integer>(cv::TermCriteria::MAX_ITER));
+	FF_SET_JS_PROP(termCriteriaTypes, EPS, Nan::New<v8::Integer>(cv::TermCriteria::EPS));
+	target->Set(FF_NEW_STRING("termCriteria"), termCriteriaTypes);
+
 	v8::Local<v8::Object> svmConstants = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(svmConstants, CUSTOM, Nan::New<v8::Integer>(ml::SVM::KernelTypes:: CUSTOM));
 	FF_SET_JS_PROP(svmConstants, LINEAR, Nan::New<v8::Integer>(ml::SVM::KernelTypes::LINEAR));
