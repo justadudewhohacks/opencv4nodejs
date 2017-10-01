@@ -1,6 +1,6 @@
 * <a href="./core/core.md"><b>core</b></a>
-  * <a href="./io/io.md#partition">partition</a>
-  * <a href="./io/io.md#kmeans">kmeans</a>
+  * <a href="./core/core.md#partition">partition</a>
+  * <a href="./core/core.md#kmeans">kmeans</a>
   * <a href="./core/Mat.md"><b>Mat</b></a>
     * <a href="./core/Mat.md#operators">operators</a>
       * <a href="./core/Mat.md#operators">add</a>
@@ -92,6 +92,7 @@
   * <a href="./core/Rect.md"><b>Rect</b></a>
   * <a href="./core/RotatedRect.md"><b>RotatedRect</b></a>
     * <a href="./core/RotatedRect.md#boundingRect">boundingRect</a>
+  * <a href="./core/TermCriteria.md"><b>TermCriteria</b></a>
 * <a href="./io/io.md"><b>io</b></a>
   * <a href="./io/io.md#imread">imread</a>
   * <a href="./io/io.md#imwrite">imwrite</a>
