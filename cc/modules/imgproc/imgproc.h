@@ -14,7 +14,9 @@ public:
 	static NAN_METHOD(CalcHist);
 	static NAN_METHOD(Plot1DHist);
 	static NAN_METHOD(FitLine);
-
+#if CV_VERSION_MINOR > 1
+	static NAN_METHOD(Canny);
+#endif
 };
 
 #endif

@@ -29,6 +29,9 @@ NAN_MODULE_INIT(Imgproc::Init) {
 	Nan::SetMethod(target, "calcHist", CalcHist);
 	Nan::SetMethod(target, "plot1DHist", Plot1DHist);
 	Nan::SetMethod(target, "fitLine", FitLine);
+#if CV_VERSION_MINOR > 1
+	Nan::SetMethod(target, "canny", Canny);
+#endif
 	Moments::Init(target);
 	Contour::Init();
 };
@@ -211,3 +214,20 @@ NAN_METHOD(Imgproc::FitLine) {
 	}
 	FF_RETURN(jsLineParams);
 }
+
+#if CV_VERSION_MINOR > 1
+NAN_METHOD(Imgproc::Canny) {
+	FF_METHOD_CONTEXT("Canny");
+
+	FF_ARG_INSTANCE(0, cv::Mat dx, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INSTANCE(1, cv::Mat dy, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_NUMBER(2, double threshold1);
+	FF_ARG_NUMBER(3, double threshold2);
+	FF_ARG_BOOL_IFDEF(4, bool L2gradient, false);
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+	cv::Canny(dx, dy, FF_UNWRAP_MAT_AND_GET(jsMat), threshold1, threshold2, L2gradient);
+
+	FF_RETURN(jsMat);
+}
+#endif

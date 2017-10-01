@@ -36,6 +36,7 @@ public:
 	static NAN_METHOD(Norm);
 	static NAN_METHOD(Normalize);
 	static NAN_METHOD(SplitChannels);
+	static NAN_METHOD(AddWeighted);
 
 	FF_INIT_MAT_OPERATIONS();
 	static NAN_METHOD(Dot) {
@@ -47,6 +48,7 @@ public:
   static NAN_METHOD(Resize);
   static NAN_METHOD(ResizeToMax);
 	static NAN_METHOD(Threshold);
+	static NAN_METHOD(AdaptiveThreshold);
 	static NAN_METHOD(InRange);
 	static NAN_METHOD(CvtColor);
 	static NAN_METHOD(BgrToGray);
@@ -61,6 +63,7 @@ public:
 	static NAN_METHOD(MedianBlur);
 	static NAN_METHOD(ConnectedComponents);
 	static NAN_METHOD(ConnectedComponentsWithStats);
+	static NAN_METHOD(GrabCut);
 	static NAN_METHOD(_Moments);
 	static NAN_METHOD(FindContours);
 	static NAN_METHOD(DrawContours);
@@ -69,6 +72,7 @@ public:
 	static NAN_METHOD(DrawRectangle);
 	static NAN_METHOD(DrawEllipse);
 	static NAN_METHOD(PutText);
+	static NAN_METHOD(Canny);
 
 	/* #ENDIF IMGPROC */
 

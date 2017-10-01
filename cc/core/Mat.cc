@@ -33,6 +33,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "norm", Norm);
 	Nan::SetPrototypeMethod(ctor, "normalize", Normalize);
 	Nan::SetPrototypeMethod(ctor, "splitChannels", SplitChannels);
+	Nan::SetPrototypeMethod(ctor, "addWeighted", AddWeighted);
 
 	FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
@@ -43,6 +44,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "cvtColor", CvtColor);
 	Nan::SetPrototypeMethod(ctor, "bgrToGray", BgrToGray);
 	Nan::SetPrototypeMethod(ctor, "threshold", Threshold);
+	Nan::SetPrototypeMethod(ctor, "adaptiveThreshold", AdaptiveThreshold);
 	Nan::SetPrototypeMethod(ctor, "inRange", InRange);
 	Nan::SetPrototypeMethod(ctor, "warpAffine", WarpAffine);
 	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
@@ -55,6 +57,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "medianBlur", MedianBlur);
 	Nan::SetPrototypeMethod(ctor, "connectedComponents", ConnectedComponents);
 	Nan::SetPrototypeMethod(ctor, "connectedComponentsWithStats", ConnectedComponentsWithStats);
+	Nan::SetPrototypeMethod(ctor, "grabCut", GrabCut);
 	Nan::SetPrototypeMethod(ctor, "moments", _Moments);
 	Nan::SetPrototypeMethod(ctor, "findContours", FindContours);
 	Nan::SetPrototypeMethod(ctor, "drawContours", DrawContours);
@@ -63,6 +66,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "drawRectangle", DrawRectangle);
 	Nan::SetPrototypeMethod(ctor, "drawEllipse", DrawEllipse);
 	Nan::SetPrototypeMethod(ctor, "putText", PutText);
+	Nan::SetPrototypeMethod(ctor, "canny", Canny);
 	/* #ENDIF IMGPROC */
 
   target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
@@ -367,6 +371,29 @@ NAN_METHOD(Mat::SplitChannels) {
 	FF_RETURN(jsChannelMats);
 }
 
+NAN_METHOD(Mat::AddWeighted) {
+	FF_METHOD_CONTEXT("Mat::AddWeighted");
+
+	FF_ARG_NUMBER(0, double alpha);
+	FF_ARG_INSTANCE(1, cv::Mat src2, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_NUMBER(2, double beta);
+	FF_ARG_NUMBER(3, double gamma);
+	FF_ARG_INT(4, int dtype);
+
+	FF_OBJ jsDstMat = FF_NEW_INSTANCE(constructor);
+	cv::addWeighted(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		alpha,
+		src2,
+		beta,
+		gamma,
+		FF_UNWRAP_MAT_AND_GET(jsDstMat),
+		dtype
+	);
+
+	FF_RETURN(jsDstMat);
+}
+
 /* #IFDEC IMGPROC */
 
 NAN_METHOD(Mat::Rescale) {
@@ -421,7 +448,6 @@ NAN_METHOD(Mat::ResizeToMax) {
 NAN_METHOD(Mat::Threshold) {
 	FF_METHOD_CONTEXT("Mat::Threshold");
 
-
 	FF_ARG_NUMBER(0, double thresh);
 	FF_ARG_NUMBER(1, double maxVal);
 	FF_ARG_UINT(2, uint type);
@@ -433,6 +459,28 @@ NAN_METHOD(Mat::Threshold) {
 		thresh,
 		maxVal,
 		(int)type
+	);
+	FF_RETURN(jsMat);
+}
+
+NAN_METHOD(Mat::AdaptiveThreshold) {
+	FF_METHOD_CONTEXT("Mat::AdaptiveThreshold");
+
+	FF_ARG_NUMBER(0, double maxVal);
+	FF_ARG_INT(1, int adaptiveMethod);
+	FF_ARG_INT(2, int thresholdType);
+	FF_ARG_INT(3, int blockSize);
+	FF_ARG_NUMBER(4, double C);
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
+	cv::adaptiveThreshold(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat),
+		maxVal,
+		adaptiveMethod,
+		thresholdType,
+		blockSize,
+		C
 	);
 	FF_RETURN(jsMat);
 }
@@ -677,6 +725,28 @@ NAN_METHOD(Mat::ConnectedComponentsWithStats) {
 	FF_RETURN(ret);
 }
 
+NAN_METHOD(Mat::GrabCut) {
+	FF_METHOD_CONTEXT("Mat::GrabCut");
+
+	FF_ARG_INSTANCE(0, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INSTANCE(1, cv::Rect rect, Rect::constructor, FF_UNWRAP_RECT_AND_GET);
+	FF_ARG_INSTANCE(2, cv::Mat bgdModel, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INSTANCE(3, cv::Mat fgdModel, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INT(4, int iterCount);
+	FF_ARG_INT(5, int mode);
+
+	cv::grabCut(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		mask,
+		rect,
+		bgdModel,
+		fgdModel,
+		iterCount,
+		mode
+	);
+	FF_RETURN(info.This());
+}
+
 NAN_METHOD(Mat::_Moments) {
 	FF_OBJ jsMoments = FF_NEW_INSTANCE(Moments::constructor);
 	FF_UNWRAP(jsMoments, Moments)->moments = cv::moments(FF_UNWRAP_MAT_AND_GET(info.This()));
@@ -880,39 +950,35 @@ NAN_METHOD(Mat::PutText) {
 	FF_RETURN(info.This());
 }
 
-/*TODO
-NAN_METHOD(Imgproc::Canny) {
-	FF_METHOD_CONTEXT("Canny");
+NAN_METHOD(Mat::Canny) {
+	FF_METHOD_CONTEXT("Mat::Canny");
 
-	FF_ARG_INSTANCE(0, cv::Mat dx, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Mat dy, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	// requried args
+	FF_ARG_NUMBER(0, double threshold1);
+	FF_ARG_NUMBER(1, double threshold2);
 
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INT_IFDEF(optArgs, bool apertureSize, "apertureSize", 3);
+	FF_GET_BOOL_IFDEF(optArgs, bool L2gradient, "L2gradient", false);
+	if (!hasOptArgsObj) {
+		FF_ARG_BOOL_IFDEF(2, apertureSize, apertureSize);
+		FF_ARG_BOOL_IFDEF(3, L2gradient, L2gradient);
+	}
 
-	double threshold1, threshold2;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, threshold1, IsNumber, NumberValue);
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, threshold2, IsNumber, NumberValue);
+	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+	cv::Canny(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsMat), 
+		threshold1, 
+		threshold2, 
+		apertureSize, 
+		L2gradient
+	);
 
-	bool L2gradient = false;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_IFDEF(args, L2gradient, IsBoolean, BooleanValue);
-
-	v8::Local<v8::Object> jsMat = FF_NEW_INSTANCE(Mat::constructor);
-
-#if CV_VERSION_MINOR < 2
-	cv::Mat image;
-	FF_GET_JSOBJ_REQUIRED(args, image, image, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
-	int apertureSize = 3;
-	FF_DESTRUCTURE_TYPECHECKED_JSPROP_REQUIRED(args, apertureSize, IsUint32, Uint32Value);
-	cv::Canny(image, FF_UNWRAP_MAT_AND_GET(jsMat), threshold1, threshold2, apertureSize, L2gradient);
-#else
-	cv::Mat dx, dy;
-	FF_GET_JSOBJ_REQUIRED(args, dx, dx, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
-	FF_GET_JSOBJ_REQUIRED(args, dy, dy, Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat);
-	cv::Canny(dx, dy, FF_UNWRAP_MAT_AND_GET(jsMat), threshold1, threshold2, L2gradient);
-#endif
-
-	info.GetReturnValue().Set(jsMat);
+	FF_RETURN(jsMat);
 }
-*/
 
 /* #ENDIF IMGPROC */
 
