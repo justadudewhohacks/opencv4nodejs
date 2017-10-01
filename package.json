@@ -1,6 +1,6 @@
 {
   "name": "opencv4nodejs",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Native node.js bindings for OpenCV 3.x",
   "keywords": [
     "opencv",
