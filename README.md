@@ -82,6 +82,8 @@ Different OpenCV 3.x base images can be found here: https://hub.docker.com/r/jus
 
 ## Usage with Electron
 
+### [opencv-electron](https://github.com/justadudewhohacks/opencv-electron) - example for opencv4nodejs with electron
+
 Add the following script to your package.json:
 ``` python
 "electron-rebuild": "electron-rebuild -w opencv4nodejs"
@@ -259,19 +261,27 @@ const matRGB = new cv.Mat([matR, matB, matG]);
 ### Drawing a Mat into HTML Canvas
 
 ``` javascript
-const matBGR = ...;
-// convert your Mat to rgba space
-const matRGBA = matBGR.cvtColor(cv.COLOR_BGR2RGBA);
-// get raw Mat data
-const matDataRaw = matRGBA.getData();
+const img = ...
 
-// fill canvas pixels
+// convert your image to rgba color space
+const matRGBA = img.channels === 1
+  ? img.cvtColor(cv.COLOR_GRAY2RGBA)
+  : img.cvtColor(cv.COLOR_BGR2RGBA);
+
+// create new ImageData from raw mat data
+const imgData = new ImageData(
+  new Uint8ClampedArray(matRGBA.getData()),
+  img.cols,
+  img.rows
+);
+
+// set canvas dimensions
 const canvas = document.getElementById('myCanvas');
+canvas.height = img.rows;
+canvas.width = img.cols;
+
+// set image data
 const ctx = canvas.getContext('2d');
-const imgData = ctx.getImageData(0, 0, matRGBA.cols, matRGBA.rows);
-for (let i = 0; i < matDataRaw.length; i += 1) {
-  imgData.data[i] = matDataRaw[i];
-}
 ctx.putImageData(imgData, 0, 0);
 ```
 

@@ -15,7 +15,7 @@
     "learning"
   ],
   "author": "justadudewhohacks",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/justadudewhohacks/opencv4nodejs"
