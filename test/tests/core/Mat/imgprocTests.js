@@ -96,7 +96,11 @@ module.exports = () => {
   });
 
   describe('warping', () => {
-    const img = readTestImage();
+    let img;
+    before(() => {
+      img = readTestImage();
+    });
+
     const transformationMatrix = new cv.Mat(
       [
         [0.5, 0, 0],
@@ -560,7 +564,7 @@ module.exports = () => {
       [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
     ], cv.CV_8UC3);
 
-    funcShouldRequireArgs((() => img.grabCut.bind(rgbMat))());
+    funcShouldRequireArgs((() => img.grabCut.bind(img))());
 
     it('can be called with mask', () => {
       const mask = new cv.Mat([
@@ -593,6 +597,46 @@ module.exports = () => {
       expect(isZeroMat(mask)).to.be.false;
       expect(isZeroMat(bgdModel)).to.be.false;
       expect(isZeroMat(fgdModel)).to.be.false;
+    });
+  });
+
+  describe('matchTemplate', () => {
+    const img = readTestImage().bgrToGray();
+    const templOffset = { x: 10, y: 10 };
+    let templ;
+    before(() => {
+      templ = img.getRegion(new cv.Rect(templOffset.x, templOffset.y, img.cols / 8, img.rows / 8));
+    });
+
+    funcShouldRequireArgs(img.matchTemplate.bind(img));
+
+    it('should return match results', () => {
+      const res = img.matchTemplate(templ, cv.TM_SQDIFF_NORMED);
+      expect(res).instanceOf(cv.Mat);
+      expect(res.cols).to.equal((img.cols - templ.cols) + 1);
+      expect(res.rows).to.equal((img.rows - templ.rows) + 1);
+      expect(res).instanceOf(cv.Mat);
+
+      const minLoc = res.minMaxLoc().minLoc;
+      expect(minLoc.x).to.equal(templOffset.x);
+      expect(minLoc.y).to.equal(templOffset.y);
+    });
+
+    it('should match template with mask', () => {
+      const mask = new cv.Mat(templ.rows, templ.cols, cv.CV_8U, 0);
+      const maskedRegion = new cv.Mat(templ.rows / 2, templ.cols / 2, cv.CV_8U, 1);
+      maskedRegion.copyTo(mask.getRegion(new cv.Rect(0, 0, templ.cols / 2, templ.rows / 2)));
+
+      const res = img.matchTemplate(templ, cv.TM_SQDIFF, mask);
+
+      expect(res).instanceOf(cv.Mat);
+      expect(res.cols).to.equal((img.cols - templ.cols) + 1);
+      expect(res.rows).to.equal((img.rows - templ.rows) + 1);
+      expect(res).instanceOf(cv.Mat);
+
+      const minLoc = res.minMaxLoc().minLoc;
+      expect(minLoc.x).to.equal(templOffset.x);
+      expect(minLoc.y).to.equal(templOffset.y);
     });
   });
 };

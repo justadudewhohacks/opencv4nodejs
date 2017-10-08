@@ -36,6 +36,7 @@
     * <a href="./core/Mat.md#normalize">normalize</a>
     * <a href="./core/Mat.md#splitChannels">splitChannels</a>
     * <a href="./core/Mat.md#addWeighted">addWeighted</a>
+    * <a href="./core/Mat.md#minMaxLoc">minMaxLoc</a>
     * <a href="./core/Mat.md#rescale">rescale</a>
     * <a href="./core/Mat.md#resize">resize</a>
     * <a href="./core/Mat.md#resizeToMax">resizeToMax</a>
@@ -65,6 +66,7 @@
     * <a href="./core/Mat.md#drawEllipse">drawEllipse</a>
     * <a href="./core/Mat.md#putText">putText</a>
     * <a href="./core/Mat.md#canny">canny</a>
+    * <a href="./core/Mat.md#matchTemplate">matchTemplate</a>
   * <a href="./core/Vec.md"><b>Vec</b></a>
     * <a href="./core/Vec.md#operators">operators</a>
       * <a href="./core/Vec.md#operators">add</a>

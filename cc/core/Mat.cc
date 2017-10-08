@@ -34,6 +34,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "normalize", Normalize);
 	Nan::SetPrototypeMethod(ctor, "splitChannels", SplitChannels);
 	Nan::SetPrototypeMethod(ctor, "addWeighted", AddWeighted);
+	Nan::SetPrototypeMethod(ctor, "minMaxLoc", MinMaxLoc);
 
 	FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
@@ -67,6 +68,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "drawEllipse", DrawEllipse);
 	Nan::SetPrototypeMethod(ctor, "putText", PutText);
 	Nan::SetPrototypeMethod(ctor, "canny", Canny);
+	Nan::SetPrototypeMethod(ctor, "matchTemplate", MatchTemplate);
 	/* #ENDIF IMGPROC */
 
   target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
@@ -392,6 +394,36 @@ NAN_METHOD(Mat::AddWeighted) {
 	);
 
 	FF_RETURN(jsDstMat);
+}
+
+NAN_METHOD(Mat::MinMaxLoc) {
+	FF_METHOD_CONTEXT("Mat::MinMaxLoc");
+
+	FF_ARG_INSTANCE_IFDEF(0, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, cv::noArray().getMat());
+
+	double minVal, maxVal;
+	cv::Point2i minLoc, maxLoc;
+	cv::minMaxLoc(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		&minVal,
+		&maxVal,
+		&minLoc,
+		&maxLoc,
+		mask
+	);
+
+	FF_OBJ jsMinLoc = FF_NEW_INSTANCE(Point2::constructor);
+	FF_UNWRAP_PT2_AND_GET(jsMinLoc) = (cv::Point2d)minLoc;
+	FF_OBJ jsMaxLoc = FF_NEW_INSTANCE(Point2::constructor);
+	FF_UNWRAP_PT2_AND_GET(jsMaxLoc) = (cv::Point2d)maxLoc;
+
+	FF_OBJ ret = FF_NEW_OBJ();
+	Nan::Set(ret, FF_NEW_STRING("minVal"), Nan::New(minVal));
+	Nan::Set(ret, FF_NEW_STRING("maxVal"), Nan::New(maxVal));
+	Nan::Set(ret, FF_NEW_STRING("minLoc"), jsMinLoc);
+	Nan::Set(ret, FF_NEW_STRING("maxLoc"), jsMaxLoc);
+
+	FF_RETURN(ret);
 }
 
 /* #IFDEC IMGPROC */
@@ -978,6 +1010,25 @@ NAN_METHOD(Mat::Canny) {
 	);
 
 	FF_RETURN(jsMat);
+}
+
+NAN_METHOD(Mat::MatchTemplate) {
+	FF_METHOD_CONTEXT("Mat::MatchTemplate");
+
+	FF_ARG_INSTANCE(0, cv::Mat templ, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INT(1, int method);
+	FF_ARG_INSTANCE_IFDEF(2, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, cv::noArray().getMat());
+
+	FF_OBJ jsResult = FF_NEW_INSTANCE(Mat::constructor);
+	cv::matchTemplate(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		templ,
+		FF_UNWRAP_MAT_AND_GET(jsResult),
+		method,
+		mask
+	);
+
+	FF_RETURN(jsResult);
 }
 
 /* #ENDIF IMGPROC */

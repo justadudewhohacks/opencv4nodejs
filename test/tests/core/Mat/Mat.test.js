@@ -24,7 +24,7 @@ const srcMatData = [
   [doubleMin, -doubleMax, 0]
 ];
 const srcMat = new cv.Mat(srcMatData, cv.CV_64F);
-const mask = new cv.Mat([
+const copyMask = new cv.Mat([
   [0, 0, 0],
   [1, 1, 1],
   [0, 0, 0],
@@ -98,8 +98,8 @@ describe('Mat', () => {
       assertDataDeepEquals(srcMat.getDataAsArray(), dstMat.getDataAsArray());
     });
 
-    it('should copy masked data', () => {
-      const dstMat = srcMat.copy(mask);
+    it('should copy copyMasked data', () => {
+      const dstMat = srcMat.copy(copyMask);
       assertMetaData(dstMat)(expectedCopy);
       assertDataDeepEquals(expectedCopyData, dstMat.getDataAsArray());
     });
@@ -114,8 +114,8 @@ describe('Mat', () => {
       assertDataDeepEquals(srcMat.getDataAsArray(), dstMat.getDataAsArray());
     });
 
-    it('should copy masked data', () => {
-      const dstMat = srcMat.copyTo(new cv.Mat(srcMat.rows, srcMat.cols, srcMat.type, 0), mask);
+    it('should copy copyMasked data', () => {
+      const dstMat = srcMat.copyTo(new cv.Mat(srcMat.rows, srcMat.cols, srcMat.type, 0), copyMask);
       assertMetaData(dstMat)(expectedCopy);
       assertDataDeepEquals(expectedCopyData, dstMat.getDataAsArray());
     });
@@ -318,6 +318,36 @@ describe('Mat', () => {
 
       const weighted = mat1.addWeighted(alpha, mat2, beta, gamma);
       assertDataDeepEquals(expected, weighted.getDataAsArray());
+    });
+  });
+
+  describe('minMaxLoc', () => {
+    const mat = new cv.Mat([
+      [0.1, 0.2, 0.3],
+      [0.4, 0.5, 0.6]
+    ], cv.CV_64F);
+
+    const mask = new cv.Mat([
+      [0, 1, 1],
+      [1, 1, 0]
+    ], cv.CV_8U);
+
+    it('should return minMaxLoc', () => {
+      const ret = mat.minMaxLoc();
+
+      expect(ret.minVal).to.equal(0.1);
+      expect(ret.maxVal).to.equal(0.6);
+      assertPropsWithValue(ret.minLoc)({ x: 0, y: 0 });
+      assertPropsWithValue(ret.maxLoc)({ x: 2, y: 1 });
+    });
+
+    it('should return minMaxLoc of masked region', () => {
+      const ret = mat.minMaxLoc(mask);
+
+      expect(ret.minVal).to.equal(0.2);
+      expect(ret.maxVal).to.equal(0.5);
+      assertPropsWithValue(ret.minLoc)({ x: 1, y: 0 });
+      assertPropsWithValue(ret.maxLoc)({ x: 1, y: 1 });
     });
   });
 
