@@ -37,6 +37,7 @@ public:
 	static NAN_METHOD(Normalize);
 	static NAN_METHOD(SplitChannels);
 	static NAN_METHOD(AddWeighted);
+	static NAN_METHOD(MinMaxLoc);
 
 	FF_INIT_MAT_OPERATIONS();
 	static NAN_METHOD(Dot) {
@@ -73,6 +74,7 @@ public:
 	static NAN_METHOD(DrawEllipse);
 	static NAN_METHOD(PutText);
 	static NAN_METHOD(Canny);
+	static NAN_METHOD(MatchTemplate);
 
 	/* #ENDIF IMGPROC */
 

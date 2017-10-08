@@ -170,6 +170,13 @@ Mat : mat.normalize(Number alpha = 1.0, Number beta = 0.0, Uint normType = NORM_
 Mat : mat.addWeighted(Number alpha, Mat mat2, Number beta,  Number gamma, Int dtype = -1)
 ```
 
+<a name="minMaxLoc"></a>
+
+### minMaxLoc
+``` javascript
+{ minVal: Number, maxVal: Number, minLoc: Point2, maxLoc: Point2 } : mat.minMaxLoc()
+```
+
 <a name="rescale"></a>
 
 ### rescale
@@ -371,4 +378,11 @@ mat.putText(String text, Point2 origin, Uint fontFace, Number fontScale, Vec3 co
 ### canny
 ``` javascript
 Mat : mat.canny(Number threshold1, Number threshold2, Int apertureSize = 3, Boolean L2gradient = false)
+```
+
+<a name="matchTemplate"></a>
+
+### matchTemplate
+``` javascript
+Mat : mat.matchTemplate(Mat template, Int method, Mat mask = noArray())
 ```
