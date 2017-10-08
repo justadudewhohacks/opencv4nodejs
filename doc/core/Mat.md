@@ -174,7 +174,7 @@ Mat : mat.addWeighted(Number alpha, Mat mat2, Number beta,  Number gamma, Int dt
 
 ### minMaxLoc
 ``` javascript
-{ minVal: Number, maxVal: Number, minLoc: Point2, maxLoc: Point2 } : mat.minMaxLoc()
+{ minVal: Number, maxVal: Number, minLoc: Point2, maxLoc: Point2 } : mat.minMaxLoc(Mat mask = noArray())
 ```
 
 <a name="rescale"></a>
