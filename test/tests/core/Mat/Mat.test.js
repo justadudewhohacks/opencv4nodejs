@@ -6,6 +6,7 @@ const {
   assertMetaData,
   assertDataDeepEquals,
   funcShouldRequireArgs,
+  readTestImage,
   MatValuesComparator,
   isZeroMat
 } = global.utils;
@@ -34,11 +35,18 @@ const expectedCopyData = srcMatData.map((row, r) => row.map(val => ((r % 2) ? va
 const expectedCopy = new cv.Mat(expectedCopyData, cv.CV_64F);
 
 describe('Mat', () => {
+  let testImg;
+  const getTestImg = () => testImg;
+  before(() => {
+    testImg = readTestImage();
+  });
+
   constructorTestsFromJsArray();
   constructorTestsFromFillVector();
   operatorTests();
   accessorTests();
-  imgprocTests();
+
+  describe('imgproc methods', () => imgprocTests(getTestImg));
 
   describe('constructor from channels', () => {
     const matEmpty8U = new cv.Mat(4, 3, cv.CV_8U);

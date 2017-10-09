@@ -373,6 +373,13 @@ mat.drawEllipse(RotatedRect box, Vec3 color, Uint lineType = LINE_8, Uint thickn
 mat.putText(String text, Point2 origin, Uint fontFace, Number fontScale, Vec3 color, Uint lineType = LINE_8, Uint thickness = 1, Boolean bottomLeftOrigin = false)
 ```
 
+<a name="matchTemplate"></a>
+
+### matchTemplate
+``` javascript
+Mat : mat.matchTemplate(Mat template, Int method, Mat mask = noArray())
+```
+
 <a name="canny"></a>
 
 ### canny
@@ -380,9 +387,23 @@ mat.putText(String text, Point2 origin, Uint fontFace, Number fontScale, Vec3 co
 Mat : mat.canny(Number threshold1, Number threshold2, Int apertureSize = 3, Boolean L2gradient = false)
 ```
 
-<a name="matchTemplate"></a>
+<a name="sobel"></a>
 
-### matchTemplate
+### sobel
 ``` javascript
-Mat : mat.matchTemplate(Mat template, Int method, Mat mask = noArray())
+Mat : mat.sobel(Int ddepth, Int dx, Int dy, Int ksize = 3, Number scale = 1.0, Number delta = 0.0, Int borderType = BORDER_DEFAULT)
+```
+
+<a name="scharr"></a>
+
+### scharr
+``` javascript
+Mat : mat.scharr(Int ddepth, Int dx, Int dy, Number scale = 1.0, Number delta = 0.0, Int borderType = BORDER_DEFAULT)
+```
+
+<a name="laplacian"></a>
+
+### laplacian
+``` javascript
+Mat : mat.laplacian(Int ddepth, Int ksize = 1, Number scale = 1.0, Number delta = 0.0, Int borderType = BORDER_DEFAULT)
 ```

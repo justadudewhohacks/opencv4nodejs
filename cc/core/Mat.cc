@@ -67,8 +67,11 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "drawRectangle", DrawRectangle);
 	Nan::SetPrototypeMethod(ctor, "drawEllipse", DrawEllipse);
 	Nan::SetPrototypeMethod(ctor, "putText", PutText);
-	Nan::SetPrototypeMethod(ctor, "canny", Canny);
 	Nan::SetPrototypeMethod(ctor, "matchTemplate", MatchTemplate);
+	Nan::SetPrototypeMethod(ctor, "canny", Canny);
+	Nan::SetPrototypeMethod(ctor, "sobel", Sobel);
+	Nan::SetPrototypeMethod(ctor, "scharr", Scharr);
+	Nan::SetPrototypeMethod(ctor, "laplacian", Laplacian);
 	/* #ENDIF IMGPROC */
 
   target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
@@ -982,6 +985,25 @@ NAN_METHOD(Mat::PutText) {
 	FF_RETURN(info.This());
 }
 
+NAN_METHOD(Mat::MatchTemplate) {
+	FF_METHOD_CONTEXT("Mat::MatchTemplate");
+
+	FF_ARG_INSTANCE(0, cv::Mat templ, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INT(1, int method);
+	FF_ARG_INSTANCE_IFDEF(2, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, cv::noArray().getMat());
+
+	FF_OBJ jsResult = FF_NEW_INSTANCE(Mat::constructor);
+	cv::matchTemplate(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		templ,
+		FF_UNWRAP_MAT_AND_GET(jsResult),
+		method,
+		mask
+	);
+
+	FF_RETURN(jsResult);
+}
+
 NAN_METHOD(Mat::Canny) {
 	FF_METHOD_CONTEXT("Mat::Canny");
 
@@ -1012,23 +1034,110 @@ NAN_METHOD(Mat::Canny) {
 	FF_RETURN(jsMat);
 }
 
-NAN_METHOD(Mat::MatchTemplate) {
-	FF_METHOD_CONTEXT("Mat::MatchTemplate");
+NAN_METHOD(Mat::Sobel) {
+	FF_METHOD_CONTEXT("Mat::Sobel");
 
-	FF_ARG_INSTANCE(0, cv::Mat templ, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INT(1, int method);
-	FF_ARG_INSTANCE_IFDEF(2, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, cv::noArray().getMat());
+	FF_ARG_INT(0, int ddepth);
+	FF_ARG_INT(1, int dx);
+	FF_ARG_INT(2, int dy);
 
-	FF_OBJ jsResult = FF_NEW_INSTANCE(Mat::constructor);
-	cv::matchTemplate(
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INT_IFDEF(optArgs, int ksize, "ksize", 3);
+	FF_GET_NUMBER_IFDEF(optArgs, double scale, "scale", 1.0);
+	FF_GET_NUMBER_IFDEF(optArgs, double delta, "delta", 0);
+	FF_GET_INT_IFDEF(optArgs, int borderType, "borderType", cv::BORDER_DEFAULT);
+
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(3, ksize, ksize);
+		FF_ARG_NUMBER_IFDEF(4, scale, scale);
+		FF_ARG_NUMBER_IFDEF(5, delta, delta);
+		FF_ARG_INT_IFDEF(6, borderType, borderType);
+	}
+
+	FF_OBJ jsDst = FF_NEW_INSTANCE(Mat::constructor);
+	cv::Sobel(
 		FF_UNWRAP_MAT_AND_GET(info.This()),
-		templ,
-		FF_UNWRAP_MAT_AND_GET(jsResult),
-		method,
-		mask
+		FF_UNWRAP_MAT_AND_GET(jsDst),
+		ddepth,
+		dx,
+		dy,
+		ksize,
+		scale,
+		delta,
+		borderType
 	);
 
-	FF_RETURN(jsResult);
+	FF_RETURN(jsDst);
+}
+
+NAN_METHOD(Mat::Scharr) {
+	FF_METHOD_CONTEXT("Mat::Scharr");
+
+	FF_ARG_INT(0, int ddepth);
+	FF_ARG_INT(1, int dx);
+	FF_ARG_INT(2, int dy);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
+	FF_GET_NUMBER_IFDEF(optArgs, double scale, "scale", 1.0);
+	FF_GET_NUMBER_IFDEF(optArgs, double delta, "delta", 0);
+	FF_GET_INT_IFDEF(optArgs, int borderType, "borderType", cv::BORDER_DEFAULT);
+
+	if (!hasOptArgsObj) {
+		FF_ARG_NUMBER_IFDEF(3, scale, scale);
+		FF_ARG_NUMBER_IFDEF(4, delta, delta);
+		FF_ARG_INT_IFDEF(5, borderType, borderType);
+	}
+
+	FF_OBJ jsDst = FF_NEW_INSTANCE(Mat::constructor);
+	cv::Scharr(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsDst),
+		ddepth,
+		dx,
+		dy,
+		scale,
+		delta,
+		borderType
+	);
+
+	FF_RETURN(jsDst);
+}
+NAN_METHOD(Mat::Laplacian) {
+	FF_METHOD_CONTEXT("Mat::Laplacian");
+
+	FF_ARG_INT(0, int ddepth);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INT_IFDEF(optArgs, int ksize, "ksize", 1);
+	FF_GET_NUMBER_IFDEF(optArgs, double scale, "scale", 1.0);
+	FF_GET_NUMBER_IFDEF(optArgs, double delta, "delta", 0);
+	FF_GET_INT_IFDEF(optArgs, int borderType, "borderType", cv::BORDER_DEFAULT);
+
+	if (!hasOptArgsObj) {
+		FF_ARG_INT_IFDEF(1, ksize, ksize);
+		FF_ARG_NUMBER_IFDEF(2, scale, scale);
+		FF_ARG_NUMBER_IFDEF(3, delta, delta);
+		FF_ARG_INT_IFDEF(4, borderType, borderType);
+	}
+
+	FF_OBJ jsDst = FF_NEW_INSTANCE(Mat::constructor);
+	cv::Laplacian(
+		FF_UNWRAP_MAT_AND_GET(info.This()),
+		FF_UNWRAP_MAT_AND_GET(jsDst),
+		ddepth,
+		ksize,
+		scale,
+		delta,
+		borderType
+	);
+
+	FF_RETURN(jsDst);
 }
 
 /* #ENDIF IMGPROC */
