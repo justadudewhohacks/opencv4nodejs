@@ -3,7 +3,6 @@ const cv = global.dut;
 const {
   assertError,
   funcShouldRequireArgs,
-  readTestImage,
   assertMetaData,
   assertDataDeepEquals,
   dangerousDeepEquals,
@@ -19,7 +18,7 @@ const rgbMatData = [
 ];
 const rgbMat = new cv.Mat(rgbMatData, cv.CV_8UC3);
 
-module.exports = () => {
+module.exports = (getTestImg) => {
   describe('bgrToGray', () => {
     it('should convert mat to gray scale', () => {
       const converted = rgbMat.bgrToGray();
@@ -98,7 +97,7 @@ module.exports = () => {
   describe('warping', () => {
     let img;
     before(() => {
-      img = readTestImage();
+      img = getTestImg();
     });
 
     const transformationMatrix = new cv.Mat(
@@ -486,30 +485,6 @@ module.exports = () => {
     });
   });
 
-  describe('canny', () => {
-    const th1 = 2.8;
-    const th2 = 0.8;
-    const apertureSize = 5;
-    const L2gradient = true;
-
-    funcShouldRequireArgs((() => rgbMat.canny.bind(rgbMat))());
-
-    it('can be called with required args', () => {
-      const canny = rgbMat.canny(th1, th2);
-      assertMetaData(canny)(rgbMat.rows, rgbMat.cols, cv.CV_8U);
-    });
-
-    it('can be called with optional args', () => {
-      const canny = rgbMat.canny(th1, th2, apertureSize, L2gradient);
-      assertMetaData(canny)(rgbMat.rows, rgbMat.cols, cv.CV_8U);
-    });
-
-    it('can be called with optional args object', () => {
-      const canny = rgbMat.canny(th1, th2, { L2gradient });
-      assertMetaData(canny)(rgbMat.rows, rgbMat.cols, cv.CV_8U);
-    });
-  });
-
   describe('thresholding', () => {
     const mat = new cv.Mat([
       [255, 255, 255],
@@ -601,14 +576,16 @@ module.exports = () => {
   });
 
   describe('matchTemplate', () => {
-    const img = readTestImage().bgrToGray();
+    let img;
     const templOffset = { x: 10, y: 10 };
     let templ;
     before(() => {
+      img = getTestImg().bgrToGray();
       templ = img.getRegion(new cv.Rect(templOffset.x, templOffset.y, img.cols / 8, img.rows / 8));
     });
 
-    funcShouldRequireArgs(img.matchTemplate.bind(img));
+    const getImg = () => img;
+    funcShouldRequireArgs(() => getImg().matchTemplate.bind(getImg())());
 
     it('should return match results', () => {
       const res = img.matchTemplate(templ, cv.TM_SQDIFF_NORMED);
@@ -637,6 +614,110 @@ module.exports = () => {
       const minLoc = res.minMaxLoc().minLoc;
       expect(minLoc.x).to.equal(templOffset.x);
       expect(minLoc.y).to.equal(templOffset.y);
+    });
+  });
+
+  describe('derivative filters', () => {
+    let img;
+    before(() => {
+      img = getTestImg();
+    });
+
+    describe('canny', () => {
+      const th1 = 2.8;
+      const th2 = 0.8;
+      const apertureSize = 5;
+      const L2gradient = true;
+
+      funcShouldRequireArgs(() => getTestImg().canny.bind(getTestImg())());
+
+      it('can be called with required args', () => {
+        const binImg = img.canny(th1, th2);
+        assertMetaData(binImg)(img.rows, img.cols, cv.CV_8U);
+      });
+
+      it('can be called with optional args', () => {
+        const binImg = img.canny(th1, th2, apertureSize, L2gradient);
+        assertMetaData(binImg)(img.rows, img.cols, cv.CV_8U);
+      });
+
+      it('can be called with optional args object', () => {
+        const binImg = img.canny(th1, th2, { L2gradient });
+        assertMetaData(binImg)(img.rows, img.cols, cv.CV_8U);
+      });
+    });
+
+    describe('sobel', () => {
+      const ddepth = cv.CV_64F;
+      const dx = 1;
+      const dy = 0;
+      const ksize = 5;
+      const borderType = cv.BORDER_CONSTANT;
+
+      funcShouldRequireArgs(() => getTestImg().sobel.bind(getTestImg())());
+
+      it('can be called with required args', () => {
+        const binImg = img.sobel(ddepth, dx, dy);
+        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+      });
+
+      it('can be called with optional args', () => {
+        const binImg = img.sobel(ddepth, dx, dy, ksize);
+        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+      });
+
+      it('can be called with optional args object', () => {
+        const binImg = img.sobel(ddepth, dx, dy, { ksize, borderType });
+        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+      });
+    });
+
+    describe('scharr', () => {
+      const ddepth = cv.CV_64F;
+      const dx = 1;
+      const dy = 0;
+      const scale = 0.5;
+      const borderType = cv.BORDER_CONSTANT;
+
+      funcShouldRequireArgs(() => getTestImg().scharr.bind(getTestImg())());
+
+      it('can be called with required args', () => {
+        const binImg = img.scharr(ddepth, dx, dy);
+        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+      });
+
+      it('can be called with optional args', () => {
+        const binImg = img.scharr(ddepth, dx, dy, scale);
+        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+      });
+
+      it('can be called with optional args object', () => {
+        const binImg = img.scharr(ddepth, dx, dy, { scale, borderType });
+        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+      });
+    });
+
+    describe('laplacian', () => {
+      const ddepth = cv.CV_64F;
+      const ksize = 5;
+      const borderType = cv.BORDER_CONSTANT;
+
+      funcShouldRequireArgs(() => getTestImg().laplacian.bind(getTestImg())());
+
+      it('can be called with required args', () => {
+        const binImg = img.laplacian(ddepth);
+        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+      });
+
+      it('can be called with optional args', () => {
+        const binImg = img.laplacian(ddepth, ksize);
+        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+      });
+
+      it('can be called with optional args object', () => {
+        const binImg = img.laplacian(ddepth, { ksize, borderType });
+        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+      });
     });
   });
 };

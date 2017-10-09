@@ -73,8 +73,11 @@ public:
 	static NAN_METHOD(DrawRectangle);
 	static NAN_METHOD(DrawEllipse);
 	static NAN_METHOD(PutText);
-	static NAN_METHOD(Canny);
 	static NAN_METHOD(MatchTemplate);
+	static NAN_METHOD(Canny);
+	static NAN_METHOD(Sobel);
+	static NAN_METHOD(Scharr);
+	static NAN_METHOD(Laplacian);
 
 	/* #ENDIF IMGPROC */
 

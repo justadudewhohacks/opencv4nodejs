@@ -65,8 +65,11 @@
     * <a href="./core/Mat.md#drawRectangle">drawRectangle</a>
     * <a href="./core/Mat.md#drawEllipse">drawEllipse</a>
     * <a href="./core/Mat.md#putText">putText</a>
-    * <a href="./core/Mat.md#canny">canny</a>
     * <a href="./core/Mat.md#matchTemplate">matchTemplate</a>
+    * <a href="./core/Mat.md#canny">canny</a>
+    * <a href="./core/Mat.md#sobel">sobel</a>
+    * <a href="./core/Mat.md#scharr">scharr</a>
+    * <a href="./core/Mat.md#laplacian">laplacian</a>
   * <a href="./core/Vec.md"><b>Vec</b></a>
     * <a href="./core/Vec.md#operators">operators</a>
       * <a href="./core/Vec.md#operators">add</a>
