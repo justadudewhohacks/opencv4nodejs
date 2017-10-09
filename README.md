@@ -14,6 +14,7 @@ opencv4nodejs
  * **[Usage with Electron](#usage-with-electron)**
  * **[Quick Start](#quick-start)**
  * **[Available Modules](#available-modules)**
+ * **[Request new Features](#request-features)**
 
 <a name="examples"></a>
 
@@ -324,3 +325,11 @@ const dst2 = src.gaussianBlur(new cv.Size(5, 5), 1.2, optionalArgs);
 * <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/photo.md"><b>photo</b></a>
 * <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/features2d/"><b>features2d</b></a>
 * <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/xfeatures2d/"><b>xfeatures2d</b></a>
+
+<a name="request-features"></a>
+
+## Request new Features
+
+Are you missing some functions from OpenCV (<a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/README.md"><b>overview</b></a> of available bindings) or have an idea for utility in regards to the OpenCV API, which you would like to be added to this package? No problem! Open a new <a href="https://github.com/justadudewhohacks/opencv4nodejs/issues"><b>issue</b></a> with a listing of the desired function bindings or features and you will find them in this package soon.
+
+

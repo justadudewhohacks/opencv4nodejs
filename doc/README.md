@@ -1,3 +1,7 @@
+# API Overview
+
+Missing some function bindings? No problem! - <a href="https://github.com/justadudewhohacks/opencv4nodejs/#request-features"><b>Requesting new Features</b></a>
+
 * <a href="./core/core.md"><b>core</b></a>
   * <a href="./core/core.md#partition">partition</a>
   * <a href="./core/core.md#kmeans">kmeans</a>
