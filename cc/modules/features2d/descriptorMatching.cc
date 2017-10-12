@@ -10,6 +10,8 @@ NAN_MODULE_INIT(DescriptorMatching::Init) {
 	Nan::SetMethod(target, "matchBruteForceL1Async", MatchBruteForceL1Async);
 	Nan::SetMethod(target, "matchBruteForceHammingAsync", MatchBruteForceHammingAsync);
 #if 2 <= CV_VERSION_MINOR
+	Nan::SetMethod(target, "matchBruteForceHammingLut", MatchBruteForceHammingLut);
+	Nan::SetMethod(target, "matchBruteForceSL2", MatchBruteForceSL2);
 	Nan::SetMethod(target, "matchBruteForceHammingLutAsync", MatchBruteForceHammingLutAsync);
 	Nan::SetMethod(target, "matchBruteForceSL2Async", MatchBruteForceSL2Async);
 #endif
