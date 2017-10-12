@@ -19,7 +19,14 @@ FASTDetector : new FASTDetector(Int threshold = 10, Boolean nonmaxSuppression = 
 
 <a name="detect"></a>
 
-### apply
+### detect
 ``` javascript
 [KeyPoint] : detector.detect(Mat image)
+```
+
+<a name="detectAsync"></a>
+
+### detectAsync
+``` javascript
+detector.detectAsync(Mat image, callback(Error err, [KeyPoint] kps))
 ```

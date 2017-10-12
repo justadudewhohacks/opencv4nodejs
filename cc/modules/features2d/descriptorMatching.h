@@ -18,10 +18,18 @@ public:
 	static NAN_METHOD(MatchBruteForceHamming);
 	static NAN_METHOD(MatchBruteForceHammingLut);
 	static NAN_METHOD(MatchBruteForceSL2);
+	static NAN_METHOD(MatchFlannBasedAsync);
+	static NAN_METHOD(MatchBruteForceAsync);
+	static NAN_METHOD(MatchBruteForceL1Async);
+	static NAN_METHOD(MatchBruteForceHammingAsync);
+	static NAN_METHOD(MatchBruteForceHammingLutAsync);
+	static NAN_METHOD(MatchBruteForceSL2Async);
 #if CV_VERSION_MINOR < 2
 	static void match(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType);
+	static void matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType);
 #else
 	static void match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType);
+	static void matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType);
 #endif
 };
 
