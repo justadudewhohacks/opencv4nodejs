@@ -22,7 +22,14 @@ GFTTDetector : new GFTTDetector(Int maxCorners = 1000, Number qualityLevel = 0.0
 
 <a name="detect"></a>
 
-### apply
+### detect
 ``` javascript
 [KeyPoint] : detector.detect(Mat image)
+```
+
+<a name="detectAsync"></a>
+
+### detectAsync
+``` javascript
+detector.detectAsync(Mat image, callback(Error err, [KeyPoint] kps))
 ```

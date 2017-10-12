@@ -24,11 +24,29 @@ module.exports = (getTestImg) => {
       matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
     });
 
+    it('matchFlannBasedAsync', (done) => {
+      cv.matchFlannBasedAsync(kazeDesc, kazeDesc, (err, matches) => {
+        expect(kazeKps.length).to.be.above(0);
+        expect(matches).to.be.an('array').lengthOf(kazeKps.length);
+        matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+        done();
+      });
+    });
+
     it('matchBruteForce', () => {
       const matches = cv.matchBruteForce(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
       matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+    });
+
+    it('matchBruteForceAsync', (done) => {
+      cv.matchBruteForceAsync(orbDesc, orbDesc, (err, matches) => {
+        expect(orbKps.length).to.be.above(0);
+        expect(matches).to.be.an('array').lengthOf(orbKps.length);
+        matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+        done();
+      });
     });
 
     it('matchBruteForceL1', () => {
@@ -38,11 +56,29 @@ module.exports = (getTestImg) => {
       matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
     });
 
+    it('matchBruteForceL1Async', (done) => {
+      cv.matchBruteForceL1Async(orbDesc, orbDesc, (err, matches) => {
+        expect(orbKps.length).to.be.above(0);
+        expect(matches).to.be.an('array').lengthOf(orbKps.length);
+        matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+        done();
+      });
+    });
+
     it('matchBruteForceHamming', () => {
       const matches = cv.matchBruteForceHamming(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
       matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+    });
+
+    it('matchBruteForceHammingAsync', (done) => {
+      cv.matchBruteForceHammingAsync(orbDesc, orbDesc, (err, matches) => {
+        expect(orbKps.length).to.be.above(0);
+        expect(matches).to.be.an('array').lengthOf(orbKps.length);
+        matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+        done();
+      });
     });
 
     (cv.version.minor < 2 ? it.skip : it)('matchBruteForceHammingLut', () => {
@@ -52,11 +88,29 @@ module.exports = (getTestImg) => {
       matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
     });
 
+    (cv.version.minor < 2 ? it.skip : it)('matchBruteForceHammingLutAsync', (done) => {
+      cv.matchBruteForceHammingAsync(orbDesc, orbDesc, (err, matches) => {
+        expect(orbKps.length).to.be.above(0);
+        expect(matches).to.be.an('array').lengthOf(orbKps.length);
+        matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+        done();
+      });
+    });
+
     (cv.version.minor < 2 ? it.skip : it)('matchBruteForceSL2', () => {
       const matches = cv.matchBruteForceSL2(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
       matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+    });
+
+    (cv.version.minor < 2 ? it.skip : it)('matchBruteForceSL2Async', (done) => {
+      cv.matchBruteForceSL2Async(orbDesc, orbDesc, (err, matches) => {
+        expect(orbKps.length).to.be.above(0);
+        expect(matches).to.be.an('array').lengthOf(orbKps.length);
+        matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+        done();
+      });
     });
   });
 };

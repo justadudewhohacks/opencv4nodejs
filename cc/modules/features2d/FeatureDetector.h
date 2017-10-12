@@ -14,6 +14,9 @@ public:
 	static void Init(v8::Local<v8::FunctionTemplate>);
 	static NAN_METHOD(Detect);
 	static NAN_METHOD(Compute);
+
+	static NAN_METHOD(DetectAsync);
+	static NAN_METHOD(ComputeAsync);
 };
 
 #endif
