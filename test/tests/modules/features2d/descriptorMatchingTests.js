@@ -2,7 +2,7 @@ const cv = global.dut;
 const { expect } = require('chai');
 
 module.exports = (getTestImg) => {
-  describe('orbDescriptorMatching', () => {
+  describe('descriptorMatching', () => {
     let kazeKps;
     let kazeDesc;
     let orbKps;

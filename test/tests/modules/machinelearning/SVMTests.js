@@ -1,7 +1,11 @@
 const { expect } = require('chai');
 
 const cv = global.dut;
-const { assertPropsWithValue, getTmpDataFilePath } = global.utils;
+const {
+  assertPropsWithValue,
+  getTmpDataFilePath,
+  clearTmpData
+} = global.utils;
 
 module.exports = () => {
   describe('SVM', () => {
@@ -242,6 +246,9 @@ module.exports = () => {
       });
 
       describe('save and load', () => {
+        beforeEach(() => { clearTmpData(); });
+        afterEach(() => { clearTmpData(); });
+
         it('should save and load from xml', () => {
           const file = getTmpDataFilePath('testSVM.xml');
           svm.save(file);

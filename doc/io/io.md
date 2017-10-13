@@ -7,11 +7,25 @@
 Mat : imread(String filePath)
 ```
 
+<a name="imreadAsync"></a>
+
+### imreadAsync
+``` javascript
+imreadAsync(String filePath, callback(Error err, Mat img))
+```
+
 <a name="imwrite"></a>
 
 ### imwrite
 ``` javascript
 imwrite(String filePath, Mat img)
+```
+
+<a name="imwriteAsync"></a>
+
+### imwriteAsync
+``` javascript
+imwriteAsync(String filePath, Mat img, callback(Error err))
 ```
 
 <a name="imshow"></a>
@@ -40,12 +54,28 @@ Number : waitKey(Uint delay)
 
 ### imencode
 ``` javascript
-[Uchar] : imencode(String fileExt, Mat img, [Int] flags)
+[Uchar] : imencode(String fileExt, Mat img, [Int] flags = [])
+```
+
+<a name="imencodeAsync"></a>
+
+### imencodeAsync
+``` javascript
+imencodeAsync(String fileExt, Mat img, callback(Error err, [Uchar] buffer))
+imencodeAsync(String fileExt, Mat img, [Int] flags, callback(Error err, [Uchar] buffer))
 ```
 
 <a name="imdecode"></a>
 
 ### imdecode
 ``` javascript
-Mat : imdecode([Uchar] buffer, Int flags)
+Mat : imdecode([Uchar] buffer, Int flags = IMREAD_ANYCOLOR)
+```
+
+<a name="imdecodeAsync"></a>
+
+### imdecodeAsync
+``` javascript
+imdecodeAsync([Uchar] buffer, callback(Error err, [Uchar] buffer))
+imdecodeAsync([Uchar] buffer, Int flags, callback(Error err, [Uchar] buffer))
 ```
