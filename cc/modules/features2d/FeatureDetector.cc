@@ -1,4 +1,5 @@
 #include "FeatureDetector.h"
+#include "GenericAsyncWorker.h"
 
 void FeatureDetector::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "detect", FeatureDetector::Detect);
@@ -37,86 +38,70 @@ NAN_METHOD(FeatureDetector::Compute) {
 	FF_RETURN(jsDesc);
 }
 
-class AsyncDetectWorker : public Nan::AsyncWorker {
+
+struct DetectContext {
 public:
 	cv::Ptr<cv::FeatureDetector> det;
 	cv::Mat img;
 	std::vector<cv::KeyPoint> kps;
 
-	AsyncDetectWorker(
-		Nan::Callback *callback,
-		cv::Ptr<cv::FeatureDetector> det,
-		cv::Mat img
-	) : Nan::AsyncWorker(callback), det(det), img(img) {}
-	~AsyncDetectWorker() {}
-
-	void Execute() {
+	const char* execute() {
 		det->detect(img, kps);
+		return "";
 	}
 
-	void HandleOKCallback() {
-		Nan::HandleScope scope;
+	FF_VAL getReturnValue() {
 		FF_PACK_KEYPOINT_ARRAY(jsKps, kps);
-
-		FF_VAL argv[] = { Nan::Null(), jsKps };
-		callback->Call(2, argv);
+		return jsKps;
 	}
 };
 
 NAN_METHOD(FeatureDetector::DetectAsync) {
 	FF_METHOD_CONTEXT("FeatureDetector::DetectAsync");
 
-	FF_ARG_INSTANCE(0, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	DetectContext ctx;
+	ctx.det = FF_UNWRAP(info.This(), FeatureDetector)->getDetector();
+
+	FF_ARG_INSTANCE(0, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 	FF_ARG_FUNC(1, v8::Local<v8::Function> cbFunc);
 
-	Nan::AsyncQueueWorker(new AsyncDetectWorker(
+	Nan::AsyncQueueWorker(new GenericAsyncWorker<DetectContext>(
 		new Nan::Callback(cbFunc),
-		FF_UNWRAP(info.This(), FeatureDetector)->getDetector(),
-		img
+		ctx
 	));
 }
 
-class AsyncComputeWorker : public Nan::AsyncWorker {
+struct ComputeContext {
 public:
 	cv::Ptr<cv::FeatureDetector> det;
 	cv::Mat img;
 	std::vector<cv::KeyPoint> kps;
 	cv::Mat desc;
 
-	AsyncComputeWorker(
-		Nan::Callback *callback,
-		cv::Ptr<cv::FeatureDetector> det,
-		cv::Mat img,
-		std::vector<cv::KeyPoint> kps
-	) : Nan::AsyncWorker(callback), det(det), img(img), kps(kps) {}
-	~AsyncComputeWorker() {}
-
-	void Execute() {
+	const char* execute() {
 		det->compute(img, kps, desc);
+		return "";
 	}
 
-	void HandleOKCallback() {
-		Nan::HandleScope scope;
+	FF_VAL getReturnValue() {
 		FF_OBJ jsDesc = FF_NEW_INSTANCE(Mat::constructor);
 		FF_UNWRAP_MAT_AND_GET(jsDesc) = desc;
-
-		FF_VAL argv[] = { Nan::Null(), jsDesc };
-		callback->Call(2, argv);
+		return jsDesc;
 	}
 };
 
 NAN_METHOD(FeatureDetector::ComputeAsync) {
 	FF_METHOD_CONTEXT("FeatureDetector::ComputeAsync");
 
-	FF_ARG_INSTANCE(0, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	ComputeContext ctx;
+	ctx.det = FF_UNWRAP(info.This(), FeatureDetector)->getDetector();
+	FF_ARG_INSTANCE(0, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 	FF_ARG_ARRAY(1, FF_ARR jsKps);
+	FF_UNPACK_KEYPOINT_ARRAY_TO(ctx.kps, jsKps);
 	FF_ARG_FUNC(2, v8::Local<v8::Function> cbFunc);
-	FF_UNPACK_KEYPOINT_ARRAY(kps, jsKps);
 
-	Nan::AsyncQueueWorker(new AsyncComputeWorker(
+	Nan::AsyncQueueWorker(new GenericAsyncWorker<ComputeContext>(
 		new Nan::Callback(cbFunc),
-		FF_UNWRAP(info.This(), FeatureDetector)->getDetector(),
-		img,
-		kps
+		ctx
 	));
 }

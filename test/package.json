@@ -2,8 +2,9 @@
   "name": "opencv4nodejs_test",
   "version": "1.1.0",
   "scripts": {
-    "test": "mocha --require ./globals --timeout 5000 --recursive ./tests",
-    "cover": "BINDINGS_DEBUG=true istanbul cover node_modules/mocha/bin/_mocha --report lcovonly --require ./globals --timeout 5000 -- --recursive ./tests",
+    "test": "mocha --require ./globals --timeout 30000 --recursive ./tests",
+    "gc": "set WITH_GC=true &&mocha --expose-gc --require ./globals --timeout 30000 --recursive ./tests",
+    "cover": "BINDINGS_DEBUG=true istanbul cover node_modules/mocha/bin/_mocha --report lcovonly --require ./globals --timeout 30000 -- --recursive ./tests",
     "codecov": "codecov -f ./coverage/opencv4nodejs.info -t f821e623-6da2-4b62-acd5-67b64169604b"
   },
   "author": "justadudewhohacks",
@@ -20,6 +21,7 @@
     "eslint-config-rallycoding": "^3.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.3"
+    "eslint-plugin-react": "^6.10.3",
+    "segfault-handler": "^1.0.0"
   }
 }

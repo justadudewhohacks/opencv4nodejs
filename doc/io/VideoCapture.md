@@ -1,6 +1,6 @@
 # VideoCapture
 
-<a name="VideoCapture.constructors"></a>
+<a name="constructors"></a>
 
 ## Constructors
 ``` javascript
@@ -9,14 +9,21 @@ VideoCapture : new VideoCapture(Number devicePort)
 ```
 ## Methods
 
-<a name="VideoCapture.read"></a>
+<a name="read"></a>
 
 ### read
 ``` javascript
 Mat : cap.read()
 ```
 
-<a name="VideoCapture.reset"></a>
+<a name="readAsync"></a>
+
+### readAsync
+``` javascript
+cap.readAsync(callback(Error err, Mat frame))
+```
+
+<a name="reset"></a>
 
 ### reset
 ``` javascript

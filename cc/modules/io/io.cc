@@ -1,6 +1,7 @@
 #include "io.h"
 #include "Mat.h"
 #include "VideoCapture.h"
+#include "GenericAsyncWorker.h"
 #include <iostream>
 
 NAN_MODULE_INIT(Io::Init) {
@@ -11,6 +12,11 @@ NAN_MODULE_INIT(Io::Init) {
 	Nan::SetMethod(target, "waitKey", WaitKey);
 	Nan::SetMethod(target, "imencode", Imencode);
 	Nan::SetMethod(target, "imdecode", Imdecode);
+
+	Nan::SetMethod(target, "imreadAsync", ImreadAsync);
+	Nan::SetMethod(target, "imwriteAsync", ImwriteAsync);
+	Nan::SetMethod(target, "imencodeAsync", ImencodeAsync);
+	Nan::SetMethod(target, "imdecodeAsync", ImdecodeAsync);
 
 	FF_SET_JS_PROP(target, IMREAD_UNCHANGED, Nan::New<v8::Integer>(cv::IMREAD_UNCHANGED));
 	FF_SET_JS_PROP(target, IMREAD_GRAYSCALE, Nan::New<v8::Integer>(cv::IMREAD_GRAYSCALE));
@@ -61,29 +67,25 @@ NAN_MODULE_INIT(Io::Init) {
 
 NAN_METHOD(Io::Imread) {
 	FF_METHOD_CONTEXT("Imread");
-  if (!info[0]->IsString()) {
-		FF_THROW("expected arg0 to be path");
-  }
 
-  std::string path = FF_CAST_STRING(info[0]);
-	cv::Mat mat = cv::imread(path);
-	if (mat.rows == 0 && mat.cols == 0) {
-		FF_THROW("empty mat");
+	FF_ARG_STRING(0, std::string path);
+
+	cv::Mat img = cv::imread(path);
+	if (img.rows == 0 && img.cols == 0) {
+		FF_THROW("empty Mat");
 	}
-	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
-	FF_UNWRAP_MAT_AND_GET(jsMat) = mat;
-	FF_RETURN(jsMat);
+	FF_OBJ jsImg = FF_NEW_INSTANCE(Mat::constructor);
+	FF_UNWRAP_MAT_AND_GET(jsImg) = img;
+	FF_RETURN(jsImg);
 }
 
 NAN_METHOD(Io::Imwrite) {
 	FF_METHOD_CONTEXT("Imwrite");
-  if (!info[0]->IsString()) {
-		FF_THROW("expected arg0 to be path");
-	}
-	if (!FF_IS_INSTANCE(Mat::constructor, info[1])) {
-		FF_THROW("expected arg1 to be an instance of Mat");
-	}
-	cv::imwrite(FF_CAST_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject()));
+
+	FF_ARG_STRING(0, std::string path);
+	FF_ARG_INSTANCE(1, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+
+	cv::imwrite(path, img);
 }
 
 NAN_METHOD(Io::Imshow) {
@@ -151,4 +153,162 @@ NAN_METHOD(Io::Imdecode) {
 	FF_OBJ jsDecodedMat = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP_MAT_AND_GET(jsDecodedMat) = cv::imdecode(vec, flags);
 	FF_RETURN(jsDecodedMat);
+}
+
+
+struct ImreadContext {
+public:
+	std::string path;
+	cv::Mat img;
+
+	const char* execute() {
+		img = cv::imread(path);
+		if (img.rows == 0 && img.cols == 0) {
+			return("empty Mat");
+		}
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		FF_OBJ jsImg = FF_NEW_INSTANCE(Mat::constructor);
+		FF_UNWRAP_MAT_AND_GET(jsImg) = img;
+		return jsImg;
+	}
+};
+
+NAN_METHOD(Io::ImreadAsync) {
+	FF_METHOD_CONTEXT("ImreadAsync");
+
+	ImreadContext ctx;
+	FF_ARG_STRING(0, ctx.path);
+	FF_ARG_FUNC(1, v8::Local<v8::Function> cbFunc);
+
+	Nan::AsyncQueueWorker(new GenericAsyncWorker<ImreadContext>(
+		new Nan::Callback(cbFunc),
+		ctx
+	));
+}
+
+struct ImwriteContext {
+public:
+	std::string path;
+	cv::Mat img;
+
+	const char* execute() {
+		cv::imwrite(path, img);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Nan::Undefined();
+	}
+};
+
+NAN_METHOD(Io::ImwriteAsync) {
+	FF_METHOD_CONTEXT("ImwriteAsync");
+
+	ImwriteContext ctx;
+	FF_ARG_STRING(0, ctx.path);
+	FF_ARG_INSTANCE(1, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+
+	FF_ARG_FUNC(2, v8::Local<v8::Function> cbFunc);
+	Nan::AsyncQueueWorker(new GenericAsyncWorker<ImwriteContext>(
+		new Nan::Callback(cbFunc),
+		ctx
+	));
+}
+
+struct ImencodeContext {
+public:
+	std::string ext;
+	cv::Mat img;
+	std::vector<int> flags;
+	char *data;
+	size_t dataSize;
+
+	const char* execute() {
+		std::vector<uchar> dataVec;
+		cv::imencode(ext, img, dataVec, flags);
+		size_t dataSize = dataVec.size() * sizeof(char);
+		data = static_cast<char *>(malloc(dataSize));
+		memcpy(data, reinterpret_cast<char*>(dataVec.data()), dataSize);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		FF_OBJ jsBuf = Nan::NewBuffer(data, dataSize).ToLocalChecked();
+		return jsBuf;
+	}
+};
+
+NAN_METHOD(Io::ImencodeAsync) {
+	FF_METHOD_CONTEXT("Io::ImencodeAsync");
+
+	ImencodeContext ctx;
+	FF_ARG_STRING(0, ctx.ext);
+	FF_ARG_INSTANCE(1, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+
+	v8::Local<v8::Function> cbFunc;
+	if (FF_HAS_ARG(2) && FF_IS_ARRAY(info[2])) {
+		FF_ARG_UNPACK_INT_ARRAY_TO(2, ctx.flags);
+		FF_ARG_FUNC(3, cbFunc);
+	}
+	else {
+		FF_ARG_FUNC(2, cbFunc);
+	}
+	
+	Nan::AsyncQueueWorker(new GenericAsyncWorker<ImencodeContext>(
+		new Nan::Callback(cbFunc),
+		ctx
+	));
+}
+
+struct ImdecodeContext {
+public:
+	int flags;
+	cv::Mat img;
+	char *data;
+	size_t dataSize;
+
+
+	const char* execute() {
+		std::vector<uchar> vec(dataSize);
+		memcpy(vec.data(), data, dataSize);
+		img = cv::imdecode(vec, flags);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		FF_OBJ jsDecodedMat = FF_NEW_INSTANCE(Mat::constructor);
+		FF_UNWRAP_MAT_AND_GET(jsDecodedMat) = img;
+		return jsDecodedMat;
+	}
+};
+
+NAN_METHOD(Io::ImdecodeAsync) {
+	FF_METHOD_CONTEXT("Io::ImdecodeAsync");
+
+	ImdecodeContext ctx;
+	if (!info[0]->IsUint8Array()) {
+		FF_THROW("expected arg 0 to be a Buffer of Uint8 Values");
+	}
+
+	v8::Local<v8::Function> cbFunc;
+	if (FF_HAS_ARG(1) && FF_IS_INT(info[1])) {
+		FF_ARG_INT(1, ctx.flags);
+		FF_ARG_FUNC(2, cbFunc);
+	}
+	else {
+		FF_ARG_FUNC(1, cbFunc);
+		ctx.flags = cv::IMREAD_ANYCOLOR;
+	}
+
+	FF_OBJ jsBuf = info[0]->ToObject();
+	ctx.data = static_cast<char *>(node::Buffer::Data(jsBuf));
+	ctx.dataSize = node::Buffer::Length(jsBuf);
+
+	Nan::AsyncQueueWorker(new GenericAsyncWorker<ImdecodeContext>(
+		new Nan::Callback(cbFunc),
+		ctx
+	));
 }

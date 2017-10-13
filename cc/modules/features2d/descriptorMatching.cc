@@ -1,4 +1,5 @@
 #include "descriptorMatching.h"
+#include "GenericAsyncWorker.h"
 
 NAN_MODULE_INIT(DescriptorMatching::Init) {
 	Nan::SetMethod(target, "matchFlannBased", MatchFlannBased);
@@ -126,28 +127,20 @@ void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) 
 	FF_RETURN(jsMatches);
 }
 
-class AsyncMatchWorker : public Nan::AsyncWorker {
+
+struct MatchContext {
 public:
 	cv::Ptr<cv::DescriptorMatcher> matcher;
 	cv::Mat descFrom;
 	cv::Mat descTo;
 	std::vector<cv::DMatch> dmatches;
 
-	AsyncMatchWorker(
-		Nan::Callback *callback,
-		cv::Ptr<cv::DescriptorMatcher> matcher,
-		cv::Mat descFrom,
-		cv::Mat descTo
-	) : Nan::AsyncWorker(callback), matcher(matcher), descFrom(descFrom), descTo(descTo) {}
-	~AsyncMatchWorker() {}
-
-	void Execute() {
+	const char* execute() {
 		matcher->match(descFrom, descTo, dmatches);
+		return "";
 	}
 
-	void HandleOKCallback() {
-		Nan::HandleScope scope;
-
+	FF_VAL getReturnValue() {
 		FF_ARR jsMatches = FF_NEW_ARRAY(dmatches.size());
 		uint i = 0;
 		for (auto dmatch : dmatches) {
@@ -155,9 +148,7 @@ public:
 			FF_UNWRAP(jsMatch, DescriptorMatch)->dmatch = dmatch;
 			jsMatches->Set(i++, jsMatch);
 		}
-
-		FF_VAL argv[] = { Nan::Null(), jsMatches };
-		callback->Call(2, argv);
+		return jsMatches;
 	}
 };
 
@@ -168,14 +159,14 @@ void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherT
 #endif
 	FF_METHOD_CONTEXT("matchAsync");
 
-	FF_ARG_INSTANCE(0, cv::Mat descFrom, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Mat descTo, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	MatchContext ctx;
+	ctx.matcher = cv::DescriptorMatcher::create(matcherType);
+	FF_ARG_INSTANCE(0, ctx.descFrom, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INSTANCE(1, ctx.descTo, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 	FF_ARG_FUNC(2, v8::Local<v8::Function> cbFunc);
 
-	Nan::AsyncQueueWorker(new AsyncMatchWorker(
+	Nan::AsyncQueueWorker(new GenericAsyncWorker<MatchContext>(
 		new Nan::Callback(cbFunc),
-		cv::DescriptorMatcher::create(matcherType),
-		descFrom,
-		descTo
+		ctx
 	));
 }
