@@ -295,7 +295,7 @@ NAN_METHOD(Io::ImdecodeAsync) {
 
 	v8::Local<v8::Function> cbFunc;
 	if (FF_HAS_ARG(1) && FF_IS_INT(info[1])) {
-		FF_ARG_INT(1, ctx.flags, cv::IMREAD_ANYCOLOR);
+		FF_ARG_INT(1, ctx.flags);
 		FF_ARG_FUNC(2, cbFunc);
 	}
 	else {
