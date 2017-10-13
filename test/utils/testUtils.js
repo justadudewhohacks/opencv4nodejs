@@ -30,16 +30,40 @@ exports.funcShouldRequireArgs = (func) => {
 exports.expectFloat = (val, expected) =>
   expect(val).to.be.a('number').above(expected - 0.01).below(expected + 0.01);
 
-exports.readTestImage = (isPng = true) => (isPng ? cv.imread('../data/Lenna.png') : cv.imread('../data/got.jpg'));
+const getTestImagePath = (isPng = true) =>
+  (isPng ? '../data/Lenna.png' : '../data/got.jpg');
+
+exports.getTestImagePath = getTestImagePath;
+
+exports.readTestImage = (isPng = true) => cv.imread(getTestImagePath(isPng));
+
+exports.getTestVideoPath = () => '../data/traffic.mp4';
+
+const tmpdataDir = './tmpdata';
+
+const ensureTmpdataDirExists = () => {
+  if (!fs.existsSync(tmpdataDir)) {
+    fs.mkdirSync(tmpdataDir);
+  }
+};
+
+exports.clearTmpData = () => {
+  ensureTmpdataDirExists();
+
+  const files = fs.readdirSync(tmpdataDir);
+  files.forEach((file) => {
+    fs.unlinkSync(`${tmpdataDir}/${file}`);
+  });
+};
 
 exports.getTmpDataFilePath = (file) => {
-  const dir = './tmpdata';
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
-  }
-  const filePath = `${dir}/${file}`;
+  ensureTmpdataDirExists();
+
+  const filePath = `${tmpdataDir}/${file}`;
   if (fs.existsSync(filePath)) {
     fs.unlinkSync(filePath);
   }
   return filePath;
 };
+
+exports.fileExists = filePath => fs.existsSync(filePath);

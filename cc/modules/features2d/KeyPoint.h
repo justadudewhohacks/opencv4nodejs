@@ -14,13 +14,16 @@
 		var->Set(i, jsKp);																		\
 	}
 
-#define FF_UNPACK_KEYPOINT_ARRAY(var, jsKps)																										\
-	std::vector<cv::KeyPoint> var;																																\
+#define FF_UNPACK_KEYPOINT_ARRAY_TO(vec, jsKps)																									\
 	for (uint i = 0; i < jsKps->Length(); i++) {																									\
 		cv::KeyPoint kp;																																						\
 		FF_REQUIRE_INSTANCE(KeyPoint::constructor, jsKps->Get(i), "expected instance of KeyPoint"); \
-		var.push_back(FF_UNWRAP(FF_CAST_OBJ(jsKps->Get(i)), KeyPoint)->keyPoint);										\
+		vec.push_back(FF_UNWRAP(FF_CAST_OBJ(jsKps->Get(i)), KeyPoint)->keyPoint);										\
 	}
+
+#define FF_UNPACK_KEYPOINT_ARRAY(var, jsKps)																										\
+	std::vector<cv::KeyPoint> var;																																\
+	FF_UNPACK_KEYPOINT_ARRAY_TO(var, jsKps)
 
 class KeyPoint : public Nan::ObjectWrap {
 public:

@@ -12,4 +12,9 @@ public:
 	static NAN_METHOD(WaitKey);
 	static NAN_METHOD(Imencode);
 	static NAN_METHOD(Imdecode);
+
+	static NAN_METHOD(ImreadAsync);
+	static NAN_METHOD(ImwriteAsync);
+	static NAN_METHOD(ImencodeAsync);
+	static NAN_METHOD(ImdecodeAsync);
 };

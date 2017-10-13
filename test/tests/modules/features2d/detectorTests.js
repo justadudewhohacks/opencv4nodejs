@@ -47,61 +47,65 @@ module.exports = (getTestImg, defaults, customProps, Detector, implementsCompute
   });
 
   describe('detect', () => {
-    it('should throw if no args', () => {
-      assertError(() => (new Detector()).detect(), 'expected arg 0 to be instance of: Mat');
+    describe('sync', () => {
+      it('should throw if no args', () => {
+        assertError(() => (new Detector()).detect(), 'expected arg 0 to be instance of: Mat');
+      });
+
+      it('should return an array of KeyPoints', () => {
+        expect(keyPoints).to.be.a('array');
+        assert(keyPoints.length > 0, 'no KeyPoints detected');
+        keyPoints.forEach(kp => assert(kp instanceof cv.KeyPoint));
+      });
     });
 
-    it('should return an array of KeyPoints', () => {
-      expect(keyPoints).to.be.a('array');
-      assert(keyPoints.length > 0, 'no KeyPoints detected');
-      keyPoints.forEach(kp => assert(kp instanceof cv.KeyPoint));
-    });
-  });
+    describe('async', () => {
+      it('should throw if no args', () => {
+        assertError(() => (new Detector()).detectAsync(), 'expected arg 0 to be instance of: Mat');
+      });
 
-  describe('detectAsync', () => {
-    it('should throw if no args', () => {
-      assertError(() => (new Detector()).detectAsync(), 'expected arg 0 to be instance of: Mat');
-    });
+      it('should require a callback', () => {
+        assertError(() => (new Detector()).detectAsync(new cv.Mat()), 'expected arg 1 to be of type: FUNC');
+      });
 
-    it('should require a callback', () => {
-      assertError(() => (new Detector()).detectAsync(new cv.Mat()), 'expected arg 1 to be of type: FUNC');
-    });
-
-    it('should return an array of KeyPoints', (done) => {
-      (new Detector()).detectAsync(testImg, (err, kps) => {
-        expect(kps).to.be.a('array');
-        assert(kps.length > 0, 'no KeyPoints detected');
-        kps.forEach(kp => assert(kp instanceof cv.KeyPoint));
-        done();
+      it('should return an array of KeyPoints', (done) => {
+        (new Detector()).detectAsync(testImg, (err, kps) => {
+          expect(kps).to.be.a('array');
+          assert(kps.length > 0, 'no KeyPoints detected');
+          kps.forEach(kp => assert(kp instanceof cv.KeyPoint));
+          done();
+        });
       });
     });
   });
 
   if (implementsCompute) {
     describe('compute', () => {
-      it('should throw if no args', () => {
-        assertError(() => (new Detector()).compute(), 'expected arg 0 to be instance of: Mat');
-      });
+      describe('sync', () => {
+        it('should throw if no args', () => {
+          assertError(() => (new Detector()).compute(), 'expected arg 0 to be instance of: Mat');
+        });
 
-      it('should return a Mat with descriptors for each KeyPoint', () => {
-        const desc = (new Detector(defaults)).compute(testImg, keyPoints);
-        assertPropsWithValue(desc)({ rows: keyPoints.length });
-      });
-    });
-
-    describe('computeAsync', () => {
-      it('should throw if no args', () => {
-        assertError(() => (new Detector()).computeAsync(), 'expected arg 0 to be instance of: Mat');
-      });
-
-      it('should require a callback', () => {
-        assertError(() => (new Detector()).computeAsync(new cv.Mat(), []), 'expected arg 2 to be of type: FUNC');
-      });
-
-      it('should return a Mat with descriptors for each KeyPoint', (done) => {
-        (new Detector()).computeAsync(testImg, keyPoints, (err, desc) => {
+        it('should return a Mat with descriptors for each KeyPoint', () => {
+          const desc = (new Detector(defaults)).compute(testImg, keyPoints);
           assertPropsWithValue(desc)({ rows: keyPoints.length });
-          done();
+        });
+      });
+
+      describe('async', () => {
+        it('should throw if no args', () => {
+          assertError(() => (new Detector()).computeAsync(), 'expected arg 0 to be instance of: Mat');
+        });
+
+        it('should require a callback', () => {
+          assertError(() => (new Detector()).computeAsync(new cv.Mat(), []), 'expected arg 2 to be of type: FUNC');
+        });
+
+        it('should return a Mat with descriptors for each KeyPoint', (done) => {
+          (new Detector()).computeAsync(testImg, keyPoints, (err, desc) => {
+            assertPropsWithValue(desc)({ rows: keyPoints.length });
+            done();
+          });
         });
       });
     });
