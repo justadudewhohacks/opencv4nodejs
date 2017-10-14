@@ -8,7 +8,7 @@ const {
 } = global.utils;
 
 module.exports = () => {
-  describe.only('SVM', () => {
+  describe('SVM', () => {
     const samples = new cv.Mat([
       [100, 200, 200],
       [200, 100, 200],
