@@ -25,6 +25,16 @@ module.exports = () => {
         const cc = new cv.CascadeClassifier(xmlHaarFile);
         expect(cc).to.have.property('detectMultiScaleWithRejectLevels').to.be.a('function');
       });
+
+      it('should implement detectMultiScaleAsync', () => {
+        const cc = new cv.CascadeClassifier(xmlHaarFile);
+        expect(cc).to.have.property('detectMultiScaleAsync').to.be.a('function');
+      });
+
+      it('should implement detectMultiScaleWithRejectLevelsAsync', () => {
+        const cc = new cv.CascadeClassifier(xmlHaarFile);
+        expect(cc).to.have.property('detectMultiScaleWithRejectLevelsAsync').to.be.a('function');
+      });
     });
 
     describe('detect', () => {
@@ -43,78 +53,90 @@ module.exports = () => {
       const maxSize = new cv.Size(250, 250);
 
       describe('detectMultiScale', () => {
-        funcShouldRequireArgs(() => cc.detectMultiScale());
-
-        it('can be called if required args passed', () => {
-          expect(() => cc.detectMultiScale(testImg)).to.not.throw();
-        });
-
-        it('can be called with optional args', () => {
-          expect(() => cc.detectMultiScale(
-            testImg,
-            scaleFactor,
-            minNeighbors,
-            flags,
-            minSize,
-            maxSize
-          )).to.not.throw();
-        });
-
-        it('can be called with optional args object', () => {
-          expect(() => cc.detectMultiScale(
-            testImg,
-            {
-              scaleFactor,
-              minNeighbors,
-              minSize,
-              maxSize
-            }
-          )).to.not.throw();
-        });
-
-        it('should return objects and numDetections', () => {
-          const ret = cc.detectMultiScale(testImg);
+        const expectOutput = (ret) => {
           expect(ret).to.have.property('objects').to.be.an('array');
           expect(ret).to.have.property('numDetections').to.be.an('array');
           expect(ret.objects.length).to.be.above(0);
           expect(ret.numDetections.length).to.be.above(0);
           ret.objects.forEach(obj => expect(obj).instanceOf(cv.Rect));
+        };
+
+        describe('sync', () => {
+          funcShouldRequireArgs(() => cc.detectMultiScale());
+
+          it('can be called if required args passed', () => {
+            expectOutput(cc.detectMultiScale(testImg));
+          });
+
+          it('can be called with optional args', () => {
+            expectOutput(cc.detectMultiScale(
+              testImg,
+              scaleFactor,
+              minNeighbors,
+              flags,
+              minSize,
+              maxSize
+            ));
+          });
+
+          it('can be called with optional args object', () => {
+            expectOutput(cc.detectMultiScale(
+              testImg,
+              {
+                scaleFactor,
+                minNeighbors,
+                minSize,
+                maxSize
+              }
+            ));
+          });
+        });
+
+        describe('async', () => {
+          const expectOutputAsync = done => (err, ret) => {
+            expectOutput(ret);
+            done();
+          };
+
+          funcShouldRequireArgs(() => cc.detectMultiScaleAsync());
+
+          it('can be called if required args passed', (done) => {
+            cc.detectMultiScaleAsync(
+              testImg,
+              expectOutputAsync(done)
+            );
+          });
+
+          it('can be called with optional args', (done) => {
+            cc.detectMultiScaleAsync(
+              testImg,
+              scaleFactor,
+              minNeighbors,
+              flags,
+              minSize,
+              maxSize,
+              expectOutputAsync(done)
+            );
+          });
+
+          it('can be called with optional args object', (done) => {
+            cc.detectMultiScaleAsync(
+              testImg,
+              {
+                scaleFactor,
+                minNeighbors,
+                minSize,
+                maxSize
+              },
+              expectOutputAsync(done)
+            );
+          });
         });
       });
 
       // TODO: figure out why it does not terminate on v3.1
       (cv.version.minor === 1 ? describe.skip : describe)('detectMultiScaleWithRejectLevels', () => {
-        funcShouldRequireArgs(() => cc.detectMultiScaleWithRejectLevels());
-
-        it('can be called if required args passed', () => {
-          expect(() => cc.detectMultiScaleWithRejectLevels(testImg)).to.not.throw();
-        });
-
-        it('can be called with optional args', () => {
-          expect(() => cc.detectMultiScaleWithRejectLevels(
-            testImg,
-            scaleFactor,
-            minNeighbors,
-            flags,
-            minSize,
-            maxSize
-          )).to.not.throw();
-        });
-
-        it('can be called with optional args object', () => {
-          expect(() => cc.detectMultiScaleWithRejectLevels(
-            testImg,
-            {
-              scaleFactor,
-              minNeighbors,
-              minSize,
-              maxSize
-            }
-          )).to.not.throw();
-        });
-
-        it('should return objects, rejectLevels and levelWeights', () => {
-          const ret = cc.detectMultiScaleWithRejectLevels(testImg);
+        const expectOutput = (ret) => {
           expect(ret).to.have.property('objects').to.be.an('array');
           expect(ret).to.have.property('rejectLevels').to.be.an('array');
           expect(ret).to.have.property('levelWeights').to.be.an('array');
@@ -122,6 +144,75 @@ module.exports = () => {
           expect(ret.rejectLevels.length).to.be.above(0);
           expect(ret.levelWeights.length).to.be.above(0);
           ret.objects.forEach(obj => expect(obj).instanceOf(cv.Rect));
+        };
+
+        describe('sync', () => {
+          funcShouldRequireArgs(() => cc.detectMultiScaleWithRejectLevels());
+
+          it('can be called if required args passed', () => {
+            expectOutput(cc.detectMultiScaleWithRejectLevels(testImg));
+          });
+
+          it('can be called with optional args', () => {
+            expectOutput(cc.detectMultiScaleWithRejectLevels(
+              testImg,
+              scaleFactor,
+              minNeighbors,
+              flags,
+              minSize,
+              maxSize
+            ));
+          });
+
+          it('can be called with optional args object', () => {
+            expectOutput(cc.detectMultiScaleWithRejectLevels(
+              testImg,
+              {
+                scaleFactor,
+                minNeighbors,
+                minSize,
+                maxSize
+              }
+            ));
+          });
+        });
+
+        describe('async', () => {
+          const expectOutputAsync = done => (err, ret) => {
+            expectOutput(ret);
+            done();
+          };
+
+          funcShouldRequireArgs(() => cc.detectMultiScaleWithRejectLevelsAsync());
+
+          it('can be called if required args passed', (done) => {
+            cc.detectMultiScaleWithRejectLevelsAsync(testImg, expectOutputAsync(done));
+          });
+
+          it('can be called with optional args', (done) => {
+            cc.detectMultiScaleWithRejectLevelsAsync(
+              testImg,
+              scaleFactor,
+              minNeighbors,
+              flags,
+              minSize,
+              maxSize,
+              expectOutputAsync(done)
+            );
+          });
+
+          it('can be called with optional args object', (done) => {
+            cc.detectMultiScaleWithRejectLevelsAsync(
+              testImg,
+              {
+                scaleFactor,
+                minNeighbors,
+                minSize,
+                maxSize
+              },
+              expectOutputAsync(done)
+            );
+          });
         });
       });
     });

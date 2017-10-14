@@ -21,6 +21,9 @@ public:
 	static NAN_METHOD(Save);
 	static NAN_METHOD(Load);
 
+	static NAN_METHOD(TrainAsync);
+	static NAN_METHOD(TrainAutoAsync);
+
 	static FF_GETTER(SVM, c, svm->getC());
 	static FF_GETTER(SVM, coef0, svm->getCoef0());
 	static FF_GETTER(SVM, degree, svm->getDegree());
@@ -35,6 +38,67 @@ public:
 
 	void setParams(v8::Local<v8::Object> params);
   static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	struct TrainFromMatContext {
+	public:
+		cv::Ptr<cv::ml::SVM> svm;
+		cv::Mat samples;
+		uint layout;
+		cv::Mat responses;
+
+		bool ret;
+
+		const char* execute() {
+			ret = svm->train(samples, (int)layout, responses);
+			return "";
+		}
+
+		FF_VAL getReturnValue() {
+			return Nan::New(ret);
+		}
+	};
+
+	struct TrainFromTrainDataContext {
+	public:
+		cv::Ptr<cv::ml::SVM> svm;
+		cv::Ptr<cv::ml::TrainData> trainData;
+		uint flags;
+
+		bool ret;
+
+		const char* execute() {
+			ret = svm->train(trainData, (int)flags);
+			return "";
+		}
+
+		FF_VAL getReturnValue() {
+			return Nan::New(ret);
+		}
+	};
+
+	struct TrainAutoContext {
+	public:
+		cv::Ptr<cv::ml::SVM> svm;
+		cv::Ptr<cv::ml::TrainData> trainData;
+		uint kFold;
+		cv::ml::ParamGrid cGrid;
+		cv::ml::ParamGrid gammaGrid;
+		cv::ml::ParamGrid pGrid;
+		cv::ml::ParamGrid nuGrid;
+		cv::ml::ParamGrid coeffGrid;
+		cv::ml::ParamGrid degreeGrid;
+		bool balanced;
+
+		bool ret;
+		const char* execute() {
+			ret = svm->trainAuto(trainData, (int)kFold, cGrid, gammaGrid, pGrid, nuGrid, coeffGrid, degreeGrid, balanced);
+			return "";
+		}
+
+		FF_VAL getReturnValue() {
+			return Nan::New(ret);
+		}
+	};
 };
 
 #endif

@@ -80,49 +80,101 @@ module.exports = () => {
         const hog = new cv.HOGDescriptor();
         expect(hog).to.have.property('compute').to.be.a('function');
       });
+
+      it('should implement computeAsync', () => {
+        const hog = new cv.HOGDescriptor();
+        expect(hog).to.have.property('computeAsync').to.be.a('function');
+      });
     });
 
     describe('compute', () => {
+      const expectOutput = (desc) => {
+        expect(desc).to.be.an('array');
+      };
+
       const winStride = new cv.Size(3, 3);
       const padding = new cv.Size(3, 3);
       const locations = [new cv.Point(50, 50), new cv.Point(150, 50), new cv.Point(50, 150)];
 
-      funcShouldRequireArgs(() => new cv.HOGDescriptor().compute());
+      describe('sync', () => {
+        funcShouldRequireArgs(() => new cv.HOGDescriptor().compute());
 
-      it('should be callable with single channel img', () => {
-        const desc = new cv.HOGDescriptor().compute(
-          new cv.Mat(200, 200, cv.CV_8U)
-        );
-        expect(desc).to.be.an('array');
-      });
+        it('should be callable with single channel img', () => {
+          expectOutput(new cv.HOGDescriptor().compute(
+            new cv.Mat(200, 200, cv.CV_8U)
+          ));
+        });
 
-      it('should be callable with triple channel img', () => {
-        const desc = new cv.HOGDescriptor().compute(
-          new cv.Mat(200, 200, cv.CV_8UC3)
-        );
-        expect(desc).to.be.an('array');
-      });
+        it('should be callable with triple channel img', () => {
+          expectOutput(new cv.HOGDescriptor().compute(
+            new cv.Mat(200, 200, cv.CV_8UC3)
+          ));
+        });
 
-      it('should be callable with optional args', () => {
-        const desc = new cv.HOGDescriptor().compute(
-          new cv.Mat(200, 200, cv.CV_8UC3),
-          winStride,
-          padding,
-          locations
-        );
-        expect(desc).to.be.an('array');
-      });
-
-      it('should be callable with optional args object', () => {
-        const desc = new cv.HOGDescriptor().compute(
-          new cv.Mat(200, 200, cv.CV_8UC3),
-          {
+        it('should be callable with optional args', () => {
+          expectOutput(new cv.HOGDescriptor().compute(
+            new cv.Mat(200, 200, cv.CV_8UC3),
             winStride,
             padding,
             locations
-          }
-        );
-        expect(desc).to.be.an('array');
+          ));
+        });
+
+        it('should be callable with optional args object', () => {
+          expectOutput(new cv.HOGDescriptor().compute(
+            new cv.Mat(200, 200, cv.CV_8UC3),
+            {
+              winStride,
+              padding,
+              locations
+            }
+          ));
+        });
+      });
+
+      describe('async', () => {
+        const expectOutputAsync = done => (err, desc) => {
+          expectOutput(desc);
+          done();
+        };
+
+        funcShouldRequireArgs(() => new cv.HOGDescriptor().computeAsync());
+
+        it('should be callable with single channel img', (done) => {
+          new cv.HOGDescriptor().computeAsync(
+            new cv.Mat(200, 200, cv.CV_8U),
+            expectOutputAsync(done)
+          );
+        });
+
+        it('should be callable with triple channel img', (done) => {
+          new cv.HOGDescriptor().computeAsync(
+            new cv.Mat(200, 200, cv.CV_8UC3),
+            expectOutputAsync(done)
+          );
+        });
+
+        it('should be callable with optional args', (done) => {
+          new cv.HOGDescriptor().computeAsync(
+            new cv.Mat(200, 200, cv.CV_8UC3),
+            winStride,
+            padding,
+            locations,
+            expectOutputAsync(done)
+          );
+        });
+
+        it('should be callable with optional args object', (done) => {
+          new cv.HOGDescriptor().computeAsync(
+            new cv.Mat(200, 200, cv.CV_8UC3),
+            {
+              winStride,
+              padding,
+              locations
+            },
+            expectOutputAsync(done)
+          );
+        });
       });
     });
   });

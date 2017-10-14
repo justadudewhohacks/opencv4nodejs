@@ -1,6 +1,5 @@
 #include "CascadeClassifier.h"
-#include "Mat.h"
-#include "Rect.h"
+#include "GenericAsyncWorker.h"
 
 Nan::Persistent<v8::FunctionTemplate> CascadeClassifier::constructor;
 
@@ -14,6 +13,9 @@ NAN_MODULE_INIT(CascadeClassifier::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "detectMultiScale", DetectMultiScale);
 	Nan::SetPrototypeMethod(ctor, "detectMultiScaleWithRejectLevels", DetectMultiScaleWithRejectLevels);
+
+	Nan::SetPrototypeMethod(ctor, "detectMultiScaleAsync", DetectMultiScaleAsync);
+	Nan::SetPrototypeMethod(ctor, "detectMultiScaleWithRejectLevelsAsync", DetectMultiScaleWithRejectLevelsAsync);
 
 	target->Set(FF_NEW_STRING("CascadeClassifier"), ctor->GetFunction());
 };
@@ -47,11 +49,11 @@ NAN_METHOD(CascadeClassifier::DetectMultiScale) {
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d minSize, "minSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d maxSize, "maxSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
 	if (!hasOptArgsObj) {
-		FF_ARG_NUMBER_IFDEF(1, double scaleFactor, 1.1);
-		FF_ARG_UINT_IFDEF(2, uint minNeighbors, 3);
-		FF_ARG_UINT_IFDEF(3, uint flags, 0);
-		FF_ARG_INSTANCE_IFDEF(4, cv::Size2d minSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, cv::Size2d());
-		FF_ARG_INSTANCE_IFDEF(5, cv::Size2d maxSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, cv::Size2d());
+		FF_ARG_NUMBER_IFDEF(1, scaleFactor, scaleFactor);
+		FF_ARG_UINT_IFDEF(2, minNeighbors, minNeighbors);
+		FF_ARG_UINT_IFDEF(3, flags, flags);
+		FF_ARG_INSTANCE_IFDEF(4, minSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, minSize);
+		FF_ARG_INSTANCE_IFDEF(5, maxSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, maxSize);
 	}
 
 	std::vector<cv::Rect> objectRects;
@@ -95,11 +97,11 @@ NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevels) {
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d minSize, "minSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d maxSize, "maxSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
 	if (!hasOptArgsObj) {
-		FF_ARG_NUMBER_IFDEF(1, double scaleFactor, 1.1);
-		FF_ARG_UINT_IFDEF(2, uint minNeighbors, 3);
-		FF_ARG_UINT_IFDEF(3, uint flags, 0);
-		FF_ARG_INSTANCE_IFDEF(4, cv::Size2d minSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, cv::Size2d());
-		FF_ARG_INSTANCE_IFDEF(5, cv::Size2d maxSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, cv::Size2d());
+		FF_ARG_NUMBER_IFDEF(1, scaleFactor, scaleFactor);
+		FF_ARG_UINT_IFDEF(2, minNeighbors, minNeighbors);
+		FF_ARG_UINT_IFDEF(3, flags, flags);
+		FF_ARG_INSTANCE_IFDEF(4, minSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, minSize);
+		FF_ARG_INSTANCE_IFDEF(5, maxSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, maxSize);
 	}
 
 	std::vector<cv::Rect> objectRects;
@@ -131,4 +133,68 @@ NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevels) {
 	Nan::Set(ret, FF_NEW_STRING("levelWeights"), jsLevelWeights);
 	Nan::Set(ret, FF_NEW_STRING("objects"), jsObjectRects);
 	FF_RETURN(ret);
+}
+
+NAN_METHOD(CascadeClassifier::DetectMultiScaleAsync) {
+	FF_METHOD_CONTEXT("CascadeClassifier::DetectMultiScaleAsync");
+
+	DetectMultiScaleContext ctx;
+	FF_ARG_INSTANCE(0, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
+
+	FF_GET_NUMBER_IFDEF(optArgs, ctx.scaleFactor, "scaleFactor", 1.1);
+	FF_GET_UINT_IFDEF(optArgs, ctx.minNeighbors, "minNeighbors", 3);
+	FF_GET_UINT_IFDEF(optArgs, ctx.flags, "flags", 0);
+	FF_GET_INSTANCE_IFDEF(optArgs, ctx.minSize, "minSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
+	FF_GET_INSTANCE_IFDEF(optArgs, ctx.maxSize, "maxSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
+	if (!hasOptArgsObj) {
+		FF_ARG_NUMBER_IFDEF(1, ctx.scaleFactor, ctx.scaleFactor);
+		FF_ARG_UINT_IFDEF(2, ctx.minNeighbors, ctx.minNeighbors);
+		FF_ARG_UINT_IFDEF(3, ctx.flags, ctx.flags);
+		FF_ARG_INSTANCE_IFDEF(4, ctx.minSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, ctx.minSize);
+		FF_ARG_INSTANCE_IFDEF(5, ctx.maxSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, ctx.maxSize);
+	}
+
+	ctx.classifier = FF_UNWRAP(info.This(), CascadeClassifier)->classifier;
+	FF_ARG_FUNC(info.Length() - 1, v8::Local<v8::Function> cbFunc);
+
+	Nan::AsyncQueueWorker(new GenericAsyncWorker<DetectMultiScaleContext>(
+		new Nan::Callback(cbFunc),
+		ctx
+	));
+}
+
+NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevelsAsync) {
+	FF_METHOD_CONTEXT("CascadeClassifier:: DetectMultiScaleWithRejectLevelsAsync");
+
+	DetectMultiScaleWithRejectLevelsContext ctx;
+	FF_ARG_INSTANCE(0, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+
+	// optional args
+	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
+	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
+
+	FF_GET_NUMBER_IFDEF(optArgs, ctx.scaleFactor, "scaleFactor", 1.1);
+	FF_GET_UINT_IFDEF(optArgs, ctx.minNeighbors, "minNeighbors", 3);
+	FF_GET_UINT_IFDEF(optArgs, ctx.flags, "flags", 0);
+	FF_GET_INSTANCE_IFDEF(optArgs, ctx.minSize, "minSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
+	FF_GET_INSTANCE_IFDEF(optArgs, ctx.maxSize, "maxSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
+	if (!hasOptArgsObj) {
+		FF_ARG_NUMBER_IFDEF(1, ctx.scaleFactor, ctx.scaleFactor);
+		FF_ARG_UINT_IFDEF(2, ctx.minNeighbors, ctx.minNeighbors);
+		FF_ARG_UINT_IFDEF(3, ctx.flags, ctx.flags);
+		FF_ARG_INSTANCE_IFDEF(4, ctx.minSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, ctx.minSize);
+		FF_ARG_INSTANCE_IFDEF(5, ctx.maxSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, ctx.maxSize);
+	}
+
+	ctx.classifier = FF_UNWRAP(info.This(), CascadeClassifier)->classifier;
+	FF_ARG_FUNC(info.Length() - 1, v8::Local<v8::Function> cbFunc);
+
+	Nan::AsyncQueueWorker(new GenericAsyncWorker< DetectMultiScaleWithRejectLevelsContext>(
+		new Nan::Callback(cbFunc),
+		ctx
+	));
 }

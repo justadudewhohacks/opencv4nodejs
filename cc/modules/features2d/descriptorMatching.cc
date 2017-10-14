@@ -127,31 +127,6 @@ void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) 
 	FF_RETURN(jsMatches);
 }
 
-
-struct MatchContext {
-public:
-	cv::Ptr<cv::DescriptorMatcher> matcher;
-	cv::Mat descFrom;
-	cv::Mat descTo;
-	std::vector<cv::DMatch> dmatches;
-
-	const char* execute() {
-		matcher->match(descFrom, descTo, dmatches);
-		return "";
-	}
-
-	FF_VAL getReturnValue() {
-		FF_ARR jsMatches = FF_NEW_ARRAY(dmatches.size());
-		uint i = 0;
-		for (auto dmatch : dmatches) {
-			FF_OBJ jsMatch = FF_NEW_INSTANCE(DescriptorMatch::constructor);
-			FF_UNWRAP(jsMatch, DescriptorMatch)->dmatch = dmatch;
-			jsMatches->Set(i++, jsMatch);
-		}
-		return jsMatches;
-	}
-};
-
 #if CV_VERSION_MINOR < 2
 void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
 #else
