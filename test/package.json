@@ -5,7 +5,7 @@
     "test": "mocha --require ./globals --timeout 10000 --recursive ./tests",
     "gc": "set WITH_GC=true &&mocha --expose-gc --require ./globals --timeout 10000 --recursive ./tests",
     "cover": "BINDINGS_DEBUG=true istanbul cover node_modules/mocha/bin/_mocha --report lcovonly --require ./globals -- --timeout 30000 --recursive ./tests",
-    "codecov": "codecov -f ./coverage/opencv4nodejs.info -t f821e623-6da2-4b62-acd5-67b64169604b"
+    "codecov": "codecov -f ./coverage/opencv4nodejs.info"
   },
   "author": "justadudewhohacks",
   "license": "ISC",
