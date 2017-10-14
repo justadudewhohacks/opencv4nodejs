@@ -51,23 +51,6 @@ NAN_METHOD(VideoCapture::Reset) {
 	}
 }
 
-struct ReadContext {
-public:
-	cv::Mat frame;
-	cv::VideoCapture cap;
-
-	const char* execute() {
-		cap.read(frame);
-		return "";
-	}
-
-	FF_VAL getReturnValue() {
-		FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
-		FF_UNWRAP_MAT_AND_GET(jsMat) = frame;
-		return jsMat;
-	}
-};
-
 NAN_METHOD(VideoCapture::ReadAsync) {
 	FF_METHOD_CONTEXT("VideoCapture::ReadAsync");
 
