@@ -32,7 +32,7 @@ public:
 	static void matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType);
 #endif
 
-	static struct MatchContext {
+	struct MatchContext {
 	public:
 		cv::Ptr<cv::DescriptorMatcher> matcher;
 		cv::Mat descFrom;

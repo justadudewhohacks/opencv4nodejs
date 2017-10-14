@@ -20,7 +20,7 @@ public:
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-	static struct DetectMultiScaleContext {
+	struct DetectMultiScaleContext {
 	public:
 		cv::CascadeClassifier classifier;
 		cv::Mat img;
@@ -62,7 +62,7 @@ public:
 		}
 	};
 
-	static struct DetectMultiScaleWithRejectLevelsContext : DetectMultiScaleContext {
+	struct DetectMultiScaleWithRejectLevelsContext : DetectMultiScaleContext {
 	public:
 		std::vector<int> rejectLevels;
 		std::vector<double> levelWeights;

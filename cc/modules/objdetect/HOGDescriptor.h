@@ -31,7 +31,7 @@ public:
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-	static struct ComputeContext {
+	struct ComputeContext {
 	public:
 		cv::HOGDescriptor hog;
 		cv::Mat img;

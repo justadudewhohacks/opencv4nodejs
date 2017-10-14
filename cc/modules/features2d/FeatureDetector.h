@@ -18,7 +18,7 @@ public:
 	static NAN_METHOD(DetectAsync);
 	static NAN_METHOD(ComputeAsync);
 
-	static struct DetectContext {
+	struct DetectContext {
 	public:
 		cv::Ptr<cv::FeatureDetector> det;
 		cv::Mat img;
@@ -35,7 +35,7 @@ public:
 		}
 	};
 
-	static struct ComputeContext {
+	struct ComputeContext {
 	public:
 		cv::Ptr<cv::FeatureDetector> det;
 		cv::Mat img;
