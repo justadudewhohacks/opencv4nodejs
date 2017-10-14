@@ -42,4 +42,4 @@ after_success:
   - lcov -e coverage/capture.info '*opencv4nodejs/cc/*' -o coverage/capturedcc.info
   - lcov -t opencv4nodejs -a coverage/capturedcc.info -o coverage/opencv4nodejs.info
   - genhtml --output-directory coverage coverage/opencv4nodejs.info
-  - npm run codecov
+  - npm run codecov -- -t $CODECOV_TOKEN
