@@ -33,3 +33,12 @@ HOGDescriptor : new HOGDescriptor(Size winSize = Size(64, 128), Size blockSize =
 ``` javascript
 [Number] : hog.compute(Mat img, Size winStride = Size(), Size padding = Size(), [Point2] locations = [])
 ```
+
+<a name="computeAsync"></a>
+
+### computeAsync
+``` javascript
+hog.computeAsync(Mat img, callback(Error err, [Number] descriptor))
+hog.computeAsync(Mat img, ...opts, callback(Error err, [Number] descriptor))
+hog.computeAsync(Mat img, { opts }, callback(Error err, [Number] descriptor))
+```

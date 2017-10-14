@@ -87,36 +87,78 @@ module.exports = () => {
 
 
     describe('training', () => {
+      const expectOutput = (svm, ret) => {
+        expect(ret).to.be.a('boolean');
+        expect(svm).to.have.property('isTrained').to.be.true;
+        expect(svm).to.have.property('varCount').to.equal(samples.cols);
+      };
+
+      const expectOutputAsync = (done, svm) => (err, ret) => {
+        expectOutput(svm, ret);
+        done();
+      };
+
       describe('train', () => {
-        it('should be trainable with trainData', () => {
-          const svm = new cv.SVM();
-          const ret = svm.train(trainData);
-          expect(ret).to.be.a('boolean');
-          expect(svm).to.have.property('isTrained').to.be.true;
-          expect(svm).to.have.property('varCount').to.equal(samples.cols);
+        describe('sync', () => {
+          it('should be trainable with trainData', () => {
+            const svm = new cv.SVM();
+            expectOutput(
+              svm,
+              svm.train(trainData)
+            );
+          });
+
+          it('should be trainable with trainData and flag', () => {
+            const svm = new cv.SVM();
+            expectOutput(
+              svm,
+              svm.train(
+                trainData,
+                cv.statModel.RAW_OUTPUT
+              )
+            );
+          });
+
+          it('should be trainable with samples, layout and responses', () => {
+            const svm = new cv.SVM();
+            expectOutput(
+              svm,
+              svm.train(
+                samples,
+                cv.ml.ROW_SAMPLE,
+                labels
+              )
+            );
+          });
         });
 
-        it('should be trainable with trainData and flag', () => {
-          const svm = new cv.SVM();
-          const ret = svm.train(
-            trainData,
-            cv.statModel.RAW_OUTPUT
-          );
-          expect(ret).to.be.a('boolean');
-          expect(svm).to.have.property('isTrained').to.be.true;
-          expect(svm).to.have.property('varCount').to.equal(samples.cols);
-        });
+        describe('async', () => {
+          it('should be trainable with trainData', (done) => {
+            const svm = new cv.SVM();
+            svm.trainAsync(
+              trainData,
+              expectOutputAsync(done, svm)
+            );
+          });
 
-        it('should be trainable with samples, layout and responses', () => {
-          const svm = new cv.SVM();
-          const ret = svm.train(
-            samples,
-            cv.ml.ROW_SAMPLE,
-            labels
-          );
-          expect(ret).to.be.a('boolean');
-          expect(svm).to.have.property('isTrained').to.be.true;
-          expect(svm).to.have.property('varCount').to.equal(samples.cols);
+          it('should be trainable with trainData and flag', (done) => {
+            const svm = new cv.SVM();
+            svm.trainAsync(
+              trainData,
+              cv.statModel.RAW_OUTPUT,
+              expectOutputAsync(done, svm)
+            );
+          });
+
+          it('should be trainable with samples, layout and responses', (done) => {
+            const svm = new cv.SVM();
+            svm.trainAsync(
+              samples,
+              cv.ml.ROW_SAMPLE,
+              labels,
+              expectOutputAsync(done, svm)
+            );
+          });
         });
       });
 
@@ -130,71 +172,146 @@ module.exports = () => {
         const degreeGrid = new cv.ParamGrid(cv.ml.SVM.DEGREE);
         const balanced = true;
 
-        it('should be trainable with trainData', () => {
-          const svm = new cv.SVM();
-          const ret = svm.trainAuto(trainData);
-          expect(ret).to.be.a('boolean');
-          expect(svm).to.have.property('isTrained').to.be.true;
-          expect(svm).to.have.property('varCount').to.equal(samples.cols);
+        describe('sync', () => {
+          it('should be trainable with trainData', () => {
+            const svm = new cv.SVM();
+            expectOutput(
+              svm,
+              svm.trainAuto(trainData)
+            );
+          });
+
+          it('should be trainable with trainData and all optional args', () => {
+            const svm = new cv.SVM();
+            expectOutput(
+              svm,
+              svm.trainAuto(
+                trainData,
+                kFold,
+                cGrid,
+                gammaGrid,
+                pGrid,
+                nuGrid,
+                coeffGrid,
+                degreeGrid,
+                balanced
+              )
+            );
+          });
+
+          it('should be trainable with trainData and first optional args', () => {
+            const svm = new cv.SVM();
+            expectOutput(
+              svm,
+              svm.trainAuto(
+                trainData,
+                kFold
+              )
+            );
+          });
+
+          it('should be trainable with trainData and optional args object', () => {
+            const svm = new cv.SVM();
+            const opts = {
+              kFold,
+              cGrid,
+              gammaGrid,
+              pGrid,
+              nuGrid,
+              coeffGrid,
+              degreeGrid,
+              balanced
+            };
+            expectOutput(
+              svm,
+              svm.trainAuto(
+                trainData,
+                opts
+              )
+            );
+          });
+
+          it('should be trainable with trainData and some optional args', () => {
+            const svm = new cv.SVM();
+            const opts = {
+              degreeGrid,
+              balanced
+            };
+            expectOutput(
+              svm,
+              svm.trainAuto(
+                trainData,
+                opts
+              )
+            );
+          });
         });
 
-        it('should be trainable with trainData and all optional args', () => {
-          const svm = new cv.SVM();
-          const ret = svm.trainAuto(
-            trainData,
-            kFold,
-            cGrid,
-            gammaGrid,
-            pGrid,
-            nuGrid,
-            coeffGrid,
-            degreeGrid,
-            balanced
-          );
-          expect(ret).to.be.a('boolean');
-          expect(svm).to.have.property('isTrained').to.be.true;
-          expect(svm).to.have.property('varCount').to.equal(samples.cols);
-        });
+        describe('async', () => {
+          it('should be trainable with trainData', (done) => {
+            const svm = new cv.SVM();
+            svm.trainAutoAsync(
+              trainData,
+              expectOutputAsync(done, svm)
+            );
+          });
 
-        it('should be trainable with trainData and first optional args', () => {
-          const svm = new cv.SVM();
-          const ret = svm.trainAuto(
-            trainData,
-            kFold
-          );
-          expect(ret).to.be.a('boolean');
-          expect(svm).to.have.property('isTrained').to.be.true;
-          expect(svm).to.have.property('varCount').to.equal(samples.cols);
-        });
+          it('should be trainable with trainData and all optional args', (done) => {
+            const svm = new cv.SVM();
+            svm.trainAutoAsync(
+              trainData,
+              kFold,
+              cGrid,
+              gammaGrid,
+              pGrid,
+              nuGrid,
+              coeffGrid,
+              degreeGrid,
+              balanced,
+              expectOutputAsync(done, svm)
+            );
+          });
 
-        it('should be trainable with trainData and optional args object', () => {
-          const svm = new cv.SVM();
-          const opts = {
-            kFold,
-            cGrid,
-            gammaGrid,
-            pGrid,
-            nuGrid,
-            coeffGrid,
-            degreeGrid,
-            balanced
-          };
-          const ret = svm.trainAuto(trainData, opts);
-          expect(ret).to.be.a('boolean');
-          expect(svm).to.have.property('isTrained').to.be.true;
-          expect(svm).to.have.property('varCount').to.equal(samples.cols);
-        });
+          it('should be trainable with trainData and first optional args', (done) => {
+            const svm = new cv.SVM();
+            svm.trainAutoAsync(
+              trainData,
+              kFold,
+              expectOutputAsync(done, svm)
+            );
+          });
 
-        it('should be trainable with trainData and some optional args', () => {
-          const svm = new cv.SVM();
-          const opts = {
-            degreeGrid,
-            balanced
-          };
-          const ret = svm.trainAuto(trainData, opts);
-          expect(ret).to.be.a('boolean');
-          expect(svm).to.have.property('isTrained').to.be.true;
-          expect(svm).to.have.property('varCount').to.equal(samples.cols);
+          it('should be trainable with trainData and optional args object', (done) => {
+            const svm = new cv.SVM();
+            const opts = {
+              kFold,
+              cGrid,
+              gammaGrid,
+              pGrid,
+              nuGrid,
+              coeffGrid,
+              degreeGrid,
+              balanced
+            };
+            svm.trainAutoAsync(
+              trainData,
+              opts,
+              expectOutputAsync(done, svm)
+            );
+          });
+
+          it('should be trainable with trainData and some optional args', (done) => {
+            const svm = new cv.SVM();
+            const opts = {
+              degreeGrid,
+              balanced
+            };
+            svm.trainAutoAsync(
+              trainData,
+              opts,
+              expectOutputAsync(done, svm)
+            );
+          });
         });
       });
     });

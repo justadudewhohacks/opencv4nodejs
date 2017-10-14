@@ -178,6 +178,20 @@ struct FF_TYPE(FUNC, v8::Local<v8::Function>, FF_IS_FUNC, FF_CAST_FUNC);
 static FF_FUNC_TYPE ff_func = FF_FUNC_TYPE();
 #define FF_ARG_FUNC(argN, var) FF_ARG(argN, var, ff_func)
 
+#define FF_ARG_IFDEF_NOT_FUNC(argN, ff_arg_getter)		\
+	if (FF_HAS_ARG(argN) && !FF_IS_FUNC(info[argN])) {	\
+		ff_arg_getter																			\
+	}
+
+#define FF_ARG_UINT_IFDEF_NOT_FUNC(argN, ff_var, ff_default)	\
+	FF_ARG_IFDEF_NOT_FUNC(argN, FF_ARG_UINT_IFDEF(argN, ff_var, ff_default))
+
+#define FF_ARG_BOOL_IFDEF_NOT_FUNC(argN, ff_var, ff_default)	\
+	FF_ARG_IFDEF_NOT_FUNC(argN, FF_ARG_BOOL_IFDEF(argN, ff_var, ff_default))
+
+#define FF_ARG_IS_OBJECT(argN) \
+	FF_HAS_ARG(argN) && info[argN]->IsObject() && !info[argN]->IsArray() && !info[argN]->IsFunction()
+
 namespace FF {
 	template<typename toType, typename type>
 	static inline v8::Local<v8::Array> stdVecToJSArray(std::vector<type> vec) {

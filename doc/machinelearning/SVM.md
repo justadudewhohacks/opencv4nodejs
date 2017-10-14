@@ -58,11 +58,28 @@ Boolean : svm.train(TrainData trainData, Uint flags = 0)
 Boolean : svm.train(Mat samples, Uint layout, Mat responses)
 ```
 
+<a name="trainAsync"></a>
+
+### trainAsync
+``` javascript
+svm.trainAsync(TrainData trainData, callback(Error err, Boolean res))
+svm.trainAsync(TrainData trainData, Uint flags, callback(Error err, Boolean res))
+svm.trainAsync(Mat samples, Uint layout, Mat responses, callback(Error err, Boolean res))
+```
 <a name="trainAuto"></a>
 
 ### trainAuto
 ``` javascript
 Mat : svm.trainAuto(TrainData trainData, Uint kFold = 10, ParamGrid cGrid = ParamGrid(ml.SVM.C), ParamGrid gammaGrid = ParamGrid(ml.SVM.GAMMA), ParamGrid pGrid = ParamGrid(ml.SVM.P), ParamGrid nuGrid = ParamGrid(ml.SVM.NU), ParamGrid coeffGrid = ParamGrid(ml.SVM.COEF), ParamGrid degreeGrid = ParamGrid(ml.SVM.DEGREE), Boolean balanced = false)
+```
+
+<a name="trainAutoAsync"></a>
+
+### trainAutoAsync
+``` javascript
+svm.trainAutoAsync(TrainData trainData, callback(Error err, Boolean res))
+svm.trainAutoAsync(TrainData trainData, ...opts, callback(Error err, Boolean res))
+svm.trainAutoAsync(TrainData trainData, { opts }, callback(Error err, Boolean res))
 ```
 
 <a name="predict"></a>

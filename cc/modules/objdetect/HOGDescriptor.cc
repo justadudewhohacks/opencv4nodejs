@@ -2,6 +2,7 @@
 #include "Mat.h"
 #include "Rect.h"
 #include "Point.h"
+#include "GenericAsyncWorker.h"
 
 Nan::Persistent<v8::FunctionTemplate> HOGDescriptor::constructor;
 
@@ -27,6 +28,7 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("signedGradient"), signedGradient);
 
 	Nan::SetPrototypeMethod(ctor, "compute", Compute);
+	Nan::SetPrototypeMethod(ctor, "computeAsync", ComputeAsync);
 
 	target->Set(FF_NEW_STRING("HOGDescriptor"), ctor->GetFunction());
 };
@@ -35,7 +37,7 @@ NAN_METHOD(HOGDescriptor::New) {
 	FF_METHOD_CONTEXT("HOGDescriptor::New");
 
 	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject() && !FF_IS_INSTANCE(Size::constructor, info[1]);
+	bool hasOptArgsObj = FF_ARG_IS_OBJECT(0) && !FF_IS_INSTANCE(Size::constructor, info[1]);
 	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
 
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d winSize, "winSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d(64, 128));
@@ -86,12 +88,12 @@ NAN_METHOD(HOGDescriptor::New) {
 };
 
 NAN_METHOD(HOGDescriptor::Compute) {
-	FF_METHOD_CONTEXT("HOGDescriptor::Detect");
+	FF_METHOD_CONTEXT("HOGDescriptor::Compute");
 
 	FF_ARG_INSTANCE(0, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 
 	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
+	bool hasOptArgsObj = FF_ARG_IS_OBJECT(1);
 	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d winStride, "winStride", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d padding, "padding", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
@@ -119,4 +121,31 @@ NAN_METHOD(HOGDescriptor::Compute) {
 		locations
 	);
 	FF_RETURN(FF::stdVecToJSArray<double>(descriptors));
+};
+
+NAN_METHOD(HOGDescriptor::ComputeAsync) {
+	FF_METHOD_CONTEXT("HOGDescriptor::ComputeAsync");
+
+	ComputeContext ctx;
+	FF_ARG_INSTANCE(0, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+
+	// optional args
+	bool hasOptArgsObj = FF_ARG_IS_OBJECT(1);
+	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
+	FF_GET_INSTANCE_IFDEF(optArgs, ctx.winStride, "winStride", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
+	FF_GET_INSTANCE_IFDEF(optArgs, ctx.padding, "padding", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
+	FF_GET_ARRAY_IFDEF(optArgs, FF_ARR jsLocations, "locations", FF_NEW_ARRAY());
+	if (!hasOptArgsObj) {
+		FF_ARG_INSTANCE_IFDEF(1, ctx.winStride, Size::constructor, FF_UNWRAP_SIZE_AND_GET, ctx.winStride);
+		FF_ARG_INSTANCE_IFDEF(2, ctx.padding, Size::constructor, FF_UNWRAP_SIZE_AND_GET, ctx.padding);
+		FF_ARG_ARRAY_IFDEF(3, jsLocations, jsLocations);
+	}
+
+	ctx.hog = FF_UNWRAP(info.This(), HOGDescriptor)->hog;
+	FF_ARG_FUNC(info.Length() - 1, v8::Local<v8::Function> cbFunc);
+
+	Nan::AsyncQueueWorker(new GenericAsyncWorker< ComputeContext>(
+		new Nan::Callback(cbFunc),
+		ctx
+	));
 };

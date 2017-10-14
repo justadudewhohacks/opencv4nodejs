@@ -1,5 +1,4 @@
 #include "io.h"
-#include "Mat.h"
 #include "VideoCapture.h"
 #include "GenericAsyncWorker.h"
 #include <iostream>
@@ -156,26 +155,6 @@ NAN_METHOD(Io::Imdecode) {
 }
 
 
-struct ImreadContext {
-public:
-	std::string path;
-	cv::Mat img;
-
-	const char* execute() {
-		img = cv::imread(path);
-		if (img.rows == 0 && img.cols == 0) {
-			return("empty Mat");
-		}
-		return "";
-	}
-
-	FF_VAL getReturnValue() {
-		FF_OBJ jsImg = FF_NEW_INSTANCE(Mat::constructor);
-		FF_UNWRAP_MAT_AND_GET(jsImg) = img;
-		return jsImg;
-	}
-};
-
 NAN_METHOD(Io::ImreadAsync) {
 	FF_METHOD_CONTEXT("ImreadAsync");
 
@@ -188,21 +167,6 @@ NAN_METHOD(Io::ImreadAsync) {
 		ctx
 	));
 }
-
-struct ImwriteContext {
-public:
-	std::string path;
-	cv::Mat img;
-
-	const char* execute() {
-		cv::imwrite(path, img);
-		return "";
-	}
-
-	FF_VAL getReturnValue() {
-		return Nan::Undefined();
-	}
-};
 
 NAN_METHOD(Io::ImwriteAsync) {
 	FF_METHOD_CONTEXT("ImwriteAsync");
@@ -217,29 +181,6 @@ NAN_METHOD(Io::ImwriteAsync) {
 		ctx
 	));
 }
-
-struct ImencodeContext {
-public:
-	std::string ext;
-	cv::Mat img;
-	std::vector<int> flags;
-	char *data;
-	size_t dataSize;
-
-	const char* execute() {
-		std::vector<uchar> dataVec;
-		cv::imencode(ext, img, dataVec, flags);
-		size_t dataSize = dataVec.size() * sizeof(char);
-		data = static_cast<char *>(malloc(dataSize));
-		memcpy(data, reinterpret_cast<char*>(dataVec.data()), dataSize);
-		return "";
-	}
-
-	FF_VAL getReturnValue() {
-		FF_OBJ jsBuf = Nan::NewBuffer(data, dataSize).ToLocalChecked();
-		return jsBuf;
-	}
-};
 
 NAN_METHOD(Io::ImencodeAsync) {
 	FF_METHOD_CONTEXT("Io::ImencodeAsync");
@@ -262,28 +203,6 @@ NAN_METHOD(Io::ImencodeAsync) {
 		ctx
 	));
 }
-
-struct ImdecodeContext {
-public:
-	int flags;
-	cv::Mat img;
-	char *data;
-	size_t dataSize;
-
-
-	const char* execute() {
-		std::vector<uchar> vec(dataSize);
-		memcpy(vec.data(), data, dataSize);
-		img = cv::imdecode(vec, flags);
-		return "";
-	}
-
-	FF_VAL getReturnValue() {
-		FF_OBJ jsDecodedMat = FF_NEW_INSTANCE(Mat::constructor);
-		FF_UNWRAP_MAT_AND_GET(jsDecodedMat) = img;
-		return jsDecodedMat;
-	}
-};
 
 NAN_METHOD(Io::ImdecodeAsync) {
 	FF_METHOD_CONTEXT("Io::ImdecodeAsync");
