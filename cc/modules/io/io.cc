@@ -11,6 +11,9 @@ NAN_MODULE_INIT(Io::Init) {
 	Nan::SetMethod(target, "waitKey", WaitKey);
 	Nan::SetMethod(target, "imencode", Imencode);
 	Nan::SetMethod(target, "imdecode", Imdecode);
+	Nan::SetMethod(target, "moveWindow", MoveWindow);
+	Nan::SetMethod(target, "destroyWindow", DestroyWindow);
+	Nan::SetMethod(target, "destroyAllWindows", DestroyAllWindows);
 
 	Nan::SetMethod(target, "imreadAsync", ImreadAsync);
 	Nan::SetMethod(target, "imwriteAsync", ImwriteAsync);
@@ -154,6 +157,24 @@ NAN_METHOD(Io::Imdecode) {
 	FF_RETURN(jsDecodedMat);
 }
 
+NAN_METHOD(Io::MoveWindow) {
+	FF_METHOD_CONTEXT("Io::MoveWindow");
+	FF_ARG_STRING(0, std::string winName);
+	FF_ARG_INT(1, int x);
+	FF_ARG_INT(2, int y);
+	cv::moveWindow(winName, x, y);
+}
+
+NAN_METHOD(Io::DestroyWindow) {
+	FF_METHOD_CONTEXT("Io::DestroyWindow");
+	FF_ARG_STRING(0, std::string winName);
+	cv::destroyWindow(winName);
+}
+
+NAN_METHOD(Io::DestroyAllWindows) {
+	FF_METHOD_CONTEXT("Io::DestroyAllWindows");
+	cv::destroyAllWindows();
+}
 
 NAN_METHOD(Io::ImreadAsync) {
 	FF_METHOD_CONTEXT("ImreadAsync");
