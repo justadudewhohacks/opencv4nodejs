@@ -13,6 +13,9 @@ public:
 	static NAN_METHOD(WaitKey);
 	static NAN_METHOD(Imencode);
 	static NAN_METHOD(Imdecode);
+	static NAN_METHOD(MoveWindow);
+	static NAN_METHOD(DestroyWindow);
+	static NAN_METHOD(DestroyAllWindows);
 
 	static NAN_METHOD(ImreadAsync);
 	static NAN_METHOD(ImwriteAsync);
