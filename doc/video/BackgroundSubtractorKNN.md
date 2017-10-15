@@ -2,7 +2,8 @@
 
 ## Accessors
 ``` javascript
-BackgroundSubtractorKNN {
+BackgroundSubtractorKNN
+{
   history: Uint,
   dist2Threshold: Number,
   detectShadows: Boolean
@@ -15,6 +16,7 @@ BackgroundSubtractorKNN {
 ``` javascript
 BackgroundSubtractorKNN : new BackgroundSubtractorKNN(Uint history = 500, Number varThreshold = 400, Boolean detectShadows = true)
 ```
+
 ## Methods
 
 <a name="apply"></a>
