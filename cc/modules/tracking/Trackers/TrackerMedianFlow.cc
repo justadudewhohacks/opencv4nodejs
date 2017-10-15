@@ -1,3 +1,5 @@
+#ifdef HAVE_TRACKING
+
 #include "TrackerMedianFlow.h"
 
 Nan::Persistent<v8::FunctionTemplate> TrackerMedianFlow::constructor;
@@ -27,3 +29,5 @@ NAN_METHOD(TrackerMedianFlow::New) {
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };
+
+#endif

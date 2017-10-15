@@ -1,3 +1,5 @@
+#ifdef HAVE_TRACKING
+
 #include "TrackerBoostingParams.h"
 
 Nan::Persistent<v8::FunctionTemplate> TrackerBoostingParams::constructor;
@@ -27,3 +29,5 @@ NAN_METHOD(TrackerBoostingParams::New) {
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };
+
+#endif

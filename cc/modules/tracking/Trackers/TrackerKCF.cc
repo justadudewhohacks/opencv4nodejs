@@ -1,3 +1,5 @@
+#ifdef HAVE_TRACKING
+
 #include "TrackerKCF.h"
 #include "TrackerKCFParams.h"
 
@@ -34,3 +36,5 @@ NAN_METHOD(TrackerKCF::New) {
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };
+
+#endif

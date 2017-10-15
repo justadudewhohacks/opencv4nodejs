@@ -1,3 +1,5 @@
+#ifdef HAVE_TRACKING
+
 #include "TrackerGOTURN.h"
 
 Nan::Persistent<v8::FunctionTemplate> TrackerGOTURN::constructor;
@@ -24,3 +26,5 @@ NAN_METHOD(TrackerGOTURN::New) {
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };
+
+#endif

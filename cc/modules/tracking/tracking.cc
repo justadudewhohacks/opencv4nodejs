@@ -1,3 +1,5 @@
+#ifdef HAVE_TRACKING
+
 #include "Tracking.h"
 #include "./Trackers/TrackerBoosting.h"
 #include "./Trackers/TrackerGOTURN.h"
@@ -22,3 +24,5 @@ NAN_MODULE_INIT(Tracking::Init) {
 	FF_SET_JS_PROP(trackerKCFModes, CUSTOM, Nan::New<v8::Integer>(cv::TrackerKCF::MODE::CUSTOM));
 	target->Set(FF_NEW_STRING("trackerKCFModes"), trackerKCFModes);
 };
+
+#endif

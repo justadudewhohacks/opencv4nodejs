@@ -1,3 +1,5 @@
+#ifdef HAVE_TRACKING
+
 #include "TrackerMILParams.h"
 
 Nan::Persistent<v8::FunctionTemplate> TrackerMILParams::constructor;
@@ -28,3 +30,5 @@ NAN_METHOD(TrackerMILParams::New) {
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };
+
+#endif

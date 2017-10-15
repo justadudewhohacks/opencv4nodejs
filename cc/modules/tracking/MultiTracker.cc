@@ -1,3 +1,5 @@
+#ifdef HAVE_TRACKING
+
 #include "MultiTracker.h"
 
 Nan::Persistent<v8::FunctionTemplate> MultiTracker::constructor;
@@ -84,3 +86,5 @@ NAN_METHOD(MultiTracker::Update) {
 	}
 	FF_RETURN(jsRects);
 }
+
+#endif

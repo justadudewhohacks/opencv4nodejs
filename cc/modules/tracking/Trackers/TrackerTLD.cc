@@ -1,3 +1,5 @@
+#ifdef HAVE_TRACKING
+
 #include "TrackerTLD.h"
 
 Nan::Persistent<v8::FunctionTemplate> TrackerTLD::constructor;
@@ -24,3 +26,5 @@ NAN_METHOD(TrackerTLD::New) {
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };
+
+#endif

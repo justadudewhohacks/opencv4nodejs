@@ -1,3 +1,5 @@
+#ifdef HAVE_TRACKING
+
 #include "Tracker.h"
 
 void Tracker::Init(v8::Local<v8::FunctionTemplate> ctor) {
@@ -34,3 +36,5 @@ NAN_METHOD(Tracker::Update) {
 NAN_METHOD(Tracker::GetModel) {
 	// TBD
 }
+
+#endif

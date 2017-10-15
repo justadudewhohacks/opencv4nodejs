@@ -1,3 +1,5 @@
+#ifdef HAVE_TRACKING
+
 #include "TrackerMIL.h"
 #include "TrackerMILParams.h"
 
@@ -34,3 +36,5 @@ NAN_METHOD(TrackerMIL::New) {
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };
+
+#endif

@@ -1,3 +1,5 @@
+#ifdef HAVE_TRACKING
+
 #include "TrackerKCFParams.h"
 
 Nan::Persistent<v8::FunctionTemplate> TrackerKCFParams::constructor;
@@ -35,3 +37,5 @@ NAN_METHOD(TrackerKCFParams::New) {
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };
+
+#endif

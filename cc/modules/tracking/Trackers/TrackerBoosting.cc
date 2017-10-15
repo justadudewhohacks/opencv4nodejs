@@ -1,3 +1,5 @@
+#ifdef HAVE_TRACKING
+
 #include "TrackerBoosting.h"
 #include "TrackerBoostingParams.h"
 
@@ -34,3 +36,5 @@ NAN_METHOD(TrackerBoosting::New) {
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };
+
+#endif
