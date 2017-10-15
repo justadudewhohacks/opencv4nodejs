@@ -1,0 +1,26 @@
+#include "TrackerTLD.h"
+
+Nan::Persistent<v8::FunctionTemplate> TrackerTLD::constructor;
+
+NAN_MODULE_INIT(TrackerTLD::Init) {
+	v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(TrackerTLD::New);
+	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
+
+	Tracker::Init(ctor);
+
+	constructor.Reset(ctor);
+	ctor->SetClassName(FF_NEW_STRING("TrackerTLD"));
+	instanceTemplate->SetInternalFieldCount(1);
+
+	target->Set(FF_NEW_STRING("TrackerTLD"), ctor->GetFunction());
+};
+
+
+NAN_METHOD(TrackerTLD::New) {
+	FF_METHOD_CONTEXT("TrackerTLD::New");
+
+	TrackerTLD* self = new TrackerTLD();
+	self->tracker = cv::TrackerTLD::createTracker();
+	self->Wrap(info.Holder());
+	FF_RETURN(info.Holder());
+};
