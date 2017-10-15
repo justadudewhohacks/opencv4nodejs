@@ -1,6 +1,6 @@
 #ifdef HAVE_TRACKING
 
-#include "Tracking.h"
+#include "tracking.h"
 #include "./Trackers/TrackerBoosting.h"
 #include "./Trackers/TrackerGOTURN.h"
 #include "./Trackers/TrackerKCF.h"
