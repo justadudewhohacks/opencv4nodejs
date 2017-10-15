@@ -10,6 +10,9 @@
 #include "modules/features2d/features2d.h"
 #include "modules/objdetect/objdetect.h"
 #include "modules/machinelearning/machinelearning.h"
+#ifdef HAVE_TRACKING
+#include "modules/tracking/tracking.h"
+#endif // HAVE_TRACKING
 #ifdef HAVE_XIMGPROC
 #include "modules/ximgproc/ximgproc.h"
 #endif // HAVE_XIMGPROC
@@ -36,6 +39,10 @@ void init(v8::Local<v8::Object> target) {
   Features2d::Init(target);
   Objdetect::Init(target);
 	MachineLearning::Init(target);
+#ifdef HAVE_TRACKING
+	Nan::Set(xmodules, FF_NEW_STRING("tracking"), Nan::New(true));
+	Tracking::Init(target);
+#endif // HAVE_TRACKING
 #ifdef HAVE_XIMGPROC
 	Nan::Set(xmodules, FF_NEW_STRING("ximgproc"), Nan::New(true));
 	XImgproc::Init(target);

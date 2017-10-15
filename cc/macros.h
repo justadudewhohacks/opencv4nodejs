@@ -6,8 +6,8 @@
 
 #define FF_NEW_INSTANCE(ctor) Nan::NewInstance(Nan::New(ctor)->GetFunction()).ToLocalChecked()
 
-#define FF_GETTER(clazz, name, value)	\
-	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->value); }
+#define FF_GETTER(clazz, name, prop)	\
+	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop); }
 
 #define FF_GETTER_JSOBJ(clazz, name, value, unwrapper, ctor)	\
 	NAN_GETTER(name) {																					\
@@ -191,6 +191,24 @@ static FF_FUNC_TYPE ff_func = FF_FUNC_TYPE();
 
 #define FF_ARG_IS_OBJECT(argN) \
 	FF_HAS_ARG(argN) && info[argN]->IsObject() && !info[argN]->IsArray() && !info[argN]->IsFunction()
+
+/* for setters */
+#define FF_REQUIRE_VALUE(ff_value, ff_type)													\
+  if (!ff_type.checkType(ff_value)) {																\
+    FF_THROW("expected value to be of type: " + ff_type.typeName);	\
+  }
+
+#define FF_SETTER(clazz, name, prop, ff_type)																\
+	NAN_SETTER(name##Set) {																										\
+		FF_METHOD_CONTEXT(#name);																								\
+		FF_REQUIRE_VALUE(value, ff_type);																				\
+		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = ff_type.cast(value);\
+	}
+
+#define FF_SETTER_INT(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_int)
+#define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_uint)
+#define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_number)
+#define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_bool)
 
 namespace FF {
 	template<typename toType, typename type>

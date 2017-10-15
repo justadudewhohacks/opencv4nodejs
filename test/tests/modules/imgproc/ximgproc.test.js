@@ -4,7 +4,7 @@ const { assert, expect } = require('chai');
 
 describe('ximgproc', () => {
   if (!cv.xmodules.ximgproc) {
-    it('compiled without  ximgproc');
+    it('compiled without ximgproc');
     return;
   }
 
