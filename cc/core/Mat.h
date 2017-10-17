@@ -91,8 +91,10 @@ public:
 	cv::Mat getNativeObject() { return mat; }
 
 	typedef InstanceConverter<Mat, cv::Mat> Converter;
-};
 
-const char* InstanceConverter<Mat, cv::Mat>::typeName = "Mat";
+	static const char* getClassName() {
+		return "Mat";
+	}
+};
 
 #endif

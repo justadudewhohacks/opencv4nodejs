@@ -34,6 +34,21 @@ public:
 	}
 };
 
+struct SimpleWorker {
+public:
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return false;
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return false;
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return false;
+	}
+};
+
 #define FF_TRY_UNWRAP_ARGS(ff_methodName, ff_worker)\
 	Nan::TryCatch tryCatch;\
 	if (\

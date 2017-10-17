@@ -5,6 +5,10 @@
 
 class IntTypeConverter {
 public:
+	static const char* getTypeName() {
+		return "int";
+	}
+
   static bool assertType(v8::Local<v8::Value> jsVal) {
     return jsVal->IsInt32();
   }
@@ -15,11 +19,14 @@ public:
 };
 
 typedef AbstractConverter<IntTypeConverter, int> IntConverter;
-const char* IntConverter::typeName = "int";
 
 
 class UintTypeConverter {
 public:
+	static const char* getTypeName() {
+		return "uint";
+	}
+
 	static bool assertType(v8::Local<v8::Value> jsVal) {
 		return jsVal->IsUint32();
 	}
@@ -30,11 +37,14 @@ public:
 };
 
 typedef AbstractConverter<UintTypeConverter, uint> UintConverter;
-const char* UintConverter::typeName = "uint";
 
 
 class BoolTypeConverter {
 public:
+	static const char* getTypeName() {
+		return "bool";
+	}
+
 	static bool assertType(v8::Local<v8::Value> jsVal) {
 		return jsVal->IsBoolean();
 	}
@@ -45,12 +55,15 @@ public:
 };
 
 typedef AbstractConverter<BoolTypeConverter, bool>  BoolConverter;
-const char* BoolConverter::typeName = "bool";
 
 
 template <class Clazz, class T>
 class InstanceConverterType {
 public:
+	static const char* getTypeName() {
+		return Clazz::getClassName();
+	}
+
 	static bool assertType(v8::Local<v8::Value> jsVal) {
 		return Nan::New(Clazz::constructor)->HasInstance(jsVal);
 	}
@@ -64,7 +77,7 @@ template <class Clazz, class T>
 class InstanceConverter : public AbstractConverter<InstanceConverterType<Clazz, T>, T> {
 public:
 	static bool hasInstance(v8::Local<v8::Value> jsVal) {
-		return assertType(jsVal);
+		return InstanceConverterType<Clazz, T>::assertType(jsVal);
 	}
 };
 

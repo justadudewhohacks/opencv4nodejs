@@ -16,8 +16,6 @@ static inline bool isCallback(int argN, Nan::NAN_METHOD_ARGS_TYPE info) {
 template <class ConverterType, class T>
 class AbstractConverter {
 public:
-	static const char* typeName;
-
 	static bool assertType(v8::Local<v8::Value> jsVal) {
 		return ConverterType::assertType(jsVal);
 	}
@@ -41,7 +39,7 @@ public:
 					std::string("expected property ")
 					+ std::string(prop)
 					+ std::string(" to be of type ")
-					+ std::string(typeName)
+					+ std::string(ConverterType::getTypeName())
 				).ToLocalChecked()
 			);
 			return unwrap(val, Nan::Get(opts, Nan::New(prop).ToLocalChecked()).ToLocalChecked());
@@ -56,7 +54,7 @@ public:
 					std::string("expected argument ")
 					+ std::to_string(argN)
 					+ std::string(" to be of type ")
-					+ std::string(typeName)
+					+ std::string(ConverterType::getTypeName())
 				).ToLocalChecked()
 			);
 			return true;
@@ -74,7 +72,7 @@ public:
 					std::string("expected argument ")
 					+ std::to_string(argN)
 					+ std::string(" to be of type ")
-					+ std::string(typeName)
+					+ std::string(ConverterType::getTypeName())
 				).ToLocalChecked()
 			);
 			return true;

@@ -20,8 +20,10 @@ public:
 	cv::ml::ParamGrid getNativeObject() { return paramGrid; }
 
 	typedef InstanceConverter<ParamGrid, cv::ml::ParamGrid> Converter;
-};
 
-const char* InstanceConverter<ParamGrid, cv::ml::ParamGrid>::typeName = "ParamGrid";
+	static const char* getClassName() {
+		return "ParamGrid";
+	}
+};
 
 #endif

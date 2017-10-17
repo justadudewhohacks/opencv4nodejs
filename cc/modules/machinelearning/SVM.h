@@ -46,8 +46,10 @@ public:
 	cv::Ptr<cv::ml::SVM> getNativeObject() { return svm; }
 
 	typedef InstanceConverter<SVM, cv::Ptr<cv::ml::SVM> > Converter;
-};
 
-const char* InstanceConverter<SVM, cv::Ptr<cv::ml::SVM> >::typeName = "SVM";
+	static const char* getClassName() {
+		return "SVM";
+	}
+};
 
 #endif

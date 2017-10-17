@@ -170,12 +170,12 @@ void SVM::setParams(v8::Local<v8::Object> params) {
 	this->svm->setClassWeights(classWeights);
 }
 
-struct SVM::TrainFromTrainDataWorker {
+struct SVM::TrainFromTrainDataWorker : SimpleWorker {
 public:
 	cv::Ptr<cv::ml::SVM> svm;
 
-	TrainFromTrainDataWorker(cv::Ptr<cv::ml::SVM> _svm) {
-		svm = _svm;
+	TrainFromTrainDataWorker(cv::Ptr<cv::ml::SVM> svm) {
+		this->svm = svm;
 	}
 
 	cv::Ptr<cv::ml::TrainData> trainData;
@@ -199,22 +199,14 @@ public:
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return UintConverter::optArg(1, &flags, info);
 	}
-
-	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return false;
-	}
-
-	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return false;
-	}
 };
 
-struct SVM::TrainFromMatWorker {
+struct SVM::TrainFromMatWorker : SimpleWorker {
 public:
 	cv::Ptr<cv::ml::SVM> svm;
 
-	SVM::TrainFromMatWorker(cv::Ptr<cv::ml::SVM> _svm) {
-		svm = _svm;
+	TrainFromMatWorker(cv::Ptr<cv::ml::SVM> svm) {
+		this->svm = svm;
 	}
 
 	cv::Mat samples;
@@ -239,22 +231,10 @@ public:
 			Mat::Converter::arg(2, &responses, info)
 		);
 	}
-
-	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return false;
-	}
-
-	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return false;
-	}
-
-	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return false;
-	}
 };
 
 NAN_METHOD(SVM::Train) {
-	if (!FF_IS_INSTANCE(TrainData::constructor, info[0]) || !FF_IS_INSTANCE(Mat::constructor, info[0])) {
+	if (!FF_IS_INSTANCE(TrainData::constructor, info[0]) && !FF_IS_INSTANCE(Mat::constructor, info[0])) {
 		return Nan::ThrowError("SVM::Train - expected argument 0 to be an instance of TrainData or Mat");
 	}
 
@@ -291,8 +271,8 @@ struct SVM::TrainAutoWorker {
 public:
 	cv::Ptr<cv::ml::SVM> svm;
 
-	TrainAutoWorker(cv::Ptr<cv::ml::SVM> _svm) {
-		svm = _svm;
+	TrainAutoWorker(cv::Ptr<cv::ml::SVM> svm) {
+		this->svm = svm;
 	}
 
 	cv::Ptr<cv::ml::TrainData> trainData;
