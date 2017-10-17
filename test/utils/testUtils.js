@@ -27,6 +27,12 @@ exports.funcShouldRequireArgs = (func) => {
   });
 };
 
+exports._funcShouldRequireArgs = (func) => {
+  it('should throw if no args', () => {
+    assertError(func, 'expected argument 0 to be');
+  });
+};
+
 exports.expectFloat = (val, expected) =>
   expect(val).to.be.a('number').above(expected - 0.01).below(expected + 0.01);
 

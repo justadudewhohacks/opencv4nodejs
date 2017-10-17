@@ -1,5 +1,5 @@
 #include "CascadeClassifier.h"
-#include "GenericAsyncWorker.h"
+#include "Workers.h"
 
 Nan::Persistent<v8::FunctionTemplate> CascadeClassifier::constructor;
 

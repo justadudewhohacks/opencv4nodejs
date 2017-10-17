@@ -2,7 +2,7 @@
 #include "Mat.h"
 #include "Rect.h"
 #include "Point.h"
-#include "GenericAsyncWorker.h"
+#include "Workers.h"
 
 Nan::Persistent<v8::FunctionTemplate> HOGDescriptor::constructor;
 

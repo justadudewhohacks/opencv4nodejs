@@ -1,5 +1,5 @@
 #include "FeatureDetector.h"
-#include "GenericAsyncWorker.h"
+#include "Workers.h"
 
 void FeatureDetector::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "detect", FeatureDetector::Detect);

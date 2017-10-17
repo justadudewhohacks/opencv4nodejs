@@ -6,6 +6,18 @@
 #ifndef __FF_POINT_H__
 #define __FF_POINT_H__
 
+// TODO replace this
+#define FF_GET_JSPROP(obj, prop) Nan::Get(obj, FF_NEW_STRING(#prop)).ToLocalChecked()
+
+#define FF_GET_JSPROP_REQUIRED(obj, var, prop, castType)																	\
+	if (!FF_HAS(obj, #prop)) {																												\
+		return Nan::ThrowError(FF_NEW_STRING("Object has no property: " + std::string(#prop)));	\
+	}																																												\
+	var = FF_GET_JSPROP(obj, prop)->castType();
+
+#define FF_DESTRUCTURE_JSPROP_REQUIRED(obj, prop, castType)	\
+	FF_GET_JSPROP_REQUIRED(obj, prop, prop, castType)
+
 class Point : public Nan::ObjectWrap {
 public:
   static NAN_MODULE_INIT(Init);

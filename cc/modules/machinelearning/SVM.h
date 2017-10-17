@@ -1,4 +1,4 @@
-#include "macros.h"
+#include "Converters.h"
 #include <opencv2/ml.hpp>
 #include "Mat.h"
 
@@ -12,8 +12,6 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 	static NAN_METHOD(SetParams);
-	static NAN_METHOD(Train);
-	static NAN_METHOD(TrainAuto);
 	static NAN_METHOD(Predict);
 	static NAN_METHOD(GetSupportVectors);
 	static NAN_METHOD(GetUncompressedSupportVectors);
@@ -21,7 +19,13 @@ public:
 	static NAN_METHOD(Save);
 	static NAN_METHOD(Load);
 
+	struct TrainFromMatWorker;
+	struct TrainFromTrainDataWorker;
+	static NAN_METHOD(Train);
 	static NAN_METHOD(TrainAsync);
+
+	struct TrainAutoWorker;
+	static NAN_METHOD(TrainAuto);
 	static NAN_METHOD(TrainAutoAsync);
 
 	static FF_GETTER(SVM, c, svm->getC());
@@ -39,66 +43,11 @@ public:
 	void setParams(v8::Local<v8::Object> params);
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-	struct TrainFromMatContext {
-	public:
-		cv::Ptr<cv::ml::SVM> svm;
-		cv::Mat samples;
-		uint layout;
-		cv::Mat responses;
+	cv::Ptr<cv::ml::SVM> getNativeObject() { return svm; }
 
-		bool ret;
-
-		const char* execute() {
-			ret = svm->train(samples, (int)layout, responses);
-			return "";
-		}
-
-		FF_VAL getReturnValue() {
-			return Nan::New(ret);
-		}
-	};
-
-	struct TrainFromTrainDataContext {
-	public:
-		cv::Ptr<cv::ml::SVM> svm;
-		cv::Ptr<cv::ml::TrainData> trainData;
-		uint flags;
-
-		bool ret;
-
-		const char* execute() {
-			ret = svm->train(trainData, (int)flags);
-			return "";
-		}
-
-		FF_VAL getReturnValue() {
-			return Nan::New(ret);
-		}
-	};
-
-	struct TrainAutoContext {
-	public:
-		cv::Ptr<cv::ml::SVM> svm;
-		cv::Ptr<cv::ml::TrainData> trainData;
-		uint kFold;
-		cv::ml::ParamGrid cGrid;
-		cv::ml::ParamGrid gammaGrid;
-		cv::ml::ParamGrid pGrid;
-		cv::ml::ParamGrid nuGrid;
-		cv::ml::ParamGrid coeffGrid;
-		cv::ml::ParamGrid degreeGrid;
-		bool balanced;
-
-		bool ret;
-		const char* execute() {
-			ret = svm->trainAuto(trainData, (int)kFold, cGrid, gammaGrid, pGrid, nuGrid, coeffGrid, degreeGrid, balanced);
-			return "";
-		}
-
-		FF_VAL getReturnValue() {
-			return Nan::New(ret);
-		}
-	};
+	typedef InstanceConverter<SVM, cv::Ptr<cv::ml::SVM> > Converter;
 };
+
+const char* InstanceConverter<SVM, cv::Ptr<cv::ml::SVM> >::typeName = "SVM";
 
 #endif

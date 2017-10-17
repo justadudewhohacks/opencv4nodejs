@@ -1,6 +1,6 @@
 #include "io.h"
 #include "VideoCapture.h"
-#include "GenericAsyncWorker.h"
+#include "Workers.h"
 #include <iostream>
 
 NAN_MODULE_INIT(Io::Init) {

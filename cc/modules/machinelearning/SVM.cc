@@ -1,8 +1,7 @@
 #include "SVM.h"
 #include "TrainData.h"
 #include "ParamGrid.h"
-#include "Mat.h"
-#include "GenericAsyncWorker.h"
+#include "Workers.h"
 
 Nan::Persistent<v8::FunctionTemplate> SVM::constructor;
 
@@ -57,7 +56,10 @@ NAN_METHOD(SVM::New) {
 };
 
 NAN_METHOD(SVM::SetParams) {
-	FF_REQUIRE_ARGS_OBJ("SVM::SetParams");
+	if (!info[0]->IsObject()) {
+		return Nan::ThrowError("SVM::SetParams - args object required");	
+	}																																														
+	v8::Local<v8::Object> args = info[0]->ToObject();
 
 	Nan::TryCatch tryCatch;
 	FF_UNWRAP(info.This(), SVM)->setParams(args);
@@ -66,61 +68,6 @@ NAN_METHOD(SVM::SetParams) {
 	}
 	FF_RETURN(info.This());
 };
-
-NAN_METHOD(SVM::Train) {
-	FF_METHOD_CONTEXT("SVM::Train");
-
-	if (!FF_IS_INSTANCE(TrainData::constructor, info[0]) && !FF_IS_INSTANCE(Mat::constructor, info[0])) {
-		FF_THROW("expected arg 0 to be an instance of TrainData or Mat");
-	}
-
-	SVM* self = FF_UNWRAP(info.This(), SVM);
-	FF_VAL ret;
-	if (FF_IS_INSTANCE(TrainData::constructor, info[0])) {
-		FF_ARG_INSTANCE(0, cv::Ptr<cv::ml::TrainData> trainData, TrainData::constructor, FF_UNWRAP_TRAINDATA_AND_GET);
-		FF_ARG_UINT_IFDEF(1, unsigned int flags, 0);
-		ret = Nan::New(self->svm->train(trainData, flags));
-	}
-	else {
-		FF_ARG_INSTANCE(0, cv::Mat samples, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-		FF_ARG_UINT(1, unsigned int layout);
-		FF_ARG_INSTANCE(2, cv::Mat responses, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-		ret = Nan::New(self->svm->train(samples, (int)layout, responses));
-	}
-	FF_RETURN(ret);
-}
-
-NAN_METHOD(SVM::TrainAuto) {
-	FF_METHOD_CONTEXT("SVM::TrainAuto");
-
-	// required args
-	FF_ARG_INSTANCE(0, cv::Ptr<cv::ml::TrainData> trainData, TrainData::constructor, FF_UNWRAP_TRAINDATA_AND_GET);
-
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_UINT_IFDEF(optArgs, unsigned int kFold, "kFold", 10);
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::ml::ParamGrid cGrid, "cGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::C));
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::ml::ParamGrid gammaGrid, "gammaGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::GAMMA));
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::ml::ParamGrid pGrid, "pGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::P));
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::ml::ParamGrid nuGrid, "nuGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::NU));
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::ml::ParamGrid coeffGrid, "coeffGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::COEF));
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::ml::ParamGrid degreeGrid, "degreeGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::DEGREE));
-	FF_GET_BOOL_IFDEF(optArgs, bool balanced, "balanced", false);
-	if (!hasOptArgsObj) {
-		FF_ARG_UINT_IFDEF(1, kFold, kFold);
-		FF_ARG_INSTANCE_IFDEF(2, cGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, cGrid);
-		FF_ARG_INSTANCE_IFDEF(3, gammaGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, gammaGrid);
-		FF_ARG_INSTANCE_IFDEF(4, pGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, pGrid);
-		FF_ARG_INSTANCE_IFDEF(5, nuGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, nuGrid);
-		FF_ARG_INSTANCE_IFDEF(6, coeffGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, coeffGrid);
-		FF_ARG_INSTANCE_IFDEF(7, degreeGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, degreeGrid);
-		FF_ARG_BOOL_IFDEF(8, balanced, balanced);
-	}
-
-	bool ret = FF_UNWRAP(info.This(), SVM)->svm->trainAuto(trainData, (int)kFold, cGrid, gammaGrid, pGrid, nuGrid, coeffGrid, degreeGrid, balanced);
-	FF_RETURN(Nan::New(ret));
-}
 
 NAN_METHOD(SVM::Predict) {
 	FF_METHOD_CONTEXT("SVM::Predict");
@@ -223,75 +170,195 @@ void SVM::setParams(v8::Local<v8::Object> params) {
 	this->svm->setClassWeights(classWeights);
 }
 
+struct SVM::TrainFromTrainDataWorker {
+public:
+	cv::Ptr<cv::ml::SVM> svm;
 
-NAN_METHOD(SVM::TrainAsync) {
-	FF_METHOD_CONTEXT("SVM::TrainAsync");
-
-	if (!FF_IS_INSTANCE(TrainData::constructor, info[0]) && !FF_IS_INSTANCE(Mat::constructor, info[0])) {
-		FF_THROW("expected arg 0 to be an instance of TrainData or Mat");
+	TrainFromTrainDataWorker(cv::Ptr<cv::ml::SVM> _svm) {
+		svm = _svm;
 	}
 
-	cv::Ptr<cv::ml::SVM> svm = FF_UNWRAP(info.This(), SVM)->svm;
-	FF_VAL ret;
-	if (FF_IS_INSTANCE(TrainData::constructor, info[0])) {
-		TrainFromTrainDataContext ctx;
-		ctx.svm = svm;
-		FF_ARG_INSTANCE(0, ctx.trainData, TrainData::constructor, FF_UNWRAP_TRAINDATA_AND_GET);
-		FF_ARG_UINT_IFDEF_NOT_FUNC(1, ctx.flags, 0);
+	cv::Ptr<cv::ml::TrainData> trainData;
+	uint flags;
 
-		FF_ARG_FUNC(info.Length() - 1, v8::Local<v8::Function> cbFunc);
-		Nan::AsyncQueueWorker(new GenericAsyncWorker<TrainFromTrainDataContext>(
-			new Nan::Callback(cbFunc),
-			ctx
-		));
+	bool ret;
+
+	const char* execute() {
+		ret = svm->train(trainData, (int)flags);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Nan::New(ret);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return TrainData::Converter::arg(0, &trainData, info);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return UintConverter::optArg(1, &flags, info);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return false;
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return false;
+	}
+};
+
+struct SVM::TrainFromMatWorker {
+public:
+	cv::Ptr<cv::ml::SVM> svm;
+
+	SVM::TrainFromMatWorker(cv::Ptr<cv::ml::SVM> _svm) {
+		svm = _svm;
+	}
+
+	cv::Mat samples;
+	uint layout;
+	cv::Mat responses;
+
+	bool ret;
+
+	const char* execute() {
+		ret = svm->train(samples, (int)layout, responses);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Nan::New(ret);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::arg(0, &samples, info) ||
+			UintConverter::arg(1, &layout, info) ||
+			Mat::Converter::arg(2, &responses, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return false;
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return false;
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return false;
+	}
+};
+
+NAN_METHOD(SVM::Train) {
+	if (!FF_IS_INSTANCE(TrainData::constructor, info[0]) || !FF_IS_INSTANCE(Mat::constructor, info[0])) {
+		return Nan::ThrowError("SVM::Train - expected argument 0 to be an instance of TrainData or Mat");
+	}
+
+	bool isTrainFromTrainData = FF_IS_INSTANCE(TrainData::constructor, info[0]);
+	if (isTrainFromTrainData) {
+		TrainFromTrainDataWorker worker(SVM::Converter::unwrap(info.This()));
+		FF_WORKER_SYNC("SVM::Train", worker);
+		info.GetReturnValue().Set(worker.getReturnValue());
 	}
 	else {
-		TrainFromMatContext ctx;
-		ctx.svm = svm;
-		FF_ARG_INSTANCE(0, ctx.samples, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-		FF_ARG_UINT(1, ctx.layout);
-		FF_ARG_INSTANCE(2, ctx.responses, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-		FF_ARG_FUNC(info.Length() - 1, v8::Local<v8::Function> cbFunc);
-		Nan::AsyncQueueWorker(new GenericAsyncWorker<TrainFromMatContext>(
-			new Nan::Callback(cbFunc),
-			ctx
-		));
+		TrainFromMatWorker worker(SVM::Converter::unwrap(info.This()));
+		FF_WORKER_SYNC("SVM::Train", worker);
+		info.GetReturnValue().Set(worker.getReturnValue());
 	}
 }
 
-NAN_METHOD(SVM::TrainAutoAsync) {
-	FF_METHOD_CONTEXT("SVM::TrainAutoAsync");
-
-	TrainAutoContext ctx;
-	ctx.svm = FF_UNWRAP(info.This(), SVM)->svm;
-	// required args
-	FF_ARG_INSTANCE(0, ctx.trainData, TrainData::constructor, FF_UNWRAP_TRAINDATA_AND_GET);
-
-	// optional args
-	bool hasOptArgsObj = FF_ARG_IS_OBJECT(1);
-	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_UINT_IFDEF(optArgs, ctx.kFold, "kFold", 10);
-	FF_GET_INSTANCE_IFDEF(optArgs, ctx.cGrid, "cGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::C));
-	FF_GET_INSTANCE_IFDEF(optArgs, ctx.gammaGrid, "gammaGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::GAMMA));
-	FF_GET_INSTANCE_IFDEF(optArgs, ctx.pGrid, "pGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::P));
-	FF_GET_INSTANCE_IFDEF(optArgs, ctx.nuGrid, "nuGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::NU));
-	FF_GET_INSTANCE_IFDEF(optArgs, ctx.coeffGrid, "coeffGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::COEF));
-	FF_GET_INSTANCE_IFDEF(optArgs, ctx.degreeGrid, "degreeGrid", ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ParamGrid, cv::ml::SVM::getDefaultGrid(cv::ml::SVM::DEGREE));
-	FF_GET_BOOL_IFDEF(optArgs, ctx.balanced, "balanced", false);
-	if (!hasOptArgsObj) {
-		FF_ARG_UINT_IFDEF_NOT_FUNC(1, ctx.kFold, ctx.kFold);
-		FF_ARG_INSTANCE_IFDEF(2, ctx.cGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ctx.cGrid);
-		FF_ARG_INSTANCE_IFDEF(3, ctx.gammaGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ctx.gammaGrid);
-		FF_ARG_INSTANCE_IFDEF(4, ctx.pGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ctx.pGrid);
-		FF_ARG_INSTANCE_IFDEF(5, ctx.nuGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ctx.nuGrid);
-		FF_ARG_INSTANCE_IFDEF(6, ctx.coeffGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ctx.coeffGrid);
-		FF_ARG_INSTANCE_IFDEF(7, ctx.degreeGrid, ParamGrid::constructor, FF_UNWRAP_PARAMGRID_AND_GET, ctx.degreeGrid);
-		FF_ARG_BOOL_IFDEF_NOT_FUNC(8, ctx.balanced, ctx.balanced);
+NAN_METHOD(SVM::TrainAsync) {
+	if (!FF_IS_INSTANCE(TrainData::constructor, info[0]) && !FF_IS_INSTANCE(Mat::constructor, info[0])) {
+		return Nan::ThrowError("SVM::Train - expected argument 0 to be an instance of TrainData or Mat");
 	}
 
-	FF_ARG_FUNC(info.Length() - 1, v8::Local<v8::Function> cbFunc);
-	Nan::AsyncQueueWorker(new GenericAsyncWorker<TrainAutoContext>(
-		new Nan::Callback(cbFunc),
-		ctx
-	));
+	bool isTrainFromTrainData = FF_IS_INSTANCE(TrainData::constructor, info[0]);
+	if (isTrainFromTrainData) {
+		TrainFromTrainDataWorker worker(SVM::Converter::unwrap(info.This()));
+		FF_WORKER_ASYNC("SVM::TrainAutoAsync", TrainFromTrainDataWorker, worker);
+	}
+	else {
+		TrainFromMatWorker worker(SVM::Converter::unwrap(info.This()));
+		FF_WORKER_ASYNC("SVM::TrainAutoAsync", TrainFromMatWorker, worker);
+	}
+}
+
+struct SVM::TrainAutoWorker {
+public:
+	cv::Ptr<cv::ml::SVM> svm;
+
+	TrainAutoWorker(cv::Ptr<cv::ml::SVM> _svm) {
+		svm = _svm;
+	}
+
+	cv::Ptr<cv::ml::TrainData> trainData;
+	uint kFold = 10;
+	cv::ml::ParamGrid cGrid = cv::ml::SVM::getDefaultGrid(cv::ml::SVM::C);
+	cv::ml::ParamGrid gammaGrid = cv::ml::SVM::getDefaultGrid(cv::ml::SVM::GAMMA);
+	cv::ml::ParamGrid pGrid = cv::ml::SVM::getDefaultGrid(cv::ml::SVM::P);
+	cv::ml::ParamGrid nuGrid = cv::ml::SVM::getDefaultGrid(cv::ml::SVM::NU);
+	cv::ml::ParamGrid coeffGrid = cv::ml::SVM::getDefaultGrid(cv::ml::SVM::COEF);
+	cv::ml::ParamGrid degreeGrid = cv::ml::SVM::getDefaultGrid(cv::ml::SVM::DEGREE);
+	bool balanced = false;
+
+	bool ret;
+
+	const char* execute() {
+		ret = svm->trainAuto(trainData, (int)kFold, cGrid, gammaGrid, pGrid, nuGrid, coeffGrid, degreeGrid, balanced);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Nan::New(ret);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return TrainData::Converter::arg(0, &trainData, info);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			UintConverter::optArg(1, &kFold, info) ||
+			ParamGrid::Converter::optArg(2, &cGrid, info) ||
+			ParamGrid::Converter::optArg(3, &gammaGrid, info) ||
+			ParamGrid::Converter::optArg(4, &pGrid, info) ||
+			ParamGrid::Converter::optArg(5, &nuGrid, info) ||
+			ParamGrid::Converter::optArg(6, &coeffGrid, info) ||
+			ParamGrid::Converter::optArg(7, &degreeGrid, info) ||
+			BoolConverter::optArg(8, &balanced, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(1);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[1]->ToObject();
+		return (
+			UintConverter::optProp(&kFold, "kFold", opts) ||
+			ParamGrid::Converter::optProp(&cGrid, "cGrid", opts) ||
+			ParamGrid::Converter::optProp(&gammaGrid, "gammaGrid", opts) ||
+			ParamGrid::Converter::optProp(&pGrid, "pGrid", opts) ||
+			ParamGrid::Converter::optProp(&nuGrid, "nuGrid", opts) ||
+			ParamGrid::Converter::optProp(&coeffGrid, "coeffGrid", opts) ||
+			ParamGrid::Converter::optProp(&degreeGrid, "degreeGrid", opts) ||
+			BoolConverter::optProp(&balanced, "balanced", opts)
+		);
+	}
+};
+
+NAN_METHOD(SVM::TrainAuto) {
+	TrainAutoWorker worker(SVM::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("SVM::TrainAuto", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(SVM::TrainAutoAsync) {
+	TrainAutoWorker worker(SVM::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("SVM::TrainAutoAsync", TrainAutoWorker, worker);
 }

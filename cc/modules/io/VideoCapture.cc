@@ -1,5 +1,5 @@
 #include "VideoCapture.h"
-#include "GenericAsyncWorker.h"
+#include "Workers.h"
 
 Nan::Persistent<v8::FunctionTemplate> VideoCapture::constructor;
 
