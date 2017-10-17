@@ -14,17 +14,7 @@ NAN_MODULE_INIT(StatModel::Init) {
 
 NAN_METHOD(StatModel::New) {
 	StatModel* self = new StatModel();
-	/*
-	self->svm = cv::ml::StatModel::create()
-	if (info.Length() > 0) {
-		FF_REQUIRE_ARGS_OBJ("StatModel::New");
-		Nan::TryCatch tryCatch;
-		self->setParams(args);
-		if (tryCatch.HasCaught()) {
-			tryCatch.ReThrow();
-		}
-	}
-	*/
+
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };

@@ -1,4 +1,4 @@
-#include "macros.h"
+#include "Converters.h"
 #include <opencv2/ml.hpp>
 #include "Mat.h"
 
@@ -22,6 +22,14 @@ public:
 	// TODO Getters
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::Ptr<cv::ml::TrainData> getNativeObject() { return trainData; }
+
+	typedef InstanceConverter<TrainData, cv::Ptr<cv::ml::TrainData> > Converter;
+
+	static const char* getClassName() {
+		return "TrainData";
+	}
 };
 
 #endif

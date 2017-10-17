@@ -1,5 +1,5 @@
 #include "descriptorMatching.h"
-#include "GenericAsyncWorker.h"
+#include "Workers.h"
 
 NAN_MODULE_INIT(DescriptorMatching::Init) {
 	Nan::SetMethod(target, "matchFlannBased", MatchFlannBased);

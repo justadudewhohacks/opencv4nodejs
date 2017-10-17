@@ -2,7 +2,9 @@ const { expect } = require('chai');
 
 const cv = global.dut;
 const {
+  assertError,
   assertPropsWithValue,
+  _funcShouldRequireArgs,
   getTmpDataFilePath,
   clearTmpData
 } = global.utils;
@@ -100,6 +102,8 @@ module.exports = () => {
 
       describe('train', () => {
         describe('sync', () => {
+          _funcShouldRequireArgs(() => new cv.SVM().train());
+
           it('should be trainable with trainData', () => {
             const svm = new cv.SVM();
             expectOutput(
@@ -133,6 +137,8 @@ module.exports = () => {
         });
 
         describe('async', () => {
+          _funcShouldRequireArgs(() => new cv.SVM().trainAsync());
+
           it('should be trainable with trainData', (done) => {
             const svm = new cv.SVM();
             svm.trainAsync(
@@ -173,6 +179,8 @@ module.exports = () => {
         const balanced = true;
 
         describe('sync', () => {
+          _funcShouldRequireArgs(() => new cv.SVM().trainAuto());
+
           it('should be trainable with trainData', () => {
             const svm = new cv.SVM();
             expectOutput(
@@ -207,6 +215,16 @@ module.exports = () => {
                 trainData,
                 kFold
               )
+            );
+          });
+
+          it('should throw if optional arg is invalid', () => {
+            assertError(
+              () => new cv.SVM().trainAuto(
+                trainData,
+                undefined
+              ),
+              'argument 1'
             );
           });
 
@@ -245,9 +263,21 @@ module.exports = () => {
               )
             );
           });
+
+          it('should throw if optional arg property is invalid', () => {
+            assertError(
+              () => new cv.SVM().trainAuto(
+                trainData,
+                { degreeGrid: undefined }
+              ),
+              'property degreeGrid'
+            );
+          });
         });
 
         describe('async', () => {
+          _funcShouldRequireArgs(() => new cv.SVM().trainAutoAsync());
+
           it('should be trainable with trainData', (done) => {
             const svm = new cv.SVM();
             svm.trainAutoAsync(
@@ -281,6 +311,17 @@ module.exports = () => {
             );
           });
 
+          it('should throw if optional arg is invalid', () => {
+            assertError(
+              () => new cv.SVM().trainAuto(
+                trainData,
+                undefined,
+                () => {}
+              ),
+              'argument 1'
+            );
+          });
+
           it('should be trainable with trainData and optional args object', (done) => {
             const svm = new cv.SVM();
             const opts = {
@@ -310,6 +351,17 @@ module.exports = () => {
               trainData,
               opts,
               expectOutputAsync(done, svm)
+            );
+          });
+
+          it('should throw if optional arg property is invalid', () => {
+            assertError(
+              () => new cv.SVM().trainAutoAsync(
+                trainData,
+                { degreeGrid: undefined },
+                () => {}
+              ),
+              'property degreeGrid'
             );
           });
         });

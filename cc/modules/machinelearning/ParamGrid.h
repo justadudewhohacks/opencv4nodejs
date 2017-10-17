@@ -1,4 +1,4 @@
-#include "macros.h"
+#include "Converters.h"
 #include <opencv2/ml.hpp>
 
 #ifndef __FF_PARAMGRID_H__
@@ -16,6 +16,14 @@ public:
 	static FF_GETTER(ParamGrid, logStep, paramGrid.logStep);
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::ml::ParamGrid getNativeObject() { return paramGrid; }
+
+	typedef InstanceConverter<ParamGrid, cv::ml::ParamGrid> Converter;
+
+	static const char* getClassName() {
+		return "ParamGrid";
+	}
 };
 
 #endif

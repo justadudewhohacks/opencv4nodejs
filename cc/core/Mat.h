@@ -1,4 +1,4 @@
-#include "macros.h"
+#include "Converters.h"
 #include <opencv2/imgproc.hpp>
 #include "Size.h"
 #include "coreUtils.h"
@@ -87,6 +87,14 @@ public:
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	void setNativeProps(cv::Mat);
+
+	cv::Mat getNativeObject() { return mat; }
+
+	typedef InstanceConverter<Mat, cv::Mat> Converter;
+
+	static const char* getClassName() {
+		return "Mat";
+	}
 };
 
 #endif
