@@ -12,3 +12,5 @@ examples
 doc
 coverage
 tmpdata
+ci
+.dockerignore

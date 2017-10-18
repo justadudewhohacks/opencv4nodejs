@@ -1,0 +1,10 @@
+**
+!ci
+!package.json
+!binding.gyp
+!lib
+!test
+!cc
+!data/got.jpg
+!data/Lenna.png
+!data/traffic.mp4
