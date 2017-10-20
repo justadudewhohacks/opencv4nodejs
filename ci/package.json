@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "codecov": "codecov -f ./coverage-report/opencv4nodejs.info"
+  },
+  "dependencies": {
+    "codecov": "^2.3.0"
+  }
+}

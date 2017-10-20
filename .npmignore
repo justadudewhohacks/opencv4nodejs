@@ -11,4 +11,7 @@ examples
 .travis.yml
 doc
 coverage
+coverage-report
 tmpdata
+ci
+.dockerignore

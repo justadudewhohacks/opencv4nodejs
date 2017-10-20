@@ -6,4 +6,5 @@ bin
 node_modules
 crash.log
 coverage
+coverage-report
 tmpdata

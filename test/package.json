@@ -3,15 +3,14 @@
   "version": "1.1.0",
   "scripts": {
     "test": "mocha --require ./globals --timeout 2000 --recursive ./tests",
+    "test-docker": "DOCKER_BUILD=true mocha --require ./globals --timeout 30000 --recursive ./tests",
     "gc": "set WITH_GC=true &&mocha --expose-gc --require ./globals --timeout 10000 --recursive ./tests",
-    "cover": "BINDINGS_DEBUG=true istanbul cover node_modules/mocha/bin/_mocha --report lcovonly --require ./globals -- --timeout 30000 --recursive ./tests",
-    "codecov": "codecov -f ./coverage/opencv4nodejs.info"
+    "cover": "BINDINGS_DEBUG=true istanbul cover node_modules/mocha/bin/_mocha --report lcovonly --require ./globals -- --timeout 30000 --recursive ./tests"
   },
   "author": "justadudewhohacks",
   "license": "ISC",
   "dependencies": {
     "chai": "^4.1.0",
-    "codecov": "^2.3.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.5.3"
   },

@@ -1,45 +1,27 @@
-language:
-  - cpp
+language: node_js
 
-cache:
-  - ccache
+node_js:
+  - '6'
 
-compiler:
-  - gcc
+sudo: required
 
-before_install:
-  - sudo apt-get update
+services:
+  - docker
 
-install:
-  - sudo apt-get install -y build-essential
-  - sudo apt-get install -y cmake git
-  - sudo apt-get install -y lcov
+install: skip
 
-  # setup opencv 3.2 with extra modules
-  - curl -sL https://github.com/Itseez/opencv/archive/3.2.0.zip > opencv.zip
-  - unzip opencv.zip
-  - curl -sL https://github.com/Itseez/opencv_contrib/archive/3.2.0.zip > opencv_contrib.zip
-  - unzip opencv_contrib.zip
+matrix:
+  include:
+  - env: BUILD_TASK=build-opencv3.0
+  - env: BUILD_TASK=build-opencv3.1
+  - env: BUILD_TASK=build-opencv3.3
+  - env: BUILD_TASK=build-opencv3.2-contrib-with-coverage
 
-  - cd opencv-3.2.0
-  - mkdir build
-  - cd build
-  - cmake -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.2.0/modules -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local ..
-  - make -j5
-  - sudo make install
-  - sudo sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
-  - sudo ldconfig
-  - cd ../../
-
-script:
-  - npm install
-  - npm run build-debug
-  - cd ./test && npm install
-  - npm run cover
+script: npm run $BUILD_TASK
 
 after_success:
-  - lcov -c -d ../build/Debug -o coverage/capture.info
-  - lcov -e coverage/capture.info '*opencv4nodejs/cc/*' -o coverage/capturedcc.info
-  - lcov -t opencv4nodejs -a coverage/capturedcc.info -o coverage/opencv4nodejs.info
-  - genhtml --output-directory coverage coverage/opencv4nodejs.info
-  - npm run codecov -- -t $CODECOV_TOKEN
+  - if [ $BUILD_TASK = 'build-opencv3.2-contrib-with-coverage' ]; then
+    cd ./ci;
+    npm install;
+    npm run codecov -- -t $CODECOV_TOKEN;
+    fi
