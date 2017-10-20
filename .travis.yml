@@ -20,6 +20,4 @@ matrix:
 script: npm run $BUILD_TASK
 
 after_success:
-  - cd ./ci
-  - npm install
-  - npm run codecov -- -t $CODECOV_TOKEN
+  - if [ $BUILD_TASK = 'build-opencv3.2-contrib-with-coverage' ]; cd ./ci &&  npm install && npm run codecov -- -t $CODECOV_TOKEN; fi;

@@ -34,7 +34,7 @@ describe('io', () => {
   });
 
   // TODO: setup opencv on travis with codecs correctly
-  if (!process.env.DOCKER_BUILD) {
+  if (!process.env.DOCKER_BUILD && !process.env.BINDINGS_DEBUG) {
     videoCaptureTests();
   }
 
