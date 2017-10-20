@@ -10,16 +10,14 @@ services:
 
 install: skip
 
-jobs:
+matrix:
   include:
-    - stage: opencv3.0
-      script: npm run build-opencv3.0
-    - stage: opencv3.1
-      script: npm run build-opencv3.1
-    - stage: opencv3.3
-      script: npm run build-opencv3.3
-    - stage: opencv3.2-contrib
-      script: npm run build-opencv3.2-contrib-with-coverage
+  - env: BUILD_TASK=build-opencv3.0
+  - env: BUILD_TASK=build-opencv3.1
+  - env: BUILD_TASK=build-opencv3.3
+  - env: BUILD_TASK=build-opencv3.2-contrib-with-coverage
+
+script: npm run $BUILD_TASK
 
 after_success:
   - cd ./ci
