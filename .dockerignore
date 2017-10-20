@@ -1,5 +1,6 @@
 **
 !ci
+ci/coverage-report
 !package.json
 !binding.gyp
 !lib

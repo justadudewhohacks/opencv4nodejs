@@ -34,7 +34,7 @@ describe('io', () => {
   });
 
   // TODO: setup opencv on travis with codecs correctly
-  if (!process.env.BINDINGS_DEBUG) {
+  if (!process.env.DOCKER_BUILD) {
     videoCaptureTests();
   }
 
@@ -121,8 +121,7 @@ describe('io', () => {
       });
     });
 
-    // TODO: figure out why travis is complaining here?
-    (process.env.BINDINGS_DEBUG ? describe.skip : describe)('async', () => {
+    describe('async', () => {
       const pngPrefixLength = 18;
       const jpgPrefixLength = 12;
       funcShouldRequireArgs(cv.imencodeAsync);
