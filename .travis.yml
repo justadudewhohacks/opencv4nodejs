@@ -8,6 +8,8 @@ sudo: required
 services:
   - docker
 
+install: skip
+
 jobs:
   include:
     - stage: opencv3.0
