@@ -1,6 +1,7 @@
 const cv = global.dut;
 const {
   assertError,
+  asyncFuncShouldRequireArgs,
   _funcShouldRequireArgs
 } = global.utils;
 const { expect } = require('chai');
@@ -157,71 +158,112 @@ module.exports = () => {
       });
 
       describe('async', () => {
-        const expectOutputAsync = done => (err, desc) => {
+        const expectOutputCallbacked = done => (err, desc) => {
           expectOutput(desc);
           done();
         };
 
-        _funcShouldRequireArgs(() => new cv.HOGDescriptor().computeAsync());
+        const expectOutputPromisified = done => (desc) => {
+          expectOutput(desc);
+          done();
+        };
 
-        it('should be callable with single channel img', (done) => {
-          new cv.HOGDescriptor().computeAsync(
-            new cv.Mat(200, 200, cv.CV_8U),
-            expectOutputAsync(done)
-          );
-        });
+        asyncFuncShouldRequireArgs(() => new cv.HOGDescriptor().computeAsync());
 
-        it('should be callable with triple channel img', (done) => {
-          new cv.HOGDescriptor().computeAsync(
-            new cv.Mat(200, 200, cv.CV_8UC3),
-            expectOutputAsync(done)
-          );
-        });
+        describe('callbacked', () => {
+          it('should be callable with single channel img', (done) => {
+            new cv.HOGDescriptor().computeAsync(
+              new cv.Mat(200, 200, cv.CV_8U),
+              expectOutputCallbacked(done)
+            );
+          });
 
-        it('should be callable with optional args', (done) => {
-          new cv.HOGDescriptor().computeAsync(
-            new cv.Mat(200, 200, cv.CV_8UC3),
-            winStride,
-            padding,
-            locations,
-            expectOutputAsync(done)
-          );
-        });
+          it('should be callable with triple channel img', (done) => {
+            new cv.HOGDescriptor().computeAsync(
+              new cv.Mat(200, 200, cv.CV_8UC3),
+              expectOutputCallbacked(done)
+            );
+          });
 
-        it('should be callable with optional args object', (done) => {
-          new cv.HOGDescriptor().computeAsync(
-            new cv.Mat(200, 200, cv.CV_8UC3),
-            {
-              winStride,
-              padding,
-              locations
-            },
-            expectOutputAsync(done)
-          );
-        });
-
-        it('should throw if locations invalid', () => {
-          assertError(
-            () => new cv.HOGDescriptor().computeAsync(
+          it('should be callable with optional args', (done) => {
+            new cv.HOGDescriptor().computeAsync(
               new cv.Mat(200, 200, cv.CV_8UC3),
               winStride,
               padding,
-              invalidLocations,
-              () => {}
-            ),
-            'expected array element at index 1 to be of type Point2'
-          );
-        });
+              locations,
+              expectOutputCallbacked(done)
+            );
+          });
 
-        it('should throw if locations invalid for opt arg object', () => {
-          assertError(
-            () => new cv.HOGDescriptor().computeAsync(
+          it('should be callable with optional args object', (done) => {
+            new cv.HOGDescriptor().computeAsync(
               new cv.Mat(200, 200, cv.CV_8UC3),
-              { locations: invalidLocations },
-              () => {}
-            ),
-            'expected array element at index 1 to be of type Point2'
-          );
+              {
+                winStride,
+                padding,
+                locations
+              },
+              expectOutputCallbacked(done)
+            );
+          });
+
+          it('should throw if locations invalid', () => {
+            assertError(
+              () => new cv.HOGDescriptor().computeAsync(
+                new cv.Mat(200, 200, cv.CV_8UC3),
+                winStride,
+                padding,
+                invalidLocations,
+                () => {}
+              ),
+              'expected array element at index 1 to be of type Point2'
+            );
+          });
+
+          it('should throw if locations invalid for opt arg object', () => {
+            assertError(
+              () => new cv.HOGDescriptor().computeAsync(
+                new cv.Mat(200, 200, cv.CV_8UC3),
+                { locations: invalidLocations },
+                () => {}
+              ),
+              'expected array element at index 1 to be of type Point2'
+            );
+          });
+
+          describe('promisified', () => {
+            it('should be callable with single channel img', (done) => {
+              new cv.HOGDescriptor().computeAsync(
+                new cv.Mat(200, 200, cv.CV_8U)
+              ).then(expectOutputPromisified(done));
+            });
+
+            it('should be callable with triple channel img', (done) => {
+              new cv.HOGDescriptor().computeAsync(
+                new cv.Mat(200, 200, cv.CV_8UC3)
+              ).then(expectOutputPromisified(done));
+            });
+
+            it('should be callable with optional args', (done) => {
+              new cv.HOGDescriptor().computeAsync(
+                new cv.Mat(200, 200, cv.CV_8UC3),
+                winStride,
+                padding,
+                locations
+              ).then(expectOutputPromisified(done));
+            });
+
+            it('should be callable with optional args object', (done) => {
+              new cv.HOGDescriptor().computeAsync(
+                new cv.Mat(200, 200, cv.CV_8UC3),
+                {
+                  winStride,
+                  padding,
+                  locations
+                }
+              ).then(expectOutputPromisified(done));
+            });
+          });
         });
       });
     });

@@ -29,10 +29,6 @@ module.exports = () => {
       });
 
       describe('async', () => {
-        it('should require a callback', () => {
-          assertError(() => cap.readAsync(), 'expected arg 0 to be of type: FUNC');
-        });
-
         it('should read a frame', (done) => {
           cap.readAsync((err, frame) => {
             expect(frame).to.be.instanceOf(cv.Mat);

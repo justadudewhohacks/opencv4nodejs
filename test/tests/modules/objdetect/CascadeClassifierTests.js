@@ -1,5 +1,6 @@
 const cv = global.dut;
 const {
+  asyncFuncShouldRequireArgs,
   funcShouldRequireArgs,
   _funcShouldRequireArgs,
   readTestImage
@@ -94,43 +95,81 @@ module.exports = () => {
         });
 
         describe('async', () => {
-          const expectOutputAsync = done => (err, ret) => {
+          const expectOutputCallbacked = done => (err, ret) => {
             expectOutput(ret);
             done();
           };
 
-          _funcShouldRequireArgs(() => cc.detectMultiScaleAsync());
+          const expectOutputPromised = done => (ret) => {
+            expectOutput(ret);
+            done();
+          };
 
-          it('can be called if required args passed', (done) => {
-            cc.detectMultiScaleAsync(
-              testImg,
-              expectOutputAsync(done)
-            );
-          });
+          asyncFuncShouldRequireArgs(() => cc.detectMultiScaleAsync());
 
-          it('can be called with optional args', (done) => {
-            cc.detectMultiScaleAsync(
-              testImg,
-              scaleFactor,
-              minNeighbors,
-              flags,
-              minSize,
-              maxSize,
-              expectOutputAsync(done)
-            );
-          });
+          describe('callbacked', () => {
+            it('can be called if required args passed', (done) => {
+              cc.detectMultiScaleAsync(
+                testImg,
+                expectOutputCallbacked(done)
+              );
+            });
 
-          it('can be called with optional args object', (done) => {
-            cc.detectMultiScaleAsync(
-              testImg,
-              {
+            it('can be called with optional args', (done) => {
+              cc.detectMultiScaleAsync(
+                testImg,
                 scaleFactor,
                 minNeighbors,
+                flags,
+                minSize,
+                maxSize,
+                expectOutputCallbacked(done)
+              );
+            });
+
+            it('can be called with optional args object', (done) => {
+              cc.detectMultiScaleAsync(
+                testImg,
+                {
+                  scaleFactor,
+                  minNeighbors,
+                  minSize,
+                  maxSize
+                },
+                expectOutputCallbacked(done)
+              );
+            });
+          });
+
+          describe('promised', () => {
+            it('can be called if required args passed', (done) => {
+              cc.detectMultiScaleAsync(
+                testImg
+              ).then(expectOutputPromised(done));
+            });
+
+            it('can be called with optional args', (done) => {
+              cc.detectMultiScaleAsync(
+                testImg,
+                scaleFactor,
+                minNeighbors,
+                flags,
                 minSize,
                 maxSize
-              },
-              expectOutputAsync(done)
-            );
+              ).then(expectOutputPromised(done));
+            });
+
+            it('can be called with optional args object', (done) => {
+              cc.detectMultiScaleAsync(
+                testImg,
+                {
+                  scaleFactor,
+                  minNeighbors,
+                  minSize,
+                  maxSize
+                }
+              ).then(expectOutputPromised(done));
+            });
           });
         });
       });
@@ -179,15 +218,15 @@ module.exports = () => {
         });
 
         describe('async', () => {
-          const expectOutputAsync = done => (err, ret) => {
+          const expectOutputCallbacked = done => (err, ret) => {
             expectOutput(ret);
             done();
           };
 
-          _funcShouldRequireArgs(() => cc.detectMultiScaleWithRejectLevelsAsync());
+          asyncFuncShouldRequireArgs(() => cc.detectMultiScaleWithRejectLevelsAsync());
 
           it('can be called if required args passed', (done) => {
-            cc.detectMultiScaleWithRejectLevelsAsync(testImg, expectOutputAsync(done));
+            cc.detectMultiScaleWithRejectLevelsAsync(testImg, expectOutputCallbacked(done));
           });
 
           it('can be called with optional args', (done) => {
@@ -198,7 +237,7 @@ module.exports = () => {
               flags,
               minSize,
               maxSize,
-              expectOutputAsync(done)
+              expectOutputCallbacked(done)
             );
           });
 
@@ -211,7 +250,7 @@ module.exports = () => {
                 minSize,
                 maxSize
               },
-              expectOutputAsync(done)
+              expectOutputCallbacked(done)
             );
           });
         });

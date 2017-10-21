@@ -5,7 +5,7 @@ opencv4nodejs
 [![npm download](https://img.shields.io/npm/dm/opencv4nodejs.svg?style=flat)](https://www.npmjs.com/package/opencv4nodejs)
 [![node version](https://img.shields.io/badge/node.js-%3E=_6-green.svg?style=flat)](http://nodejs.org/download/)
 
-**By it's nature, JavaScript lacks the performance to implement Computer Vision tasks efficiently. Therefore this package brings the performance of the native OpenCV C++ library to your Node.js application. Bindings to OpenCV 3 are available as an asynchronous (currently under construction) and synchronous API.**
+**By it's nature, JavaScript lacks the performance to implement Computer Vision tasks efficiently. Therefore this package brings the performance of the native OpenCV C++ library to your Node.js application. Bindings to OpenCV 3 are available as an asynchronous (callbacked and promisified, currently under construction) and synchronous API.**
 
  * **[Examples](#examples)**
  * **[API Documentation](https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/README.md)**
@@ -13,6 +13,7 @@ opencv4nodejs
  * **[Usage with Docker](#usage-with-docker)**
  * **[Usage with Electron](#usage-with-electron)**
  * **[Quick Start](#quick-start)**
+ * **[Async API](#async-api)**
  * **[Available Modules](#available-modules)**
  * **[Request new Features](#request-features)**
 
@@ -319,6 +320,49 @@ const optionalArgs = {
 };
 const dst2 = src.gaussianBlur(new cv.Size(5, 5), 1.2, optionalArgs);
 ```
+
+<a name="async-api"></a>
+
+## Async API
+
+The async API can be consumed by passing a callback as the last argument of the function call. By default, if an async method is called without passing a callback, the function call will yield a Promise.
+
+### Async Face Detection
+
+``` javascript
+const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
+
+// by nesting callbacks
+cv.imreadAsync('./faceimg.jpg', (err, img) => {
+  if (err) { return console.error(err); }
+
+  const grayImg = img.bgrToGray();
+  classifier.detectMultiScaleAsync(grayImg, (err, res) => {
+    if (err) { return console.error(err); }
+
+    const { objects, numDetections } = res;
+    ...
+  });
+});
+
+// via Promise
+cv.imreadAsync('./faceimg.jpg')
+  .then(img => classifier.detectMultiScaleAsync(img.bgrToGray()).then(res => ({ res, img })))
+  .then(({ res, img }) => {
+    const { objects, numDetections } = res;
+    ...
+  })
+  .catch(err => console.error(err));
+
+// using async await
+const img = await cv.imreadAsync('./faceimg.jpg');
+const grayImg = img.bgrToGray();
+const { objects, numDetections } = await classifier.detectMultiScaleAsync(grayImg);
+...
+
+```
+
+### Initializing Mat (image matrix), Vec, Point
 
 <a name="available-modules"></a>
 

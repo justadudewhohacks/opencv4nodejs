@@ -13,6 +13,7 @@ const {
   assertDataDeepEquals,
   assertError,
   assertMetaData,
+  _asyncFuncShouldRequireArgs,
   funcShouldRequireArgs
 } = global.utils;
 
@@ -25,6 +26,9 @@ describe('io', () => {
   let got;
   let lennaBase64Buf;
   let gotBase64Buf;
+
+  const getLennaBase64Buf = () => lennaBase64Buf;
+  const getGotBase64Buf = () => gotBase64Buf;
 
   before(() => {
     lenna = readTestImage();
@@ -48,11 +52,7 @@ describe('io', () => {
     });
 
     describe('async', () => {
-      funcShouldRequireArgs(cv.imreadAsync);
-
-      it('should require a callback', () => {
-        assertError(() => cv.imreadAsync('foo.png'), 'expected arg 1 to be of type: FUNC');
-      });
+      _asyncFuncShouldRequireArgs(cv.imreadAsync);
 
       it('should throw empty Mat if path invalid', (done) => {
         cv.imreadAsync('foo.png', (err) => {
@@ -87,11 +87,7 @@ describe('io', () => {
 
     describe('async', () => {
       const file = getTmpDataFilePath('written_async.png');
-      funcShouldRequireArgs(cv.imwriteAsync);
-
-      it('should require a callback', () => {
-        assertError(() => cv.imwriteAsync(file, lenna), 'expected arg 2 to be of type: FUNC');
-      });
+      _asyncFuncShouldRequireArgs(cv.imwriteAsync);
 
       it('should write image', (done) => {
         cv.imwriteAsync(file, lenna, () => {
@@ -110,13 +106,13 @@ describe('io', () => {
 
       it('should encode png img', () => {
         const enc = cv.imencode('.png', lenna);
-        const buf = lennaBase64Buf;
+        const buf = getLennaBase64Buf();
         expect(enc.slice(0, pngPrefixLength)).to.deep.equal(buf.slice(0, pngPrefixLength));
       });
 
       it('should encode jpg img', () => {
         const enc = cv.imencode('.jpg', got);
-        const buf = gotBase64Buf;
+        const buf = getGotBase64Buf();
         expect(enc.slice(0, jpgPrefixLength)).to.deep.equal(buf.slice(0, jpgPrefixLength));
       });
     });
@@ -124,15 +120,11 @@ describe('io', () => {
     describe('async', () => {
       const pngPrefixLength = 18;
       const jpgPrefixLength = 12;
-      funcShouldRequireArgs(cv.imencodeAsync);
-
-      it('should require a callback', () => {
-        assertError(() => cv.imencodeAsync('.png', lenna), 'expected arg 2 to be of type: FUNC');
-      });
+      _asyncFuncShouldRequireArgs(cv.imencodeAsync);
 
       it('should encode png img', (done) => {
         cv.imencodeAsync('.png', lenna, (err, enc) => {
-          const buf = lennaBase64Buf;
+          const buf = getLennaBase64Buf();
           expect(enc.slice(0, pngPrefixLength)).to.deep.equal(buf.slice(0, pngPrefixLength));
           done();
         });
@@ -140,7 +132,7 @@ describe('io', () => {
 
       it('should encode jpg img', (done) => {
         cv.imencodeAsync('.jpg', got, (err, enc) => {
-          const buf = gotBase64Buf;
+          const buf = getGotBase64Buf();
           expect(enc.slice(0, jpgPrefixLength)).to.deep.equal(buf.slice(0, jpgPrefixLength));
           done();
         });
@@ -153,32 +145,28 @@ describe('io', () => {
       funcShouldRequireArgs(cv.imdecode);
 
       it('should decode png', () => {
-        const dec = cv.imdecode(lennaBase64Buf);
+        const dec = cv.imdecode(getLennaBase64Buf());
         assertDataDeepEquals(lenna.getDataAsArray(), dec.getDataAsArray());
       });
 
       it('should decode jpeg', () => {
-        const dec = cv.imdecode(gotBase64Buf);
+        const dec = cv.imdecode(getGotBase64Buf());
         assertDataDeepEquals(got.getDataAsArray(), dec.getDataAsArray());
       });
     });
 
     describe('async', () => {
-      funcShouldRequireArgs(cv.imdecodeAsync);
-
-      it('should require a callback', () => {
-        assertError(() => cv.imdecodeAsync(lennaBase64Buf), 'expected arg 1 to be of type: FUNC');
-      });
+      _asyncFuncShouldRequireArgs(cv.imdecodeAsync);
 
       it('should decode png', (done) => {
-        cv.imdecodeAsync(lennaBase64Buf, (err, dec) => {
+        cv.imdecodeAsync(getLennaBase64Buf(), (err, dec) => {
           assertDataDeepEquals(lenna.getDataAsArray(), dec.getDataAsArray());
           done();
         });
       });
 
       it('should decode jpeg', (done) => {
-        cv.imdecodeAsync(gotBase64Buf, (err, dec) => {
+        cv.imdecodeAsync(getGotBase64Buf(), (err, dec) => {
           assertDataDeepEquals(got.getDataAsArray(), dec.getDataAsArray());
           done();
         });

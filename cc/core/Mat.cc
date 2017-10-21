@@ -1418,7 +1418,7 @@ public:
 			DoubleConverter::optArg(2, &scale, info) ||
 			DoubleConverter::optArg(3, &delta, info) ||
 			IntConverter::optArg(4, &borderType, info)
-			);
+		);
 	}
 
 	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
