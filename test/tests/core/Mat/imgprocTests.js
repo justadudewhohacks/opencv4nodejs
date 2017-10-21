@@ -531,21 +531,46 @@ module.exports = (getTestImg) => {
       const maxVal = 255;
       const thresholdType = cv.THRESH_BINARY;
 
-      funcShouldRequireArgs((() => mat.threshold.bind(mat))());
+      describe('sync', () => {
+        _funcShouldRequireArgs(() => mat.threshold());
 
-      it('can be called with required args', () => {
-        const thresholded = mat.threshold(th, maxVal, thresholdType);
-        assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+        it('can be called with required args', () => {
+          const thresholded = mat.threshold(th, maxVal, thresholdType);
+          assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+        });
+
+        it('should return correct binary mat', () => {
+          const expected = [
+            [255, 255, 255],
+            [0, 0, 255]
+          ];
+
+          const thresholded = mat.threshold(th, maxVal, thresholdType);
+          assertDataDeepEquals(expected, thresholded.getDataAsArray());
+        });
       });
 
-      it('should return correct binary mat', () => {
-        const expected = [
-          [255, 255, 255],
-          [0, 0, 255]
-        ];
+      describe('async', () => {
+        _funcShouldRequireArgs(() => mat.thresholdAsync());
 
-        const thresholded = mat.threshold(th, maxVal, thresholdType);
-        assertDataDeepEquals(expected, thresholded.getDataAsArray());
+        it('can be called with required args', (done) => {
+          mat.thresholdAsync(th, maxVal, thresholdType, (err, thresholded) => {
+            assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+            done();
+          });
+        });
+
+        it('should return correct binary mat', (done) => {
+          const expected = [
+            [255, 255, 255],
+            [0, 0, 255]
+          ];
+
+          mat.thresholdAsync(th, maxVal, thresholdType, (err, thresholded) => {
+            assertDataDeepEquals(expected, thresholded.getDataAsArray());
+            done();
+          });
+        });
       });
     });
 
@@ -555,12 +580,24 @@ module.exports = (getTestImg) => {
       const thresholdType = cv.THRESH_BINARY;
       const blockSize = 3;
       const C = 0.9;
+      describe('sync', () => {
+        _funcShouldRequireArgs(() => mat.adaptiveThreshold());
 
-      funcShouldRequireArgs((() => mat.adaptiveThreshold.bind(mat))());
+        it('can be called with required args', () => {
+          const thresholded = mat.adaptiveThreshold(maxVal, adaptiveMethod, thresholdType, blockSize, C);
+          assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+        });
+      });
 
-      it('can be called with required args', () => {
-        const thresholded = mat.adaptiveThreshold(maxVal, adaptiveMethod, thresholdType, blockSize, C);
-        assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+      describe('async', (done) => {
+        _funcShouldRequireArgs(() => mat.adaptiveThresholdAsync());
+
+        it('can be called with required args', () => {
+          mat.adaptiveThresholdAsync(maxVal, adaptiveMethod, thresholdType, blockSize, C, (err, thresholded) => {
+            assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+            done();
+          });
+        });
       });
     });
   });
@@ -610,7 +647,7 @@ module.exports = (getTestImg) => {
     });
   });
 
-  describe.only('matchTemplate', () => {
+  describe('matchTemplate', () => {
     let img;
     const templOffset = { x: 10, y: 10 };
     let templ;

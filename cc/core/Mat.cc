@@ -47,8 +47,11 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "cvtColor", CvtColor);
 	Nan::SetPrototypeMethod(ctor, "bgrToGray", BgrToGray);
 	Nan::SetPrototypeMethod(ctor, "threshold", Threshold);
+	Nan::SetPrototypeMethod(ctor, "thresholdAsync", ThresholdAsync);
 	Nan::SetPrototypeMethod(ctor, "adaptiveThreshold", AdaptiveThreshold);
+	Nan::SetPrototypeMethod(ctor, "adaptiveThresholdAsync", AdaptiveThresholdAsync);
 	Nan::SetPrototypeMethod(ctor, "inRange", InRange);
+	Nan::SetPrototypeMethod(ctor, "inRangeAsync", InRangeAsync);
 	Nan::SetPrototypeMethod(ctor, "warpAffine", WarpAffine);
 	Nan::SetPrototypeMethod(ctor, "warpAffineAsync", WarpAffineAsync);
 	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
@@ -489,61 +492,137 @@ NAN_METHOD(Mat::ResizeToMax) {
   FF_RETURN(jsMat);
 }
 
+struct Mat::ThresholdWorker : SimpleWorker {
+public:
+	cv::Mat mat;
+
+	ThresholdWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	double thresh;
+	double maxVal;
+	uint type;
+
+	cv::Mat thresholdMat;
+
+	const char* execute() {
+		cv::threshold(mat, thresholdMat, thresh, maxVal, (int)type);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(thresholdMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::arg(0, &thresh, info) ||
+			DoubleConverter::arg(1, &maxVal, info) ||
+			UintConverter::arg(2, &type, info)
+			);
+	}
+};
+
 NAN_METHOD(Mat::Threshold) {
-	FF_METHOD_CONTEXT("Mat::Threshold");
-
-	FF_ARG_NUMBER(0, double thresh);
-	FF_ARG_NUMBER(1, double maxVal);
-	FF_ARG_UINT(2, uint type);
-
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::threshold(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		thresh,
-		maxVal,
-		(int)type
-	);
-	FF_RETURN(jsMat);
+	ThresholdWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Threshold", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::ThresholdAsync) {
+	ThresholdWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::ThresholdAsync", ThresholdWorker, worker);
+}
+
+struct Mat::AdaptiveThresholdWorker : SimpleWorker {
+public:
+	cv::Mat mat;
+
+	AdaptiveThresholdWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	double maxVal;
+	int adaptiveMethod;
+	int thresholdType;
+	int blockSize;
+	double C;
+
+	cv::Mat thresholdMat;
+
+	const char* execute() {
+		cv::adaptiveThreshold(mat, thresholdMat, maxVal, adaptiveMethod, thresholdType, blockSize, C);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(thresholdMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::arg(0, &maxVal, info) ||
+			IntConverter::arg(1, &adaptiveMethod, info) ||
+			IntConverter::arg(2, &thresholdType, info) ||
+			IntConverter::arg(3, &blockSize, info) ||
+			DoubleConverter::arg(4, &C, info)
+			);
+	}
+};
 
 NAN_METHOD(Mat::AdaptiveThreshold) {
-	FF_METHOD_CONTEXT("Mat::AdaptiveThreshold");
-
-	FF_ARG_NUMBER(0, double maxVal);
-	FF_ARG_INT(1, int adaptiveMethod);
-	FF_ARG_INT(2, int thresholdType);
-	FF_ARG_INT(3, int blockSize);
-	FF_ARG_NUMBER(4, double C);
-
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::adaptiveThreshold(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		maxVal,
-		adaptiveMethod,
-		thresholdType,
-		blockSize,
-		C
-	);
-	FF_RETURN(jsMat);
+	AdaptiveThresholdWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::AdaptiveThreshold", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::AdaptiveThresholdAsync) {
+	AdaptiveThresholdWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::AdaptiveThresholdAsync", AdaptiveThresholdWorker, worker);
+}
+
+struct Mat::InRangeWorker : SimpleWorker {
+public:
+	cv::Mat mat;
+
+	InRangeWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	cv::Vec3d lower;
+	cv::Vec3d upper;
+
+	cv::Mat inRangeMat;
+
+	const char* execute() {
+		cv::inRange(mat, lower, upper, inRangeMat);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(inRangeMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Vec3::Converter::arg(0, &lower, info) ||
+			Vec3::Converter::arg(1, &upper, info)
+		);
+	}
+};
 
 NAN_METHOD(Mat::InRange) {
-	FF_METHOD_CONTEXT("Mat::InRange");
-
-	FF_ARG_INSTANCE(0, cv::Vec3d lower, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Vec3d upper, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::inRange(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		lower,
-		upper,
-		FF_UNWRAP_MAT_AND_GET(jsMat)
-	);
-	FF_RETURN(jsMat);
+	InRangeWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::InRange", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::InRangeAsync) {
+	InRangeWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::InRangeAsync", InRangeWorker, worker);
+}
+
 
 NAN_METHOD(Mat::CvtColor) {
 	FF_METHOD_CONTEXT("Mat::CvtColor");

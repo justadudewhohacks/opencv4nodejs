@@ -5,6 +5,7 @@ const {
   assertMatValueEquals,
   assertMetaData,
   assertDataDeepEquals,
+  _funcShouldRequireArgs,
   funcShouldRequireArgs,
   readTestImage,
   MatValuesComparator,
@@ -362,6 +363,43 @@ describe('Mat', () => {
   describe.skip('getData', () => {
     it('getData', () => {
       expect(true).to.be.false;
+    });
+  });
+
+  describe('inRange', () => {
+    const mat = new cv.Mat([
+      [[255, 255, 255], [255, 255, 255], [255, 255, 255]],
+      [[0, 0, 0], [100, 100, 100], [101, 101, 101]]
+    ], cv.CV_8UC3);
+
+    const expected = [
+      [255, 255, 255],
+      [0, 0, 255]
+    ];
+
+    const lower = new cv.Vec(101, 101, 101);
+    const upper = new cv.Vec(255, 255, 255);
+
+    describe('sync', () => {
+      _funcShouldRequireArgs(() => mat.inRange());
+
+      it('should return correct binary mat', () => {
+        const inRangeMat = mat.inRange(lower, upper);
+        assertMetaData(inRangeMat)(2, 3, cv.CV_8U);
+        assertDataDeepEquals(expected, inRangeMat.getDataAsArray());
+      });
+    });
+
+    describe('async', () => {
+      _funcShouldRequireArgs(() => mat.inRangeAsync());
+
+      it('should return correct binary mat', (done) => {
+        mat.inRangeAsync(lower, upper, (err, inRangeMat) => {
+          assertMetaData(inRangeMat)(2, 3, cv.CV_8U);
+          assertDataDeepEquals(expected, inRangeMat.getDataAsArray());
+          done();
+        });
+      });
     });
   });
 });
