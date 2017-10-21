@@ -74,10 +74,22 @@ public:
 	static NAN_METHOD(DrawEllipse);
 	static NAN_METHOD(PutText);
 	static NAN_METHOD(MatchTemplate);
+
+	struct CannyWorker;
 	static NAN_METHOD(Canny);
+	static NAN_METHOD(CannyAsync);
+
+	struct SobelScharrWorker;
+	struct SobelWorker;
+	struct ScharrWorker;
 	static NAN_METHOD(Sobel);
+	static NAN_METHOD(SobelAsync);
 	static NAN_METHOD(Scharr);
+	static NAN_METHOD(ScharrAsync);
+
+	struct LaplacianWorker;
 	static NAN_METHOD(Laplacian);
+	static NAN_METHOD(LaplacianAsync);
 
 	/* #ENDIF IMGPROC */
 
