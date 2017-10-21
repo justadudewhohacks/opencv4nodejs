@@ -103,6 +103,14 @@ mat.set(Uint row, Uint col, Vec4)
 [Uchar] : mat.getData()
 ```
 
+<a name="getDataAsync"></a>
+
+### getDataAsync
+``` javascript
+mat.getDataAsync(callback(Error err, [Uchar] buffer))
+```
+
+
 <a name="getDataAsArray"></a>
 
 ### getDataAsArray
@@ -205,6 +213,13 @@ Mat : mat.resizeToMax(Uint maxRowsOrCols)
 Mat : mat.threshold(Number thresh, Number maxVal, Uint type)
 ```
 
+<a name="thresholdAsync"></a>
+
+### thresholdAsync
+``` javascript
+mat.thresholdAsync(Number thresh, Number maxVal, Uint type, callback(Error err, Mat result))
+```
+
 <a name="adaptiveThreshold"></a>
 
 ### adaptiveThreshold
@@ -212,11 +227,25 @@ Mat : mat.threshold(Number thresh, Number maxVal, Uint type)
 Mat : mat.adaptiveThreshold(Number maxVal, Int adaptiveMethod, Int thresholdType, Int blockSize, Number C)
 ```
 
+<a name="adaptiveThresholdAsync"></a>
+
+### adaptiveThresholdAsync
+``` javascript
+mat.adaptiveThresholdAsync(Number maxVal, Int adaptiveMethod, Int thresholdType, Int blockSize, Number C, callback(Error err, Mat result))
+```
+
 <a name="inRange"></a>
 
 ### inRange
 ``` javascript
 Mat : mat.inRange(Vec3 lower, Vec3 upper)
+```
+
+<a name="inRangeAsync"></a>
+
+### inRangeAsync
+``` javascript
+mat.inRangeAsync(Vec3 lower, Vec3 upper, callback(Error err, Mat result))
 ```
 
 <a name="cvtColor"></a>
@@ -240,11 +269,29 @@ Mat : mat.bgrToGray()
 Mat : mat.warpAffine(Mat transforMationMatrix, Size size = new Size(this.cols, this.rows), Uint flags = INTER_LINEAR, Uint borderMode = BORDER_CONSTANT)
 ```
 
+<a name="warpAffineAsync"></a>
+
+### warpAffineAsync
+``` javascript
+mat.warpAffineAsync(Mat transforMationMatrix, callback(Error err, Mat result))
+mat.warpAffineAsync(Mat transforMationMatrix, ...opts, callback(Error err, Mat result))
+mat.warpAffineAsync(Mat transforMationMatrix, { opts }, callback(Error err, Mat result))
+```
+
 <a name="warpPerspective"></a>
 
 ### warpPerspective
 ``` javascript
 Mat : mat.warpPerspective(Mat transforMationMatrix, Size size = new Size(this.cols, this.rows), Uint flags = INTER_LINEAR, Uint borderMode = BORDER_CONSTANT)
+```
+
+<a name="warpPerspectiveAsync"></a>
+
+### warpPerspectiveAsync
+``` javascript
+mat.warpPerspectiveAsync(Mat transforMationMatrix, callback(Error err, Mat result))
+mat.warpPerspectiveAsync(Mat transforMationMatrix, ...opts, callback(Error err, Mat result))
+mat.warpPerspectiveAsync(Mat transforMationMatrix, { opts }, callback(Error err, Mat result))
 ```
 
 <a name="dilate"></a>
@@ -380,11 +427,28 @@ mat.putText(String text, Point2 origin, Uint fontFace, Number fontScale, Vec3 co
 Mat : mat.matchTemplate(Mat template, Int method, Mat mask = noArray())
 ```
 
+<a name="matchTemplateAsync"></a>
+
+### matchTemplateAsync
+``` javascript
+mat.matchTemplateAsync(Mat template, Int method, callback(Error err, Mat result))
+mat.matchTemplateAsync(Mat template, Int method, Mat mask, callback(Error err, Mat result))
+```
+
 <a name="canny"></a>
 
 ### canny
 ``` javascript
 Mat : mat.canny(Number threshold1, Number threshold2, Int apertureSize = 3, Boolean L2gradient = false)
+```
+
+<a name="cannyAsync"></a>
+
+### cannyAsync
+``` javascript
+mat.cannyAsync(Number threshold1, Number threshold2, callback(Error err, Mat result))
+mat.cannyAsync(Number threshold1, Number threshold2, ...opts, callback(Error err, Mat result))
+mat.cannyAsync(Number threshold1, Number threshold2, { opts }, callback(Error err, Mat result))
 ```
 
 <a name="sobel"></a>
@@ -394,6 +458,15 @@ Mat : mat.canny(Number threshold1, Number threshold2, Int apertureSize = 3, Bool
 Mat : mat.sobel(Int ddepth, Int dx, Int dy, Int ksize = 3, Number scale = 1.0, Number delta = 0.0, Int borderType = BORDER_DEFAULT)
 ```
 
+<a name="sobelAsync"></a>
+
+### sobelAsync
+``` javascript
+mat.sobelAsync(Int ddepth, Int dx, Int dy, callback(Error err, Mat result))
+mat.sobelAsync(Int ddepth, Int dx, Int dy, ...opts, callback(Error err, Mat result))
+mat.sobelAsync(Int ddepth, Int dx, Int dy, { opts }, callback(Error err, Mat result))
+```
+
 <a name="scharr"></a>
 
 ### scharr
@@ -401,9 +474,27 @@ Mat : mat.sobel(Int ddepth, Int dx, Int dy, Int ksize = 3, Number scale = 1.0, N
 Mat : mat.scharr(Int ddepth, Int dx, Int dy, Number scale = 1.0, Number delta = 0.0, Int borderType = BORDER_DEFAULT)
 ```
 
+<a name="scharrAsync"></a>
+
+### scharrAsync
+``` javascript
+mat.scharrAsync(Int ddepth, Int dx, Int dy, callback(Error err, Mat result))
+mat.scharrAsync(Int ddepth, Int dx, Int dy, ...opts, callback(Error err, Mat result))
+mat.scharrAsync(Int ddepth, Int dx, Int dy, { opts }, callback(Error err, Mat result))
+```
+
 <a name="laplacian"></a>
 
 ### laplacian
 ``` javascript
 Mat : mat.laplacian(Int ddepth, Int ksize = 1, Number scale = 1.0, Number delta = 0.0, Int borderType = BORDER_DEFAULT)
+```
+
+<a name="laplacianAsync"></a>
+
+### laplacianAsync
+``` javascript
+mat.laplacianAsync(Int ddepth, callback(Error err, Mat result))
+mat.laplacianAsync(Int ddepth, ...opts, callback(Error err, Mat result))
+mat.laplacianAsync(Int ddepth, { opts }, callback(Error err, Mat result))
 ```

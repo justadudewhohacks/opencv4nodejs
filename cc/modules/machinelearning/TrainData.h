@@ -23,6 +23,7 @@ public:
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
+	cv::Ptr<cv::ml::TrainData>* getNativeObjectPtr() { return &trainData; }
 	cv::Ptr<cv::ml::TrainData> getNativeObject() { return trainData; }
 
 	typedef InstanceConverter<TrainData, cv::Ptr<cv::ml::TrainData> > Converter;

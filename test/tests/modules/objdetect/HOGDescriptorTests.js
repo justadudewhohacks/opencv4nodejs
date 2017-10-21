@@ -1,6 +1,7 @@
 const cv = global.dut;
 const {
-  funcShouldRequireArgs
+  assertError,
+  _funcShouldRequireArgs
 } = global.utils;
 const { expect } = require('chai');
 
@@ -95,9 +96,10 @@ module.exports = () => {
       const winStride = new cv.Size(3, 3);
       const padding = new cv.Size(3, 3);
       const locations = [new cv.Point(50, 50), new cv.Point(150, 50), new cv.Point(50, 150)];
+      const invalidLocations = [new cv.Point(50, 50), undefined, new cv.Point(50, 150)];
 
       describe('sync', () => {
-        funcShouldRequireArgs(() => new cv.HOGDescriptor().compute());
+        _funcShouldRequireArgs(() => new cv.HOGDescriptor().compute());
 
         it('should be callable with single channel img', () => {
           expectOutput(new cv.HOGDescriptor().compute(
@@ -130,6 +132,28 @@ module.exports = () => {
             }
           ));
         });
+
+        it('should throw if locations invalid', () => {
+          assertError(
+            () => new cv.HOGDescriptor().compute(
+              new cv.Mat(200, 200, cv.CV_8UC3),
+              winStride,
+              padding,
+              invalidLocations
+            ),
+            'expected array element at index 1 to be of type Point2'
+          );
+        });
+
+        it('should throw if locations invalid for opt arg object', () => {
+          assertError(
+            () => new cv.HOGDescriptor().compute(
+              new cv.Mat(200, 200, cv.CV_8UC3),
+              { locations: invalidLocations }
+            ),
+            'expected array element at index 1 to be of type Point2'
+          );
+        });
       });
 
       describe('async', () => {
@@ -138,7 +162,7 @@ module.exports = () => {
           done();
         };
 
-        funcShouldRequireArgs(() => new cv.HOGDescriptor().computeAsync());
+        _funcShouldRequireArgs(() => new cv.HOGDescriptor().computeAsync());
 
         it('should be callable with single channel img', (done) => {
           new cv.HOGDescriptor().computeAsync(
@@ -173,6 +197,30 @@ module.exports = () => {
               locations
             },
             expectOutputAsync(done)
+          );
+        });
+
+        it('should throw if locations invalid', () => {
+          assertError(
+            () => new cv.HOGDescriptor().computeAsync(
+              new cv.Mat(200, 200, cv.CV_8UC3),
+              winStride,
+              padding,
+              invalidLocations,
+              () => {}
+            ),
+            'expected array element at index 1 to be of type Point2'
+          );
+        });
+
+        it('should throw if locations invalid for opt arg object', () => {
+          assertError(
+            () => new cv.HOGDescriptor().computeAsync(
+              new cv.Mat(200, 200, cv.CV_8UC3),
+              { locations: invalidLocations },
+              () => {}
+            ),
+            'expected array element at index 1 to be of type Point2'
           );
         });
       });

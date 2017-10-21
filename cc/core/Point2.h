@@ -1,4 +1,4 @@
-#include "macros.h"
+#include "Converters.h"
 #include <opencv2/core.hpp>
 #include "coreUtils.h"
 
@@ -37,6 +37,15 @@ public:
 	}
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::Point2d* getNativeObjectPtr() { return &pt; }
+	cv::Point2d getNativeObject() { return pt; }
+
+	typedef InstanceConverter<Point2, cv::Point2d> Converter;
+
+	static const char* getClassName() {
+		return "Point2";
+	}
 };
 
 #endif

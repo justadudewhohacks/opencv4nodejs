@@ -4,6 +4,8 @@
 #include "RotatedRect.h"
 #include "imgproc/Moments.h"
 #include "imgproc/Contour.h"
+#include "Converters.h"
+#include "Workers.h"
 
 Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
 
@@ -24,6 +26,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "atRaw", AtRaw);
 	Nan::SetPrototypeMethod(ctor, "set", Set);
 	Nan::SetPrototypeMethod(ctor, "getData", GetData);
+	Nan::SetPrototypeMethod(ctor, "getDataAsync", GetData);
 	Nan::SetPrototypeMethod(ctor, "getDataAsArray", GetDataAsArray);
 	Nan::SetPrototypeMethod(ctor, "getRegion", GetRegion);
 	Nan::SetPrototypeMethod(ctor, "row", Row);
@@ -45,10 +48,15 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "cvtColor", CvtColor);
 	Nan::SetPrototypeMethod(ctor, "bgrToGray", BgrToGray);
 	Nan::SetPrototypeMethod(ctor, "threshold", Threshold);
+	Nan::SetPrototypeMethod(ctor, "thresholdAsync", ThresholdAsync);
 	Nan::SetPrototypeMethod(ctor, "adaptiveThreshold", AdaptiveThreshold);
+	Nan::SetPrototypeMethod(ctor, "adaptiveThresholdAsync", AdaptiveThresholdAsync);
 	Nan::SetPrototypeMethod(ctor, "inRange", InRange);
+	Nan::SetPrototypeMethod(ctor, "inRangeAsync", InRangeAsync);
 	Nan::SetPrototypeMethod(ctor, "warpAffine", WarpAffine);
+	Nan::SetPrototypeMethod(ctor, "warpAffineAsync", WarpAffineAsync);
 	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
+	Nan::SetPrototypeMethod(ctor, "warpPerspectiveAsync", WarpPerspectiveAsync);
 	Nan::SetPrototypeMethod(ctor, "dilate", Dilate);
 	Nan::SetPrototypeMethod(ctor, "erode", Erode);
 	Nan::SetPrototypeMethod(ctor, "distanceTransform", DistanceTransform);
@@ -68,10 +76,15 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "drawEllipse", DrawEllipse);
 	Nan::SetPrototypeMethod(ctor, "putText", PutText);
 	Nan::SetPrototypeMethod(ctor, "matchTemplate", MatchTemplate);
+	Nan::SetPrototypeMethod(ctor, "matchTemplateAsync", MatchTemplateAsync);
 	Nan::SetPrototypeMethod(ctor, "canny", Canny);
+	Nan::SetPrototypeMethod(ctor, "cannyAsync", CannyAsync);
 	Nan::SetPrototypeMethod(ctor, "sobel", Sobel);
+	Nan::SetPrototypeMethod(ctor, "sobelAsync", SobelAsync);
 	Nan::SetPrototypeMethod(ctor, "scharr", Scharr);
+	Nan::SetPrototypeMethod(ctor, "scharrAsync", ScharrAsync);
 	Nan::SetPrototypeMethod(ctor, "laplacian", Laplacian);
+	Nan::SetPrototypeMethod(ctor, "laplacianAsync", LaplacianAsync);
 	/* #ENDIF IMGPROC */
 
   target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
@@ -227,12 +240,38 @@ NAN_METHOD(Mat::Set) {
 	}
 }
 
+struct Mat::GetDataWorker : SimpleWorker {
+public:
+	cv::Mat mat;
+
+	GetDataWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	size_t size;
+	char *data;
+
+	const char* execute() {
+		size = mat.rows * mat.cols * mat.elemSize();
+		data = static_cast<char *>(malloc(size));
+		memcpy(data, mat.data, size);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Nan::NewBuffer(data, size).ToLocalChecked();
+	}
+};
+
 NAN_METHOD(Mat::GetData) {
-	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-	size_t size = matSelf.rows * matSelf.cols * matSelf.elemSize();
-	char *data = static_cast<char *>(malloc(size));
-	memcpy(data, matSelf.data, size);
-	FF_RETURN(Nan::NewBuffer(data, size).ToLocalChecked());
+	GetDataWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::GetData", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::GetDataAsync) {
+	GetDataWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::GetDataAsync", GetDataWorker, worker);
 }
 
 NAN_METHOD(Mat::GetDataAsArray) {
@@ -480,61 +519,137 @@ NAN_METHOD(Mat::ResizeToMax) {
   FF_RETURN(jsMat);
 }
 
+struct Mat::ThresholdWorker : SimpleWorker {
+public:
+	cv::Mat mat;
+
+	ThresholdWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	double thresh;
+	double maxVal;
+	uint type;
+
+	cv::Mat thresholdMat;
+
+	const char* execute() {
+		cv::threshold(mat, thresholdMat, thresh, maxVal, (int)type);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(thresholdMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::arg(0, &thresh, info) ||
+			DoubleConverter::arg(1, &maxVal, info) ||
+			UintConverter::arg(2, &type, info)
+			);
+	}
+};
+
 NAN_METHOD(Mat::Threshold) {
-	FF_METHOD_CONTEXT("Mat::Threshold");
-
-	FF_ARG_NUMBER(0, double thresh);
-	FF_ARG_NUMBER(1, double maxVal);
-	FF_ARG_UINT(2, uint type);
-
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::threshold(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		thresh,
-		maxVal,
-		(int)type
-	);
-	FF_RETURN(jsMat);
+	ThresholdWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Threshold", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::ThresholdAsync) {
+	ThresholdWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::ThresholdAsync", ThresholdWorker, worker);
+}
+
+struct Mat::AdaptiveThresholdWorker : SimpleWorker {
+public:
+	cv::Mat mat;
+
+	AdaptiveThresholdWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	double maxVal;
+	int adaptiveMethod;
+	int thresholdType;
+	int blockSize;
+	double C;
+
+	cv::Mat thresholdMat;
+
+	const char* execute() {
+		cv::adaptiveThreshold(mat, thresholdMat, maxVal, adaptiveMethod, thresholdType, blockSize, C);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(thresholdMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::arg(0, &maxVal, info) ||
+			IntConverter::arg(1, &adaptiveMethod, info) ||
+			IntConverter::arg(2, &thresholdType, info) ||
+			IntConverter::arg(3, &blockSize, info) ||
+			DoubleConverter::arg(4, &C, info)
+			);
+	}
+};
 
 NAN_METHOD(Mat::AdaptiveThreshold) {
-	FF_METHOD_CONTEXT("Mat::AdaptiveThreshold");
-
-	FF_ARG_NUMBER(0, double maxVal);
-	FF_ARG_INT(1, int adaptiveMethod);
-	FF_ARG_INT(2, int thresholdType);
-	FF_ARG_INT(3, int blockSize);
-	FF_ARG_NUMBER(4, double C);
-
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::adaptiveThreshold(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		maxVal,
-		adaptiveMethod,
-		thresholdType,
-		blockSize,
-		C
-	);
-	FF_RETURN(jsMat);
+	AdaptiveThresholdWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::AdaptiveThreshold", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::AdaptiveThresholdAsync) {
+	AdaptiveThresholdWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::AdaptiveThresholdAsync", AdaptiveThresholdWorker, worker);
+}
+
+struct Mat::InRangeWorker : SimpleWorker {
+public:
+	cv::Mat mat;
+
+	InRangeWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	cv::Vec3d lower;
+	cv::Vec3d upper;
+
+	cv::Mat inRangeMat;
+
+	const char* execute() {
+		cv::inRange(mat, lower, upper, inRangeMat);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(inRangeMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Vec3::Converter::arg(0, &lower, info) ||
+			Vec3::Converter::arg(1, &upper, info)
+		);
+	}
+};
 
 NAN_METHOD(Mat::InRange) {
-	FF_METHOD_CONTEXT("Mat::InRange");
-
-	FF_ARG_INSTANCE(0, cv::Vec3d lower, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Vec3d upper, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::inRange(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		lower,
-		upper,
-		FF_UNWRAP_MAT_AND_GET(jsMat)
-	);
-	FF_RETURN(jsMat);
+	InRangeWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::InRange", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::InRangeAsync) {
+	InRangeWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::InRangeAsync", InRangeWorker, worker);
+}
+
 
 NAN_METHOD(Mat::CvtColor) {
 	FF_METHOD_CONTEXT("Mat::CvtColor");
@@ -563,20 +678,92 @@ NAN_METHOD(Mat::BgrToGray) {
 	FF_RETURN(jsMat);
 }
 
-NAN_METHOD(Mat::WarpAffine) {
-	Nan::TryCatch tryCatch;
-	warp(info, "Mat::WarpAffine", &cv::warpAffine);
-	if (tryCatch.HasCaught()) {
-		tryCatch.ReThrow();
+struct Mat::WarpWorker {
+public:
+	cv::Mat mat;
+
+	WarpWorker(cv::Mat mat) {
+		this->mat = mat;
+		this->size = cv::Size2d(mat.cols, mat.rows);
 	}
+
+	cv::Mat transformationMatrix;
+	cv::Size2d size;
+	int flags = cv::INTER_LINEAR;
+	int borderMode = cv::BORDER_CONSTANT;
+
+	cv::Mat warpedMat;
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(warpedMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return Mat::Converter::arg(0, &transformationMatrix, info);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Size::Converter::optArg(1, &size, info) ||
+			IntConverter::optArg(2, &flags, info) ||
+			IntConverter::optArg(3, &borderMode, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(1) && !Size::Converter::hasInstance(info[1]->ToObject());
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[1]->ToObject();
+		return (
+			Size::Converter::optProp(&size, "size", opts) ||
+			IntConverter::optProp(&flags, "flags", opts) ||
+			IntConverter::optProp(&borderMode, "borderMode", opts)
+		);
+	}
+};
+
+struct Mat::WarpAffineWorker : public WarpWorker {
+	WarpAffineWorker(cv::Mat mat) : WarpWorker(mat) {
+	}
+
+	const char* execute() {
+		cv::warpAffine(mat, warpedMat, transformationMatrix, (cv::Size)size, flags, borderMode, cv::Scalar());
+		return "";
+	}
+};
+
+NAN_METHOD(Mat::WarpAffine) {
+	WarpAffineWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::WarpAffine", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
-NAN_METHOD(Mat::WarpPerspective) {
-	Nan::TryCatch tryCatch;
-	warp(info, "Mat::WarpPerspective", &cv::warpPerspective);
-	if (tryCatch.HasCaught()) {
-		tryCatch.ReThrow();
+NAN_METHOD(Mat::WarpAffineAsync) {
+	WarpAffineWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::WarpAffineAsync", WarpAffineWorker, worker);
+}
+
+struct Mat::WarpPerspectiveWorker : public WarpWorker {
+	WarpPerspectiveWorker(cv::Mat mat) : WarpWorker(mat) {
 	}
+
+	const char* execute() {
+		cv::warpPerspective(mat, warpedMat, transformationMatrix, (cv::Size)size, flags, borderMode, cv::Scalar());
+		return "";
+	}
+};
+
+NAN_METHOD(Mat::WarpPerspective) {
+	WarpPerspectiveWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::WarpPerspective", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::WarpPerspectiveAsync) {
+	WarpPerspectiveWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::WarpPerspectiveAsync", WarpPerspectiveWorker, worker);
 }
 
 NAN_METHOD(Mat::Dilate) {
@@ -985,160 +1172,282 @@ NAN_METHOD(Mat::PutText) {
 	FF_RETURN(info.This());
 }
 
+
+struct Mat::MatchTemplateWorker : SimpleWorker {
+public:
+	cv::Mat mat;
+
+	MatchTemplateWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	cv::Mat templ;
+	int method;
+	cv::Mat mask = cv::noArray().getMat();
+
+	cv::Mat resultsMat;
+
+	const char* execute() {
+		cv::matchTemplate(mat, templ, resultsMat, method, mask);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(resultsMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::arg(0, &templ, info) ||
+			IntConverter::arg(1, &method, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return Mat::Converter::optArg(2, &mask, info);
+	}
+};
+
 NAN_METHOD(Mat::MatchTemplate) {
-	FF_METHOD_CONTEXT("Mat::MatchTemplate");
-
-	FF_ARG_INSTANCE(0, cv::Mat templ, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INT(1, int method);
-	FF_ARG_INSTANCE_IFDEF(2, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, cv::noArray().getMat());
-
-	FF_OBJ jsResult = FF_NEW_INSTANCE(Mat::constructor);
-	cv::matchTemplate(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		templ,
-		FF_UNWRAP_MAT_AND_GET(jsResult),
-		method,
-		mask
-	);
-
-	FF_RETURN(jsResult);
+	MatchTemplateWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::MatchTemplate", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::MatchTemplateAsync) {
+	MatchTemplateWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::MatchTemplateAsync", MatchTemplateWorker, worker);
+}
+
+
+struct Mat::CannyWorker {
+public:
+	cv::Mat mat;
+
+	CannyWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	double threshold1;
+	double threshold2;
+	int apertureSize = 3;
+	bool L2gradient = false;
+
+	cv::Mat cannyMat;
+
+	const char* execute() {
+		cv::Canny(mat, cannyMat, threshold1, threshold2, apertureSize, L2gradient);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(cannyMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::arg(0, &threshold1, info) ||
+			DoubleConverter::arg(1, &threshold2, info)
+			);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(2, &apertureSize, info) ||
+			BoolConverter::optArg(3, &L2gradient, info)
+			);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(2);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[2]->ToObject();
+		return (
+			IntConverter::optProp(&apertureSize, "apertureSize", opts) ||
+			BoolConverter::optProp(&L2gradient, "L2gradient", opts)
+		);
+	}
+};
 
 NAN_METHOD(Mat::Canny) {
-	FF_METHOD_CONTEXT("Mat::Canny");
+	CannyWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Canny", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
 
-	// requried args
-	FF_ARG_NUMBER(0, double threshold1);
-	FF_ARG_NUMBER(1, double threshold2);
+NAN_METHOD(Mat::CannyAsync) {
+	CannyWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::CannyAsync", CannyWorker, worker);
+}
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INT_IFDEF(optArgs, int apertureSize, "apertureSize", 3);
-	FF_GET_BOOL_IFDEF(optArgs, bool L2gradient, "L2gradient", false);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(2, apertureSize, apertureSize);
-		FF_ARG_BOOL_IFDEF(3, L2gradient, L2gradient);
+
+struct Mat::SobelScharrWorker {
+public:
+	cv::Mat mat;
+	bool hasKsize;
+
+	SobelScharrWorker(cv::Mat mat, bool hasKsize) {
+		this->mat = mat;
+		this->hasKsize = hasKsize;
 	}
 
-	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
-	cv::Canny(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat), 
-		threshold1, 
-		threshold2, 
-		apertureSize, 
-		L2gradient
-	);
+	int ddepth;
+	int dx;
+	int dy;
+	int ksize = 3;
+	double scale = 1.0;
+	double delta = 0;
+	int borderType = cv::BORDER_DEFAULT;
 
-	FF_RETURN(jsMat);
-}
+	cv::Mat resultMat;
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(resultMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &ddepth, info) ||
+			IntConverter::arg(1, &dx, info) ||
+			IntConverter::arg(2, &dy, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		int optArgIdx = hasKsize ? 3 : 2;
+		return (
+			(hasKsize && IntConverter::optArg(optArgIdx, &ksize, info)) ||
+			DoubleConverter::optArg(optArgIdx + 1, &scale, info) ||
+			DoubleConverter::optArg(optArgIdx + 2, &delta, info) ||
+			IntConverter::optArg(optArgIdx + 3, &borderType, info)
+			);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(3);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[3]->ToObject();
+		return (
+			(hasKsize && IntConverter::optProp(&ksize, "ksize", opts)) ||
+			DoubleConverter::optProp(&scale, "scale", opts) ||
+			DoubleConverter::optProp(&delta, "delta", opts) ||
+			IntConverter::optProp(&borderType, "borderType", opts)
+			);
+	}
+};
+
+struct Mat::SobelWorker : SobelScharrWorker {
+	SobelWorker(cv::Mat mat, bool hasKsize) : SobelScharrWorker(mat, hasKsize) {
+	}
+
+	const char* execute() {
+		cv::Sobel(mat, resultMat, ddepth, dx, dy, ksize, scale, delta, borderType);
+		return "";
+	}
+};
 
 NAN_METHOD(Mat::Sobel) {
-	FF_METHOD_CONTEXT("Mat::Sobel");
+	SobelWorker worker(Mat::Converter::unwrap(info.This()), true);
+	FF_WORKER_SYNC("Mat::Sobel", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
 
-	FF_ARG_INT(0, int ddepth);
-	FF_ARG_INT(1, int dx);
-	FF_ARG_INT(2, int dy);
+NAN_METHOD(Mat::SobelAsync) {
+	SobelWorker worker(Mat::Converter::unwrap(info.This()), true);
+	FF_WORKER_ASYNC("Mat::SobelAsync", SobelWorker, worker);
+}
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INT_IFDEF(optArgs, int ksize, "ksize", 3);
-	FF_GET_NUMBER_IFDEF(optArgs, double scale, "scale", 1.0);
-	FF_GET_NUMBER_IFDEF(optArgs, double delta, "delta", 0);
-	FF_GET_INT_IFDEF(optArgs, int borderType, "borderType", cv::BORDER_DEFAULT);
-
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(3, ksize, ksize);
-		FF_ARG_NUMBER_IFDEF(4, scale, scale);
-		FF_ARG_NUMBER_IFDEF(5, delta, delta);
-		FF_ARG_INT_IFDEF(6, borderType, borderType);
+struct Mat::ScharrWorker : SobelScharrWorker {
+	ScharrWorker(cv::Mat mat, bool hasKsize) : SobelScharrWorker(mat, hasKsize) {
 	}
 
-	FF_OBJ jsDst = FF_NEW_INSTANCE(Mat::constructor);
-	cv::Sobel(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsDst),
-		ddepth,
-		dx,
-		dy,
-		ksize,
-		scale,
-		delta,
-		borderType
-	);
-
-	FF_RETURN(jsDst);
-}
+	const char* execute() {
+		cv::Scharr(mat, resultMat, ddepth, dx, dy, scale, delta, borderType);
+		return "";
+	}
+};
 
 NAN_METHOD(Mat::Scharr) {
-	FF_METHOD_CONTEXT("Mat::Scharr");
+	ScharrWorker worker(Mat::Converter::unwrap(info.This()), false);
+	FF_WORKER_SYNC("Mat::Scharr", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
 
-	FF_ARG_INT(0, int ddepth);
-	FF_ARG_INT(1, int dx);
-	FF_ARG_INT(2, int dy);
+NAN_METHOD(Mat::ScharrAsync) {
+	ScharrWorker worker(Mat::Converter::unwrap(info.This()), false);
+	FF_WORKER_ASYNC("Mat::ScharrAsync", ScharrWorker, worker);
+}
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
-	FF_GET_NUMBER_IFDEF(optArgs, double scale, "scale", 1.0);
-	FF_GET_NUMBER_IFDEF(optArgs, double delta, "delta", 0);
-	FF_GET_INT_IFDEF(optArgs, int borderType, "borderType", cv::BORDER_DEFAULT);
 
-	if (!hasOptArgsObj) {
-		FF_ARG_NUMBER_IFDEF(3, scale, scale);
-		FF_ARG_NUMBER_IFDEF(4, delta, delta);
-		FF_ARG_INT_IFDEF(5, borderType, borderType);
+struct Mat::LaplacianWorker {
+public:
+	cv::Mat mat;
+
+	LaplacianWorker(cv::Mat mat) {
+		this->mat = mat;
 	}
 
-	FF_OBJ jsDst = FF_NEW_INSTANCE(Mat::constructor);
-	cv::Scharr(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsDst),
-		ddepth,
-		dx,
-		dy,
-		scale,
-		delta,
-		borderType
-	);
+	int ddepth;
+	int ksize = 1;
+	double scale = 1.0;
+	double delta = 0;
+	int borderType = cv::BORDER_DEFAULT;
 
-	FF_RETURN(jsDst);
-}
+	cv::Mat resultMat;
+
+	const char* execute() {
+		cv::Laplacian(mat, resultMat, ddepth, ksize, scale, delta, borderType);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(resultMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return IntConverter::arg(0, &ddepth, info);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(1, &ksize, info) ||
+			DoubleConverter::optArg(2, &scale, info) ||
+			DoubleConverter::optArg(3, &delta, info) ||
+			IntConverter::optArg(4, &borderType, info)
+			);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(1);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[1]->ToObject();
+		return (
+			IntConverter::optProp(&ksize, "ksize", opts) ||
+			DoubleConverter::optProp(&scale, "scale", opts) ||
+			DoubleConverter::optProp(&delta, "delta", opts) ||
+			IntConverter::optProp(&borderType, "borderType", opts)
+			);
+	}
+};
+
+
 NAN_METHOD(Mat::Laplacian) {
-	FF_METHOD_CONTEXT("Mat::Laplacian");
-
-	FF_ARG_INT(0, int ddepth);
-
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INT_IFDEF(optArgs, int ksize, "ksize", 1);
-	FF_GET_NUMBER_IFDEF(optArgs, double scale, "scale", 1.0);
-	FF_GET_NUMBER_IFDEF(optArgs, double delta, "delta", 0);
-	FF_GET_INT_IFDEF(optArgs, int borderType, "borderType", cv::BORDER_DEFAULT);
-
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(1, ksize, ksize);
-		FF_ARG_NUMBER_IFDEF(2, scale, scale);
-		FF_ARG_NUMBER_IFDEF(3, delta, delta);
-		FF_ARG_INT_IFDEF(4, borderType, borderType);
-	}
-
-	FF_OBJ jsDst = FF_NEW_INSTANCE(Mat::constructor);
-	cv::Laplacian(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsDst),
-		ddepth,
-		ksize,
-		scale,
-		delta,
-		borderType
-	);
-
-	FF_RETURN(jsDst);
+	LaplacianWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Laplacian", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::LaplacianAsync) {
+	LaplacianWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::LaplacianAsync", LaplacianWorker, worker);
+}
+
 
 /* #ENDIF IMGPROC */
 
@@ -1176,39 +1485,6 @@ NAN_METHOD(Mat::Row) {
     return Nan::ThrowError("... Exception");
   }
   FF_RETURN(row);
-}
-
-void Mat::warp(Nan::NAN_METHOD_ARGS_TYPE info, const char* methodName, void(*func)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Size, int, int, const cv::Scalar&)) {
-	FF_METHOD_CONTEXT("Mat::WarpAffine");
-	cv::Mat self = FF_UNWRAP_MAT_AND_GET(info.This());
-
-	FF_ARG_INSTANCE(0, cv::Mat transformationMatrix, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(1) && !FF_IS_INSTANCE(Size::constructor, info[1]);
-	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d size, "size", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d(self.cols, self.rows));
-	FF_GET_UINT_IFDEF(optArgs, int flags, "flags", cv::INTER_LINEAR);
-	FF_GET_UINT_IFDEF(optArgs, int borderMode, "borderMode", cv::BORDER_CONSTANT);
-	if (!hasOptArgsObj) {
-		FF_ARG_INSTANCE_IFDEF(1, size, Size::constructor, FF_UNWRAP_SIZE_AND_GET, size);
-		FF_ARG_UINT_IFDEF(2, flags, flags);
-		FF_ARG_UINT_IFDEF(3, borderMode, borderMode);
-	}
-	// TODO borderValue
-	const cv::Scalar& borderValue = cv::Scalar();
-
-	FF_OBJ jsWarped = FF_NEW_INSTANCE(Mat::constructor);
-	func(
-		self,
-		FF_UNWRAP_MAT_AND_GET(jsWarped),
-		transformationMatrix,
-		(cv::Size)size,
-		flags,
-		borderMode,
-		borderValue
-	);
-	FF_RETURN(jsWarped);
 }
 
 void Mat::morph(Nan::NAN_METHOD_ARGS_TYPE info, const char* methodName, void(*func)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Point, int, int, const cv::Scalar&)) {

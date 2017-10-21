@@ -17,6 +17,7 @@ public:
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
+	cv::ml::ParamGrid* getNativeObjectPtr() { return &paramGrid; }
 	cv::ml::ParamGrid getNativeObject() { return paramGrid; }
 
 	typedef InstanceConverter<ParamGrid, cv::ml::ParamGrid> Converter;

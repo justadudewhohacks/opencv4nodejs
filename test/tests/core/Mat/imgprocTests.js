@@ -3,6 +3,7 @@ const cv = global.dut;
 const {
   assertError,
   funcShouldRequireArgs,
+  _funcShouldRequireArgs,
   assertMetaData,
   assertDataDeepEquals,
   dangerousDeepEquals,
@@ -96,9 +97,19 @@ module.exports = (getTestImg) => {
 
   describe('warping', () => {
     let img;
+    let size;
     before(() => {
       img = getTestImg();
+      size = new cv.Size(img.cols, img.rows);
     });
+
+    const expectOutput = (warped) => {
+      assertMetaData(warped)(img.rows, img.cols, img.type);
+    };
+    const expectOutputAsync = done => (err, warped) => {
+      expectOutput(warped);
+      done();
+    };
 
     const transformationMatrix = new cv.Mat(
       [
@@ -118,46 +129,70 @@ module.exports = (getTestImg) => {
     const flags = cv.INTER_CUBIC;
 
     describe('warpAffine', () => {
-      funcShouldRequireArgs((() => new cv.Mat().warpAffine.bind(new cv.Mat()))());
+      describe('sync', () => {
+        _funcShouldRequireArgs(() => new cv.Mat().warpAffine());
 
-      it('can be called if required args passed', () => {
-        expect(() => img.warpAffine(transformationMatrixAffine)).to.not.throw();
+        it('can be called if required args passed', () => {
+          expectOutput(img.warpAffine(transformationMatrixAffine));
+        });
+
+        it('can be called with optional args', () => {
+          expectOutput(img.warpAffine(transformationMatrixAffine, size, flags));
+        });
+
+        it('can be called with optional args object', () => {
+          expectOutput(img.warpAffine(transformationMatrixAffine, { flags }));
+        });
       });
 
-      it('can be called with optional args', () => {
-        expect(() => img.warpAffine(transformationMatrixAffine, flags)).to.not.throw();
-      });
+      describe('async', () => {
+        _funcShouldRequireArgs(() => new cv.Mat().warpAffineAsync());
 
-      it('can be called with optional args object', () => {
-        expect(() => img.warpAffine(transformationMatrixAffine, { flags })).to.not.throw();
-      });
+        it('can be called if required args passed', (done) => {
+          img.warpAffineAsync(transformationMatrixAffine, expectOutputAsync(done));
+        });
 
-      it('should warp image perspective', () => {
-        const warped = img.warpAffine(transformationMatrixAffine);
-        assertMetaData(warped)(img.rows, img.cols, img.type);
-        expect(dangerousDeepEquals(warped.getDataAsArray(), img.getDataAsArray())).to.be.false;
+        it('can be called with optional args', (done) => {
+          img.warpAffineAsync(transformationMatrixAffine, size, flags, expectOutputAsync(done));
+        });
+
+        it('can be called with optional args object', (done) => {
+          img.warpAffineAsync(transformationMatrixAffine, { flags }, expectOutputAsync(done));
+        });
       });
     });
 
     describe('warpPerspective', () => {
-      funcShouldRequireArgs((() => new cv.Mat().warpPerspective.bind(new cv.Mat()))());
+      describe('sync', () => {
+        _funcShouldRequireArgs(() => new cv.Mat().warpPerspective());
 
-      it('can be called if required args passed', () => {
-        expect(() => img.warpPerspective(transformationMatrix)).to.not.throw();
+        it('can be called if required args passed', () => {
+          expectOutput(img.warpPerspective(transformationMatrix));
+        });
+
+        it('can be called with optional args', () => {
+          expectOutput(img.warpPerspective(transformationMatrix, size, flags));
+        });
+
+        it('can be called with optional args object', () => {
+          expectOutput(img.warpPerspective(transformationMatrix, { flags }));
+        });
       });
 
-      it('can be called with optional args', () => {
-        expect(() => img.warpPerspective(transformationMatrix, flags)).to.not.throw();
-      });
+      describe('async', () => {
+        _funcShouldRequireArgs(() => new cv.Mat().warpPerspectiveAsync());
 
-      it('can be called with optional args object', () => {
-        expect(() => img.warpPerspective(transformationMatrix, { flags })).to.not.throw();
-      });
+        it('can be called if required args passed', (done) => {
+          img.warpPerspectiveAsync(transformationMatrix, expectOutputAsync(done));
+        });
 
-      it('should warp image perspective', () => {
-        const warped = img.warpPerspective(transformationMatrix);
-        assertMetaData(warped)(img.rows, img.cols, img.type);
-        expect(dangerousDeepEquals(warped.getDataAsArray(), img.getDataAsArray())).to.be.false;
+        it('can be called with optional args', (done) => {
+          img.warpPerspectiveAsync(transformationMatrix, size, flags, expectOutputAsync(done));
+        });
+
+        it('can be called with optional args object', (done) => {
+          img.warpPerspectiveAsync(transformationMatrix, { flags }, expectOutputAsync(done));
+        });
       });
     });
   });
@@ -496,21 +531,46 @@ module.exports = (getTestImg) => {
       const maxVal = 255;
       const thresholdType = cv.THRESH_BINARY;
 
-      funcShouldRequireArgs((() => mat.threshold.bind(mat))());
+      describe('sync', () => {
+        _funcShouldRequireArgs(() => mat.threshold());
 
-      it('can be called with required args', () => {
-        const thresholded = mat.threshold(th, maxVal, thresholdType);
-        assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+        it('can be called with required args', () => {
+          const thresholded = mat.threshold(th, maxVal, thresholdType);
+          assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+        });
+
+        it('should return correct binary mat', () => {
+          const expected = [
+            [255, 255, 255],
+            [0, 0, 255]
+          ];
+
+          const thresholded = mat.threshold(th, maxVal, thresholdType);
+          assertDataDeepEquals(expected, thresholded.getDataAsArray());
+        });
       });
 
-      it('should return correct binary mat', () => {
-        const expected = [
-          [255, 255, 255],
-          [0, 0, 255]
-        ];
+      describe('async', () => {
+        _funcShouldRequireArgs(() => mat.thresholdAsync());
 
-        const thresholded = mat.threshold(th, maxVal, thresholdType);
-        assertDataDeepEquals(expected, thresholded.getDataAsArray());
+        it('can be called with required args', (done) => {
+          mat.thresholdAsync(th, maxVal, thresholdType, (err, thresholded) => {
+            assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+            done();
+          });
+        });
+
+        it('should return correct binary mat', (done) => {
+          const expected = [
+            [255, 255, 255],
+            [0, 0, 255]
+          ];
+
+          mat.thresholdAsync(th, maxVal, thresholdType, (err, thresholded) => {
+            assertDataDeepEquals(expected, thresholded.getDataAsArray());
+            done();
+          });
+        });
       });
     });
 
@@ -520,12 +580,24 @@ module.exports = (getTestImg) => {
       const thresholdType = cv.THRESH_BINARY;
       const blockSize = 3;
       const C = 0.9;
+      describe('sync', () => {
+        _funcShouldRequireArgs(() => mat.adaptiveThreshold());
 
-      funcShouldRequireArgs((() => mat.adaptiveThreshold.bind(mat))());
+        it('can be called with required args', () => {
+          const thresholded = mat.adaptiveThreshold(maxVal, adaptiveMethod, thresholdType, blockSize, C);
+          assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+        });
+      });
 
-      it('can be called with required args', () => {
-        const thresholded = mat.adaptiveThreshold(maxVal, adaptiveMethod, thresholdType, blockSize, C);
-        assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+      describe('async', (done) => {
+        _funcShouldRequireArgs(() => mat.adaptiveThresholdAsync());
+
+        it('can be called with required args', () => {
+          mat.adaptiveThresholdAsync(maxVal, adaptiveMethod, thresholdType, blockSize, C, (err, thresholded) => {
+            assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+            done();
+          });
+        });
       });
     });
   });
@@ -585,35 +657,63 @@ module.exports = (getTestImg) => {
     });
 
     const getImg = () => img;
-    funcShouldRequireArgs(() => getImg().matchTemplate.bind(getImg())());
 
-    it('should return match results', () => {
-      const res = img.matchTemplate(templ, cv.TM_SQDIFF_NORMED);
+    const expectOutput = (res) => {
       expect(res).instanceOf(cv.Mat);
       expect(res.cols).to.equal((img.cols - templ.cols) + 1);
       expect(res.rows).to.equal((img.rows - templ.rows) + 1);
       expect(res).instanceOf(cv.Mat);
-
       const minLoc = res.minMaxLoc().minLoc;
       expect(minLoc.x).to.equal(templOffset.x);
       expect(minLoc.y).to.equal(templOffset.y);
+    };
+
+    const expectWithMaskOutput = (res) => {
+      expect(res).instanceOf(cv.Mat);
+      expect(res.cols).to.equal((img.cols - templ.cols) + 1);
+      expect(res.rows).to.equal((img.rows - templ.rows) + 1);
+      expect(res).instanceOf(cv.Mat);
+      const minLoc = res.minMaxLoc().minLoc;
+      expect(minLoc.x).to.equal(templOffset.x);
+      expect(minLoc.y).to.equal(templOffset.y);
+    };
+
+    describe('sync', () => {
+      _funcShouldRequireArgs(() => getImg().matchTemplate());
+
+      it('should return match results', () => {
+        expectOutput(img.matchTemplate(templ, cv.TM_SQDIFF_NORMED));
+      });
+
+      it('should match template with mask', () => {
+        const mask = new cv.Mat(templ.rows, templ.cols, cv.CV_8U, 0);
+        const maskedRegion = new cv.Mat(templ.rows / 2, templ.cols / 2, cv.CV_8U, 1);
+        maskedRegion.copyTo(mask.getRegion(new cv.Rect(0, 0, templ.cols / 2, templ.rows / 2)));
+
+        expectWithMaskOutput(img.matchTemplate(templ, cv.TM_SQDIFF, mask));
+      });
     });
 
-    it('should match template with mask', () => {
-      const mask = new cv.Mat(templ.rows, templ.cols, cv.CV_8U, 0);
-      const maskedRegion = new cv.Mat(templ.rows / 2, templ.cols / 2, cv.CV_8U, 1);
-      maskedRegion.copyTo(mask.getRegion(new cv.Rect(0, 0, templ.cols / 2, templ.rows / 2)));
+    describe('async', () => {
+      _funcShouldRequireArgs(() => getImg().matchTemplateAsync());
 
-      const res = img.matchTemplate(templ, cv.TM_SQDIFF, mask);
+      it('should return match results', (done) => {
+        img.matchTemplateAsync(templ, cv.TM_SQDIFF_NORMED, (err, res) => {
+          expectOutput(res);
+          done();
+        });
+      });
 
-      expect(res).instanceOf(cv.Mat);
-      expect(res.cols).to.equal((img.cols - templ.cols) + 1);
-      expect(res.rows).to.equal((img.rows - templ.rows) + 1);
-      expect(res).instanceOf(cv.Mat);
+      it('should match template with mask', (done) => {
+        const mask = new cv.Mat(templ.rows, templ.cols, cv.CV_8U, 0);
+        const maskedRegion = new cv.Mat(templ.rows / 2, templ.cols / 2, cv.CV_8U, 1);
+        maskedRegion.copyTo(mask.getRegion(new cv.Rect(0, 0, templ.cols / 2, templ.rows / 2)));
 
-      const minLoc = res.minMaxLoc().minLoc;
-      expect(minLoc.x).to.equal(templOffset.x);
-      expect(minLoc.y).to.equal(templOffset.y);
+        img.matchTemplateAsync(templ, cv.TM_SQDIFF, mask, (err, res) => {
+          expectWithMaskOutput(res);
+          done();
+        });
+      });
     });
   });
 
@@ -623,27 +723,58 @@ module.exports = (getTestImg) => {
       img = getTestImg();
     });
 
+    const expectOutputCanny = (binImg) => {
+      assertMetaData(binImg)(img.rows, img.cols, cv.CV_8U);
+    };
+    const expectOutputCannyAsync = done => (err, desc) => {
+      expectOutputCanny(desc);
+      done();
+    };
+
+    const expectOutput = (binImg) => {
+      assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+    };
+    const expectOutputAsync = done => (err, binImg) => {
+      expectOutput(binImg);
+      done();
+    };
+
     describe('canny', () => {
       const th1 = 2.8;
       const th2 = 0.8;
       const apertureSize = 5;
       const L2gradient = true;
 
-      funcShouldRequireArgs(() => getTestImg().canny.bind(getTestImg())());
+      describe('sync', () => {
+        _funcShouldRequireArgs(() => getTestImg().canny.bind(getTestImg())());
 
-      it('can be called with required args', () => {
-        const binImg = img.canny(th1, th2);
-        assertMetaData(binImg)(img.rows, img.cols, cv.CV_8U);
+        it('can be called with required args', () => {
+          expectOutputCanny(img.canny(th1, th2));
+        });
+
+        it('can be called with optional args', () => {
+          expectOutputCanny(img.canny(th1, th2, apertureSize, L2gradient));
+        });
+
+        it('can be called with optional args object', () => {
+          expectOutputCanny(img.canny(th1, th2, { L2gradient }));
+        });
       });
 
-      it('can be called with optional args', () => {
-        const binImg = img.canny(th1, th2, apertureSize, L2gradient);
-        assertMetaData(binImg)(img.rows, img.cols, cv.CV_8U);
-      });
+      describe('async', () => {
+        _funcShouldRequireArgs(() => getTestImg().cannyAsync.bind(getTestImg())());
 
-      it('can be called with optional args object', () => {
-        const binImg = img.canny(th1, th2, { L2gradient });
-        assertMetaData(binImg)(img.rows, img.cols, cv.CV_8U);
+        it('can be called with required args', (done) => {
+          img.cannyAsync(th1, th2, expectOutputCannyAsync(done));
+        });
+
+        it('can be called with optional args', (done) => {
+          img.cannyAsync(th1, th2, apertureSize, L2gradient, expectOutputCannyAsync(done));
+        });
+
+        it('can be called with optional args object', (done) => {
+          img.cannyAsync(th1, th2, { L2gradient }, expectOutputCannyAsync(done));
+        });
       });
     });
 
@@ -654,21 +785,36 @@ module.exports = (getTestImg) => {
       const ksize = 5;
       const borderType = cv.BORDER_CONSTANT;
 
-      funcShouldRequireArgs(() => getTestImg().sobel.bind(getTestImg())());
+      describe('sync', () => {
+        _funcShouldRequireArgs(() => getTestImg().sobel());
 
-      it('can be called with required args', () => {
-        const binImg = img.sobel(ddepth, dx, dy);
-        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+        it('can be called with required args', () => {
+          expectOutput(img.sobel(ddepth, dx, dy));
+        });
+
+        it('can be called with optional args', () => {
+          expectOutput(img.sobel(ddepth, dx, dy, ksize));
+        });
+
+        it('can be called with optional args object', () => {
+          expectOutput(img.sobel(ddepth, dx, dy, { ksize, borderType }));
+        });
       });
 
-      it('can be called with optional args', () => {
-        const binImg = img.sobel(ddepth, dx, dy, ksize);
-        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
-      });
+      describe('async', () => {
+        _funcShouldRequireArgs(() => getTestImg().sobelAsync());
 
-      it('can be called with optional args object', () => {
-        const binImg = img.sobel(ddepth, dx, dy, { ksize, borderType });
-        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+        it('can be called with required args', (done) => {
+          img.sobelAsync(ddepth, dx, dy, expectOutputAsync(done));
+        });
+
+        it('can be called with optional args', (done) => {
+          img.sobelAsync(ddepth, dx, dy, ksize, expectOutputAsync(done));
+        });
+
+        it('can be called with optional args object', (done) => {
+          img.sobelAsync(ddepth, dx, dy, { ksize, borderType }, expectOutputAsync(done));
+        });
       });
     });
 
@@ -679,21 +825,36 @@ module.exports = (getTestImg) => {
       const scale = 0.5;
       const borderType = cv.BORDER_CONSTANT;
 
-      funcShouldRequireArgs(() => getTestImg().scharr.bind(getTestImg())());
+      describe('sync', () => {
+        _funcShouldRequireArgs(() => getTestImg().scharr.bind(getTestImg())());
 
-      it('can be called with required args', () => {
-        const binImg = img.scharr(ddepth, dx, dy);
-        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+        it('can be called with required args', () => {
+          expectOutput(img.scharr(ddepth, dx, dy));
+        });
+
+        it('can be called with optional args', () => {
+          expectOutput(img.scharr(ddepth, dx, dy, scale));
+        });
+
+        it('can be called with optional args object', () => {
+          expectOutput(img.scharr(ddepth, dx, dy, { scale, borderType }));
+        });
       });
 
-      it('can be called with optional args', () => {
-        const binImg = img.scharr(ddepth, dx, dy, scale);
-        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
-      });
+      describe('async', () => {
+        _funcShouldRequireArgs(() => getTestImg().scharrAsync.bind(getTestImg())());
 
-      it('can be called with optional args object', () => {
-        const binImg = img.scharr(ddepth, dx, dy, { scale, borderType });
-        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+        it('can be called with required args', (done) => {
+          img.scharrAsync(ddepth, dx, dy, expectOutputAsync(done));
+        });
+
+        it('can be called with optional args', (done) => {
+          img.scharrAsync(ddepth, dx, dy, scale, expectOutputAsync(done));
+        });
+
+        it('can be called with optional args object', (done) => {
+          img.scharrAsync(ddepth, dx, dy, { scale, borderType }, expectOutputAsync(done));
+        });
       });
     });
 
@@ -701,22 +862,36 @@ module.exports = (getTestImg) => {
       const ddepth = cv.CV_64F;
       const ksize = 5;
       const borderType = cv.BORDER_CONSTANT;
+      describe('sync', () => {
+        _funcShouldRequireArgs(() => getTestImg().laplacian.bind(getTestImg())());
 
-      funcShouldRequireArgs(() => getTestImg().laplacian.bind(getTestImg())());
+        it('can be called with required args', () => {
+          expectOutput(img.laplacian(ddepth));
+        });
 
-      it('can be called with required args', () => {
-        const binImg = img.laplacian(ddepth);
-        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+        it('can be called with optional args', () => {
+          expectOutput(img.laplacian(ddepth, ksize));
+        });
+
+        it('can be called with optional args object', () => {
+          expectOutput(img.laplacian(ddepth, { ksize, borderType }));
+        });
       });
 
-      it('can be called with optional args', () => {
-        const binImg = img.laplacian(ddepth, ksize);
-        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
-      });
+      describe('async', () => {
+        _funcShouldRequireArgs(() => getTestImg().laplacianAsync.bind(getTestImg())());
 
-      it('can be called with optional args object', () => {
-        const binImg = img.laplacian(ddepth, { ksize, borderType });
-        assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
+        it('can be called with required args', (done) => {
+          img.laplacianAsync(ddepth, expectOutputAsync(done));
+        });
+
+        it('can be called with optional args', (done) => {
+          img.laplacianAsync(ddepth, ksize, expectOutputAsync(done));
+        });
+
+        it('can be called with optional args object', (done) => {
+          img.laplacianAsync(ddepth, { ksize, borderType }, expectOutputAsync(done));
+        });
       });
     });
   });

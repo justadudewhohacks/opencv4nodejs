@@ -1,4 +1,4 @@
-#include "macros.h"
+#include "Converters.h"
 #include <opencv2/core.hpp>
 #include <opencv2/objdetect.hpp>
 #include "Mat.h"
@@ -13,9 +13,13 @@ public:
 
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
+
+	struct DetectMultiScaleWorker;
 	static NAN_METHOD(DetectMultiScale);
-	static NAN_METHOD(DetectMultiScaleWithRejectLevels);
 	static NAN_METHOD(DetectMultiScaleAsync);
+
+	struct DetectMultiScaleWithRejectLevelsWorker;
+	static NAN_METHOD(DetectMultiScaleWithRejectLevels);
 	static NAN_METHOD(DetectMultiScaleWithRejectLevelsAsync);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
@@ -99,6 +103,15 @@ public:
 			return ret;
 		}
 	};
+
+	cv::CascadeClassifier* getNativeObjectPtr() { return &classifier; }
+	cv::CascadeClassifier getNativeObject() { return classifier; }
+
+	typedef InstanceConverter<CascadeClassifier, cv::CascadeClassifier> Converter;
+
+	static const char* getClassName() {
+		return "CascadeClassifier";
+	}
 };
 
 #endif

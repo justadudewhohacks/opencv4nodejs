@@ -26,7 +26,11 @@ public:
 	static NAN_METHOD(At);
 	static NAN_METHOD(AtRaw);
 	static NAN_METHOD(Set);
+
+	struct GetDataWorker;
 	static NAN_METHOD(GetData);
+	static NAN_METHOD(GetDataAsync);
+
 	static NAN_METHOD(GetDataAsArray);
 	static NAN_METHOD(GetRegion);
 	static NAN_METHOD(Row);
@@ -48,13 +52,31 @@ public:
   static NAN_METHOD(Rescale);
   static NAN_METHOD(Resize);
   static NAN_METHOD(ResizeToMax);
+
+
+	struct ThresholdWorker;
 	static NAN_METHOD(Threshold);
+	static NAN_METHOD(ThresholdAsync);
+
+	struct AdaptiveThresholdWorker;
 	static NAN_METHOD(AdaptiveThreshold);
+	static NAN_METHOD(AdaptiveThresholdAsync);
+
+	struct InRangeWorker;
 	static NAN_METHOD(InRange);
+	static NAN_METHOD(InRangeAsync);
+
 	static NAN_METHOD(CvtColor);
 	static NAN_METHOD(BgrToGray);
+
+	struct WarpWorker;
+	struct WarpAffineWorker;
+	struct WarpPerspectiveWorker;
 	static NAN_METHOD(WarpAffine);
+	static NAN_METHOD(WarpAffineAsync);
 	static NAN_METHOD(WarpPerspective);
+	static NAN_METHOD(WarpPerspectiveAsync);
+
 	static NAN_METHOD(Dilate);
 	static NAN_METHOD(Erode);
 	static NAN_METHOD(DistanceTransform);
@@ -73,21 +95,36 @@ public:
 	static NAN_METHOD(DrawRectangle);
 	static NAN_METHOD(DrawEllipse);
 	static NAN_METHOD(PutText);
+
+	struct MatchTemplateWorker;
 	static NAN_METHOD(MatchTemplate);
+	static NAN_METHOD(MatchTemplateAsync);
+
+	struct CannyWorker;
 	static NAN_METHOD(Canny);
+	static NAN_METHOD(CannyAsync);
+
+	struct SobelScharrWorker;
+	struct SobelWorker;
+	struct ScharrWorker;
 	static NAN_METHOD(Sobel);
+	static NAN_METHOD(SobelAsync);
 	static NAN_METHOD(Scharr);
+	static NAN_METHOD(ScharrAsync);
+
+	struct LaplacianWorker;
 	static NAN_METHOD(Laplacian);
+	static NAN_METHOD(LaplacianAsync);
 
 	/* #ENDIF IMGPROC */
 
-	static void warp(Nan::NAN_METHOD_ARGS_TYPE, const char*, void(*)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Size, int, int, const cv::Scalar&));
 	static void morph(Nan::NAN_METHOD_ARGS_TYPE, const char*, void(*)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Point, int, int, const cv::Scalar&));
 	
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	void setNativeProps(cv::Mat);
 
+	cv::Mat* getNativeObjectPtr() { return &mat; }
 	cv::Mat getNativeObject() { return mat; }
 
 	typedef InstanceConverter<Mat, cv::Mat> Converter;

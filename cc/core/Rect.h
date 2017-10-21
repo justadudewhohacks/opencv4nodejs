@@ -1,4 +1,4 @@
-#include "macros.h"
+#include "Converters.h"
 #include <opencv2/core.hpp>
 
 #ifndef __FF_RECT_H__
@@ -17,6 +17,15 @@ public:
 	static FF_GETTER(Rect, GetHeight, rect.height);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::Rect2d* getNativeObjectPtr() { return &rect; }
+	cv::Rect2d getNativeObject() { return rect; }
+
+	typedef InstanceConverter<Rect, cv::Rect2d> Converter;
+
+	static const char* getClassName() {
+		return "Rect";
+	}
 };
 
 #endif
