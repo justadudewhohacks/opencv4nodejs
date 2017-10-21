@@ -97,9 +97,19 @@ module.exports = (getTestImg) => {
 
   describe('warping', () => {
     let img;
+    let size;
     before(() => {
       img = getTestImg();
+      size = new cv.Size(img.cols, img.rows);
     });
+
+    const expectOutput = (warped) => {
+      assertMetaData(warped)(img.rows, img.cols, img.type);
+    };
+    const expectOutputAsync = done => (err, warped) => {
+      expectOutput(warped);
+      done();
+    };
 
     const transformationMatrix = new cv.Mat(
       [
@@ -119,46 +129,70 @@ module.exports = (getTestImg) => {
     const flags = cv.INTER_CUBIC;
 
     describe('warpAffine', () => {
-      funcShouldRequireArgs((() => new cv.Mat().warpAffine.bind(new cv.Mat()))());
+      describe('sync', () => {
+        _funcShouldRequireArgs(() => new cv.Mat().warpAffine());
 
-      it('can be called if required args passed', () => {
-        expect(() => img.warpAffine(transformationMatrixAffine)).to.not.throw();
+        it('can be called if required args passed', () => {
+          expectOutput(img.warpAffine(transformationMatrixAffine));
+        });
+
+        it('can be called with optional args', () => {
+          expectOutput(img.warpAffine(transformationMatrixAffine, size, flags));
+        });
+
+        it('can be called with optional args object', () => {
+          expectOutput(img.warpAffine(transformationMatrixAffine, { flags }));
+        });
       });
 
-      it('can be called with optional args', () => {
-        expect(() => img.warpAffine(transformationMatrixAffine, flags)).to.not.throw();
-      });
+      describe('async', () => {
+        _funcShouldRequireArgs(() => new cv.Mat().warpAffineAsync());
 
-      it('can be called with optional args object', () => {
-        expect(() => img.warpAffine(transformationMatrixAffine, { flags })).to.not.throw();
-      });
+        it('can be called if required args passed', (done) => {
+          img.warpAffineAsync(transformationMatrixAffine, expectOutputAsync(done));
+        });
 
-      it('should warp image perspective', () => {
-        const warped = img.warpAffine(transformationMatrixAffine);
-        assertMetaData(warped)(img.rows, img.cols, img.type);
-        expect(dangerousDeepEquals(warped.getDataAsArray(), img.getDataAsArray())).to.be.false;
+        it('can be called with optional args', (done) => {
+          img.warpAffineAsync(transformationMatrixAffine, size, flags, expectOutputAsync(done));
+        });
+
+        it('can be called with optional args object', (done) => {
+          img.warpAffineAsync(transformationMatrixAffine, { flags }, expectOutputAsync(done));
+        });
       });
     });
 
     describe('warpPerspective', () => {
-      funcShouldRequireArgs((() => new cv.Mat().warpPerspective.bind(new cv.Mat()))());
+      describe('sync', () => {
+        _funcShouldRequireArgs(() => new cv.Mat().warpPerspective());
 
-      it('can be called if required args passed', () => {
-        expect(() => img.warpPerspective(transformationMatrix)).to.not.throw();
+        it('can be called if required args passed', () => {
+          expectOutput(img.warpPerspective(transformationMatrix));
+        });
+
+        it('can be called with optional args', () => {
+          expectOutput(img.warpPerspective(transformationMatrix, size, flags));
+        });
+
+        it('can be called with optional args object', () => {
+          expectOutput(img.warpPerspective(transformationMatrix, { flags }));
+        });
       });
 
-      it('can be called with optional args', () => {
-        expect(() => img.warpPerspective(transformationMatrix, flags)).to.not.throw();
-      });
+      describe('async', () => {
+        _funcShouldRequireArgs(() => new cv.Mat().warpPerspectiveAsync());
 
-      it('can be called with optional args object', () => {
-        expect(() => img.warpPerspective(transformationMatrix, { flags })).to.not.throw();
-      });
+        it('can be called if required args passed', (done) => {
+          img.warpPerspectiveAsync(transformationMatrix, expectOutputAsync(done));
+        });
 
-      it('should warp image perspective', () => {
-        const warped = img.warpPerspective(transformationMatrix);
-        assertMetaData(warped)(img.rows, img.cols, img.type);
-        expect(dangerousDeepEquals(warped.getDataAsArray(), img.getDataAsArray())).to.be.false;
+        it('can be called with optional args', (done) => {
+          img.warpPerspectiveAsync(transformationMatrix, size, flags, expectOutputAsync(done));
+        });
+
+        it('can be called with optional args object', (done) => {
+          img.warpPerspectiveAsync(transformationMatrix, { flags }, expectOutputAsync(done));
+        });
       });
     });
   });
@@ -576,7 +610,7 @@ module.exports = (getTestImg) => {
     });
   });
 
-  describe('matchTemplate', () => {
+  describe.only('matchTemplate', () => {
     let img;
     const templOffset = { x: 10, y: 10 };
     let templ;
@@ -586,35 +620,63 @@ module.exports = (getTestImg) => {
     });
 
     const getImg = () => img;
-    funcShouldRequireArgs(() => getImg().matchTemplate.bind(getImg())());
 
-    it('should return match results', () => {
-      const res = img.matchTemplate(templ, cv.TM_SQDIFF_NORMED);
+    const expectOutput = (res) => {
       expect(res).instanceOf(cv.Mat);
       expect(res.cols).to.equal((img.cols - templ.cols) + 1);
       expect(res.rows).to.equal((img.rows - templ.rows) + 1);
       expect(res).instanceOf(cv.Mat);
-
       const minLoc = res.minMaxLoc().minLoc;
       expect(minLoc.x).to.equal(templOffset.x);
       expect(minLoc.y).to.equal(templOffset.y);
+    };
+
+    const expectWithMaskOutput = (res) => {
+      expect(res).instanceOf(cv.Mat);
+      expect(res.cols).to.equal((img.cols - templ.cols) + 1);
+      expect(res.rows).to.equal((img.rows - templ.rows) + 1);
+      expect(res).instanceOf(cv.Mat);
+      const minLoc = res.minMaxLoc().minLoc;
+      expect(minLoc.x).to.equal(templOffset.x);
+      expect(minLoc.y).to.equal(templOffset.y);
+    };
+
+    describe('sync', () => {
+      _funcShouldRequireArgs(() => getImg().matchTemplate());
+
+      it('should return match results', () => {
+        expectOutput(img.matchTemplate(templ, cv.TM_SQDIFF_NORMED));
+      });
+
+      it('should match template with mask', () => {
+        const mask = new cv.Mat(templ.rows, templ.cols, cv.CV_8U, 0);
+        const maskedRegion = new cv.Mat(templ.rows / 2, templ.cols / 2, cv.CV_8U, 1);
+        maskedRegion.copyTo(mask.getRegion(new cv.Rect(0, 0, templ.cols / 2, templ.rows / 2)));
+
+        expectWithMaskOutput(img.matchTemplate(templ, cv.TM_SQDIFF, mask));
+      });
     });
 
-    it('should match template with mask', () => {
-      const mask = new cv.Mat(templ.rows, templ.cols, cv.CV_8U, 0);
-      const maskedRegion = new cv.Mat(templ.rows / 2, templ.cols / 2, cv.CV_8U, 1);
-      maskedRegion.copyTo(mask.getRegion(new cv.Rect(0, 0, templ.cols / 2, templ.rows / 2)));
+    describe('async', () => {
+      _funcShouldRequireArgs(() => getImg().matchTemplateAsync());
 
-      const res = img.matchTemplate(templ, cv.TM_SQDIFF, mask);
+      it('should return match results', (done) => {
+        img.matchTemplateAsync(templ, cv.TM_SQDIFF_NORMED, (err, res) => {
+          expectOutput(res);
+          done();
+        });
+      });
 
-      expect(res).instanceOf(cv.Mat);
-      expect(res.cols).to.equal((img.cols - templ.cols) + 1);
-      expect(res.rows).to.equal((img.rows - templ.rows) + 1);
-      expect(res).instanceOf(cv.Mat);
+      it('should match template with mask', (done) => {
+        const mask = new cv.Mat(templ.rows, templ.cols, cv.CV_8U, 0);
+        const maskedRegion = new cv.Mat(templ.rows / 2, templ.cols / 2, cv.CV_8U, 1);
+        maskedRegion.copyTo(mask.getRegion(new cv.Rect(0, 0, templ.cols / 2, templ.rows / 2)));
 
-      const minLoc = res.minMaxLoc().minLoc;
-      expect(minLoc.x).to.equal(templOffset.x);
-      expect(minLoc.y).to.equal(templOffset.y);
+        img.matchTemplateAsync(templ, cv.TM_SQDIFF, mask, (err, res) => {
+          expectWithMaskOutput(res);
+          done();
+        });
+      });
     });
   });
 
@@ -635,8 +697,8 @@ module.exports = (getTestImg) => {
     const expectOutput = (binImg) => {
       assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
     };
-    const expectOutputAsync = done => (err, desc) => {
-      expectOutput(desc);
+    const expectOutputAsync = done => (err, binImg) => {
+      expectOutput(binImg);
       done();
     };
 

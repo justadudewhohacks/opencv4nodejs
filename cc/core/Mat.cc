@@ -50,7 +50,9 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "adaptiveThreshold", AdaptiveThreshold);
 	Nan::SetPrototypeMethod(ctor, "inRange", InRange);
 	Nan::SetPrototypeMethod(ctor, "warpAffine", WarpAffine);
+	Nan::SetPrototypeMethod(ctor, "warpAffineAsync", WarpAffineAsync);
 	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
+	Nan::SetPrototypeMethod(ctor, "warpPerspectiveAsync", WarpPerspectiveAsync);
 	Nan::SetPrototypeMethod(ctor, "dilate", Dilate);
 	Nan::SetPrototypeMethod(ctor, "erode", Erode);
 	Nan::SetPrototypeMethod(ctor, "distanceTransform", DistanceTransform);
@@ -70,6 +72,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "drawEllipse", DrawEllipse);
 	Nan::SetPrototypeMethod(ctor, "putText", PutText);
 	Nan::SetPrototypeMethod(ctor, "matchTemplate", MatchTemplate);
+	Nan::SetPrototypeMethod(ctor, "matchTemplateAsync", MatchTemplateAsync);
 	Nan::SetPrototypeMethod(ctor, "canny", Canny);
 	Nan::SetPrototypeMethod(ctor, "cannyAsync", CannyAsync);
 	Nan::SetPrototypeMethod(ctor, "sobel", Sobel);
@@ -569,20 +572,92 @@ NAN_METHOD(Mat::BgrToGray) {
 	FF_RETURN(jsMat);
 }
 
-NAN_METHOD(Mat::WarpAffine) {
-	Nan::TryCatch tryCatch;
-	warp(info, "Mat::WarpAffine", &cv::warpAffine);
-	if (tryCatch.HasCaught()) {
-		tryCatch.ReThrow();
+struct Mat::WarpWorker {
+public:
+	cv::Mat mat;
+
+	WarpWorker(cv::Mat mat) {
+		this->mat = mat;
+		this->size = cv::Size2d(mat.cols, mat.rows);
 	}
+
+	cv::Mat transformationMatrix;
+	cv::Size2d size;
+	int flags = cv::INTER_LINEAR;
+	int borderMode = cv::BORDER_CONSTANT;
+
+	cv::Mat warpedMat;
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(warpedMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return Mat::Converter::arg(0, &transformationMatrix, info);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Size::Converter::optArg(1, &size, info) ||
+			IntConverter::optArg(2, &flags, info) ||
+			IntConverter::optArg(3, &borderMode, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(1) && !Size::Converter::hasInstance(info[1]->ToObject());
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[1]->ToObject();
+		return (
+			Size::Converter::optProp(&size, "size", opts) ||
+			IntConverter::optProp(&flags, "flags", opts) ||
+			IntConverter::optProp(&borderMode, "borderMode", opts)
+		);
+	}
+};
+
+struct Mat::WarpAffineWorker : public WarpWorker {
+	WarpAffineWorker(cv::Mat mat) : WarpWorker(mat) {
+	}
+
+	const char* execute() {
+		cv::warpAffine(mat, warpedMat, transformationMatrix, (cv::Size)size, flags, borderMode, cv::Scalar());
+		return "";
+	}
+};
+
+NAN_METHOD(Mat::WarpAffine) {
+	WarpAffineWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::WarpAffine", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
-NAN_METHOD(Mat::WarpPerspective) {
-	Nan::TryCatch tryCatch;
-	warp(info, "Mat::WarpPerspective", &cv::warpPerspective);
-	if (tryCatch.HasCaught()) {
-		tryCatch.ReThrow();
+NAN_METHOD(Mat::WarpAffineAsync) {
+	WarpAffineWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::WarpAffineAsync", WarpAffineWorker, worker);
+}
+
+struct Mat::WarpPerspectiveWorker : public WarpWorker {
+	WarpPerspectiveWorker(cv::Mat mat) : WarpWorker(mat) {
 	}
+
+	const char* execute() {
+		cv::warpPerspective(mat, warpedMat, transformationMatrix, (cv::Size)size, flags, borderMode, cv::Scalar());
+		return "";
+	}
+};
+
+NAN_METHOD(Mat::WarpPerspective) {
+	WarpPerspectiveWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::WarpPerspective", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::WarpPerspectiveAsync) {
+	WarpPerspectiveWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::WarpPerspectiveAsync", WarpPerspectiveWorker, worker);
 }
 
 NAN_METHOD(Mat::Dilate) {
@@ -991,23 +1066,51 @@ NAN_METHOD(Mat::PutText) {
 	FF_RETURN(info.This());
 }
 
+
+struct Mat::MatchTemplateWorker : SimpleWorker {
+public:
+	cv::Mat mat;
+
+	MatchTemplateWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	cv::Mat templ;
+	int method;
+	cv::Mat mask = cv::noArray().getMat();
+
+	cv::Mat resultsMat;
+
+	const char* execute() {
+		cv::matchTemplate(mat, templ, resultsMat, method, mask);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(resultsMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::arg(0, &templ, info) ||
+			IntConverter::arg(1, &method, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return Mat::Converter::optArg(2, &mask, info);
+	}
+};
+
 NAN_METHOD(Mat::MatchTemplate) {
-	FF_METHOD_CONTEXT("Mat::MatchTemplate");
+	MatchTemplateWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::MatchTemplate", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
 
-	FF_ARG_INSTANCE(0, cv::Mat templ, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INT(1, int method);
-	FF_ARG_INSTANCE_IFDEF(2, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, cv::noArray().getMat());
-
-	FF_OBJ jsResult = FF_NEW_INSTANCE(Mat::constructor);
-	cv::matchTemplate(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		templ,
-		FF_UNWRAP_MAT_AND_GET(jsResult),
-		method,
-		mask
-	);
-
-	FF_RETURN(jsResult);
+NAN_METHOD(Mat::MatchTemplateAsync) {
+	MatchTemplateWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::MatchTemplateAsync", MatchTemplateWorker, worker);
 }
 
 
@@ -1276,39 +1379,6 @@ NAN_METHOD(Mat::Row) {
     return Nan::ThrowError("... Exception");
   }
   FF_RETURN(row);
-}
-
-void Mat::warp(Nan::NAN_METHOD_ARGS_TYPE info, const char* methodName, void(*func)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Size, int, int, const cv::Scalar&)) {
-	FF_METHOD_CONTEXT("Mat::WarpAffine");
-	cv::Mat self = FF_UNWRAP_MAT_AND_GET(info.This());
-
-	FF_ARG_INSTANCE(0, cv::Mat transformationMatrix, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(1) && !FF_IS_INSTANCE(Size::constructor, info[1]);
-	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d size, "size", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d(self.cols, self.rows));
-	FF_GET_UINT_IFDEF(optArgs, int flags, "flags", cv::INTER_LINEAR);
-	FF_GET_UINT_IFDEF(optArgs, int borderMode, "borderMode", cv::BORDER_CONSTANT);
-	if (!hasOptArgsObj) {
-		FF_ARG_INSTANCE_IFDEF(1, size, Size::constructor, FF_UNWRAP_SIZE_AND_GET, size);
-		FF_ARG_UINT_IFDEF(2, flags, flags);
-		FF_ARG_UINT_IFDEF(3, borderMode, borderMode);
-	}
-	// TODO borderValue
-	const cv::Scalar& borderValue = cv::Scalar();
-
-	FF_OBJ jsWarped = FF_NEW_INSTANCE(Mat::constructor);
-	func(
-		self,
-		FF_UNWRAP_MAT_AND_GET(jsWarped),
-		transformationMatrix,
-		(cv::Size)size,
-		flags,
-		borderMode,
-		borderValue
-	);
-	FF_RETURN(jsWarped);
 }
 
 void Mat::morph(Nan::NAN_METHOD_ARGS_TYPE info, const char* methodName, void(*func)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Point, int, int, const cv::Scalar&)) {

@@ -53,8 +53,15 @@ public:
 	static NAN_METHOD(InRange);
 	static NAN_METHOD(CvtColor);
 	static NAN_METHOD(BgrToGray);
+
+	struct WarpWorker;
+	struct WarpAffineWorker;
+	struct WarpPerspectiveWorker;
 	static NAN_METHOD(WarpAffine);
+	static NAN_METHOD(WarpAffineAsync);
 	static NAN_METHOD(WarpPerspective);
+	static NAN_METHOD(WarpPerspectiveAsync);
+
 	static NAN_METHOD(Dilate);
 	static NAN_METHOD(Erode);
 	static NAN_METHOD(DistanceTransform);
@@ -73,7 +80,10 @@ public:
 	static NAN_METHOD(DrawRectangle);
 	static NAN_METHOD(DrawEllipse);
 	static NAN_METHOD(PutText);
+
+	struct MatchTemplateWorker;
 	static NAN_METHOD(MatchTemplate);
+	static NAN_METHOD(MatchTemplateAsync);
 
 	struct CannyWorker;
 	static NAN_METHOD(Canny);
@@ -93,7 +103,6 @@ public:
 
 	/* #ENDIF IMGPROC */
 
-	static void warp(Nan::NAN_METHOD_ARGS_TYPE, const char*, void(*)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Size, int, int, const cv::Scalar&));
 	static void morph(Nan::NAN_METHOD_ARGS_TYPE, const char*, void(*)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Point, int, int, const cv::Scalar&));
 	
   static Nan::Persistent<v8::FunctionTemplate> constructor;
