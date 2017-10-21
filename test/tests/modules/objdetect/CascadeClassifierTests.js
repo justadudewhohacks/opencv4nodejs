@@ -1,6 +1,7 @@
 const cv = global.dut;
 const {
   funcShouldRequireArgs,
+  _funcShouldRequireArgs,
   readTestImage
 } = global.utils;
 const { expect } = require('chai');
@@ -62,7 +63,7 @@ module.exports = () => {
         };
 
         describe('sync', () => {
-          funcShouldRequireArgs(() => cc.detectMultiScale());
+          _funcShouldRequireArgs(() => cc.detectMultiScale());
 
           it('can be called if required args passed', () => {
             expectOutput(cc.detectMultiScale(testImg));
@@ -98,7 +99,7 @@ module.exports = () => {
             done();
           };
 
-          funcShouldRequireArgs(() => cc.detectMultiScaleAsync());
+          _funcShouldRequireArgs(() => cc.detectMultiScaleAsync());
 
           it('can be called if required args passed', (done) => {
             cc.detectMultiScaleAsync(
@@ -147,7 +148,7 @@ module.exports = () => {
         };
 
         describe('sync', () => {
-          funcShouldRequireArgs(() => cc.detectMultiScaleWithRejectLevels());
+          _funcShouldRequireArgs(() => cc.detectMultiScaleWithRejectLevels());
 
           it('can be called if required args passed', () => {
             expectOutput(cc.detectMultiScaleWithRejectLevels(testImg));
@@ -183,7 +184,7 @@ module.exports = () => {
             done();
           };
 
-          funcShouldRequireArgs(() => cc.detectMultiScaleWithRejectLevelsAsync());
+          _funcShouldRequireArgs(() => cc.detectMultiScaleWithRejectLevelsAsync());
 
           it('can be called if required args passed', (done) => {
             cc.detectMultiScaleWithRejectLevelsAsync(testImg, expectOutputAsync(done));

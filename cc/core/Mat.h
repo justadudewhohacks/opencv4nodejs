@@ -88,6 +88,7 @@ public:
 
 	void setNativeProps(cv::Mat);
 
+	cv::Mat* getNativeObjectPtr() { return &mat; }
 	cv::Mat getNativeObject() { return mat; }
 
 	typedef InstanceConverter<Mat, cv::Mat> Converter;

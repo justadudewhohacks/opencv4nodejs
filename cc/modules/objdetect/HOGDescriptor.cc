@@ -87,65 +87,63 @@ NAN_METHOD(HOGDescriptor::New) {
 	FF_RETURN(info.Holder());
 };
 
-NAN_METHOD(HOGDescriptor::Compute) {
-	FF_METHOD_CONTEXT("HOGDescriptor::Compute");
+struct HOGDescriptor::ComputeWorker {
+public:
+	cv::HOGDescriptor hog;
 
-	FF_ARG_INSTANCE(0, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-
-	// optional args
-	bool hasOptArgsObj = FF_ARG_IS_OBJECT(1);
-	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d winStride, "winStride", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d padding, "padding", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
-	FF_GET_ARRAY_IFDEF(optArgs, FF_ARR jsLocations, "locations", FF_NEW_ARRAY());
-	if (!hasOptArgsObj) {
-		FF_ARG_INSTANCE_IFDEF(1, winStride, Size::constructor, FF_UNWRAP_SIZE_AND_GET, winStride);
-		FF_ARG_INSTANCE_IFDEF(2, padding, Size::constructor, FF_UNWRAP_SIZE_AND_GET, padding);
-		FF_ARG_ARRAY_IFDEF(3, jsLocations, jsLocations);
+	ComputeWorker(cv::HOGDescriptor hog) {
+		this->hog = hog;
 	}
 
-	std::vector<cv::Point2i> locations; 
-	Nan::TryCatch tryCatch;
-	Point::unpackJSPoint2Array(locations, jsLocations);
-	if (tryCatch.HasCaught()) {
-		tryCatch.ReThrow();
-		return;
-	}
+	cv::Mat img;
+	cv::Size2d winStride;
+	cv::Size2d padding;
+	std::vector<cv::Point2i> locations;
 
 	std::vector<float> descriptors;
-	FF_UNWRAP(info.This(), HOGDescriptor)->hog.compute(
-		img,
-		descriptors,
-		winStride,
-		padding,
-		locations
-	);
-	FF_RETURN(FF::stdVecToJSArray<double>(descriptors));
-};
 
-NAN_METHOD(HOGDescriptor::ComputeAsync) {
-	FF_METHOD_CONTEXT("HOGDescriptor::ComputeAsync");
-
-	ComputeContext ctx;
-	FF_ARG_INSTANCE(0, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-
-	// optional args
-	bool hasOptArgsObj = FF_ARG_IS_OBJECT(1);
-	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INSTANCE_IFDEF(optArgs, ctx.winStride, "winStride", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
-	FF_GET_INSTANCE_IFDEF(optArgs, ctx.padding, "padding", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d());
-	FF_GET_ARRAY_IFDEF(optArgs, FF_ARR jsLocations, "locations", FF_NEW_ARRAY());
-	if (!hasOptArgsObj) {
-		FF_ARG_INSTANCE_IFDEF(1, ctx.winStride, Size::constructor, FF_UNWRAP_SIZE_AND_GET, ctx.winStride);
-		FF_ARG_INSTANCE_IFDEF(2, ctx.padding, Size::constructor, FF_UNWRAP_SIZE_AND_GET, ctx.padding);
-		FF_ARG_ARRAY_IFDEF(3, jsLocations, jsLocations);
+	const char* execute() {
+		hog.compute(img, descriptors, winStride, padding, locations);
+		return "";
 	}
 
-	ctx.hog = FF_UNWRAP(info.This(), HOGDescriptor)->hog;
-	FF_ARG_FUNC(info.Length() - 1, v8::Local<v8::Function> cbFunc);
+	FF_VAL getReturnValue() {
+		return FloatArrayConverter::wrap(descriptors);
+	}
 
-	Nan::AsyncQueueWorker(new GenericAsyncWorker< ComputeContext>(
-		new Nan::Callback(cbFunc),
-		ctx
-	));
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return Mat::Converter::arg(0, &img, info);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Size::Converter::optArg(1, &winStride, info) ||
+			Size::Converter::optArg(2, &padding, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2i>::optArg(3, &locations, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(1) && !FF_IS_INSTANCE(Size::constructor, info[1]->ToObject());
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[1]->ToObject();
+		return (
+			Size::Converter::optProp(&winStride, "winStride", opts) ||
+			Size::Converter::optProp(&padding, "padding", opts) ||
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2i>::optProp(&locations, "locations", opts)
+		);
+	}
 };
+
+NAN_METHOD(HOGDescriptor::Compute) {
+	ComputeWorker worker(HOGDescriptor::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("HOGDescriptor::Compute", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(HOGDescriptor::ComputeAsync) {
+	ComputeWorker worker(HOGDescriptor::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("HOGDescriptor::ComputeAsync", ComputeWorker, worker);
+}

@@ -43,6 +43,7 @@ public:
 	void setParams(v8::Local<v8::Object> params);
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
+	cv::Ptr<cv::ml::SVM>* getNativeObjectPtr() { return &svm; }
 	cv::Ptr<cv::ml::SVM> getNativeObject() { return svm; }
 
 	typedef InstanceConverter<SVM, cv::Ptr<cv::ml::SVM> > Converter;

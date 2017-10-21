@@ -25,37 +25,21 @@ public:
 
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
-	static NAN_METHOD(Compute);
 
+	struct ComputeWorker;
+	static NAN_METHOD(Compute);
 	static NAN_METHOD(ComputeAsync);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-	struct ComputeContext {
-	public:
-		cv::HOGDescriptor hog;
-		cv::Mat img;
-		cv::Size2d winStride;
-		cv::Size2d padding;
-		std::vector<cv::Point2i> locations;
+	cv::HOGDescriptor* getNativeObjectPtr() { return &hog; }
+	cv::HOGDescriptor getNativeObject() { return hog; }
 
-		std::vector<float> descriptors;
+	typedef InstanceConverter<HOGDescriptor, cv::HOGDescriptor> Converter;
 
-		const char* execute() {
-			hog.compute(
-				img,
-				descriptors,
-				winStride,
-				padding,
-				locations
-			);
-			return "";
-		}
-
-		FF_VAL getReturnValue() {
-			return FF::stdVecToJSArray<double>(descriptors);
-		}
-	};
+	static const char* getClassName() {
+		return "HOGDescriptor";
+	}
 };
 
 #endif

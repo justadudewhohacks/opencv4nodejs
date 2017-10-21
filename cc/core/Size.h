@@ -1,4 +1,4 @@
-#include "macros.h"
+#include "Converters.h"
 #include <opencv2/core.hpp>
 
 #ifndef __FF_SIZE_H__
@@ -15,6 +15,15 @@ public:
 	static FF_GETTER(Size, GetHeight, size.height);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::Size2d* getNativeObjectPtr() { return &size; }
+	cv::Size2d getNativeObject() { return size; }
+
+	typedef InstanceConverter<Size, cv::Size2d> Converter;
+
+	static const char* getClassName() {
+		return "Size";
+	}
 };
 
 #endif
