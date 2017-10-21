@@ -5,6 +5,7 @@ const {
   assertMatValueEquals,
   assertMetaData,
   assertDataDeepEquals,
+  asyncFuncShouldRequireArgs,
   _funcShouldRequireArgs,
   funcShouldRequireArgs,
   readTestImage,
@@ -423,13 +424,25 @@ describe('Mat', () => {
     });
 
     describe('async', () => {
-      _funcShouldRequireArgs(() => mat.inRangeAsync());
+      asyncFuncShouldRequireArgs(() => mat.inRangeAsync());
 
-      it('should return correct binary mat', (done) => {
-        mat.inRangeAsync(lower, upper, (err, inRangeMat) => {
-          assertMetaData(inRangeMat)(2, 3, cv.CV_8U);
-          assertDataDeepEquals(expected, inRangeMat.getDataAsArray());
-          done();
+      describe('callbacked', () => {
+        it('should return correct binary mat', (done) => {
+          mat.inRangeAsync(lower, upper, (err, inRangeMat) => {
+            assertMetaData(inRangeMat)(2, 3, cv.CV_8U);
+            assertDataDeepEquals(expected, inRangeMat.getDataAsArray());
+            done();
+          });
+        });
+      });
+
+      describe('promisified', () => {
+        it('should return correct binary mat', (done) => {
+          mat.inRangeAsync(lower, upper).then((inRangeMat) => {
+            assertMetaData(inRangeMat)(2, 3, cv.CV_8U);
+            assertDataDeepEquals(expected, inRangeMat.getDataAsArray());
+            done();
+          });
         });
       });
     });

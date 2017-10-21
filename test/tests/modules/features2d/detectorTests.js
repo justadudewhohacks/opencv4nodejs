@@ -1,7 +1,11 @@
 const cv = global.dut;
 const { assert, expect } = require('chai');
 
-const { assertError, assertPropsWithValue } = global.utils;
+const {
+  assertError,
+  assertPropsWithValue,
+  asyncFuncShouldRequireArgs
+} = global.utils;
 
 module.exports = (getTestImg, defaults, customProps, Detector, implementsCompute = true) => {
   let testImg;
@@ -67,11 +71,7 @@ module.exports = (getTestImg, defaults, customProps, Detector, implementsCompute
 
       describe('async', () => {
         it('should throw if no args', () => {
-          assertError(() => (new Detector()).detectAsync(), 'expected arg 0 to be instance of: Mat');
-        });
-
-        it('should require a callback', () => {
-          assertError(() => (new Detector()).detectAsync(new cv.Mat()), 'expected arg 1 to be of type: FUNC');
+          asyncFuncShouldRequireArgs(() => new Detector().detectAsync());
         });
 
         it('should return an array of KeyPoints', (done) => {
@@ -100,11 +100,7 @@ module.exports = (getTestImg, defaults, customProps, Detector, implementsCompute
 
         describe('async', () => {
           it('should throw if no args', () => {
-            assertError(() => (new Detector()).computeAsync(), 'expected arg 0 to be instance of: Mat');
-          });
-
-          it('should require a callback', () => {
-            assertError(() => (new Detector()).computeAsync(new cv.Mat(), []), 'expected arg 2 to be of type: FUNC');
+            asyncFuncShouldRequireArgs(() => new Detector().computeAsync());
           });
 
           it('should return a Mat with descriptors for each KeyPoint', (done) => {

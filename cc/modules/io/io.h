@@ -68,7 +68,7 @@ public:
 		const char* execute() {
 			std::vector<uchar> dataVec;
 			cv::imencode(ext, img, dataVec, flags);
-			size_t dataSize = dataVec.size() * sizeof(char);
+			dataSize = dataVec.size() * sizeof(char);
 			data = static_cast<char *>(malloc(dataSize));
 			memcpy(data, reinterpret_cast<char*>(dataVec.data()), dataSize);
 			return "";

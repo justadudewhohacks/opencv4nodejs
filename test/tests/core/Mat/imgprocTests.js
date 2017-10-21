@@ -2,6 +2,7 @@ const cv = global.dut;
 
 const {
   assertError,
+  asyncFuncShouldRequireArgs,
   funcShouldRequireArgs,
   _funcShouldRequireArgs,
   assertMetaData,
@@ -146,7 +147,7 @@ module.exports = (getTestImg) => {
       });
 
       describe('async', () => {
-        _funcShouldRequireArgs(() => new cv.Mat().warpAffineAsync());
+        asyncFuncShouldRequireArgs(() => new cv.Mat().warpAffineAsync());
 
         it('can be called if required args passed', (done) => {
           img.warpAffineAsync(transformationMatrixAffine, expectOutputAsync(done));
@@ -180,7 +181,7 @@ module.exports = (getTestImg) => {
       });
 
       describe('async', () => {
-        _funcShouldRequireArgs(() => new cv.Mat().warpPerspectiveAsync());
+        asyncFuncShouldRequireArgs(() => new cv.Mat().warpPerspectiveAsync());
 
         it('can be called if required args passed', (done) => {
           img.warpPerspectiveAsync(transformationMatrix, expectOutputAsync(done));
@@ -551,7 +552,7 @@ module.exports = (getTestImg) => {
       });
 
       describe('async', () => {
-        _funcShouldRequireArgs(() => mat.thresholdAsync());
+        asyncFuncShouldRequireArgs(() => mat.thresholdAsync());
 
         it('can be called with required args', (done) => {
           mat.thresholdAsync(th, maxVal, thresholdType, (err, thresholded) => {
@@ -590,7 +591,7 @@ module.exports = (getTestImg) => {
       });
 
       describe('async', (done) => {
-        _funcShouldRequireArgs(() => mat.adaptiveThresholdAsync());
+        asyncFuncShouldRequireArgs(() => mat.adaptiveThresholdAsync());
 
         it('can be called with required args', () => {
           mat.adaptiveThresholdAsync(maxVal, adaptiveMethod, thresholdType, blockSize, C, (err, thresholded) => {
@@ -695,7 +696,7 @@ module.exports = (getTestImg) => {
     });
 
     describe('async', () => {
-      _funcShouldRequireArgs(() => getImg().matchTemplateAsync());
+      asyncFuncShouldRequireArgs(() => getImg().matchTemplateAsync());
 
       it('should return match results', (done) => {
         img.matchTemplateAsync(templ, cv.TM_SQDIFF_NORMED, (err, res) => {
@@ -762,7 +763,7 @@ module.exports = (getTestImg) => {
       });
 
       describe('async', () => {
-        _funcShouldRequireArgs(() => getTestImg().cannyAsync.bind(getTestImg())());
+        asyncFuncShouldRequireArgs(() => getTestImg().cannyAsync.bind(getTestImg())());
 
         it('can be called with required args', (done) => {
           img.cannyAsync(th1, th2, expectOutputCannyAsync(done));
@@ -802,7 +803,7 @@ module.exports = (getTestImg) => {
       });
 
       describe('async', () => {
-        _funcShouldRequireArgs(() => getTestImg().sobelAsync());
+        asyncFuncShouldRequireArgs(() => getTestImg().sobelAsync());
 
         it('can be called with required args', (done) => {
           img.sobelAsync(ddepth, dx, dy, expectOutputAsync(done));
@@ -842,7 +843,7 @@ module.exports = (getTestImg) => {
       });
 
       describe('async', () => {
-        _funcShouldRequireArgs(() => getTestImg().scharrAsync.bind(getTestImg())());
+        asyncFuncShouldRequireArgs(() => getTestImg().scharrAsync.bind(getTestImg())());
 
         it('can be called with required args', (done) => {
           img.scharrAsync(ddepth, dx, dy, expectOutputAsync(done));
@@ -879,7 +880,7 @@ module.exports = (getTestImg) => {
       });
 
       describe('async', () => {
-        _funcShouldRequireArgs(() => getTestImg().laplacianAsync.bind(getTestImg())());
+        asyncFuncShouldRequireArgs(() => getTestImg().laplacianAsync.bind(getTestImg())());
 
         it('can be called with required args', (done) => {
           img.laplacianAsync(ddepth, expectOutputAsync(done));

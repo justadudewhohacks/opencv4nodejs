@@ -13,6 +13,22 @@ const assertError = (func, msg) => {
   assert.include(errMsg, msg);
 };
 
+const assertErrorAsync = (func, msg) => {
+  const ret = func();
+
+  if (!ret.then || !ret.catch) {
+    assert(false, 'func does not return a promise');
+    return Promise.reject(ret);
+  }
+
+  return ret.then(() => {
+    assert(false, 'no error was thrown');
+  })
+  .catch((err) => {
+    assert.include(err.toString(), msg);
+  });
+};
+
 exports.assertError = assertError;
 
 exports.assertPropsWithValue = obj => (props) => {
@@ -30,6 +46,21 @@ exports.funcShouldRequireArgs = (func) => {
 exports._funcShouldRequireArgs = (func) => {
   it('should throw if no args', () => {
     assertError(func, 'expected argument 0 to be');
+  });
+};
+
+exports.asyncFuncShouldRequireArgs = (func) => {
+  it('should throw if no args', (done) => {
+    assertErrorAsync(func, 'expected argument 0 to be')
+    .then(() => done());
+  });
+};
+
+
+exports._asyncFuncShouldRequireArgs = (func) => {
+  it('should throw if no args', (done) => {
+    assertErrorAsync(func, 'expected arg 0 to be')
+    .then(() => done());
   });
 };
 

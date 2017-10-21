@@ -4,6 +4,7 @@ const cv = global.dut;
 const {
   assertError,
   assertPropsWithValue,
+  asyncFuncShouldRequireArgs,
   _funcShouldRequireArgs,
   getTmpDataFilePath,
   clearTmpData
@@ -137,7 +138,7 @@ module.exports = () => {
         });
 
         describe('async', () => {
-          _funcShouldRequireArgs(() => new cv.SVM().trainAsync());
+          asyncFuncShouldRequireArgs(() => new cv.SVM().trainAsync());
 
           it('should be trainable with trainData', (done) => {
             const svm = new cv.SVM();
@@ -276,7 +277,7 @@ module.exports = () => {
         });
 
         describe('async', () => {
-          _funcShouldRequireArgs(() => new cv.SVM().trainAutoAsync());
+          asyncFuncShouldRequireArgs(() => new cv.SVM().trainAutoAsync());
 
           it('should be trainable with trainData', (done) => {
             const svm = new cv.SVM();
