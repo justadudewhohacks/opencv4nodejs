@@ -362,8 +362,6 @@ const { objects, numDetections } = await classifier.detectMultiScaleAsync(grayIm
 
 ```
 
-### Initializing Mat (image matrix), Vec, Point
-
 <a name="available-modules"></a>
 
 ## Available Modules
