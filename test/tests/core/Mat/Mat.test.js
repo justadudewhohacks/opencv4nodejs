@@ -360,9 +360,41 @@ describe('Mat', () => {
     });
   });
 
-  describe.skip('getData', () => {
-    it('getData', () => {
-      expect(true).to.be.false;
+  describe('getData', () => {
+    const matC1 = new cv.Mat([
+      [255, 255, 255],
+      [0, 0, 0]
+    ], cv.CV_8U);
+
+    const matC3 = new cv.Mat([
+      [[255, 255, 255], [255, 255, 255], [255, 255, 255]],
+      [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+    ], cv.CV_8UC3);
+
+    describe('sync', () => {
+      it('should return buffer of with data of single channeled Mat', () => {
+        const buf = matC1.getData();
+        expect(buf).instanceOf(Buffer).lengthOf(6);
+      });
+
+      it('should return buffer of with data of triple channeled Mat', () => {
+        const buf = matC3.getData();
+        expect(buf).instanceOf(Buffer).lengthOf(18);
+      });
+    });
+
+    describe('async', () => {
+      it('should return buffer of with data of single channeled Mat', () => {
+        matC1.getData((err, buf) => {
+          expect(buf).instanceOf(Buffer).lengthOf(6);
+        });
+      });
+
+      it('should return buffer of with data of triple channeled Mat', () => {
+        matC3.getData((err, buf) => {
+          expect(buf).instanceOf(Buffer).lengthOf(18);
+        });
+      });
     });
   });
 

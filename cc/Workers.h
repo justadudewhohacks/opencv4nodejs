@@ -47,6 +47,10 @@ public:
 	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return false;
 	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return false;
+	}
 };
 
 #define FF_TRY_UNWRAP_ARGS(ff_methodName, ff_worker)\

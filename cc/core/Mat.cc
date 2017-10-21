@@ -26,6 +26,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "atRaw", AtRaw);
 	Nan::SetPrototypeMethod(ctor, "set", Set);
 	Nan::SetPrototypeMethod(ctor, "getData", GetData);
+	Nan::SetPrototypeMethod(ctor, "getDataAsync", GetData);
 	Nan::SetPrototypeMethod(ctor, "getDataAsArray", GetDataAsArray);
 	Nan::SetPrototypeMethod(ctor, "getRegion", GetRegion);
 	Nan::SetPrototypeMethod(ctor, "row", Row);
@@ -239,12 +240,38 @@ NAN_METHOD(Mat::Set) {
 	}
 }
 
+struct Mat::GetDataWorker : SimpleWorker {
+public:
+	cv::Mat mat;
+
+	GetDataWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	size_t size;
+	char *data;
+
+	const char* execute() {
+		size = mat.rows * mat.cols * mat.elemSize();
+		data = static_cast<char *>(malloc(size));
+		memcpy(data, mat.data, size);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Nan::NewBuffer(data, size).ToLocalChecked();
+	}
+};
+
 NAN_METHOD(Mat::GetData) {
-	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-	size_t size = matSelf.rows * matSelf.cols * matSelf.elemSize();
-	char *data = static_cast<char *>(malloc(size));
-	memcpy(data, matSelf.data, size);
-	FF_RETURN(Nan::NewBuffer(data, size).ToLocalChecked());
+	GetDataWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::GetData", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::GetDataAsync) {
+	GetDataWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::GetDataAsync", GetDataWorker, worker);
 }
 
 NAN_METHOD(Mat::GetDataAsArray) {
