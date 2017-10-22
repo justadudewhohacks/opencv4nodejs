@@ -547,7 +547,7 @@ public:
 			DoubleConverter::arg(0, &thresh, info) ||
 			DoubleConverter::arg(1, &maxVal, info) ||
 			UintConverter::arg(2, &type, info)
-			);
+		);
 	}
 };
 

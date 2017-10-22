@@ -108,10 +108,6 @@ module.exports = (getTestImg) => {
     const expectOutput = (warped) => {
       assertMetaData(warped)(img.rows, img.cols, img.type);
     };
-    const expectOutputAsync = done => (err, warped) => {
-      expectOutput(warped);
-      done();
-    };
 
     const transformationMatrix = new cv.Mat(
       [
@@ -128,74 +124,35 @@ module.exports = (getTestImg) => {
       ],
       cv.CV_64F
     );
-    const flags = cv.INTER_CUBIC;
 
-    describe('warpAffine', () => {
-      describe('sync', () => {
-        _funcShouldRequireArgs(() => new cv.Mat().warpAffine());
-
-        it('can be called if required args passed', () => {
-          expectOutput(img.warpAffine(transformationMatrixAffine));
-        });
-
-        it('can be called with optional args', () => {
-          expectOutput(img.warpAffine(transformationMatrixAffine, size, flags));
-        });
-
-        it('can be called with optional args object', () => {
-          expectOutput(img.warpAffine(transformationMatrixAffine, { flags }));
-        });
-      });
-
-      describe('async', () => {
-        asyncFuncShouldRequireArgs(() => new cv.Mat().warpAffineAsync());
-
-        it('can be called if required args passed', (done) => {
-          img.warpAffineAsync(transformationMatrixAffine, expectOutputAsync(done));
-        });
-
-        it('can be called with optional args', (done) => {
-          img.warpAffineAsync(transformationMatrixAffine, size, flags, expectOutputAsync(done));
-        });
-
-        it('can be called with optional args object', (done) => {
-          img.warpAffineAsync(transformationMatrixAffine, { flags }, expectOutputAsync(done));
-        });
-      });
+    generateAPITests({
+      getDut: () => img,
+      methodName: 'warpAffine',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        transformationMatrixAffine
+      ]),
+      getOptionalArgsMap: () => ([
+        ['size', size],
+        ['flags', cv.INTER_CUBIC],
+        ['borderMode', cv.BORDER_REFLECT]
+      ]),
+      expectOutput
     });
 
-    describe('warpPerspective', () => {
-      describe('sync', () => {
-        _funcShouldRequireArgs(() => new cv.Mat().warpPerspective());
-
-        it('can be called if required args passed', () => {
-          expectOutput(img.warpPerspective(transformationMatrix));
-        });
-
-        it('can be called with optional args', () => {
-          expectOutput(img.warpPerspective(transformationMatrix, size, flags));
-        });
-
-        it('can be called with optional args object', () => {
-          expectOutput(img.warpPerspective(transformationMatrix, { flags }));
-        });
-      });
-
-      describe('async', () => {
-        asyncFuncShouldRequireArgs(() => new cv.Mat().warpPerspectiveAsync());
-
-        it('can be called if required args passed', (done) => {
-          img.warpPerspectiveAsync(transformationMatrix, expectOutputAsync(done));
-        });
-
-        it('can be called with optional args', (done) => {
-          img.warpPerspectiveAsync(transformationMatrix, size, flags, expectOutputAsync(done));
-        });
-
-        it('can be called with optional args object', (done) => {
-          img.warpPerspectiveAsync(transformationMatrix, { flags }, expectOutputAsync(done));
-        });
-      });
+    generateAPITests({
+      getDut: () => img,
+      methodName: 'warpPerspective',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        transformationMatrix
+      ]),
+      getOptionalArgsMap: () => ([
+        ['size', size],
+        ['flags', cv.INTER_CUBIC],
+        ['borderMode', cv.BORDER_REFLECT]
+      ]),
+      expectOutput
     });
   });
 
@@ -529,77 +486,57 @@ module.exports = (getTestImg) => {
     ], cv.CV_8U);
 
     describe('threshold', () => {
+      const expectOutput = (thresholded) => {
+        assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+        assertDataDeepEquals(
+          [
+            [255, 255, 255],
+            [0, 0, 255]
+          ],
+          thresholded.getDataAsArray()
+        );
+      };
+
       const th = 100;
       const maxVal = 255;
       const thresholdType = cv.THRESH_BINARY;
 
-      describe('sync', () => {
-        _funcShouldRequireArgs(() => mat.threshold());
-
-        it('can be called with required args', () => {
-          const thresholded = mat.threshold(th, maxVal, thresholdType);
-          assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
-        });
-
-        it('should return correct binary mat', () => {
-          const expected = [
-            [255, 255, 255],
-            [0, 0, 255]
-          ];
-
-          const thresholded = mat.threshold(th, maxVal, thresholdType);
-          assertDataDeepEquals(expected, thresholded.getDataAsArray());
-        });
-      });
-
-      describe('async', () => {
-        asyncFuncShouldRequireArgs(() => mat.thresholdAsync());
-
-        it('can be called with required args', (done) => {
-          mat.thresholdAsync(th, maxVal, thresholdType, (err, thresholded) => {
-            assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
-            done();
-          });
-        });
-
-        it('should return correct binary mat', (done) => {
-          const expected = [
-            [255, 255, 255],
-            [0, 0, 255]
-          ];
-
-          mat.thresholdAsync(th, maxVal, thresholdType, (err, thresholded) => {
-            assertDataDeepEquals(expected, thresholded.getDataAsArray());
-            done();
-          });
-        });
+      generateAPITests({
+        getDut: () => mat,
+        methodName: 'threshold',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          th,
+          maxVal,
+          thresholdType
+        ]),
+        expectOutput
       });
     });
 
     describe('adaptiveThreshold', () => {
+      const expectOutput = (thresholded) => {
+        assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
+      };
+
       const maxVal = 255;
       const adaptiveMethod = cv.ADAPTIVE_THRESH_MEAN_C;
       const thresholdType = cv.THRESH_BINARY;
       const blockSize = 3;
       const C = 0.9;
-      describe('sync', () => {
-        _funcShouldRequireArgs(() => mat.adaptiveThreshold());
 
-        it('can be called with required args', () => {
-          const thresholded = mat.adaptiveThreshold(maxVal, adaptiveMethod, thresholdType, blockSize, C);
-          assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
-        });
-      });
-
-      describe('async', (done) => {
-        asyncFuncShouldRequireArgs(() => mat.adaptiveThresholdAsync());
-
-        it('can be called with required args', () => {
-          mat.adaptiveThresholdAsync(maxVal, adaptiveMethod, thresholdType, blockSize, C, (err, thresholded) => {
-            assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
-            done();
-          });
-        });
+      generateAPITests({
+        getDut: () => mat,
+        methodName: 'adaptiveThreshold',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          maxVal,
+          adaptiveMethod,
+          thresholdType,
+          blockSize,
+          C
+        ]),
+        expectOutput
       });
     });
   });
