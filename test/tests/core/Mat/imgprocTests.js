@@ -1,6 +1,7 @@
 const cv = global.dut;
 
 const {
+  generateAPITests,
   assertError,
   asyncFuncShouldRequireArgs,
   funcShouldRequireArgs,
@@ -724,58 +725,29 @@ module.exports = (getTestImg) => {
       img = getTestImg();
     });
 
-    const expectOutputCanny = (binImg) => {
-      assertMetaData(binImg)(img.rows, img.cols, cv.CV_8U);
-    };
-    const expectOutputCannyAsync = done => (err, desc) => {
-      expectOutputCanny(desc);
-      done();
-    };
-
     const expectOutput = (binImg) => {
       assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
-    };
-    const expectOutputAsync = done => (err, binImg) => {
-      expectOutput(binImg);
-      done();
     };
 
     describe('canny', () => {
       const th1 = 2.8;
       const th2 = 0.8;
-      const apertureSize = 5;
-      const L2gradient = true;
 
-      describe('sync', () => {
-        _funcShouldRequireArgs(() => getTestImg().canny.bind(getTestImg())());
-
-        it('can be called with required args', () => {
-          expectOutputCanny(img.canny(th1, th2));
-        });
-
-        it('can be called with optional args', () => {
-          expectOutputCanny(img.canny(th1, th2, apertureSize, L2gradient));
-        });
-
-        it('can be called with optional args object', () => {
-          expectOutputCanny(img.canny(th1, th2, { L2gradient }));
-        });
-      });
-
-      describe('async', () => {
-        asyncFuncShouldRequireArgs(() => getTestImg().cannyAsync.bind(getTestImg())());
-
-        it('can be called with required args', (done) => {
-          img.cannyAsync(th1, th2, expectOutputCannyAsync(done));
-        });
-
-        it('can be called with optional args', (done) => {
-          img.cannyAsync(th1, th2, apertureSize, L2gradient, expectOutputCannyAsync(done));
-        });
-
-        it('can be called with optional args object', (done) => {
-          img.cannyAsync(th1, th2, { L2gradient }, expectOutputCannyAsync(done));
-        });
+      generateAPITests({
+        getDut: () => img,
+        methodName: 'canny',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          th1,
+          th2
+        ]),
+        getOptionalArgsMap: () => ([
+          ['apertureSize', 5],
+          ['L2gradient', true]
+        ]),
+        expectOutput: (binImg) => {
+          assertMetaData(binImg)(img.rows, img.cols, cv.CV_8U);
+        }
       });
     });
 
@@ -783,39 +755,23 @@ module.exports = (getTestImg) => {
       const ddepth = cv.CV_64F;
       const dx = 1;
       const dy = 0;
-      const ksize = 5;
-      const borderType = cv.BORDER_CONSTANT;
 
-      describe('sync', () => {
-        _funcShouldRequireArgs(() => getTestImg().sobel());
-
-        it('can be called with required args', () => {
-          expectOutput(img.sobel(ddepth, dx, dy));
-        });
-
-        it('can be called with optional args', () => {
-          expectOutput(img.sobel(ddepth, dx, dy, ksize));
-        });
-
-        it('can be called with optional args object', () => {
-          expectOutput(img.sobel(ddepth, dx, dy, { ksize, borderType }));
-        });
-      });
-
-      describe('async', () => {
-        asyncFuncShouldRequireArgs(() => getTestImg().sobelAsync());
-
-        it('can be called with required args', (done) => {
-          img.sobelAsync(ddepth, dx, dy, expectOutputAsync(done));
-        });
-
-        it('can be called with optional args', (done) => {
-          img.sobelAsync(ddepth, dx, dy, ksize, expectOutputAsync(done));
-        });
-
-        it('can be called with optional args object', (done) => {
-          img.sobelAsync(ddepth, dx, dy, { ksize, borderType }, expectOutputAsync(done));
-        });
+      generateAPITests({
+        getDut: () => img,
+        methodName: 'sobel',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          ddepth,
+          dx,
+          dy
+        ]),
+        getOptionalArgsMap: () => ([
+          ['ksize', 5],
+          ['scale', 2],
+          ['delta', 0.5],
+          ['borderType', cv.BORDER_CONSTANT]
+        ]),
+        expectOutput
       });
     });
 
@@ -823,76 +779,42 @@ module.exports = (getTestImg) => {
       const ddepth = cv.CV_64F;
       const dx = 1;
       const dy = 0;
-      const scale = 0.5;
-      const borderType = cv.BORDER_CONSTANT;
 
-      describe('sync', () => {
-        _funcShouldRequireArgs(() => getTestImg().scharr.bind(getTestImg())());
-
-        it('can be called with required args', () => {
-          expectOutput(img.scharr(ddepth, dx, dy));
-        });
-
-        it('can be called with optional args', () => {
-          expectOutput(img.scharr(ddepth, dx, dy, scale));
-        });
-
-        it('can be called with optional args object', () => {
-          expectOutput(img.scharr(ddepth, dx, dy, { scale, borderType }));
-        });
-      });
-
-      describe('async', () => {
-        asyncFuncShouldRequireArgs(() => getTestImg().scharrAsync.bind(getTestImg())());
-
-        it('can be called with required args', (done) => {
-          img.scharrAsync(ddepth, dx, dy, expectOutputAsync(done));
-        });
-
-        it('can be called with optional args', (done) => {
-          img.scharrAsync(ddepth, dx, dy, scale, expectOutputAsync(done));
-        });
-
-        it('can be called with optional args object', (done) => {
-          img.scharrAsync(ddepth, dx, dy, { scale, borderType }, expectOutputAsync(done));
-        });
+      generateAPITests({
+        getDut: () => img,
+        methodName: 'scharr',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          ddepth,
+          dx,
+          dy
+        ]),
+        getOptionalArgsMap: () => ([
+          ['scale', 2],
+          ['delta', 0.5],
+          ['borderType', cv.BORDER_CONSTANT]
+        ]),
+        expectOutput
       });
     });
 
     describe('laplacian', () => {
       const ddepth = cv.CV_64F;
-      const ksize = 5;
-      const borderType = cv.BORDER_CONSTANT;
-      describe('sync', () => {
-        _funcShouldRequireArgs(() => getTestImg().laplacian.bind(getTestImg())());
 
-        it('can be called with required args', () => {
-          expectOutput(img.laplacian(ddepth));
-        });
-
-        it('can be called with optional args', () => {
-          expectOutput(img.laplacian(ddepth, ksize));
-        });
-
-        it('can be called with optional args object', () => {
-          expectOutput(img.laplacian(ddepth, { ksize, borderType }));
-        });
-      });
-
-      describe('async', () => {
-        asyncFuncShouldRequireArgs(() => getTestImg().laplacianAsync.bind(getTestImg())());
-
-        it('can be called with required args', (done) => {
-          img.laplacianAsync(ddepth, expectOutputAsync(done));
-        });
-
-        it('can be called with optional args', (done) => {
-          img.laplacianAsync(ddepth, ksize, expectOutputAsync(done));
-        });
-
-        it('can be called with optional args object', (done) => {
-          img.laplacianAsync(ddepth, { ksize, borderType }, expectOutputAsync(done));
-        });
+      generateAPITests({
+        getDut: () => img,
+        methodName: 'laplacian',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          ddepth
+        ]),
+        getOptionalArgsMap: () => ([
+          ['ksize', 5],
+          ['scale', 2],
+          ['delta', 0.5],
+          ['borderType', cv.BORDER_CONSTANT]
+        ]),
+        expectOutput
       });
     });
   });

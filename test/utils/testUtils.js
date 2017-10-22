@@ -13,7 +13,7 @@ const assertError = (func, msg) => {
   assert.include(errMsg, msg);
 };
 
-const assertErrorAsync = (func, msg) => {
+const assertErrorAsyncPromised = (func, msg) => {
   const ret = func();
 
   if (!ret.then || !ret.catch) {
@@ -51,7 +51,7 @@ exports._funcShouldRequireArgs = (func) => {
 
 exports.asyncFuncShouldRequireArgs = (func) => {
   it('should throw if no args', (done) => {
-    assertErrorAsync(func, 'expected argument 0 to be')
+    assertErrorAsyncPromised(func, 'expected argument 0 to be')
     .then(() => done());
   });
 };
@@ -59,7 +59,7 @@ exports.asyncFuncShouldRequireArgs = (func) => {
 
 exports._asyncFuncShouldRequireArgs = (func) => {
   it('should throw if no args', (done) => {
-    assertErrorAsync(func, 'expected arg 0 to be')
+    assertErrorAsyncPromised(func, 'expected arg 0 to be')
     .then(() => done());
   });
 };

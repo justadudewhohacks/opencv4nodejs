@@ -128,7 +128,7 @@ public:
 
 NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevels) {
 	DetectMultiScaleWithRejectLevelsWorker worker(CascadeClassifier::Converter::unwrap(info.This()));
-	FF_WORKER_SYNC("CascadeClassifier::DetectMultiScale", worker);
+	FF_WORKER_SYNC("CascadeClassifier::DetectMultiScaleWithRejectLevels", worker);
 	info.GetReturnValue().Set(worker.getReturnValue());
 }
 

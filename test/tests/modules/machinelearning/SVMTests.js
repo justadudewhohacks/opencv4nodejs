@@ -2,10 +2,8 @@ const { expect } = require('chai');
 
 const cv = global.dut;
 const {
-  assertError,
+  generateAPITests,
   assertPropsWithValue,
-  asyncFuncShouldRequireArgs,
-  _funcShouldRequireArgs,
   getTmpDataFilePath,
   clearTmpData
 } = global.utils;
@@ -90,281 +88,62 @@ module.exports = () => {
 
 
     describe('training', () => {
-      const expectOutput = (svm, ret) => {
+      const expectOutput = (ret, svm) => {
         expect(ret).to.be.a('boolean');
         expect(svm).to.have.property('isTrained').to.be.true;
         expect(svm).to.have.property('varCount').to.equal(samples.cols);
       };
 
-      const expectOutputAsync = (done, svm) => (err, ret) => {
-        expectOutput(svm, ret);
-        done();
-      };
-
       describe('train', () => {
-        describe('sync', () => {
-          _funcShouldRequireArgs(() => new cv.SVM().train());
-
-          it('should be trainable with trainData', () => {
-            const svm = new cv.SVM();
-            expectOutput(
-              svm,
-              svm.train(trainData)
-            );
-          });
-
-          it('should be trainable with trainData and flag', () => {
-            const svm = new cv.SVM();
-            expectOutput(
-              svm,
-              svm.train(
-                trainData,
-                cv.statModel.RAW_OUTPUT
-              )
-            );
-          });
-
-          it('should be trainable with samples, layout and responses', () => {
-            const svm = new cv.SVM();
-            expectOutput(
-              svm,
-              svm.train(
-                samples,
-                cv.ml.ROW_SAMPLE,
-                labels
-              )
-            );
+        describe('with trainData', () => {
+          generateAPITests({
+            getDut: () => new cv.SVM(),
+            methodName: 'train',
+            methodNameSpace: 'SVM',
+            getRequiredArgs: () => ([
+              trainData
+            ]),
+            getOptionalArgs: () => ([
+              cv.statModel.RAW_OUTPUT
+            ]),
+            expectOutput
           });
         });
 
-        describe('async', () => {
-          asyncFuncShouldRequireArgs(() => new cv.SVM().trainAsync());
-
-          it('should be trainable with trainData', (done) => {
-            const svm = new cv.SVM();
-            svm.trainAsync(
-              trainData,
-              expectOutputAsync(done, svm)
-            );
-          });
-
-          it('should be trainable with trainData and flag', (done) => {
-            const svm = new cv.SVM();
-            svm.trainAsync(
-              trainData,
-              cv.statModel.RAW_OUTPUT,
-              expectOutputAsync(done, svm)
-            );
-          });
-
-          it('should be trainable with samples, layout and responses', (done) => {
-            const svm = new cv.SVM();
-            svm.trainAsync(
+        describe('with samples, layout and responses', () => {
+          generateAPITests({
+            getDut: () => new cv.SVM(),
+            methodName: 'train',
+            methodNameSpace: 'SVM',
+            getRequiredArgs: () => ([
               samples,
               cv.ml.ROW_SAMPLE,
-              labels,
-              expectOutputAsync(done, svm)
-            );
+              labels
+            ]),
+            expectOutput
           });
         });
       });
 
       describe('trainAuto', () => {
-        const kFold = 20;
-        const cGrid = new cv.ParamGrid(cv.ml.SVM.C);
-        const gammaGrid = new cv.ParamGrid(cv.ml.SVM.GAMMA);
-        const pGrid = new cv.ParamGrid(cv.ml.SVM.P);
-        const nuGrid = new cv.ParamGrid(cv.ml.SVM.NU);
-        const coeffGrid = new cv.ParamGrid(cv.ml.SVM.COEF);
-        const degreeGrid = new cv.ParamGrid(cv.ml.SVM.DEGREE);
-        const balanced = true;
-
-        describe('sync', () => {
-          _funcShouldRequireArgs(() => new cv.SVM().trainAuto());
-
-          it('should be trainable with trainData', () => {
-            const svm = new cv.SVM();
-            expectOutput(
-              svm,
-              svm.trainAuto(trainData)
-            );
-          });
-
-          it('should be trainable with trainData and all optional args', () => {
-            const svm = new cv.SVM();
-            expectOutput(
-              svm,
-              svm.trainAuto(
-                trainData,
-                kFold,
-                cGrid,
-                gammaGrid,
-                pGrid,
-                nuGrid,
-                coeffGrid,
-                degreeGrid,
-                balanced
-              )
-            );
-          });
-
-          it('should be trainable with trainData and first optional args', () => {
-            const svm = new cv.SVM();
-            expectOutput(
-              svm,
-              svm.trainAuto(
-                trainData,
-                kFold
-              )
-            );
-          });
-
-          it('should throw if optional arg is invalid', () => {
-            assertError(
-              () => new cv.SVM().trainAuto(
-                trainData,
-                undefined
-              ),
-              'argument 1'
-            );
-          });
-
-          it('should be trainable with trainData and optional args object', () => {
-            const svm = new cv.SVM();
-            const opts = {
-              kFold,
-              cGrid,
-              gammaGrid,
-              pGrid,
-              nuGrid,
-              coeffGrid,
-              degreeGrid,
-              balanced
-            };
-            expectOutput(
-              svm,
-              svm.trainAuto(
-                trainData,
-                opts
-              )
-            );
-          });
-
-          it('should be trainable with trainData and some optional args', () => {
-            const svm = new cv.SVM();
-            const opts = {
-              degreeGrid,
-              balanced
-            };
-            expectOutput(
-              svm,
-              svm.trainAuto(
-                trainData,
-                opts
-              )
-            );
-          });
-
-          it('should throw if optional arg property is invalid', () => {
-            assertError(
-              () => new cv.SVM().trainAuto(
-                trainData,
-                { degreeGrid: undefined }
-              ),
-              'property degreeGrid'
-            );
-          });
-        });
-
-        describe('async', () => {
-          asyncFuncShouldRequireArgs(() => new cv.SVM().trainAutoAsync());
-
-          it('should be trainable with trainData', (done) => {
-            const svm = new cv.SVM();
-            svm.trainAutoAsync(
-              trainData,
-              expectOutputAsync(done, svm)
-            );
-          });
-
-          it('should be trainable with trainData and all optional args', (done) => {
-            const svm = new cv.SVM();
-            svm.trainAutoAsync(
-              trainData,
-              kFold,
-              cGrid,
-              gammaGrid,
-              pGrid,
-              nuGrid,
-              coeffGrid,
-              degreeGrid,
-              balanced,
-              expectOutputAsync(done, svm)
-            );
-          });
-
-          it('should be trainable with trainData and first optional args', (done) => {
-            const svm = new cv.SVM();
-            svm.trainAutoAsync(
-              trainData,
-              kFold,
-              expectOutputAsync(done, svm)
-            );
-          });
-
-          it('should throw if optional arg is invalid', () => {
-            assertError(
-              () => new cv.SVM().trainAuto(
-                trainData,
-                undefined,
-                () => {}
-              ),
-              'argument 1'
-            );
-          });
-
-          it('should be trainable with trainData and optional args object', (done) => {
-            const svm = new cv.SVM();
-            const opts = {
-              kFold,
-              cGrid,
-              gammaGrid,
-              pGrid,
-              nuGrid,
-              coeffGrid,
-              degreeGrid,
-              balanced
-            };
-            svm.trainAutoAsync(
-              trainData,
-              opts,
-              expectOutputAsync(done, svm)
-            );
-          });
-
-          it('should be trainable with trainData and some optional args', (done) => {
-            const svm = new cv.SVM();
-            const opts = {
-              degreeGrid,
-              balanced
-            };
-            svm.trainAutoAsync(
-              trainData,
-              opts,
-              expectOutputAsync(done, svm)
-            );
-          });
-
-          it('should throw if optional arg property is invalid', () => {
-            assertError(
-              () => new cv.SVM().trainAutoAsync(
-                trainData,
-                { degreeGrid: undefined },
-                () => {}
-              ),
-              'property degreeGrid'
-            );
-          });
+        generateAPITests({
+          getDut: () => new cv.SVM(),
+          methodName: 'trainAuto',
+          methodNameSpace: 'SVM',
+          getRequiredArgs: () => ([
+            trainData
+          ]),
+          getOptionalArgsMap: () => ([
+            ['kFold', 20],
+            ['cGrid', new cv.ParamGrid(cv.ml.SVM.C)],
+            ['gammaGrid', new cv.ParamGrid(cv.ml.SVM.GAMMA)],
+            ['pGrid', new cv.ParamGrid(cv.ml.SVM.P)],
+            ['nuGrid', new cv.ParamGrid(cv.ml.SVM.NU)],
+            ['coeffGrid', new cv.ParamGrid(cv.ml.SVM.COEF)],
+            ['degreeGrid', new cv.ParamGrid(cv.ml.SVM.DEGREE)],
+            ['balanced', true]
+          ]),
+          expectOutput
         });
       });
     });
