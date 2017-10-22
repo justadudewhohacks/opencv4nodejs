@@ -1,12 +1,11 @@
 const cv = global.dut;
 const {
+  generateAPITests,
   assertError,
   assertPropsWithValue,
   assertMatValueEquals,
   assertMetaData,
   assertDataDeepEquals,
-  asyncFuncShouldRequireArgs,
-  _funcShouldRequireArgs,
   funcShouldRequireArgs,
   readTestImage,
   MatValuesComparator,
@@ -400,51 +399,34 @@ describe('Mat', () => {
   });
 
   describe('inRange', () => {
+    const expectOutput = (inRangeMat) => {
+      assertMetaData(inRangeMat)(2, 3, cv.CV_8U);
+      assertDataDeepEquals(
+        [
+          [255, 255, 255],
+          [0, 0, 255]
+        ],
+        inRangeMat.getDataAsArray()
+      );
+    };
+
     const mat = new cv.Mat([
       [[255, 255, 255], [255, 255, 255], [255, 255, 255]],
       [[0, 0, 0], [100, 100, 100], [101, 101, 101]]
     ], cv.CV_8UC3);
 
-    const expected = [
-      [255, 255, 255],
-      [0, 0, 255]
-    ];
-
     const lower = new cv.Vec(101, 101, 101);
     const upper = new cv.Vec(255, 255, 255);
 
-    describe('sync', () => {
-      _funcShouldRequireArgs(() => mat.inRange());
-
-      it('should return correct binary mat', () => {
-        const inRangeMat = mat.inRange(lower, upper);
-        assertMetaData(inRangeMat)(2, 3, cv.CV_8U);
-        assertDataDeepEquals(expected, inRangeMat.getDataAsArray());
-      });
-    });
-
-    describe('async', () => {
-      asyncFuncShouldRequireArgs(() => mat.inRangeAsync());
-
-      describe('callbacked', () => {
-        it('should return correct binary mat', (done) => {
-          mat.inRangeAsync(lower, upper, (err, inRangeMat) => {
-            assertMetaData(inRangeMat)(2, 3, cv.CV_8U);
-            assertDataDeepEquals(expected, inRangeMat.getDataAsArray());
-            done();
-          });
-        });
-      });
-
-      describe('promisified', () => {
-        it('should return correct binary mat', (done) => {
-          mat.inRangeAsync(lower, upper).then((inRangeMat) => {
-            assertMetaData(inRangeMat)(2, 3, cv.CV_8U);
-            assertDataDeepEquals(expected, inRangeMat.getDataAsArray());
-            done();
-          });
-        });
-      });
+    generateAPITests({
+      getDut: () => mat,
+      methodName: 'inRange',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        lower,
+        upper
+      ]),
+      expectOutput
     });
   });
 });

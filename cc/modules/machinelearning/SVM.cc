@@ -235,7 +235,7 @@ public:
 
 NAN_METHOD(SVM::Train) {
 	if (!FF_IS_INSTANCE(TrainData::constructor, info[0]) && !FF_IS_INSTANCE(Mat::constructor, info[0])) {
-		return Nan::ThrowError("SVM::Train - expected argument 0 to be an instance of TrainData or Mat");
+		return Nan::ThrowError("SVM::Train - Error: expected argument 0 to be of type TrainData or Mat");
 	}
 
 	bool isTrainFromTrainData = FF_IS_INSTANCE(TrainData::constructor, info[0]);
@@ -253,17 +253,17 @@ NAN_METHOD(SVM::Train) {
 
 NAN_METHOD(SVM::TrainAsync) {
 	if (!FF_IS_INSTANCE(TrainData::constructor, info[0]) && !FF_IS_INSTANCE(Mat::constructor, info[0])) {
-		return Nan::ThrowError("SVM::Train - expected argument 0 to be an instance of TrainData or Mat");
+		return Nan::ThrowError("SVM::TrainAsync - Error: expected argument 0 to be of type TrainData or Mat");
 	}
 
 	bool isTrainFromTrainData = FF_IS_INSTANCE(TrainData::constructor, info[0]);
 	if (isTrainFromTrainData) {
 		TrainFromTrainDataWorker worker(SVM::Converter::unwrap(info.This()));
-		FF_WORKER_ASYNC("SVM::TrainAutoAsync", TrainFromTrainDataWorker, worker);
+		FF_WORKER_ASYNC("SVM::TrainAsync", TrainFromTrainDataWorker, worker);
 	}
 	else {
 		TrainFromMatWorker worker(SVM::Converter::unwrap(info.This()));
-		FF_WORKER_ASYNC("SVM::TrainAutoAsync", TrainFromMatWorker, worker);
+		FF_WORKER_ASYNC("SVM::TrainAsync", TrainFromMatWorker, worker);
 	}
 }
 
