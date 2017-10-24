@@ -98,9 +98,18 @@ public:
 	static NAN_METHOD(Erode);
 	static NAN_METHOD(DistanceTransform);
 	static NAN_METHOD(DistanceTransformWithLabels);
+
+	struct BlurWorker;
 	static NAN_METHOD(Blur);
+	static NAN_METHOD(BlurAsync);
+
+	struct GaussianBlurWorker;
 	static NAN_METHOD(GaussianBlur);
+	static NAN_METHOD(GaussianBlurAsync);
+
+	struct MedianBlurWorker;
 	static NAN_METHOD(MedianBlur);
+	static NAN_METHOD(MedianBlurAsync);
 	static NAN_METHOD(ConnectedComponents);
 	static NAN_METHOD(ConnectedComponentsWithStats);
 	static NAN_METHOD(GrabCut);
