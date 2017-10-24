@@ -755,4 +755,176 @@ module.exports = (getTestImg) => {
       });
     });
   });
+
+  describe('pyramid', () => {
+    let img;
+    let sizeDown;
+    let sizeUp;
+    before(() => {
+      img = getTestImg();
+      sizeDown = new cv.Size(img.cols / 2, img.rows / 2);
+      sizeUp = new cv.Size(img.cols * 2, img.rows * 2);
+    });
+
+    describe('pyrDown', () => {
+      generateAPITests({
+        getDut: () => img,
+        methodName: 'pyrDown',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([]),
+        getOptionalArgsMap: () => ([
+          ['size', sizeDown],
+          ['borderType', cv.BORDER_REFLECT]
+        ]),
+        expectOutput: outImg => assertMetaData(outImg)(sizeDown.height, sizeDown.width, cv.CV_8UC3)
+      });
+    });
+
+    describe('pyrUp', () => {
+      generateAPITests({
+        getDut: () => img,
+        methodName: 'pyrUp',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([]),
+        getOptionalArgsMap: () => ([
+          ['size', sizeUp],
+          ['borderType', cv.BORDER_DEFAULT]
+        ]),
+        expectOutput: outImg => assertMetaData(outImg)(sizeUp.height, sizeUp.width, cv.CV_8UC3)
+      });
+    });
+
+    describe('buildPyramid', () => {
+      const expectOutput = (pyramid) => {
+        expect(pyramid).to.be.an('array').lengthOf(4);
+        pyramid.forEach((outImg, i) => {
+          /* eslint-disable no-restricted-properties */
+          const scale = 1 / Math.pow(2, i);
+          expect(outImg).to.be.instanceOf(cv.Mat);
+          assertMetaData(outImg)(img.rows * scale, img.cols * scale, cv.CV_8UC3);
+        });
+      };
+
+      const maxlevel = 3;
+      const borderType = cv.BORDER_REFLECT;
+      generateAPITests({
+        getDut: () => img,
+        methodName: 'buildPyramid',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          maxlevel
+        ]),
+        getOptionalArgs: () => ([
+          borderType
+        ]),
+        expectOutput
+      });
+    });
+  });
+
+  describe('hough', () => {
+    let img;
+    before(() => {
+      img = getTestImg().rescale(0.25).bgrToGray();
+    });
+
+    const rho = 0.5;
+    const theta = Math.PI / 4;
+    const threshold = 100;
+
+    describe('houghLines', () => {
+      const expectOutput = (out) => {
+        expect(out).to.be.an('array');
+        expect(out.length).to.be.above(0);
+        out.forEach((vec) => {
+          expect(vec).to.have.property('x');
+          expect(vec).to.have.property('y');
+          expect(vec).to.not.have.property('z');
+          expect(vec).to.not.have.property('w');
+        });
+      };
+
+      generateAPITests({
+        getDut: () => img,
+        methodName: 'houghLines',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          rho,
+          theta,
+          threshold
+        ]),
+        getOptionalArgsMap: () => ([
+          ['srn', 0.5],
+          ['stn', 0.5],
+          ['min_theta', 0],
+          ['max_theta', Math.PI]
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('houghLinesP', () => {
+      const expectOutput = (out) => {
+        expect(out).to.be.an('array');
+        expect(out.length).to.be.above(0);
+        out.forEach((vec) => {
+          expect(vec).to.have.property('x');
+          expect(vec).to.have.property('y');
+          expect(vec).to.have.property('z');
+          expect(vec).to.have.property('w');
+        });
+      };
+
+      generateAPITests({
+        getDut: () => img,
+        methodName: 'houghLinesP',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          rho,
+          theta,
+          threshold
+        ]),
+        getOptionalArgsMap: () => ([
+          ['minLineLength', 0.5],
+          ['maxLineGap', 0.5]
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('houghCircles', () => {
+      const expectOutput = (out) => {
+        expect(out).to.be.an('array');
+        expect(out.length).to.be.above(0);
+        out.forEach((vec) => {
+          expect(vec).to.have.property('x');
+          expect(vec).to.have.property('y');
+          expect(vec).to.have.property('z');
+          expect(vec).to.not.have.property('w');
+        });
+      };
+
+      const method = cv.HOUGH_GRADIENT;
+      const dp = 2;
+      const minDist = 20;
+
+      generateAPITests({
+        getDut: () => img,
+        methodName: 'houghCircles',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          method,
+          dp,
+          minDist
+        ]),
+        getOptionalArgsMap: () => ([
+          ['param1', 50],
+          ['param2', 50],
+          ['minRadius', 4],
+          ['maxRadius', 40]
+        ]),
+        expectOutput
+      });
+    });
+  });
 };

@@ -185,6 +185,79 @@ Mat : mat.addWeighted(Number alpha, Mat mat2, Number beta,  Number gamma, Int dt
 { minVal: Number, maxVal: Number, minLoc: Point2, maxLoc: Point2 } : mat.minMaxLoc(Mat mask = noArray())
 ```
 
+<a name="dct"></a>
+
+### dct
+``` javascript
+Mat : mat.dct(Int flags = 0)
+```
+
+<a name="dctAsync"></a>
+
+### dctAsync
+``` javascript
+mat.dctAsync(Int flags = 0, callback(Error err, Mat result))
+```
+
+<a name="idct"></a>
+
+### idct
+``` javascript
+Mat : mat.idct(Int flags = 0)
+```
+
+<a name="idctAsync"></a>
+
+### idctAsync
+``` javascript
+mat.idctAsync(Int flags = 0, callback(Error err, Mat result))
+```
+
+<a name="dft"></a>
+
+### dft
+``` javascript
+Mat : mat.dft(Int flags = 0, Int nonzeroRows = 0)
+```
+
+<a name="dftAsync"></a>
+
+### dftAsync
+``` javascript
+mat.dftAsync(...opts, callback(Error err, Mat result))
+mat.dftAsync({ opts }, callback(Error err, Mat result))
+```
+
+<a name="idft"></a>
+
+### idft
+``` javascript
+Mat : mat.idft(Int flags = 0, Int nonzeroRows = 0)
+```
+
+<a name="idftAsync"></a>
+
+### idftAsync
+``` javascript
+mat.idftAsync(...opts, callback(Error err, Mat result))
+mat.idftAsync({ opts }, callback(Error err, Mat result))
+```
+
+<a name="mulSpectrums"></a>
+
+### mulSpectrums
+``` javascript
+Mat : mat.mulSpectrums(Mat mat2, Bool dftRows = false, Bool conjB = false)
+```
+
+<a name="mulSpectrumsAsync"></a>
+
+### mulSpectrumsAsync
+``` javascript
+mat.mulSpectrumsAsync(Mat mat2, ...opts, callback(Error err, Mat result))
+mat.mulSpectrumsAsync(Mat mat2, { opts }, callback(Error err, Mat result))
+```
+
 <a name="rescale"></a>
 
 ### rescale
@@ -497,4 +570,99 @@ Mat : mat.laplacian(Int ddepth, Int ksize = 1, Number scale = 1.0, Number delta 
 mat.laplacianAsync(Int ddepth, callback(Error err, Mat result))
 mat.laplacianAsync(Int ddepth, ...opts, callback(Error err, Mat result))
 mat.laplacianAsync(Int ddepth, { opts }, callback(Error err, Mat result))
+```
+
+<a name="pyrDown"></a>
+
+### pyrDown
+``` javascript
+Mat : mat.pyrDown(Size size = Size(), Int borderType = BORDER_DEFAULT)
+```
+
+<a name="pyrDownAsync"></a>
+
+### pyrDownAsync
+``` javascript
+mat.pyrDownAsync(callback(Error err, Mat result))
+mat.pyrDownAsync(...opts, callback(Error err, Mat result))
+mat.pyrDownAsync({ opts }, callback(Error err, Mat result))
+```
+
+<a name="pyrUp"></a>
+
+### pyrUp
+``` javascript
+Mat : mat.pyrUp(Size size = Size(), Int borderType = BORDER_DEFAULT)
+```
+
+<a name="pyrUpAsync"></a>
+
+### pyrUpAsync
+``` javascript
+mat.pyrUpAsync(callback(Error err, Mat result))
+mat.pyrUpAsync(...opts, callback(Error err, Mat result))
+mat.pyrUpAsync({ opts }, callback(Error err, Mat result))
+```
+
+<a name="buildPyramid"></a>
+
+### buildPyramid
+``` javascript
+[Mat] : mat.buildPyramid(Int maxLevel, Int borderType = BORDER_DEFAULT)
+```
+
+<a name="buildPyramidAsync"></a>
+
+### buildPyramidAsync
+``` javascript
+mat.buildPyramidAsync(Int maxLevel, callback(Error err, [Mat] result))
+mat.buildPyramidAsync(Int maxLevel, Int borderType, callback(Error err, [Mat] result))
+```
+
+<a name="houghLines"></a>
+
+### houghLines
+``` javascript
+[Vec2] : mat.houghLines(Number rho, Number theta, Int threshold, Number srn = 0.0, Number stn = 0.0, Number min_theta = 0.0, Number max_theta = PI)
+```
+
+<a name="houghLinesAsync"></a>
+
+### houghLinesAsync
+``` javascript
+mat.houghLinesAsync(Number rho, Number theta, Int threshold, callback(Error err, [Vec2] result))
+mat.houghLinesAsync(Number rho, Number theta, Int threshold, ...opts, callback(Error err, [Vec2] result))
+mat.houghLinesAsync(Number rho, Number theta, Int threshold, { opts }, callback(Error err, [Vec2] result))
+```
+
+<a name="houghLinesP"></a>
+
+### houghLinesP
+``` javascript
+[Vec4] : mat.houghLinesP(Number rho, Number theta, Int threshold, Number minLineLength = 0.0, Number maxLineGap = 0.0)
+```
+
+<a name="houghLinesPAsync"></a>
+
+### houghLinesPAsync
+``` javascript
+mat.houghLinesPAsync(Number rho, Number theta, Int threshold, callback(Error err, [Vec4] result))
+mat.houghLinesPAsync(Number rho, Number theta, Int threshold, ...opts, callback(Error err, [Vec4] result))
+mat.houghLinesPAsync(Number rho, Number theta, Int threshold, { opts }, callback(Error err, [Vec4] result))
+```
+
+<a name="houghCircles"></a>
+
+### houghCircles
+``` javascript
+[Vec3] : mat.houghCircles(Int method, Number dp, Number minDist, Number param1 = 100.0, Number param2 = 100.0, Int minRadius = 0, Int maxRadius = 0)
+```
+
+<a name="houghCirclesAsync"></a>
+
+### houghCirclesAsync
+``` javascript
+mat.houghCirclesAsync(Int method, Number dp, Number minDist, callback(Error err, [Vec3] result))
+mat.houghCirclesAsync(Int method, Number dp, Number minDist ...opts, callback(Error err, [Vec3] result))
+mat.houghCirclesAsync(Int method, Number dp, Number minDist, { opts }, callback(Error err, [Vec3] result))
 ```

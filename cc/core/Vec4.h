@@ -1,4 +1,4 @@
-#include "macros.h"
+#include "Converters.h"
 #include <opencv2/core.hpp>
 #include "coreUtils.h"
 
@@ -40,6 +40,15 @@ public:
 	}
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::Vec4d* getNativeObjectPtr() { return &vec; }
+	cv::Vec4d getNativeObject() { return vec; }
+
+	typedef InstanceConverter<Vec4, cv::Vec4d> Converter;
+
+	static const char* getClassName() {
+		return "Vec4";
+	}
 };
 
 #endif

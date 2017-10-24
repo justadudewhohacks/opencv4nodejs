@@ -16,7 +16,7 @@ exports.generateAPITests = ({
   getDut,
   methodName,
   methodNameSpace,
-  getRequiredArgs,
+  getRequiredArgs = getEmptyArray,
   getOptionalArgs: _getOptionalArgs,
   getOptionalArgsMap = getEmptyArray,
   expectOutput,
@@ -32,6 +32,7 @@ exports.generateAPITests = ({
     return optionalArgsObject;
   };
 
+  const hasRequiredArgs = !!getRequiredArgs().length;
   const hasOptArgs = !!getOptionalArgs().length;
   const hasOptArgsObject = getOptionalArgs().length > 1;
 
@@ -110,10 +111,12 @@ exports.generateAPITests = ({
       expectSuccess(args, done);
     });
 
-    it('should throw if required arg invalid', (done) => {
-      const args = [undefined];
-      expectError(args, typeErrMsg(0), done);
-    });
+    if (hasRequiredArgs) {
+      it('should throw if required arg invalid', (done) => {
+        const args = [undefined];
+        expectError(args, typeErrMsg(0), done);
+      });
+    }
 
     if (hasOptArgs) {
       it('should be callable with optional args', (done) => {
@@ -144,7 +147,9 @@ exports.generateAPITests = ({
   };
 
   describe('sync', () => {
-    funcShouldRequireArgs(() => getDut()[methodName]());
+    if (hasRequiredArgs) {
+      funcShouldRequireArgs(() => getDut()[methodName]());
+    }
 
     generateTests();
 
@@ -152,7 +157,9 @@ exports.generateAPITests = ({
   });
 
   describe('async', () => {
-    asyncFuncShouldRequireArgs(() => getDut()[methodNameAsync]());
+    if (hasRequiredArgs) {
+      asyncFuncShouldRequireArgs(() => getDut()[methodNameAsync]());
+    }
 
     describe('callbacked', () => {
       generateTests('callbacked');
