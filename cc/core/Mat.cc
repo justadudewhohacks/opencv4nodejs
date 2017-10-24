@@ -72,8 +72,11 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "distanceTransform", DistanceTransform);
 	Nan::SetPrototypeMethod(ctor, "distanceTransformWithLabels", DistanceTransformWithLabels);
 	Nan::SetPrototypeMethod(ctor, "blur", Blur);
+	Nan::SetPrototypeMethod(ctor, "blurAsync", BlurAsync);
 	Nan::SetPrototypeMethod(ctor, "gaussianBlur", GaussianBlur);
+	Nan::SetPrototypeMethod(ctor, "gaussianBlurAsync", GaussianBlurAsync);
 	Nan::SetPrototypeMethod(ctor, "medianBlur", MedianBlur);
+	Nan::SetPrototypeMethod(ctor, "medianBlurAsync", MedianBlurAsync);
 	Nan::SetPrototypeMethod(ctor, "connectedComponents", ConnectedComponents);
 	Nan::SetPrototypeMethod(ctor, "connectedComponentsWithStats", ConnectedComponentsWithStats);
 	Nan::SetPrototypeMethod(ctor, "grabCut", GrabCut);
@@ -645,7 +648,7 @@ public:
 		return (
 			BoolConverter::optArg(1, &dftRows, info) ||
 			BoolConverter::optArg(2, &conjB, info)
-		); 
+		);
 	}
 
 	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1028,73 +1031,166 @@ NAN_METHOD(Mat::DistanceTransformWithLabels) {
 	FF_RETURN(ret);
 }
 
-NAN_METHOD(Mat::Blur) {
-	FF_METHOD_CONTEXT("Mat::Blur");
 
-	FF_ARG_INSTANCE(0, cv::Size kSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET);
+struct Mat::BlurWorker {
+public:
+	cv::Mat mat;
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::Point2d anchor, "anchor", Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2, cv::Point2d(-1, -1));
-	FF_GET_UINT_IFDEF(optArgs, uint borderType, "borderType", cv::BORDER_CONSTANT);
-	if (!hasOptArgsObj) {
-		FF_ARG_INSTANCE_IFDEF(1, anchor, Point2::constructor, FF_UNWRAP_PT2_AND_GET, anchor);
-		FF_ARG_UINT_IFDEF(2, borderType, borderType);
+	BlurWorker(cv::Mat mat) {
+		this->mat = mat;
 	}
 
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::blur(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		kSize,
-		anchor,
-		borderType
-	);
-	FF_RETURN(jsMat);
+	cv::Size2d kSize;
+	cv::Point2d anchor = cv::Point2d(-1, -1);
+	int borderType = cv::BORDER_CONSTANT;
+
+	cv::Mat blurMat;
+
+	const char* execute() {
+		cv::blur(mat, blurMat, kSize, anchor, borderType);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(blurMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return Size::Converter::arg(0, &kSize, info);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Point2::Converter::optArg(1, &anchor, info) ||
+			IntConverter::optArg(2, &borderType, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(1) && !Point2::Converter::hasInstance(info[1]->ToObject());
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[1]->ToObject();
+		return (
+			Point2::Converter::optProp(&anchor, "anchor", opts) ||
+			IntConverter::optProp(&borderType, "borderType", opts)
+		);
+	}
+};
+
+NAN_METHOD(Mat::Blur) {
+	BlurWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Blur", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::BlurAsync) {
+	BlurWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::BlurAsync", BlurWorker, worker);
+}
+
+
+struct Mat::GaussianBlurWorker {
+public:
+	cv::Mat mat;
+
+	GaussianBlurWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	cv::Size2d kSize;
+	double sigmaX;
+	double sigmaY = 0;
+	int borderType = cv::BORDER_CONSTANT;
+
+	cv::Mat blurMat;
+
+	const char* execute() {
+		cv::GaussianBlur(mat, blurMat, kSize, sigmaX, sigmaY, borderType);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(blurMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Size::Converter::arg(0, &kSize, info) ||
+			DoubleConverter::arg(1, &sigmaX, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::optArg(2, &sigmaY, info) ||
+			IntConverter::optArg(3, &borderType, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(2);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[2]->ToObject();
+		return (
+			DoubleConverter::optProp(&sigmaY, "sigmaY", opts) ||
+			IntConverter::optProp(&borderType, "borderType", opts)
+		);
+	}
+};
 
 NAN_METHOD(Mat::GaussianBlur) {
-	FF_METHOD_CONTEXT("Mat::GaussianBlur");
+	GaussianBlurWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::GaussianBlur", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
 
-	FF_ARG_INSTANCE(0, cv::Size kSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET);
-	FF_ARG_NUMBER(1, double sigmaX);
+NAN_METHOD(Mat::GaussianBlurAsync) {
+	GaussianBlurWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::GaussianBlurAsync", GaussianBlurWorker, worker);
+}
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject() : FF_NEW_OBJ();
-	FF_GET_NUMBER_IFDEF(optArgs, double sigmaY, "sigmaY", 0.0);
-	FF_GET_UINT_IFDEF(optArgs, uint borderType, "borderType", cv::BORDER_CONSTANT);
-	if (!hasOptArgsObj) {
-		FF_ARG_NUMBER_IFDEF(2, sigmaY, sigmaY);
-		FF_ARG_NUMBER_IFDEF(3, borderType, borderType);
+
+struct Mat::MedianBlurWorker : public SimpleWorker {
+public:
+	cv::Mat mat;
+
+	MedianBlurWorker(cv::Mat mat) {
+		this->mat = mat;
 	}
 
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::GaussianBlur(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		kSize,
-		sigmaX,
-		sigmaY,
-		borderType
-	);
-	FF_RETURN(jsMat);
-}
+	int kSize;
+
+	cv::Mat blurMat;
+
+	const char* execute() {
+		cv::medianBlur(mat, blurMat, kSize);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(blurMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return IntConverter::arg(0, &kSize, info);
+	}
+};
 
 NAN_METHOD(Mat::MedianBlur) {
-	FF_METHOD_CONTEXT("Mat::MedianBlur");
-
-	FF_ARG_UINT(0, uint kSize);
-
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::medianBlur(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		(int)kSize
-	);
-	FF_RETURN(jsMat);
+	MedianBlurWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::MedianBlur", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::MedianBlurAsync) {
+	MedianBlurWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::MedianBlurAsync", MedianBlurWorker, worker);
+}
+
 
 NAN_METHOD(Mat::ConnectedComponents) {
 	FF_METHOD_CONTEXT("Mat::ConnectedComponents");
