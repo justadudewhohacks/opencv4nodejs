@@ -38,10 +38,20 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "splitChannels", SplitChannels);
 	Nan::SetPrototypeMethod(ctor, "addWeighted", AddWeighted);
 	Nan::SetPrototypeMethod(ctor, "minMaxLoc", MinMaxLoc);
+	Nan::SetPrototypeMethod(ctor, "dct", Dct);
+	Nan::SetPrototypeMethod(ctor, "dctAsync", DctAsync);
+	Nan::SetPrototypeMethod(ctor, "idct", Idct);
+	Nan::SetPrototypeMethod(ctor, "idctAsync", IdctAsync);
+	Nan::SetPrototypeMethod(ctor, "dft", Dft);
+	Nan::SetPrototypeMethod(ctor, "dftAsync", DftAsync);
+	Nan::SetPrototypeMethod(ctor, "idft", Idft);
+	Nan::SetPrototypeMethod(ctor, "idftAsync", IdftAsync);
+	Nan::SetPrototypeMethod(ctor, "mulSpectrums", MulSpectrums);
+	Nan::SetPrototypeMethod(ctor, "mulSpectrumsAsync", MulSpectrumsAsync);
 
 	FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
-	/* #IFDEF IMGPROC */
+	/* imgproc */
   Nan::SetPrototypeMethod(ctor, "rescale", Rescale);
   Nan::SetPrototypeMethod(ctor, "resize", Resize);
   Nan::SetPrototypeMethod(ctor, "resizeToMax", ResizeToMax);
@@ -85,7 +95,21 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "scharrAsync", ScharrAsync);
 	Nan::SetPrototypeMethod(ctor, "laplacian", Laplacian);
 	Nan::SetPrototypeMethod(ctor, "laplacianAsync", LaplacianAsync);
-	/* #ENDIF IMGPROC */
+	Nan::SetPrototypeMethod(ctor, "pyrDown", PyrDown);
+	Nan::SetPrototypeMethod(ctor, "pyrDownAsync", PyrDownAsync);
+	Nan::SetPrototypeMethod(ctor, "pyrUp", PyrUp);
+	Nan::SetPrototypeMethod(ctor, "pyrUpAsync", PyrUpAsync);
+	Nan::SetPrototypeMethod(ctor, "buildPyramid", BuildPyramid);
+	Nan::SetPrototypeMethod(ctor, "buildPyramidAsync", BuildPyramidAsync);
+	Nan::SetPrototypeMethod(ctor, "buildPyramid", BuildPyramid);
+	Nan::SetPrototypeMethod(ctor, "buildPyramidAsync", BuildPyramidAsync);
+	Nan::SetPrototypeMethod(ctor, "houghLines", HoughLines);
+	Nan::SetPrototypeMethod(ctor, "houghLinesAsync", HoughLinesAsync);
+	Nan::SetPrototypeMethod(ctor, "houghLinesP", HoughLinesP);
+	Nan::SetPrototypeMethod(ctor, "houghLinesPAsync", HoughLinesPAsync);
+	Nan::SetPrototypeMethod(ctor, "houghCircles", HoughCircles);
+	Nan::SetPrototypeMethod(ctor, "houghCirclesAsync", HoughCirclesAsync);
+	/* end imgproc */
 
   target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
 };
@@ -468,7 +492,189 @@ NAN_METHOD(Mat::MinMaxLoc) {
 	FF_RETURN(ret);
 }
 
-/* #IFDEC IMGPROC */
+struct Mat::DTWorker : public SimpleWorker {
+public:
+	cv::Mat mat;
+	bool isInverse;
+
+	DTWorker(cv::Mat mat, bool isInverse) {
+		this->mat = mat;
+		this->isInverse = isInverse;
+	}
+
+	int flags = 0;
+
+	cv::Mat dst;
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return false;
+	}
+};
+
+struct Mat::DCTWorker : public DTWorker {
+	DCTWorker(cv::Mat mat, bool isInverse = false) : DTWorker(mat, isInverse) {
+	}
+
+	const char* execute() {
+		if (isInverse) {
+			cv::idct(mat, dst, flags);
+		}
+		else {
+			cv::dct(mat, dst, flags);
+		}
+		return "";
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return IntConverter::optArg(0, &flags, info);
+	}
+};
+
+struct Mat::DFTWorker : public DTWorker {
+	DFTWorker(cv::Mat mat, bool isInverse = false) : DTWorker(mat, isInverse) {
+	}
+
+	int nonzeroRows = 0;
+
+	const char* execute() {
+		if (isInverse) {
+			cv::idft(mat, dst, flags, nonzeroRows);
+		}
+		else {
+			cv::dft(mat, dst, flags, nonzeroRows);
+		}
+		return "";
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(0, &flags, info) ||
+			IntConverter::optArg(1, &nonzeroRows, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(0);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[0]->ToObject();
+		return (
+			IntConverter::optProp(&flags, "flags", opts) ||
+			IntConverter::optProp(&nonzeroRows, "nonzeroRows", opts)
+		);
+	}
+};
+
+NAN_METHOD(Mat::Dct) {
+	DCTWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Dct", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::DctAsync) {
+	DCTWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::DctAsync", DCTWorker, worker);
+}
+
+NAN_METHOD(Mat::Idct) {
+	DCTWorker worker(Mat::Converter::unwrap(info.This()), true);
+	FF_WORKER_SYNC("Mat::Idct", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::IdctAsync) {
+	DCTWorker worker(Mat::Converter::unwrap(info.This()), true);
+	FF_WORKER_ASYNC("Mat::IdctAsync", DCTWorker, worker);
+}
+
+NAN_METHOD(Mat::Dft) {
+	DFTWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Dft", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::DftAsync) {
+	DFTWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::DftAsync", DFTWorker, worker);
+}
+
+NAN_METHOD(Mat::Idft) {
+	DFTWorker worker(Mat::Converter::unwrap(info.This()), true);
+	FF_WORKER_SYNC("Mat::Idft", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::IdftAsync) {
+	DFTWorker worker(Mat::Converter::unwrap(info.This()), true);
+	FF_WORKER_ASYNC("Mat::IdftAsync", DFTWorker, worker);
+}
+
+struct Mat::MulSpectrumsWorker {
+public:
+	cv::Mat mat;
+	bool isInverse;
+
+	MulSpectrumsWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	cv::Mat mat2;
+	bool dftRows = false;
+	bool conjB = false;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		int flags = (dftRows ? cv::DFT_ROWS : 0);
+		cv::mulSpectrums(mat, mat2, dst, flags, conjB);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return Mat::Converter::arg(0, &mat2, info);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			BoolConverter::optArg(1, &dftRows, info) ||
+			BoolConverter::optArg(2, &conjB, info)
+		); 
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(1);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[1]->ToObject();
+		return (
+			BoolConverter::optProp(&dftRows, "dftRows", opts) ||
+			BoolConverter::optProp(&conjB, "conjB", opts)
+		);
+	}
+};
+
+NAN_METHOD(Mat::MulSpectrums) {
+	MulSpectrumsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::MulSpectrums", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::MulSpectrumsAsync) {
+	MulSpectrumsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::MulSpectrumsAsync", MulSpectrumsWorker, worker);
+}
+
+/* imgproc */
 
 NAN_METHOD(Mat::Rescale) {
 	FF_METHOD_CONTEXT("Mat::Rescale");
@@ -1446,6 +1652,316 @@ NAN_METHOD(Mat::Laplacian) {
 NAN_METHOD(Mat::LaplacianAsync) {
 	LaplacianWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::LaplacianAsync", LaplacianWorker, worker);
+}
+
+
+struct Mat::PyrWorker {
+public:
+	cv::Mat mat;
+	bool isUp;
+
+	PyrWorker(cv::Mat mat, bool isUp = false) {
+		this->mat = mat;
+		this->isUp = isUp;
+	}
+
+	cv::Size2d size = cv::Size2d();
+	int borderType = cv::BORDER_DEFAULT;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		if (isUp) {
+			cv::pyrUp(mat, dst, size, borderType);
+		}
+		else {
+			cv::pyrDown(mat, dst, size, borderType);
+		}
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return false;
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Size::Converter::optArg(0, &size, info) ||
+			IntConverter::optArg(1, &borderType, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(0);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[0]->ToObject();
+		return (
+			Size::Converter::optProp(&size, "size", opts) ||
+			IntConverter::optProp(&borderType, "borderType", opts)
+		);
+	}
+};
+
+NAN_METHOD(Mat::PyrDown) {
+	PyrWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::PyrDown", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::PyrDownAsync) {
+	PyrWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::PyrDownAsync", PyrWorker, worker);
+}
+
+NAN_METHOD(Mat::PyrUp) {
+	PyrWorker worker(Mat::Converter::unwrap(info.This()), true);
+	FF_WORKER_SYNC("Mat::PyrUp", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::PyrUpAsync) {
+	PyrWorker worker(Mat::Converter::unwrap(info.This()), true);
+	FF_WORKER_ASYNC("Mat::PyrUpAsync", PyrWorker, worker);
+}
+
+struct Mat::BuildPyramidWorker : public SimpleWorker {
+public:
+	cv::Mat mat;
+
+	BuildPyramidWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	int maxlevel;
+	int borderType = cv::BORDER_DEFAULT;
+
+	std::vector<cv::Mat> dst;
+
+	const char* execute() {
+		cv::buildPyramid(mat, dst, maxlevel, borderType);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return ObjectArrayConverter<Mat, cv::Mat>::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return IntConverter::arg(0, &maxlevel, info);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return IntConverter::optArg(1, &borderType, info);
+	}
+};
+
+NAN_METHOD(Mat::BuildPyramid) {
+	BuildPyramidWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::BuildPyramid", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::BuildPyramidAsync) {
+	BuildPyramidWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::BuildPyramidAsync", BuildPyramidWorker, worker);
+}
+
+struct Mat::HoughLinesWorker {
+public:
+	cv::Mat mat;
+
+	HoughLinesWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	double rho;
+	double theta;
+	int threshold;
+	double srn = 0;
+	double stn = 0;
+	double min_theta = 0;
+	double max_theta = CV_PI;
+
+	std::vector<cv::Vec2f> lines;
+
+	const char* execute() {
+		cv::HoughLines(mat, lines, rho, theta, threshold, srn, stn, min_theta, max_theta);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return ObjectArrayConverter<Vec2, cv::Vec2d, cv::Vec2f>::wrap(lines);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::arg(0, &rho, info) ||
+			DoubleConverter::arg(1, &theta, info) ||
+			IntConverter::arg(2, &threshold, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::optArg(3, &srn, info) ||
+			DoubleConverter::optArg(4, &stn, info) ||
+			DoubleConverter::optArg(5, &min_theta, info) ||
+			DoubleConverter::optArg(6, &max_theta, info)
+			);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(3);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[3]->ToObject();
+		return (
+			DoubleConverter::optProp(&srn, "srn", opts) ||
+			DoubleConverter::optProp(&stn, "stn", opts) ||
+			DoubleConverter::optProp(&min_theta, "min_theta", opts) ||
+			DoubleConverter::optProp(&max_theta, "max_theta", opts)
+		);
+	}
+};
+
+NAN_METHOD(Mat::HoughLines) {
+	HoughLinesWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::HoughLines", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::HoughLinesAsync) {
+	HoughLinesWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::HoughLinesAsync", HoughLinesWorker, worker);
+}
+
+struct Mat::HoughLinesPWorker : public HoughLinesWorker {
+public:
+	HoughLinesPWorker(cv::Mat mat) : HoughLinesWorker(mat) {
+	}
+
+	double minLineLength = 0;
+	double maxLineGap = 0;
+
+	std::vector<cv::Vec4f> linesP;
+
+	const char* execute() {
+		cv::HoughLinesP(mat, linesP, rho, theta, threshold, minLineLength, maxLineGap);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return ObjectArrayConverter<Vec4, cv::Vec4d, cv::Vec4f>::wrap(linesP);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::optArg(3, &minLineLength, info) ||
+			DoubleConverter::optArg(4, &maxLineGap, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(3);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[3]->ToObject();
+		return (
+			DoubleConverter::optProp(&minLineLength, "minLineLength", opts) ||
+			DoubleConverter::optProp(&maxLineGap, "maxLineGap", opts)
+		);
+	}
+};
+
+NAN_METHOD(Mat::HoughLinesP) {
+	HoughLinesPWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::HoughLinesP", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::HoughLinesPAsync) {
+	HoughLinesPWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::HoughLinesPAsync", HoughLinesPWorker, worker);
+}
+
+/* end imgproc */
+
+struct Mat::HoughCirclesWorker {
+public:
+	cv::Mat mat;
+
+	HoughCirclesWorker(cv::Mat mat) {
+		this->mat = mat;
+	}
+
+	int method;
+	double dp;
+	double minDist;
+	double param1 = 100;
+	double param2 = 100;
+	int minRadius = 0;
+	int maxRadius = 0;
+
+	std::vector<cv::Vec3f> circles;
+
+	const char* execute() {
+		cv::HoughCircles(mat, circles, method, dp, minDist, param1, param2, minRadius, maxRadius);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return ObjectArrayConverter<Vec3, cv::Vec3d, cv::Vec3f>::wrap(circles);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &method, info) ||
+			DoubleConverter::arg(1, &dp, info) ||
+			DoubleConverter::arg(2, &minDist, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::optArg(3, &param1, info) ||
+			DoubleConverter::optArg(4, &param2, info) ||
+			IntConverter::optArg(5, &minRadius, info) ||
+			IntConverter::optArg(6, &maxRadius, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(3);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[3]->ToObject();
+		return (
+			DoubleConverter::optProp(&param1, "param1", opts) ||
+			DoubleConverter::optProp(&param2, "param2", opts) ||
+			IntConverter::optProp(&minRadius, "minRadius", opts) ||
+			IntConverter::optProp(&maxRadius, "maxRadius", opts)
+		);
+	}
+};
+
+NAN_METHOD(Mat::HoughCircles) {
+	HoughCirclesWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::HoughCircles", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::HoughCirclesAsync) {
+	HoughCirclesWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::HoughCirclesAsync", HoughCirclesWorker, worker);
 }
 
 

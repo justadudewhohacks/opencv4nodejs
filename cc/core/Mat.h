@@ -48,7 +48,24 @@ public:
 		FF_OPERATOR_RET_SCALAR(&cv::Mat::dot, FF_APPLY_CLASS_FUNC, FF_UNWRAP_MAT_AND_GET, Mat);
 	}
 
-	/* #IFDEF IMGPROC */
+	struct DTWorker;
+	struct DCTWorker;
+	struct DFTWorker;
+	static NAN_METHOD(Dct);
+	static NAN_METHOD(DctAsync);
+	static NAN_METHOD(Idct);
+	static NAN_METHOD(IdctAsync);
+	static NAN_METHOD(Dft);
+	static NAN_METHOD(DftAsync);
+	static NAN_METHOD(Idft);
+	static NAN_METHOD(IdftAsync);
+
+	struct MulSpectrumsWorker;
+	static NAN_METHOD(MulSpectrums);
+	static NAN_METHOD(MulSpectrumsAsync);
+
+	/* imgproc */
+
   static NAN_METHOD(Rescale);
   static NAN_METHOD(Resize);
   static NAN_METHOD(ResizeToMax);
@@ -116,7 +133,29 @@ public:
 	static NAN_METHOD(Laplacian);
 	static NAN_METHOD(LaplacianAsync);
 
-	/* #ENDIF IMGPROC */
+	struct PyrWorker;
+	static NAN_METHOD(PyrDown);
+	static NAN_METHOD(PyrDownAsync);
+	static NAN_METHOD(PyrUp);
+	static NAN_METHOD(PyrUpAsync);
+
+	struct BuildPyramidWorker;
+	static NAN_METHOD(BuildPyramid);
+	static NAN_METHOD(BuildPyramidAsync);
+
+	struct HoughLinesWorker;
+	static NAN_METHOD(HoughLines);
+	static NAN_METHOD(HoughLinesAsync);
+
+	struct HoughLinesPWorker;
+	static NAN_METHOD(HoughLinesP);
+	static NAN_METHOD(HoughLinesPAsync);
+
+	struct HoughCirclesWorker;
+	static NAN_METHOD(HoughCircles);
+	static NAN_METHOD(HoughCirclesAsync);
+
+	/* end imgproc */
 
 	static void morph(Nan::NAN_METHOD_ARGS_TYPE, const char*, void(*)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Point, int, int, const cv::Scalar&));
 	

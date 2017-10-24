@@ -429,5 +429,90 @@ describe('Mat', () => {
       expectOutput
     });
   });
+
+  describe('discrete transform', () => {
+    const dtMat = new cv.Mat([
+      [0.9, 0.9, 0, 0],
+      [0.9, 0, -0.9, -0.9],
+      [-0.9, 0, 0.9, -0.9],
+      [0.9, 0, -0.9, 0]
+    ], cv.CV_64F);
+
+    const expectOutput = (res) => {
+      assertMetaData(res)(dtMat.rows, dtMat.cols, cv.CV_64F);
+    };
+
+    const flags = 0;
+
+    describe('dct', () => {
+      generateAPITests({
+        getDut: () => dtMat,
+        methodName: 'dct',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([]),
+        getOptionalArgs: () => ([
+          flags
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('idct', () => {
+      generateAPITests({
+        getDut: () => dtMat,
+        methodName: 'idct',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([]),
+        getOptionalArgs: () => ([
+          flags
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('dft', () => {
+      generateAPITests({
+        getDut: () => dtMat,
+        methodName: 'dft',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([]),
+        getOptionalArgsMap: () => ([
+          ['flags', flags],
+          ['nonZeroRows', 0]
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('idft', () => {
+      generateAPITests({
+        getDut: () => dtMat,
+        methodName: 'idft',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([]),
+        getOptionalArgsMap: () => ([
+          ['flags', flags],
+          ['nonZeroRows', 0]
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('mulSpectrums', () => {
+      generateAPITests({
+        getDut: () => dtMat,
+        methodName: 'mulSpectrums',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          dtMat
+        ]),
+        getOptionalArgsMap: () => ([
+          ['dftRows', true],
+          ['conjB', true]
+        ]),
+        expectOutput
+      });
+    });
+  });
 });
 
