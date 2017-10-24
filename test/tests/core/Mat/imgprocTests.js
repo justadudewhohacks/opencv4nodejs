@@ -400,82 +400,62 @@ module.exports = (getTestImg) => {
     });
   });
 
-  describe('blur', () => {
-    const kSize = new cv.Size(3, 3);
-    const anchor = new cv.Point(1, 1);
-    const borderType = cv.BORDER_CONSTANT;
-    funcShouldRequireArgs((() => rgbMat.blur.bind(rgbMat))());
-
-    it('can be called if required args passed', () => {
-      expect(() => rgbMat.blur(kSize)).to.not.throw();
-    });
-
-    it('can be called with optional args', () => {
-      expect(() => rgbMat.blur(
-        kSize,
-        anchor,
-        borderType
-      )).to.not.throw();
-    });
-
-    it('can be called with optional args object', () => {
-      expect(() => rgbMat.blur(
-        kSize,
-        { anchor, borderType }
-      )).to.not.throw();
-    });
-
-    it('should blur something', () => {
-      const blurred = rgbMat.blur(kSize);
+  describe('smoothing', () => {
+    const expectOutput = (blurred) => {
       assertMetaData(blurred)(rgbMat.rows, rgbMat.cols, rgbMat.type);
       expect(dangerousDeepEquals(blurred.getDataAsArray(), rgbMat.getDataAsArray())).to.be.false;
-    });
-  });
+    };
 
-  describe('gaussianBlur', () => {
-    const kSize = new cv.Size(3, 3);
-    const sigmaX = 1.2;
-    const sigmaY = 0.8;
-    const borderType = cv.BORDER_CONSTANT;
-    funcShouldRequireArgs((() => rgbMat.gaussianBlur.bind(rgbMat))());
+    describe('blur', () => {
+      const kSize = new cv.Size(3, 3);
 
-    it('can be called if required args passed', () => {
-      expect(() => rgbMat.gaussianBlur(kSize, sigmaX)).to.not.throw();
-    });
-
-    it('can be called with optional args', () => {
-      expect(() => rgbMat.gaussianBlur(
-        kSize,
-        sigmaX,
-        sigmaY,
-        borderType
-      )).to.not.throw();
+      generateAPITests({
+        getDut: () => rgbMat,
+        methodName: 'blur',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          kSize
+        ]),
+        getOptionalArgsMap: () => ([
+          ['anchor', new cv.Point(1, 1)],
+          ['borderType', cv.BORDER_CONSTANT]
+        ]),
+        expectOutput
+      });
     });
 
-    it('can be called with optional args object', () => {
-      expect(() => rgbMat.gaussianBlur(
-        kSize,
-        sigmaX,
-        { sigmaY, borderType }
-      )).to.not.throw();
+    describe('gaussianBlur', () => {
+      const kSize = new cv.Size(3, 3);
+      const sigmaX = 1.2;
+
+      generateAPITests({
+        getDut: () => rgbMat,
+        methodName: 'gaussianBlur',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          kSize,
+          sigmaX
+        ]),
+        getOptionalArgsMap: () => ([
+          ['sigmaY', 1.2],
+          ['borderType', cv.BORDER_CONSTANT]
+        ]),
+        expectOutput
+      });
     });
 
-    it('should blur something', () => {
-      const blurred = rgbMat.gaussianBlur(kSize, sigmaX);
-      assertMetaData(blurred)(rgbMat.rows, rgbMat.cols, rgbMat.type);
-      expect(dangerousDeepEquals(blurred.getDataAsArray(), rgbMat.getDataAsArray())).to.be.false;
-    });
-  });
+    describe('medianBlur', () => {
+      const kSize = 3;
 
-  describe('medianBlur', () => {
-    const kSize = 3;
-
-    funcShouldRequireArgs((() => rgbMat.medianBlur.bind(rgbMat))());
-
-    it('should blur something', () => {
-      const blurred = rgbMat.medianBlur(kSize);
-      assertMetaData(blurred)(rgbMat.rows, rgbMat.cols, rgbMat.type);
-      expect(dangerousDeepEquals(blurred.getDataAsArray(), rgbMat.getDataAsArray())).to.be.false;
+      generateAPITests({
+        getDut: () => rgbMat,
+        methodName: 'medianBlur',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          kSize
+        ]),
+        expectOutput
+      });
     });
   });
 

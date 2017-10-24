@@ -402,6 +402,15 @@ Mat : mat.distanceTransform(Uint distanceType, Uint maskSize, Uint dstType = CV_
 Mat : mat.blur(Size kSize, Point2 anchor = new Point2(-1, -1), Uint borderType = BORDER_CONSTANT)
 ```
 
+<a name="blurAsync"></a>
+
+### blurAsync
+``` javascript
+mat.blurAsync(Size kSize, callback(Error err, Mat res))
+mat.blurAsync(Size kSize, ...opts, callback(Error err, Mat res))
+mat.blurAsync(Size kSize, { opts }, callback(Error err, Mat res))
+```
+
 <a name="gaussianBlur"></a>
 
 ### gaussianBlur
@@ -409,11 +418,27 @@ Mat : mat.blur(Size kSize, Point2 anchor = new Point2(-1, -1), Uint borderType =
 Mat : mat.gaussianBlur(Size kSize, Number sigmaX, Number sigmaY = 0.0, Uint borderType = BORDER_CONSTANT)
 ```
 
+<a name="gaussianBlurAsync"></a>
+
+### gaussianBlurAsync
+``` javascript
+mat.gaussianBlurAsync(Size kSize, Number sigmaX, callback(Error err, Mat res))
+mat.gaussianBlurAsync(Size kSize, Number sigmaX, ...opts, callback(Error err, Mat res))
+mat.gaussianBlurAsync(Size kSize, Number sigmaX, { opts }, callback(Error err, Mat res))
+```
+
 <a name="medianBlur"></a>
 
 ### medianBlur
 ``` javascript
-Mat : mat.medianBlur(Uint kSize)
+Mat : mat.medianBlur(Int kSize)
+```
+
+<a name="medianBlurAsync"></a>
+
+### medianBlurAsync
+``` javascript
+mat.medianBlurAsync(Int kSize, callback(Error err, Mat res))
 ```
 
 <a name="connectedComponents"></a>
