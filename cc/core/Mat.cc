@@ -101,8 +101,6 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "pyrUpAsync", PyrUpAsync);
 	Nan::SetPrototypeMethod(ctor, "buildPyramid", BuildPyramid);
 	Nan::SetPrototypeMethod(ctor, "buildPyramidAsync", BuildPyramidAsync);
-	Nan::SetPrototypeMethod(ctor, "buildPyramid", BuildPyramid);
-	Nan::SetPrototypeMethod(ctor, "buildPyramidAsync", BuildPyramidAsync);
 	Nan::SetPrototypeMethod(ctor, "houghLines", HoughLines);
 	Nan::SetPrototypeMethod(ctor, "houghLinesAsync", HoughLinesAsync);
 	Nan::SetPrototypeMethod(ctor, "houghLinesP", HoughLinesP);
