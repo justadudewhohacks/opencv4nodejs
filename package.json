@@ -33,9 +33,12 @@
     "clean": "node-gyp clean",
     "build-debug": "node-gyp rebuild --debug",
     "build-opencv3.0": "docker build -t opencv3.0 -f ./ci/opencv3.0/Dockerfile . &&docker run opencv3.0",
+    "build-opencv3.0-contrib": "docker build -t opencv3.0-contrib -f ./ci/opencv3.0-contrib/Dockerfile . &&docker run opencv3.0-contrib",
     "build-opencv3.1": "docker build -t opencv3.1 -f ./ci/opencv3.1/Dockerfile . &&docker run opencv3.1",
-    "build-opencv3.3": "docker build -t opencv3.3 -f ./ci/opencv3.3/Dockerfile . &&docker run opencv3.3",
+    "build-opencv3.1-contrib": "docker build -t opencv3.1-contrib -f ./ci/opencv3.1-contrib/Dockerfile . &&docker run opencv3.1-contrib",
     "build-opencv3.2-contrib": "docker build -t opencv3.2-contrib -f ./ci/opencv3.2-contrib/Dockerfile . &&docker run opencv3.2-contrib",
+    "build-opencv3.3": "docker build -t opencv3.3 -f ./ci/opencv3.3/Dockerfile . &&docker run opencv3.3",
+    "build-opencv3.3-contrib": "docker build -t opencv3.3-contrib -f ./ci/opencv3.3-contrib/Dockerfile . &&docker run opencv3.3-contrib",
     "build-opencv3.2-contrib-with-coverage": "docker build -t opencv3.2-contrib-with-coverage -f ./ci/opencv3.2-contrib-with-coverage/Dockerfile . &&docker run -v $PWD/ci/coverage-report:/test/coverage-report opencv3.2-contrib-with-coverage"
   },
   "gypfile": true,
