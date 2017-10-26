@@ -374,11 +374,45 @@ mat.warpPerspectiveAsync(Mat transforMationMatrix, { opts }, callback(Error err,
 Mat : mat.dilate(Mat kernel, Point2 anchor = new Point2(-1, -1), Uint iterations = 1, Uint borderType = BORDER_CONSTANT)
 ```
 
+<a name="dilateAsync"></a>
+
+### dilateAsync
+``` javascript
+mat.dilateAsync(Mat kernel, callback(Error err, Mat result))
+mat.dilateAsync(Mat kernel, ...opts, callback(Error err, Mat result))
+mat.dilateAsync(Mat kernel, { opts }, callback(Error err, Mat result))
+```
+
 <a name="erode"></a>
 
 ### erode
 ``` javascript
-Mat : mat.erode(Mat kernel,Point2 anchor = new Point2(-1, -1), Uint iterations = 1, Uint borderType = BORDER_CONSTANT)
+Mat : mat.erode(Mat kernel, Point2 anchor = new Point2(-1, -1), Uint iterations = 1, Uint borderType = BORDER_CONSTANT)
+```
+
+<a name="erodeAsync"></a>
+
+### erodeAsync
+``` javascript
+mat.erodeAsync(Mat kernel, callback(Error err, Mat result))
+mat.erodeAsync(Mat kernel, ...opts, callback(Error err, Mat result))
+mat.erodeAsync(Mat kernel, { opts }, callback(Error err, Mat result))
+```
+
+<a name="morphologyEx"></a>
+
+### morphologyEx
+``` javascript
+Mat : mat.morphologyEx(Mat kernel, Int morphType, Point2 anchor = new Point2(-1, -1), Uint iterations = 1, Uint borderType = BORDER_CONSTANT)
+```
+
+<a name="morphologyExAsync"></a>
+
+### morphologyExAsync
+``` javascript
+mat.morphologyExAsync(Mat kernel, Int morphType, callback(Error err, Mat result))
+mat.morphologyExAsync(Mat kernel, Int morphType, ...opts, callback(Error err, Mat result))
+mat.morphologyExAsync(Mat kernel, Int morphType, { opts }, callback(Error err, Mat result))
 ```
 
 <a name="distanceTransform"></a>

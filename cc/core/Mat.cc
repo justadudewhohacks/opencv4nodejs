@@ -68,7 +68,11 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "warpPerspective", WarpPerspective);
 	Nan::SetPrototypeMethod(ctor, "warpPerspectiveAsync", WarpPerspectiveAsync);
 	Nan::SetPrototypeMethod(ctor, "dilate", Dilate);
+	Nan::SetPrototypeMethod(ctor, "dilateAsync", DilateAsync);
 	Nan::SetPrototypeMethod(ctor, "erode", Erode);
+	Nan::SetPrototypeMethod(ctor, "erodeAsync", ErodeAsync);
+	Nan::SetPrototypeMethod(ctor, "morphologyEx", MorphologyEx);
+	Nan::SetPrototypeMethod(ctor, "morphologyExAsync", MorphologyExAsync);
 	Nan::SetPrototypeMethod(ctor, "distanceTransform", DistanceTransform);
 	Nan::SetPrototypeMethod(ctor, "distanceTransformWithLabels", DistanceTransformWithLabels);
 	Nan::SetPrototypeMethod(ctor, "blur", Blur);
@@ -973,21 +977,128 @@ NAN_METHOD(Mat::WarpPerspectiveAsync) {
 	FF_WORKER_ASYNC("Mat::WarpPerspectiveAsync", WarpPerspectiveWorker, worker);
 }
 
-NAN_METHOD(Mat::Dilate) {
-	Nan::TryCatch tryCatch;
-	morph(info, "Mat::Dilate", cv::dilate);
-	if (tryCatch.HasCaught()) {
-		tryCatch.ReThrow();
+
+struct Mat::MorphWorker {
+public:
+	cv::Mat mat;
+	bool withOp;
+
+	MorphWorker(cv::Mat mat, bool withOp = false) {
+		this->mat = mat;
+		this->withOp = withOp;
 	}
-}
+
+	cv::Mat kernel;
+
+	int op;
+	cv::Point2d anchor = cv::Point2d(-1, -1);
+	int iterations = 1;
+	int borderType = cv::BORDER_CONSTANT;
+
+	cv::Mat resultMat;
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(resultMat);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::arg(0, &kernel, info) ||
+			(withOp && IntConverter::optArg(1, &op, info))
+			);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		int off = (withOp ? 1 : 0);
+		return (
+			Point2::Converter::optArg(1 + off, &anchor, info) ||
+			IntConverter::optArg(2 + off, &iterations, info) ||
+			IntConverter::optArg(3 + off, &borderType, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		int optArgN = (withOp ? 2 : 1);
+		return FF_ARG_IS_OBJECT(optArgN) && !Point2::Converter::hasInstance(info[optArgN]->ToObject());
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		int optArgN = (withOp ? 2 : 1);
+		FF_OBJ opts = info[optArgN]->ToObject();
+		return (
+			Point2::Converter::optProp(&anchor, "anchor", opts) ||
+			IntConverter::optProp(&iterations, "iterations", opts) ||
+			IntConverter::optProp(&borderType, "borderType", opts)
+		);
+	}
+};
+
+struct Mat::ErodeWorker : public MorphWorker {
+	ErodeWorker(cv::Mat mat) : MorphWorker(mat) {
+	}
+
+	const char* execute() {
+		cv::erode(mat, resultMat, kernel, anchor, iterations, borderType, cv::morphologyDefaultBorderValue());
+		return "";
+	}
+};
 
 NAN_METHOD(Mat::Erode) {
-	Nan::TryCatch tryCatch;
-	morph(info, "Mat::Erode", cv::erode);
-	if (tryCatch.HasCaught()) {
-		tryCatch.ReThrow();
-	}
+	ErodeWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Erode", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::ErodeAsync) {
+	ErodeWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::ErodeAsync", ErodeWorker, worker);
+}
+
+
+struct Mat::DilateWorker : public MorphWorker {
+	DilateWorker(cv::Mat mat) : MorphWorker(mat) {
+	}
+
+	const char* execute() {
+		cv::dilate(mat, resultMat, kernel, anchor, iterations, borderType, cv::morphologyDefaultBorderValue());
+		return "";
+	}
+};
+
+NAN_METHOD(Mat::Dilate) {
+	DilateWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Dilate", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::DilateAsync) {
+	DilateWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::DilateAsync", DilateWorker, worker);
+}
+
+
+struct Mat::MorphologyExWorker : public MorphWorker {
+public:
+	MorphologyExWorker(cv::Mat mat) : MorphWorker(mat, true) {
+	}
+
+	const char* execute() {
+		cv::morphologyEx(mat, resultMat, op, kernel, anchor, iterations, borderType, cv::morphologyDefaultBorderValue());
+		return "";
+	}
+};
+
+NAN_METHOD(Mat::MorphologyEx) {
+	MorphologyExWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::MorphologyEx", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::MorphologyExAsync) {
+	MorphologyExWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::MorphologyExAsync", MorphologyExWorker, worker);
+}
+
 
 NAN_METHOD(Mat::DistanceTransform) {
 	FF_METHOD_CONTEXT("Mat::DistanceTransform");
@@ -2095,30 +2206,6 @@ NAN_METHOD(Mat::Row) {
     return Nan::ThrowError("... Exception");
   }
   FF_RETURN(row);
-}
-
-void Mat::morph(Nan::NAN_METHOD_ARGS_TYPE info, const char* methodName, void(*func)(cv::InputArray, cv::OutputArray, cv::InputArray, cv::Point, int, int, const cv::Scalar&)) {
-	FF_METHOD_CONTEXT(methodName);
-	FF_ARG_INSTANCE(0, cv::Mat kernel, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::Point2d anchor, "anchor", Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2, cv::Point2d(-1, -1));
-	FF_GET_UINT_IFDEF(optArgs, uint iterations, "iterations", 1);
-	FF_GET_UINT_IFDEF(optArgs, uint borderType, "borderType", cv::BORDER_CONSTANT);
-
-	if (!hasOptArgsObj) {
-		FF_ARG_INSTANCE_IFDEF(1, anchor, Point2::constructor, FF_UNWRAP_PT2_AND_GET, anchor);
-		FF_ARG_UINT_IFDEF(2, iterations, iterations);
-		FF_ARG_UINT_IFDEF(3, borderType, borderType);
-	}
-
-	cv::Scalar borderValue = cv::morphologyDefaultBorderValue();
-	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-	FF_OBJ jsMatDst = FF_NEW_INSTANCE(constructor);
-	func(matSelf, FF_UNWRAP_MAT_AND_GET(jsMatDst), kernel, anchor, iterations, borderType, borderValue);
-	FF_RETURN(jsMatDst);
 }
 
 void Mat::setNativeProps(cv::Mat mat) {
