@@ -52,47 +52,64 @@ module.exports = (getTestImg) => {
   describe('morphological operators', () => {
     const mat = new cv.Mat(Array(5).fill([0, 255, 0, 255, 0]), cv.CV_8U);
     const kernel = new cv.Mat(Array(3).fill([255, 255, 255]), cv.CV_8U);
-    const iterations = 5;
-    const borderType = cv.BORDER_REFLECT;
+
+    const optionalArgsMap = [
+      ['anchor', new cv.Point(0, 0)],
+      ['iterations', 5],
+      ['borderType', cv.BORDER_REFLECT]
+    ];
+
     describe('erode', () => {
-      funcShouldRequireArgs((() => new cv.Mat().erode.bind(new cv.Mat()))());
-
-      it('can be called if required args passed', () => {
-        expect(() => mat.erode(kernel)).to.not.throw();
-      });
-
-      it('can be called with optional args', () => {
-        expect(() => mat.erode(kernel, iterations, borderType)).to.not.throw();
-      });
-
-      it('can be called with optional args object', () => {
-        expect(() => mat.erode(kernel, { borderType })).to.not.throw();
-      });
-
-      it('should erode image', () => {
-        const eroded = mat.erode(kernel);
+      const expectOutput = (eroded) => {
         assertDataDeepEquals(Array(5).fill(Array(5).fill(0)), eroded.getDataAsArray());
+      };
+
+      generateAPITests({
+        getDut: () => mat,
+        methodName: 'erode',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          kernel
+        ]),
+        getOptionalArgsMap: () => optionalArgsMap,
+        expectOutput
       });
     });
 
     describe('dilate', () => {
-      funcShouldRequireArgs((() => new cv.Mat().dilate.bind(new cv.Mat()))());
-
-      it('can be called if required args passed', () => {
-        expect(() => mat.dilate(kernel)).to.not.throw();
-      });
-
-      it('can be called with optional args', () => {
-        expect(() => mat.dilate(kernel, iterations, borderType)).to.not.throw();
-      });
-
-      it('can be called with optional args object', () => {
-        expect(() => mat.dilate(kernel, { borderType })).to.not.throw();
-      });
-
-      it('should dilate image', () => {
-        const dilated = mat.dilate(kernel);
+      const expectOutput = (dilated) => {
         assertDataDeepEquals(Array(5).fill(Array(5).fill(255)), dilated.getDataAsArray());
+      };
+
+      generateAPITests({
+        getDut: () => mat,
+        methodName: 'dilate',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          kernel
+        ]),
+        getOptionalArgsMap: () => optionalArgsMap,
+        expectOutput
+      });
+    });
+
+    describe('morphologyEx', () => {
+      const expectOutput = (morphed) => {
+        assertMetaData(mat)(morphed);
+      }
+
+      const op = cv.MORPH_TOPHAT;
+
+      generateAPITests({
+        getDut: () => mat,
+        methodName: 'morphologyEx',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          kernel,
+          op
+        ]),
+        getOptionalArgsMap: () => optionalArgsMap,
+        expectOutput
       });
     });
   });

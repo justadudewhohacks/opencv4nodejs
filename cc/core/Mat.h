@@ -94,8 +94,17 @@ public:
 	static NAN_METHOD(WarpPerspective);
 	static NAN_METHOD(WarpPerspectiveAsync);
 
+	struct MorphWorker;
+	struct DilateWorker;
+	struct ErodeWorker;
+	struct MorphologyExWorker;
 	static NAN_METHOD(Dilate);
+	static NAN_METHOD(DilateAsync);
 	static NAN_METHOD(Erode);
+	static NAN_METHOD(ErodeAsync);
+	static NAN_METHOD(MorphologyEx);
+	static NAN_METHOD(MorphologyExAsync);
+
 	static NAN_METHOD(DistanceTransform);
 	static NAN_METHOD(DistanceTransformWithLabels);
 
