@@ -30,7 +30,7 @@ matrix:
     - DOCKER_IMAGE=opencv3.3-contrib-node6
   - env:
     - BUILD_TASK=build-opencv3.2-contrib-with-coverage
-    - DOCKER_IMAGE=-opencv3.2-contrib-node6
+    - DOCKER_IMAGE=opencv3.2-contrib-node6
 
 install: travis_wait 30 docker pull justadudewhohacks/$DOCKER_IMAGE
 
