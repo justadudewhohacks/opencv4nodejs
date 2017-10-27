@@ -1,5 +1,7 @@
 #include "../Tracker.h"
 
+#if CV_MINOR_VERSION > 0
+
 #ifndef __FF_TRACKERKCF_H__
 #define __FF_TRACKERKCF_H__
 
@@ -16,5 +18,7 @@ public:
 		return tracker;
 	}
 };
+
+#endif
 
 #endif

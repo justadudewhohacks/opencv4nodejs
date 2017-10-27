@@ -1,4 +1,4 @@
-# TrackerKCFParams
+# TrackerKCFParams (v3.1, v3.2, v3.3)
 
 ## Accessors (Writeable)
 ``` javascript

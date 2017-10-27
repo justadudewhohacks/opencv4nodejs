@@ -32,7 +32,11 @@ NAN_METHOD(TrackerMIL::New) {
 	);
 
 	TrackerMIL* self = new TrackerMIL();
+#if CV_VERSION_MINOR > 2
+	self->tracker = cv::TrackerMIL::create(params);
+#else
 	self->tracker = cv::TrackerMIL::createTracker(params);
+#endif
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };

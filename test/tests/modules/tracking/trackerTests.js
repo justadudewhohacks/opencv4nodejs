@@ -73,18 +73,24 @@ module.exports = () => {
 
   const trackerNames = [
     'TrackerBoosting',
-    //'TrackerGOTURN', TODO: sample goturn.prototxt
-    'TrackerKCF',
     'TrackerMedianFlow',
     'TrackerMIL',
     'TrackerTLD'
   ];
 
+  if (cv.version.minor > 0) {
+    trackerNames.push('TrackerKCF');
+  }
+
+  if (cv.version.minor > 1) {
+    // trackerNames.push('TrackerGOTURN'); TODO: sample goturn.prototxt
+  }
+
   trackerNames.forEach((trackerName) => {
     generateTrackerTests(trackerName);
   });
 
-  describe('MultiTracker', () => {
+  (cv.version.minor > 0 ? describe : describe.skip)('MultiTracker', () => {
     describe('add', () => {
       it('addMIL', () => {
         const tracker = new cv.MultiTracker();

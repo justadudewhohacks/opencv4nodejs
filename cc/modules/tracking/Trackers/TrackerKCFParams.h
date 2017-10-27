@@ -1,6 +1,8 @@
 #include "macros.h"
 #include <opencv2/tracking.hpp>
 
+#if CV_MINOR_VERSION > 0
+
 #ifndef __FF_TRACKERKCFPARAMS_H__
 #define __FF_TRACKERKCFPARAMS_H__
 
@@ -43,5 +45,7 @@ public:
 
 #define FF_UNWRAP_TRACKERKCFPARAMS(obj) FF_UNWRAP(obj, TrackerKCFParams)
 #define FF_UNWRAP_TRACKERKCFPARAMS_AND_GET(obj) FF_UNWRAP_TRACKERKCFPARAMS(obj)->params
+
+#endif
 
 #endif

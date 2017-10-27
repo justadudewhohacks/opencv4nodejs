@@ -22,7 +22,11 @@ NAN_METHOD(TrackerTLD::New) {
 	FF_METHOD_CONTEXT("TrackerTLD::New");
 
 	TrackerTLD* self = new TrackerTLD();
+#if CV_VERSION_MINOR > 2
+	self->tracker = cv::TrackerTLD::create();
+#else
 	self->tracker = cv::TrackerTLD::createTracker();
+#endif
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };
