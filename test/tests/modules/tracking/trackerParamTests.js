@@ -19,7 +19,7 @@ module.exports = () => {
       assertPropsWithValue(trackerParams)(params);
     });
 
-    it('TrackerKCFParams', () => {
+    (cv.version.minor > 0 ? it : it.skip)('TrackerKCFParams', () => {
       const params = {
         sigma: 0.9,
         lambda: 0.8,

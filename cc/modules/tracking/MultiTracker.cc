@@ -2,6 +2,8 @@
 
 #include "MultiTracker.h"
 
+#if CV_MINOR_VERSION > 0
+
 Nan::Persistent<v8::FunctionTemplate> MultiTracker::constructor;
 
 NAN_MODULE_INIT(MultiTracker::Init) {
@@ -34,7 +36,11 @@ NAN_METHOD(MultiTracker::AddMIL) {
 	FF_METHOD_CONTEXT("MultiTracker::AddMIL");
 	FF_ARG_INSTANCE(0, cv::Mat image, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 	FF_ARG_INSTANCE(1, cv::Rect2d boundingBox, Rect::constructor, FF_UNWRAP_RECT_AND_GET);
+#if CV_MINOR_VERSION > 2
+	cv::Ptr<cv::Tracker> type = cv::TrackerMIL::create();
+#else
 	const std::string type("MIL");
+#endif
 	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
 	FF_RETURN(Nan::New(ret));
 }
@@ -43,7 +49,11 @@ NAN_METHOD(MultiTracker::AddBOOSTING) {
 	FF_METHOD_CONTEXT("MultiTracker::AddBOOSTING");
 	FF_ARG_INSTANCE(0, cv::Mat image, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 	FF_ARG_INSTANCE(1, cv::Rect2d boundingBox, Rect::constructor, FF_UNWRAP_RECT_AND_GET);
-	const cv::String type("BOOSTING");
+#if CV_MINOR_VERSION > 2
+	cv::Ptr<cv::Tracker> type = cv::TrackerBoosting::create();
+#else
+	const std::string type("BOOSTING");
+#endif
 	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
 	FF_RETURN(Nan::New(ret));
 }
@@ -52,7 +62,11 @@ NAN_METHOD(MultiTracker::AddMEDIANFLOW) {
 	FF_METHOD_CONTEXT("MultiTracker::AddMEDIANFLOW");
 	FF_ARG_INSTANCE(0, cv::Mat image, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 	FF_ARG_INSTANCE(1, cv::Rect2d boundingBox, Rect::constructor, FF_UNWRAP_RECT_AND_GET);
-	const cv::String type("MEDIANFLOW");
+#if CV_MINOR_VERSION > 2
+	cv::Ptr<cv::Tracker> type = cv::TrackerMedianFlow::create();
+#else
+	const std::string type("MEDIANFLOW");
+#endif
 	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
 	FF_RETURN(Nan::New(ret));
 }
@@ -61,7 +75,11 @@ NAN_METHOD(MultiTracker::AddTLD) {
 	FF_METHOD_CONTEXT("MultiTracker::AddTLD");
 	FF_ARG_INSTANCE(0, cv::Mat image, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 	FF_ARG_INSTANCE(1, cv::Rect2d boundingBox, Rect::constructor, FF_UNWRAP_RECT_AND_GET);
-	const cv::String type("TLD");
+#if CV_MINOR_VERSION > 2
+	cv::Ptr<cv::Tracker> type = cv::TrackerTLD::create();
+#else
+	const std::string type("TLD");
+#endif
 	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
 	FF_RETURN(Nan::New(ret));
 }
@@ -70,7 +88,11 @@ NAN_METHOD(MultiTracker::AddKCF) {
 	FF_METHOD_CONTEXT("MultiTracker::AddKCF");
 	FF_ARG_INSTANCE(0, cv::Mat image, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 	FF_ARG_INSTANCE(1, cv::Rect2d boundingBox, Rect::constructor, FF_UNWRAP_RECT_AND_GET);
-	const cv::String type("KCF");
+#if CV_MINOR_VERSION > 2
+	cv::Ptr<cv::Tracker> type = cv::TrackerKCF::create();
+#else
+	const std::string type("KCF");
+#endif
 	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
 	FF_RETURN(Nan::New(ret));
 }
@@ -91,5 +113,7 @@ NAN_METHOD(MultiTracker::Update) {
 	}
 	FF_RETURN(jsRects);
 }
+
+#endif
 
 #endif

@@ -2,6 +2,8 @@
 
 #include "TrackerKCFParams.h"
 
+#if CV_MINOR_VERSION > 0
+
 Nan::Persistent<v8::FunctionTemplate> TrackerKCFParams::constructor;
 
 NAN_MODULE_INIT(TrackerKCFParams::Init) {
@@ -37,5 +39,7 @@ NAN_METHOD(TrackerKCFParams::New) {
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };
+
+#endif
 
 #endif

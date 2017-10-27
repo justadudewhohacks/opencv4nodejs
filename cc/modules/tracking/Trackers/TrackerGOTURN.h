@@ -1,5 +1,7 @@
 #include "../Tracker.h"
 
+#if CV_MINOR_VERSION > 1
+
 #ifndef __FF_TRACKERGOTURN_H__
 #define __FF_TRACKERGOTURN_H__
 
@@ -16,5 +18,7 @@ public:
 		return tracker;
 	}
 };
+
+#endif
 
 #endif

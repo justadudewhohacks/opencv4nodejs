@@ -2,6 +2,8 @@
 
 #include "TrackerGOTURN.h"
 
+#if CV_MINOR_VERSION > 1
+
 Nan::Persistent<v8::FunctionTemplate> TrackerGOTURN::constructor;
 
 NAN_MODULE_INIT(TrackerGOTURN::Init) {
@@ -22,9 +24,16 @@ NAN_METHOD(TrackerGOTURN::New) {
 	FF_METHOD_CONTEXT("TrackerGOTURN::New");
 
 	TrackerGOTURN* self = new TrackerGOTURN();
+#if CV_VERSION_MINOR > 2
+	self->tracker = cv::TrackerGOTURN::create();
+#else
 	self->tracker = cv::TrackerGOTURN::createTracker();
+#endif
+
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };
+
+#endif
 
 #endif

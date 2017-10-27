@@ -25,7 +25,13 @@ NAN_METHOD(TrackerMedianFlow::New) {
 	if (FF_HAS_ARG(0) && FF_IS_INT(info[0])) {
 		params.pointsInGrid = info[0]->Int32Value();
 	}
+
+#if CV_VERSION_MINOR > 2
+	self->tracker = cv::TrackerMedianFlow::create(params);
+#else
 	self->tracker = cv::TrackerMedianFlow::createTracker(params);
+#endif
+
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };

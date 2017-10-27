@@ -3,6 +3,8 @@
 #include "Mat.h"
 #include "Rect.h"
 
+#if CV_MINOR_VERSION > 0
+
 #ifndef __FF_MULTITRACKER_H__
 #define __FF_MULTITRACKER_H__
 
@@ -22,5 +24,7 @@ public:
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 };
+
+#endif
 
 #endif
