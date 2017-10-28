@@ -22,6 +22,8 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("depth").ToLocalChecked(), Mat::GetDepth);
 	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("empty").ToLocalChecked(), Mat::GetIsEmpty);
 
+	Nan::SetMethod(ctor, "eye", Eye);
+
 	Nan::SetPrototypeMethod(ctor, "at", At);
 	Nan::SetPrototypeMethod(ctor, "atRaw", AtRaw);
 	Nan::SetPrototypeMethod(ctor, "set", Set);
@@ -225,6 +227,16 @@ NAN_METHOD(Mat::At) {
 		jsVal = v8::Local<v8::Value>::Cast(val);
 	}
 	FF_RETURN(jsVal);
+}
+
+NAN_METHOD(Mat::Eye) {
+	FF_METHOD_CONTEXT("Mat::Eye");
+	FF_ARG_INT(0, int rows);
+	FF_ARG_INT(1, int cols);
+	FF_ARG_INT(2, int type);
+	FF_OBJ jsEyeMat = FF_NEW_INSTANCE(Mat::constructor);
+	FF_UNWRAP_MAT_AND_GET(jsEyeMat) = cv::Mat::eye(cv::Size(cols, rows), type);
+	FF_RETURN(jsEyeMat);
 }
 
 NAN_METHOD(Mat::AtRaw) {

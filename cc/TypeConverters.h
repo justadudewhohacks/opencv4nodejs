@@ -83,4 +83,26 @@ public:
 typedef AbstractConverter<SingleTypeConverter<NumberTypeConverter, double>, double>  DoubleConverter;
 typedef AbstractConverter<SingleTypeConverter<NumberTypeConverter, float>, float>  FloatConverter;
 
+
+class StringTypeConverter {
+public:
+	static const char* getTypeName() {
+		return "string";
+	}
+
+	static bool assertType(v8::Local<v8::Value> jsVal) {
+		return jsVal->IsString();
+	}
+
+	static std::string unwrap(v8::Local<v8::Value> jsVal) {	
+		return std::string(*Nan::Utf8String(jsVal->ToString()));
+	}
+
+	static v8::Local<v8::Value> wrap(std::string val) {
+		return Nan::New(val).ToLocalChecked();
+	}
+};
+
+typedef AbstractConverter<SingleTypeConverter<StringTypeConverter, std::string>, std::string> StringConverter;
+
 #endif

@@ -15,6 +15,8 @@ public:
   static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
+	static NAN_METHOD(Eye);
+
 	static FF_GETTER(Mat, GetRows, mat.rows);
 	static FF_GETTER(Mat, GetCols, mat.cols);
 	static FF_GETTER(Mat, GetType, mat.type());
