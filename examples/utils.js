@@ -13,7 +13,7 @@ exports.grabFrames = (videoFile, delay, onFrame) => {
     onFrame(frame);
 
     const key = cv.waitKey(delay);
-    done = key !== 255;
+    done = key !== -1 && key !== 255;
   }
   console.log('Key pressed, exiting.');
 };

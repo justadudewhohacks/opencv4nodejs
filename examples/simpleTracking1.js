@@ -10,6 +10,7 @@ grabFrames('../data/traffic.mp4', delay, (frame) => {
   const iterations = 2;
   const dilated = foreGroundMask.dilate(
     cv.getStructuringElement(cv.MORPH_ELLIPSE, new cv.Size(4, 4)),
+    new cv.Point(-1, -1),
     iterations
   );
   const blurred = dilated.blur(new cv.Size(10, 10));
