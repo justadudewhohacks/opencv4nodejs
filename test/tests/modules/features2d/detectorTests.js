@@ -14,52 +14,62 @@ module.exports = (getTestImg, defaults, customProps, Detector, implementsCompute
     testImg = getTestImg();
   });
 
+  const getDut = () => (typeof Detector === 'function' ? new Detector() : Detector);
+
   describe('constructor', () => {
-    it('should use default values if no args', () => {
-      assertPropsWithValue(new Detector())(defaults);
-    });
-
-    it('should use default values if empty args', () => {
-      assertPropsWithValue(new Detector({}))(defaults);
-    });
-
-    it('should be constructable with custom props', () => {
-      const props = {};
-      customProps.args.forEach((arg, i) => {
-        props[arg] = customProps.values[i];
+    if (defaults) {
+      it('should use default values if no args', () => {
+        assertPropsWithValue(new Detector())(defaults);
       });
-      /* eslint-disable new-parens */
-      const detector = new (Detector.bind.apply(Detector, [null].concat(customProps.values)));
-      assertPropsWithValue(detector)(props);
-    });
 
-    it('should be constructable with custom props object', () => {
-      const props = {};
-      customProps.args.forEach((arg, i) => {
-        props[arg] = customProps.values[i];
+      it('should use default values if empty args', () => {
+        assertPropsWithValue(new Detector({}))(defaults);
       });
-      assertPropsWithValue(new Detector(props))(props);
-    });
+    }
+
+    if (customProps) {
+      it('should be constructable with custom props', () => {
+        const props = {};
+        customProps.args.forEach((arg, i) => {
+          props[arg] = customProps.values[i];
+        });
+        /* eslint-disable new-parens */
+        const detector = new (Detector.bind.apply(Detector, [null].concat(customProps.values)));
+        assertPropsWithValue(detector)(props);
+      });
+
+      it('should be constructable with custom props object', () => {
+        const props = {};
+        customProps.args.forEach((arg, i) => {
+          props[arg] = customProps.values[i];
+        });
+        assertPropsWithValue(new Detector(props))(props);
+      });
+    }
 
     it('should have function detect', () => {
-      expect(new Detector()).to.have.property('detect').to.be.a('function');
+      const detector = getDut();
+      expect(detector).to.have.property('detect').to.be.a('function');
     });
 
     it('should have function compute', () => {
-      expect(new Detector()).to.have.property('compute').to.be.a('function');
+      const detector = getDut();
+      expect(detector).to.have.property('compute').to.be.a('function');
     });
   });
 
   describe('detect and compute', () => {
+    let dut;
     let keyPoints;
     before(() => {
-      keyPoints = (new Detector()).detect(testImg);
+      dut = getDut();
+      keyPoints = dut.detect(testImg);
     });
 
     describe('detect', () => {
       describe('sync', () => {
         it('should throw if no args', () => {
-          assertError(() => (new Detector()).detect(), 'expected arg 0 to be instance of: Mat');
+          assertError(() => dut.detect(), 'expected arg 0 to be instance of: Mat');
         });
 
         it('should return an array of KeyPoints', () => {
@@ -75,7 +85,7 @@ module.exports = (getTestImg, defaults, customProps, Detector, implementsCompute
         });
 
         it('should return an array of KeyPoints', (done) => {
-          (new Detector()).detectAsync(testImg, (err, kps) => {
+          dut.detectAsync(testImg, (err, kps) => {
             expect(kps).to.be.a('array');
             assert(kps.length > 0, 'no KeyPoints detected');
             kps.forEach(kp => assert(kp instanceof cv.KeyPoint));
@@ -89,11 +99,11 @@ module.exports = (getTestImg, defaults, customProps, Detector, implementsCompute
       describe('compute', () => {
         describe('sync', () => {
           it('should throw if no args', () => {
-            assertError(() => (new Detector()).compute(), 'expected arg 0 to be instance of: Mat');
+            assertError(() => dut.compute(), 'expected arg 0 to be instance of: Mat');
           });
 
           it('should return a Mat with descriptors for each KeyPoint', () => {
-            const desc = (new Detector(defaults)).compute(testImg, keyPoints);
+            const desc = dut.compute(testImg, keyPoints);
             assertPropsWithValue(desc)({ rows: keyPoints.length });
           });
         });
@@ -104,7 +114,7 @@ module.exports = (getTestImg, defaults, customProps, Detector, implementsCompute
           });
 
           it('should return a Mat with descriptors for each KeyPoint', (done) => {
-            (new Detector()).computeAsync(testImg, keyPoints, (err, desc) => {
+            dut.computeAsync(testImg, keyPoints, (err, desc) => {
               assertPropsWithValue(desc)({ rows: keyPoints.length });
               done();
             });

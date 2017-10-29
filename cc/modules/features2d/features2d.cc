@@ -11,6 +11,7 @@
 #include "detectors/KAZEDetector.h"
 #include "detectors/MSERDetector.h"
 #include "detectors/ORBDetector.h"
+#include "detectors/SimpleBlobDetector.h"
 
 NAN_MODULE_INIT(Features2d::Init) {
 	KeyPoint::Init(target);
@@ -25,6 +26,7 @@ NAN_MODULE_INIT(Features2d::Init) {
 	KAZEDetector::Init(target);
 	MSERDetector::Init(target);
 	ORBDetector::Init(target);
+	SimpleBlobDetector::Init(target);
 
 	FF_OBJ agastTypes = FF_NEW_OBJ();
 	FF_SET_JS_PROP(agastTypes, AGAST_5_8, Nan::New<v8::Integer>(cv::AgastFeatureDetector::AGAST_5_8));
