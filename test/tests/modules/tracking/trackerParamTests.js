@@ -39,7 +39,9 @@ module.exports = () => {
 
       const trackerParams = new cv.TrackerKCFParams();
       Object.keys(params).forEach((param) => { trackerParams[param] = params[param]; });
-      assertPropsWithValue(trackerParams)(params);
+
+      const floatSafe = true;
+      assertPropsWithValue(trackerParams)(params, floatSafe);
     });
 
     it('TrackerMILParams', () => {
