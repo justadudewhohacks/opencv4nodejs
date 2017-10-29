@@ -29,6 +29,12 @@ matrix:
     - BUILD_TASK=build-opencv3.3-contrib
     - DOCKER_IMAGE=opencv3.3-contrib-node6
   - env:
+    - BUILD_TASK=build-opencv3.3.1
+    - DOCKER_IMAGE=opencv3.3.1-node6
+  - env:
+    - BUILD_TASK=build-opencv3.3.1-contrib
+    - DOCKER_IMAGE=opencv3.3.1-contrib-node6
+  - env:
     - BUILD_TASK=build-opencv3.2-contrib-with-coverage
     - DOCKER_IMAGE=opencv3.2-contrib-node6
 
