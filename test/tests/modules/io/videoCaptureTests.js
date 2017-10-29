@@ -38,5 +38,13 @@ module.exports = () => {
         });
       });
     });
+
+    describe('properties', () => {
+      it('should get properties', () => {
+        const cap = new cv.VideoCapture(getTestVideoPath());
+        expect(cap.get(cv.CAP_PROP_FRAME_WIDTH)).to.equal(640);
+        expect(cap.get(cv.CAP_PROP_FRAME_HEIGHT)).to.equal(360);
+      });
+    });
   });
 };
