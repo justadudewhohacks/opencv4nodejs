@@ -45,11 +45,12 @@ public:
 	}
 };
 
-class BoolArrayConverter : public AbstractConverter<ArrayConverterType<BoolConverter, bool>, std::vector<bool>> {};
-class DoubleArrayConverter : public AbstractConverter<ArrayConverterType<DoubleConverter, double>, std::vector<double>> {};
-class FloatArrayConverter : public AbstractConverter<ArrayConverterType<FloatConverter, float>, std::vector<float>> {};
-class UintArrayConverter : public AbstractConverter<ArrayConverterType<UintConverter, uint>, std::vector<uint>> {};
-class IntArrayConverter : public AbstractConverter<ArrayConverterType<IntConverter, int>, std::vector<int>> {};
+class BoolArrayConverter : public AbstractConverter<ArrayConverterType<BoolTypeConverter, bool>, std::vector<bool>> {};
+class DoubleArrayConverter : public AbstractConverter<ArrayConverterType<NumberTypeConverter, double>, std::vector<double>> {};
+class FloatArrayConverter : public AbstractConverter<ArrayConverterType<NumberTypeConverter, float>, std::vector<float>> {};
+class UintArrayConverter : public AbstractConverter<ArrayConverterType<UintTypeConverter, uint>, std::vector<uint>> {};
+class IntArrayConverter : public AbstractConverter<ArrayConverterType<IntTypeConverter, int>, std::vector<int>> {};
+class StringArrayConverter : public AbstractConverter<ArrayConverterType<StringTypeConverter, std::string>, std::vector<std::string>> {};
 
 template <class Clazz, class T, class CastType = T>
 class ObjectArrayConverter : public AbstractConverter<ArrayConverterType<InstanceConverterType<Clazz, CastType>, T, CastType>, std::vector<CastType>> {};

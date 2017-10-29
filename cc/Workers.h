@@ -36,6 +36,10 @@ public:
 
 struct SimpleWorker {
 public:
+	const char* execute() {
+		return "";
+	}
+
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return false;
 	}
