@@ -29,3 +29,17 @@ cap.readAsync(callback(Error err, Mat frame))
 ``` javascript
 cap.reset()
 ```
+
+<a name="get"></a>
+
+### get
+``` javascript
+cap.get(Int property)
+```
+
+<a name="set"></a>
+
+### set
+``` javascript
+cap.set(Int property, Number value)
+```

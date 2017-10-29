@@ -11,6 +11,8 @@ NAN_MODULE_INIT(VideoCapture::Init) {
 	Nan::SetPrototypeMethod(ctor, "read", Read);
   Nan::SetPrototypeMethod(ctor, "reset", Reset);
 	Nan::SetPrototypeMethod(ctor, "readAsync", ReadAsync);
+	Nan::SetPrototypeMethod(ctor, "get", Get);
+	Nan::SetPrototypeMethod(ctor, "set", Set);
   target->Set(FF_NEW_STRING("VideoCapture"), ctor->GetFunction());
 };
 
@@ -62,4 +64,17 @@ NAN_METHOD(VideoCapture::ReadAsync) {
 		new Nan::Callback(cbFunc),
 		ctx
 	));
+}
+
+NAN_METHOD(VideoCapture::Get) {
+	FF_METHOD_CONTEXT("VideoCapture::Get");
+	FF_ARG_INT(0, int prop);
+	FF_RETURN(FF_UNWRAP(info.This(), VideoCapture)->cap.get(prop));
+}
+
+NAN_METHOD(VideoCapture::Set) {
+	FF_METHOD_CONTEXT("VideoCapture::Set");
+	FF_ARG_INT(0, int prop);
+	FF_ARG_NUMBER(1, double value);
+	FF_UNWRAP(info.This(), VideoCapture)->cap.set(prop, value);
 }
