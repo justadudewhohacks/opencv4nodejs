@@ -10,7 +10,6 @@
     "eslint-config-rallycoding": "^3.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.3",
-    "segfault-handler": "^1.0.0"
+    "eslint-plugin-react": "^6.10.3"
   }
 }

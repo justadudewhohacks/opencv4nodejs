@@ -6,8 +6,6 @@
 #include "Mat.h"
 #include "Rect.h"
 
-#include "opencv2\highgui.hpp"
-
 Nan::Persistent<v8::FunctionTemplate> OCRHMMDecoder::constructor;
 
 NAN_MODULE_INIT(OCRHMMDecoder::Init) {
@@ -58,8 +56,10 @@ NAN_METHOD(OCRHMMDecoder::New) {
 		worker.classifier,
 		worker.vocabulary,
 		worker.transition_probabilities_table,
-		worker.emission_probabilities_table,
-		worker.mode
+		worker.emission_probabilities_table
+#if CV_MINOR_VERSION > 0
+		, worker.mode
+#endif
 	);
 
 	self->Wrap(info.Holder());
@@ -88,12 +88,16 @@ public:
 	}
 
 	const char* execute() {
+#if CV_MINOR_VERSION > 0
 		if (mask.empty()) {
 			output_text = decoder->run(img, min_confidence, component_level);
 		}
 		else {
 			output_text = decoder->run(img, mask, min_confidence, component_level);
 		}
+#else
+		decoder->run(img, output_text);
+#endif
 		return "";
 	}
 
@@ -108,12 +112,14 @@ public:
 		);
 	}
 
+#if CV_MINOR_VERSION > 0
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
 			Mat::Converter::optArg(2, &mask, info) ||
 			IntConverter::optArg(3, &component_level, info)
 		);
 	}
+#endif
 };
 
 NAN_METHOD(OCRHMMDecoder::Run) {
@@ -139,12 +145,16 @@ public:
 
 
 	const char* execute() {
+#if CV_MINOR_VERSION > 0
 		if (mask.empty()) {
 			decoder->run(img, output_text, &component_rects, &component_texts, &component_confidences, component_level);
 		}
 		else {
 			decoder->run(img, mask, output_text, &component_rects, &component_texts, &component_confidences, component_level);
 		}
+#else
+		decoder->run(img, output_text, &component_rects, &component_texts, &component_confidences, component_level);
+#endif
 		return "";
 	}
 

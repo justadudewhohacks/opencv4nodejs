@@ -1,20 +1,20 @@
 #ifdef HAVE_TEXT
 
 #include "text.h"
-#include "OCRHMMClassifier.h"
-#include "OCRHMMDecoder.h"
 #include "Workers.h"
 #include "Mat.h"
 
 NAN_MODULE_INIT(Text::Init) {
 	OCRHMMDecoder::Init(target);
 	OCRHMMClassifier::Init(target);
-	Nan::SetMethod(target, "loadOCRHMMClassifierCNN", LoadOCRHMMClassifierCNN);
-	Nan::SetMethod(target, "loadOCRHMMClassifierCNNAsync", LoadOCRHMMClassifierCNNAsync);
 	Nan::SetMethod(target, "loadOCRHMMClassifierNM", LoadOCRHMMClassifierNM);
 	Nan::SetMethod(target, "loadOCRHMMClassifierNMAsync", LoadOCRHMMClassifierNMAsync);
+#if CV_MINOR_VERSION > 0
+	Nan::SetMethod(target, "loadOCRHMMClassifierCNN", LoadOCRHMMClassifierCNN);
+	Nan::SetMethod(target, "loadOCRHMMClassifierCNNAsync", LoadOCRHMMClassifierCNNAsync);
 	Nan::SetMethod(target, "createOCRHMMTransitionsTable", CreateOCRHMMTransitionsTable);
 	Nan::SetMethod(target, "createOCRHMMTransitionsTableAsync", CreateOCRHMMTransitionsTableAsync);
+#endif
 }
 
 struct Text::LoadOCRHMMClassifierWorker : public SimpleWorker {
@@ -51,6 +51,8 @@ NAN_METHOD(Text::LoadOCRHMMClassifierNMAsync) {
 	LoadOCRHMMClassifierNMWorker worker;
 	FF_WORKER_ASYNC("Text::LoadOCRHMMClassifierNMAsync", LoadOCRHMMClassifierWorker, worker);
 }
+
+#if CV_MINOR_VERSION > 0
 
 struct Text::LoadOCRHMMClassifierCNNWorker : public LoadOCRHMMClassifierWorker {
 	const char* execute() {
@@ -105,5 +107,7 @@ NAN_METHOD(Text::CreateOCRHMMTransitionsTableAsync) {
 	CreateOCRHMMTransitionsTableWorker worker;
 	FF_WORKER_ASYNC("Text::CreateOCRHMMTransitionsTableAsync", CreateOCRHMMTransitionsTableWorker, worker);
 }
+
+#endif
 
 #endif

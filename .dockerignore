@@ -9,3 +9,4 @@ ci/coverage-report
 !data/got.jpg
 !data/Lenna.png
 !data/traffic.mp4
+!data/text-models

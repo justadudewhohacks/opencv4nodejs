@@ -1,6 +1,10 @@
 const cv = require('../');
 const path = require('path');
 
+if (!cv.xmodules.text) {
+  return console.log('exiting: opencv4nodejs compiled without text module');
+}
+
 const dataPath = path.resolve('../data/text-data/');
 const modelsPath = path.resolve('../data/text-models');
 const beamSearchModel = path.resolve(modelsPath, 'OCRBeamSearch_CNN_model_data.xml.gz');
