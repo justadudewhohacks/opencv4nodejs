@@ -150,6 +150,11 @@ describe('features2d', () => {
     detectorTests(() => testImg, defaults, customProps, Detector);
   });
 
+  describe('SimpleBlobDetector', () => {
+    const Detector = new cv.SimpleBlobDetector(new cv.SimpleBlobDetectorParams());
+    detectorTests(() => testImg, null, null, Detector, false);
+  });
+
   describe('drawing', () => {
     let kps;
 

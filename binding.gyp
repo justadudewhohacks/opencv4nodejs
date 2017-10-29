@@ -77,6 +77,8 @@
 			"cc/modules/features2d/detectors/KAZEDetector.cc",
 			"cc/modules/features2d/detectors/MSERDetector.cc",
 			"cc/modules/features2d/detectors/ORBDetector.cc",
+			"cc/modules/features2d/detectors/SimpleBlobDetector.cc",
+			"cc/modules/features2d/detectors/SimpleBlobDetectorParams.cc",
 			"cc/modules/xfeatures2d/xfeatures2d.cc",
 			"cc/modules/xfeatures2d/SIFTDetector.cc",
 			"cc/modules/xfeatures2d/SURFDetector.cc"
