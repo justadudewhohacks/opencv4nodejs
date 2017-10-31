@@ -3,23 +3,22 @@ const fs = require('fs');
 const path = require('path');
 
 const {
+  assertDataDeepEquals,
+  assertError,
+  assertMetaData,
+  _asyncFuncShouldRequireArgs,
+  funcShouldRequireArgs,
   getTestImagePath,
   clearTmpData,
   getTmpDataFilePath,
   fileExists,
   readTestImage
 } = global.utils;
-const {
-  assertDataDeepEquals,
-  assertError,
-  assertMetaData,
-  _asyncFuncShouldRequireArgs,
-  funcShouldRequireArgs
-} = global.utils;
 
 const { assert, expect } = require('chai');
 
 const videoCaptureTests = require('./videoCaptureTests');
+const videoWriterTests = require('./videoWriterTests');
 
 describe('io', () => {
   let lenna;
@@ -40,6 +39,7 @@ describe('io', () => {
   // TODO: setup opencv on travis with codecs correctly
   if (!process.env.DOCKER_BUILD && !process.env.BINDINGS_DEBUG) {
     videoCaptureTests();
+    videoWriterTests();
   }
 
   describe('imread', () => {

@@ -1,6 +1,5 @@
 const cv = global.dut;
 const {
-  assertError,
   assertMetaData,
   getTestVideoPath
 } = global.utils;

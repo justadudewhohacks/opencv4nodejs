@@ -1,9 +1,13 @@
 #include "io.h"
 #include "VideoCapture.h"
+#include "VideoWriter.h"
 #include "Workers.h"
 #include <iostream>
 
 NAN_MODULE_INIT(Io::Init) {
+	VideoCapture::Init(target);
+	VideoWriter::Init(target);
+
   Nan::SetMethod(target, "imread", Imread);
   Nan::SetMethod(target, "imshow", Imshow);
 	Nan::SetMethod(target, "imshowWait", ImshowWait);
@@ -63,8 +67,6 @@ NAN_MODULE_INIT(Io::Init) {
 	FF_SET_JS_PROP(target, IMWRITE_PNG_STRATEGY_HUFFMAN_ONLY, Nan::New<v8::Integer>(cv::IMWRITE_PNG_STRATEGY_HUFFMAN_ONLY));
 	FF_SET_JS_PROP(target, IMWRITE_PNG_STRATEGY_RLE, Nan::New<v8::Integer>(cv::IMWRITE_PNG_STRATEGY_RLE));
 	FF_SET_JS_PROP(target, IMWRITE_PNG_STRATEGY_FIXED, Nan::New<v8::Integer>(cv::IMWRITE_PNG_STRATEGY_FIXED));
-
-	VideoCapture::Init(target);
 };
 
 NAN_METHOD(Io::Imread) {
