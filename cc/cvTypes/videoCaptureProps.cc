@@ -84,5 +84,7 @@ void VideoCaptureProps::Init(v8::Local<v8::Object> target) {
 
 	FF_SET_CV_CONSTANT(target, VIDEOWRITER_PROP_QUALITY);
 	FF_SET_CV_CONSTANT(target, VIDEOWRITER_PROP_FRAMEBYTES);
+#if CV_VERSION_MINOR > 0
 	FF_SET_CV_CONSTANT(target, VIDEOWRITER_PROP_NSTRIPES);
+#endif
 }
