@@ -43,3 +43,10 @@ cap.get(Int property)
 ``` javascript
 cap.set(Int property, Number value)
 ```
+
+<a name="release"></a>
+
+### release
+``` javascript
+cap.release()
+```

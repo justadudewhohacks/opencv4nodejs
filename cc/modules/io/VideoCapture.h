@@ -17,6 +17,7 @@ public:
 	static NAN_METHOD(ReadAsync);
 	static NAN_METHOD(Get);
 	static NAN_METHOD(Set);
+	static NAN_METHOD(Release);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
