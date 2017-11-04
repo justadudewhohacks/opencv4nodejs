@@ -1,4 +1,4 @@
-#include "macros.h"
+#include "Converters.h"
 #include <opencv2/core.hpp>
 
 #ifndef __FF_MOMENTS_H__
@@ -44,6 +44,15 @@ public:
 	static NAN_METHOD(HuMoments);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::Moments* getNativeObjectPtr() { return &moments; }
+	cv::Moments getNativeObject() { return moments; }
+
+	typedef InstanceConverter<Moments, cv::Moments> Converter;
+
+	static const char* getClassName() {
+		return "Moments";
+	}
 };
 
 #endif

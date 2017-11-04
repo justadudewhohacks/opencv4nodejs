@@ -36,14 +36,33 @@ public:
 	static NAN_METHOD(GetDataAsArray);
 	static NAN_METHOD(GetRegion);
 	static NAN_METHOD(Row);
+
+	struct CopyWorker;
 	static NAN_METHOD(Copy);
+	static NAN_METHOD(CopyAsync);
+
+	struct CopyToWorker;
 	static NAN_METHOD(CopyTo);
+	static NAN_METHOD(CopyToAsync);
+
+	struct ConvertToWorker;
 	static NAN_METHOD(ConvertTo);
+	static NAN_METHOD(ConvertToAsync);
+
 	static NAN_METHOD(Norm);
 	static NAN_METHOD(Normalize);
+
+	struct SplitChannelsWorker;
 	static NAN_METHOD(SplitChannels);
+	static NAN_METHOD(SplitChannelsAsync);
+
+	struct AddWeightedWorker;
 	static NAN_METHOD(AddWeighted);
+	static NAN_METHOD(AddWeightedAsync);
+
+	struct MinMaxLocWorker;
 	static NAN_METHOD(MinMaxLoc);
+	static NAN_METHOD(MinMaxLocAsync);
 
 	FF_INIT_MAT_OPERATIONS();
 	static NAN_METHOD(Dot) {
@@ -68,9 +87,16 @@ public:
 
 	/* imgproc */
 
-  static NAN_METHOD(Rescale);
+	struct BaseResizeWorker;
+	struct RescaleWorker;
+	static NAN_METHOD(Rescale);
+	static NAN_METHOD(RescaleAsync);
+	struct ResizeWorker;
   static NAN_METHOD(Resize);
+	static NAN_METHOD(ResizeAsync);
+	struct ResizeToMaxWorker;
   static NAN_METHOD(ResizeToMax);
+	static NAN_METHOD(ResizeToMaxAsync);
 
 
 	struct ThresholdWorker;
@@ -85,8 +111,12 @@ public:
 	static NAN_METHOD(InRange);
 	static NAN_METHOD(InRangeAsync);
 
+	struct CvtColorWorker;
 	static NAN_METHOD(CvtColor);
+	static NAN_METHOD(CvtColorAsync);
+	struct BgrToGrayWorker;
 	static NAN_METHOD(BgrToGray);
+	static NAN_METHOD(BgrToGrayAsync);
 
 	struct WarpWorker;
 	struct WarpAffineWorker;
@@ -107,8 +137,12 @@ public:
 	static NAN_METHOD(MorphologyEx);
 	static NAN_METHOD(MorphologyExAsync);
 
+	struct DistanceTransformWorker;
 	static NAN_METHOD(DistanceTransform);
+	static NAN_METHOD(DistanceTransformAsync);
+	struct DistanceTransformWithLabelsWorker;
 	static NAN_METHOD(DistanceTransformWithLabels);
+	static NAN_METHOD(DistanceTransformWithLabelsAsync);
 
 	struct BlurWorker;
 	static NAN_METHOD(Blur);
@@ -121,11 +155,24 @@ public:
 	struct MedianBlurWorker;
 	static NAN_METHOD(MedianBlur);
 	static NAN_METHOD(MedianBlurAsync);
+
+	struct ConnectedComponentsWorker;
 	static NAN_METHOD(ConnectedComponents);
+	static NAN_METHOD(ConnectedComponentsAsync);
+	struct ConnectedComponentsWithStatsWorker;
 	static NAN_METHOD(ConnectedComponentsWithStats);
+	static NAN_METHOD(ConnectedComponentsWithStatsAsync);
+
+	struct GrabCutWorker;
 	static NAN_METHOD(GrabCut);
+	static NAN_METHOD(GrabCutAsync);
+	struct MomentsWorker;
 	static NAN_METHOD(_Moments);
+	static NAN_METHOD(_MomentsAsync);
+	struct FindContoursWorker;
 	static NAN_METHOD(FindContours);
+	static NAN_METHOD(FindContoursAsync);
+
 	static NAN_METHOD(DrawContours);
 	static NAN_METHOD(DrawLine);
 	static NAN_METHOD(DrawCircle);
