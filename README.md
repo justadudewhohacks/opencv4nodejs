@@ -385,6 +385,9 @@ try {
 * <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/photo.md"><b>photo</b></a>
 * <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/features2d/"><b>features2d</b></a>
 * <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/xfeatures2d/"><b>xfeatures2d</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/tracking/"><b>tracking</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/text/"><b>text</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/face/"><b>face</b></a>
 
 <a name="request-features"></a>
 
