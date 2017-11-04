@@ -22,6 +22,9 @@
 #ifdef HAVE_TEXT
 #include "modules/text/text.h"
 #endif // HAVE_TEXT
+#ifdef HAVE_FACE
+#include "modules/face/face.h"
+#endif // HAVE_FACE
 
 void init(v8::Local<v8::Object> target) {
 	v8::Local<v8::Object> version = Nan::New<v8::Object>();
@@ -58,6 +61,10 @@ void init(v8::Local<v8::Object> target) {
 	Nan::Set(xmodules, FF_NEW_STRING("text"), Nan::New(true));
 	Text::Init(target);
 #endif // HAVE_TEXT
+#ifdef HAVE_FACE
+	Nan::Set(xmodules, FF_NEW_STRING("face"), Nan::New(true));
+	Face::Init(target);
+#endif // HAVE_FACE
 
 };
 
