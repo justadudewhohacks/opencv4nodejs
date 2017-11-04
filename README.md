@@ -347,19 +347,25 @@ cv.imreadAsync('./faceimg.jpg', (err, img) => {
 
 // via Promise
 cv.imreadAsync('./faceimg.jpg')
-  .then(img => classifier.detectMultiScaleAsync(img.bgrToGray()).then(res => ({ res, img })))
-  .then(({ res, img }) => {
-    const { objects, numDetections } = res;
-    ...
-  })
+  .then(img =>
+    img.bgrToGrayAsync()
+      .then(grayImg => classifier.detectMultiScaleAsync(grayImg))
+      .then((res) => {
+        const { objects, numDetections } = res;
+        ...
+      })
+  )
   .catch(err => console.error(err));
 
 // using async await
-const img = await cv.imreadAsync('./faceimg.jpg');
-const grayImg = img.bgrToGray();
-const { objects, numDetections } = await classifier.detectMultiScaleAsync(grayImg);
-...
-
+try {
+  const img = await cv.imreadAsync('./faceimg.jpg');
+  const grayImg = await img.bgrToGrayAsync();
+  const { objects, numDetections } = await classifier.detectMultiScaleAsync(grayImg);
+  ...
+} catch (err) {
+  console.error(err);
+}
 ```
 
 <a name="available-modules"></a>
