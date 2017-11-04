@@ -1,20 +1,61 @@
 const cv = global.dut;
+const { generateAPITests } = global.utils;
 const { expect } = require('chai');
 
 module.exports = () => {
+  // apparently cv version minor < 2 does not consider image borders
+  const contoursData = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 0, 0, 1, 0, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0, 0, 1, 0, 0],
+    [0, 1, 0, 1, 0, 0, 0, 0, 0],
+    [0, 1, 0, 1, 0, 1, 1, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 1, 1, 1, 0, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+  ];
+  const contoursImg = new cv.Mat(contoursData, cv.CV_8U);
+  const mode = cv.RETR_EXTERNAL;
+  const findContoursMethod = cv.CHAIN_APPROX_NONE;
+
+  describe('findContours', () => {
+    const expectOutput = (contours) => {
+      expect(contours).to.be.an('array').lengthOf(3);
+
+      contours.forEach((contour) => {
+        expect(contour).to.have.property('hierarchy');
+        expect(contour).to.have.property('numPoints');
+        expect(contour).to.have.property('area');
+        expect(contour).to.have.property('isConvex');
+      });
+
+      expect(contours.some(c => c.area === 2)).to.be.true;
+      expect(contours.some(c => c.area === 4)).to.be.true;
+      expect(contours.some(c => c.area === 12)).to.be.true;
+
+      expect(contours.some(c => c.numPoints === 4)).to.be.true;
+      expect(contours.some(c => c.numPoints === 8)).to.be.true;
+      expect(contours.some(c => c.numPoints === 16)).to.be.true;
+    };
+
+    const offset = new cv.Point(0, 0);
+    generateAPITests({
+      getDut: () => contoursImg,
+      methodName: 'findContours',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        mode,
+        findContoursMethod
+      ]),
+      getOptionalArgs: () => ([
+        offset
+      ]),
+      expectOutput
+    });
+  });
+
   describe('Contour', () => {
-    // apparently minor < 2 does not consider image borders
-    const contoursData = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 0, 0, 1, 0, 0],
-      [0, 1, 0, 1, 0, 1, 0, 1, 0],
-      [0, 1, 0, 1, 0, 0, 1, 0, 0],
-      [0, 1, 0, 1, 0, 0, 0, 0, 0],
-      [0, 1, 0, 1, 0, 1, 1, 1, 0],
-      [0, 1, 0, 1, 0, 1, 0, 1, 0],
-      [0, 1, 1, 1, 0, 1, 1, 1, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ];
     const convexityDefectsData = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 1, 1, 1, 0, 1, 1, 1, 0],
@@ -26,7 +67,6 @@ module.exports = () => {
       [0, 1, 1, 1, 0, 1, 1, 1, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0]
     ];
-    const contoursImg = new cv.Mat(contoursData, cv.CV_8U);
     const convexityDefectsImg = new cv.Mat(convexityDefectsData, cv.CV_8U);
 
     let contours;
@@ -35,41 +75,11 @@ module.exports = () => {
     let rightBottomContour;
 
     before(() => {
-      const mode = cv.RETR_EXTERNAL;
-      const method = cv.CHAIN_APPROX_NONE;
-
-      contours = contoursImg.findContours(mode, method);
-      convexityDefectsContours = convexityDefectsImg.findContours(mode, method);
+      contours = contoursImg.findContours(mode, findContoursMethod);
+      convexityDefectsContours = convexityDefectsImg.findContours(mode, findContoursMethod);
       const sortedByArea = contours.sort((c0, c1) => c1.area - c0.area);
       leftmostContour = sortedByArea[0];
       rightBottomContour = sortedByArea[1];
-    });
-
-    describe('findContours', () => {
-      it('should find contours', () => {
-        expect(contours).to.be.an('array').lengthOf(3);
-      });
-
-      it('should have contour properties', () => {
-        contours.forEach((contour) => {
-          expect(contour).to.have.property('hierarchy');
-          expect(contour).to.have.property('numPoints');
-          expect(contour).to.have.property('area');
-          expect(contour).to.have.property('isConvex');
-        });
-      });
-
-      it('should calculate correct area', () => {
-        expect(contours.some(c => c.area === 2)).to.be.true;
-        expect(contours.some(c => c.area === 4)).to.be.true;
-        expect(contours.some(c => c.area === 12)).to.be.true;
-      });
-
-      it('should contain correct number of points', () => {
-        expect(contours.some(c => c.numPoints === 4)).to.be.true;
-        expect(contours.some(c => c.numPoints === 8)).to.be.true;
-        expect(contours.some(c => c.numPoints === 16)).to.be.true;
-      });
     });
 
     describe('approxPolyDP', () => {

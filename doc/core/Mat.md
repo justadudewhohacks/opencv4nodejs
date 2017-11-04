@@ -135,6 +135,14 @@ Mat : mat.getRegion(Rect region)
 Mat : mat.copy(Mat mask = null)
 ```
 
+<a name="copyAsync"></a>
+
+### copyAsync
+``` javascript
+mat.copyAsync(callback(Error err, Mat result))
+mat.copyAsync(Mat mask, callback(Error err, Mat result))
+```
+
 <a name="copyTo"></a>
 
 ### copyTo
@@ -142,11 +150,28 @@ Mat : mat.copy(Mat mask = null)
 Mat : mat.copyTo(Mat dst, Mat mask = null)
 ```
 
+<a name="copyToAsync"></a>
+
+### copyToAsync
+``` javascript
+mat.copyToAsync(Mat dst, callback(Error err, Mat result))
+mat.copyToAsync(Mat dst, Mat mask, callback(Error err, Mat result))
+```
+
 <a name="convertTo"></a>
 
 ### convertTo
 ``` javascript
 Mat : mat.convertTo(Uint type, Number alpha = 1.0, Number beta = 0.0)
+```
+
+<a name="convertToAsync"></a>
+
+### convertToAsync
+``` javascript
+mat.convertToAsync(Uint type, callback(Error err, Mat result))
+mat.convertToAsync(Uint type, ...opts, callback(Error err, Mat result))
+mat.convertToAsync(Uint type, { opts }, callback(Error err, Mat result))
 ```
 
 <a name="norm"></a>
@@ -171,11 +196,26 @@ Mat : mat.normalize(Number alpha = 1.0, Number beta = 0.0, Uint normType = NORM_
 [Mat] : mat.splitChannels()
 ```
 
+<a name="splitChannelsAsync"></a>
+
+### splitChannelsAsync
+``` javascript
+mat.splitChannelsAsync(callback(Error err, [Mat] result))
+```
+
 <a name="addWeighted"></a>
 
 ### addWeighted
 ``` javascript
-Mat : mat.addWeighted(Number alpha, Mat mat2, Number beta,  Number gamma, Int dtype = -1)
+Mat : mat.addWeighted(Number alpha, Mat mat2, Number beta, Number gamma, Int dtype = -1)
+```
+
+<a name="addWeightedAsync"></a>
+
+### addWeightedAsync
+``` javascript
+mat.addWeightedAsync(Number alpha, Mat mat2, Number beta, Number gamma, callback(Error err, Mat result))
+mat.addWeightedAsync(Number alpha, Mat mat2, Number beta, Number gamma, Int dtype, callback(Error err, Mat result))
 ```
 
 <a name="minMaxLoc"></a>
@@ -183,6 +223,14 @@ Mat : mat.addWeighted(Number alpha, Mat mat2, Number beta,  Number gamma, Int dt
 ### minMaxLoc
 ``` javascript
 { minVal: Number, maxVal: Number, minLoc: Point2, maxLoc: Point2 } : mat.minMaxLoc(Mat mask = noArray())
+```
+
+<a name="minMaxLocAsync"></a>
+
+### minMaxLocAsync
+``` javascript
+mat.minMaxLocAsync(callback(Error err, { minVal: Number, maxVal: Number, minLoc: Point2, maxLoc: Point2 } result))
+mat.minMaxLocAsync(Mat mask, callback(Error err, { minVal: Number, maxVal: Number, minLoc: Point2, maxLoc: Point2 } result))
 ```
 
 <a name="dct"></a>
@@ -265,11 +313,25 @@ mat.mulSpectrumsAsync(Mat mat2, { opts }, callback(Error err, Mat result))
 Mat : mat.rescale(Number factor)
 ```
 
-<a name="rescale"></a>
+<a name="rescaleAsync"></a>
+
+### rescaleAsync
+``` javascript
+mat.rescaleAsync(Number factor, callback(Error err, Mat result))
+```
+
+<a name="resize"></a>
 
 ### resize
 ``` javascript
 Mat : mat.resize(Uint rows, Uint cols)
+```
+
+<a name="resizeAsync"></a>
+
+### resizeAsync
+``` javascript
+mat.resizeAsync(Uint rows, Uint cols, callback(Error err, Mat result))
 ```
 
 <a name="resizeToMax"></a>
@@ -277,6 +339,13 @@ Mat : mat.resize(Uint rows, Uint cols)
 ### resizeToMax
 ``` javascript
 Mat : mat.resizeToMax(Uint maxRowsOrCols)
+```
+
+<a name="resizeToMaxAsync"></a>
+
+### resizeToMaxAsync
+``` javascript
+mat.resizeToMaxAsync(Uint maxRowsOrCols, callback(Error err, Mat result))
 ```
 
 <a name="threshold"></a>
@@ -328,11 +397,26 @@ mat.inRangeAsync(Vec3 lower, Vec3 upper, callback(Error err, Mat result))
 Mat : mat.cvtColor(Uint code, Uint dstCn = 0)
 ```
 
+<a name="cvtColorAsync"></a>
+
+### cvtColorAsync
+``` javascript
+mat.cvtColorAsync(Uint code, callback(Error err, Mat result))
+mat.cvtColorAsync(Uint code, Uint dstCn, callback(Error err, Mat result))
+```
+
 <a name="bgrToGray"></a>
 
 ### bgrToGray
 ``` javascript
 Mat : mat.bgrToGray()
+```
+
+<a name="bgrToGrayAsync"></a>
+
+### bgrToGrayAsync
+``` javascript
+mat.bgrToGrayAsync(callback(Error err, Mat result))
 ```
 
 <a name="warpAffine"></a>
@@ -422,11 +506,27 @@ mat.morphologyExAsync(Mat kernel, Int morphType, { opts }, callback(Error err, M
 Mat : mat.distanceTransform(Uint distanceType, Uint maskSize, Uint dstType = CV_32F)
 ```
 
+<a name="distanceTransformAsync"></a>
+
+### distanceTransformAsync
+``` javascript
+mat.distanceTransformAsync(Uint distanceType, Uint maskSize, callback(Error err, Mat result))
+mat.distanceTransformAsync(Uint distanceType, Uint maskSize, Uint dstType, callback(Error err, Mat result))
+```
+
 <a name="distanceTransformWithLabels"></a>
 
 ### distanceTransformWithLabels
 ``` javascript
 { labels: Mat, dist: Mat } : mat.distanceTransformWithLabels(Uint distanceType, Uint maskSize, Uint labelType = DIST_LABEL_CCOMP)
+```
+
+<a name="distanceTransformWithLabelsAsync"></a>
+
+### distanceTransformWithLabelsAsync
+``` javascript
+mat.distanceTransformWithLabelsAsync(Uint distanceType, Uint maskSize, callback(Error err, { labels: Mat, dist: Mat } result))
+mat.distanceTransformWithLabelsAsync(Uint distanceType, Uint maskSize, Uint labelType, callback(Error err, { labels: Mat, dist: Mat } result))
 ```
 
 <a name="blur"></a>
@@ -440,9 +540,9 @@ Mat : mat.blur(Size kSize, Point2 anchor = new Point2(-1, -1), Uint borderType =
 
 ### blurAsync
 ``` javascript
-mat.blurAsync(Size kSize, callback(Error err, Mat res))
-mat.blurAsync(Size kSize, ...opts, callback(Error err, Mat res))
-mat.blurAsync(Size kSize, { opts }, callback(Error err, Mat res))
+mat.blurAsync(Size kSize, callback(Error err, Mat result))
+mat.blurAsync(Size kSize, ...opts, callback(Error err, Mat result))
+mat.blurAsync(Size kSize, { opts }, callback(Error err, Mat result))
 ```
 
 <a name="gaussianBlur"></a>
@@ -456,9 +556,9 @@ Mat : mat.gaussianBlur(Size kSize, Number sigmaX, Number sigmaY = 0.0, Uint bord
 
 ### gaussianBlurAsync
 ``` javascript
-mat.gaussianBlurAsync(Size kSize, Number sigmaX, callback(Error err, Mat res))
-mat.gaussianBlurAsync(Size kSize, Number sigmaX, ...opts, callback(Error err, Mat res))
-mat.gaussianBlurAsync(Size kSize, Number sigmaX, { opts }, callback(Error err, Mat res))
+mat.gaussianBlurAsync(Size kSize, Number sigmaX, callback(Error err, Mat result))
+mat.gaussianBlurAsync(Size kSize, Number sigmaX, ...opts, callback(Error err, Mat result))
+mat.gaussianBlurAsync(Size kSize, Number sigmaX, { opts }, callback(Error err, Mat result))
 ```
 
 <a name="medianBlur"></a>
@@ -472,7 +572,7 @@ Mat : mat.medianBlur(Int kSize)
 
 ### medianBlurAsync
 ``` javascript
-mat.medianBlurAsync(Int kSize, callback(Error err, Mat res))
+mat.medianBlurAsync(Int kSize, callback(Error err, Mat result))
 ```
 
 <a name="connectedComponents"></a>
@@ -482,11 +582,29 @@ mat.medianBlurAsync(Int kSize, callback(Error err, Mat res))
 Mat : mat.connectedComponents(Uint connectivity = 8, Uint ltype = CV_32S)
 ```
 
+<a name="connectedComponentsAsync"></a>
+
+### connectedComponentsAsync
+``` javascript
+mat.connectedComponentsAsync(callback(Error err, Mat result))
+mat.connectedComponentsAsync(Uint connectivity, callback(Error err, Mat result))
+mat.connectedComponentsAsync(Uint connectivity, Uint ltype, callback(Error err, Mat result))
+```
+
 <a name="connectedComponentsWithStats"></a>
 
 ### connectedComponentsWithStats
 ``` javascript
 { labels: Mat, stats: Mat, centroids: Mat } : mat.connectedComponentsWithStats(Uint connectivity = 8, Uint ltype = CV_32S)
+```
+
+<a name="connectedComponentsWithStatsAsync"></a>
+
+### connectedComponentsWithStatsAsync
+``` javascript
+mat.connectedComponentsWithStatsAsync(callback(Error err, { labels: Mat, stats: Mat, centroids: Mat } result))
+mat.connectedComponentsWithStatsAsync(Uint connectivity, callback(Error err, { labels: Mat, stats: Mat, centroids: Mat } result))
+mat.connectedComponentsWithStatsAsync(Uint connectivity, Uint ltype, callback(Error err, { labels: Mat, stats: Mat, centroids: Mat } result))
 ```
 
 <a name="grabCut"></a>
@@ -496,6 +614,13 @@ Mat : mat.connectedComponents(Uint connectivity = 8, Uint ltype = CV_32S)
 mat.grabCut(Mat mask, Rect rect, Mat bgdModel, Mat fgdModel, Int iterCount, Int mode)
 ```
 
+<a name="grabCutAsync"></a>
+
+### grabCutAsync
+``` javascript
+mat.grabCutAsync(Mat mask, Rect rect, Mat bgdModel, Mat fgdModel, Int iterCount, Int mode, callback(Error err))
+```
+
 <a name="findContours"></a>
 
 ### findContours
@@ -503,11 +628,26 @@ mat.grabCut(Mat mask, Rect rect, Mat bgdModel, Mat fgdModel, Int iterCount, Int 
 [Contour] : mat.findContours(Uint mode, Uint method, Point2 offset = new Point2(0, 0))
 ```
 
+<a name="findContoursAsync"></a>
+
+### findContoursAsync
+``` javascript
+mat.findContoursAsync(Uint mode, Uint method, callback(Error err, [Contour] result))
+mat.findContoursAsync(Uint mode, Uint method, Point2 offset, callback(Error err, [Contour] result))
+```
+
 <a name="moments"></a>
 
 ### moments
 ``` javascript
 Moments : mat.moments()
+```
+
+<a name="momentsAsync"></a>
+
+### momentsAsync
+``` javascript
+mat.momentsAsync(callback(Error err, Moments result))
 ```
 
 <a name="drawContours"></a>

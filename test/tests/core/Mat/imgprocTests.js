@@ -2,12 +2,12 @@ const cv = global.dut;
 
 const {
   generateAPITests,
-  assertError,
   asyncFuncShouldRequireArgs,
   funcShouldRequireArgs,
   _funcShouldRequireArgs,
   assertMetaData,
   assertDataDeepEquals,
+  assertMatValueEquals,
   dangerousDeepEquals,
   isZeroMat
 } = global.utils;
@@ -22,30 +22,94 @@ const rgbMatData = [
 const rgbMat = new cv.Mat(rgbMatData, cv.CV_8UC3);
 
 module.exports = (getTestImg) => {
+  describe('resizing', () => {
+    describe('rescale', () => {
+      const mat = new cv.Mat(16, 16, cv.CV_8UC3);
+      const factor = 2.0;
+
+      const expectOutput = (res) => {
+        assertMetaData(res)(mat.rows * 2, mat.cols * 2, cv.CV_8UC3);
+      };
+
+      generateAPITests({
+        getDut: () => mat,
+        methodName: 'rescale',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          factor
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('resize', () => {
+      const rows = 8;
+      const cols = 8;
+      const mat = new cv.Mat(16, 16, cv.CV_8UC3);
+
+      const expectOutput = (res) => {
+        assertMetaData(res)(rows, cols, cv.CV_8UC3);
+      };
+
+      generateAPITests({
+        getDut: () => mat,
+        methodName: 'resize',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          rows,
+          cols
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('resizeToMax', () => {
+      const mat = new cv.Mat(16, 32, cv.CV_8UC3);
+      const maxRowsOrCols = 8;
+
+      const expectOutput = (res) => {
+        assertMetaData(res)(4, 8, cv.CV_8UC3);
+      };
+
+      generateAPITests({
+        getDut: () => mat,
+        methodName: 'resizeToMax',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          maxRowsOrCols
+        ]),
+        expectOutput
+      });
+    });
+  });
+
   describe('bgrToGray', () => {
-    it('should convert mat to gray scale', () => {
-      const converted = rgbMat.bgrToGray();
-      assertMetaData(converted)(rgbMat.rows, rgbMat.cols, cv.CV_8U);
-      expect(dangerousDeepEquals(converted.getDataAsArray(), rgbMatData)).to.be.false;
+    const expectOutput = (res) => {
+      assertMetaData(res)(rgbMat.rows, rgbMat.cols, cv.CV_8U);
+    };
+
+    generateAPITests({
+      getDut: () => rgbMat,
+      methodName: 'bgrToGray',
+      methodNameSpace: 'Mat',
+      expectOutput
     });
   });
 
   describe('cvtColor', () => {
-    funcShouldRequireArgs((() => new cv.Mat().cvtColor.bind(new cv.Mat()))());
+    const expectOutput = (res) => {
+      assertMetaData(res)(rgbMat.rows, rgbMat.cols, cv.CV_8UC3);
+      expect(dangerousDeepEquals(res.getDataAsArray(), rgbMatData)).to.be.false;
+    };
 
-    it('can be called if required args passed', () => {
-      expect(() => rgbMat.cvtColor(cv.COLOR_BGR2Lab)).to.not.throw();
-    });
-
-    it('should throw if code invalid', () => {
-      assertError(() => rgbMat.cvtColor(undefined), 'Mat::CvtColor - expected arg 0 to be of type: UINT');
-      assertError(() => rgbMat.cvtColor(null), 'Mat::CvtColor - expected arg 0 to be of type: UINT');
-    });
-
-    it('should convert color', () => {
-      const converted = rgbMat.cvtColor(cv.COLOR_BGR2Lab);
-      assertMetaData(converted)(rgbMat.rows, rgbMat.cols, rgbMat.type);
-      expect(dangerousDeepEquals(converted.getDataAsArray(), rgbMatData)).to.be.false;
+    generateAPITests({
+      getDut: () => rgbMat,
+      methodName: 'cvtColor',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        cv.COLOR_BGR2Lab
+      ]),
+      expectOutput
     });
   });
 
@@ -96,7 +160,7 @@ module.exports = (getTestImg) => {
     describe('morphologyEx', () => {
       const expectOutput = (morphed) => {
         assertMetaData(mat)(morphed);
-      }
+      };
 
       const op = cv.MORPH_TOPHAT;
 
@@ -405,15 +469,63 @@ module.exports = (getTestImg) => {
     });
   });
 
-  describe.skip('distanceTransform', () => {
-    it('distanceTransform', () => {
-      expect(true).to.be.false;
-    });
-  });
+  describe('distanceTransform', () => {
+    const grayMat = new cv.Mat([
+      [0, 0, 0, 0, 0],
+      [0, 128, 255, 128, 0],
+      [0, 255, 255, 255, 0],
+      [0, 128, 255, 128, 0],
+      [0, 0, 0, 0, 0]
+    ], cv.CV_8U);
+    const distanceType = cv.DIST_L1;
+    const maskSize = 3;
 
-  describe.skip('distanceTransformWithLabels', () => {
-    it('distanceTransformWithLabels', () => {
-      expect(true).to.be.false;
+    describe('distanceTransform', () => {
+      const dstType = cv.CV_8U;
+
+      const expectOutput = (res, dut, args) => {
+        const assertType = args.length > 2 && args[2] === cv.CV_8U ? cv.CV_8U : cv.CV_32F;
+        assertMetaData(res)(grayMat.rows, grayMat.cols, assertType);
+      };
+
+      generateAPITests({
+        getDut: () => grayMat,
+        methodName: 'distanceTransform',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          distanceType,
+          maskSize
+        ]),
+        getOptionalArgs: () => ([
+          dstType
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('distanceTransformWithLabels', () => {
+      const distLabelType = cv.DIST_LABEL_PIXEL;
+
+      const expectOutput = (res) => {
+        expect(res).to.have.property('dst').instanceOf(cv.Mat);
+        expect(res).to.have.property('labels').instanceOf(cv.Mat);
+        assertMetaData(res.dst)(grayMat.rows, grayMat.cols, cv.CV_32F);
+        assertMetaData(res.labels)(grayMat.rows, grayMat.cols, cv.CV_32S);
+      };
+
+      generateAPITests({
+        getDut: () => grayMat,
+        methodName: 'distanceTransformWithLabels',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          distanceType,
+          maskSize
+        ]),
+        getOptionalArgs: () => ([
+          distLabelType
+        ]),
+        expectOutput
+      });
     });
   });
 
@@ -538,6 +650,77 @@ module.exports = (getTestImg) => {
     });
   });
 
+  describe('connectedComponents', () => {
+    const connectedComponentsMat = new cv.Mat([
+      [0, 255, 255, 255, 0],
+      [0, 255, 255, 255, 0],
+      [0, 255, 255, 255, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0]
+    ], cv.CV_8U);
+
+    const connectivity = 4;
+    const ltype = cv.CV_16U;
+
+    describe('connectedComponents', () => {
+      const expectOutput = (res, dut, args) => {
+        const assertType = (args[1] === cv.CV_16U || (args[0] && args[0].ltype === cv.CV_16U)) ? cv.CV_16U : cv.CV_32S;
+        assertMetaData(res)(connectedComponentsMat.rows, connectedComponentsMat.cols, assertType);
+      };
+
+      generateAPITests({
+        getDut: () => connectedComponentsMat,
+        methodName: 'connectedComponents',
+        methodNameSpace: 'Mat',
+        getOptionalArgsMap: () => ([
+          ['connectivity', connectivity],
+          ['ltype', ltype]
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('connectedComponentsWithStats', () => {
+      const expectOutput = (res, dut, args) => {
+        const assertType = (args[1] === cv.CV_16U || (args[0] && args[0].ltype === cv.CV_16U)) ? cv.CV_16U : cv.CV_32S;
+        expect(res).to.have.property('labels').instanceOf(cv.Mat);
+        expect(res).to.have.property('stats').instanceOf(cv.Mat);
+        expect(res).to.have.property('centroids').instanceOf(cv.Mat);
+        assertMetaData(res.labels)(connectedComponentsMat.rows, connectedComponentsMat.cols, assertType);
+        expect(isZeroMat(res.labels)).to.be.false;
+        const label0 = res.labels.at(0, 0);
+        const label255 = res.labels.at(0, 1);
+        const centroid = [
+          res.centroids.at(label255, 0),
+          res.centroids.at(label255, 1)
+        ];
+        const expectedCenter = [2, 1];
+        assertMatValueEquals(centroid, expectedCenter);
+        expect(res.stats.at(label255, cv.CC_STAT_LEFT)).to.equal(1);
+        expect(res.stats.at(label255, cv.CC_STAT_TOP)).to.equal(0);
+        expect(res.stats.at(label255, cv.CC_STAT_WIDTH)).to.equal(3);
+        expect(res.stats.at(label255, cv.CC_STAT_HEIGHT)).to.equal(3);
+        expect(res.stats.at(label255, cv.CC_STAT_AREA)).to.equal(9);
+        expect(res.stats.at(label0, cv.CC_STAT_LEFT)).to.equal(0);
+        expect(res.stats.at(label0, cv.CC_STAT_TOP)).to.equal(0);
+        expect(res.stats.at(label0, cv.CC_STAT_WIDTH)).to.equal(5);
+        expect(res.stats.at(label0, cv.CC_STAT_HEIGHT)).to.equal(5);
+        expect(res.stats.at(label0, cv.CC_STAT_AREA)).to.equal(16);
+      };
+
+      generateAPITests({
+        getDut: () => connectedComponentsMat,
+        methodName: 'connectedComponentsWithStats',
+        methodNameSpace: 'Mat',
+        getOptionalArgsMap: () => ([
+          ['connectivity', connectivity],
+          ['ltype', ltype]
+        ]),
+        expectOutput
+      });
+    });
+  });
+
   describe('grabCut', () => {
     const img = new cv.Mat([
       [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
@@ -547,39 +730,74 @@ module.exports = (getTestImg) => {
       [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
     ], cv.CV_8UC3);
 
-    funcShouldRequireArgs((() => img.grabCut.bind(img))());
+    const getMask = () => new cv.Mat([
+      [cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD],
+      [cv.GC_BGD, cv.GC_FGD, cv.GC_FGD, cv.GC_FGD, cv.GC_BGD],
+      [cv.GC_BGD, cv.GC_FGD, cv.GC_FGD, cv.GC_FGD, cv.GC_BGD],
+      [cv.GC_BGD, cv.GC_FGD, cv.GC_FGD, cv.GC_FGD, cv.GC_BGD],
+      [cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD]
+    ], cv.CV_8U);
+    const getBgdModel = () => new cv.Mat(1, 65, cv.CV_64F, 0);
+    const getFgdModel = () => new cv.Mat(1, 65, cv.CV_64F, 0);
+    const iterCount = 4;
 
-    it('can be called with mask', () => {
-      const mask = new cv.Mat([
-        [cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD],
-        [cv.GC_BGD, cv.GC_FGD, cv.GC_FGD, cv.GC_FGD, cv.GC_BGD],
-        [cv.GC_BGD, cv.GC_FGD, cv.GC_FGD, cv.GC_FGD, cv.GC_BGD],
-        [cv.GC_BGD, cv.GC_FGD, cv.GC_FGD, cv.GC_FGD, cv.GC_BGD],
-        [cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD]
-      ], cv.CV_8U);
+    describe('with mask', () => {
+      const expectOutput = (res, dut, args) => {
+        const bgdModel = args[2];
+        const fgdModel = args[3];
+        expect(isZeroMat(bgdModel)).to.be.false;
+        expect(isZeroMat(fgdModel)).to.be.false;
+      };
       const rect = new cv.Rect();
-      const bgdModel = new cv.Mat(1, 65, cv.CV_64F, 0);
-      const fgdModel = new cv.Mat(1, 65, cv.CV_64F, 0);
-      const iterCount = 4;
       const mode = cv.GC_INIT_WITH_MASK;
 
-      img.grabCut(mask, rect, bgdModel, fgdModel, iterCount, mode);
-      expect(isZeroMat(bgdModel)).to.be.false;
-      expect(isZeroMat(fgdModel)).to.be.false;
+      generateAPITests({
+        getDut: () => img,
+        methodName: 'grabCut',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          getMask(),
+          rect,
+          getBgdModel(),
+          getFgdModel(),
+          iterCount
+        ]),
+        getOptionalArgs: () => ([
+          mode
+        ]),
+        expectOutput
+      });
     });
 
-    it('can be called with roi rect', () => {
-      const mask = new cv.Mat(img.rows, img.cols, cv.CV_8U);
+    describe('with rect', () => {
+      const mask = getMask();
       const rect = new cv.Rect(1, 1, 3, 3);
-      const bgdModel = new cv.Mat(1, 65, cv.CV_64F, 0);
-      const fgdModel = new cv.Mat(1, 65, cv.CV_64F, 0);
-      const iterCount = 4;
+      const bgdModel = getBgdModel();
+      const fgdModel = getFgdModel();
       const mode = cv.GC_INIT_WITH_RECT;
 
       img.grabCut(mask, rect, bgdModel, fgdModel, iterCount, mode);
       expect(isZeroMat(mask)).to.be.false;
       expect(isZeroMat(bgdModel)).to.be.false;
       expect(isZeroMat(fgdModel)).to.be.false;
+    });
+  });
+
+  describe('moments', () => {
+    let grayImg;
+    before(() => {
+      grayImg = getTestImg().bgrToGray();
+    });
+
+    const isBinaryImg = true;
+    generateAPITests({
+      getDut: () => grayImg,
+      methodName: 'moments',
+      methodNameSpace: 'Mat',
+      getOptionalArgs: () => ([
+        isBinaryImg
+      ]),
+      expectOutput: res => expect(res).to.be.instanceOf(cv.Moments)
     });
   });
 

@@ -36,13 +36,13 @@ exports.generateAPITests = ({
   const hasOptArgs = !!getOptionalArgs().length;
   const hasOptArgsObject = getOptionalArgs().length > 1;
 
-  const expectOutputCallbacked = (done, dut) => (err, res) => {
-    expectOutput(res, dut);
+  const expectOutputCallbacked = (done, dut, args) => (err, res) => {
+    expectOutput(res, dut, args);
     done();
   };
 
-  const expectOutputPromisified = (done, dut) => (res) => {
-    expectOutput(res, dut);
+  const expectOutputPromisified = (done, dut, args) => (res) => {
+    expectOutput(res, dut, args);
     done();
   };
 
@@ -62,13 +62,13 @@ exports.generateAPITests = ({
       const dut = getDut();
       if (isPromised) {
         return dut[method].apply(dut, args)
-          .then(expectOutputPromisified(done, dut))
+          .then(expectOutputPromisified(done, dut, args))
           .catch(done);
       } else if (isCallbacked) {
-        args.push(expectOutputCallbacked(done, dut));
+        args.push(expectOutputCallbacked(done, dut, args));
         return dut[method].apply(dut, args);
       }
-      expectOutput(dut[method].apply(dut, args), dut);
+      expectOutput(dut[method].apply(dut, args), dut, args);
       return done();
     };
 

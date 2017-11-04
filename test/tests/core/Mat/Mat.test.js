@@ -3,10 +3,8 @@ const {
   generateAPITests,
   assertError,
   assertPropsWithValue,
-  assertMatValueEquals,
   assertMetaData,
   assertDataDeepEquals,
-  funcShouldRequireArgs,
   readTestImage,
   MatValuesComparator,
   isZeroMat
@@ -32,8 +30,6 @@ const copyMask = new cv.Mat([
   [0, 0, 0],
   [1, 1, 1]
 ], cv.CV_8U);
-const expectedCopyData = srcMatData.map((row, r) => row.map(val => ((r % 2) ? val : 0)));
-const expectedCopy = new cv.Mat(expectedCopyData, cv.CV_64F);
 
 describe('Mat', () => {
   let testImg;
@@ -101,50 +97,57 @@ describe('Mat', () => {
   });
 
   describe('copy', () => {
-    it('should copy data', () => {
-      const dstMat = srcMat.copy();
-      assertMetaData(dstMat)(srcMat);
-      assertDataDeepEquals(srcMat.getDataAsArray(), dstMat.getDataAsArray());
-    });
+    const expectOutput = (res) => {
+      assertMetaData(res)(srcMat.rows, srcMat.cols, srcMat.type);
+    };
 
-    it('should copy copyMasked data', () => {
-      const dstMat = srcMat.copy(copyMask);
-      assertMetaData(dstMat)(expectedCopy);
-      assertDataDeepEquals(expectedCopyData, dstMat.getDataAsArray());
+    generateAPITests({
+      getDut: () => srcMat,
+      methodName: 'copy',
+      methodNameSpace: 'Mat',
+      getOptionalArgs: () => ([
+        copyMask
+      ]),
+      expectOutput
     });
   });
 
   describe('copyTo', () => {
-    funcShouldRequireArgs((() => new cv.Mat().copyTo.bind(new cv.Mat()))());
+    const expectOutput = (res) => {
+      assertMetaData(res)(srcMat.rows, srcMat.cols, srcMat.type);
+    };
 
-    it('should copy data', () => {
-      const dstMat = srcMat.copyTo(new cv.Mat(srcMat.rows, srcMat.cols, srcMat.type));
-      assertMetaData(dstMat)(srcMat);
-      assertDataDeepEquals(srcMat.getDataAsArray(), dstMat.getDataAsArray());
-    });
-
-    it('should copy copyMasked data', () => {
-      const dstMat = srcMat.copyTo(new cv.Mat(srcMat.rows, srcMat.cols, srcMat.type, 0), copyMask);
-      assertMetaData(dstMat)(expectedCopy);
-      assertDataDeepEquals(expectedCopyData, dstMat.getDataAsArray());
+    generateAPITests({
+      getDut: () => srcMat,
+      methodName: 'copyTo',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        new cv.Mat()
+      ]),
+      getOptionalArgs: () => ([
+        copyMask
+      ]),
+      expectOutput
     });
   });
 
   describe('convertTo', () => {
-    funcShouldRequireArgs((() => new cv.Mat().convertTo.bind(new cv.Mat()))());
+    const expectOutput = (res) => {
+      assertMetaData(res)(srcMat.rows, srcMat.cols, cv.CV_32S);
+    };
 
-    it('can be called if required args passed', () => {
-      expect(() => srcMat.convertTo(cv.CV_32S)).to.not.throw();
-    });
-
-    it('should throw if code invalid', () => {
-      assertError(() => srcMat.convertTo(undefined), 'Mat::ConvertTo - expected arg 0 to be of type: UINT');
-      assertError(() => srcMat.convertTo(null), 'Mat::ConvertTo - expected arg 0 to be of type: UINT');
-    });
-
-    it('should convert mat', () => {
-      const dstMat = srcMat.convertTo(cv.CV_32S);
-      assertMetaData(dstMat)(srcMat.rows, srcMat.cols, cv.CV_32S);
+    generateAPITests({
+      getDut: () => srcMat,
+      methodName: 'convertTo',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        cv.CV_32S
+      ]),
+      getOptionalArgsMap: () => ([
+        ['alpha', 0.5],
+        ['beta', 0.5]
+      ]),
+      expectOutput
     });
   });
 
@@ -206,94 +209,28 @@ describe('Mat', () => {
   });
 
   describe('splitChannels', () => {
-    it('should return an array of all channels', () => {
-      const channels = new cv.Mat(4, 3, cv.CV_8UC3).splitChannels();
-      expect(channels).to.be.an('array').lengthOf(3);
-      channels.forEach(channel => assertMetaData(channel)(4, 3, cv.CV_8U));
-    });
-  });
+    const mat = new cv.Mat(4, 3, cv.CV_8UC3);
+    const expectOutput = (res) => {
+      expect(res).to.be.an('array').lengthOf(3);
+      res.forEach(channel => assertMetaData(channel)(mat.rows, mat.cols, cv.CV_8U));
+    };
 
-  const zeros = new cv.Mat(
-    Array(5).fill(0).map(() => Array(5).fill(0)),
-    cv.CV_8U
-  );
-  const connectedComponentsMat = new cv.Mat([
-    [0, 255, 255, 255, 0],
-    [0, 255, 255, 255, 0],
-    [0, 255, 255, 255, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0]
-  ], cv.CV_8U);
-
-  describe('connectedComponents', () => {
-    it('should not find any connected components', () => {
-      const contours = zeros.connectedComponents();
-      assertMetaData(contours)(zeros.rows, zeros.cols, cv.CV_32S);
-      expect(isZeroMat(contours)).to.be.true;
-    });
-
-    it('should find connected component', () => {
-      const mat = connectedComponentsMat;
-      const contours = mat.connectedComponents();
-      assertMetaData(contours)(mat.rows, mat.cols, cv.CV_32S);
-      expect(isZeroMat(contours)).to.be.false;
-    });
-  });
-
-  describe('connectedComponentsWithStats', () => {
-    const zerosRetObj = zeros.connectedComponentsWithStats();
-    const matRetObj = connectedComponentsMat.connectedComponentsWithStats();
-
-    it('should return labels, stats and centroids', () => {
-      expect(zerosRetObj).to.have.property('labels').instanceOf(cv.Mat);
-      expect(zerosRetObj).to.have.property('stats').instanceOf(cv.Mat);
-      expect(zerosRetObj).to.have.property('centroids').instanceOf(cv.Mat);
-    });
-
-    it('should not find any connected components', () => {
-      assertMetaData(zerosRetObj.labels)(zeros.rows, zeros.cols, cv.CV_32S);
-      expect(isZeroMat(zerosRetObj.labels)).to.be.true;
-    });
-
-    it('should not find any connected components', () => {
-      assertMetaData(zeros.rows, zeros.cols, cv.CV_32S);
-      expect(isZeroMat(zerosRetObj.labels)).to.be.true;
-    });
-
-    it('should find connected component', () => {
-      const mat = connectedComponentsMat;
-      assertMetaData(mat.rows, mat.cols, cv.CV_32S);
-      expect(isZeroMat(matRetObj.labels)).to.be.false;
-    });
-
-    it('should find correct centroid', () => {
-      const label255 = matRetObj.labels.at(0, 1);
-      const centroid = [
-        matRetObj.centroids.at(label255, 0),
-        matRetObj.centroids.at(label255, 1)
-      ];
-      const expectedCenter = [2, 1];
-      assertMatValueEquals(centroid, expectedCenter);
-    });
-
-    it('should return correct stats', () => {
-      const { stats } = matRetObj;
-      const label0 = matRetObj.labels.at(0, 0);
-      const label255 = matRetObj.labels.at(0, 1);
-      expect(stats.at(label255, cv.CC_STAT_LEFT)).to.equal(1);
-      expect(stats.at(label255, cv.CC_STAT_TOP)).to.equal(0);
-      expect(stats.at(label255, cv.CC_STAT_WIDTH)).to.equal(3);
-      expect(stats.at(label255, cv.CC_STAT_HEIGHT)).to.equal(3);
-      expect(stats.at(label255, cv.CC_STAT_AREA)).to.equal(9);
-      expect(stats.at(label0, cv.CC_STAT_LEFT)).to.equal(0);
-      expect(stats.at(label0, cv.CC_STAT_TOP)).to.equal(0);
-      expect(stats.at(label0, cv.CC_STAT_WIDTH)).to.equal(5);
-      expect(stats.at(label0, cv.CC_STAT_HEIGHT)).to.equal(5);
-      expect(stats.at(label0, cv.CC_STAT_AREA)).to.equal(16);
+    generateAPITests({
+      getDut: () => mat,
+      methodName: 'splitChannels',
+      methodNameSpace: 'Mat',
+      expectOutput
     });
   });
 
   describe('addWeighted', () => {
+    const expectOutput = (res) => {
+      assertDataDeepEquals([
+        [120, 140, 160],
+        [180, 200, 220]
+      ], res.getDataAsArray());
+    };
+
     const alpha = 1;
     const beta = 0.5;
     const gamma = 100;
@@ -307,30 +244,37 @@ describe('Mat', () => {
       [80, 100, 120]
     ], cv.CV_8U);
 
-    funcShouldRequireArgs((() => new cv.Mat().convertTo.bind(new cv.Mat()))());
-
-    it('can be called with required args', () => {
-      const weighted = mat1.addWeighted(alpha, mat2, beta, gamma);
-      assertMetaData(weighted)(2, 3, cv.CV_8U);
-    });
-
-    it('can be called with optional args', () => {
-      const weighted = mat1.addWeighted(alpha, mat2, beta, gamma, 2);
-      assertMetaData(weighted)(2, 3, cv.CV_16U);
-    });
-
-    it('should calculate the weighted sum', () => {
-      const expected = [
-        [120, 140, 160],
-        [180, 200, 220]
-      ];
-
-      const weighted = mat1.addWeighted(alpha, mat2, beta, gamma);
-      assertDataDeepEquals(expected, weighted.getDataAsArray());
+    generateAPITests({
+      getDut: () => mat1,
+      methodName: 'addWeighted',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        alpha,
+        mat2,
+        beta,
+        gamma
+      ]),
+      expectOutput
     });
   });
 
   describe('minMaxLoc', () => {
+    const expectOutput = (res, dut, args) => {
+      if (!args.filter(arg => !(typeof arg === 'function')).length) {
+        // without mask
+        expect(res.minVal).to.equal(0.1);
+        expect(res.maxVal).to.equal(0.6);
+        assertPropsWithValue(res.minLoc)({ x: 0, y: 0 });
+        assertPropsWithValue(res.maxLoc)({ x: 2, y: 1 });
+      } else {
+        // with mask
+        expect(res.minVal).to.equal(0.2);
+        expect(res.maxVal).to.equal(0.5);
+        assertPropsWithValue(res.minLoc)({ x: 1, y: 0 });
+        assertPropsWithValue(res.maxLoc)({ x: 1, y: 1 });
+      }
+    };
+
     const mat = new cv.Mat([
       [0.1, 0.2, 0.3],
       [0.4, 0.5, 0.6]
@@ -341,22 +285,14 @@ describe('Mat', () => {
       [1, 1, 0]
     ], cv.CV_8U);
 
-    it('should return minMaxLoc', () => {
-      const ret = mat.minMaxLoc();
-
-      expect(ret.minVal).to.equal(0.1);
-      expect(ret.maxVal).to.equal(0.6);
-      assertPropsWithValue(ret.minLoc)({ x: 0, y: 0 });
-      assertPropsWithValue(ret.maxLoc)({ x: 2, y: 1 });
-    });
-
-    it('should return minMaxLoc of masked region', () => {
-      const ret = mat.minMaxLoc(mask);
-
-      expect(ret.minVal).to.equal(0.2);
-      expect(ret.maxVal).to.equal(0.5);
-      assertPropsWithValue(ret.minLoc)({ x: 1, y: 0 });
-      assertPropsWithValue(ret.maxLoc)({ x: 1, y: 1 });
+    generateAPITests({
+      getDut: () => mat,
+      methodName: 'minMaxLoc',
+      methodNameSpace: 'Mat',
+      getOptionalArgs: () => ([
+        mask
+      ]),
+      expectOutput
     });
   });
 

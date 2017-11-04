@@ -33,13 +33,19 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "getRegion", GetRegion);
 	Nan::SetPrototypeMethod(ctor, "row", Row);
 	Nan::SetPrototypeMethod(ctor, "copy", Copy);
+	Nan::SetPrototypeMethod(ctor, "copyAsync", CopyAsync);
 	Nan::SetPrototypeMethod(ctor, "copyTo", CopyTo);
+	Nan::SetPrototypeMethod(ctor, "copyToAsync", CopyToAsync);
 	Nan::SetPrototypeMethod(ctor, "convertTo", ConvertTo);
+	Nan::SetPrototypeMethod(ctor, "convertToAsync", ConvertToAsync);
 	Nan::SetPrototypeMethod(ctor, "norm", Norm);
 	Nan::SetPrototypeMethod(ctor, "normalize", Normalize);
 	Nan::SetPrototypeMethod(ctor, "splitChannels", SplitChannels);
+	Nan::SetPrototypeMethod(ctor, "splitChannelsAsync", SplitChannelsAsync);
 	Nan::SetPrototypeMethod(ctor, "addWeighted", AddWeighted);
+	Nan::SetPrototypeMethod(ctor, "addWeightedAsync", AddWeightedAsync);
 	Nan::SetPrototypeMethod(ctor, "minMaxLoc", MinMaxLoc);
+	Nan::SetPrototypeMethod(ctor, "minMaxLocAsync", MinMaxLocAsync);
 	Nan::SetPrototypeMethod(ctor, "dct", Dct);
 	Nan::SetPrototypeMethod(ctor, "dctAsync", DctAsync);
 	Nan::SetPrototypeMethod(ctor, "idct", Idct);
@@ -55,10 +61,15 @@ NAN_MODULE_INIT(Mat::Init) {
 
 	/* imgproc */
   Nan::SetPrototypeMethod(ctor, "rescale", Rescale);
-  Nan::SetPrototypeMethod(ctor, "resize", Resize);
+	Nan::SetPrototypeMethod(ctor, "rescaleAsync", RescaleAsync);
+	Nan::SetPrototypeMethod(ctor, "resize", Resize);
+  Nan::SetPrototypeMethod(ctor, "resizeAsync", ResizeAsync);
   Nan::SetPrototypeMethod(ctor, "resizeToMax", ResizeToMax);
+	Nan::SetPrototypeMethod(ctor, "resizeToMaxAsync", ResizeToMaxAsync);
 	Nan::SetPrototypeMethod(ctor, "cvtColor", CvtColor);
+	Nan::SetPrototypeMethod(ctor, "cvtColorAsync", CvtColorAsync);
 	Nan::SetPrototypeMethod(ctor, "bgrToGray", BgrToGray);
+	Nan::SetPrototypeMethod(ctor, "bgrToGrayAsync", BgrToGrayAsync);
 	Nan::SetPrototypeMethod(ctor, "threshold", Threshold);
 	Nan::SetPrototypeMethod(ctor, "thresholdAsync", ThresholdAsync);
 	Nan::SetPrototypeMethod(ctor, "adaptiveThreshold", AdaptiveThreshold);
@@ -76,7 +87,9 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "morphologyEx", MorphologyEx);
 	Nan::SetPrototypeMethod(ctor, "morphologyExAsync", MorphologyExAsync);
 	Nan::SetPrototypeMethod(ctor, "distanceTransform", DistanceTransform);
+	Nan::SetPrototypeMethod(ctor, "distanceTransformAsync", DistanceTransformAsync);
 	Nan::SetPrototypeMethod(ctor, "distanceTransformWithLabels", DistanceTransformWithLabels);
+	Nan::SetPrototypeMethod(ctor, "distanceTransformWithLabelsAsync", DistanceTransformWithLabelsAsync);
 	Nan::SetPrototypeMethod(ctor, "blur", Blur);
 	Nan::SetPrototypeMethod(ctor, "blurAsync", BlurAsync);
 	Nan::SetPrototypeMethod(ctor, "gaussianBlur", GaussianBlur);
@@ -84,10 +97,15 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "medianBlur", MedianBlur);
 	Nan::SetPrototypeMethod(ctor, "medianBlurAsync", MedianBlurAsync);
 	Nan::SetPrototypeMethod(ctor, "connectedComponents", ConnectedComponents);
+	Nan::SetPrototypeMethod(ctor, "connectedComponentsAsync", ConnectedComponentsAsync);
 	Nan::SetPrototypeMethod(ctor, "connectedComponentsWithStats", ConnectedComponentsWithStats);
+	Nan::SetPrototypeMethod(ctor, "connectedComponentsWithStatsAsync", ConnectedComponentsWithStatsAsync);
 	Nan::SetPrototypeMethod(ctor, "grabCut", GrabCut);
+	Nan::SetPrototypeMethod(ctor, "grabCutAsync", GrabCutAsync);
 	Nan::SetPrototypeMethod(ctor, "moments", _Moments);
+	Nan::SetPrototypeMethod(ctor, "momentsAsync", _MomentsAsync);
 	Nan::SetPrototypeMethod(ctor, "findContours", FindContours);
+	Nan::SetPrototypeMethod(ctor, "findContoursAsync", FindContoursAsync);
 	Nan::SetPrototypeMethod(ctor, "drawContours", DrawContours);
 	Nan::SetPrototypeMethod(ctor, "drawLine", DrawLine);
 	Nan::SetPrototypeMethod(ctor, "drawCircle", DrawCircle);
@@ -332,66 +350,132 @@ NAN_METHOD(Mat::GetRegion) {
 	FF_RETURN(jsRegion);
 }
 
-NAN_METHOD(Mat::Copy) {
-	FF_METHOD_CONTEXT("Mat::Copy");
+struct Mat::CopyWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	CopyWorker(cv::Mat self) {
+		this->self = self;
+	}
 
-	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-	cv::Mat matDst = cv::Mat::zeros(matSelf.size(), matSelf.type());
-	if (info.Length() > 0) {
-		/* with mask*/
-		FF_ARG_INSTANCE(0, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-		matSelf.copyTo(matDst, mask);
+	cv::Mat dst;
+	cv::Mat mask = cv::noArray().getMat();
+
+	const char* execute() {
+		self.copyTo(dst, mask);
+		return "";
 	}
-	else {
-		matSelf.copyTo(matDst);
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(dst);
 	}
-	FF_OBJ jsMatDst = FF_NEW_INSTANCE(Mat::constructor);
-	FF_UNWRAP_MAT_AND_GET(jsMatDst) = matDst;
-	FF_RETURN(jsMatDst);
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::optArg(0, &mask, info)
+		);
+	}
+};
+
+NAN_METHOD(Mat::Copy) {
+	CopyWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Copy", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::CopyAsync) {
+	CopyWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::CopyAsync", CopyWorker, worker);
+}
+
+
+struct Mat::CopyToWorker : public CopyWorker {
+public:
+	CopyToWorker(cv::Mat self) : CopyWorker(self){
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::arg(0, &dst, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::optArg(1, &mask, info)
+		);
+	}
+};
 
 NAN_METHOD(Mat::CopyTo) {
-	FF_METHOD_CONTEXT("Mat::CopyTo");
-
-	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-	FF_ARG_INSTANCE(0, cv::Mat dst, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	if (info.Length() > 1) {
-		/* with mask*/
-		FF_ARG_INSTANCE(1, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-		matSelf.copyTo(dst, mask);
-	}
-	else {
-		matSelf.copyTo(dst);
-	}
-	FF_RETURN(info[0]);
+	CopyToWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::CopyTo", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::CopyToAsync) {
+	CopyToWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::CopyToAsync", CopyToWorker, worker);
+}
+
+
+struct Mat::ConvertToWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	ConvertToWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int rtype;
+	double alpha = 1.0;
+	double beta = 0.0;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		self.convertTo(dst, rtype, alpha, beta);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &rtype, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::optArg(1, &alpha, info) ||
+			DoubleConverter::optArg(2, &beta, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(1);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[1]->ToObject();
+		return (
+			DoubleConverter::optProp(&alpha, "alpha", opts) ||
+			DoubleConverter::optProp(&beta, "beta", opts)
+		);
+	}
+};
 
 NAN_METHOD(Mat::ConvertTo) {
-	FF_METHOD_CONTEXT("Mat::ConvertTo");
-
-	// required args
-	FF_ARG_UINT(0, uint type);
-
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
-	FF_GET_NUMBER_IFDEF(optArgs, double alpha, "alpha", 1.0);
-	FF_GET_NUMBER_IFDEF(optArgs, double beta, "beta", 0.0);
-	if (!hasOptArgsObj) {
-		FF_ARG_NUMBER_IFDEF(1, alpha, 1.0);
-		FF_ARG_NUMBER_IFDEF(2, beta, 0.0);
-	}
-
-	FF_OBJ jsMatConverted = FF_NEW_INSTANCE(Mat::constructor);
-	FF_UNWRAP_MAT_AND_GET(info.This()).convertTo(
-		FF_UNWRAP_MAT_AND_GET(jsMatConverted),
-		(int)type,
-		alpha,
-		beta
-	);
-	FF_RETURN(jsMatConverted);
+	ConvertToWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::ConvertTo", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
+NAN_METHOD(Mat::ConvertToAsync) {
+	ConvertToWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::ConvertToAsync", ConvertToWorker, worker);
+}
 
 NAN_METHOD(Mat::Norm) {
 	FF_METHOD_CONTEXT("Mat::Norm");
@@ -444,69 +528,128 @@ NAN_METHOD(Mat::Normalize) {
 	FF_RETURN(jsMat);
 }
 
-NAN_METHOD(Mat::SplitChannels) {
-	std::vector<cv::Mat> channels;
-	cv::split(FF_UNWRAP_MAT_AND_GET(info.This()), channels);
-	FF_ARR jsChannelMats = FF_NEW_ARRAY(channels.size());
-	for (int i = 0; i < channels.size(); i++) {
-		FF_OBJ jsChannelMat = FF_NEW_INSTANCE(constructor);
-		FF_UNWRAP_MAT_AND_GET(jsChannelMat) = channels.at(i);
-		jsChannelMats->Set(i, jsChannelMat);
+struct Mat::SplitChannelsWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	SplitChannelsWorker(cv::Mat self) {
+		this->self = self;
 	}
-	FF_RETURN(jsChannelMats);
+
+
+	std::vector<cv::Mat> mv;
+
+	const char* execute() {
+		cv::split(self, mv);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return ObjectArrayConverter<Mat, cv::Mat> ::wrap(mv);
+	}
+};
+
+NAN_METHOD(Mat::SplitChannels) {
+	SplitChannelsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::SplitChannels", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::SplitChannelsAsync) {
+	SplitChannelsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::SplitChannelsAsync", SplitChannelsWorker, worker);
+}
+
+struct Mat::AddWeightedWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	AddWeightedWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	double alpha;
+	cv::Mat src2;
+	double beta;
+	double gamma;
+	int dtype = -1;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::addWeighted(self, alpha, src2, beta, gamma, dst, dtype);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::arg(0, &alpha, info) ||
+			Mat::Converter::arg(1, &src2, info) ||
+			DoubleConverter::arg(2, &beta, info) ||
+			DoubleConverter::arg(3, &gamma, info)
+			);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(4, &dtype, info)
+		);
+	}
+};
 
 NAN_METHOD(Mat::AddWeighted) {
-	FF_METHOD_CONTEXT("Mat::AddWeighted");
-
-	FF_ARG_NUMBER(0, double alpha);
-	FF_ARG_INSTANCE(1, cv::Mat src2, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_NUMBER(2, double beta);
-	FF_ARG_NUMBER(3, double gamma);
-	FF_ARG_INT_IFDEF(4, int dtype, -1);
-
-	FF_OBJ jsDstMat = FF_NEW_INSTANCE(constructor);
-	cv::addWeighted(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		alpha,
-		src2,
-		beta,
-		gamma,
-		FF_UNWRAP_MAT_AND_GET(jsDstMat),
-		dtype
-	);
-
-	FF_RETURN(jsDstMat);
+	AddWeightedWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::AddWeighted", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
-NAN_METHOD(Mat::MinMaxLoc) {
-	FF_METHOD_CONTEXT("Mat::MinMaxLoc");
+NAN_METHOD(Mat::AddWeightedAsync) {
+	AddWeightedWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::AddWeightedAsync", AddWeightedWorker, worker);
+}
 
-	FF_ARG_INSTANCE_IFDEF(0, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, cv::noArray().getMat());
+
+struct Mat::MinMaxLocWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	MinMaxLocWorker(cv::Mat self) {
+		this->self = self;
+	}
 
 	double minVal, maxVal;
 	cv::Point2i minLoc, maxLoc;
-	cv::minMaxLoc(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		&minVal,
-		&maxVal,
-		&minLoc,
-		&maxLoc,
-		mask
-	);
+	cv::Mat mask = cv::noArray().getMat();
 
-	FF_OBJ jsMinLoc = FF_NEW_INSTANCE(Point2::constructor);
-	FF_UNWRAP_PT2_AND_GET(jsMinLoc) = (cv::Point2d)minLoc;
-	FF_OBJ jsMaxLoc = FF_NEW_INSTANCE(Point2::constructor);
-	FF_UNWRAP_PT2_AND_GET(jsMaxLoc) = (cv::Point2d)maxLoc;
+	const char* execute() {
+		cv::minMaxLoc(self, &minVal, &maxVal, &minLoc, &maxLoc, mask);
+		return "";
+	}
 
-	FF_OBJ ret = FF_NEW_OBJ();
-	Nan::Set(ret, FF_NEW_STRING("minVal"), Nan::New(minVal));
-	Nan::Set(ret, FF_NEW_STRING("maxVal"), Nan::New(maxVal));
-	Nan::Set(ret, FF_NEW_STRING("minLoc"), jsMinLoc);
-	Nan::Set(ret, FF_NEW_STRING("maxLoc"), jsMaxLoc);
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return Mat::Converter::optArg(0, &mask, info);
+	}
 
-	FF_RETURN(ret);
+	v8::Local<v8::Value> getReturnValue() {
+		FF_OBJ ret = FF_NEW_OBJ();
+		Nan::Set(ret, FF_NEW_STRING("minVal"), Nan::New(minVal));
+		Nan::Set(ret, FF_NEW_STRING("maxVal"), Nan::New(maxVal));
+		Nan::Set(ret, FF_NEW_STRING("minLoc"), Point2::Converter::wrap(minLoc));
+		Nan::Set(ret, FF_NEW_STRING("maxLoc"), Point2::Converter::wrap(maxLoc));
+		return ret;
+	}
+};
+
+NAN_METHOD(Mat::MinMaxLoc) {
+	MinMaxLocWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::MinMaxLoc", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::MinMaxLocAsync) {
+	MinMaxLocWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::MinMaxLocAsync", MinMaxLocWorker, worker);
 }
 
 struct Mat::DTWorker : public SimpleWorker {
@@ -692,54 +835,113 @@ NAN_METHOD(Mat::MulSpectrumsAsync) {
 }
 
 /* imgproc */
+struct Mat::BaseResizeWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	BaseResizeWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	cv::Mat dst;
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+};
+
+struct Mat::RescaleWorker : public BaseResizeWorker {
+public:
+	RescaleWorker(cv::Mat self) : BaseResizeWorker(self) {
+	}
+
+	double factor;
+
+	const char* execute() {
+		cv::resize(self, dst, cv::Size(), factor, factor);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::arg(0, &factor, info)
+		);
+	}
+};
 
 NAN_METHOD(Mat::Rescale) {
-	FF_METHOD_CONTEXT("Mat::Rescale");
-
-	FF_ARG_NUMBER(0, double factor);
-
-  FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-  cv::resize(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-    cv::Size(),
-    factor,
-    factor
-  );
-  FF_RETURN(jsMat);
+	RescaleWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Rescale", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::RescaleAsync) {
+	RescaleWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::RescaleAsync", RescaleWorker, worker);
+}
+
+struct Mat::ResizeWorker : BaseResizeWorker {
+public:
+	ResizeWorker(cv::Mat self) : BaseResizeWorker(self) {
+	}
+
+	int rows; 
+	int cols;
+
+	const char* execute() {
+		cv::resize(self, dst, cv::Size(rows, cols));
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &rows, info) ||
+			IntConverter::arg(0, &cols, info)
+		);
+	}
+};
 
 NAN_METHOD(Mat::Resize) {
-	FF_METHOD_CONTEXT("Mat::Resize");
-
-	FF_ARG_UINT(0, uint rows);
-	FF_ARG_UINT(1, uint cols);
-
-  FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-  cv::resize(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-    cv::Size((int)rows, (int)cols)
-  );
-  FF_RETURN(jsMat);
+	ResizeWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Resize", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
+NAN_METHOD(Mat::ResizeAsync) {
+	ResizeWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::ResizeAsync", ResizeWorker, worker);
+}
+
+struct Mat::ResizeToMaxWorker : BaseResizeWorker {
+public:
+	ResizeToMaxWorker(cv::Mat self) : BaseResizeWorker(self) {
+	}
+
+	int maxRowsOrCols;
+
+	const char* execute() {
+		double ratioY = (double)maxRowsOrCols / (double)self.rows;
+		double ratioX = (double)maxRowsOrCols / (double)self.cols;
+		double scale = (std::min)(ratioY, ratioX);
+		cv::resize(self, dst, cv::Size((int)(self.cols * scale), (int)(self.rows * scale)));
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &maxRowsOrCols, info)
+		);
+	}
+};
+
 NAN_METHOD(Mat::ResizeToMax) {
-	FF_METHOD_CONTEXT("Mat::ResizeToMax");
+	ResizeToMaxWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::ResizeToMax", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
 
-	FF_ARG_UINT(0, uint maxRowsOrCols);
-  cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info.This());
-  double ratioY = (double)maxRowsOrCols / (double)mat.rows;
-  double ratioX = (double)maxRowsOrCols / (double)mat.cols;
-	double scale = (std::min)(ratioY, ratioX);
-
-  FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-  cv::resize(
-    mat,
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-    cv::Size((int)(mat.cols * scale), (int)(mat.rows * scale))
-  );
-  FF_RETURN(jsMat);
+NAN_METHOD(Mat::ResizeToMaxAsync) {
+	ResizeToMaxWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::ResizeToMaxAsync", ResizeToMaxWorker, worker);
 }
 
 struct Mat::ThresholdWorker : SimpleWorker {
@@ -874,31 +1076,82 @@ NAN_METHOD(Mat::InRangeAsync) {
 }
 
 
+struct Mat::CvtColorWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	CvtColorWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int code;
+	int dstCn = 0;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::cvtColor(self, dst, code, dstCn);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &code, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(1, &dstCn, info)
+		);
+	}
+};
+
 NAN_METHOD(Mat::CvtColor) {
-	FF_METHOD_CONTEXT("Mat::CvtColor");
-
-	FF_ARG_UINT(0, uint code);
-	FF_ARG_UINT_IFDEF(1, uint dstCn, 0);
-
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::cvtColor(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		(int)code,
-		(int)dstCn
-	);
-	FF_RETURN(jsMat);
+	CvtColorWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::CvtColor", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
-NAN_METHOD(Mat::BgrToGray) {
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::cvtColor(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		CV_BGR2GRAY
-	);
+NAN_METHOD(Mat::CvtColorAsync) {
+	CvtColorWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::CvtColorAsync", CvtColorWorker, worker);
+}
 
-	FF_RETURN(jsMat);
+
+struct Mat::BgrToGrayWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	BgrToGrayWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int code;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::cvtColor(self, dst, CV_BGR2GRAY);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+};
+
+NAN_METHOD(Mat::BgrToGray) {
+	BgrToGrayWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::BgrToGray", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::BgrToGrayAsync) {
+	BgrToGrayWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::BgrToGrayAsync", BgrToGrayWorker, worker);
 }
 
 struct Mat::WarpWorker {
@@ -1111,47 +1364,88 @@ NAN_METHOD(Mat::MorphologyExAsync) {
 	FF_WORKER_ASYNC("Mat::MorphologyExAsync", MorphologyExWorker, worker);
 }
 
+struct Mat::DistanceTransformWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	DistanceTransformWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int distanceType;
+	int maskSize;
+	int dstType = CV_32F;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::distanceTransform(self, dst, distanceType, maskSize, dstType);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &distanceType, info) ||
+			IntConverter::arg(1, &maskSize, info)
+		);
+	}	
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(2, &dstType, info)
+		);
+	}
+};
 
 NAN_METHOD(Mat::DistanceTransform) {
-	FF_METHOD_CONTEXT("Mat::DistanceTransform");
-
-	FF_ARG_UINT(0, uint distanceType);
-	FF_ARG_UINT(1, uint maskSize);
-	FF_ARG_UINT_IFDEF(2, uint dstType, CV_32F);
-
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::distanceTransform(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		(int)distanceType,
-		(int)maskSize,
-		(int)dstType
-	);
-	FF_RETURN(jsMat);
+	DistanceTransformWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::DistanceTransform", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
+NAN_METHOD(Mat::DistanceTransformAsync) {
+	DistanceTransformWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::DistanceTransformAsync", DistanceTransformWorker, worker);
+}
+
+struct Mat::DistanceTransformWithLabelsWorker : public DistanceTransformWorker {
+	DistanceTransformWithLabelsWorker(cv::Mat self) : DistanceTransformWorker(self) {
+	}
+
+	int labelType = cv::DIST_LABEL_CCOMP;
+	cv::Mat labels;
+
+	const char* execute() {
+		cv::distanceTransform(self, dst, labels, distanceType, maskSize, labelType);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		Nan::Set(ret, Nan::New("dst").ToLocalChecked(), Mat::Converter::wrap(dst));
+		Nan::Set(ret, Nan::New("labels").ToLocalChecked(), Mat::Converter::wrap(labels));
+		return ret;
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(2, &labelType, info)
+		);
+	}
+};
+
 NAN_METHOD(Mat::DistanceTransformWithLabels) {
-	FF_METHOD_CONTEXT("Mat::DistanceTransformWithLabels");
+	DistanceTransformWithLabelsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::DistanceTransformWithLabels", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
 
-	FF_ARG_UINT(0, uint distanceType);
-	FF_ARG_UINT(1, uint maskSize);
-	FF_ARG_UINT_IFDEF(2, uint labelType, cv::DIST_LABEL_CCOMP);
-
-	FF_OBJ jsDst = FF_NEW_INSTANCE(constructor);
-	FF_OBJ jsLabels = FF_NEW_INSTANCE(constructor);
-	cv::distanceTransform(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsDst),
-		FF_UNWRAP_MAT_AND_GET(jsLabels),
-		(int)distanceType,
-		(int)maskSize,
-		(int)labelType
-	);
-
-	FF_OBJ ret = FF_NEW_OBJ();
-	Nan::Set(ret, FF_NEW_STRING("labels"), jsLabels);
-	Nan::Set(ret, FF_NEW_STRING("dist"), jsDst);
-	FF_RETURN(ret);
+NAN_METHOD(Mat::DistanceTransformWithLabelsAsync) {
+	DistanceTransformWithLabelsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::DistanceTransformWithLabelsAsync", DistanceTransformWithLabelsWorker, worker);
 }
 
 
@@ -1315,116 +1609,235 @@ NAN_METHOD(Mat::MedianBlurAsync) {
 }
 
 
-NAN_METHOD(Mat::ConnectedComponents) {
-	FF_METHOD_CONTEXT("Mat::ConnectedComponents");
-
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
-	FF_GET_UINT_IFDEF(optArgs, uint connectivity, "connectivity", 8);
-	FF_GET_UINT_IFDEF(optArgs, uint ltype, "ltype", CV_32S);
-	if (!hasOptArgsObj) {
-		FF_ARG_UINT_IFDEF(0, connectivity, connectivity);
-		FF_ARG_UINT_IFDEF(1, ltype, ltype);
+struct Mat::ConnectedComponentsWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	ConnectedComponentsWorker(cv::Mat self) {
+		this->self = self;
 	}
 
-	FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
-	cv::connectedComponents(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsMat),
-		(int)connectivity,
-		(int)ltype
-	);
-	FF_RETURN(jsMat);
+	int connectivity = 8;
+	int ltype = CV_32S;
+
+	cv::Mat labels;
+
+	const char* execute() {
+		cv::connectedComponents(self, labels, connectivity, ltype);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(labels);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(0, &connectivity, info) ||
+			IntConverter::optArg(1, &ltype, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(0);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[0]->ToObject();
+		return (
+			IntConverter::optProp(&connectivity, "connectivity", opts) ||
+			IntConverter::optProp(&ltype, "ltype", opts)
+		);
+	}
+};
+
+NAN_METHOD(Mat::ConnectedComponents) {
+	ConnectedComponentsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::ConnectedComponents", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::ConnectedComponentsAsync) {
+	ConnectedComponentsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::ConnectedComponentsAsync", ConnectedComponentsWorker, worker);
+}
+
+
+struct Mat::ConnectedComponentsWithStatsWorker : public ConnectedComponentsWorker {
+	ConnectedComponentsWithStatsWorker(cv::Mat self) : ConnectedComponentsWorker(self) {
+	}
+
+	cv::Mat stats;
+	cv::Mat centroids;
+
+	const char* execute() {
+		cv::connectedComponentsWithStats(self, labels, stats, centroids, connectivity, ltype);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		Nan::Set(ret, Nan::New("labels").ToLocalChecked(), Mat::Converter::wrap(labels));
+		Nan::Set(ret, Nan::New("stats").ToLocalChecked(), Mat::Converter::wrap(stats));
+		Nan::Set(ret, Nan::New("centroids").ToLocalChecked(), Mat::Converter::wrap(centroids));
+		return ret;
+	}
+};
 
 NAN_METHOD(Mat::ConnectedComponentsWithStats) {
-	FF_METHOD_CONTEXT("Mat::ConnectedComponentsWithStats");
+	ConnectedComponentsWithStatsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::ConnectedComponentsWithStats", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
-	FF_GET_UINT_IFDEF(optArgs, uint connectivity, "connectivity", 8);
-	FF_GET_UINT_IFDEF(optArgs, uint ltype, "ltype", CV_32S);
-	if (!hasOptArgsObj) {
-		FF_ARG_UINT_IFDEF(0, connectivity, connectivity);
-		FF_ARG_UINT_IFDEF(1, ltype, ltype);
+NAN_METHOD(Mat::ConnectedComponentsWithStatsAsync) {
+	ConnectedComponentsWithStatsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::ConnectedComponentsWithStatsAsync", ConnectedComponentsWithStatsWorker, worker);
+}
+
+
+struct Mat::GrabCutWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	GrabCutWorker(cv::Mat self) {
+		this->self = self;
 	}
 
-	FF_OBJ jsLabels = FF_NEW_INSTANCE(constructor);
-	FF_OBJ jsStats = FF_NEW_INSTANCE(constructor);
-	FF_OBJ jsCentroids = FF_NEW_INSTANCE(constructor);
-	cv::connectedComponentsWithStats(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		FF_UNWRAP_MAT_AND_GET(jsLabels),
-		FF_UNWRAP_MAT_AND_GET(jsStats),
-		FF_UNWRAP_MAT_AND_GET(jsCentroids),
-		(int)connectivity,
-		(int)ltype
-	);
+	cv::Mat mask;
+	cv::Rect2d rect;
+	cv::Mat bgdModel;
+	cv::Mat fgdModel;
+	int iterCount;
+	int mode = cv::GC_EVAL;
 
-	FF_OBJ ret = FF_NEW_OBJ();
-	Nan::Set(ret, FF_NEW_STRING("labels"), jsLabels);
-	Nan::Set(ret, FF_NEW_STRING("stats"), jsStats);
-	Nan::Set(ret, FF_NEW_STRING("centroids"), jsCentroids);
-	FF_RETURN(ret);
-}
+
+	const char* execute() {
+		cv::grabCut(self, mask, rect, bgdModel, fgdModel, iterCount, mode);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(self);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::arg(0, &mask, info) ||
+			Rect::Converter::arg(1, &rect, info) ||
+			Mat::Converter::arg(2, &bgdModel, info) ||
+			Mat::Converter::arg(3, &fgdModel, info) ||
+			IntConverter::arg(4, &iterCount, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(5, &mode, info)
+		);
+	}
+};
 
 NAN_METHOD(Mat::GrabCut) {
-	FF_METHOD_CONTEXT("Mat::GrabCut");
-
-	FF_ARG_INSTANCE(0, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Rect rect, Rect::constructor, FF_UNWRAP_RECT_AND_GET);
-	FF_ARG_INSTANCE(2, cv::Mat bgdModel, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(3, cv::Mat fgdModel, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INT(4, int iterCount);
-	FF_ARG_INT(5, int mode);
-
-	cv::grabCut(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		mask,
-		rect,
-		bgdModel,
-		fgdModel,
-		iterCount,
-		mode
-	);
-	FF_RETURN(info.This());
+	GrabCutWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::GrabCut", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+NAN_METHOD(Mat::GrabCutAsync) {
+	GrabCutWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::GrabCutAsync", GrabCutWorker, worker);
+}
+
+struct Mat::MomentsWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	MomentsWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	bool binaryImage = false;
+
+	cv::Moments returnValue;
+
+	const char* execute() {
+		cv::moments(self, binaryImage);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Moments::Converter::wrap(returnValue);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			BoolConverter::optArg(0, &binaryImage, info)
+		);
+	}
+};
 
 NAN_METHOD(Mat::_Moments) {
-	FF_OBJ jsMoments = FF_NEW_INSTANCE(Moments::constructor);
-	FF_UNWRAP(jsMoments, Moments)->moments = cv::moments(FF_UNWRAP_MAT_AND_GET(info.This()));
-	FF_RETURN(jsMoments);
+	MomentsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Moments", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
-NAN_METHOD(Mat::FindContours) {
-	FF_METHOD_CONTEXT("Mat::FindContours");
+NAN_METHOD(Mat::_MomentsAsync) {
+	MomentsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::MomentsAsync", MomentsWorker, worker);
+}
 
-	FF_ARG_UINT(0, uint mode);
-	FF_ARG_UINT(1, uint method);
-	FF_ARG_INSTANCE_IFDEF(2, cv::Point2d offset, Point2::constructor, FF_UNWRAP_PT2_AND_GET, cv::Point2d());
+struct Mat::FindContoursWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	FindContoursWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int mode;
+	int method;
+	cv::Point2d offset = cv::Point2d();
 
 	std::vector<cv::Mat> contours;
 	std::vector<cv::Vec4i> hierarchy;
-	cv::findContours(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		contours,
-		hierarchy,
-		(int)mode,
-		(int)method,
-		offset
-	);
 
-	FF_ARR jsContours = FF_NEW_ARRAY(contours.size());
-	for (uint i = 0; i < jsContours->Length(); i++) {
-		FF_OBJ jsContour = FF_NEW_INSTANCE(Contour::constructor);
-		FF_UNWRAP(jsContour, Contour)->contour = contours.at(i);
-		FF_UNWRAP(jsContour, Contour)->hierarchy = hierarchy.at(i);
-		jsContours->Set(i, jsContour);
+	const char* execute() {
+		cv::findContours(self, contours, hierarchy, mode, method, offset);
+		return "";
 	}
 
-	FF_RETURN(jsContours);
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Array> ret = Nan::New<v8::Array>(contours.size());
+		for (uint i = 0; i < ret->Length(); i++) {
+			FF_OBJ jsContour = FF_NEW_INSTANCE(Contour::constructor);
+			FF_UNWRAP(jsContour, Contour)->contour = contours.at(i);
+			FF_UNWRAP(jsContour, Contour)->hierarchy = hierarchy.at(i);
+			ret->Set(i, jsContour);
+		}
+		return ret;
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &mode, info) ||
+			IntConverter::arg(1, &method, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Point2::Converter::optArg(2, &offset, info)
+		);
+	}
+};
+
+NAN_METHOD(Mat::FindContours) {
+	FindContoursWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::FindContours", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::FindContoursAsync) {
+	FindContoursWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::FindContoursAsync", FindContoursWorker, worker);
 }
 
 NAN_METHOD(Mat::DrawContours) {
