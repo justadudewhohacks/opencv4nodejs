@@ -40,6 +40,10 @@ public:
 		return "";
 	}
 
+	v8::Local<v8::Value> getReturnValue() {
+		return Nan::Undefined();
+	}
+
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return false;
 	}
