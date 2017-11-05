@@ -28,6 +28,10 @@ See <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/exam
 ![face0](https://user-images.githubusercontent.com/31125521/29702727-c796acc4-8972-11e7-8043-117dd2761833.jpg)
 ![face1](https://user-images.githubusercontent.com/31125521/29702730-c79d3904-8972-11e7-8ccb-e8c467244ad8.jpg)
 
+### Face Recognition
+
+![facerec](https://user-images.githubusercontent.com/31125521/32416405-d71ad684-c248-11e7-9a6f-016d0edf2c15.jpg)
+
 ### Hand Gesture Recognition
 Check out my <a href="https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0"><b>article</b></a> about fingertip detection.
 
