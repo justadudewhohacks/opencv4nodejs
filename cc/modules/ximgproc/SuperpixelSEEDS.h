@@ -10,6 +10,7 @@ public:
 	cv::Ptr<cv::ximgproc::SuperpixelSEEDS> superpixelSeeds;
 	cv::Mat img;
 	cv::Mat labels;
+	cv::Mat labelContourMask;
 	int numSuperpixels;
 	int numLevels;
 	int prior = 2;
@@ -23,6 +24,7 @@ public:
 
 	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetImg, img, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
 	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetLabels, labels, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
+	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetLabelContourMask, labelContourMask, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
 	static FF_GETTER(SuperpixelSEEDS, GetNumSuperpixels, numSuperpixels);
 	static FF_GETTER(SuperpixelSEEDS, GeNumLevels, numLevels);
 	static FF_GETTER(SuperpixelSEEDS, GetPrior, prior);

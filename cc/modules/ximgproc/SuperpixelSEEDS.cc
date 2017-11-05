@@ -19,7 +19,8 @@ NAN_MODULE_INIT(SuperpixelSEEDS::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("doubleStep").ToLocalChecked(), SuperpixelSEEDS::GetDoubleStep);
 	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), SuperpixelSEEDS::GetNumCalculatedSuperpixels);
 	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), SuperpixelSEEDS::GetLabels);
-
+	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), SuperpixelSEEDS::GetLabelContourMask);
+	
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelSEEDS::Iterate);
 
   target->Set(Nan::New("SuperpixelSEEDS").ToLocalChecked(), ctor->GetFunction());
@@ -70,6 +71,7 @@ NAN_METHOD(SuperpixelSEEDS::Iterate) {
 	self->superpixelSeeds->iterate(self->img, (int)iterations);
 	self->superpixelSeeds->getLabels(self->labels);
 	self->numCalculatedSuperpixels = self->superpixelSeeds->getNumberOfSuperpixels();
+	self->superpixelSeeds->getLabelContourMask(self->labelContourMask);
 }
 
 #endif // HAVE_XIMGPROC
