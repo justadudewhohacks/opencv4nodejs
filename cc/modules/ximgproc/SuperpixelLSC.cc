@@ -1,5 +1,7 @@
 #ifdef HAVE_XIMGPROC
 
+#if OPENCV_MINOR_VERSION > 0
+
 #include "SuperpixelLSC.h"
 
 Nan::Persistent<v8::FunctionTemplate> SuperpixelLSC::constructor;
@@ -54,5 +56,7 @@ NAN_METHOD(SuperpixelLSC::Iterate) {
 	self->numCalculatedSuperpixels = self->superpixelLsc->getNumberOfSuperpixels();
 	self->superpixelLsc->getLabelContourMask(self->labelContourMask, false);
 }
+
+#endif
 
 #endif // HAVE_XIMGPROC
