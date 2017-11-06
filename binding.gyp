@@ -42,6 +42,7 @@
 			"cc/modules/imgproc/Moments.cc",
 			"cc/modules/ximgproc/ximgproc.cc",
 			"cc/modules/ximgproc/SuperpixelSEEDS.cc",
+			"cc/modules/ximgproc/SuperpixelSLIC.cc",			
 			"cc/modules/objdetect/objdetect.cc",
 			"cc/modules/objdetect/CascadeClassifier.cc",
 			"cc/modules/objdetect/HOGDescriptor.cc",
