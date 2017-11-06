@@ -2,6 +2,8 @@
 #include "Mat.h"
 #include "macros.h"
 
+#if OPENCV_MINOR_VERSION > 0
+
 #ifndef __FF_SUPERPIXELLSC_H__
 #define __FF_SUPERPIXELLSC_H__
 
@@ -28,5 +30,7 @@ public:
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 };
+
+#endif
 
 #endif
