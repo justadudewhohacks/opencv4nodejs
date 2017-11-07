@@ -2,7 +2,7 @@ const cv = global.dut;
 const { assertMetaData, assertPropsWithValue, funcShouldRequireArgs, readTestImage } = global.utils;
 const { assert, expect } = require('chai');
 
-describe.only('ximgproc', () => {
+describe('ximgproc', () => {
   if (!cv.xmodules.ximgproc) {
     it('compiled without ximgproc');
     return;
