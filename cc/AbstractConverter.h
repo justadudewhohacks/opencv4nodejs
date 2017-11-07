@@ -52,6 +52,10 @@ public:
 		return ConverterType::wrap(val);
 	}
 
+	static bool unwrap(T* val, v8::Local<v8::Value> jsVal) {
+		return ConverterType::unwrap(vec, jsVal);
+	}
+
 	static bool optProp(T* val, const char* prop, v8::Local<v8::Object> opts) {
 		Nan::TryCatch tryCatch;
 		if (
