@@ -272,7 +272,7 @@ public:
 			DoubleConverter::optArg(1, &hitThreshold, info) ||
 			Size::Converter::optArg(2, &winStride, info) ||
 			Size::Converter::optArg(3, &padding, info) ||
-			ObjectArrayConverter<Point, cv::Point2d, cv::Point>::optArg(4, &searchLocations, info)
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::optArg(4, &searchLocations, info)
 		);
 	}
 
@@ -286,7 +286,7 @@ public:
 			DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
 			Size::Converter::optProp(&winStride, "winStride", opts) ||
 			Size::Converter::optProp(&padding, "padding", opts) ||
-			ObjectArrayConverter<Point, cv::Point2d, cv::Point>::optProp(&searchLocations, "searchLocations", opts)
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::optProp(&searchLocations, "searchLocations", opts)
 		);
 	}
 };
@@ -326,7 +326,7 @@ public:
 
 	v8::Local<v8::Value> getReturnValue() {
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-		Nan::Set(ret, Nan::New("foundLocations").ToLocalChecked(), ObjectArrayConverter<Point, cv::Point2d, cv::Point>::wrap(foundLocations));
+		Nan::Set(ret, Nan::New("foundLocations").ToLocalChecked(), ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::wrap(foundLocations));
 		Nan::Set(ret, Nan::New("confidences").ToLocalChecked(), DoubleArrayConverter::wrap(confidences));
 		return ret;
 	}
@@ -334,8 +334,8 @@ public:
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
 			Mat::Converter::arg(0, &img, info) ||
-			ObjectArrayConverter<Point, cv::Point2d, cv::Point>::arg(1, &locations, info)
-			);
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::arg(1, &locations, info)
+		);
 	}
 
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -356,7 +356,7 @@ public:
 			DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
 			Size::Converter::optProp(&winStride, "winStride", opts) ||
 			Size::Converter::optProp(&padding, "padding", opts)
-			);
+		);
 	}
 };
 
@@ -572,11 +572,10 @@ NAN_METHOD(HOGDescriptor::CheckDetectorSize) {
 NAN_METHOD(HOGDescriptor::SetSVMDetector) {
 	FF_METHOD_CONTEXT("SetSVMDetector");
 	std::vector<float> detector;
-	if (!FF_HAS_ARG(0) || !FloatArrayConverter::unwrap(&detector, info[0])) {
+	if (!FF_HAS_ARG(0) || FloatArrayConverter::unwrap(&detector, info[0])) {
 		FF_THROW("expected detector to be an Array of type Number");
 	}
-
-	HOGDescriptor::Converter::unwrap(info.This()).setSVMDetector(detector);
+	HOGDescriptor::Converter::unwrapPtr(info.This())->setSVMDetector(detector);
 }
 
 NAN_METHOD(HOGDescriptor::Save) {

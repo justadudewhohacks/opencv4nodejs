@@ -20,11 +20,11 @@ module.exports = () => {
       expect(detectionROI).to.have.property('locations')
         .to.be.an('array')
         .lengthOf(3)
-        .to.have.ordered.members(params.locations);
+        .to.deep.equal(params.locations);
       expect(detectionROI).to.have.property('confidences')
         .to.be.an('array')
         .lengthOf(3)
-        .to.have.ordered.members(params.confidences);
+        .to.deep.equal(params.confidences);
     });
   });
 };
