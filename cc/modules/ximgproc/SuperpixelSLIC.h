@@ -2,7 +2,7 @@
 #include "Mat.h"
 #include "macros.h"
 
-#if OPENCV_MINOR_VERSION > 0
+#if CV_MINOR_VERSION > 0
 
 #ifndef __FF_SUPERPIXELSLIC_H__
 #define __FF_SUPERPIXELSLIC_H__

@@ -1,8 +1,8 @@
 #ifdef HAVE_XIMGPROC
 
-#if OPENCV_MINOR_VERSION > 0
-
 #include "SuperpixelLSC.h"
+
+#if CV_MINOR_VERSION > 0
 
 Nan::Persistent<v8::FunctionTemplate> SuperpixelLSC::constructor;
 
@@ -35,7 +35,7 @@ NAN_METHOD(SuperpixelLSC::New) {
 	FF_ARG_INSTANCE(0, self->img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
   FF_ARG_INT_IFDEF(1, self->regionSize, 10);
   FF_ARG_INT_IFDEF(2, self->ratio, 0.075);
-	
+
 	self->Wrap(info.Holder());
 	self->superpixelLsc = cv::ximgproc::createSuperpixelLSC(
 		self->img,
