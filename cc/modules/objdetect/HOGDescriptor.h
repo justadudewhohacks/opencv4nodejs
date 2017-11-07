@@ -30,6 +30,37 @@ public:
 	static NAN_METHOD(Compute);
 	static NAN_METHOD(ComputeAsync);
 
+	struct ComputeGradientWorker;
+	static NAN_METHOD(ComputeGradient);
+	static NAN_METHOD(ComputeGradientAsync);
+
+	struct DetectWorker;
+	static NAN_METHOD(Detect);
+	static NAN_METHOD(DetectAsync);
+
+	struct DetectROIWorker;
+	static NAN_METHOD(DetectROI);
+	static NAN_METHOD(DetectROIAsync);
+
+	struct DetectMultiScaleWorker;
+	static NAN_METHOD(DetectMultiScale);
+	static NAN_METHOD(DetectMultiScaleAsync);
+
+	struct DetectMultiScaleROIWorker;
+	static NAN_METHOD(DetectMultiScaleROI);
+	static NAN_METHOD(DetectMultiScaleROIAsync);
+
+	struct GroupRectanglesWorker;
+	static NAN_METHOD(GroupRectangles);
+	static NAN_METHOD(GroupRectanglesAsync);
+
+	static NAN_METHOD(GetDaimlerPeopleDetector);
+	static NAN_METHOD(GetDefaultPeopleDetector);
+	static NAN_METHOD(CheckDetectorSize);
+	static NAN_METHOD(SetSVMDetector);
+	static NAN_METHOD(Save);
+	static NAN_METHOD(Load);
+
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	cv::HOGDescriptor* getNativeObjectPtr() { return &hog; }
