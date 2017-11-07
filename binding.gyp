@@ -47,6 +47,7 @@
 			"cc/modules/objdetect/objdetect.cc",
 			"cc/modules/objdetect/CascadeClassifier.cc",
 			"cc/modules/objdetect/HOGDescriptor.cc",
+			"cc/modules/objdetect/DetectionROI.cc",
 			"cc/modules/machinelearning/machinelearning.cc",
 			"cc/modules/machinelearning/ParamGrid.cc",
 			"cc/modules/machinelearning/StatModel.cc",

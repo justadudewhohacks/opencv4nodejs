@@ -28,6 +28,10 @@ public:
 		return ConverterType::unwrap(jsVal);
 	}
 
+	static T* unwrapPtr(v8::Local<v8::Value> jsVal) {
+		return ConverterType::unwrapPtr(jsVal);
+	}
+
 	static v8::Local<v8::Value> wrap(T val) {
 		return ConverterType::wrap(val);
 	}
@@ -48,8 +52,16 @@ public:
 		return ConverterType::unwrap(jsVal);
 	}
 
+	static T* unwrapPtr(v8::Local<v8::Value> jsVal) {
+		return ConverterType::unwrapPtr(jsVal);
+	}
+
 	static v8::Local<v8::Value> wrap(T val) {
 		return ConverterType::wrap(val);
+	}
+
+	static bool unwrap(T* val, v8::Local<v8::Value> jsVal) {
+		return ConverterType::unwrap(val, jsVal);
 	}
 
 	static bool optProp(T* val, const char* prop, v8::Local<v8::Object> opts) {

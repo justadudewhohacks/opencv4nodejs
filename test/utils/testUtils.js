@@ -82,6 +82,8 @@ exports.getTestImagePath = getTestImagePath;
 
 exports.readTestImage = (isPng = true) => cv.imread(getTestImagePath(isPng));
 
+exports.readPeoplesImage = () => cv.imread('../data/people.jpeg');
+
 exports.getTestVideoPath = () => '../data/traffic.mp4';
 
 const tmpdataDir = './tmpdata';
