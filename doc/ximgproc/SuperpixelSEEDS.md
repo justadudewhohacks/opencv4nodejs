@@ -5,6 +5,7 @@
 {
 	img: Mat,
   labels: Mat,
+  labelContourMask: Mat,
   numSuperpixels: Int,
   numLevels: Int,
   prior: Int,

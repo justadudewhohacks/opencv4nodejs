@@ -2,12 +2,15 @@
 
 #include "ximgproc.h"
 #include "SuperpixelSEEDS.h"
+
+#if CV_MINOR_VERSION > 0
 #include "SuperpixelSLIC.h"
 #include "SuperpixelLSC.h"
+#endif
 
 NAN_MODULE_INIT(XImgproc::Init) {
 	SuperpixelSEEDS::Init(target);
-#if OPENCV_MINOR_VERSION > 0
+#if CV_MINOR_VERSION > 0
 	SuperpixelSLIC::Init(target);
 	SuperpixelLSC::Init(target);
 #endif

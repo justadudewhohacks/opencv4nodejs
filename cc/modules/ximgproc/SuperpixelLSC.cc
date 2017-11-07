@@ -1,8 +1,8 @@
 #ifdef HAVE_XIMGPROC
 
-#if OPENCV_MINOR_VERSION > 0
-
 #include "SuperpixelLSC.h"
+
+#if CV_MINOR_VERSION > 0
 
 Nan::Persistent<v8::FunctionTemplate> SuperpixelLSC::constructor;
 
