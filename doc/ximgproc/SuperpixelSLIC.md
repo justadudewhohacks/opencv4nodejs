@@ -17,7 +17,7 @@
 
 ## Constructors
 ``` javascript
-SuperpixelSLIC : new SuperpixelSLIC(Mat img, Int algorithm, Int regionSize = 10, Number ruler = 10)
+SuperpixelSLIC : new SuperpixelSLIC(Mat img, Int algorithm = cv.SLICO, Int regionSize = 10, Number ruler = 10)
 ```
 
 ## Methods

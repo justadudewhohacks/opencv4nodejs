@@ -34,7 +34,7 @@ NAN_METHOD(SuperpixelSLIC::New) {
 	SuperpixelSLIC* self = new SuperpixelSLIC();
 
 	FF_ARG_INSTANCE(0, self->img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INT(1, self->algorithm);
+	FF_ARG_INT_IFDEF(1, self->algorithm, cv::ximgproc::SLICO);
   FF_ARG_INT_IFDEF(2, self->regionSize, 10);
   FF_ARG_INT_IFDEF(3, self->ruler, 10.0);
 	
