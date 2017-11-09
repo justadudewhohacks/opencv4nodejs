@@ -29,6 +29,8 @@ NAN_MODULE_INIT(Imgproc::Init) {
 	Nan::SetMethod(target, "calcHist", CalcHist);
 	Nan::SetMethod(target, "plot1DHist", Plot1DHist);
 	Nan::SetMethod(target, "fitLine", FitLine);
+	Nan::SetMethod(target, "getAffineTransform", GetAffineTransform);
+	Nan::SetMethod(target, "getPerspectiveTransform", GetPerspectiveTransform);
 #if CV_VERSION_MINOR > 1
 	Nan::SetMethod(target, "canny", Canny);
 #endif
@@ -61,6 +63,45 @@ NAN_METHOD(Imgproc::GetRotationMatrix2D) {
 	FF_RETURN(jsRotationMat);
 }
 
+NAN_METHOD(Imgproc::GetAffineTransform) {
+	FF_METHOD_CONTEXT("GetAffineTransform");
+
+	FF_ARG_ARRAY(0, FF_ARR jsSrcPoints);
+	FF_ARG_ARRAY(1, FF_ARR jsDstPoints);
+
+	// TODO FF_ARG_UNPACK_ARRAY_INSTANCE
+	Nan::TryCatch tryCatch;
+	std::vector<cv::Point2f> srcPoints, dstPoints;
+	Point::unpackJSPoint2Array<float>(srcPoints, jsSrcPoints);
+	Point::unpackJSPoint2Array<float>(dstPoints, jsDstPoints);
+	if (tryCatch.HasCaught()) {
+		return info.GetReturnValue().Set(tryCatch.ReThrow());
+	}
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+	FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getAffineTransform(srcPoints, dstPoints);
+	FF_RETURN(jsMat);
+}
+
+NAN_METHOD(Imgproc::GetPerspectiveTransform) {
+	FF_METHOD_CONTEXT("GetPerspectiveTransform");
+
+	FF_ARG_ARRAY(0, FF_ARR jsSrcPoints);
+	FF_ARG_ARRAY(1, FF_ARR jsDstPoints);
+
+	// TODO FF_ARG_UNPACK_ARRAY_INSTANCE
+	Nan::TryCatch tryCatch;
+	std::vector<cv::Point2f> srcPoints, dstPoints;
+	Point::unpackJSPoint2Array<float>(srcPoints, jsSrcPoints);
+	Point::unpackJSPoint2Array<float>(dstPoints, jsDstPoints);
+	if (tryCatch.HasCaught()) {
+		return info.GetReturnValue().Set(tryCatch.ReThrow());
+	}
+
+	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+	FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getPerspectiveTransform(srcPoints, dstPoints);
+	FF_RETURN(jsMat);
+}
 
 NAN_METHOD(Imgproc::CalcHist) {
 	FF_METHOD_CONTEXT("CalcHist");
