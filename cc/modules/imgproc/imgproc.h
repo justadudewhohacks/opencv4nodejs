@@ -14,6 +14,8 @@ public:
 	static NAN_METHOD(CalcHist);
 	static NAN_METHOD(Plot1DHist);
 	static NAN_METHOD(FitLine);
+  static NAN_METHOD(GetAffineTransform);
+  static NAN_METHOD(GetPerspectiveTransform);
 #if CV_VERSION_MINOR > 1
 	static NAN_METHOD(Canny);
 #endif
