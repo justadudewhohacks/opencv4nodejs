@@ -7,8 +7,9 @@ opencv4nodejs
 
 **By its nature, JavaScript lacks the performance to implement Computer Vision tasks efficiently. Therefore this package brings the performance of the native OpenCV library to your Node.js application. Supports all OpenCV 3 versions. The bindings are available as an asynchronous (via promises or callbacks) and synchronous API.**
 
+**The ultimate goal of this project is to provide a collection of Node.js bindings, which supports the entire OpenCV and OpenCV-contrib API. An overview of available bindings can be found in the [API Documentation](https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/README.md). The implementation of missing bindings can be specifically prioritized by [requesting new features](#request-features). Furthermore, contribution is highly appreciated. If you want to get involved you have a look at the <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b>.**
+
  * **[Examples](#examples)**
- * **[API Documentation](https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/README.md)**
  * **[How to install](#how-to-install)**
  * **[Usage with Docker](#usage-with-docker)**
  * **[Usage with Electron](#usage-with-electron)**
