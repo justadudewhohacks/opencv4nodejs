@@ -1,10 +1,12 @@
+# Contribution Guide
+
 First of all, any kind of contribution is highly appreciated, you don't have to be a pro in C++, neither am I. If you are totally new to native Node.js development and would like to get started, you can have a look at my article series as a quick introduction:
 <a href="https://medium.com/netscape/tutorial-building-native-c-modules-for-node-js-using-nan-part-1-755b07389c7c"><b>Tutorial to Native Node.js Modules with C++</b></a>
-
 
 Oftentimes adding bindings is done similarly to what already exists in the codebase. Thus, you can take the existing stuff as an example to help you to get started. In the following, you can find some basic guidelines for adding new OpenCV function bindings to the package.
 
 ## API Design
+
 The API is designed such that
 
 A: Parameters passed to a function call are type checked and appropriate messages are displayed to the user in case an error occured. Nobody wants passing garbage to a function by coincidence to fail silently, which may produce unexpected results.
@@ -16,6 +18,7 @@ void GaussianBlur(InputArray src, OutputArray dst, Size ksize, double sigmaX, do
 ```
 
 The function should be invokable in the following ways:
+
 ``` javascript
 const mat = new cv.Mat(...)
 
@@ -53,11 +56,11 @@ In the .h file add the declaration of the bindings its' worker to the class defi
 ``` c++
 class Mat : public Nan::ObjectWrap {
 
-...
+  ...
 
-	struct GaussianBlurWorker;
-	NAN_METHOD(GaussianBlur);
-	NAN_METHOD(GaussianBlurAsync);
+  struct GaussianBlurWorker;
+  NAN_METHOD(GaussianBlur);
+  NAN_METHOD(GaussianBlurAsync);
 
 }
 
@@ -69,66 +72,66 @@ In the .cc file add the implementation of the worker:
 struct Mat::GaussianBlurWorker : public SimpleWorker {
 public:
   // instance of the class exposing the method
-	cv::Mat mat;
-	GaussianBlurWorker(cv::Mat mat) {
-		this->mat = mat;
-	}
+  cv::Mat mat;
+  GaussianBlurWorker(cv::Mat mat) {
+    this->mat = mat;
+  }
 
   // required function arguments
-	cv::Size2d kSize;
-	double sigmaX;
+  cv::Size2d kSize;
+  double sigmaX;
   // optional function arguments
-	double sigmaY = 0;
-	int borderType = cv::BORDER_CONSTANT;
+  double sigmaY = 0;
+  int borderType = cv::BORDER_CONSTANT;
 
   // function return value
-	cv::Mat blurMat;
+  cv::Mat blurMat;
 
   // here the main work is performed, the async worker will execute
   // this in a different thread
-	const char* execute() {
-		cv::GaussianBlur(mat, blurMat, kSize, sigmaX, sigmaY, borderType);
+  const char* execute() {
+    cv::GaussianBlur(mat, blurMat, kSize, sigmaX, sigmaY, borderType);
     // if you need to handle errors, you can return an error message here, which
     // will trigger the error callback if message is not empty
-		return "";
-	}
+    return "";
+  }
 
   // return the native objects, handle all object wrapping stuff here
-	v8::Local<v8::Value> getReturnValue() {
-		return Mat::Converter::wrap(blurMat);
-	}
+  v8::Local<v8::Value> getReturnValue() {
+    return Mat::Converter::wrap(blurMat);
+  }
 
-	// implement this method if function takes any required arguments
-	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return (
-			Size::Converter::arg(0, &kSize, info) ||
-			DoubleConverter::arg(1, &sigmaX, info)
-		);
-	}
+  // implement this method if function takes any required arguments
+  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+    return (
+      Size::Converter::arg(0, &kSize, info) ||
+      DoubleConverter::arg(1, &sigmaX, info)
+    );
+  }
 
-	// implement this method if function takes any optional arguments
-	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return (
-			DoubleConverter::optArg(2, &sigmaY, info) ||
-			IntConverter::optArg(3, &borderType, info)
-		);
-	}
+  // implement this method if function takes any optional arguments
+  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+    return (
+      DoubleConverter::optArg(2, &sigmaY, info) ||
+      IntConverter::optArg(3, &borderType, info)
+     );
+  }
 
-	// implement the following methods if function takes more than a single optional parameter
+  // implement the following methods if function takes more than a single optional parameter
 
-	// check if a JSON object as the first argument after the required arguments
-	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return FF_ARG_IS_OBJECT(2);
-	}
+  // check if a JSON object as the first argument after the required arguments
+  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+    return FF_ARG_IS_OBJECT(2);
+  }
 
-	// get the values from named properties of the JSON object
-	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-		FF_OBJ opts = info[2]->ToObject();
-		return (
-			DoubleConverter::optProp(&sigmaY, "sigmaY", opts) ||
-			IntConverter::optProp(&borderType, "borderType", opts)
-		);
-	}
+  // get the values from named properties of the JSON object
+  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+    FF_OBJ opts = info[2]->ToObject();
+    return (
+      DoubleConverter::optProp(&sigmaY, "sigmaY", opts) ||
+      IntConverter::optProp(&borderType, "borderType", opts)
+    );
+  }
 };
 ```
 
@@ -136,14 +139,14 @@ After you have set up the worker, implementing the bindings is as easy as follow
 
 ``` c++
 NAN_METHOD(Mat::GaussianBlur) {
-	GaussianBlurWorker worker(Mat::Converter::unwrap(info.This()));
-	FF_WORKER_SYNC("Mat::GaussianBlur", worker);
-	info.GetReturnValue().Set(worker.getReturnValue());
+  GaussianBlurWorker worker(Mat::Converter::unwrap(info.This()));
+  FF_WORKER_SYNC("Mat::GaussianBlur", worker);
+  info.GetReturnValue().Set(worker.getReturnValue());
 }
 
 NAN_METHOD(Mat::GaussianBlurAsync) {
-	GaussianBlurWorker worker(Mat::Converter::unwrap(info.This()));
-	FF_WORKER_ASYNC("Mat::GaussianBlurAsync", GaussianBlurWorker, worker);
+  GaussianBlurWorker worker(Mat::Converter::unwrap(info.This()));
+  FF_WORKER_ASYNC("Mat::GaussianBlurAsync", GaussianBlurWorker, worker);
 }
 ```
 
@@ -152,6 +155,7 @@ NAN_METHOD(Mat::GaussianBlurAsync) {
 For converting native types to v8 types and unwrapping/ wrapping objects and instances you can use the Converters. A Converter will perform type checking and throw an error if converting a value or unwrapping an object failed. If a converter returns true, an error was thrown. You should use the Converters in conjunction with a worker struct. Otherwise you will have to handle rethrowing the error manually. There are Converters for conversion of primitive types, for unwrapping/ wrapping class instances as well as arrays of primitive types and arrays of instances. For representation of a JS array in c++ we are using std::vector.
 
 Some Usage examples:
+
 ``` c++
 // require arg 0 to be a Mat
 cv::Mat img;
@@ -191,25 +195,25 @@ v8::Local<v8::Array> jsPoints = ObjectArrayConverter<Point2, cv::Point2d>::wrap(
 // std::vector<cv::Point2i> you can use the third template parameter to specify a conversion type
 std::vector<cv::Point2i> points;
 v8::Local<v8::Array> jsPoints = ObjectArrayConverter<Point2, cv::Point2d, cv::Point2i>::wrap(points);
-ObjectArrayConverter<Point2, cv::Point2d, cv::Point2i>::wrap(points);
 ```
 
 A class can be made convertable if you you add the typedef for an InstanceConverter the class definition. Example for the Mat class wrapper:
+
 ``` c++
 class Mat : public Nan::ObjectWrap {
 public:
   cv::Mat mat;
 
-	...
+  ...
 
-	cv::Mat* getNativeObjectPtr() { return &mat; }
-	cv::Mat getNativeObject() { return mat; }
+  cv::Mat* getNativeObjectPtr() { return &mat; }
+  cv::Mat getNativeObject() { return mat; }
 
-	typedef InstanceConverter<Mat, cv::Mat> Converter;
+  typedef InstanceConverter<Mat, cv::Mat> Converter;
 
-	static const char* getClassName() {
-		return "Mat";
-	}
+  static const char* getClassName() {
+    return "Mat";
+  }
 };
 ```
 
@@ -272,6 +276,7 @@ In the corresponding markdown file in the doc folder add some docs, so that peop
 <a name="gaussianBlur"></a>
 
 ### gaussianBlur
+
 ``` javascript
 Mat : mat.gaussianBlur(Size kSize, Number sigmaX, Number sigmaY = 0.0, Uint borderType = BORDER_CONSTANT)
 ```
@@ -279,6 +284,7 @@ Mat : mat.gaussianBlur(Size kSize, Number sigmaX, Number sigmaY = 0.0, Uint bord
 <a name="gaussianBlurAsync"></a>
 
 ### gaussianBlurAsync
+
 ``` javascript
 mat.gaussianBlurAsync(Size kSize, Number sigmaX, callback(Error err, Mat result))
 mat.gaussianBlurAsync(Size kSize, Number sigmaX, ...opts, callback(Error err, Mat result))
