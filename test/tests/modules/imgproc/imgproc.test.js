@@ -4,7 +4,8 @@ const {
   assertPropsWithValue,
   assertMetaData,
   funcShouldRequireArgs,
-  readTestImage
+  readTestImage,
+  generateAPITests
 } = global.utils;
 const { expect } = require('chai');
 const contourTests = require('./contourTests');
@@ -175,6 +176,39 @@ describe('imgproc', () => {
     it('can be called with optional args', () => {
       const canny = cv.canny(dx, dy, th1, th2, L2gradient);
       assertMetaData(canny)(3, 4, cv.CV_8U);
+    });
+  });
+
+  describe('transformation matrix getters', () => {
+    const srcPoints = [new cv.Point(0, 0), new cv.Point(10, 10), new cv.Point(0, 10)];
+    const dstPoints = [new cv.Point(0, 0), new cv.Point(20, 20), new cv.Point(0, 20)];
+
+    describe('getAffineTransform', () => {
+      generateAPITests({
+        getDut: () => cv,
+        methodName: 'getAffineTransform',
+        getRequiredArgs: () => ([
+          srcPoints,
+          dstPoints
+        ]),
+        hasAsync: false,
+        usesMacroInferno: true,
+        expectOutput: res => expect(res).to.be.instanceOf(cv.Mat)
+      });
+    });
+
+    describe('getPerspectiveTransform', () => {
+      generateAPITests({
+        getDut: () => cv,
+        methodName: 'getPerspectiveTransform',
+        getRequiredArgs: () => ([
+          srcPoints.concat(new cv.Point(10, 0)),
+          dstPoints.concat(new cv.Point(20, 0))
+        ]),
+        hasAsync: false,
+        usesMacroInferno: true,
+        expectOutput: res => expect(res).to.be.instanceOf(cv.Mat)
+      });
     });
   });
 });

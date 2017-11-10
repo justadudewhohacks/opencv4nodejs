@@ -14,6 +14,20 @@ Mat : getStructuringElement(Uint shape, Size kernelSize, Point2 anchor = new Poi
 Mat : getRotationMatrix2D(Point2 center, Number angle, Number scale = 1.0)
 ```
 
+<a name="getAffineTransform"></a>
+
+### getAffineTransform
+``` javascript
+Mat : getAffineTransform([Point2] srcPoints,[Point2] srcPoints)
+```
+
+<a name="getPerspectiveTransform"></a>
+
+### getPerspectiveTransform
+``` javascript
+Mat : getPerspectiveTransform([Point2] srcPoints,[Point2] srcPoints)
+```
+
 <a name="calcHist"></a>
 
 ### calcHist
