@@ -6,7 +6,8 @@ const {
 const {
   assertError,
   asyncFuncShouldRequireArgs,
-  _funcShouldRequireArgs: funcShouldRequireArgs
+  _funcShouldRequireArgs,
+  funcShouldRequireArgs: __funcShouldRequireArgs
 } = require('./testUtils');
 
 const getEmptyArray = () => ([]);
@@ -22,7 +23,11 @@ exports.generateAPITests = ({
   expectOutput,
   otherSyncTests = emptyFunc,
   otherAsyncCallbackedTests = emptyFunc,
-  otherAsyncPromisedTests = emptyFunc
+  otherAsyncPromisedTests = emptyFunc,
+  hasAsync = true,
+  // provide backwards compatibility for bindings implemented with
+  // macro-inferno macros
+  usesMacroInferno = false
 }) => {
   const methodNameAsync = `${methodName}Async`;
   const getOptionalArgs = _getOptionalArgs || (() => getOptionalArgsMap().map(kv => kv[1]));
@@ -31,6 +36,8 @@ exports.generateAPITests = ({
     getOptionalArgsMap().forEach((kv) => { optionalArgsObject[kv[0]] = kv[1]; });
     return optionalArgsObject;
   };
+
+  const funcShouldRequireArgs = usesMacroInferno ? __funcShouldRequireArgs : _funcShouldRequireArgs;
 
   const hasRequiredArgs = !!getRequiredArgs().length;
   const hasOptArgs = !!getOptionalArgs().length;
@@ -54,8 +61,8 @@ exports.generateAPITests = ({
     const method = isAsync ? methodNameAsync : methodName;
     const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
 
-    const getErrPrefix = () => `${(methodNameSpace ? `${methodNameSpace}::` : '')}${capitalize(method)} - Error:`;
-    const typeErrMsg = argN => `${getErrPrefix()} expected argument ${argN} to be of type`;
+    const getErrPrefix = () => `${(methodNameSpace ? `${methodNameSpace}::` : '')}${capitalize(method)} -${usesMacroInferno ? '' : ' Error:'}`;
+    const typeErrMsg = argN => `${getErrPrefix()} expected ${usesMacroInferno ? 'arg' : 'argument'} ${argN} to be of type`;
     const propErrMsg = prop => `${getErrPrefix()} expected property ${prop} to be of type`;
 
     const expectSuccess = (args, done) => {
@@ -156,21 +163,23 @@ exports.generateAPITests = ({
     otherSyncTests();
   });
 
-  describe('async', () => {
-    if (hasRequiredArgs) {
-      asyncFuncShouldRequireArgs(() => getDut()[methodNameAsync]());
-    }
+  if (hasAsync) {
+    describe('async', () => {
+      if (hasRequiredArgs) {
+        asyncFuncShouldRequireArgs(() => getDut()[methodNameAsync]());
+      }
 
-    describe('callbacked', () => {
-      generateTests('callbacked');
+      describe('callbacked', () => {
+        generateTests('callbacked');
 
-      otherAsyncCallbackedTests();
+        otherAsyncCallbackedTests();
+      });
+
+      describe('promisified', () => {
+        generateTests('promised');
+
+        otherAsyncPromisedTests();
+      });
     });
-
-    describe('promisified', () => {
-      generateTests('promised');
-
-      otherAsyncPromisedTests();
-    });
-  });
+  }
 };
