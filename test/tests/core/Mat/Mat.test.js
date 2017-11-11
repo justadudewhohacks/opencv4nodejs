@@ -450,5 +450,77 @@ describe('Mat', () => {
       });
     });
   });
+
+  describe('findNonZero', () => {
+    const expectOutput = (res) => {
+      expect(res).to.be.an('array').lengthOf(3);
+    };
+
+    const mat = new cv.Mat([
+      [1, 0, 1],
+      [0, 1, 0]
+    ], cv.CV_8U);
+
+    generateAPITests({
+      getDut: () => mat,
+      methodName: 'findNonZero',
+      methodNameSpace: 'Mat',
+      expectOutput
+    });
+  });
+
+  describe('padToSquare', () => {
+    const expectOutput = (res) => {
+      expect(res).to.be.instanceOf(cv.Mat);
+      assertMetaData(res)(3, 3, cv.CV_8UC3);
+    };
+
+    describe('cols > rows', () => {
+      const mat = new cv.Mat([
+        [[255, 255, 255], [0, 0, 0], [255, 255, 255]],
+        [[0, 0, 0], [255, 255, 255], [0, 0, 0]]
+      ], cv.CV_8UC3);
+
+      generateAPITests({
+        getDut: () => mat,
+        getOptionalArgs: () => [new cv.Vec(255, 255, 255)],
+        methodName: 'padToSquare',
+        methodNameSpace: 'Mat',
+        expectOutput
+      });
+    });
+
+    describe('rows > cols', () => {
+      const mat = new cv.Mat([
+        [[255, 255, 255], [0, 0, 0]],
+        [[0, 0, 0], [255, 255, 255]],
+        [[0, 0, 0], [255, 255, 255]]
+      ], cv.CV_8UC3);
+
+      generateAPITests({
+        getDut: () => mat,
+        getOptionalArgs: () => [new cv.Vec(255, 255, 255)],
+        methodName: 'padToSquare',
+        methodNameSpace: 'Mat',
+        expectOutput
+      });
+    });
+
+    describe('rows === cols', () => {
+      const mat = new cv.Mat([
+        [[255, 255, 255], [0, 0, 0], [0, 0, 0]],
+        [[0, 0, 0], [255, 255, 255], [0, 0, 0]],
+        [[0, 0, 0], [255, 255, 255], [0, 0, 0]]
+      ], cv.CV_8UC3);
+
+      generateAPITests({
+        getDut: () => mat,
+        getOptionalArgs: () => [new cv.Vec(255, 255, 255)],
+        methodName: 'padToSquare',
+        methodNameSpace: 'Mat',
+        expectOutput
+      });
+    });
+  });
 });
 
