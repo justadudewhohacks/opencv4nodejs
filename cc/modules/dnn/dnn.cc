@@ -16,7 +16,7 @@ NAN_MODULE_INIT(Dnn::Init) {
 	Nan::SetMethod(target, "readNetFromTensorflow", ReadNetFromTensorflow);
 	Nan::SetMethod(target, "readNetFromTensorflowAsync", ReadNetFromTensorflowAsync);
 	Nan::SetMethod(target, "blobFromImage", BlobFromImage);
-	Nan::SetMethod(target, "blobFromImagsAsync", BlobFromImageAsync);
+	Nan::SetMethod(target, "blobFromImageAsync", BlobFromImageAsync);
 	Nan::SetMethod(target, "blobFromImages", BlobFromImages);
 	Nan::SetMethod(target, "blobFromImagesAsync", BlobFromImagesAsync);
 };
@@ -97,9 +97,9 @@ public:
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
 			DoubleConverter::optArg(1, &scalefactor, info) ||
-			BoolConverter::optArg(2, &swapRB, info) ||
-			Size::Converter::optArg(3, &size, info) ||
-			Vec3::Converter::optArg(4, &mean, info)
+			Size::Converter::optArg(2, &size, info) ||
+			Vec3::Converter::optArg(3, &mean, info) ||
+			BoolConverter::optArg(4, &swapRB, info)
 		);
 	}
 
@@ -108,7 +108,7 @@ public:
 	}
 
 	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-		v8::Local<v8::Object> opts = info[3]->ToObject();
+		v8::Local<v8::Object> opts = info[1]->ToObject();
 		return (
 			DoubleConverter::optProp(&scalefactor, "scalefactor", opts) ||
 			BoolConverter::optProp(&swapRB, "swapRB", opts) ||

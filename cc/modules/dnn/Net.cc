@@ -61,7 +61,7 @@ public:
 
 NAN_METHOD(Net::SetInput) {
 	SetInputWorker worker(Net::Converter::unwrap(info.This()));
-	FF_WORKER_SYNC("Net::SetInputWorker", worker);
+	FF_WORKER_SYNC("Net::SetInput", worker);
 	info.GetReturnValue().Set(worker.getReturnValue());
 }
 

@@ -10,7 +10,6 @@
 #include "modules/features2d/features2d.h"
 #include "modules/objdetect/objdetect.h"
 #include "modules/machinelearning/machinelearning.h"
-#include "modules/dnn/dnn.h"
 #ifdef HAVE_TRACKING
 #include "modules/tracking/tracking.h"
 #endif // HAVE_TRACKING
