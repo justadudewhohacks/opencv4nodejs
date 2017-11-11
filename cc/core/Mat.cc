@@ -46,6 +46,10 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "addWeightedAsync", AddWeightedAsync);
 	Nan::SetPrototypeMethod(ctor, "minMaxLoc", MinMaxLoc);
 	Nan::SetPrototypeMethod(ctor, "minMaxLocAsync", MinMaxLocAsync);
+	Nan::SetPrototypeMethod(ctor, "findNonZero", FindNonZero);
+	Nan::SetPrototypeMethod(ctor, "findNonZeroAsync", FindNonZeroAsync);
+	Nan::SetPrototypeMethod(ctor, "padToSquare", PadToSquare);
+	Nan::SetPrototypeMethod(ctor, "padToSquareAsync", PadToSquareAsync);
 	Nan::SetPrototypeMethod(ctor, "dct", Dct);
 	Nan::SetPrototypeMethod(ctor, "dctAsync", DctAsync);
 	Nan::SetPrototypeMethod(ctor, "idct", Idct);
@@ -650,6 +654,83 @@ NAN_METHOD(Mat::MinMaxLoc) {
 NAN_METHOD(Mat::MinMaxLocAsync) {
 	MinMaxLocWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::MinMaxLocAsync", MinMaxLocWorker, worker);
+}
+
+struct Mat::FindNonZeroWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	FindNonZeroWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	std::vector<cv::Point> idx;
+
+	const char* execute() {
+		cv::findNonZero(self, idx);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::wrap(idx);
+	}
+};
+
+NAN_METHOD(Mat::FindNonZero) {
+	FindNonZeroWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::FindNonZero", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::FindNonZeroAsync) {
+	FindNonZeroWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::FindNonZeroAsync", FindNonZeroWorker, worker);
+}
+
+
+struct Mat::PadToSquareWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	PadToSquareWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	cv::Vec3d fillVec = cv::Vec3d();
+	cv::Mat out;
+	const char* execute() {
+		int maxDim = (std::max)(self.cols, self.rows);
+		out = cv::Mat(maxDim, maxDim, self.type(), (cv::Vec3b)fillVec);
+
+		int offX = 0, offY = 0;
+		if (self.cols > self.rows) {
+			offY = (self.cols - self.rows) / 2;
+		}
+		else {
+			offX = (self.rows - self.cols) / 2;
+		}
+		cv::Mat roi = out(cv::Rect(offX, offY, self.cols, self.rows));
+		self.copyTo(roi);
+
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(out);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return Vec3::Converter::optArg(0, &fillVec, info);
+	}
+};
+
+NAN_METHOD(Mat::PadToSquare) {
+	PadToSquareWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::PadToSquare", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::PadToSquareAsync) {
+	PadToSquareWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::PadToSquareAsync", PadToSquareWorker, worker);
 }
 
 struct Mat::DTWorker : public SimpleWorker {

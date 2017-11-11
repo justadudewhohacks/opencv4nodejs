@@ -64,6 +64,15 @@ public:
 	static NAN_METHOD(MinMaxLoc);
 	static NAN_METHOD(MinMaxLocAsync);
 
+	struct FindNonZeroWorker;
+	static NAN_METHOD(FindNonZero);
+	static NAN_METHOD(FindNonZeroAsync);
+
+	struct PadToSquareWorker;
+	static NAN_METHOD(PadToSquare);
+	static NAN_METHOD(PadToSquareAsync);
+
+
 	FF_INIT_MAT_OPERATIONS();
 	static NAN_METHOD(Dot) {
 		FF_OPERATOR_RET_SCALAR(&cv::Mat::dot, FF_APPLY_CLASS_FUNC, FF_UNWRAP_MAT_AND_GET, Mat);

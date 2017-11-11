@@ -53,6 +53,8 @@
 			"cc/modules/machinelearning/StatModel.cc",
 			"cc/modules/machinelearning/SVM.cc",
 			"cc/modules/machinelearning/TrainData.cc",
+			"cc/modules/dnn/dnn.cc",
+			"cc/modules/dnn/Net.cc",
 			"cc/modules/face/face.cc",
 			"cc/modules/face/FaceRecognizer.cc",
 			"cc/modules/face/EigenFaceRecognizer.cc",

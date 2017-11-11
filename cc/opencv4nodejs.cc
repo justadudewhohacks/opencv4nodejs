@@ -10,6 +10,7 @@
 #include "modules/features2d/features2d.h"
 #include "modules/objdetect/objdetect.h"
 #include "modules/machinelearning/machinelearning.h"
+#include "modules/dnn/dnn.h"
 #ifdef HAVE_TRACKING
 #include "modules/tracking/tracking.h"
 #endif // HAVE_TRACKING
@@ -25,6 +26,14 @@
 #ifdef HAVE_FACE
 #include "modules/face/face.h"
 #endif // HAVE_FACE
+
+#if CV_VERSION_MINOR > 2
+#define HAVE_DNN_CV3
+#endif
+
+#ifdef HAVE_DNN_CV3
+#include "modules/dnn/dnn.h"
+#endif // HAVE_DNN_CV3
 
 void init(v8::Local<v8::Object> target) {
 	v8::Local<v8::Object> version = Nan::New<v8::Object>();
@@ -45,6 +54,10 @@ void init(v8::Local<v8::Object> target) {
   Features2d::Init(target);
   Objdetect::Init(target);
 	MachineLearning::Init(target);
+#ifdef HAVE_DNN_CV3
+	Nan::Set(xmodules, FF_NEW_STRING("dnn"), Nan::New(true));
+	Dnn::Init(target);
+#endif // HAVE_DNN_CV3
 #ifdef HAVE_TRACKING
 	Nan::Set(xmodules, FF_NEW_STRING("tracking"), Nan::New(true));
 	Tracking::Init(target);
