@@ -44,9 +44,10 @@ Check out my <a href="https://medium.com/@muehler.v/simple-hand-gesture-recognit
 
 #### Tensorflow Inception
 
-![husky](https://user-images.githubusercontent.com/31125521/32703212-cc99cfa8-c7f2-11e7-8b22-b9841ef645bd.jpg)
-![car](https://user-images.githubusercontent.com/31125521/32703213-ccb488fc-c7f2-11e7-8fad-c5a9dd7c3b5a.jpeg)
-![banana](https://user-images.githubusercontent.com/31125521/32703214-ccd04e52-c7f2-11e7-9c45-2af802c68583.jpg)
+![husky](https://user-images.githubusercontent.com/31125521/32703295-f6b0e7ee-c7f3-11e7-8039-b3ada21810a0.jpg)
+![car](https://user-images.githubusercontent.com/31125521/32703296-f6cea892-c7f3-11e7-8aaa-9fe48b88fe05.jpeg)
+![banana](https://user-images.githubusercontent.com/31125521/32703297-f6e932ca-c7f3-11e7-9a66-bbc826ebf007.jpg)
+
 
 #### Single Shot Multibox Detector with COCO
 
