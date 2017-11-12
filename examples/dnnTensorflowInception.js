@@ -7,7 +7,7 @@ if (!cv.xmodules.dnn) {
 }
 
 // replace with path where you unzipped inception model
-const inceptionModelPath = '../data/dnn'
+const inceptionModelPath = '../data/dnn/tf-inception'
 
 const modelFile = path.resolve(inceptionModelPath, 'tensorflow_inception_graph.pb');
 const classNamesFile = path.resolve(inceptionModelPath, 'imagenet_comp_graph_label_strings.txt');

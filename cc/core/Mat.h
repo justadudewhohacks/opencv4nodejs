@@ -16,6 +16,7 @@ public:
 	static NAN_METHOD(New);
 
 	static NAN_METHOD(Eye);
+	static NAN_METHOD(FlattenFloat);
 
 	static FF_GETTER(Mat, GetRows, mat.rows);
 	static FF_GETTER(Mat, GetCols, mat.cols);
@@ -24,6 +25,14 @@ public:
 	static FF_GETTER(Mat, GetDims, mat.dims);
 	static FF_GETTER(Mat, GetDepth, mat.depth());
 	static FF_GETTER(Mat, GetIsEmpty, mat.empty());
+	static NAN_GETTER(GetSizes) {
+		cv::Mat m = Converter::unwrap(info.This());
+		std::vector<int> sizes;
+		for (int s = 0; s < m.dims; s++) {
+			sizes.push_back(m.size[s]);
+		}
+		info.GetReturnValue().Set(IntArrayConverter::wrap(sizes));
+	};
 
 	static NAN_METHOD(At);
 	static NAN_METHOD(AtRaw);

@@ -15,6 +15,8 @@ NAN_MODULE_INIT(Dnn::Init) {
 
 	Nan::SetMethod(target, "readNetFromTensorflow", ReadNetFromTensorflow);
 	Nan::SetMethod(target, "readNetFromTensorflowAsync", ReadNetFromTensorflowAsync);
+	Nan::SetMethod(target, "readNetFromCaffe", ReadNetFromCaffe);
+	Nan::SetMethod(target, "readNetFromCaffeAsync", ReadNetFromCaffeAsync);
 	Nan::SetMethod(target, "blobFromImage", BlobFromImage);
 	Nan::SetMethod(target, "blobFromImageAsync", BlobFromImageAsync);
 	Nan::SetMethod(target, "blobFromImages", BlobFromImages);
@@ -56,6 +58,51 @@ NAN_METHOD(Dnn::ReadNetFromTensorflowAsync) {
 	ReadNetFromTensorflowWorker worker;
 	FF_WORKER_ASYNC("Dnn::ReadNetFromTensorflowAsync", ReadNetFromTensorflowWorker, worker);
 }
+
+
+struct Dnn::ReadNetFromCaffeWorker : public SimpleWorker {
+public:
+	std::string prototxt;
+	std::string modelFile = "";
+
+	cv::dnn::Net net;
+
+	const char* execute() {
+		net = cv::dnn::readNetFromCaffe(prototxt, modelFile);
+		if (net.empty()) {
+			return std::string("failed to prototxt: " + prototxt + ", modelFile: " + modelFile).data();
+		}
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Net::Converter::wrap(net);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			StringConverter::arg(0, &prototxt, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			StringConverter::optArg(1, &modelFile, info)
+		);
+	}
+};
+
+NAN_METHOD(Dnn::ReadNetFromCaffe) {
+	ReadNetFromCaffeWorker worker;
+	FF_WORKER_SYNC("Dnn::ReadNetFromCaffe", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Dnn::ReadNetFromCaffeAsync) {
+	ReadNetFromCaffeWorker worker;
+	FF_WORKER_ASYNC("Dnn::ReadNetFromCaffeAsync", ReadNetFromCaffeWorker, worker);
+}
+
 
 struct Dnn::BlobFromImageWorker : public SimpleWorker {
 public:

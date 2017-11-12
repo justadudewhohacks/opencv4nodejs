@@ -9,7 +9,8 @@ Mat {
   channels: Number,
   depth: Number,
   dims: Number,
-  empty: Boolean
+  empty: Boolean,
+  sizes: [Number]
 }
 ```
 

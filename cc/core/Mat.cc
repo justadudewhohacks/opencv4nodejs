@@ -21,8 +21,10 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("dims").ToLocalChecked(), Mat::GetDims);
 	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("depth").ToLocalChecked(), Mat::GetDepth);
 	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("empty").ToLocalChecked(), Mat::GetIsEmpty);
+	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("sizes").ToLocalChecked(), Mat::GetSizes);
 
 	Nan::SetMethod(ctor, "eye", Eye);
+	Nan::SetPrototypeMethod(ctor, "flattenFloat", FlattenFloat);
 
 	Nan::SetPrototypeMethod(ctor, "at", At);
 	Nan::SetPrototypeMethod(ctor, "atRaw", AtRaw);
@@ -220,6 +222,28 @@ NAN_METHOD(Mat::New) {
 	FF_RETURN(info.Holder());
 }
 
+NAN_METHOD(Mat::Eye) {
+	FF_METHOD_CONTEXT("Mat::Eye");
+	FF_ARG_INT(0, int rows);
+	FF_ARG_INT(1, int cols);
+	FF_ARG_INT(2, int type);
+	FF_OBJ jsEyeMat = FF_NEW_INSTANCE(Mat::constructor);
+	FF_UNWRAP_MAT_AND_GET(jsEyeMat) = cv::Mat::eye(cv::Size(cols, rows), type);
+	FF_RETURN(jsEyeMat);
+}
+
+// squash multidimensional Mat into 2D Mat
+// TODO: figure out how to deal with multidim Mats
+NAN_METHOD(Mat::FlattenFloat) {
+	FF_METHOD_CONTEXT("Mat::To2DFloat");
+	FF_ARG_INT(0, int rows);
+	FF_ARG_INT(1, int cols);
+
+	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+	cv::Mat mat2D(rows, cols, CV_32F, matSelf.ptr<float>());
+	FF_RETURN(Mat::Converter::wrap(mat2D));
+}
+
 NAN_METHOD(Mat::At) {
 	FF_METHOD_CONTEXT("Mat::At");
 	cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
@@ -249,16 +273,6 @@ NAN_METHOD(Mat::At) {
 		jsVal = v8::Local<v8::Value>::Cast(val);
 	}
 	FF_RETURN(jsVal);
-}
-
-NAN_METHOD(Mat::Eye) {
-	FF_METHOD_CONTEXT("Mat::Eye");
-	FF_ARG_INT(0, int rows);
-	FF_ARG_INT(1, int cols);
-	FF_ARG_INT(2, int type);
-	FF_OBJ jsEyeMat = FF_NEW_INSTANCE(Mat::constructor);
-	FF_UNWRAP_MAT_AND_GET(jsEyeMat) = cv::Mat::eye(cv::Size(cols, rows), type);
-	FF_RETURN(jsEyeMat);
 }
 
 NAN_METHOD(Mat::AtRaw) {

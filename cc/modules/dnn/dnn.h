@@ -12,7 +12,10 @@ public:
 	static NAN_METHOD(ReadNetFromTensorflow);
 	static NAN_METHOD(ReadNetFromTensorflowAsync);
 
-#if CV_VERSION_MINOR > 2
+	struct ReadNetFromCaffeWorker;
+	static NAN_METHOD(ReadNetFromCaffe);
+	static NAN_METHOD(ReadNetFromCaffeAsync);
+
 	struct BlobFromImageWorker;
 	static NAN_METHOD(BlobFromImage);
 	static NAN_METHOD(BlobFromImageAsync);
@@ -20,7 +23,6 @@ public:
 	struct BlobFromImagesWorker;
 	static NAN_METHOD(BlobFromImages);
 	static NAN_METHOD(BlobFromImagesAsync);
-#endif
 };
 
 #endif
