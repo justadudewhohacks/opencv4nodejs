@@ -31,12 +31,27 @@ See <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/exam
 
 ### Face Recognition
 
+Check out my <a href="https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0"><b>article</b></a> about face recognition.
+
 ![facerec](https://user-images.githubusercontent.com/31125521/32416405-d71ad684-c248-11e7-9a6f-016d0edf2c15.jpg)
 
 ### Hand Gesture Recognition
 Check out my <a href="https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0"><b>article</b></a> about fingertip detection.
 
 ![gesture-rec_sm](https://user-images.githubusercontent.com/31125521/30052864-41bd5680-9227-11e7-8a62-6205f3d99d5c.gif)
+
+### Object Recognition with Deep Neural Networks
+
+#### Tensorflow Inception
+
+![husky](https://user-images.githubusercontent.com/31125521/32703212-cc99cfa8-c7f2-11e7-8b22-b9841ef645bd.jpg)
+![car](https://user-images.githubusercontent.com/31125521/32703213-ccb488fc-c7f2-11e7-8fad-c5a9dd7c3b5a.jpeg)
+![banana](https://user-images.githubusercontent.com/31125521/32703214-ccd04e52-c7f2-11e7-9c45-2af802c68583.jpg)
+
+#### Single Shot Multibox Detector with COCO
+
+![dishes-detection](https://user-images.githubusercontent.com/31125521/32703228-eae787d4-c7f2-11e7-8323-ea0265deccb3.jpg)
+![car-detection](https://user-images.githubusercontent.com/31125521/32703229-eb081e36-c7f2-11e7-8b26-4d253b4702b4.jpg)
 
 ### Machine Learning
 Check out my <a href="https://medium.com/@muehler.v/machine-learning-with-opencv-and-javascript-part-1-recognizing-handwritten-letters-using-hog-and-88719b70efaa"><b>article</b></a> about recognition of handwritten letters using Histogram of oriented Gradients (HOG) and Support Vector Machines (SVM).
@@ -385,6 +400,7 @@ try {
 * <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/ximgproc/"><b>ximgproc</b></a>
 * <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/objdetect/"><b>objdetect</b></a>
 * <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/machinelearning/"><b>machinelearning</b></a>
+* <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/dnn/"><b>deepneuralnetworks</b></a>
 * <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/video/"><b>video</b></a>
 * <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/calib3d.md"><b>calib3d</b></a>
 * <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/doc/photo.md"><b>photo</b></a>
