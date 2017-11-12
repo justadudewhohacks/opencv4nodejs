@@ -14,6 +14,21 @@ Net : readNetFromTensorflow(String modelPath)
 readNetFromTensorflowAsync(String modelPath, callback(Error err, Net net))
 ```
 
+<a name="readNetFromCaffe"></a>
+
+### readNetFromCaffe
+``` javascript
+Net : readNetFromCaffe(String prototxt, String modelPath = '')
+```
+
+<a name="readNetFromCaffeAsync"></a>
+
+### readNetFromCaffeAsync
+``` javascript
+readNetFromCaffeAsync(String prototxt, callback(Error err, Net net))
+readNetFromCaffeAsync(String prototxt, String modelPath, callback(Error err, Net net))
+```
+
 <a name="blobFromImage"></a>
 
 ### blobFromImage
