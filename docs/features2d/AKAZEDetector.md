@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# AKAZEDetector
+###  AKAZEDetector
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 AKAZEDetector {
   descriptorType: Int,
   descriptorSize: Int,
@@ -19,36 +19,36 @@ AKAZEDetector {
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 AKAZEDetector : new AKAZEDetector(Int descriptorType = AKAZE.DESCRIPTOR_MLDB, Int descriptorSize = 0, Int descriptorChannels = 3, Number threshold = 0.01, Int nOctaves = 4, Int nOctaveLayers = 4, Int diffusivity = KAZE.DIFF_PM_G2)
 ```
-## Methods
+####  Methods
 
 <a name="detect"></a>
 
-### detect
-``` javascript
+#####  detect
+``` ruby
 [KeyPoint] : detector.detect(Mat image)
 ```
 
 <a name="detectAsync"></a>
 
-### detectAsync
-``` javascript
+#####  detectAsync
+``` ruby
 detector.detectAsync(Mat image, callback(Error err, [KeyPoint] kps))
 ```
 
 <a name="compute"></a>
 
-### compute
-``` javascript
+#####  compute
+``` ruby
 Mat : detector.compute(Mat image, [KeyPoint] keypoints)
 ```
 
 <a name="computeAsync"></a>
 
-### computeAsync
-``` javascript
+#####  computeAsync
+``` ruby
 detector.computeAsync(Mat image, [KeyPoint] keypoints, callback(Error err, Mat descriptors))
 ```

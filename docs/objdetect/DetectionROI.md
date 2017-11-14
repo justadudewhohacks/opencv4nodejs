@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# DetectionROI
+###  DetectionROI
 
-## Accessors (writeable)
-``` javascript
+####  Accessors (writeable)
+``` ruby
 DetectionROI {
   scale: Number,
   locations: [Point2],
@@ -15,7 +15,7 @@ DetectionROI {
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 DetectionROI : new DetectionROI()
 ```

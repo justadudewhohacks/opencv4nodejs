@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# DescriptorMatch
+###  DescriptorMatch
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 DescriptorMatch {
   queryIdx: Int,
   trainIdx: Int,
@@ -15,7 +15,7 @@ DescriptorMatch {
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 DescriptorMatch : new DescriptorMatch(Int queryIdx, Int trainIdx size, Number distance)
 ```

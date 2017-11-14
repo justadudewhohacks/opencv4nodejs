@@ -2,40 +2,40 @@
 layout: default
 ---
 
-# SimpleBlobDetector
+###  SimpleBlobDetector
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 SimpleBlobDetector : new SimpleBlobDetector(SimpleBlobDetectorParams params)
 ```
-## Methods
+####  Methods
 
 <a name="detect"></a>
 
-### detect
-``` javascript
+#####  detect
+``` ruby
 [KeyPoint] : detector.detect(Mat image)
 ```
 
 <a name="detectAsync"></a>
 
-### detectAsync
-``` javascript
+#####  detectAsync
+``` ruby
 detector.detectAsync(Mat image, callback(Error err, [KeyPoint] kps))
 ```
 
 <a name="compute"></a>
 
-### compute
-``` javascript
+#####  compute
+``` ruby
 Mat : detector.compute(Mat image, [KeyPoint] keypoints)
 ```
 
 <a name="computeAsync"></a>
 
-### computeAsync
-``` javascript
+#####  computeAsync
+``` ruby
 detector.computeAsync(Mat image, [KeyPoint] keypoints, callback(Error err, Mat descriptors))
 ```

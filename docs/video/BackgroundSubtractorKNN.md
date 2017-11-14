@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# BackgroundSubtractorKNN
+###  BackgroundSubtractorKNN
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 BackgroundSubtractorKNN
 {
   history: Uint,
@@ -16,16 +16,16 @@ BackgroundSubtractorKNN
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 BackgroundSubtractorKNN : new BackgroundSubtractorKNN(Uint history = 500, Number varThreshold = 400, Boolean detectShadows = true)
 ```
 
-## Methods
+####  Methods
 
 <a name="apply"></a>
 
-### apply
-``` javascript
+#####  apply
+``` ruby
 Mat : bgsubtractor.apply(Mat frame, Number learningRate = -1)
 ```

@@ -2,54 +2,54 @@
 layout: default
 ---
 
-# VideoWriter
+###  VideoWriter
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 VideoWriter : new VideoWriter(String filePath, Int fourccCode, Number fps, Size frameSize, Bool isColor = true)
 ```
-## Methods
+####  Methods
 
 <a name="fourcc"></a>
 
-### fourcc
-``` javascript
+#####  fourcc
+``` ruby
 Int : VideoWriter.fourcc(String fourcc)
 ```
 
 <a name="write"></a>
 
-### write
-``` javascript
+#####  write
+``` ruby
 writer.write(Mat img)
 ```
 
 <a name="writeAsync"></a>
 
-### writeAsync
-``` javascript
+#####  writeAsync
+``` ruby
 writer.writeAsync(Mat img, callback(Error err))
 ```
 
 <a name="get"></a>
 
-### get
-``` javascript
+#####  get
+``` ruby
 writer.get(Int property)
 ```
 
 <a name="set"></a>
 
-### set
-``` javascript
+#####  set
+``` ruby
 writer.set(Int property, Number value)
 ```
 
 <a name="release"></a>
 
-### release
-``` javascript
+#####  release
+``` ruby
 writer.release()
 ```

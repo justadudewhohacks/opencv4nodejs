@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# SuperpixelLSC
+###  SuperpixelLSC
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 {
 	img: Mat,
   labels: Mat,
@@ -18,16 +18,16 @@ layout: default
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 SuperpixelLSC : new SuperpixelLSC(Mat img, Int regionSize = 10, Number ratio = 10)
 ```
 
-## Methods
+####  Methods
 
 <a name="iterate"></a>
 
-### iterate
-``` javascript
+#####  iterate
+``` ruby
 lsc.iterate(Uint iterations = 10)
 ```

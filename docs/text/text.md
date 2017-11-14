@@ -2,47 +2,47 @@
 layout: default
 ---
 
-# text
+###  text
 
 <a name="loadOCRHMMClassifierCNN"></a>
 
-### loadOCRHMMClassifierCNN
-``` javascript
+#####  loadOCRHMMClassifierCNN
+``` ruby
 OCRHMMClassifier : loadOCRHMMClassifierCNN(String file)
 ```
 
 <a name="loadOCRHMMClassifierCNNAsync"></a>
 
-### loadOCRHMMClassifierCNNAsync
-``` javascript
+#####  loadOCRHMMClassifierCNNAsync
+``` ruby
 loadOCRHMMClassifierCNNAsync(String file, callback(Error err, OCRHMMClassifier classifier))
 ```
 
 <a name="loadOCRHMMClassifierNM"></a>
 
-### loadOCRHMMClassifierNM
-``` javascript
+#####  loadOCRHMMClassifierNM
+``` ruby
 OCRHMMClassifier : loadOCRHMMClassifierNM(String file)
 ```
 
 <a name="loadOCRHMMClassifierNMAsync"></a>
 
-### loadOCRHMMClassifierNMAsync
-``` javascript
+#####  loadOCRHMMClassifierNMAsync
+``` ruby
 loadOCRHMMClassifierNMAsync(String file, callback(Error err, OCRHMMClassifier classifier))
 ```
 
 <a name="createOCRHMMTransitionsTable"></a>
 
-### createOCRHMMTransitionsTable
-``` javascript
+#####  createOCRHMMTransitionsTable
+``` ruby
 Mat : createOCRHMMTransitionsTable(String vocabulary, [String] lexicon)
 ```
 
 <a name="createOCRHMMTransitionsTableAsync"></a>
 
-### createOCRHMMTransitionsTableAsync
-``` javascript
+#####  createOCRHMMTransitionsTableAsync
+``` ruby
 createOCRHMMTransitionsTableAsync(String vocabulary, [String] lexicon, callback(Error err, Mat table))
 ```
 

@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# FASTDetector
+###  FASTDetector
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 FASTDetector {
   threshold: Int,
   type: Int,
@@ -15,22 +15,22 @@ FASTDetector {
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 FASTDetector : new FASTDetector(Int threshold = 10, Boolean nonmaxSuppression = true, Int type = FAST.TYPE_9_16)
 ```
-## Methods
+####  Methods
 
 <a name="detect"></a>
 
-### detect
-``` javascript
+#####  detect
+``` ruby
 [KeyPoint] : detector.detect(Mat image)
 ```
 
 <a name="detectAsync"></a>
 
-### detectAsync
-``` javascript
+#####  detectAsync
+``` ruby
 detector.detectAsync(Mat image, callback(Error err, [KeyPoint] kps))
 ```

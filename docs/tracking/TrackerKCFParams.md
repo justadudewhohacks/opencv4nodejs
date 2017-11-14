@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# TrackerKCFParams (v3.1, v3.2, v3.3)
+###  TrackerKCFParams (v3.1, v3.2, v3.3)
 
-## Accessors (Writeable)
-``` javascript
+####  Accessors (Writeable)
+``` ruby
 TrackerKCFParams
 {
   sigma: Number,
@@ -26,7 +26,7 @@ TrackerKCFParams
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 TrackerKCFParams : new TrackerKCFParams()
 ```

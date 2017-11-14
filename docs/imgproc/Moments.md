@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# Moments
+###  Moments
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 {
   m00: Number,
   m10: Number,
@@ -36,11 +36,11 @@ layout: default
 }
 ```
 
-## Methods
+####  Methods
 
 <a name="huMoments"></a>
 
-### huMoments
-``` javascript
+#####  huMoments
+``` ruby
 [Number] moments.huMoments()
 ```

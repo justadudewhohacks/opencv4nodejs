@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# SVM
+###  SVM
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 SVM {
   c: Number,
   coef0: Number,
@@ -22,8 +22,8 @@ SVM {
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 SVM : new SVM({
   c: Number = 0,
   coef0: Number = 0,
@@ -36,12 +36,12 @@ SVM : new SVM({
 })
 ```
 
-## Methods
+####  Methods
 
 <a name="setParams"></a>
 
-### setParams
-``` javascript
+#####  setParams
+``` ruby
 svm.setParams({
   c: Number = this.c,
   coef0: Number = this.coef0,
@@ -56,31 +56,31 @@ svm.setParams({
 
 <a name="train"></a>
 
-### train
-``` javascript
+#####  train
+``` ruby
 Boolean : svm.train(TrainData trainData, Uint flags = 0)
 Boolean : svm.train(Mat samples, Uint layout, Mat responses)
 ```
 
 <a name="trainAsync"></a>
 
-### trainAsync
-``` javascript
+#####  trainAsync
+``` ruby
 svm.trainAsync(TrainData trainData, callback(Error err, Boolean res))
 svm.trainAsync(TrainData trainData, Uint flags, callback(Error err, Boolean res))
 svm.trainAsync(Mat samples, Uint layout, Mat responses, callback(Error err, Boolean res))
 ```
 <a name="trainAuto"></a>
 
-### trainAuto
-``` javascript
+#####  trainAuto
+``` ruby
 Mat : svm.trainAuto(TrainData trainData, Uint kFold = 10, ParamGrid cGrid = ParamGrid(ml.SVM.C), ParamGrid gammaGrid = ParamGrid(ml.SVM.GAMMA), ParamGrid pGrid = ParamGrid(ml.SVM.P), ParamGrid nuGrid = ParamGrid(ml.SVM.NU), ParamGrid coeffGrid = ParamGrid(ml.SVM.COEF), ParamGrid degreeGrid = ParamGrid(ml.SVM.DEGREE), Boolean balanced = false)
 ```
 
 <a name="trainAutoAsync"></a>
 
-### trainAutoAsync
-``` javascript
+#####  trainAutoAsync
+``` ruby
 svm.trainAutoAsync(TrainData trainData, callback(Error err, Boolean res))
 svm.trainAutoAsync(TrainData trainData, ...opts, callback(Error err, Boolean res))
 svm.trainAutoAsync(TrainData trainData, { opts }, callback(Error err, Boolean res))
@@ -88,36 +88,36 @@ svm.trainAutoAsync(TrainData trainData, { opts }, callback(Error err, Boolean re
 
 <a name="predict"></a>
 
-### predict
-``` javascript
+#####  predict
+``` ruby
 Uint : svm.predict([Number] sample, Uint flags = 0)
 [Uint] : svm.predict(Mat samples, Uint flags = 0)
 ```
 
 <a name="save"></a>
 
-### save
-``` javascript
+#####  save
+``` ruby
 svm.save(String file)
 ```
 
 <a name="load"></a>
 
-### load
-``` javascript
+#####  load
+``` ruby
 svm.load(String file)
 ```
 
 <a name="getSupportVectors"></a>
 
-### getSupportVectors
-``` javascript
+#####  getSupportVectors
+``` ruby
 Mat : svm.getSupportVectors()
 ```
 
 <a name="calcError"></a>
 
-### calcError
-``` javascript
+#####  calcError
+``` ruby
 { error: Number, responses: Mat } : svm.calcError(TrainData trainData, Boolean test)
 ```

@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# GFTTDetector
+###  GFTTDetector
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 GFTTDetector {
   maxCorners: Int,
   blockSize: Int,
@@ -18,22 +18,22 @@ GFTTDetector {
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 GFTTDetector : new GFTTDetector(Int maxCorners = 1000, Number qualityLevel = 0.01, Number minDistance = 1.0, Int blockSize = 3, Boolean useHarrisDetector = false, Number k = 0.04)
 ```
-## Methods
+####  Methods
 
 <a name="detect"></a>
 
-### detect
-``` javascript
+#####  detect
+``` ruby
 [KeyPoint] : detector.detect(Mat image)
 ```
 
 <a name="detectAsync"></a>
 
-### detectAsync
-``` javascript
+#####  detectAsync
+``` ruby
 detector.detectAsync(Mat image, callback(Error err, [KeyPoint] kps))
 ```

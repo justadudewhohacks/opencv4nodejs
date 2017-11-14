@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# SimpleBlobDetectorParams
+###  SimpleBlobDetectorParams
 
-## Accessors (Writeable)
-``` javascript
+####  Accessors (Writeable)
+``` ruby
 SimpleBlobDetectorParams
 {
   blobColor: Uchar,
@@ -32,7 +32,7 @@ SimpleBlobDetectorParams
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 SimpleBlobDetectorParams : new SimpleBlobDetectorParams()
 ```

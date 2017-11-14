@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# TermCriteria
+###  TermCriteria
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 {
   type: Int,
   maxCount: Int,
@@ -15,8 +15,8 @@ layout: default
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 TermCriteria : new TermCriteria()
 TermCriteria : new TermCriteria(Int type, Int maxCount, Number epsilon)
 ```

@@ -10,3 +10,5 @@ group :jekyll_plugins do
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+# Added at 2017-11-14 14:36:25 +0100 by windows-hlr83jn\user:
+gem "jekyll-pug", "~> 1.5"

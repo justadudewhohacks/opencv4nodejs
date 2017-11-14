@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# TrainData
+###  TrainData
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 TrainData {
  samples: Mat,
  layout: Uint,
@@ -18,7 +18,7 @@ TrainData {
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 TrainData : new TrainData(Mat samples, Uint layout, Mat responses, [Int] varIdx = [], [Int] sampleIdx = [], [Number] sampleWeights = [], [Uchar] varType = [])
 ```

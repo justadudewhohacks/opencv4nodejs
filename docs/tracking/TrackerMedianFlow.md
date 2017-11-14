@@ -2,34 +2,34 @@
 layout: default
 ---
 
-# TrackerMedianFlow
+###  TrackerMedianFlow
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 TrackerMedianFlow : new TrackerMedianFlow(Int pointsInGrid = null)
 ```
 
-## Methods
+####  Methods
 
 <a name="clear"></a>
 
-### clear
-``` javascript
+#####  clear
+``` ruby
 tracker.clear()
 ```
 
 <a name="init"></a>
 
-### init
-``` javascript
+#####  init
+``` ruby
 Boolean : tracker.init(Mat frame, Rect boundingBox)
 ```
 
 <a name="update"></a>
 
-### update
-``` javascript
+#####  update
+``` ruby
 Rect : tracker.update(Mat frame)
 ```

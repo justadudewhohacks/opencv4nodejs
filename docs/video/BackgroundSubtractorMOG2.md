@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# BackgroundSubtractorMOG2
+###  BackgroundSubtractorMOG2
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 BackgroundSubtractorMOG2
 {
   history: Uint,
@@ -16,16 +16,16 @@ BackgroundSubtractorMOG2
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 BackgroundSubtractorMOG2 : new BackgroundSubtractorMOG2(Uint history = 500, Number varThreshold = 16, Boolean detectShadows = true)
 ```
 
-## Methods
+####  Methods
 
 <a name="apply"></a>
 
-### apply
-``` javascript
+#####  apply
+``` ruby
 Mat : bgsubtractor.apply(Mat frame, Number learningRate = -1)
 ```

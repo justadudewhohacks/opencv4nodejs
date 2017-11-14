@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# SuperpixelSLIC
+###  SuperpixelSLIC
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 {
 	img: Mat,
   labels: Mat,
@@ -19,16 +19,16 @@ layout: default
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 SuperpixelSLIC : new SuperpixelSLIC(Mat img, Int algorithm = cv.SLICO, Int regionSize = 10, Number ruler = 10)
 ```
 
-## Methods
+####  Methods
 
 <a name="iterate"></a>
 
-### iterate
-``` javascript
+#####  iterate
+``` ruby
 slic.iterate(Uint iterations = 10)
 ```

@@ -6,8 +6,16 @@ baseurl: "/"
 url: https://justadudewhohacks.github.io/opencv4nodejs/
 github_username: justadudewhohacks
 
-# Build settings
-markdown: kramdown
+# Conversion
+markdown:    kramdown
+highlighter: rouge
+
+# Markdown Processors
+kramdown:
+  input: GFM
+  auto_ids: true
+  syntax_highlighter: rouge
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag

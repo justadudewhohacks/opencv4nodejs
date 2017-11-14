@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# KeyPoint
+###  KeyPoint
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 KeyPoint {
   point: Point2,
   size: Number,
@@ -19,7 +19,7 @@ KeyPoint {
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 KeyPoint : new KeyPoint(Point2 point, Number size, Number angle, Number response, Int octave, Int classId)
 ```

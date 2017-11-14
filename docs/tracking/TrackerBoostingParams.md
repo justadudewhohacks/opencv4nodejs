@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# TrackerBoostingParams
+###  TrackerBoostingParams
 
-## Accessors (Writeable)
-``` javascript
+####  Accessors (Writeable)
+``` ruby
 TrackerBoostingParams
 {
   numClassifiers: Int
@@ -18,7 +18,7 @@ TrackerBoostingParams
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 TrackerBoostingParams : new TrackerBoostingParams()
 ```

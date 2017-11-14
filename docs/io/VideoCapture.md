@@ -2,55 +2,55 @@
 layout: default
 ---
 
-# VideoCapture
+###  VideoCapture
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 VideoCapture : new VideoCapture(String filePath)
 VideoCapture : new VideoCapture(Number devicePort)
 ```
-## Methods
+####  Methods
 
 <a name="read"></a>
 
-### read
-``` javascript
+#####  read
+``` ruby
 Mat : cap.read()
 ```
 
 <a name="readAsync"></a>
 
-### readAsync
-``` javascript
+#####  readAsync
+``` ruby
 cap.readAsync(callback(Error err, Mat frame))
 ```
 
 <a name="reset"></a>
 
-### reset
-``` javascript
+#####  reset
+``` ruby
 cap.reset()
 ```
 
 <a name="get"></a>
 
-### get
-``` javascript
+#####  get
+``` ruby
 cap.get(Int property)
 ```
 
 <a name="set"></a>
 
-### set
-``` javascript
+#####  set
+``` ruby
 cap.set(Int property, Number value)
 ```
 
 <a name="release"></a>
 
-### release
-``` javascript
+#####  release
+``` ruby
 cap.release()
 ```

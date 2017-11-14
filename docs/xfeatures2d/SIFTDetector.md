@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# SIFTDetector
+###  SIFTDetector
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 SIFTDetector {
   nfeatures: Int,
   nOctaveLayers: Int,
@@ -17,36 +17,36 @@ SIFTDetector {
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 SIFTDetector : new SIFTDetector(Int nfeatures = 0, Int nOctaveLayers = 3,  Number contrastThreshold = 0.04, Number edgeThreshold = 10, Number sigma = 1.6)
 ```
-## Methods
+####  Methods
 
 <a name="detect"></a>
 
-### detect
-``` javascript
+#####  detect
+``` ruby
 [KeyPoint] : detector.detect(Mat image)
 ```
 
 <a name="detectAsync"></a>
 
-### detectAsync
-``` javascript
+#####  detectAsync
+``` ruby
 detector.detectAsync(Mat image, callback(Error err, [KeyPoint] kps))
 ```
 
 <a name="compute"></a>
 
-### compute
-``` javascript
+#####  compute
+``` ruby
 Mat : detector.compute(Mat image, [KeyPoint] keypoints)
 ```
 
 <a name="computeAsync"></a>
 
-### computeAsync
-``` javascript
+#####  computeAsync
+``` ruby
 detector.computeAsync(Mat image, [KeyPoint] keypoints, callback(Error err, Mat descriptors))
 ```

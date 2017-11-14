@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# TrackerMILParams
+###  TrackerMILParams
 
-## Accessors (Writeable)
-``` javascript
+####  Accessors (Writeable)
+``` ruby
 TrackerMILParams
 {
   samplerInitInRadius: Number,
@@ -20,7 +20,7 @@ TrackerMILParams
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 TrackerMILParams : new TrackerMILParams()
 ```

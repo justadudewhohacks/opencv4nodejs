@@ -2,58 +2,58 @@
 layout: default
 ---
 
-# EigenFaceRecognizer
+###  EigenFaceRecognizer
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 EigenFaceRecognizer : new EigenFaceRecognizer({
   num_components: Int = 0,
   threshold: Number = DBL_MAX
 })
 ```
 
-## Methods
+####  Methods
 
 <a name="train"></a>
 
-### train
-``` javascript
+#####  train
+``` ruby
 recognizer.train([Mat] trainImages, [Int] labels)
 ```
 
 <a name="trainAsync"></a>
 
-### trainAsync
-``` javascript
+#####  trainAsync
+``` ruby
 recognizer.trainAsync([Mat] trainImages, [Int] labels, callback(Error err))
 ```
 
 <a name="predict"></a>
 
-### predict
-``` javascript
+#####  predict
+``` ruby
 { label: Int, confidence: Number } : recognizer.predict(Mat img)
 ```
 
 <a name="predictAsync"></a>
 
-### predictAsync
-``` javascript
+#####  predictAsync
+``` ruby
 recognizer.predictAsync(Mat img, callback(Error err, { label: Int, confidence: Number } result))
 ```
 
 <a name="save"></a>
 
-### save
-``` javascript
+#####  save
+``` ruby
 recognizer.save(String file)
 ```
 
 <a name="load"></a>
 
-### load
-``` javascript
+#####  load
+``` ruby
 recognizer.load(String file)
 ```

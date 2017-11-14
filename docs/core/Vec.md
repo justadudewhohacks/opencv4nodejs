@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# Vec
+###  Vec
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 // Vec2
 {
   x: Number,
@@ -30,8 +30,8 @@ layout: default
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 Vec2 : new Vec(Number x, Number y)
 Vec3 : new Vec(Number x, Number y, Number z
 Vec4 : new Vec(Number x, Number y, Number z, Number w)
@@ -39,8 +39,8 @@ Vec4 : new Vec(Number x, Number y, Number z, Number w)
 
 <a name="operators"></a>
 
-## Operators
-``` javascript
+####  Operators
+``` ruby
 Vec : vec.add(Vec otherVec)
 Vec : vec.sub(Vec otherVec)
 Vec : vec.mul(Number s)
@@ -58,11 +58,11 @@ Number : Vec.norm()
 Vec3 : vec3.cross()
 ```
 
-## Methods
+####  Methods
 
 <a name="at"></a>
 
-### at
-``` javascript
+#####  at
+``` ruby
 Number : vec.at(Uint index)
 ```

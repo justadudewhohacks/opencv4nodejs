@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# ParamGrid
+###  ParamGrid
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 ParamGrid {
   minVal: Number,
   maxVal: Number,
@@ -15,8 +15,8 @@ ParamGrid {
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 ParamGrid : new ParamGrid(Uint paramId)
 ParamGrid : new ParamGrid(Number minVal, Number maxVal, Number logStep)
 ```

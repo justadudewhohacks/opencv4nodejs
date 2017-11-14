@@ -1,8 +1,8 @@
 ---
-layout: home
+layout: default
 ---
 
-# API Overview
+###  API Overview
 
 Missing some function bindings? No problem! - <a href="https://github.com/justadudewhohacks/opencv4nodejs/#request-features"><b>Requesting new Features</b></a>
 

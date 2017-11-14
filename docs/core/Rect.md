@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# Rect
+###  Rect
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 {
   x: Number,
   y: Number,
@@ -16,8 +16,8 @@ layout: default
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 Rect : new Rect()
 Rect : new Rect(Number x, Number y, Number width, Number height)
 ```

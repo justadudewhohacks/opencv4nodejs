@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# AGASTDetector
+###  AGASTDetector
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 AGASTDetector {
   threshold: Int,
   type: Int,
@@ -15,22 +15,22 @@ AGASTDetector {
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 AGASTDetector : new AGASTDetector(Int threshold = 10, Boolean nonmaxSuppression = true, Int type = AGAST.OAST_9_16)
 ```
-## Methods
+####  Methods
 
 <a name="detect"></a>
 
-### detect
-``` javascript
+#####  detect
+``` ruby
 [KeyPoint] : detector.detect(Mat image)
 ```
 
 <a name="detectAsync"></a>
 
-### detectAsync
-``` javascript
+#####  detectAsync
+``` ruby
 detector.detectAsync(Mat image, callback(Error err, [KeyPoint] kps))
 ```

@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# ORBDetector
+###  ORBDetector
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 ORBDetector {
   nfeatures: Int,
   nlevels: Int,
@@ -21,36 +21,36 @@ ORBDetector {
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 ORBDetector : new ORBDetector(Int nfeatures = 500, Number scaleFactor = 1.2, Int nlevels = 8, Int edgeThreshold = 31, Int firstLevel = 0, Int WTA_K = 2, Int scoreType = ORB.HARRIS_SCORE, Int patchSize = 31, Int fastThreshold = 20)
 ```
-## Methods
+####  Methods
 
 <a name="detect"></a>
 
-### detect
-``` javascript
+#####  detect
+``` ruby
 [KeyPoint] : detector.detect(Mat image)
 ```
 
 <a name="detectAsync"></a>
 
-### detectAsync
-``` javascript
+#####  detectAsync
+``` ruby
 detector.detectAsync(Mat image, callback(Error err, [KeyPoint] kps))
 ```
 
 <a name="compute"></a>
 
-### compute
-``` javascript
+#####  compute
+``` ruby
 Mat : detector.compute(Mat image, [KeyPoint] keypoints)
 ```
 
 <a name="computeAsync"></a>
 
-### computeAsync
-``` javascript
+#####  computeAsync
+``` ruby
 detector.computeAsync(Mat image, [KeyPoint] keypoints, callback(Error err, Mat descriptors))
 ```

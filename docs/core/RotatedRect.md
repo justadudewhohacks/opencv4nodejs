@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# RotatedRect
+###  RotatedRect
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 {
   center: Point2,
   size: Size,
@@ -15,17 +15,17 @@ layout: default
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 RotatedRect : new RotatedRect()
 RotatedRect : new RotatedRect(Point2 center, Size size, Number angle)
 ```
 
-## Methods
+####  Methods
 
 <a name="boundingRect"></a>
 
-### at
-``` javascript
+#####  at
+``` ruby
 Rect : rotatedRect.boundingRect()
 ```

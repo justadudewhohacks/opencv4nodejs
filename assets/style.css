@@ -1,0 +1,7 @@
+ul {
+  padding-left: 40px !important;
+}
+
+ul > li {
+  list-style-type: initial !important;
+}

@@ -2,10 +2,10 @@
 layout: default
 ---
 
-# Size
+###  Size
 
-## Accessors
-``` javascript
+####  Accessors
+``` ruby
 {
   width: Number,
   height: Number
@@ -14,8 +14,8 @@ layout: default
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 Size : new Size()
 Size : new Size(Number width, Number height)
 ```

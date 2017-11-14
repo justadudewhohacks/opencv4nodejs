@@ -2,57 +2,57 @@
 layout: default
 ---
 
-# MultiTracker (v3.1, v3.2, v3.3)
+###  MultiTracker (v3.1, v3.2, v3.3)
 
 <a name="constructors"></a>
 
-## Constructors
-``` javascript
+####  Constructors
+``` ruby
 MultiTracker : new MultiTracker()
 ```
 
-## Methods
+####  Methods
 
 <a name="addMil"></a>
 
-### addMil
-``` javascript
+#####  addMil
+``` ruby
 Boolean : tracker.addMil(Mat frame, Rect boundingBox)
 ```
 
-## Methods
+####  Methods
 
 <a name="addBOOSTING"></a>
 
-### addBOOSTING
-``` javascript
+#####  addBOOSTING
+``` ruby
 Boolean : tracker.addBOOSTING(Mat frame, Rect boundingBox)
 ```
 
 <a name="addMEDIANFLOW"></a>
 
-### addMEDIANFLOW
-``` javascript
+#####  addMEDIANFLOW
+``` ruby
 Boolean : tracker.addMEDIANFLOW(Mat frame, Rect boundingBox)
 ```
 
 <a name="addTLD"></a>
 
-### addTLD
-``` javascript
+#####  addTLD
+``` ruby
 Boolean : tracker.addTLD(Mat frame, Rect boundingBox)
 ```
 
 <a name="addKCF"></a>
 
-### addKCF
-``` javascript
+#####  addKCF
+``` ruby
 Boolean : tracker.addKCF(Mat frame, Rect boundingBox)
 ```
 
 <a name="update"></a>
 
-### update
-``` javascript
+#####  update
+``` ruby
 Rect : tracker.update(Mat frame)
 ```
