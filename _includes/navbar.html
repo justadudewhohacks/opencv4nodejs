@@ -1,0 +1,17 @@
+<nav class="navbar">
+  <div class="nav-wrapper">
+    <a href="#" data-activates="mobile-sidenav" class="button-collapse hide-on-med-and-up"><i class="material-icons">menu</i></a>
+    <a href="#" class="brand-logo left hide-on-small-and-down">opencv-nodejs</a>
+    <ul class="right hide-on-small-and-down">
+      {% include navcontent.html %}
+    </ul>
+    <ul class="side-nav" id="mobile-sidenav">
+      {% include navcontent.html %}
+    </ul>
+  </div>
+</nav>
+<script>
+  $(document).ready(function() {
+    $(".button-collapse").sideNav()
+  })
+</script>

@@ -1,0 +1,1 @@
+## https://justadudewhohacks.github.io/opencv4nodejs/
