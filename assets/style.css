@@ -21,12 +21,13 @@ a {
 .navbar {
   position: fixed;
   top: 0;
-}
-
-.side-nav {
-  position: absolute;
+  z-index: 1000;
 }
 
 .below-navbar {
   margin-top: 64px;
+}
+
+.brand-logo {
+  padding-left: 20px !important;
 }
