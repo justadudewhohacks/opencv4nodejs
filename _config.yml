@@ -2,6 +2,7 @@ name: opencv-nodejs
 description: opencv4nodejs is a npm package with Node.js bindings to OpenCV
 author: justadudewhohacks
 author_email: muehler.v@gmail.com
+baseurl: https://justadudewhohacks.github.io/opencv4nodejs
 url: https://justadudewhohacks.github.io/opencv4nodejs
 github_username: justadudewhohacks
 
