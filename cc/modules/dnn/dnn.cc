@@ -2,7 +2,8 @@
 
 #if CV_VERSION_MINOR > 2
 
-#ifdef HAVE_DNN
+// cv 3.3+ should have dnn by default
+//#ifdef HAVE_DNN
 
 #include "dnn.h"
 #include "Workers.h"
@@ -187,6 +188,6 @@ NAN_METHOD(Dnn::BlobFromImagesAsync) {
 	FF_WORKER_ASYNC("Dnn::BlobFromImagesAsync", BlobFromImageWorker, worker);
 }
 
-#endif
+//#endif
 
 #endif

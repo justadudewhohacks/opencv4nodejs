@@ -2,7 +2,8 @@
 
 #if CV_VERSION_MINOR > 2
 
-#ifdef HAVE_DNN
+// cv 3.3+ should have dnn by default
+//#ifdef HAVE_DNN
 
 #include "Net.h"
 #include "Workers.h"
@@ -109,6 +110,6 @@ NAN_METHOD(Net::ForwardAsync) {
 	FF_WORKER_ASYNC("Net::ForwardAsync", ForwardWorker, worker);
 }
 
-#endif
+//#endif
 
 #endif
