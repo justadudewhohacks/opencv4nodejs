@@ -9,7 +9,7 @@ layout: home
 
 **By its nature, JavaScript lacks the performance to implement Computer Vision tasks efficiently. Therefore this package brings the performance of the native OpenCV library to your Node.js application. Supports all OpenCV 3 versions. The bindings are available as an asynchronous (via promises or callbacks) and synchronous API.**
 
-**The ultimate goal of this project is to provide a collection of Node.js bindings, which supports the entire OpenCV and OpenCV-contrib API. An overview of available bindings can be found in the [API Documentation](/docsREADME.md). The implementation of missing bindings can be specifically prioritized by [requesting new features](#request-features). Furthermore, contribution is highly appreciated. If you want to get involved you can have a look at the <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b></a>.**
+**The ultimate goal of this project is to provide a collection of Node.js bindings, which supports the entire OpenCV and OpenCV-contrib API. An overview of available bindings can be found in the [API Documentation]({{ site.baseurl }}/docsREADME.md). The implementation of missing bindings can be specifically prioritized by [requesting new features](#request-features). Furthermore, contribution is highly appreciated. If you want to get involved you can have a look at the <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b></a>.**
 
  * **[Examples](#examples)**
  * **[How to install](#how-to-install)**
@@ -395,26 +395,26 @@ try {
 
 ####   Available Modules
 
-#####   <a href="/docs"><b>API doc overview</b></a>
+#####   <a href="{{ site.baseurl }}/docs"><b>API doc overview</b></a>
 
-* <a href="/docs"><b>core</b></a>
-* <a href="/docs"><b>io</b></a>
-* <a href="/docs"><b>imgproc</b></a>
-* <a href="/docs"><b>ximgproc</b></a>
-* <a href="/docs"><b>objdetect</b></a>
-* <a href="/docs"><b>machinelearning</b></a>
-* <a href="/docs"><b>deepneuralnetworks</b></a>
-* <a href="/docs"><b>video</b></a>
-* <a href="/docs"><b>calib3d</b></a>
-* <a href="/docs"><b>photo</b></a>
-* <a href="/docs"><b>features2d</b></a>
-* <a href="/docs"><b>xfeatures2d</b></a>
-* <a href="/docs"><b>tracking</b></a>
-* <a href="/docs"><b>text</b></a>
-* <a href="/docs"><b>face</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>core</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>io</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>imgproc</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>ximgproc</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>objdetect</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>machinelearning</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>deepneuralnetworks</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>video</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>calib3d</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>photo</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>features2d</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>xfeatures2d</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>tracking</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>text</b></a>
+* <a href="{{ site.baseurl }}/docs"><b>face</b></a>
 
 <a name="request-features"></a>
 
 ####   Request new Features
 
-Are you missing some functions from OpenCV (<a href="/docs"><b>overview</b></a> of available bindings) or have an idea for utility in regards to the OpenCV API, which you would like to be added to this package? No problem! Open a new <a href="https://github.com/justadudewhohacks/opencv4nodejs/issues"><b>issue</b></a> with a listing of the desired function bindings or features and you will find them in this package soon.
+Are you missing some functions from OpenCV (<a href="{{ site.baseurl }}/docs"><b>overview</b></a> of available bindings) or have an idea for utility in regards to the OpenCV API, which you would like to be added to this package? No problem! Open a new <a href="https://github.com/justadudewhohacks/opencv4nodejs/issues"><b>issue</b></a> with a listing of the desired function bindings or features and you will find them in this package soon.
