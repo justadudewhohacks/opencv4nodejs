@@ -1,0 +1,52 @@
+# appveyor file
+# http://www.appveyor.com/docs/appveyor-yml
+
+platform:
+  - x64
+
+image:
+  - Visual Studio 2015
+
+clone_folder: c:\projects\opencv4nodejs
+
+init:
+  - git config --global core.autocrlf true
+
+# what combinations to test
+environment:
+  matrix:
+    - nodejs_version: 9
+      PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7"
+      opencv_version: 3.2.0
+    - nodejs_version: 8
+      PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7"
+      opencv_version: 3.2.0
+    - nodejs_version: 6
+      opencv_version: 3.2.0
+      PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7"
+
+install:
+  - cmd: choco install OpenCV -y -version %OPENCV_VERSION%
+  - IF EXIST c:\tools\opencv* CD c:\tools\opencv*
+  - SET OPENCV_DIR=%CD%\build\x64\vc14
+  - SET OPENCV_LIB_DIR=%CD%\build\x64\vc14\lib
+  - SET OPENCV_INCLUDE_DIR=%CD%\build\include
+
+  - ps: Install-Product node $env:nodejs_version x64
+  - npm install -g node-gyp
+  - cd c:\projects\opencv4nodejs
+  - npm install
+
+
+build: off
+
+test_script:
+  - ps: Install-Product node $env:nodejs_version x64
+  - node --version
+  - npm --version
+  - cmd: cd c:\projects\opencv4nodejs\test
+  - cmd: npm install
+  - cmd: npm test
