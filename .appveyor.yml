@@ -12,6 +12,9 @@ clone_folder: c:\projects\opencv4nodejs
 init:
   - git config --global core.autocrlf true
 
+cache:
+  - c:\tools
+
 # what combinations to test
 environment:
   matrix:
