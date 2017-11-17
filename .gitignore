@@ -9,3 +9,4 @@ coverage
 coverage-report
 tmpdata
 data/dnn
+.idea/
