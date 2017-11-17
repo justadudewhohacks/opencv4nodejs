@@ -49,6 +49,13 @@ describe('io', () => {
       it('should throw empty Mat if path invalid', () => {
         assertError(() => cv.imread('foo.png'), 'empty Mat');
       });
+
+      it('should read image with flags', () => {
+        const flags = cv.IMREAD_UNCHANGED;
+        const img = cv.imread(getTestImagePath(), flags);
+        expect(img).to.be.instanceOf(cv.Mat);
+        assertMetaData(img)(512, 512, cv.CV_8UC3);
+      });
     });
 
     describe('async', () => {
@@ -63,6 +70,15 @@ describe('io', () => {
 
       it('should read image', (done) => {
         cv.imreadAsync(getTestImagePath(), (err, img) => {
+          expect(img).to.be.instanceOf(cv.Mat);
+          assertMetaData(img)(512, 512, cv.CV_8UC3);
+          done();
+        });
+      });
+
+      it('should read image with flags', (done) => {
+        const flags = cv.IMREAD_UNCHANGED;
+        cv.imreadAsync(getTestImagePath(), flags, (err, img) => {
           expect(img).to.be.instanceOf(cv.Mat);
           assertMetaData(img)(512, 512, cv.CV_8UC3);
           done();
@@ -83,6 +99,13 @@ describe('io', () => {
         cv.imwrite(file, lenna);
         expect(fileExists(file)).to.be.true;
       });
+
+      it('should write image with flags', () => {
+        const flags = [cv.IMWRITE_PNG_COMPRESSION];
+        const file = getTmpDataFilePath('written_sync.png');
+        cv.imwrite(file, lenna, flags);
+        expect(fileExists(file)).to.be.true;
+      });
     });
 
     describe('async', () => {
@@ -91,6 +114,14 @@ describe('io', () => {
 
       it('should write image', (done) => {
         cv.imwriteAsync(file, lenna, () => {
+          expect(fileExists(file)).to.be.true;
+          done();
+        });
+      });
+
+      it('should write image with flags', (done) => {
+        const flags = [cv.IMWRITE_PNG_COMPRESSION];
+        cv.imwriteAsync(file, lenna, flags, () => {
           expect(fileExists(file)).to.be.true;
           done();
         });
