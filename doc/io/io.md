@@ -4,7 +4,7 @@
 
 ### imread
 ``` javascript
-Mat : imread(String filePath)
+Mat : imread(String filePath, Int flags = cv.IMREAD_COLOR)
 ```
 
 <a name="imreadAsync"></a>
@@ -12,13 +12,14 @@ Mat : imread(String filePath)
 ### imreadAsync
 ``` javascript
 imreadAsync(String filePath, callback(Error err, Mat img))
+imreadAsync(String filePath, Int flags, callback(Error err, Mat img))
 ```
 
 <a name="imwrite"></a>
 
 ### imwrite
 ``` javascript
-imwrite(String filePath, Mat img)
+imwrite(String filePath, Mat img, [Int] flags = [])
 ```
 
 <a name="imwriteAsync"></a>
@@ -26,6 +27,7 @@ imwrite(String filePath, Mat img)
 ### imwriteAsync
 ``` javascript
 imwriteAsync(String filePath, Mat img, callback(Error err))
+imwriteAsync(String filePath, Mat img,  [Int] flags, callback(Error err))
 ```
 
 <a name="imshow"></a>
