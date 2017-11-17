@@ -27,10 +27,6 @@ environment:
       PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7"
       opencv_version: 3.3.0
-    - nodejs_version: 9
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7"
-      opencv_version: 3.3.1
     # node 8
     - nodejs_version: 8
       PYTHON: "C:\\Python27-x64"
@@ -40,10 +36,6 @@ environment:
       PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7"
       opencv_version: 3.3.0
-    - nodejs_version: 8
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7"
-      opencv_version: 3.3.1
     # node 6
     - nodejs_version: 6
       PYTHON: "C:\\Python27-x64"
@@ -53,18 +45,15 @@ environment:
       PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7"
       opencv_version: 3.3.0
-    - nodejs_version: 6
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7"
-      opencv_version: 3.3.1
 
 
 install:
   - cmd: choco install OpenCV -y -version %OPENCV_VERSION%
   - IF EXIST c:\tools\opencv* CD c:\tools\opencv*
-  - SET OPENCV_DIR=%CD%\build\x64\vc14\bin
-  - SET OPENCV_LIB_DIR=%CD%\build\x64\vc14\lib
   - SET OPENCV_INCLUDE_DIR=%CD%\build\include
+  - SET OPENCV_LIB_DIR=%CD%\build\x64\vc14\lib
+  - SET OPENCV_BIN_DIR=%CD%\build\x64\vc14\bin
+  - SET PATH=%PATH%;%OPENCV_BIN_DIR%;
 
   - ps: Install-Product node $env:nodejs_version x64
   - node --version
