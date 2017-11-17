@@ -62,7 +62,7 @@ environment:
 install:
   - cmd: choco install OpenCV -y -version %OPENCV_VERSION%
   - IF EXIST c:\tools\opencv* CD c:\tools\opencv*
-  - SET OPENCV_DIR=%CD%\build\x64\vc14
+  - SET OPENCV_DIR=%CD%\build\x64\vc14\bin
   - SET OPENCV_LIB_DIR=%CD%\build\x64\vc14\lib
   - SET OPENCV_INCLUDE_DIR=%CD%\build\include
 
