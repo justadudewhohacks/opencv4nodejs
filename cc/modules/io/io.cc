@@ -73,8 +73,9 @@ NAN_METHOD(Io::Imread) {
 	FF_METHOD_CONTEXT("Imread");
 
 	FF_ARG_STRING(0, std::string path);
+	FF_ARG_INT_IFDEF(1, int flags, cv::IMREAD_COLOR);
 
-	cv::Mat img = cv::imread(path);
+	cv::Mat img = cv::imread(path, flags);
 	if (img.rows == 0 && img.cols == 0) {
 		FF_THROW("empty Mat");
 	}
@@ -88,8 +89,9 @@ NAN_METHOD(Io::Imwrite) {
 
 	FF_ARG_STRING(0, std::string path);
 	FF_ARG_INSTANCE(1, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_UNPACK_INT_ARRAY_IFDEF(2, flags, std::vector<int>());
 
-	cv::imwrite(path, img);
+	cv::imwrite(path, img, flags);
 }
 
 NAN_METHOD(Io::Imshow) {
@@ -183,7 +185,14 @@ NAN_METHOD(Io::ImreadAsync) {
 
 	ImreadContext ctx;
 	FF_ARG_STRING(0, ctx.path);
-	FF_ARG_FUNC(1, v8::Local<v8::Function> cbFunc);
+	v8::Local<v8::Function> cbFunc;
+	if (FF_HAS_ARG(1) && !FF_IS_FUNC(info[1])) {
+		FF_ARG_INT(1, ctx.flags);
+		FF_ARG_FUNC(2, cbFunc);
+	}
+	else {
+		FF_ARG_FUNC(1, cbFunc);
+	}
 
 	Nan::AsyncQueueWorker(new GenericAsyncWorker<ImreadContext>(
 		new Nan::Callback(cbFunc),
@@ -197,8 +206,17 @@ NAN_METHOD(Io::ImwriteAsync) {
 	ImwriteContext ctx;
 	FF_ARG_STRING(0, ctx.path);
 	FF_ARG_INSTANCE(1, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	v8::Local<v8::Function> cbFunc;
+	if (FF_HAS_ARG(2) && !FF_IS_FUNC(info[2])) {
+		FF_ARG_UNPACK_INT_ARRAY(2, flags);
+		ctx.flags = flags;
+		FF_ARG_FUNC(3, cbFunc);
+	}
+	else {
+		FF_ARG_FUNC(2, cbFunc);
 
-	FF_ARG_FUNC(2, v8::Local<v8::Function> cbFunc);
+	}
+
 	Nan::AsyncQueueWorker(new GenericAsyncWorker<ImwriteContext>(
 		new Nan::Callback(cbFunc),
 		ctx

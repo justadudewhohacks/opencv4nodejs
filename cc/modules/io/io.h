@@ -25,10 +25,11 @@ public:
 	struct ImreadContext {
 	public:
 		std::string path;
+		int flags = cv::IMREAD_COLOR;
 		cv::Mat img;
 
 		const char* execute() {
-			img = cv::imread(path);
+			img = cv::imread(path, flags);
 			if (img.rows == 0 && img.cols == 0) {
 				return("empty Mat");
 			}
@@ -45,6 +46,7 @@ public:
 	struct ImwriteContext {
 	public:
 		std::string path;
+		std::vector<int> flags = std::vector<int>();
 		cv::Mat img;
 
 		const char* execute() {
