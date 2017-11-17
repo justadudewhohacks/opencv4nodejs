@@ -67,4 +67,4 @@ test_script:
   - node --version
   - cmd: cd c:\projects\opencv4nodejs\test
   - npm install
-  - npm test
+  - npm run test-appveyor
