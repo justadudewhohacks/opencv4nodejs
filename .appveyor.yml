@@ -13,7 +13,7 @@ init:
   - git config --global core.autocrlf true
 
 cache:
-  - c:\tools\opencv
+  - packages
 
 # what combinations to test
 environment:
