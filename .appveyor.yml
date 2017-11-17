@@ -12,8 +12,8 @@ clone_folder: c:\projects\opencv4nodejs
 init:
   - git config --global core.autocrlf true
 
-cache:
-  - packages
+# cache:
+ # - c:\tools\opencv
 
 # what combinations to test
 environment:
@@ -22,25 +22,8 @@ environment:
     - nodejs_version: 9
       PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7"
-      opencv_version: 3.2.0
-    - nodejs_version: 9
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7"
-      opencv_version: 3.3.0
-    # node 8
-    - nodejs_version: 8
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7"
-      opencv_version: 3.2.0
-    - nodejs_version: 8
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7"
       opencv_version: 3.3.0
     # node 6
-    - nodejs_version: 6
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7"
-      opencv_version: 3.2.0
     - nodejs_version: 6
       PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7"
