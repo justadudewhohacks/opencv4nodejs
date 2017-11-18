@@ -21,9 +21,6 @@ public:
 	struct SolvePnPWorker;
 	static NAN_METHOD(SolvePnP);
 	static NAN_METHOD(SolvePnPAsync);
-	struct SolveP3PWorker;
-	static NAN_METHOD(SolveP3P);
-	static NAN_METHOD(SolveP3PAsync);
 	struct SolvePnPRansacWorker;
 	static NAN_METHOD(SolvePnPRansac);
 	static NAN_METHOD(SolvePnPRansacAsync);
@@ -37,11 +34,8 @@ public:
 	static NAN_METHOD(InitCameraMatrix2DAsync);
 
 	struct CalibrateCameraWorker;
-	struct CalibrateCameraExtendedWorker;
 	static NAN_METHOD(CalibrateCamera);
 	static NAN_METHOD(CalibrateCameraAsync);
-	static NAN_METHOD(CalibrateCameraExtended);
-	static NAN_METHOD(CalibrateCameraExtendedAsync);
 
 	struct StereoCalibrateWorker;
 	static NAN_METHOD(StereoCalibrate);
@@ -71,13 +65,19 @@ public:
 	static NAN_METHOD(GetValidDisparityROI);
 	static NAN_METHOD(GetValidDisparityROIAsync);
 
-	struct SampsonDistanceWorker;
-	static NAN_METHOD(SampsonDistance);
-	static NAN_METHOD(SampsonDistanceAsync);
-
 	struct EstimateAffine3DWorker;
 	static NAN_METHOD(EstimateAffine3D);
 	static NAN_METHOD(EstimateAffine3DAsync);
+
+#if CV_VERSION_MINOR > 0
+	struct SampsonDistanceWorker;
+	static NAN_METHOD(SampsonDistance);
+	static NAN_METHOD(SampsonDistanceAsync);
+#endif
+#if CV_VERSION_MINOR > 1
+	struct CalibrateCameraExtendedWorker;
+	static NAN_METHOD(CalibrateCameraExtended);
+	static NAN_METHOD(CalibrateCameraExtendedAsync);
 
 	struct EstimateAffine2DWorker;
 	static NAN_METHOD(EstimateAffine2D);
@@ -86,7 +86,12 @@ public:
 	struct EstimateAffinePartial2DWorker;
 	static NAN_METHOD(EstimateAffinePartial2D);
 	static NAN_METHOD(EstimateAffinePartial2DAsync);
-
+#endif
+#if CV_VERSION_MINOR > 2
+	struct SolveP3PWorker;
+	static NAN_METHOD(SolveP3P);
+	static NAN_METHOD(SolveP3PAsync);
+#endif
 	// TODO convertPointsHomogeneous
 };
 

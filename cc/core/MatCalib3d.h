@@ -54,17 +54,9 @@ public:
 	static NAN_METHOD(GetOptimalNewCameraMatrix);
 	static NAN_METHOD(GetOptimalNewCameraMatrixAsync);
 
-	struct FindEssentialMatWorker;
-	static NAN_METHOD(FindEssentialMat);
-	static NAN_METHOD(FindEssentialMatAsync);
-
 	struct DecomposeEssentialMatWorker;
 	static NAN_METHOD(DecomposeEssentialMat);
 	static NAN_METHOD(DecomposeEssentialMatAsync);
-
-	struct RecoverPoseWorker;
-	static NAN_METHOD(RecoverPose);
-	static NAN_METHOD(RecoverPoseAsync);
 
 	struct TriangulatePointsWorker;
 	static NAN_METHOD(TriangulatePoints);
@@ -89,6 +81,16 @@ public:
 	struct DecomposeHomographyMatWorker;
 	static NAN_METHOD(DecomposeHomographyMat);
 	static NAN_METHOD(DecomposeHomographyMatAsync);
+
+#if CV_VERSION_MINOR > 0
+	struct FindEssentialMatWorker;
+	static NAN_METHOD(FindEssentialMat);
+	static NAN_METHOD(FindEssentialMatAsync);
+
+	struct RecoverPoseWorker;
+	static NAN_METHOD(RecoverPose);
+	static NAN_METHOD(RecoverPoseAsync);
+#endif
 };
 
 #endif

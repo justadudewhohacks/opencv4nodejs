@@ -84,7 +84,7 @@ public:
 	static v8::Local<v8::Value> wrap(std::vector<std::vector<CastType>> vec) {
 		v8::Local<v8::Array> jsArr = Nan::New<v8::Array>(vec.size());
 		for (int i = 0; i < jsArr->Length(); i++) {
-			jsArr->Set(i, ArrayConverterType<Converter, T, CastType::wrap(vec.at(i)));
+			jsArr->Set(i, ArrayConverterType<Converter, T, CastType>::wrap(vec.at(i)));
 		}
 		return jsArr;
 	}

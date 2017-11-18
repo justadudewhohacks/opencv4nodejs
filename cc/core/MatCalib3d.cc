@@ -23,12 +23,8 @@ void MatCalib3d::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "rectify3CollinearAsync", Rectify3CollinearAsync);
 	Nan::SetPrototypeMethod(ctor, "getOptimalNewCameraMatrix", GetOptimalNewCameraMatrix);
 	Nan::SetPrototypeMethod(ctor, "getOptimalNewCameraMatrixAsync", GetOptimalNewCameraMatrixAsync);
-	Nan::SetPrototypeMethod(ctor, "findEssentialMat", FindEssentialMat);
-	Nan::SetPrototypeMethod(ctor, "findEssentialMatAsync", FindEssentialMatAsync);
 	Nan::SetPrototypeMethod(ctor, "decomposeEssentialMat", DecomposeEssentialMat);
 	Nan::SetPrototypeMethod(ctor, "decomposeEssentialMatAsync", DecomposeEssentialMatAsync);
-	Nan::SetPrototypeMethod(ctor, "recoverPose", RecoverPose);
-	Nan::SetPrototypeMethod(ctor, "recoverPoseAsync", RecoverPoseAsync);
 	Nan::SetPrototypeMethod(ctor, "triangulatePoints", TriangulatePoints);
 	Nan::SetPrototypeMethod(ctor, "triangulatePointsAsync", TriangulatePointsAsync);
 	Nan::SetPrototypeMethod(ctor, "correctMatches", CorrectMatches);
@@ -41,6 +37,12 @@ void MatCalib3d::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "reprojectImageTo3DAsync", ReprojectImageTo3DAsync);
 	Nan::SetPrototypeMethod(ctor, "decomposeHomographyMat", DecomposeHomographyMat);
 	Nan::SetPrototypeMethod(ctor, "decomposeHomographyMatAsync", DecomposeHomographyMatAsync);
+#if CV_VERSION_MINOR > 0
+	Nan::SetPrototypeMethod(ctor, "findEssentialMat", FindEssentialMat);
+	Nan::SetPrototypeMethod(ctor, "findEssentialMatAsync", FindEssentialMatAsync);
+	Nan::SetPrototypeMethod(ctor, "recoverPose", RecoverPose);
+	Nan::SetPrototypeMethod(ctor, "recoverPoseAsync", RecoverPoseAsync);
+#endif
 };
 
 struct MatCalib3d::RodriguesWorker : public SimpleWorker {
@@ -637,75 +639,6 @@ NAN_METHOD(MatCalib3d::GetOptimalNewCameraMatrixAsync) {
 }
 
 
-struct MatCalib3d::FindEssentialMatWorker : public SimpleWorker {
-public:
-	cv::Mat self;
-	FindEssentialMatWorker(cv::Mat self) {
-		this->self = self;
-	}
-
-	std::vector<cv::Point2f> points1;
-	std::vector<cv::Point2f> points2;
-	int method = cv::RANSAC;
-	double prob = 0.999;
-	double threshold = 1.0;
-
-	cv::Mat returnValue;
-	cv::Mat mask = cv::noArray().getMat();
-
-	const char* execute() {
-		returnValue = cv::findEssentialMat(points1, points2, self, method, prob, threshold, mask);
-		return "";
-	}
-
-	v8::Local<v8::Value> getReturnValue() {
-		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), Mat::Converter::wrap(returnValue));
-		Nan::Set(ret, Nan::New("mask").ToLocalChecked(), Mat::Converter::wrap(mask));
-		return ret;
-	}
-
-	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return (
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &points1, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &points2, info)
-		);
-	}
-
-	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return (
-			IntConverter::optArg(2, &method, info) ||
-			DoubleConverter::optArg(3, &prob, info) ||
-			DoubleConverter::optArg(4, &threshold, info)
-		);
-	}
-
-	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return FF_ARG_IS_OBJECT(2);
-	}
-
-	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-		v8::Local<v8::Object> opts = info[2]->ToObject();
-		return (
-			IntConverter::optProp(&method, "method", opts) ||
-			DoubleConverter::optProp(&prob, "prob", opts) ||
-			DoubleConverter::optProp(&threshold, "threshold", opts)
-		);
-	}
-};
-
-NAN_METHOD(MatCalib3d::FindEssentialMat) {
-	FindEssentialMatWorker worker(Mat::Converter::unwrap(info.This()));
-	FF_WORKER_SYNC("Mat::FindEssentialMat", worker);
-	info.GetReturnValue().Set(worker.getReturnValue());
-}
-
-NAN_METHOD(MatCalib3d::FindEssentialMatAsync) {
-	FindEssentialMatWorker worker(Mat::Converter::unwrap(info.This()));
-	FF_WORKER_ASYNC("Mat::FindEssentialMatAsync", FindEssentialMatWorker, worker);
-}
-
-
 struct MatCalib3d::DecomposeEssentialMatWorker : public SimpleWorker {
 public:
 	cv::Mat self;
@@ -740,62 +673,6 @@ NAN_METHOD(MatCalib3d::DecomposeEssentialMat) {
 NAN_METHOD(MatCalib3d::DecomposeEssentialMatAsync) {
 	DecomposeEssentialMatWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::DecomposeEssentialMatAsync", DecomposeEssentialMatWorker, worker);
-}
-
-
-struct MatCalib3d::RecoverPoseWorker : public SimpleWorker {
-public:
-	cv::Mat self;
-	RecoverPoseWorker(cv::Mat self) {
-		this->self = self;
-	}
-
-	cv::Mat E;
-	std::vector<cv::Point2f> points1;
-	std::vector<cv::Point2f> points2;
-	cv::Mat mask = cv::noArray().getMat();
-
-	int returnValue;
-	cv::Mat R;
-	cv::Vec3f t;
-
-	const char* execute() {
-		returnValue = cv::recoverPose(E, points1, points2, self, R, t, mask);
-		return "";
-	}
-
-	v8::Local<v8::Value> getReturnValue() {
-		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), IntConverter::wrap(returnValue));
-		Nan::Set(ret, Nan::New("R").ToLocalChecked(), Mat::Converter::wrap(R));
-		Nan::Set(ret, Nan::New("t").ToLocalChecked(), Vec3::Converter::wrap(t));
-		return ret;
-	}
-
-	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return (
-			Mat::Converter::arg(0, &E, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &points1, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(2, &points2, info)
-		);
-	}
-
-	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return (
-			Mat::Converter::optArg(3, &mask, info)
-		);
-	}
-};
-
-NAN_METHOD(MatCalib3d::RecoverPose) {
-	RecoverPoseWorker worker(Mat::Converter::unwrap(info.This()));
-	FF_WORKER_SYNC("Mat::RecoverPose", worker);
-	info.GetReturnValue().Set(worker.getReturnValue());
-}
-
-NAN_METHOD(MatCalib3d::RecoverPoseAsync) {
-	RecoverPoseWorker worker(Mat::Converter::unwrap(info.This()));
-	FF_WORKER_ASYNC("Mat::RecoverPoseAsync", RecoverPoseWorker, worker);
 }
 
 
@@ -1083,3 +960,132 @@ NAN_METHOD(MatCalib3d::DecomposeHomographyMatAsync) {
 	DecomposeHomographyMatWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::DecomposeHomographyMatAsync", DecomposeHomographyMatWorker, worker);
 }
+
+
+#if CV_VERSION_MINOR > 0
+
+struct MatCalib3d::FindEssentialMatWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	FindEssentialMatWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	std::vector<cv::Point2f> points1;
+	std::vector<cv::Point2f> points2;
+	int method = cv::RANSAC;
+	double prob = 0.999;
+	double threshold = 1.0;
+
+	cv::Mat returnValue;
+	cv::Mat mask = cv::noArray().getMat();
+
+	const char* execute() {
+		returnValue = cv::findEssentialMat(points1, points2, self, method, prob, threshold, mask);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), Mat::Converter::wrap(returnValue));
+		Nan::Set(ret, Nan::New("mask").ToLocalChecked(), Mat::Converter::wrap(mask));
+		return ret;
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &points1, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &points2, info)
+			);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(2, &method, info) ||
+			DoubleConverter::optArg(3, &prob, info) ||
+			DoubleConverter::optArg(4, &threshold, info)
+			);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(2);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[2]->ToObject();
+		return (
+			IntConverter::optProp(&method, "method", opts) ||
+			DoubleConverter::optProp(&prob, "prob", opts) ||
+			DoubleConverter::optProp(&threshold, "threshold", opts)
+			);
+	}
+};
+
+NAN_METHOD(MatCalib3d::FindEssentialMat) {
+	FindEssentialMatWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::FindEssentialMat", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatCalib3d::FindEssentialMatAsync) {
+	FindEssentialMatWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::FindEssentialMatAsync", FindEssentialMatWorker, worker);
+}
+
+
+struct MatCalib3d::RecoverPoseWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	RecoverPoseWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	cv::Mat E;
+	std::vector<cv::Point2f> points1;
+	std::vector<cv::Point2f> points2;
+	cv::Mat mask = cv::noArray().getMat();
+
+	int returnValue;
+	cv::Mat R;
+	cv::Vec3f t;
+
+	const char* execute() {
+		returnValue = cv::recoverPose(E, points1, points2, self, R, t, mask);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), IntConverter::wrap(returnValue));
+		Nan::Set(ret, Nan::New("R").ToLocalChecked(), Mat::Converter::wrap(R));
+		Nan::Set(ret, Nan::New("t").ToLocalChecked(), Vec3::Converter::wrap(t));
+		return ret;
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::arg(0, &E, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &points1, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(2, &points2, info)
+			);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::optArg(3, &mask, info)
+			);
+	}
+};
+
+NAN_METHOD(MatCalib3d::RecoverPose) {
+	RecoverPoseWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::RecoverPose", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatCalib3d::RecoverPoseAsync) {
+	RecoverPoseWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::RecoverPoseAsync", RecoverPoseWorker, worker);
+}
+
+#endif

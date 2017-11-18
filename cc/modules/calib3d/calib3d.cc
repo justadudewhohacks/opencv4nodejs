@@ -9,8 +9,6 @@ NAN_MODULE_INIT(Calib3d::Init) {
 	Nan::SetMethod(target, "composeRTAsync", ComposeRTAsync);
 	Nan::SetMethod(target, "solvePnP", SolvePnP);
 	Nan::SetMethod(target, "solvePnPAsync", SolvePnPAsync);
-	Nan::SetMethod(target, "solveP3P", SolveP3P);
-	Nan::SetMethod(target, "solveP3PAsync", SolveP3PAsync);
 	Nan::SetMethod(target, "solvePnPRansac", SolvePnPRansac);
 	Nan::SetMethod(target, "solvePnPRansacAsync", SolvePnPRansacAsync);
 	Nan::SetMethod(target, "projectPoints", ProjectPoints);
@@ -19,8 +17,6 @@ NAN_MODULE_INIT(Calib3d::Init) {
 	Nan::SetMethod(target, "initCameraMatrix2DAsync", InitCameraMatrix2DAsync);
 	Nan::SetMethod(target, "calibrateCamera", CalibrateCamera);
 	Nan::SetMethod(target, "calibrateCameraAsync", CalibrateCameraAsync);
-	Nan::SetMethod(target, "calibrateCameraExtended", CalibrateCameraExtended);
-	Nan::SetMethod(target, "calibrateCameraExtendedAsync", CalibrateCameraExtendedAsync);
 	Nan::SetMethod(target, "stereoCalibrate", StereoCalibrate);
 	Nan::SetMethod(target, "stereoCalibrateAsync", StereoCalibrateAsync);
 	Nan::SetMethod(target, "stereoRectifyUncalibrated", StereoRectifyUncalibrated);
@@ -35,14 +31,24 @@ NAN_MODULE_INIT(Calib3d::Init) {
 	Nan::SetMethod(target, "computeCorrespondEpilinesAsync", ComputeCorrespondEpilinesAsync);
 	Nan::SetMethod(target, "getValidDisparityROI", GetValidDisparityROI);
 	Nan::SetMethod(target, "getValidDisparityROIAsync", GetValidDisparityROIAsync);
-	Nan::SetMethod(target, "sampsonDistance", SampsonDistance);
-	Nan::SetMethod(target, "sampsonDistanceAsync", SampsonDistanceAsync);
 	Nan::SetMethod(target, "estimateAffine3D", EstimateAffine3D);
 	Nan::SetMethod(target, "estimateAffine3DAsync", EstimateAffine3DAsync);
+#if CV_VERSION_MINOR > 0
+	Nan::SetMethod(target, "sampsonDistance", SampsonDistance);
+	Nan::SetMethod(target, "sampsonDistanceAsync", SampsonDistanceAsync);
+#endif
+#if CV_VERSION_MINOR > 1
+	Nan::SetMethod(target, "calibrateCameraExtended", CalibrateCameraExtended);
+	Nan::SetMethod(target, "calibrateCameraExtendedAsync", CalibrateCameraExtendedAsync);
 	Nan::SetMethod(target, "estimateAffine2D", EstimateAffine2D);
 	Nan::SetMethod(target, "estimateAffine2DAsync", EstimateAffine2DAsync);
 	Nan::SetMethod(target, "estimateAffinePartial2D", EstimateAffinePartial2D);
 	Nan::SetMethod(target, "estimateAffinePartial2DAsync", EstimateAffinePartial2DAsync);
+#endif
+#if CV_VERSION_MINOR > 2
+	Nan::SetMethod(target, "solveP3P", SolveP3P);
+	Nan::SetMethod(target, "solveP3PAsync", SolveP3PAsync);
+#endif
 };
 
 NAN_METHOD(Calib3d::FindHomography) {
@@ -210,34 +216,6 @@ NAN_METHOD(Calib3d::SolvePnP) {
 NAN_METHOD(Calib3d::SolvePnPAsync) {
 	SolvePnPWorker worker;
 	FF_WORKER_ASYNC("Mat::SolvePnPAsync", SolvePnPWorker, worker);
-}
-
-
-struct Calib3d::SolveP3PWorker : public Calib3d::SolvePxPWorker {
-public:
-	int flags = cv::SOLVEPNP_P3P;
-
-	const char* execute() {
-		returnValue = cv::solveP3P(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvec, tvec, flags);
-		return "";
-	}
-
-	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return (
-			IntConverter::optArg(4, &flags, info)
-		);
-	}
-};
-
-NAN_METHOD(Calib3d::SolveP3P) {
-	SolveP3PWorker worker;
-	FF_WORKER_SYNC("Mat::SolveP3P", worker);
-	info.GetReturnValue().Set(worker.getReturnValue());
-}
-
-NAN_METHOD(Calib3d::SolveP3PAsync) {
-	SolveP3PWorker worker;
-	FF_WORKER_ASYNC("Mat::SolveP3PAsync", SolveP3PWorker, worker);
 }
 
 
@@ -464,38 +442,6 @@ NAN_METHOD(Calib3d::CalibrateCamera) {
 NAN_METHOD(Calib3d::CalibrateCameraAsync) {
 	CalibrateCameraWorker worker;
 	FF_WORKER_ASYNC("Mat::CalibrateCameraAsync", CalibrateCameraWorker, worker);
-}
-
-
-struct Calib3d::CalibrateCameraExtendedWorker : public Calib3d::CalibrateCameraWorker {
-public:
-	cv::Mat stdDeviationsIntrinsics;
-	cv::Mat stdDeviationsExtrinsics;
-	cv::Mat perViewErrors;
-
-	const char* execute() {
-		returnValue = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs, stdDeviationsIntrinsics, stdDeviationsExtrinsics, perViewErrors, flags, criteria);
-		return "";
-	}
-
-	v8::Local<v8::Value> getReturnValue() {
-		v8::Local<v8::Object> ret = Calib3d::CalibrateCameraWorker::getReturnValue()->ToObject();
-		Nan::Set(ret, Nan::New("stdDeviationsIntrinsics").ToLocalChecked(), Mat::Converter::wrap(stdDeviationsIntrinsics));
-		Nan::Set(ret, Nan::New("stdDeviationsExtrinsics").ToLocalChecked(), Mat::Converter::wrap(stdDeviationsExtrinsics));
-		Nan::Set(ret, Nan::New("perViewErrors").ToLocalChecked(), Mat::Converter::wrap(perViewErrors));
-		return ret;
-	}
-};
-
-NAN_METHOD(Calib3d::CalibrateCameraExtended) {
-	CalibrateCameraExtendedWorker worker;
-	FF_WORKER_SYNC("Mat::CalibrateCameraExtended", worker);
-	info.GetReturnValue().Set(worker.getReturnValue());
-}
-
-NAN_METHOD(Calib3d::CalibrateCameraExtendedAsync) {
-	CalibrateCameraExtendedWorker worker;
-	FF_WORKER_ASYNC("Mat::CalibrateCameraExtendedAsync", CalibrateCameraExtendedWorker, worker);
 }
 
 
@@ -912,44 +858,6 @@ NAN_METHOD(Calib3d::GetValidDisparityROIAsync) {
 }
 
 
-struct Calib3d::SampsonDistanceWorker : public SimpleWorker {
-public:
-	cv::Vec2d pt1;
-	cv::Vec2d pt2;
-	cv::Mat F;
-
-	double returnValue;
-
-	const char* execute() {
-		returnValue = cv::sampsonDistance(pt1, pt2, F);
-		return "";
-	}
-
-	v8::Local<v8::Value> getReturnValue() {
-		return DoubleConverter::wrap(returnValue);
-	}
-
-	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return (
-			Vec2::Converter::arg(0, &pt1, info) ||
-			Vec2::Converter::arg(1, &pt2, info) ||
-			Mat::Converter::arg(2, &F, info)
-		);
-	}
-};
-
-NAN_METHOD(Calib3d::SampsonDistance) {
-	SampsonDistanceWorker worker;
-	FF_WORKER_SYNC("Mat::SampsonDistance", worker);
-	info.GetReturnValue().Set(worker.getReturnValue());
-}
-
-NAN_METHOD(Calib3d::SampsonDistanceAsync) {
-	SampsonDistanceWorker worker;
-	FF_WORKER_ASYNC("Mat::SampsonDistanceAsync", SampsonDistanceWorker, worker);
-}
-
-
 struct Calib3d::EstimateAffine3DWorker : public SimpleWorker {
 public:
 	std::vector<cv::Vec3f> src;
@@ -1010,6 +918,80 @@ NAN_METHOD(Calib3d::EstimateAffine3D) {
 NAN_METHOD(Calib3d::EstimateAffine3DAsync) {
 	EstimateAffine3DWorker worker;
 	FF_WORKER_ASYNC("Mat::EstimateAffine3DAsync", EstimateAffine3DWorker, worker);
+}
+
+#if CV_VERSION_MINOR > 0
+
+struct Calib3d::SampsonDistanceWorker : public SimpleWorker {
+public:
+	cv::Vec2d pt1;
+	cv::Vec2d pt2;
+	cv::Mat F;
+
+	double returnValue;
+
+	const char* execute() {
+		returnValue = cv::sampsonDistance(pt1, pt2, F);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return DoubleConverter::wrap(returnValue);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Vec2::Converter::arg(0, &pt1, info) ||
+			Vec2::Converter::arg(1, &pt2, info) ||
+			Mat::Converter::arg(2, &F, info)
+			);
+	}
+};
+
+NAN_METHOD(Calib3d::SampsonDistance) {
+	SampsonDistanceWorker worker;
+	FF_WORKER_SYNC("Mat::SampsonDistance", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Calib3d::SampsonDistanceAsync) {
+	SampsonDistanceWorker worker;
+	FF_WORKER_ASYNC("Mat::SampsonDistanceAsync", SampsonDistanceWorker, worker);
+}
+
+#endif
+
+#if CV_VERSION_MINOR > 1
+
+struct Calib3d::CalibrateCameraExtendedWorker : public Calib3d::CalibrateCameraWorker {
+public:
+	cv::Mat stdDeviationsIntrinsics;
+	cv::Mat stdDeviationsExtrinsics;
+	cv::Mat perViewErrors;
+
+	const char* execute() {
+		returnValue = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs, stdDeviationsIntrinsics, stdDeviationsExtrinsics, perViewErrors, flags, criteria);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Object> ret = Calib3d::CalibrateCameraWorker::getReturnValue()->ToObject();
+		Nan::Set(ret, Nan::New("stdDeviationsIntrinsics").ToLocalChecked(), Mat::Converter::wrap(stdDeviationsIntrinsics));
+		Nan::Set(ret, Nan::New("stdDeviationsExtrinsics").ToLocalChecked(), Mat::Converter::wrap(stdDeviationsExtrinsics));
+		Nan::Set(ret, Nan::New("perViewErrors").ToLocalChecked(), Mat::Converter::wrap(perViewErrors));
+		return ret;
+	}
+};
+
+NAN_METHOD(Calib3d::CalibrateCameraExtended) {
+	CalibrateCameraExtendedWorker worker;
+	FF_WORKER_SYNC("Mat::CalibrateCameraExtended", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Calib3d::CalibrateCameraExtendedAsync) {
+	CalibrateCameraExtendedWorker worker;
+	FF_WORKER_ASYNC("Mat::CalibrateCameraExtendedAsync", CalibrateCameraExtendedWorker, worker);
 }
 
 
@@ -1100,3 +1082,36 @@ NAN_METHOD(Calib3d::EstimateAffinePartial2DAsync) {
 	EstimateAffinePartial2DWorker worker;
 	FF_WORKER_ASYNC("Mat::EstimateAffinePartial2DAsync", EstimateAffinePartial2DWorker, worker);
 }
+
+#endif
+
+#if CV_VERSION_MINOR > 2
+
+struct Calib3d::SolveP3PWorker : public Calib3d::SolvePxPWorker {
+public:
+	int flags = cv::SOLVEPNP_P3P;
+
+	const char* execute() {
+		returnValue = cv::solveP3P(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvec, tvec, flags);
+		return "";
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(4, &flags, info)
+			);
+	}
+};
+
+NAN_METHOD(Calib3d::SolveP3P) {
+	SolveP3PWorker worker;
+	FF_WORKER_SYNC("Mat::SolveP3P", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Calib3d::SolveP3PAsync) {
+	SolveP3PWorker worker;
+	FF_WORKER_ASYNC("Mat::SolveP3PAsync", SolveP3PWorker, worker);
+}
+
+#endif
