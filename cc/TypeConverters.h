@@ -81,7 +81,24 @@ public:
 };
 
 typedef AbstractConverter<SingleTypeConverter<NumberTypeConverter, double>, double>  DoubleConverter;
-typedef AbstractConverter<SingleTypeConverter<NumberTypeConverter, float>, float>  FloatConverter;
+
+
+class FloatTypeConverter : public TypeConverter<float> {
+public:
+	static const char* getTypeName() {
+		return "number";
+	}
+
+	static bool assertType(v8::Local<v8::Value> jsVal) {
+		return jsVal->IsNumber();
+	}
+
+	static float unwrap(v8::Local<v8::Value> jsVal) {
+		return jsVal->NumberValue();
+	}
+};
+
+typedef AbstractConverter<SingleTypeConverter<FloatTypeConverter, float>, float>  FloatConverter;
 
 
 class StringTypeConverter {
