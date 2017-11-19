@@ -132,7 +132,7 @@ public:
 
 	cv::Mat cameraMatrix;
 	cv::Mat rotMatrix;
-	cv::Vec4f transVect;
+	cv::Vec4d transVect;
 	cv::Mat rotMatrixX;
 	cv::Mat rotMatrixY;
 	cv::Mat rotMatrixZ;
@@ -268,7 +268,7 @@ public:
 	}
 
 	cv::Size2d patternSize;
-	std::vector<cv::Point2d> corners;
+	std::vector<cv::Point2f> corners;
 	bool patternWasFound;
 
 
@@ -277,15 +277,10 @@ public:
 		return "";
 	}
 
-	v8::Local<v8::Value> getReturnValue() {
-		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-		return ret;
-	}
-
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
 			Size::Converter::arg(0, &patternSize, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d>::arg(1, &corners, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &corners, info) ||
 			BoolConverter::arg(2, &patternWasFound, info)
 		);
 	}
@@ -310,7 +305,7 @@ public:
 		this->self = self;
 	}
 
-	std::vector<cv::Point2d> corners;
+	std::vector<cv::Point2f> corners;
 	cv::Size2d region_size;
 
 	bool returnValue;
@@ -326,7 +321,7 @@ public:
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &corners, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &corners, info) ||
 			Size::Converter::arg(1, &region_size, info)
 		);
 	}
@@ -419,11 +414,11 @@ public:
 	cv::Mat P1;
 	cv::Mat P2;
 	cv::Mat Q;
-	cv::Rect validPixROI1;
-	cv::Rect validPixROI2;
+	cv::Rect roi1;
+	cv::Rect roi2;
 
 	const char* execute() {
-		cv::stereoRectify(self, distCoeffs1, cameraMatrix2, distCoeffs2, imageSize, R, T, R1, R2, P1, P2, Q, flags, alpha, newImageSize, &validPixROI1, &validPixROI2);
+		cv::stereoRectify(self, distCoeffs1, cameraMatrix2, distCoeffs2, imageSize, R, T, R1, R2, P1, P2, Q, flags, alpha, newImageSize, &roi1, &roi2);
 		return "";
 	}
 
@@ -434,8 +429,8 @@ public:
 		Nan::Set(ret, Nan::New("P1").ToLocalChecked(), Mat::Converter::wrap(P1));
 		Nan::Set(ret, Nan::New("P2").ToLocalChecked(), Mat::Converter::wrap(P2));
 		Nan::Set(ret, Nan::New("Q").ToLocalChecked(), Mat::Converter::wrap(Q));
-		Nan::Set(ret, Nan::New("validPixROI1").ToLocalChecked(), Rect::Converter::wrap(validPixROI1));
-		Nan::Set(ret, Nan::New("validPixROI2").ToLocalChecked(), Rect::Converter::wrap(validPixROI2));
+		Nan::Set(ret, Nan::New("roi1").ToLocalChecked(), Rect::Converter::wrap(roi1));
+		Nan::Set(ret, Nan::New("roi2").ToLocalChecked(), Rect::Converter::wrap(roi2));
 		return ret;
 	}
 
@@ -584,17 +579,17 @@ public:
 	cv::Size2d newImgSize = cv::Size2d();
 	bool centerPrincipalPoint = false;
 
-	cv::Mat returnValue;
+	cv::Mat out;
 	cv::Rect validPixROI;
 
 	const char* execute() {
-		returnValue = cv::getOptimalNewCameraMatrix(self, distCoeffs, imageSize, alpha, newImgSize, &validPixROI, centerPrincipalPoint);
+		out = cv::getOptimalNewCameraMatrix(self, distCoeffs, imageSize, alpha, newImgSize, &validPixROI, centerPrincipalPoint);
 		return "";
 	}
 
 	v8::Local<v8::Value> getReturnValue() {
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), Mat::Converter::wrap(returnValue));
+		Nan::Set(ret, Nan::New("out").ToLocalChecked(), Mat::Converter::wrap(out));
 		Nan::Set(ret, Nan::New("validPixROI").ToLocalChecked(), Rect::Converter::wrap(validPixROI));
 		return ret;
 	}
@@ -648,10 +643,10 @@ public:
 
 	cv::Mat R1;
 	cv::Mat R2;
-	cv::Vec3f t;
+	cv::Vec3d T;
 
 	const char* execute() {
-		cv::decomposeEssentialMat(self, R1, R2, t);
+		cv::decomposeEssentialMat(self, R1, R2, T);
 		return "";
 	}
 
@@ -659,7 +654,7 @@ public:
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
 		Nan::Set(ret, Nan::New("R1").ToLocalChecked(), Mat::Converter::wrap(R1));
 		Nan::Set(ret, Nan::New("R2").ToLocalChecked(), Mat::Converter::wrap(R2));
-		Nan::Set(ret, Nan::New("t").ToLocalChecked(), Vec3::Converter::wrap(t));
+		Nan::Set(ret, Nan::New("T").ToLocalChecked(), Vec3::Converter::wrap(T));
 		return ret;
 	}
 };
@@ -684,10 +679,10 @@ public:
 	}
 
 	cv::Mat projMatr2;
-	std::vector<cv::Point2f> projPoints1;
-	std::vector<cv::Point2f> projPoints2;
+	std::vector<cv::Point2d> projPoints1;
+	std::vector<cv::Point2d> projPoints2;
 
-	std::vector<cv::Vec4f> points4D;
+	cv::Mat points4D;
 
 	const char* execute() {
 		cv::triangulatePoints(self, projMatr2, projPoints1, projPoints2, points4D);
@@ -695,14 +690,14 @@ public:
 	}
 
 	v8::Local<v8::Value> getReturnValue() {
-		return ObjectArrayConverter<Vec4, cv::Vec4d, cv::Vec4f>::wrap(points4D);
+		return Mat::Converter::wrap(points4D);
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
 			Mat::Converter::arg(0, &projMatr2, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &projPoints1, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(2, &projPoints2, info)
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(1, &projPoints1, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(2, &projPoints2, info)
 		);
 	}
 };

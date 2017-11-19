@@ -114,3 +114,24 @@ exports.getTmpDataFilePath = (file) => {
 };
 
 exports.fileExists = filePath => fs.existsSync(filePath);
+
+exports.expectToBeVec2 = (vec) => {
+  expect(vec).to.have.property('x');
+  expect(vec).to.have.property('y');
+  expect(vec).to.not.have.property('z');
+  expect(vec).to.not.have.property('w');
+};
+
+exports.expectToBeVec3 = (vec) => {
+  expect(vec).to.have.property('x');
+  expect(vec).to.have.property('y');
+  expect(vec).to.have.property('z');
+  expect(vec).to.not.have.property('w');
+};
+
+exports.expectToBeVec4 = (vec) => {
+  expect(vec).to.have.property('x');
+  expect(vec).to.have.property('y');
+  expect(vec).to.have.property('z');
+  expect(vec).to.have.property('w');
+};

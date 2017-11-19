@@ -72,7 +72,7 @@ public:
 		for (int i = 0; i < jsArr->Length(); i++) {
 			std::vector<CastType> vec;
 			Nan::TryCatch tryCatch;
-			if (!ArrayConverterType<Converter, T, CastType>::unwrap(&vec, jsArr->Get(i))) {
+			if (ArrayConverterType<Converter, T, CastType>::unwrap(&vec, jsArr->Get(i))) {
 				tryCatch.ReThrow();
 				return true;
 			}

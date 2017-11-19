@@ -95,16 +95,16 @@ public:
 	cv::Vec3d rvec2;
 	cv::Vec3d tvec2;
 
-	cv::Vec3f rvec3;
-	cv::Vec3f tvec3;
-	cv::Vec3f dr3dr1;
-	cv::Vec3f dr3dt1;
-	cv::Vec3f dr3dr2;
-	cv::Vec3f dr3dt2;
-	cv::Vec3f dt3dr1;
-	cv::Vec3f dt3dt1;
-	cv::Vec3f dt3dr2;
-	cv::Vec3f dt3dt2;
+	cv::Vec3d rvec3;
+	cv::Vec3d tvec3;
+	cv::Mat dr3dr1;
+	cv::Mat dr3dt1;
+	cv::Mat dr3dr2;
+	cv::Mat dr3dt2;
+	cv::Mat dt3dr1;
+	cv::Mat dt3dt1;
+	cv::Mat dt3dr2;
+	cv::Mat dt3dt2;
 
 	const char* execute() {
 		cv::composeRT(rvec1, tvec1, rvec2, tvec2, rvec3, tvec3, dr3dr1, dr3dt1, dr3dr2, dr3dt2, dt3dr1, dt3dt1, dt3dr2, dt3dt2);
@@ -115,14 +115,14 @@ public:
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
 		Nan::Set(ret, Nan::New("rvec3").ToLocalChecked(), Vec3::Converter::wrap(rvec3));
 		Nan::Set(ret, Nan::New("tvec3").ToLocalChecked(), Vec3::Converter::wrap(tvec3));
-		Nan::Set(ret, Nan::New("dr3dr1").ToLocalChecked(), Vec3::Converter::wrap(dr3dr1));
-		Nan::Set(ret, Nan::New("dr3dt1").ToLocalChecked(), Vec3::Converter::wrap(dr3dt1));
-		Nan::Set(ret, Nan::New("dr3dr2").ToLocalChecked(), Vec3::Converter::wrap(dr3dr2));
-		Nan::Set(ret, Nan::New("dr3dt2").ToLocalChecked(), Vec3::Converter::wrap(dr3dt2));
-		Nan::Set(ret, Nan::New("dt3dr1").ToLocalChecked(), Vec3::Converter::wrap(dt3dr1));
-		Nan::Set(ret, Nan::New("dt3dt1").ToLocalChecked(), Vec3::Converter::wrap(dt3dt1));
-		Nan::Set(ret, Nan::New("dt3dr2").ToLocalChecked(), Vec3::Converter::wrap(dt3dr2));
-		Nan::Set(ret, Nan::New("dt3dt2").ToLocalChecked(), Vec3::Converter::wrap(dt3dt2));
+		Nan::Set(ret, Nan::New("dr3dr1").ToLocalChecked(), Mat::Converter::wrap(dr3dr1));
+		Nan::Set(ret, Nan::New("dr3dt1").ToLocalChecked(), Mat::Converter::wrap(dr3dt1));
+		Nan::Set(ret, Nan::New("dr3dr2").ToLocalChecked(), Mat::Converter::wrap(dr3dr2));
+		Nan::Set(ret, Nan::New("dr3dt2").ToLocalChecked(), Mat::Converter::wrap(dr3dt2));
+		Nan::Set(ret, Nan::New("dt3dr1").ToLocalChecked(), Mat::Converter::wrap(dt3dr1));
+		Nan::Set(ret, Nan::New("dt3dt1").ToLocalChecked(), Mat::Converter::wrap(dt3dt1));
+		Nan::Set(ret, Nan::New("dt3dr2").ToLocalChecked(), Mat::Converter::wrap(dt3dr2));
+		Nan::Set(ret, Nan::New("dt3dt2").ToLocalChecked(), Mat::Converter::wrap(dt3dt2));
 		return ret;
 	}
 
@@ -150,8 +150,8 @@ NAN_METHOD(Calib3d::ComposeRTAsync) {
 
 struct Calib3d::SolvePxPWorker : public SimpleWorker {
 public:
-	std::vector<cv::Point3f> objectPoints;
-	std::vector<cv::Point2f> imagePoints;
+	std::vector<cv::Point3d> objectPoints;
+	std::vector<cv::Point2d> imagePoints;
 	cv::Mat cameraMatrix;
 	std::vector<double> distCoeffs;
 
@@ -169,8 +169,8 @@ public:
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::arg(0, &objectPoints, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &imagePoints, info) ||
+			ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &objectPoints, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(1, &imagePoints, info) ||
 			Mat::Converter::arg(2, &cameraMatrix, info) ||
 			DoubleArrayConverter::arg(3, &distCoeffs, info)
 		);
@@ -280,14 +280,14 @@ NAN_METHOD(Calib3d::SolvePnPRansacAsync) {
 
 struct Calib3d::ProjectPointsWorker : public SimpleWorker {
 public:
-	std::vector<cv::Point3f> objectPoints;
+	std::vector<cv::Point3d> objectPoints;
 	cv::Vec3d rvec;
 	cv::Vec3d tvec;
 	cv::Mat cameraMatrix;
 	std::vector<double> distCoeffs;
 	double aspectRatio = 0;
 
-	std::vector<cv::Point2f> imagePoints;
+	std::vector<cv::Point2d> imagePoints;
 	cv::Mat jacobian;
 
 	const char* execute() {
@@ -297,14 +297,14 @@ public:
 
 	v8::Local<v8::Value> getReturnValue() {
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-		Nan::Set(ret, Nan::New("imagePoints").ToLocalChecked(), ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(imagePoints));
+		Nan::Set(ret, Nan::New("imagePoints").ToLocalChecked(), ObjectArrayConverter<Point2, cv::Point2d>::wrap(imagePoints));
 		Nan::Set(ret, Nan::New("jacobian").ToLocalChecked(), Mat::Converter::wrap(jacobian));
 		return ret;
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::arg(0, &objectPoints, info) ||
+			ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &objectPoints, info) ||
 			Vec3::Converter::arg(1, &rvec, info) ||
 			Vec3::Converter::arg(2, &tvec, info) ||
 			Mat::Converter::arg(3, &cameraMatrix, info) ||
@@ -378,17 +378,17 @@ NAN_METHOD(Calib3d::InitCameraMatrix2DAsync) {
 
 struct Calib3d::CalibrateCameraWorker : public SimpleWorker {
 public:
-	std::vector<cv::Point3f> objectPoints;
-	std::vector<cv::Point2f> imagePoints;
+	std::vector<std::vector<cv::Point3f>> objectPoints;
+	std::vector<std::vector<cv::Point2f>> imagePoints;
 	cv::Size2d imageSize;
 	cv::Mat cameraMatrix;
 	std::vector<double> distCoeffs;
-	int flags = 0;
+	int flags = 0; 
 	cv::TermCriteria criteria = cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON);
 
 	double returnValue;
-	std::vector<cv::Vec3f> rvecs;
-	std::vector<cv::Vec3f> tvecs;
+	std::vector<cv::Vec3d> rvecs;
+	std::vector<cv::Vec3d> tvecs;
 
 	const char* execute() {
 		returnValue = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs, flags, criteria);
@@ -398,15 +398,15 @@ public:
 	v8::Local<v8::Value> getReturnValue() {
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
 		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), DoubleConverter::wrap(returnValue));
-		Nan::Set(ret, Nan::New("rvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d, cv::Vec3f>::wrap(rvecs));
-		Nan::Set(ret, Nan::New("tvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d, cv::Vec3f>::wrap(tvecs));
+		Nan::Set(ret, Nan::New("rvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d>::wrap(rvecs));
+		Nan::Set(ret, Nan::New("tvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d>::wrap(tvecs));
 		return ret;
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::arg(0, &objectPoints, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &imagePoints, info) ||
+			ObjectArrayOfArraysConverter<Point3, cv::Point3d, cv::Point3f>::arg(0, &objectPoints, info) ||
+			ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &imagePoints, info) ||
 			Size::Converter::arg(2, &imageSize, info) ||
 			Mat::Converter::arg(3, &cameraMatrix, info) ||
 			DoubleArrayConverter::arg(4, &distCoeffs, info)
@@ -447,9 +447,9 @@ NAN_METHOD(Calib3d::CalibrateCameraAsync) {
 
 struct Calib3d::StereoCalibrateWorker : public SimpleWorker {
 public:
-	std::vector<cv::Point3f> objectPoints;
-	std::vector<cv::Point2f> imagePoints1;
-	std::vector<cv::Point2f> imagePoints2;
+	std::vector<std::vector<cv::Point3f>> objectPoints;
+	std::vector<std::vector<cv::Point2f>> imagePoints1;
+	std::vector<std::vector<cv::Point2f>> imagePoints2;
 	cv::Mat cameraMatrix1;
 	std::vector<double> distCoeffs1;
 	cv::Mat cameraMatrix2;
@@ -460,7 +460,7 @@ public:
 
 	double returnValue;
 	cv::Mat R;
-	cv::Vec3f T;
+	cv::Vec3d T;
 	cv::Mat E;
 	cv::Mat F;
 
@@ -481,9 +481,9 @@ public:
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::arg(0, &objectPoints, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &imagePoints1, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &imagePoints2, info) ||
+			ObjectArrayOfArraysConverter<Point3, cv::Point3d, cv::Point3f>::arg(0, &objectPoints, info) ||
+			ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &imagePoints1, info) ||
+			ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2f>::arg(2, &imagePoints2, info) ||
 			Mat::Converter::arg(3, &cameraMatrix1, info) ||
 			DoubleArrayConverter::arg(4, &distCoeffs1, info) ||
 			Mat::Converter::arg(5, &cameraMatrix2, info) ||
@@ -526,8 +526,8 @@ NAN_METHOD(Calib3d::StereoCalibrateAsync) {
 
 struct Calib3d::StereoRectifyUncalibratedWorker : public SimpleWorker {
 public:
-	std::vector<cv::Point2f> points1;
-	std::vector<cv::Point2f> points2;
+	std::vector<cv::Point2d> points1;
+	std::vector<cv::Point2d> points2;
 	cv::Mat F;
 	cv::Size2d imgSize;
 	double threshold = 5;
@@ -551,8 +551,8 @@ public:
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &points1, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &points2, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &points1, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(1, &points2, info) ||
 			Mat::Converter::arg(2, &F, info) ||
 			Size::Converter::arg(3, &imgSize, info)
 		);
@@ -579,31 +579,31 @@ NAN_METHOD(Calib3d::StereoRectifyUncalibratedAsync) {
 
 struct Calib3d::FindFundamentalMatWorker : public SimpleWorker {
 public:
-	std::vector<cv::Point2f> points1;
-	std::vector<cv::Point2f> points2;
+	std::vector<cv::Point2d> points1;
+	std::vector<cv::Point2d> points2;
 	int method = cv::FM_RANSAC;
 	double param1 = 3.0;
 	double param2 = 0.99;
 
-	cv::Mat returnValue;
-	cv::Mat mask = cv::noArray().getMat();
+	cv::Mat F;
+	cv::Mat mask;
 
 	const char* execute() {
-		returnValue = cv::findFundamentalMat(points1, points2, method, param1, param2, mask);
+		F = cv::findFundamentalMat(points1, points2, method, param1, param2, mask);
 		return "";
 	}
 
 	v8::Local<v8::Value> getReturnValue() {
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), Mat::Converter::wrap(returnValue));
+		Nan::Set(ret, Nan::New("F").ToLocalChecked(), Mat::Converter::wrap(F));
 		Nan::Set(ret, Nan::New("mask").ToLocalChecked(), Mat::Converter::wrap(mask));
 		return ret;
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &points1, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &points2, info)
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &points1, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(1, &points2, info)
 		);
 	}
 
@@ -642,33 +642,33 @@ NAN_METHOD(Calib3d::FindFundamentalMatAsync) {
 
 struct Calib3d::FindEssentialMatWorker : public SimpleWorker {
 public:
-	std::vector<cv::Point2f> points1;
-	std::vector<cv::Point2f> points2;
+	std::vector<cv::Point2d> points1;
+	std::vector<cv::Point2d> points2;
 	double focal = 1.0;
 	cv::Point2d pp = cv::Point2d(0, 0);
 	int method = cv::RANSAC;
 	double prob = 0.999;
 	double threshold = 1.0;
 
-	cv::Mat returnValue;
+	cv::Mat E;
 	cv::Mat mask = cv::noArray().getMat();
 
 	const char* execute() {
-		returnValue = cv::findEssentialMat(points1, points2, focal, pp, method, prob, threshold, mask);
+		E = cv::findEssentialMat(points1, points2, focal, pp, method, prob, threshold, mask);
 		return "";
 	}
 
 	v8::Local<v8::Value> getReturnValue() {
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), Mat::Converter::wrap(returnValue));
+		Nan::Set(ret, Nan::New("E").ToLocalChecked(), Mat::Converter::wrap(E));
 		Nan::Set(ret, Nan::New("mask").ToLocalChecked(), Mat::Converter::wrap(mask));
 		return ret;
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &points1, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &points2, info)
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &points1, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(1, &points2, info)
 		);
 	}
 
@@ -713,18 +713,18 @@ NAN_METHOD(Calib3d::FindEssentialMatAsync) {
 struct Calib3d::RecoverPoseWorker : public SimpleWorker {
 public:
 	cv::Mat E;
-	std::vector<cv::Point2f> points1;
-	std::vector<cv::Point2f> points2;
+	std::vector<cv::Point2d> points1;
+	std::vector<cv::Point2d> points2;
 	double focal = 1.0;
 	cv::Point2d pp = cv::Point2d(0, 0);
 	cv::Mat mask = cv::noArray().getMat();
 
 	int returnValue;
 	cv::Mat R;
-	cv::Vec3f t;
+	cv::Vec3d T;
 
 	const char* execute() {
-		returnValue = cv::recoverPose(E, points1, points2, R, t, focal, pp, mask);
+		returnValue = cv::recoverPose(E, points1, points2, R, T, focal, pp, mask);
 		return "";
 	}
 
@@ -732,15 +732,15 @@ public:
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
 		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), IntConverter::wrap(returnValue));
 		Nan::Set(ret, Nan::New("R").ToLocalChecked(), Mat::Converter::wrap(R));
-		Nan::Set(ret, Nan::New("t").ToLocalChecked(), Vec3::Converter::wrap(t));
+		Nan::Set(ret, Nan::New("T").ToLocalChecked(), Vec3::Converter::wrap(T));
 		return ret;
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
 			Mat::Converter::arg(0, &E, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &points2, info) ||
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(2, &points2, info)
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(1, &points1, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(2, &points2, info)
 		);
 	}
 
@@ -780,11 +780,11 @@ NAN_METHOD(Calib3d::RecoverPoseAsync) {
 
 struct Calib3d::ComputeCorrespondEpilinesWorker : public SimpleWorker {
 public:
-	std::vector<cv::Point2f> points;
+	std::vector<cv::Point2d> points;
 	int whichImage;
 	cv::Mat F;
 
-	std::vector<cv::Point3f> lines;
+	std::vector<cv::Point3d> lines;
 
 	const char* execute() {
 		cv::computeCorrespondEpilines(points, whichImage, F, lines);
@@ -792,12 +792,12 @@ public:
 	}
 
 	v8::Local<v8::Value> getReturnValue() {
-		return ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::wrap(lines);
+		return ObjectArrayConverter<Point3, cv::Point3d>::wrap(lines);
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &points, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &points, info) ||
 			IntConverter::arg(1, &whichImage, info) ||
 			Mat::Converter::arg(2, &F, info)
 		);
@@ -860,14 +860,14 @@ NAN_METHOD(Calib3d::GetValidDisparityROIAsync) {
 
 struct Calib3d::EstimateAffine3DWorker : public SimpleWorker {
 public:
-	std::vector<cv::Vec3f> src;
-	std::vector<cv::Vec3f> dst;
+	std::vector<cv::Point3d> src;
+	std::vector<cv::Point3d> dst;
 	double ransacThreshold = 3;
 	double confidence = 0.99;
 
 	int returnValue;
 	cv::Mat out;
-	std::vector<int> inliers;
+	cv::Mat inliers;
 
 	const char* execute() {
 		returnValue = cv::estimateAffine3D(src, dst, out, inliers, ransacThreshold, confidence);
@@ -878,14 +878,14 @@ public:
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
 		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), IntConverter::wrap(returnValue));
 		Nan::Set(ret, Nan::New("out").ToLocalChecked(), Mat::Converter::wrap(out));
-		Nan::Set(ret, Nan::New("inliers").ToLocalChecked(), IntArrayConverter::wrap(inliers));
+		Nan::Set(ret, Nan::New("inliers").ToLocalChecked(), Mat::Converter::wrap(inliers));
 		return ret;
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			ObjectArrayConverter<Vec3, cv::Vec3d, cv::Vec3f>::arg(0, &src, info) ||
-			ObjectArrayConverter<Vec3, cv::Vec3d, cv::Vec3f>::arg(1, &dst, info)
+			ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &src, info) ||
+			ObjectArrayConverter<Point3, cv::Point3d>::arg(1, &dst, info)
 		);
 	}
 
@@ -944,7 +944,7 @@ public:
 			Vec2::Converter::arg(0, &pt1, info) ||
 			Vec2::Converter::arg(1, &pt2, info) ||
 			Mat::Converter::arg(2, &F, info)
-			);
+		);
 	}
 };
 
@@ -967,7 +967,7 @@ struct Calib3d::CalibrateCameraExtendedWorker : public Calib3d::CalibrateCameraW
 public:
 	cv::Mat stdDeviationsIntrinsics;
 	cv::Mat stdDeviationsExtrinsics;
-	cv::Mat perViewErrors;
+	std::vector<double> perViewErrors;
 
 	const char* execute() {
 		returnValue = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs, stdDeviationsIntrinsics, stdDeviationsExtrinsics, perViewErrors, flags, criteria);
@@ -978,7 +978,7 @@ public:
 		v8::Local<v8::Object> ret = Calib3d::CalibrateCameraWorker::getReturnValue()->ToObject();
 		Nan::Set(ret, Nan::New("stdDeviationsIntrinsics").ToLocalChecked(), Mat::Converter::wrap(stdDeviationsIntrinsics));
 		Nan::Set(ret, Nan::New("stdDeviationsExtrinsics").ToLocalChecked(), Mat::Converter::wrap(stdDeviationsExtrinsics));
-		Nan::Set(ret, Nan::New("perViewErrors").ToLocalChecked(), Mat::Converter::wrap(perViewErrors));
+		Nan::Set(ret, Nan::New("perViewErrors").ToLocalChecked(), DoubleArrayConverter::wrap(perViewErrors));
 		return ret;
 	}
 };
@@ -997,33 +997,33 @@ NAN_METHOD(Calib3d::CalibrateCameraExtendedAsync) {
 
 struct Calib3d::EstimateAffine2DWorker : public SimpleWorker {
 public:
-	std::vector<cv::Vec2f> from;
-	std::vector<cv::Vec2f> to;
+	std::vector<cv::Point2d> from;
+	std::vector<cv::Point2d> to;
 	int method = cv::RANSAC;
 	double ransacReprojThreshold = 3;
 	int maxIters = 2000;
 	double confidence = 0.99;
 	int refineIters = 10;
 
-	cv::Mat returnValue;
-	std::vector<int> inliers;
+	cv::Mat out;
+	cv::Mat inliers;
 
 	const char* execute() {
-		returnValue = cv::estimateAffine2D(from, to, inliers, method, ransacReprojThreshold, maxIters, confidence, refineIters);
+		out = cv::estimateAffine2D(from, to, inliers, method, ransacReprojThreshold, maxIters, confidence, refineIters);
 		return "";
 	}
 
 	v8::Local<v8::Value> getReturnValue() {
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), Mat::Converter::wrap(returnValue));
-		Nan::Set(ret, Nan::New("inliers").ToLocalChecked(), IntArrayConverter::wrap(inliers));
+		Nan::Set(ret, Nan::New("out").ToLocalChecked(), Mat::Converter::wrap(out));
+		Nan::Set(ret, Nan::New("inliers").ToLocalChecked(), Mat::Converter::wrap(inliers));
 		return ret;
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			ObjectArrayConverter<Vec2, cv::Vec2d, cv::Vec2f>::arg(0, &from, info) ||
-			ObjectArrayConverter<Vec2, cv::Vec2d, cv::Vec2f>::arg(1, &to, info)
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &from, info) ||
+			ObjectArrayConverter<Point2, cv::Point2d>::arg(1, &to, info)
 		);
 	}
 
@@ -1067,7 +1067,7 @@ NAN_METHOD(Calib3d::EstimateAffine2DAsync) {
 
 struct Calib3d::EstimateAffinePartial2DWorker : public Calib3d::EstimateAffine2DWorker {
 	const char* execute() {
-		returnValue = cv::estimateAffinePartial2D(from, to, inliers, method, ransacReprojThreshold, maxIters, confidence, refineIters);
+		out = cv::estimateAffinePartial2D(from, to, inliers, method, ransacReprojThreshold, maxIters, confidence, refineIters);
 		return "";
 	}
 };
@@ -1091,15 +1091,27 @@ struct Calib3d::SolveP3PWorker : public Calib3d::SolvePxPWorker {
 public:
 	int flags = cv::SOLVEPNP_P3P;
 
+	bool returnValue;
+	std::vector<cv::Mat> rvecs;
+	std::vector<cv::Mat> tvecs;
+
 	const char* execute() {
-		returnValue = cv::solveP3P(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvec, tvec, flags);
+		returnValue = cv::solveP3P(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvecs, tvecs, flags);
 		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), BoolConverter::wrap(returnValue));
+		Nan::Set(ret, Nan::New("rvecs").ToLocalChecked(), ObjectArrayConverter<Mat, cv::Mat>::wrap(rvecs));
+		Nan::Set(ret, Nan::New("tvecs").ToLocalChecked(), ObjectArrayConverter<Mat, cv::Mat>::wrap(tvecs));
+		return ret;
 	}
 
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
 			IntConverter::optArg(4, &flags, info)
-			);
+		);
 	}
 };
 

@@ -9,6 +9,7 @@ const {
   assertDataDeepEquals,
   assertMatValueEquals,
   dangerousDeepEquals,
+  expectToBeVec2,
   isZeroMat
 } = global.utils;
 const { expect } = require('chai');
@@ -1052,10 +1053,7 @@ module.exports = (getTestImg) => {
         expect(out).to.be.an('array');
         expect(out.length).to.be.above(0);
         out.forEach((vec) => {
-          expect(vec).to.have.property('x');
-          expect(vec).to.have.property('y');
-          expect(vec).to.not.have.property('z');
-          expect(vec).to.not.have.property('w');
+          expectToBeVec2(vec);
         });
       };
 

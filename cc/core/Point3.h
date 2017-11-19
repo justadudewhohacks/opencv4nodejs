@@ -45,7 +45,7 @@ public:
 	typedef InstanceConverter<Point3, cv::Point3d> Converter;
 
 	static const char* getClassName() {
-		return "Point23";
+		return "Point3";
 	}
 };
 
