@@ -28,7 +28,6 @@ const imagePoints = [
   new cv.Point(101.0, 101.0),
   new cv.Point(101.0, 100.5)
 ];
-const cameraMatrix = cv.Mat.eye(3, 3, cv.CV_64F);
 const distCoefficients = [0, 0.5, 1.0, 1.0];
 
 describe('calib3d', () => {
@@ -115,7 +114,7 @@ describe('calib3d', () => {
     const getRequiredArgs = () => ([
       objectPoints,
       imagePoints,
-      cameraMatrix,
+      cv.Mat.eye(3, 4, cv.CV_64F),
       distCoefficients
     ]);
 
@@ -158,7 +157,7 @@ describe('calib3d', () => {
         getRequiredArgs: () => ([
           objectPoints.slice(0, 3),
           imagePoints.slice(0, 3),
-          cameraMatrix,
+          cv.Mat.eye(3, 4, cv.CV_64F),
           distCoefficients
         ]),
         getOptionalParams: () => ([
@@ -194,7 +193,7 @@ describe('calib3d', () => {
         objectPoints,
         rvec,
         tvec,
-        cameraMatrix,
+        cv.Mat.eye(3, 4, cv.CV_64F),
         distCoefficients
       ],
       getOptionalParams: () => ([
@@ -308,9 +307,9 @@ describe('calib3d', () => {
         [objectPoints, objectPoints],
         [imagePoints, imagePoints],
         [imagePoints, imagePoints],
-        cameraMatrix,
+        cv.Mat.eye(3, 4, cv.CV_64F),
         distCoefficients,
-        cameraMatrix,
+        cv.Mat.eye(3, 4, cv.CV_64F),
         distCoefficients,
         imageSize
       ],

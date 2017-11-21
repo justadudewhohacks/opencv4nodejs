@@ -18,8 +18,6 @@ const imagePoints = [
   new cv.Point(101.0, 101.0),
   new cv.Point(101.0, 100.5)
 ];
-const cameraMatrix = cv.Mat.eye(3, 3, cv.CV_64F);
-const projectionMatrix = cv.Mat.eye(3, 4, cv.CV_64F);
 const distCoefficients = [0, 0.5, 1.0, 1.0];
 
 module.exports = () => {
@@ -32,7 +30,7 @@ module.exports = () => {
     };
 
     generateAPITests({
-      getDut: () => cameraMatrix,
+      getDut: () => cv.Mat.eye(3, 3, cv.CV_64F),
       methodName: 'rodrigues',
       methodNameSpace: 'Mat',
       expectOutput
@@ -56,7 +54,7 @@ module.exports = () => {
     };
 
     generateAPITests({
-      getDut: () => cameraMatrix,
+      getDut: () => cv.Mat.eye(3, 3, cv.CV_64F),
       methodName: 'rqDecomp3x3',
       methodNameSpace: 'Mat',
       expectOutput
@@ -80,7 +78,7 @@ module.exports = () => {
     };
 
     generateAPITests({
-      getDut: () => projectionMatrix,
+      getDut: () => cv.Mat.eye(3, 4, cv.CV_64F),
       methodName: 'decomposeProjectionMatrix',
       methodNameSpace: 'Mat',
       expectOutput
@@ -95,10 +93,10 @@ module.exports = () => {
       assertMetaData(res.dABdB)(9, 9, cv.CV_64F);
     };
 
-    const B = cameraMatrix;
+    const B = cv.Mat.eye(3, 3, cv.CV_64F);
 
     generateAPITests({
-      getDut: () => cameraMatrix,
+      getDut: () => cv.Mat.eye(3, 3, cv.CV_64F),
       methodName: 'matMulDeriv',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
@@ -200,7 +198,7 @@ module.exports = () => {
     const apertureHeight = 10;
 
     generateAPITests({
-      getDut: () => cameraMatrix,
+      getDut: () => cv.Mat.eye(3, 3, cv.CV_64F),
       methodName: 'calibrationMatrixValues',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
@@ -234,12 +232,12 @@ module.exports = () => {
 
     describe('stereoRectify', () => {
       generateAPITests({
-        getDut: () => cameraMatrix,
+        getDut: () => cv.Mat.eye(3, 3, cv.CV_64F),
         methodName: 'stereoRectify',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           distCoefficients,
-          cameraMatrix,
+          cv.Mat.eye(3, 3, cv.CV_64F),
           distCoefficients,
           imageSize,
           R,
@@ -259,14 +257,14 @@ module.exports = () => {
       const flags = cv.CALIB_ZERO_DISPARITY;
 
       generateAPITests({
-        getDut: () => cameraMatrix,
+        getDut: () => cv.Mat.eye(3, 3, cv.CV_64F),
         methodName: 'rectify3Collinear',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           distCoefficients,
-          cameraMatrix,
+          cv.Mat.eye(3, 3, cv.CV_64F),
           distCoefficients,
-          cameraMatrix,
+          cv.Mat.eye(3, 3, cv.CV_64F),
           distCoefficients,
           imagePoints,
           imagePoints,
@@ -303,7 +301,7 @@ module.exports = () => {
     const centerPrincipalPoint = true;
 
     generateAPITests({
-      getDut: () => cameraMatrix,
+      getDut: () => cv.Mat.eye(3, 3, cv.CV_64F),
       methodName: 'getOptimalNewCameraMatrix',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
@@ -333,7 +331,7 @@ module.exports = () => {
     };
 
     generateAPITests({
-      getDut: () => cameraMatrix,
+      getDut: () => cv.Mat.eye(3, 3, cv.CV_64F),
       methodName: 'decomposeEssentialMat',
       methodNameSpace: 'Mat',
       expectOutput
@@ -347,11 +345,11 @@ module.exports = () => {
     };
 
     generateAPITests({
-      getDut: () => projectionMatrix,
+      getDut: () => cv.Mat.eye(3, 4, cv.CV_64F),
       methodName: 'triangulatePoints',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
-        projectionMatrix,
+        cv.Mat.eye(3, 4, cv.CV_64F),
         imagePoints,
         imagePoints
       ]),
@@ -368,7 +366,7 @@ module.exports = () => {
     };
 
     generateAPITests({
-      getDut: () => cameraMatrix,
+      getDut: () => cv.Mat.eye(3, 3, cv.CV_64F),
       methodName: 'correctMatches',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
@@ -468,7 +466,7 @@ module.exports = () => {
     const K = cv.Mat.eye(3, 3, cv.CV_64F);
 
     generateAPITests({
-      getDut: () => cameraMatrix,
+      getDut: () => cv.Mat.eye(3, 3, cv.CV_64F),
       methodName: 'decomposeHomographyMat',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
@@ -487,7 +485,7 @@ module.exports = () => {
     };
 
     generateAPITests({
-      getDut: () => cameraMatrix,
+      getDut: () => cv.Mat.eye(3, 3, cv.CV_64F),
       methodName: 'findEssentialMat',
       getRequiredArgs: () => [
         imagePoints,
@@ -515,7 +513,7 @@ module.exports = () => {
     const mask = new cv.Mat(imagePoints.length, 1, cv.CV_8U, 255);
 
     generateAPITests({
-      getDut: () => cameraMatrix,
+      getDut: () => cv.Mat.eye(3, 3, cv.CV_64F),
       methodName: 'recoverPose',
       getRequiredArgs: () => [
         E,
