@@ -258,7 +258,7 @@ describe('calib3d', () => {
       ['termCriteria', new cv.TermCriteria()]
     ]);
 
-    describe('calibrateCamera', () => {
+    (cv.version.minor > 0 ? describe : describe.skip)('calibrateCamera', () => {
       generateAPITests({
         getDut: () => cv,
         methodName: 'calibrateCamera',
@@ -394,7 +394,6 @@ describe('calib3d', () => {
         ['focal', 800.0],
         ['pp', new cv.Point(100, 100)],
         ['method', cv.LMEDS],
-        ['method', cv.FM_LMEDS],
         ['prob', 0.9],
         ['threshold', 2.0]
       ]),

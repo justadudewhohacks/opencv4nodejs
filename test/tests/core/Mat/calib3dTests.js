@@ -8,16 +8,6 @@ const {
 } = global.utils;
 const { expect } = require('chai');
 
-const objectPoints = [
-  new cv.Point(0, 0, 0),
-  new cv.Point(0.5, 0.5, 0.5),
-  new cv.Point(1.0, 1.0, 1.0),
-  new cv.Point(1.0, 0.5, 0),
-  new cv.Point(100, 100, 100),
-  new cv.Point(100.5, 100.5, 100.5),
-  new cv.Point(101.0, 101.0, 101.0),
-  new cv.Point(101.0, 100.5, 100)
-];
 const imagePoints = [
   new cv.Point(0, 0),
   new cv.Point(0.5, 0.5),
@@ -384,6 +374,156 @@ module.exports = () => {
       getRequiredArgs: () => ([
         imagePoints,
         imagePoints
+      ]),
+      expectOutput
+    });
+  });
+
+  describe('filterSpeckles', () => {
+    const expectOutput = () => {
+      // expect not to throw
+    };
+    const img = new cv.Mat(200, 200, cv.CV_8U, 0);
+    const newVal = 1.0;
+    const maxSpeckleSize = 10;
+    const maxDiff = 0.8;
+
+    generateAPITests({
+      getDut: () => img,
+      methodName: 'filterSpeckles',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        newVal,
+        maxSpeckleSize,
+        maxDiff
+      ]),
+      expectOutput
+    });
+  });
+
+  describe('validateDisparity', () => {
+    const expectOutput = () => {
+      // expect not to throw
+    };
+    const disparity = new cv.Mat(10, 10, cv.CV_16S, 0);
+    const cost = new cv.Mat(10, 10, cv.CV_16S, 0);
+    const minDisparity = 1;
+    const numberOfDisparities = 2;
+    const disp12MaxDisp = 2;
+
+    generateAPITests({
+      getDut: () => disparity,
+      methodName: 'validateDisparity',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        cost,
+        minDisparity,
+        numberOfDisparities
+      ]),
+      getOptionalArgs: () => ([
+        disp12MaxDisp
+      ]),
+      expectOutput
+    });
+  });
+
+  describe('reprojectImageTo3D', () => {
+    const expectOutput = (res) => {
+      expect(res).to.be.instanceOf(cv.Mat);
+      assertMetaData(res)(200, 200, cv.CV_32FC3);
+    };
+
+    const img = new cv.Mat(200, 200, cv.CV_8U, 0);
+    const Q = cv.Mat.eye(4, 4, cv.CV_64F);
+
+    generateAPITests({
+      getDut: () => img,
+      methodName: 'reprojectImageTo3D',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        Q
+      ]),
+      getOptionalParamsMap: () => ([
+        ['handleMissingValues', true],
+        ['ddepth', -1]
+      ]),
+      expectOutput
+    });
+  });
+
+  describe('decomposeHomographyMat', () => {
+    const expectOutput = (res) => {
+      expect(res).to.have.property('returnValue').to.be.a('number');
+      expect(res).to.have.property('rotations').to.be.an('array');
+      expect(res.rotations.length).to.be.above(0);
+      res.rotations.forEach(mat => assertMetaData(mat)(3, 3, cv.CV_64F));
+      expect(res).to.have.property('translations').to.be.an('array');
+      expect(res.translations.length).to.be.above(0);
+      res.translations.forEach(mat => assertMetaData(mat)(3, 1, cv.CV_64F));
+      expect(res).to.have.property('normals').to.be.an('array');
+      expect(res.normals.length).to.be.above(0);
+      res.normals.forEach(mat => assertMetaData(mat)(3, 1, cv.CV_64F));
+    };
+
+    const K = cv.Mat.eye(3, 3, cv.CV_64F);
+
+    generateAPITests({
+      getDut: () => cameraMatrix,
+      methodName: 'decomposeHomographyMat',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        K
+      ]),
+      expectOutput
+    });
+  });
+
+  (cv.version.minor < 1 ? describe.skip : describe)('findEssentialMat', () => {
+    const expectOutput = (res) => {
+      expect(res).to.have.property('E').to.be.instanceOf(cv.Mat);
+      assertMetaData(res.E)(3, 3, cv.CV_64F);
+      expect(res).to.have.property('mask').to.be.instanceOf(cv.Mat);
+      assertMetaData(res.mask)(8, 1, cv.CV_8U);
+    };
+
+    generateAPITests({
+      getDut: () => cameraMatrix,
+      methodName: 'findEssentialMat',
+      getRequiredArgs: () => [
+        imagePoints,
+        imagePoints
+      ],
+      getOptionalParamsMap: () => ([
+        ['method', cv.LMEDS],
+        ['prob', 0.9],
+        ['threshold', 2.0]
+      ]),
+      expectOutput
+    });
+  });
+
+  (cv.version.minor < 1 ? describe.skip : describe)('recoverPose', () => {
+    const expectOutput = (res) => {
+      expect(res).to.have.property('returnValue').to.be.a('Number');
+      expect(res).to.have.property('R').to.be.instanceOf(cv.Mat);
+      assertMetaData(res.R)(3, 3, cv.CV_64F);
+      expect(res).to.have.property('T');
+      expectToBeVec3(res.T);
+    };
+
+    const E = cv.Mat.eye(3, 3, cv.CV_64F);
+    const mask = new cv.Mat(imagePoints.length, 1, cv.CV_8U, 255);
+
+    generateAPITests({
+      getDut: () => cameraMatrix,
+      methodName: 'recoverPose',
+      getRequiredArgs: () => [
+        E,
+        imagePoints,
+        imagePoints
+      ],
+      getOptionalParamsMap: () => ([
+        ['mask', mask]
       ]),
       expectOutput
     });

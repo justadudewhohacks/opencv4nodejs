@@ -1,6 +1,5 @@
 #include "photo.h"
 #include "Mat.h"
-#include <iostream>
 #include <opencv2/highgui.hpp>
 #include <opencv2/videostab.hpp>
 

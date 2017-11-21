@@ -33,10 +33,6 @@ public:
 	static NAN_METHOD(InitCameraMatrix2D);
 	static NAN_METHOD(InitCameraMatrix2DAsync);
 
-	struct CalibrateCameraWorker;
-	static NAN_METHOD(CalibrateCamera);
-	static NAN_METHOD(CalibrateCameraAsync);
-
 	struct StereoCalibrateWorker;
 	static NAN_METHOD(StereoCalibrate);
 	static NAN_METHOD(StereoCalibrateAsync);
@@ -73,6 +69,10 @@ public:
 	struct SampsonDistanceWorker;
 	static NAN_METHOD(SampsonDistance);
 	static NAN_METHOD(SampsonDistanceAsync);
+
+	struct CalibrateCameraWorker;
+	static NAN_METHOD(CalibrateCamera);
+	static NAN_METHOD(CalibrateCameraAsync);
 #endif
 #if CV_VERSION_MINOR > 1
 	struct CalibrateCameraExtendedWorker;

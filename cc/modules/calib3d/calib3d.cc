@@ -15,8 +15,6 @@ NAN_MODULE_INIT(Calib3d::Init) {
 	Nan::SetMethod(target, "projectPointsAsync", ProjectPointsAsync);
 	Nan::SetMethod(target, "initCameraMatrix2D", InitCameraMatrix2D);
 	Nan::SetMethod(target, "initCameraMatrix2DAsync", InitCameraMatrix2DAsync);
-	Nan::SetMethod(target, "calibrateCamera", CalibrateCamera);
-	Nan::SetMethod(target, "calibrateCameraAsync", CalibrateCameraAsync);
 	Nan::SetMethod(target, "stereoCalibrate", StereoCalibrate);
 	Nan::SetMethod(target, "stereoCalibrateAsync", StereoCalibrateAsync);
 	Nan::SetMethod(target, "stereoRectifyUncalibrated", StereoRectifyUncalibrated);
@@ -36,6 +34,8 @@ NAN_MODULE_INIT(Calib3d::Init) {
 #if CV_VERSION_MINOR > 0
 	Nan::SetMethod(target, "sampsonDistance", SampsonDistance);
 	Nan::SetMethod(target, "sampsonDistanceAsync", SampsonDistanceAsync);
+	Nan::SetMethod(target, "calibrateCamera", CalibrateCamera);
+	Nan::SetMethod(target, "calibrateCameraAsync", CalibrateCameraAsync);
 #endif
 #if CV_VERSION_MINOR > 1
 	Nan::SetMethod(target, "calibrateCameraExtended", CalibrateCameraExtended);
@@ -374,76 +374,6 @@ NAN_METHOD(Calib3d::InitCameraMatrix2DAsync) {
 	InitCameraMatrix2DWorker worker;
 	FF_WORKER_ASYNC("Mat::InitCameraMatrix2DAsync", InitCameraMatrix2DWorker, worker);
 }
-
-
-struct Calib3d::CalibrateCameraWorker : public SimpleWorker {
-public:
-	std::vector<std::vector<cv::Point3f>> objectPoints;
-	std::vector<std::vector<cv::Point2f>> imagePoints;
-	cv::Size2d imageSize;
-	cv::Mat cameraMatrix;
-	std::vector<double> distCoeffs;
-	int flags = 0; 
-	cv::TermCriteria criteria = cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON);
-
-	double returnValue;
-	std::vector<cv::Vec3d> rvecs;
-	std::vector<cv::Vec3d> tvecs;
-
-	const char* execute() {
-		returnValue = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs, flags, criteria);
-		return "";
-	}
-
-	v8::Local<v8::Value> getReturnValue() {
-		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), DoubleConverter::wrap(returnValue));
-		Nan::Set(ret, Nan::New("rvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d>::wrap(rvecs));
-		Nan::Set(ret, Nan::New("tvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d>::wrap(tvecs));
-		return ret;
-	}
-
-	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return (
-			ObjectArrayOfArraysConverter<Point3, cv::Point3d, cv::Point3f>::arg(0, &objectPoints, info) ||
-			ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &imagePoints, info) ||
-			Size::Converter::arg(2, &imageSize, info) ||
-			Mat::Converter::arg(3, &cameraMatrix, info) ||
-			DoubleArrayConverter::arg(4, &distCoeffs, info)
-		);
-	}
-
-	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return (
-			IntConverter::optArg(5, &flags, info) ||
-			TermCriteria::Converter::optArg(6, &criteria, info)
-		);
-	}
-
-	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return FF_ARG_IS_OBJECT(5);
-	}
-
-	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-		v8::Local<v8::Object> opts = info[5]->ToObject();
-		return (
-			IntConverter::optProp(&flags, "flags", opts) ||
-			TermCriteria::Converter::optProp(&criteria, "criteria", opts)
-		);
-	}
-};
-
-NAN_METHOD(Calib3d::CalibrateCamera) {
-	CalibrateCameraWorker worker;
-	FF_WORKER_SYNC("Mat::CalibrateCamera", worker);
-	info.GetReturnValue().Set(worker.getReturnValue());
-}
-
-NAN_METHOD(Calib3d::CalibrateCameraAsync) {
-	CalibrateCameraWorker worker;
-	FF_WORKER_ASYNC("Mat::CalibrateCameraAsync", CalibrateCameraWorker, worker);
-}
-
 
 struct Calib3d::StereoCalibrateWorker : public SimpleWorker {
 public:
@@ -957,6 +887,77 @@ NAN_METHOD(Calib3d::SampsonDistance) {
 NAN_METHOD(Calib3d::SampsonDistanceAsync) {
 	SampsonDistanceWorker worker;
 	FF_WORKER_ASYNC("Mat::SampsonDistanceAsync", SampsonDistanceWorker, worker);
+}
+
+struct Calib3d::CalibrateCameraWorker : public SimpleWorker {
+public:
+	std::vector<std::vector<cv::Point3f>> objectPoints;
+	std::vector<std::vector<cv::Point2f>> imagePoints;
+	cv::Size2d imageSize;
+	cv::Mat cameraMatrix;
+	std::vector<double> distCoeffs;
+	int flags = 0;
+	cv::TermCriteria criteria = cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON);
+
+	double returnValue;
+	std::vector<cv::Vec3d> rvecs;
+	std::vector<cv::Vec3d> tvecs;
+
+	cv::Mat _rvecs;
+	cv::Mat _tvecs;
+
+	const char* execute() {
+		returnValue = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs, flags, criteria);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), DoubleConverter::wrap(returnValue));
+		Nan::Set(ret, Nan::New("rvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d>::wrap(rvecs));
+		Nan::Set(ret, Nan::New("tvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d>::wrap(tvecs));
+		return ret;
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			ObjectArrayOfArraysConverter<Point3, cv::Point3d, cv::Point3f>::arg(0, &objectPoints, info) ||
+			ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &imagePoints, info) ||
+			Size::Converter::arg(2, &imageSize, info) ||
+			Mat::Converter::arg(3, &cameraMatrix, info) ||
+			DoubleArrayConverter::arg(4, &distCoeffs, info)
+			);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(5, &flags, info) ||
+			TermCriteria::Converter::optArg(6, &criteria, info)
+			);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(5);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[5]->ToObject();
+		return (
+			IntConverter::optProp(&flags, "flags", opts) ||
+			TermCriteria::Converter::optProp(&criteria, "criteria", opts)
+			);
+	}
+};
+
+NAN_METHOD(Calib3d::CalibrateCamera) {
+	CalibrateCameraWorker worker;
+	FF_WORKER_SYNC("Mat::CalibrateCamera", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Calib3d::CalibrateCameraAsync) {
+	CalibrateCameraWorker worker;
+	FF_WORKER_ASYNC("Mat::CalibrateCameraAsync", CalibrateCameraWorker, worker);
 }
 
 #endif

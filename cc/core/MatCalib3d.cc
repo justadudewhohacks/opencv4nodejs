@@ -972,17 +972,17 @@ public:
 	double prob = 0.999;
 	double threshold = 1.0;
 
-	cv::Mat returnValue;
+	cv::Mat E;
 	cv::Mat mask = cv::noArray().getMat();
 
 	const char* execute() {
-		returnValue = cv::findEssentialMat(points1, points2, self, method, prob, threshold, mask);
+		E = cv::findEssentialMat(points1, points2, self, method, prob, threshold, mask);
 		return "";
 	}
 
 	v8::Local<v8::Value> getReturnValue() {
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), Mat::Converter::wrap(returnValue));
+		Nan::Set(ret, Nan::New("E").ToLocalChecked(), Mat::Converter::wrap(E));
 		Nan::Set(ret, Nan::New("mask").ToLocalChecked(), Mat::Converter::wrap(mask));
 		return ret;
 	}
@@ -1012,7 +1012,7 @@ public:
 			IntConverter::optProp(&method, "method", opts) ||
 			DoubleConverter::optProp(&prob, "prob", opts) ||
 			DoubleConverter::optProp(&threshold, "threshold", opts)
-			);
+		);
 	}
 };
 
@@ -1042,10 +1042,10 @@ public:
 
 	int returnValue;
 	cv::Mat R;
-	cv::Vec3f t;
+	cv::Vec3d T;
 
 	const char* execute() {
-		returnValue = cv::recoverPose(E, points1, points2, self, R, t, mask);
+		returnValue = cv::recoverPose(E, points1, points2, self, R, T, mask);
 		return "";
 	}
 
@@ -1053,7 +1053,7 @@ public:
 		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
 		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), IntConverter::wrap(returnValue));
 		Nan::Set(ret, Nan::New("R").ToLocalChecked(), Mat::Converter::wrap(R));
-		Nan::Set(ret, Nan::New("t").ToLocalChecked(), Vec3::Converter::wrap(t));
+		Nan::Set(ret, Nan::New("T").ToLocalChecked(), Vec3::Converter::wrap(T));
 		return ret;
 	}
 
@@ -1062,13 +1062,13 @@ public:
 			Mat::Converter::arg(0, &E, info) ||
 			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &points1, info) ||
 			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(2, &points2, info)
-			);
+		);
 	}
 
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
 			Mat::Converter::optArg(3, &mask, info)
-			);
+		);
 	}
 };
 
