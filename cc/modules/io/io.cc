@@ -2,7 +2,6 @@
 #include "VideoCapture.h"
 #include "VideoWriter.h"
 #include "Workers.h"
-#include <iostream>
 
 NAN_MODULE_INIT(Io::Init) {
 	VideoCapture::Init(target);

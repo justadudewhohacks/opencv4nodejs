@@ -1,4 +1,4 @@
-#include "macros.h"
+#include "Converters.h"
 #include <opencv2/core.hpp>
 
 #ifndef __FF_TERMCRITERIA_H__
@@ -16,6 +16,15 @@ public:
 	static FF_GETTER(TermCriteria, GetEpsilon, termCriteria.epsilon);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::TermCriteria* getNativeObjectPtr() { return &termCriteria; }
+	cv::TermCriteria getNativeObject() { return termCriteria; }
+
+	typedef InstanceConverter<TermCriteria, cv::TermCriteria> Converter;
+
+	static const char* getClassName() {
+		return "TermCriteria";
+	}
 };
 
 #endif

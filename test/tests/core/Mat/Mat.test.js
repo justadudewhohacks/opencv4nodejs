@@ -15,6 +15,7 @@ const constructorTestsFromJsArray = require('./constructorTestsFromJsArray');
 const constructorTestsFromFillVector = require('./constructorTestsFromFillVector');
 const operatorTests = require('./operatorTests');
 const imgprocTests = require('./imgprocTests');
+const calib3dTests = require('./calib3dTests');
 const { doubleMin, doubleMax } = require('./typeRanges');
 
 const srcMatData = [
@@ -44,6 +45,7 @@ describe('Mat', () => {
   accessorTests();
 
   describe('imgproc methods', () => imgprocTests(getTestImg));
+  describe('calib3d methods', () => calib3dTests());
 
   describe('constructor from channels', () => {
     const matEmpty8U = new cv.Mat(4, 3, cv.CV_8U);

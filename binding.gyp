@@ -22,6 +22,8 @@
 			"cc/cvTypes/videoCaptureProps.cc",
 			"cc/core/core.cc",
 			"cc/core/Mat.cc",
+			"cc/core/MatImgproc.cc",
+			"cc/core/MatCalib3d.cc",
 			"cc/core/Point.cc",
 			"cc/core/Vec.cc",
 			"cc/core/Size.cc",
