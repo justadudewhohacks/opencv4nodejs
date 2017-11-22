@@ -870,3 +870,294 @@ mat.houghCirclesAsync(Int method, Number dp, Number minDist, callback(Error err,
 mat.houghCirclesAsync(Int method, Number dp, Number minDist ...opts, callback(Error err, [Vec3] result))
 mat.houghCirclesAsync(Int method, Number dp, Number minDist, { opts }, callback(Error err, [Vec3] result))
 ```
+
+<a name="rodrigues"></a>
+
+#####  rodrigues
+``` ruby
+{ dst: Mat, jacobian: Mat } : mat.rodrigues()
+```
+
+<a name="rodriguesAsync"></a>
+
+#####  rodriguesAsync
+``` ruby
+mat.rodriguesAsync(callback(Error err, { dst: Mat, jacobian: Mat } result))
+```
+
+<a name="rqDecomp3x3"></a>
+
+#####  rqDecomp3x3
+``` ruby
+{ returnValue: Vec3, mtxR: Mat, mtxQ: Mat, Qx: Mat, Qy: Mat, Qz: Mat } : mat.rqDecomp3x3()
+```
+
+<a name="rqDecomp3x3Async"></a>
+
+#####  rqDecomp3x3Async
+``` ruby
+mat.rqDecomp3x3Async(callback(Error err, { returnValue: Vec3, mtxR: Mat, mtxQ: Mat, Qx: Mat, Qy: Mat, Qz: Mat } result))
+```
+
+<a name="decomposeProjectionMatrix"></a>
+
+#####  decomposeProjectionMatrix
+``` ruby
+{ cameraMatrix: Mat, rotMatrix: Mat, transVect: Vec4, rotMatrixX: Mat, rotMatrixY: Mat, rotMatrixZ: Mat, eulerAngles: Mat } : mat.decomposeProjectionMatrix()
+```
+
+<a name="decomposeProjectionMatrixAsync"></a>
+
+#####  decomposeProjectionMatrixAsync
+``` ruby
+mat.decomposeProjectionMatrixAsync(callback(Error err, { cameraMatrix: Mat, rotMatrix: Mat, transVect: Vec4, rotMatrixX: Mat, rotMatrixY: Mat, rotMatrixZ: Mat, eulerAngles: Mat } result))
+```
+
+<a name="matMulDeriv"></a>
+
+#####  matMulDeriv
+``` ruby
+{ dABdA: Mat, dABdB: Mat } : mat.matMulDeriv(Mat B)
+```
+
+<a name="matMulDerivAsync"></a>
+
+#####  matMulDerivAsync
+``` ruby
+mat.matMulDerivAsync(Mat B, callback(Error err, { dABdA: Mat, dABdB: Mat } result))
+```
+
+<a name="findChessboardCorners"></a>
+
+#####  findChessboardCorners
+``` ruby
+{ returnValue: Boolean, corners: [Point2] } : mat.findChessboardCorners(Size patternSize, Int flags = cv.CALIB_CB_ADAPTIVE_THRESH + cv.CALIB_CB_NORMALIZE_IMAGE)
+```
+
+<a name="findChessboardCornersAsync"></a>
+
+#####  findChessboardCornersAsync
+``` ruby
+mat.findChessboardCornersAsync(Size patternSize, callback(Error err, { returnValue: Boolean, corners: [Point2] } result))
+mat.findChessboardCornersAsync(Size patternSize, Int flags, callback(Error err, { returnValue: Boolean, corners: [Point2] } result))
+```
+
+<a name="drawChessboardCorners"></a>
+
+#####  drawChessboardCorners
+``` ruby
+mat.drawChessboardCorners(Size patternSize, [Point2] corners, Boolean patternWasFound)
+```
+
+<a name="drawChessboardCornersAsync"></a>
+
+#####  drawChessboardCornersAsync
+``` ruby
+mat.drawChessboardCornersAsync(Size patternSize, [Point2] corners, Boolean patternWasFound, callback(Error err))
+```
+
+<a name="find4QuadCornerSubpix"></a>
+
+#####  find4QuadCornerSubpix
+``` ruby
+Boolean : mat.find4QuadCornerSubpix([Point2] corners, Size regionSize)
+```
+
+<a name="find4QuadCornerSubpixAsync"></a>
+
+#####  find4QuadCornerSubpixAsync
+``` ruby
+mat.find4QuadCornerSubpixAsync([Point2] corners, Size regionSize, callback(Error err, Boolean result))
+```
+
+<a name="calibrationMatrixValues"></a>
+
+#####  calibrationMatrixValues
+``` ruby
+{ fovx: Number, fovy: Number, focalLength: Number, principalPoint: Point2, aspectRatio: Number } : mat.calibrationMatrixValues(Size imageSize, Number apertureWidth, Number apertureHeight)
+```
+
+<a name="calibrationMatrixValuesAsync"></a>
+
+#####  calibrationMatrixValuesAsync
+``` ruby
+mat.calibrationMatrixValuesAsync(Size imageSize, Number apertureWidth, Number apertureHeight, callback(Error err, { fovx: Number, fovy: Number, focalLength: Number, principalPoint: Point2, aspectRatio: Number } result))
+```
+
+<a name="stereoRectify"></a>
+
+#####  stereoRectify
+``` ruby
+{ R1: Mat, R2: Mat, P1: Mat, P2: Mat, Q: Mat, roi1: Rect, roi2: Rect } : mat.stereoRectify([Number] distCoeffs1, Mat cameraMatrix2, [Number] distCoeffs2, Size imageSize, Mat R, Vec3 T, Int flags = cv.CALIB_ZERO_DISPARITY, Number alpha = -1, Size newImageSize = new Size())
+```
+
+<a name="stereoRectifyAsync"></a>
+
+#####  stereoRectifyAsync
+``` ruby
+mat.stereoRectifyAsync([Number] distCoeffs1, Mat cameraMatrix2, [Number] distCoeffs2, Size imageSize, Mat R, Vec3 T, callback(Error err, { R1: Mat, R2: Mat, P1: Mat, P2: Mat, Q: Mat, roi1: Rect, roi2: Rect } result))
+mat.stereoRectifyAsync([Number] distCoeffs1, Mat cameraMatrix2, [Number] distCoeffs2, Size imageSize, Mat R, Vec3 T, ...opts, callback(Error err, { R1: Mat, R2: Mat, P1: Mat, P2: Mat, Q: Mat, roi1: Rect, roi2: Rect } result))
+mat.stereoRectifyAsync([Number] distCoeffs1, Mat cameraMatrix2, [Number] distCoeffs2, Size imageSize, Mat R, Vec3 T, { opts }, callback(Error err, { R1: Mat, R2: Mat, P1: Mat, P2: Mat, Q: Mat, roi1: Rect, roi2: Rect } result))
+```
+
+<a name="rectify3Collinear"></a>
+
+#####  rectify3Collinear
+``` ruby
+{ returnValue: Number, R1: Mat, R2: Mat, R3: Mat, P1: Mat, P2: Mat, P3: Mat, Q: Mat, roi1: Rect, roi2: Rect } : mat.rectify3Collinear([Number] distCoeffs1, Mat cameraMatrix2, [Number] distCoeffs2, at cameraMatrix3,  [Number] distCoeffs3, Size imageSize, Mat R12, Vec3 T12, Mat R13, Vec3 T13, Number alpha, Size newImageSize, Int flags)
+```
+
+<a name="rectify3CollinearAsync"></a>
+
+#####  rectify3CollinearAsync
+``` ruby
+mat.rectify3CollinearAsync([Number] distCoeffs1, Mat cameraMatrix2, [Number] distCoeffs2, at cameraMatrix3,  [Number] distCoeffs3, Size imageSize, Mat R12, Vec3 T12, Mat R13, Vec3 T13, Number alpha, Size newImageSize, Int flags, callback(Error err, { returnValue: Number, R1: Mat, R2: Mat, R3: Mat, P1: Mat, P2: Mat, P3: Mat, Q: Mat, roi1: Rect, roi2: Rect } result))
+```
+
+<a name="getOptimalNewCameraMatrix"></a>
+
+#####  getOptimalNewCameraMatrix
+``` ruby
+{ out: Mat, validPixROI: Rect } : mat.getOptimalNewCameraMatrix([Number] distCoeffs, Size imageSize, Number alpha, Size newImageSize = new Size(), Boolean centerPrincipalPoint = false)
+```
+
+<a name="getOptimalNewCameraMatrixAsync"></a>
+
+#####  getOptimalNewCameraMatrixAsync
+``` ruby
+mat.getOptimalNewCameraMatrixAsync([Number] distCoeffs, Size imageSize, Number alpha, callback(Error err, { out: Mat, validPixROI: Rect } result)
+mat.getOptimalNewCameraMatrixAsync([Number] distCoeffs, Size imageSize, Number alpha, ...opts, callback(Error err, { out: Mat, validPixROI: Rect } result)
+mat.getOptimalNewCameraMatrixAsync([Number] distCoeffs, Size imageSize, Number alpha, { opts }, callback(Error err, { out: Mat, validPixROI: Rect } result)
+```
+
+<a name="decomposeEssentialMat"></a>
+
+#####  decomposeEssentialMat
+``` ruby
+{ R1: Mat, R2: Mat, T: Vec3 } : mat.decomposeEssentialMat()
+```
+
+<a name="decomposeEssentialMatAsync"></a>
+
+#####  decomposeEssentialMatAsync
+``` ruby
+mat.decomposeEssentialMatAsync(callback(Error err, { R1: Mat, R2: Mat, T: Vec3 } result))
+```
+
+<a name="triangulatePoints"></a>
+
+#####  triangulatePoints
+``` ruby
+{ points4D: Mat } : mat.triangulatePoints([Point2] projPoints1, [Point2] projPoints2)
+```
+
+<a name="triangulatePointsAsync"></a>
+
+#####  triangulatePointsAsync
+``` ruby
+mat.triangulatePointsAsync([Point2] projPoints1, [Point2] projPoints2, callback(Error err, { points4D: Mat } result))
+```
+
+<a name="correctMatches"></a>
+
+#####  correctMatches
+``` ruby
+{ newPoints1: [Point2], newPoints2: [Point2] } : mat.correctMatches([Point2] points1, [Point2] points2)
+```
+
+<a name="correctMatchesAsync"></a>
+
+#####  correctMatchesAsync
+``` ruby
+mat.correctMatchesAsync([Point2] points1, [Point2] points2, callback(Error err, { newPoints1: [Point2], newPoints2: [Point2] } result))
+```
+
+<a name="filterSpeckles"></a>
+
+#####  filterSpeckles
+``` ruby
+{ newPoints1: [Point2], newPoints2: [Point2] } : mat.filterSpeckles(Number newVal, Int maxSpeckleSize, Number maxDiff)
+```
+
+<a name="filterSpecklesAsync"></a>
+
+#####  filterSpecklesAsync
+``` ruby
+mat.filterSpecklesAsync(Number newVal, Int maxSpeckleSize, Number maxDiff, callback(Error err, { newPoints1: [Point2], newPoints2: [Point2] } result))
+```
+
+<a name="validateDisparity"></a>
+
+#####  validateDisparity
+``` ruby
+mat.validateDisparity(Mat cost, Int minDisparity, Int numberOfDisparities, Int disp12MaxDisp = 1)
+```
+
+<a name="validateDisparityAsync"></a>
+
+#####  validateDisparityAsync
+``` ruby
+mat.validateDisparityAsync(Mat cost, Int minDisparity, Int numberOfDisparities, callback(Error err))
+mat.validateDisparityAsync(Mat cost, Int minDisparity, Int numberOfDisparities, Int disp12MaxDisp, callback(Error err))
+```
+
+<a name="reprojectImageTo3D"></a>
+
+#####  reprojectImageTo3D
+``` ruby
+Mat : mat.reprojectImageTo3D(Mat Q, Boolean handleMissingValues = false, Int ddepth = -1)
+```
+
+<a name="reprojectImageTo3DAsync"></a>
+
+#####  reprojectImageTo3DAsync
+``` ruby
+Mat : mat.reprojectImageTo3DAsync(Mat Q, callback(Error err, Mat result))
+Mat : mat.reprojectImageTo3DAsync(Mat Q, ...opts, callback(Error err, Mat result))
+Mat : mat.reprojectImageTo3DAsync(Mat Q, { opts }, callback(Error err, Mat result))
+```
+
+<a name="decomposeHomographyMat"></a>
+
+#####  decomposeHomographyMat
+``` ruby
+{ returnValue: Int, rotations: [Mat], translations: [Mat], normals: [Mat] } : mat.decomposeHomographyMat(Mat K)
+```
+
+<a name="decomposeHomographyMatAsync"></a>
+
+#####  decomposeHomographyMatAsync
+``` ruby
+mat.decomposeHomographyMatAsync(Mat K, callback(Error err, { returnValue: Int, rotations: [Mat], translations: [Mat], normals: [Mat] } result))
+```
+
+<a name="findEssentialMat"></a>
+
+#####  findEssentialMat (v3.1+)
+``` ruby
+{ E: Mat, mask: Mat } : mat.findEssentialMat([Point2] points1, [Point2] points2, Int method = cv.RANSAC, Number prob = 0.999, Number threshold = 1.0)
+```
+
+<a name="findEssentialMatAsync"></a>
+
+#####  findEssentialMatAsync (v3.1+)
+``` ruby
+mat.findEssentialMatAsync([Point2] points1, [Point2] points2, callback(Error err, { E: Mat, mask: Mat } result))
+mat.findEssentialMatAsync([Point2] points1, [Point2] points2, ...opts, callback(Error err, { E: Mat, mask: Mat } result))
+mat.findEssentialMatAsync([Point2] points1, [Point2] points2, { opts }, callback(Error err, { E: Mat, mask: Mat } result))
+```
+
+<a name="recoverPose"></a>
+
+#####  recoverPose (v3.1+)
+``` ruby
+{ returnValue: Int, R: Mat, T: Vec3 } : mat.recoverPose(Mat E, [Point2] points1, [Point2] points2, Mat mask = noArray())
+```
+
+<a name="recoverPoseAsync"></a>
+
+#####  recoverPoseAsync (v3.1+)
+``` ruby
+mat.recoverPoseAsync(Mat E, [Point2] points1, [Point2] points2, callback(Error err, { returnValue: Int, R: Mat, T: Vec3 } result))
+mat.recoverPoseAsync(Mat E, [Point2] points1, [Point2] points2, Mat mask = noArray(), callback(Error err, { returnValue: Int, R: Mat, T: Vec3 } result))
+```
