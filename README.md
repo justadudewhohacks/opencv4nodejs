@@ -32,7 +32,7 @@ See <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/exam
 
 ### Face Recognition
 
-Check out my <a href="https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0"><b>article</b></a> about face recognition.
+Check out my <a href="https://medium.com/@muehler.v/node-js-opencv-for-face-recognition-37fa7cb860e8"><b>article</b></a> about face recognition.
 
 ![facerec](https://user-images.githubusercontent.com/31125521/32416405-d71ad684-c248-11e7-9a6f-016d0edf2c15.jpg)
 
