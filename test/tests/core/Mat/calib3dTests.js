@@ -112,11 +112,10 @@ module.exports = () => {
       expect(res).to.have.property('corners').to.be.an('array');
     };
 
-    const img = new cv.Mat(200, 200, cv.CV_8UC3);
     const patternSize = new cv.Size(100, 100);
     const flags = cv.CALIB_CB_ADAPTIVE_THRESH + cv.CALIB_CB_NORMALIZE_IMAGE;
     generateAPITests({
-      getDut: () => img,
+      getDut: () => new cv.Mat(200, 200, cv.CV_8UC3),
       methodName: 'findChessboardCorners',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
@@ -130,12 +129,11 @@ module.exports = () => {
   });
 
   describe('drawChessboardCorners', () => {
-    const img = new cv.Mat(200, 200, cv.CV_8U, 0);
     const expectOutput = () => {
       // expect not to throw
     };
 
-    const patternSize = new cv.Size(50, 50);
+    const patternSize = new cv.Size(2, 2);
     const corners = [
       new cv.Point(50, 50),
       new cv.Point(50, 100),
@@ -145,7 +143,7 @@ module.exports = () => {
     const patternWasFound = true;
 
     generateAPITests({
-      getDut: () => img,
+      getDut: () => new cv.Mat(200, 200, cv.CV_8U, 0),
       methodName: 'drawChessboardCorners',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
@@ -163,7 +161,7 @@ module.exports = () => {
       // expect not to throw
     };
 
-    const regionSize = new cv.Size(50, 50);
+    const regionSize = new cv.Size(2, 2);
     const corners = [
       new cv.Point(50, 50),
       new cv.Point(50, 100),
@@ -381,13 +379,12 @@ module.exports = () => {
     const expectOutput = () => {
       // expect not to throw
     };
-    const img = new cv.Mat(200, 200, cv.CV_8U, 0);
     const newVal = 1.0;
     const maxSpeckleSize = 10;
     const maxDiff = 0.8;
 
     generateAPITests({
-      getDut: () => img,
+      getDut: () => new cv.Mat(200, 200, cv.CV_8U, 0),
       methodName: 'filterSpeckles',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
@@ -403,14 +400,13 @@ module.exports = () => {
     const expectOutput = () => {
       // expect not to throw
     };
-    const disparity = new cv.Mat(10, 10, cv.CV_16S, 0);
     const cost = new cv.Mat(10, 10, cv.CV_16S, 0);
     const minDisparity = 1;
     const numberOfDisparities = 2;
     const disp12MaxDisp = 2;
 
     generateAPITests({
-      getDut: () => disparity,
+      getDut: () => new cv.Mat(10, 10, cv.CV_16S, 0),
       methodName: 'validateDisparity',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
@@ -431,11 +427,10 @@ module.exports = () => {
       assertMetaData(res)(200, 200, cv.CV_32FC3);
     };
 
-    const img = new cv.Mat(200, 200, cv.CV_8U, 0);
     const Q = cv.Mat.eye(4, 4, cv.CV_64F);
 
     generateAPITests({
-      getDut: () => img,
+      getDut: () => new cv.Mat(200, 200, cv.CV_8U, 0),
       methodName: 'reprojectImageTo3D',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
