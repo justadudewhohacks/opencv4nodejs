@@ -11,7 +11,7 @@ public:
 	}
 
 	static bool assertType(v8::Local<v8::Value> jsVal) {
-		return !jsVal->IsNullOrUndefined() && Nan::New(Clazz::constructor)->HasInstance(jsVal);
+		return !jsVal->IsNull() && !jsVal->IsUndefined() && Nan::New(Clazz::constructor)->HasInstance(jsVal);
 	}
 
 	static T unwrap(v8::Local<v8::Value> jsVal) {
