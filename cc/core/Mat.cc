@@ -25,7 +25,7 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "atRaw", AtRaw);
 	Nan::SetPrototypeMethod(ctor, "set", Set);
 	Nan::SetPrototypeMethod(ctor, "getData", GetData);
-	Nan::SetPrototypeMethod(ctor, "getDataAsync", GetData);
+	Nan::SetPrototypeMethod(ctor, "getDataAsync", GetDataAsync);
 	Nan::SetPrototypeMethod(ctor, "getDataAsArray", GetDataAsArray);
 	Nan::SetPrototypeMethod(ctor, "getRegion", GetRegion);
 	Nan::SetPrototypeMethod(ctor, "row", Row);
