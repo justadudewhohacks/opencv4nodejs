@@ -322,15 +322,17 @@ describe('Mat', () => {
     });
 
     describe('async', () => {
-      it('should return buffer with data of single channeled Mat', () => {
+      it('should return buffer with data of single channeled Mat', (done) => {
         matC1.getDataAsync((err, buf) => {
           expect(buf).instanceOf(Buffer).lengthOf(6);
+          done();
         });
       });
 
-      it('should return buffer with data of triple channeled Mat', () => {
+      it('should return buffer with data of triple channeled Mat', (done) => {
         matC3.getDataAsync((err, buf) => {
           expect(buf).instanceOf(Buffer).lengthOf(18);
+          done();
         });
       });
     });
