@@ -526,5 +526,37 @@ describe('Mat', () => {
       });
     });
   });
+
+  describe('transform', () => {
+    const src = cv.Mat.eye(3, 3, cv.CV_64FC3);
+    const expectOutput = (res) => {
+      expect(res).to.be.instanceOf(cv.Mat);
+      assertMetaData(src)(res);
+    };
+
+    describe('transform', () => {
+      const M = cv.Mat.eye(3, 3, cv.CV_64F);
+
+      generateAPITests({
+        getDut: () => src,
+        methodName: 'transform',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => [M],
+        expectOutput
+      });
+    });
+
+    describe('perspectiveTransform', () => {
+      const M = cv.Mat.eye(4, 4, cv.CV_64F);
+
+      generateAPITests({
+        getDut: () => src,
+        methodName: 'perspectiveTransform',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => [M],
+        expectOutput
+      });
+    });
+  });
 });
 

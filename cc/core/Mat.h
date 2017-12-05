@@ -106,6 +106,13 @@ public:
 	static NAN_METHOD(MulSpectrums);
 	static NAN_METHOD(MulSpectrumsAsync);
 
+	struct TransformWorker;
+	struct PerspectiveTransformWorker;
+	static NAN_METHOD(Transform);
+	static NAN_METHOD(TransformAsync);
+	static NAN_METHOD(PerspectiveTransform);
+	static NAN_METHOD(PerspectiveTransformAsync);
+
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	void setNativeProps(cv::Mat);
