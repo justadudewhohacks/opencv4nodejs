@@ -57,6 +57,10 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "idftAsync", IdftAsync);
 	Nan::SetPrototypeMethod(ctor, "mulSpectrums", MulSpectrums);
 	Nan::SetPrototypeMethod(ctor, "mulSpectrumsAsync", MulSpectrumsAsync);
+	Nan::SetPrototypeMethod(ctor, "transform", Transform);
+	Nan::SetPrototypeMethod(ctor, "transformAsync", TransformAsync);
+	Nan::SetPrototypeMethod(ctor, "perspectiveTransform", PerspectiveTransform);
+	Nan::SetPrototypeMethod(ctor, "perspectiveTransformAsync", PerspectiveTransformAsync);
 
 	FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
@@ -849,6 +853,68 @@ NAN_METHOD(Mat::MulSpectrumsAsync) {
 	MulSpectrumsWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::MulSpectrumsAsync", MulSpectrumsWorker, worker);
 }
+
+
+struct Mat::TransformWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	TransformWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	cv::Mat m;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::transform(self, dst, m);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::arg(0, &m, info)
+		);
+	}
+};
+
+NAN_METHOD(Mat::Transform) {
+	TransformWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Transform", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::TransformAsync) {
+	TransformWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::TransformAsync", TransformWorker, worker);
+}
+
+struct Mat::PerspectiveTransformWorker : public Mat::TransformWorker {
+public:
+	PerspectiveTransformWorker(cv::Mat self) : Mat::TransformWorker(self) {
+	}
+
+	const char* execute() {
+		cv::perspectiveTransform(self, dst, m);
+		return "";
+	}
+};
+
+NAN_METHOD(Mat::PerspectiveTransform) {
+	PerspectiveTransformWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::PerspectiveTransform", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::PerspectiveTransformAsync) {
+	PerspectiveTransformWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::PerspectiveTransformAsync", PerspectiveTransformWorker, worker);
+}
+
 
 NAN_METHOD(Mat::Row) {
   if (!info[0]->IsNumber()) {

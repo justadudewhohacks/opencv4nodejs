@@ -307,6 +307,34 @@ mat.mulSpectrumsAsync(Mat mat2, ...opts, callback(Error err, Mat result))
 mat.mulSpectrumsAsync(Mat mat2, { opts }, callback(Error err, Mat result))
 ```
 
+<a name="transform"></a>
+
+### transform
+``` javascript
+Mat : mat.transform(Mat m)
+```
+
+<a name="transformAsync"></a>
+
+### transformAsync
+``` javascript
+mat.transformAsync(Mat m, callback(Error err, Mat result))
+```
+
+<a name="perspectiveTransform"></a>
+
+### perspectiveTransform
+``` javascript
+Mat : mat.perspectiveTransform(Mat m)
+```
+
+<a name="perspectiveTransformAsync"></a>
+
+### perspectiveTransformAsync
+``` javascript
+mat.perspectiveTransformAsync(Mat m, callback(Error err, Mat result))
+```
+
 <a name="rescale"></a>
 
 ### rescale
