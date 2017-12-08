@@ -63,9 +63,10 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "perspectiveTransformAsync", PerspectiveTransformAsync);
 	Nan::SetPrototypeMethod(ctor, "flip", Flip);
 	Nan::SetPrototypeMethod(ctor, "flipAsync", FlipAsync);
+#if CV_VERSION_MINOR > 1
 	Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
 	Nan::SetPrototypeMethod(ctor, "rotateAsync", RotateAsync);
-
+#endif
 	FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
 	MatImgproc::Init(ctor);
@@ -970,7 +971,7 @@ NAN_METHOD(Mat::FlipAsync) {
 }
 
 
-
+#if CV_VERSION_MINOR > 1
 struct Mat::RotateWorker : public OpWithCodeWorker {
 public:
 	RotateWorker(cv::Mat self) : OpWithCodeWorker(self) {
@@ -992,6 +993,7 @@ NAN_METHOD(Mat::RotateAsync) {
 	RotateWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::RotateAsync", RotateWorker, worker);
 }
+#endif
 
 
 NAN_METHOD(Mat::Row) {

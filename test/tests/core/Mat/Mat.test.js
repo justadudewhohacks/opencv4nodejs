@@ -586,7 +586,7 @@ describe('Mat', () => {
     });
   });
 
-  describe('rotate', () => {
+  (cv.version.minor < 2 ? describe.skip : describe)('rotate', () => {
     const src = new cv.Mat([
       [1, 0, 0],
       [1, 0, 0],
