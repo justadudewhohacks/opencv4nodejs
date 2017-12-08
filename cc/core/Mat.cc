@@ -61,7 +61,12 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "transformAsync", TransformAsync);
 	Nan::SetPrototypeMethod(ctor, "perspectiveTransform", PerspectiveTransform);
 	Nan::SetPrototypeMethod(ctor, "perspectiveTransformAsync", PerspectiveTransformAsync);
-
+	Nan::SetPrototypeMethod(ctor, "flip", Flip);
+	Nan::SetPrototypeMethod(ctor, "flipAsync", FlipAsync);
+#if CV_VERSION_MINOR > 1
+	Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
+	Nan::SetPrototypeMethod(ctor, "rotateAsync", RotateAsync);
+#endif
 	FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
 	MatImgproc::Init(ctor);
@@ -914,6 +919,81 @@ NAN_METHOD(Mat::PerspectiveTransformAsync) {
 	PerspectiveTransformWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::PerspectiveTransformAsync", PerspectiveTransformWorker, worker);
 }
+
+
+struct Mat::OpWithCodeWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	OpWithCodeWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int code;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::flip(self, dst, code);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &code, info)
+		);
+	}
+};
+
+struct Mat::FlipWorker : public OpWithCodeWorker {
+public:
+	FlipWorker(cv::Mat self) : OpWithCodeWorker(self) {
+	}
+
+	const char* execute() {
+		cv::flip(self, dst, code);
+		return "";
+	}
+};
+
+NAN_METHOD(Mat::Flip) {
+	FlipWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Flip", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::FlipAsync) {
+	FlipWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::FlipAsync", FlipWorker, worker);
+}
+
+
+#if CV_VERSION_MINOR > 1
+struct Mat::RotateWorker : public OpWithCodeWorker {
+public:
+	RotateWorker(cv::Mat self) : OpWithCodeWorker(self) {
+	}
+
+	const char* execute() {
+		cv::rotate(self, dst, code);
+		return "";
+	}
+};
+
+NAN_METHOD(Mat::Rotate) {
+	RotateWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Rotate", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::RotateAsync) {
+	RotateWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::RotateAsync", RotateWorker, worker);
+}
+#endif
 
 
 NAN_METHOD(Mat::Row) {

@@ -335,6 +335,34 @@ Mat : mat.perspectiveTransform(Mat m)
 mat.perspectiveTransformAsync(Mat m, callback(Error err, Mat result))
 ```
 
+<a name="flip"></a>
+
+### flip
+``` javascript
+Mat : mat.flip(Int flipCode)
+```
+
+<a name="flipAsync"></a>
+
+### flipAsync
+``` javascript
+mat.flipAsync(Int flipCode, callback(Error err, Mat result))
+```
+
+<a name="rotate"></a>
+
+### rotate
+``` javascript
+Mat : mat.rotate(Int rotateCode)
+```
+
+<a name="rotateAsync"></a>
+
+### rotateAsync
+``` javascript
+mat.rotateAsync(Int rotateCode, callback(Error err, Mat result))
+```
+
 <a name="rescale"></a>
 
 ### rescale

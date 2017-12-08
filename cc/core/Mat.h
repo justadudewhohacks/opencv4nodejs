@@ -113,6 +113,17 @@ public:
 	static NAN_METHOD(PerspectiveTransform);
 	static NAN_METHOD(PerspectiveTransformAsync);
 
+	struct OpWithCodeWorker;
+	struct FlipWorker;
+	static NAN_METHOD(Flip);
+	static NAN_METHOD(FlipAsync);
+
+#if CV_VERSION_MINOR > 1
+	struct RotateWorker;
+	static NAN_METHOD(Rotate);
+	static NAN_METHOD(RotateAsync);
+#endif
+
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	void setNativeProps(cv::Mat);
