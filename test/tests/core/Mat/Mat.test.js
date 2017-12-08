@@ -558,5 +558,59 @@ describe('Mat', () => {
       });
     });
   });
+
+  describe('flip', () => {
+    const src = new cv.Mat([
+      [1, 0, 0],
+      [1, 0, 0],
+      [1, 0, 0]
+    ], cv.CV_64F);
+
+    const expectOutput = (res) => {
+      expect(res).to.be.instanceOf(cv.Mat);
+      assertMetaData(src)(res);
+      assertDataDeepEquals([
+        [0, 0, 1],
+        [0, 0, 1],
+        [0, 0, 1]
+      ], res.getDataAsArray());
+    };
+
+    const flipCode = 1;
+    generateAPITests({
+      getDut: () => src,
+      methodName: 'flip',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => [flipCode],
+      expectOutput
+    });
+  });
+
+  describe('rotate', () => {
+    const src = new cv.Mat([
+      [1, 0, 0],
+      [1, 0, 0],
+      [1, 0, 0]
+    ], cv.CV_64F);
+
+    const expectOutput = (res) => {
+      expect(res).to.be.instanceOf(cv.Mat);
+      assertMetaData(src)(res);
+      assertDataDeepEquals([
+        [1, 1, 1],
+        [0, 0, 0],
+        [0, 0, 0]
+      ], res.getDataAsArray());
+    };
+
+    const rotateCode = cv.ROTATE_90_CLOCKWISE;
+    generateAPITests({
+      getDut: () => src,
+      methodName: 'rotate',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => [rotateCode],
+      expectOutput
+    });
+  });
 });
 

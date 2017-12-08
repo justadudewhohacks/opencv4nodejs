@@ -77,6 +77,10 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(target, KMEANS_PP_CENTERS);
 	FF_SET_CV_CONSTANT(target, KMEANS_USE_INITIAL_LABELS);
 
+	FF_SET_CV_CONSTANT(target, ROTATE_90_CLOCKWISE);
+	FF_SET_CV_CONSTANT(target, ROTATE_180);
+	FF_SET_CV_CONSTANT(target, ROTATE_90_COUNTERCLOCKWISE);
+
 	v8::Local<v8::Object> termCriteriaTypes = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(termCriteriaTypes, COUNT, Nan::New<v8::Integer>(cv::TermCriteria::COUNT));
 	FF_SET_JS_PROP(termCriteriaTypes, MAX_ITER, Nan::New<v8::Integer>(cv::TermCriteria::MAX_ITER));
