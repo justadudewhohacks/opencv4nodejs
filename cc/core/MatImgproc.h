@@ -142,6 +142,14 @@ public:
 	struct HoughCirclesWorker;
 	static NAN_METHOD(HoughCircles);
 	static NAN_METHOD(HoughCirclesAsync);
+
+	struct EqualizeHistWorker;
+	static NAN_METHOD(EqualizeHist);
+	static NAN_METHOD(EqualizeHistAsync);
+
+	struct CompareHistWorker;
+	static NAN_METHOD(CompareHist);
+	static NAN_METHOD(CompareHistAsync);
 };
 
 #endif

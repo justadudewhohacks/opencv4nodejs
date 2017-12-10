@@ -923,6 +923,34 @@ mat.houghCirclesAsync(Int method, Number dp, Number minDist ...opts, callback(Er
 mat.houghCirclesAsync(Int method, Number dp, Number minDist, { opts }, callback(Error err, [Vec3] result))
 ```
 
+<a name="equalizeHist"></a>
+
+### equalizeHist
+``` javascript
+Mat : mat.equalizeHist()
+```
+
+<a name="equalizeHistAsync"></a>
+
+### equalizeHistAsync
+``` javascript
+mat.equalizeHistAsync(callback(Error err, Mat result))
+```
+
+<a name="compareHist"></a>
+
+### compareHist
+``` javascript
+Number : mat.compareHist(Mat H2, Int method)
+```
+
+<a name="compareHistAsync"></a>
+
+### compareHistAsync
+``` javascript
+mat.compareHistAsync(Mat H2, Int method, callback(Error err, Number result))
+```
+
 <a name="rodrigues"></a>
 
 ### rodrigues

@@ -77,6 +77,10 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "houghLinesPAsync", HoughLinesPAsync);
 	Nan::SetPrototypeMethod(ctor, "houghCircles", HoughCircles);
 	Nan::SetPrototypeMethod(ctor, "houghCirclesAsync", HoughCirclesAsync);
+	Nan::SetPrototypeMethod(ctor, "equalizeHist", EqualizeHist);
+	Nan::SetPrototypeMethod(ctor, "equalizeHistAsync", EqualizeHistAsync);
+	Nan::SetPrototypeMethod(ctor, "compareHist", CompareHist);
+	Nan::SetPrototypeMethod(ctor, "compareHistAsync", CompareHistAsync);
 };
 
 struct MatImgproc::BaseResizeWorker : public SimpleWorker {
@@ -1834,4 +1838,76 @@ NAN_METHOD(MatImgproc::HoughCircles) {
 NAN_METHOD(MatImgproc::HoughCirclesAsync) {
 	HoughCirclesWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::HoughCirclesAsync", HoughCirclesWorker, worker);
+}
+
+
+struct MatImgproc::EqualizeHistWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	EqualizeHistWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::equalizeHist(self, dst);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+};
+
+NAN_METHOD(MatImgproc::EqualizeHist) {
+	EqualizeHistWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::EqualizeHist", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::EqualizeHistAsync) {
+	EqualizeHistWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::EqualizeHistAsync", EqualizeHistWorker, worker);
+}
+
+
+struct MatImgproc::CompareHistWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	CompareHistWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	cv::Mat H2;
+	int method;
+
+	double returnValue;
+
+	const char* execute() {
+		returnValue = cv::compareHist(self, H2, method);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return DoubleConverter::wrap(returnValue);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::arg(0, &H2, info) ||
+			IntConverter::arg(1, &method, info)
+		);
+	}
+};
+
+NAN_METHOD(MatImgproc::CompareHist) {
+	CompareHistWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::CompareHist", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::CompareHistAsync) {
+	CompareHistWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::CompareHistAsync", CompareHistWorker, worker);
 }
