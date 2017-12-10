@@ -1139,5 +1139,41 @@ module.exports = (getTestImg) => {
         expectOutput
       });
     });
+
+    describe('equalizeHist', () => {
+      const expectOutput = (out) => {
+        expect(out).to.be.instanceOf(cv.Mat);
+        assertMetaData(img)(out);
+      };
+
+
+      generateAPITests({
+        getDut: () => img,
+        methodName: 'equalizeHist',
+        methodNameSpace: 'Mat',
+        expectOutput
+      });
+    });
+
+    describe('compareHist', () => {
+      const expectOutput = (out) => {
+        expect(out).to.be.a('number').above(0);
+      };
+
+      const method = cv.HISTCMP_CHISQR_ALT;
+
+      const H1 = new cv.Mat(1, 8, cv.CV_32FC3, [0.5, 0.5, 0.5]);
+      const H2 = new cv.Mat(1, 8, cv.CV_32FC3, [0.75, 0.75, 0.75]);
+      generateAPITests({
+        getDut: () => H1,
+        methodName: 'compareHist',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          H2,
+          method
+        ]),
+        expectOutput
+      });
+    });
   });
 };
