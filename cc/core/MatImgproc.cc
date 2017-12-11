@@ -136,14 +136,14 @@ public:
 	int cols;
 
 	const char* execute() {
-		cv::resize(self, dst, cv::Size(rows, cols));
+		cv::resize(self, dst, cv::Size(cols, rows));
 		return "";
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
 			IntConverter::arg(0, &rows, info) ||
-			IntConverter::arg(0, &cols, info)
+			IntConverter::arg(1, &cols, info)
 		);
 	}
 };
