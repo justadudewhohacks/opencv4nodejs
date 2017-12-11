@@ -44,7 +44,7 @@ module.exports = (getTestImg) => {
     });
 
     describe('resize', () => {
-      const rows = 8;
+      const rows = 32;
       const cols = 8;
       const mat = new cv.Mat(16, 16, cv.CV_8UC3);
 
