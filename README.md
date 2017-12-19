@@ -8,7 +8,7 @@ opencv4nodejs
 
 **By its nature, JavaScript lacks the performance to implement Computer Vision tasks efficiently. Therefore this package brings the performance of the native OpenCV library to your Node.js application. Supports all OpenCV 3 versions. The bindings are available as an asynchronous (via promises or callbacks) and synchronous API.**
 
-**The ultimate goal of this project is to provide a collection of Node.js bindings, which supports the entire OpenCV and OpenCV-contrib API. An overview of available bindings can be found in the [API Documentation](https://justadudewhohacks.github.io/opencv4nodejs/docs/). The implementation of missing bindings can be specifically prioritized by [requesting new features](#request-features). Furthermore, contribution is highly appreciated. If you want to get involved you can have a look at the <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b>.**
+**The ultimate goal of this project is to provide a collection of Node.js bindings, which supports the entire OpenCV and OpenCV-contrib API. An overview of available bindings can be found in the [API Documentation](https://opencv4nodejs.herokuapp.com/docs). The implementation of missing bindings can be specifically prioritized by [requesting new features](#request-features). Furthermore, contribution is highly appreciated. If you want to get involved you can have a look at the <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b>.**
 
  * **[Examples](#examples)**
  * **[How to install](#how-to-install)**
@@ -395,28 +395,28 @@ try {
 
 ## Available Modules
 
-### <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>API doc overview</b></a>
+### <a href="https://opencv4nodejs.herokuapp.com/docs"><b>API doc overview</b></a>
 
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>core</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>io</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>imgproc</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>ximgproc</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>objdetect</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>machinelearning</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>deepneuralnetworks</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>video</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>calib3d</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>photo</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>features2d</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>xfeatures2d</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>tracking</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>text</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>face</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/core"><b>core</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/io"><b>io</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/imgproc"><b>imgproc</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/ximgproc"><b>ximgproc</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/objdetect"><b>objdetect</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/machinelearning"><b>machinelearning</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/dnn"><b>deepneuralnetworks</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/video"><b>video</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/calib3d"><b>calib3d</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/photo"><b>photo</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/features2d"><b>features2d</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/xfeatures2d"><b>xfeatures2d</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/tracking"><b>tracking</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/text"><b>text</b></a>
+* <a href="https://opencv4nodejs.herokuapp.com/docs/face"><b>face</b></a>
 
 <a name="request-features"></a>
 
 ## Request new Features
 
-Are you missing some functions from OpenCV (<a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/"><b>overview</b></a> of available bindings) or have an idea for utility in regards to the OpenCV API, which you would like to be added to this package? No problem! Open a new <a href="https://github.com/justadudewhohacks/opencv4nodejs/issues"><b>issue</b></a> with a listing of the desired function bindings or features and you will find them in this package soon.
+Are you missing some functions from OpenCV (<a href="https://opencv4nodejs.herokuapp.com/docs"><b>overview</b></a> of available bindings) or have an idea for utility in regards to the OpenCV API, which you would like to be added to this package? No problem! Open a new <a href="https://github.com/justadudewhohacks/opencv4nodejs/issues"><b>issue</b></a> with a listing of the desired function bindings or features and you will find them in this package soon.
 
 
