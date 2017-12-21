@@ -1,6 +1,6 @@
 {
   "name": "opencv4nodejs",
-  "version": "2.26.2",
+  "version": "2.27.0",
   "description": "Asynchronous OpenCV 3.x API for node.js",
   "keywords": [
     "opencv",
