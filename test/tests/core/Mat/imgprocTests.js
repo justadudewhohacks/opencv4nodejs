@@ -1175,5 +1175,56 @@ module.exports = (getTestImg) => {
         expectOutput
       });
     });
+
+    describe('floodFill', () => {
+      const expectOutput = (out) => {
+        expect(out).to.have.property('returnValue').to.be.a('number');
+        expect(out).to.have.property('rect').to.be.instanceOf(cv.Rect);
+      };
+
+      const seedPoint = new cv.Point(50, 50);
+      const mask = new cv.Mat(102, 102, cv.CV_8U, 255);
+      const flags = 4;
+
+      describe('C1', () => {
+        const newVal = 155;
+        generateAPITests({
+          getDut: () => new cv.Mat(100, 100, cv.CV_8UC1),
+          methodName: 'floodFill',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            seedPoint,
+            newVal
+          ]),
+          getOptionalArgsMap: () => ([
+            ['mask', mask],
+            ['loDiff', 100],
+            ['upDiff', 255],
+            ['flags', flags]
+          ]),
+          expectOutput
+        });
+      });
+
+      describe('C3', () => {
+        const newVal = new cv.Vec(155, 155, 155);
+        generateAPITests({
+          getDut: () => new cv.Mat(100, 100, cv.CV_8UC3),
+          methodName: 'floodFill',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            seedPoint,
+            newVal
+          ]),
+          getOptionalArgsMap: () => ([
+            ['mask', mask],
+            ['loDiff', new cv.Vec(100, 100, 100)],
+            ['upDiff', new cv.Vec(255, 255, 255)],
+            ['flags', flags]
+          ]),
+          expectOutput
+        });
+      });
+    });
   });
 };

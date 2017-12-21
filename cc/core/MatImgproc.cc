@@ -81,6 +81,8 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "equalizeHistAsync", EqualizeHistAsync);
 	Nan::SetPrototypeMethod(ctor, "compareHist", CompareHist);
 	Nan::SetPrototypeMethod(ctor, "compareHistAsync", CompareHistAsync);
+	Nan::SetPrototypeMethod(ctor, "floodFill", FloodFill);
+	Nan::SetPrototypeMethod(ctor, "floodFillAsync", FloodFillAsync);
 };
 
 struct MatImgproc::BaseResizeWorker : public SimpleWorker {
@@ -1910,4 +1912,104 @@ NAN_METHOD(MatImgproc::CompareHist) {
 NAN_METHOD(MatImgproc::CompareHistAsync) {
 	CompareHistWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::CompareHistAsync", CompareHistWorker, worker);
+}
+
+
+struct MatImgproc::FloodFillWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	FloodFillWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	cv::Point2d seedPoint;
+	double newVal1;
+	cv::Vec2d newVal2 = cv::Vec2d();
+	cv::Vec3d newVal3 = cv::Vec3d();
+	cv::Vec4d newVal4 = cv::Vec4d();
+	cv::Mat mask = cv::noArray().getMat();
+	double loDiff1;
+	cv::Vec2d loDiff2 = cv::Vec2d();
+	cv::Vec3d loDiff3 = cv::Vec3d();
+	cv::Vec4d loDiff4 = cv::Vec4d();
+	double upDiff1;
+	cv::Vec2d upDiff2 = cv::Vec2d();
+	cv::Vec3d upDiff3 = cv::Vec3d();
+	cv::Vec4d upDiff4 = cv::Vec4d();
+	int flags = 4;
+
+	int returnValue;
+	cv::Rect rect;
+
+	const char* execute() {
+		switch (self.channels()) {
+		case 1: 
+			returnValue = cv::floodFill(self, mask, seedPoint, newVal1, &rect, loDiff1, upDiff1, flags);
+			break;		
+		case 3:
+			returnValue = cv::floodFill(self, mask, seedPoint, newVal3, &rect, loDiff3, upDiff3, flags);
+			break;
+		default:
+			return "expected single or 3 channel mat";
+			break; 
+		}
+		
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), IntConverter::wrap(returnValue));
+		Nan::Set(ret, Nan::New("rect").ToLocalChecked(), Rect::Converter::wrap(rect));
+		return ret;
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Point2::Converter::arg(0, &seedPoint, info) ||
+			(self.channels() == 1 && DoubleConverter::optArg(1, &newVal1, info)) ||
+			(self.channels() == 2 && Vec2::Converter::optArg(1, &newVal2, info)) ||
+			(self.channels() == 3 && Vec3::Converter::optArg(1, &newVal3, info)) ||
+			(self.channels() == 4 && Vec4::Converter::optArg(1, &newVal4, info))
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::optArg(2, &mask, info) ||
+			(self.channels() == 1 && DoubleConverter::optArg(3, &loDiff1, info)) ||
+			(self.channels() == 3 && Vec3::Converter::optArg(3, &loDiff3, info)) ||
+			(self.channels() == 1 && DoubleConverter::optArg(4, &upDiff1, info)) ||
+			(self.channels() == 3 && Vec3::Converter::optArg(4, &upDiff3, info)) ||
+			IntConverter::optArg(5, &flags, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(2)
+			&& !Mat::Converter::hasInstance(info[2]);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[2]->ToObject();
+		return (
+			Mat::Converter::optProp(&mask, "mask", opts) ||
+			(self.channels() == 1 && DoubleConverter::optProp(&loDiff1, "loDiff", opts)) ||
+			(self.channels() == 3 && Vec3::Converter::optProp(&loDiff3, "loDiff", opts)) ||
+			(self.channels() == 1 && DoubleConverter::optProp(&upDiff1, "upDiff", opts)) ||
+			(self.channels() == 3 && Vec3::Converter::optProp(&upDiff3, "upDiff", opts)) ||
+			IntConverter::optProp(&flags, "flags", opts)
+		);
+	}
+};
+
+NAN_METHOD(MatImgproc::FloodFill) {
+	FloodFillWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::FloodFill", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::FloodFillAsync) {
+	FloodFillWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::FloodFillAsync", FloodFillWorker, worker);
 }
