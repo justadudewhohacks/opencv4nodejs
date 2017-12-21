@@ -150,6 +150,10 @@ public:
 	struct CompareHistWorker;
 	static NAN_METHOD(CompareHist);
 	static NAN_METHOD(CompareHistAsync);
+
+	struct FloodFillWorker;
+	static NAN_METHOD(FloodFill);
+	static NAN_METHOD(FloodFillAsync);
 };
 
 #endif
