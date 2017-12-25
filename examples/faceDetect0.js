@@ -4,8 +4,19 @@ const image = cv.imread('../data/got.jpg');
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
 
 // detect faces
+console.time('gpu')
+//for (let i = 0; i < 50; i++) {
+  classifier.detectMultiScaleGpu(image.bgrToGray());
+//}
+console.timeEnd('gpu')
+console.time('cpu')
+//for (let i = 0; i < 50; i++) {
+  classifier.detectMultiScale(image.bgrToGray());
+//}
+console.timeEnd('cpu')
 const { objects, numDetections } = classifier.detectMultiScale(image.bgrToGray());
 
+console.log({ objects, numDetections });
 if (!objects.length) {
   throw new Error('No faces detected!');
 }
