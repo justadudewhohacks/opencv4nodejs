@@ -1,8 +1,12 @@
-const cv = require('../');
+const {
+  cv,
+  getDataFilePath,
+  drawBlueRect
+} = require('../utils');
 
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
 
-cv.imreadAsync('../data/got.jpg')
+cv.imreadAsync(getDataFilePath('got.jpg'))
   .then(img =>
     img.bgrToGrayAsync()
       .then(grayImg => classifier.detectMultiScaleAsync(grayImg))
@@ -17,18 +21,8 @@ cv.imreadAsync('../data/got.jpg')
           const facesImg = img.copy();
           const numDetectionsTh = 10;
           objects.forEach((rect, i) => {
-            const color = new cv.Vec(255, 0, 0);
-            let thickness = 2;
-            if (numDetections[i] < numDetectionsTh) {
-              thickness = 1;
-            }
-
-            facesImg.drawRectangle(
-              new cv.Point(rect.x, rect.y),
-              new cv.Point(rect.x + rect.width, rect.y + rect.height),
-              color,
-              { thickness }
-            );
+            const thickness = numDetections[i] < numDetectionsTh ? 1 : 2;
+            drawBlueRect(facesImg, rect, { thickness });
           });
 
           return facesImg;

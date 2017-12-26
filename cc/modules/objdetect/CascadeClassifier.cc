@@ -1,6 +1,6 @@
 #include "CascadeClassifier.h"
 #include "Workers.h"
-
+#include <iostream>
 Nan::Persistent<v8::FunctionTemplate> CascadeClassifier::constructor;
 
 NAN_MODULE_INIT(CascadeClassifier::Init) {
@@ -12,9 +12,11 @@ NAN_MODULE_INIT(CascadeClassifier::Init) {
 	instanceTemplate->SetInternalFieldCount(1);
 
 	Nan::SetPrototypeMethod(ctor, "detectMultiScale", DetectMultiScale);
-	Nan::SetPrototypeMethod(ctor, "detectMultiScaleWithRejectLevels", DetectMultiScaleWithRejectLevels);
 	Nan::SetPrototypeMethod(ctor, "detectMultiScaleAsync", DetectMultiScaleAsync);
+	Nan::SetPrototypeMethod(ctor, "detectMultiScaleGpu", DetectMultiScaleGpu);
+	Nan::SetPrototypeMethod(ctor, "detectMultiScaleWithRejectLevels", DetectMultiScaleWithRejectLevels);
 	Nan::SetPrototypeMethod(ctor, "detectMultiScaleWithRejectLevelsAsync", DetectMultiScaleWithRejectLevelsAsync);
+	Nan::SetPrototypeMethod(ctor, "detectMultiScaleWithRejectLevelsGpu", DetectMultiScaleWithRejectLevelsGpu);
 
 	target->Set(FF_NEW_STRING("CascadeClassifier"), ctor->GetFunction());
 };
@@ -36,9 +38,11 @@ NAN_METHOD(CascadeClassifier::New) {
 struct CascadeClassifier::DetectMultiScaleWorker {
 public:
 	cv::CascadeClassifier classifier;
+	bool isGpu;
 
-	DetectMultiScaleWorker(cv::CascadeClassifier classifier) {
+	DetectMultiScaleWorker(cv::CascadeClassifier classifier, bool isGpu = false) {
 		this->classifier = classifier;
+		this->isGpu = isGpu;
 	}
 
 	cv::Mat img;
@@ -52,15 +56,26 @@ public:
 	std::vector<int> numDetections;
 
 	const char* execute() {
-		classifier.detectMultiScale(img, objectRects, numDetections, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize);
+		if (isGpu) {
+			cv::UMat oclMat = img.getUMat(cv::ACCESS_READ);
+			classifier.detectMultiScale(oclMat, objectRects, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize);
+		}
+		else {
+			classifier.detectMultiScale(img, objectRects, numDetections, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize);
+		}
 		return "";
 	}
 
 	FF_VAL getReturnValue() {
-		FF_OBJ ret = FF_NEW_OBJ();
-		Nan::Set(ret, FF_NEW_STRING("objects"), ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects));
-		Nan::Set(ret, FF_NEW_STRING("numDetections"), IntArrayConverter::wrap(numDetections));
-		return ret;
+		if (isGpu) {
+			return ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects);
+		}
+		else {
+			FF_OBJ ret = FF_NEW_OBJ();
+			Nan::Set(ret, FF_NEW_STRING("objects"), ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects));
+			Nan::Set(ret, FF_NEW_STRING("numDetections"), IntArrayConverter::wrap(numDetections));
+			return ret;
+		}
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -104,16 +119,28 @@ NAN_METHOD(CascadeClassifier::DetectMultiScaleAsync) {
 	FF_WORKER_ASYNC("CascadeClassifier::DetectMultiScaleAsync", DetectMultiScaleWorker, worker);
 }
 
+NAN_METHOD(CascadeClassifier::DetectMultiScaleGpu) {
+	DetectMultiScaleWorker worker(CascadeClassifier::Converter::unwrap(info.This()), true);
+	FF_WORKER_SYNC("CascadeClassifier::DetectMultiScaleGpu", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
 
 struct CascadeClassifier::DetectMultiScaleWithRejectLevelsWorker : public DetectMultiScaleWorker {
 public:
-	DetectMultiScaleWithRejectLevelsWorker(cv::CascadeClassifier classifier) : DetectMultiScaleWorker(classifier) {}
+	DetectMultiScaleWithRejectLevelsWorker(cv::CascadeClassifier classifier, bool isGpu = false) : DetectMultiScaleWorker(classifier, isGpu) {}
 
 	std::vector<int> rejectLevels;
 	std::vector<double> levelWeights;
 
 	const char* execute() {
-		classifier.detectMultiScale(img, objectRects, rejectLevels, levelWeights, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize, true);
+		if (isGpu) {
+			cv::UMat oclMat = img.getUMat(cv::ACCESS_READ);
+			classifier.detectMultiScale(oclMat, objectRects, rejectLevels, levelWeights, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize, true);
+		}
+		else {
+			classifier.detectMultiScale(img, objectRects, rejectLevels, levelWeights, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize, true);
+		}
 		return "";
 	}
 
@@ -135,4 +162,10 @@ NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevels) {
 NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevelsAsync) {
 	DetectMultiScaleWithRejectLevelsWorker worker(CascadeClassifier::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("CascadeClassifier::DetectMultiScaleWithRejectLevelsAsync", DetectMultiScaleWithRejectLevelsWorker, worker);
+}
+
+NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevelsGpu) {
+	DetectMultiScaleWithRejectLevelsWorker worker(CascadeClassifier::Converter::unwrap(info.This()), true);
+	FF_WORKER_SYNC("CascadeClassifier::DetectMultiScaleWithRejectLevelsGpu", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }

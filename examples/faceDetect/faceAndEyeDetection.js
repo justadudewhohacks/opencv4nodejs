@@ -1,6 +1,12 @@
-const cv = require('../');
+const {
+  cv,
+  getDataFilePath,
+  drawBlueRect,
+  drawGreenRect
+} = require('../utils');
 
-const image = cv.imread('../data/Lenna.png');
+const image = cv.imread(getDataFilePath('Lenna.png'));
+
 const faceClassifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_DEFAULT);
 const eyeClassifier = new cv.CascadeClassifier(cv.HAAR_EYE);
 
@@ -18,34 +24,24 @@ const sortByNumDetections = result => result.numDetections
 
 // get best result
 const faceRect = faceResult.objects[sortByNumDetections(faceResult)[0]];
+console.log('faceRects:', faceResult.objects);
+console.log('confidences:', faceResult.numDetections);
 
 // detect eyes
 const faceRegion = image.getRegion(faceRect);
 const eyeResult = eyeClassifier.detectMultiScale(faceRegion);
-
-// draw face detection
-const blue = new cv.Vec(255, 0, 0);
-const thickness = 2;
-image.drawRectangle(
-  new cv.Point(faceRect.x, faceRect.y),
-  new cv.Point(faceRect.x + faceRect.width, faceRect.y + faceRect.height),
-  blue,
-  cv.LINE_8,
-  thickness
-);
+console.log('eyeRects:', eyeResult.objects);
+console.log('confidences:', eyeResult.numDetections);
 
 // get best result
-const eyeRects = sortByNumDetections(eyeResult).slice(0, 2).map(idx => eyeResult.objects[idx]);
+const eyeRects = sortByNumDetections(eyeResult)
+  .slice(0, 2)
+  .map(idx => eyeResult.objects[idx]);
+
+// draw face detection
+drawBlueRect(image, faceRect);
 
 // draw eyes detection in face region
-const green = new cv.Vec(0, 255, 0);
-eyeRects.forEach((rect) => {
-  faceRegion.drawRectangle(
-    new cv.Point(rect.x, rect.y),
-    new cv.Point(rect.x + rect.width, rect.y + rect.height),
-    green,
-    { thickness }
-  );
-});
+eyeRects.forEach(eyeRect => drawGreenRect(faceRegion, eyeRect));
 
 cv.imshowWait('face detection', image);
