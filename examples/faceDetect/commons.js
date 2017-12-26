@@ -1,13 +1,10 @@
 const {
   cv,
-  getDataFilePath,
   grabFrames,
   drawBlueRect
 } = require('../utils');
 
-const videoFile = getDataFilePath('people.mp4');
-
-exports.runVideoFaceDetection = detectFaces => grabFrames(videoFile, 1, (frame) => {
+exports.runVideoFaceDetection = (src, detectFaces) => grabFrames(src, 1, (frame) => {
   console.time('detection time');
   const frameResized = frame.resizeToMax(800);
 
