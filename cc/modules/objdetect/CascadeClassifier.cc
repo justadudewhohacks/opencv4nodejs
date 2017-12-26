@@ -57,16 +57,11 @@ public:
 
 	const char* execute() {
 		if (isGpu) {
-			std::cout << "isgpu" << std::endl;
 			cv::UMat oclMat = img.getUMat(cv::ACCESS_READ);
-			for (int i = 0; i < 50; i++) {
-				classifier.detectMultiScale(oclMat, objectRects, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize);
-			}
+			classifier.detectMultiScale(oclMat, objectRects, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize);
 		}
 		else {
-			for (int i = 0; i < 50; i++) {
-				classifier.detectMultiScale(img, objectRects, numDetections, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize);
-			}
+			classifier.detectMultiScale(img, objectRects, numDetections, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize);
 		}
 		return "";
 	}

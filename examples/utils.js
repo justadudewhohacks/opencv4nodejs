@@ -1,4 +1,12 @@
+const path = require('path');
+
 const cv = require('../');
+
+exports.cv = cv;
+
+const dataPath = path.resolve(__dirname, '../data');
+exports.dataPath = dataPath;
+exports.getDataFilePath = fileName => path.resolve(dataPath, fileName);
 
 exports.grabFrames = (videoFile, delay, onFrame) => {
   const cap = new cv.VideoCapture(videoFile);
@@ -43,3 +51,20 @@ exports.drawRectAroundBlobs = (binaryImg, dstImg, minPxSize, fixedRectWidth) => 
     }
   }
 };
+
+const drawRect = (image, rect, color, opts = { thickness: 2 }) =>
+  image.drawRectangle(
+    new cv.Point(rect.x, rect.y),
+    new cv.Point(rect.x + rect.width, rect.y + rect.height),
+    color,
+    cv.LINE_8,
+    opts.thickness
+  );
+
+exports.drawRect = drawRect;
+exports.drawBlueRect = (image, rect, opts = { thickness: 2 }) =>
+  drawRect(image, rect, new cv.Vec(255, 0, 0), opts);
+exports.drawGreenRect = (image, rect, opts = { thickness: 2 }) =>
+  drawRect(image, rect, new cv.Vec(0, 255, 0), opts);
+exports.drawRedRect = (image, rect, opts = { thickness: 2 }) =>
+  drawRect(image, rect, new cv.Vec(0, 0, 255), opts);
