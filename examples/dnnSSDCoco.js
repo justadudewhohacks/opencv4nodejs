@@ -1,7 +1,11 @@
-const cv = require('../');
+const {
+  cv,
+  drawRect
+} = require('./utils');
 const fs = require('fs');
 const path = require('path');
 const classNames = require('./dnnCocoClassNames');
+const { extractResults } = require('./dnn/ssdUtils')
 
 if (!cv.xmodules.dnn) {
   return console.log('exiting: opencv4nodejs compiled without dnn module');
@@ -22,8 +26,7 @@ if (!fs.existsSync(prototxt) || !fs.existsSync(modelFile)) {
 // initialize ssdcoco model from prototxt and modelFile
 const net = cv.readNetFromCaffe(prototxt, modelFile);
 
-const classifyImg = (img) => {
-  const white = new cv.Vec(255, 255, 255);
+function classifyImg(img) {
   // ssdcoco model works with 300 x 300 images
   const imgResized = img.resize(300, 300);
 
@@ -37,41 +40,14 @@ const classifyImg = (img) => {
   // extract NxM Mat
   outputBlob = outputBlob.flattenFloat(outputBlob.sizes[2], outputBlob.sizes[3]);
 
-  const results = Array(outputBlob.rows).fill(0)
-    .map((res, i) => {
-      const className = classNames[outputBlob.at(i, 1)];
-      const confidence = outputBlob.at(i, 2);
-      const topLeft = new cv.Point(
-        outputBlob.at(i, 3) * img.cols,
-        outputBlob.at(i, 6) * img.rows
-      );
-      const bottomRight = new cv.Point(
-        outputBlob.at(i, 5) * img.cols,
-        outputBlob.at(i, 4) * img.rows
-      );
-
-      return ({
-        className,
-        confidence,
-        topLeft,
-        bottomRight
-      })
-    });
-
-    return results;
+  return extractResults(outputBlob, img)
+    .map(r => Object.assign({}, r, { className: classNames[r.classLabel] }));
 };
 
 const makeDrawClassDetections = predictions => (drawImg, className, getColor, thickness = 2) => {
   predictions
     .filter(p => p.className === className)
-    .forEach(p => {
-      drawImg.drawRectangle(
-        p.topLeft,
-        p.bottomRight,
-        getColor(),
-        { thickness }
-      );
-    });
+    .forEach(p => drawRect(drawImg, p.rect, getColor(), { thickness }));
   return drawImg;
 };
 
