@@ -80,6 +80,10 @@ public:
 	static NAN_METHOD(FindNonZero);
 	static NAN_METHOD(FindNonZeroAsync);
 
+	struct CountNonZeroWorker;
+	static NAN_METHOD(CountNonZero);
+	static NAN_METHOD(CountNonZeroAsync);
+
 	struct PadToSquareWorker;
 	static NAN_METHOD(PadToSquare);
 	static NAN_METHOD(PadToSquareAsync);

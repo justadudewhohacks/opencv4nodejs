@@ -45,6 +45,8 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "minMaxLocAsync", MinMaxLocAsync);
 	Nan::SetPrototypeMethod(ctor, "findNonZero", FindNonZero);
 	Nan::SetPrototypeMethod(ctor, "findNonZeroAsync", FindNonZeroAsync);
+	Nan::SetPrototypeMethod(ctor, "countNonZero", CountNonZero);
+	Nan::SetPrototypeMethod(ctor, "countNonZeroAsync", CountNonZeroAsync);
 	Nan::SetPrototypeMethod(ctor, "padToSquare", PadToSquare);
 	Nan::SetPrototypeMethod(ctor, "padToSquareAsync", PadToSquareAsync);
 	Nan::SetPrototypeMethod(ctor, "dct", Dct);
@@ -630,6 +632,35 @@ NAN_METHOD(Mat::FindNonZeroAsync) {
 	FF_WORKER_ASYNC("Mat::FindNonZeroAsync", FindNonZeroWorker, worker);
 }
 
+struct Mat::CountNonZeroWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	CountNonZeroWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int num;
+
+	const char* execute() {
+		num = cv::countNonZero(self);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return IntConverter::wrap(num);
+	}
+};
+
+NAN_METHOD(Mat::CountNonZero) {
+	CountNonZeroWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::CountNonZero", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::CountNonZeroAsync) {
+	CountNonZeroWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::CountNonZeroAsync", CountNonZeroWorker, worker);
+}
 
 struct Mat::PadToSquareWorker : public SimpleWorker {
 public:
