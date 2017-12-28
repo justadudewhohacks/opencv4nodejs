@@ -473,6 +473,24 @@ describe('Mat', () => {
     });
   });
 
+  describe('countNonZero', () => {
+    const expectOutput = (res) => {
+      expect(res).to.be.a('number').to.equal(3);
+    };
+
+    const mat = new cv.Mat([
+      [1, 0, 1],
+      [0, 1, 0]
+    ], cv.CV_8U);
+
+    generateAPITests({
+      getDut: () => mat,
+      methodName: 'countNonZero',
+      methodNameSpace: 'Mat',
+      expectOutput
+    });
+  });
+
   describe('padToSquare', () => {
     const expectOutput = (res) => {
       expect(res).to.be.instanceOf(cv.Mat);
