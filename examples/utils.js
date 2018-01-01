@@ -11,7 +11,7 @@ exports.getDataFilePath = fileName => path.resolve(dataPath, fileName);
 exports.grabFrames = (videoFile, delay, onFrame) => {
   const cap = new cv.VideoCapture(videoFile);
   let done = false;
-  while (!done) {
+  var intvl = setInterval(() => {
     let frame = cap.read();
     // loop back to start on end of stream reached
     if (frame.empty) {
@@ -22,8 +22,11 @@ exports.grabFrames = (videoFile, delay, onFrame) => {
 
     const key = cv.waitKey(delay);
     done = key !== -1 && key !== 255;
-  }
-  console.log('Key pressed, exiting.');
+    if (done) {
+      clearInterval(intvl);
+      console.log('Key pressed, exiting.');
+    }
+  }, delay);
 };
 
 exports.drawRectAroundBlobs = (binaryImg, dstImg, minPxSize, fixedRectWidth) => {
