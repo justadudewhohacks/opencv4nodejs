@@ -83,6 +83,16 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "compareHistAsync", CompareHistAsync);
 	Nan::SetPrototypeMethod(ctor, "floodFill", FloodFill);
 	Nan::SetPrototypeMethod(ctor, "floodFillAsync", FloodFillAsync);
+	Nan::SetPrototypeMethod(ctor, "bilateralFilter", BilateralFilter);
+	Nan::SetPrototypeMethod(ctor, "bilateralFilterAsync", BilateralFilterAsync);
+	Nan::SetPrototypeMethod(ctor, "boxFilter", BoxFilter);
+	Nan::SetPrototypeMethod(ctor, "boxFilterAsync", BoxFilterAsync);
+	Nan::SetPrototypeMethod(ctor, "sqrBoxFilter", SqrBoxFilter);
+	Nan::SetPrototypeMethod(ctor, "sqrBoxFilterAsync", SqrBoxFilterAsync);
+	Nan::SetPrototypeMethod(ctor, "filter2D", Filter2D);
+	Nan::SetPrototypeMethod(ctor, "filter2DAsync", Filter2DAsync);
+	Nan::SetPrototypeMethod(ctor, "sepFilter2D", SepFilter2D);
+	Nan::SetPrototypeMethod(ctor, "sepFilter2DAsync", SepFilter2DAsync);
 };
 
 struct MatImgproc::BaseResizeWorker : public SimpleWorker {
@@ -2012,4 +2022,270 @@ NAN_METHOD(MatImgproc::FloodFill) {
 NAN_METHOD(MatImgproc::FloodFillAsync) {
 	FloodFillWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::FloodFillAsync", FloodFillWorker, worker);
+}
+
+struct MatImgproc::BilateralFilterWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	BilateralFilterWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int d;
+	double sigmaColor;
+	double sigmaSpace;
+	int borderType = cv::BORDER_DEFAULT;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::bilateralFilter(self, dst, d, sigmaColor, sigmaSpace, borderType);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &d, info) ||
+			DoubleConverter::arg(1, &sigmaColor, info) ||
+			DoubleConverter::arg(2, &sigmaSpace, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(3, &borderType, info)
+		);
+	}
+};
+
+NAN_METHOD(MatImgproc::BilateralFilter) {
+	BilateralFilterWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::BilateralFilter", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::BilateralFilterAsync) {
+	BilateralFilterWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::BilateralFilterAsync", BilateralFilterWorker, worker);
+}
+
+struct MatImgproc::BoxFilterWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	BoxFilterWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int ddepth;
+	cv::Size2d ksize;
+	cv::Point2d anchor = cv::Point2d(-1, -1);
+	bool normalize = true;
+	int borderType = cv::BORDER_DEFAULT;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::boxFilter(self, dst, ddepth, ksize, anchor, normalize, borderType);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &ddepth, info) ||
+			Size::Converter::arg(1, &ksize, info)
+			);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Point2::Converter::optArg(2, &anchor, info) ||
+			BoolConverter::optArg(3, &normalize, info) ||
+			IntConverter::optArg(4, &borderType, info)
+			);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(2);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[2]->ToObject();
+		return (
+			Point2::Converter::optProp(&anchor, "anchor", opts) ||
+			BoolConverter::optProp(&normalize, "normalize", opts) ||
+			IntConverter::optProp(&borderType, "borderType", opts)
+		);
+	}
+};
+
+NAN_METHOD(MatImgproc::BoxFilter) {
+	BoxFilterWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::BoxFilter", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::BoxFilterAsync) {
+	BoxFilterWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::BoxFilterAsync", BoxFilterWorker, worker);
+}
+
+struct MatImgproc::SqrBoxFilterWorker : public BoxFilterWorker {
+public:
+	SqrBoxFilterWorker(cv::Mat self) : BoxFilterWorker(self) {
+	}
+
+	const char* execute() {
+		cv::sqrBoxFilter(self, dst, ddepth, ksize, anchor, normalize, borderType);
+		return "";
+	}
+};
+
+NAN_METHOD(MatImgproc::SqrBoxFilter) {
+	SqrBoxFilterWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::SqrBoxFilter", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::SqrBoxFilterAsync) {
+	SqrBoxFilterWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::SqrBoxFilterAsync", SqrBoxFilterWorker, worker);
+}
+
+
+struct MatImgproc::Filter2DWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	Filter2DWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int ddepth;
+	cv::Mat kernel;
+	cv::Point2d anchor = cv::Point2d(-1, -1);
+	double delta = 0;
+	int borderType = cv::BORDER_DEFAULT;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::filter2D(self, dst, ddepth, kernel, anchor, delta, borderType);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &ddepth, info) ||
+			Mat::Converter::arg(1, &kernel, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Point2::Converter::optArg(2, &anchor, info) ||
+			DoubleConverter::optArg(3, &delta, info) ||
+			IntConverter::optArg(4, &borderType, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(2);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[2]->ToObject();
+		return (
+			Point2::Converter::optProp(&anchor, "anchor", opts) ||
+			DoubleConverter::optProp(&delta, "delta", opts) ||
+			IntConverter::optProp(&borderType, "borderType", opts)
+		);
+	}
+};
+
+NAN_METHOD(MatImgproc::Filter2D) {
+	Filter2DWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Filter2D", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::Filter2DAsync) {
+	Filter2DWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::Filter2DAsync", Filter2DWorker, worker);
+}
+
+struct MatImgproc::SepFilter2DWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	SepFilter2DWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int ddepth;
+	cv::Mat kernelX;
+	cv::Mat kernelY;
+	cv::Point2d anchor = cv::Point2d(-1, -1);
+	double delta = 0;
+	int borderType = cv::BORDER_DEFAULT;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::sepFilter2D(self, dst, ddepth, kernelX, kernelY, anchor, delta, borderType);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &ddepth, info) ||
+			Mat::Converter::arg(1, &kernelX, info) ||
+			Mat::Converter::arg(2, &kernelY, info)
+			);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Point2::Converter::optArg(3, &anchor, info) ||
+			DoubleConverter::optArg(4, &delta, info) ||
+			IntConverter::optArg(5, &borderType, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(3);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[3]->ToObject();
+		return (
+			Point2::Converter::optProp(&anchor, "anchor", opts) ||
+			DoubleConverter::optProp(&delta, "delta", opts) ||
+			IntConverter::optProp(&borderType, "borderType", opts)
+		);
+	}
+};
+
+NAN_METHOD(MatImgproc::SepFilter2D) {
+	SepFilter2DWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::SepFilter2D", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::SepFilter2DAsync) {
+	SepFilter2DWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::SepFilter2DAsync", SepFilter2DWorker, worker);
 }

@@ -1227,4 +1227,113 @@ module.exports = (getTestImg) => {
       });
     });
   });
+
+  describe('filters', () => {
+    const expectOutput = (res) => {
+      assertMetaData(res)(100, 100, cv.CV_32F);
+    };
+
+    const getDut = () => new cv.Mat(100, 100, cv.CV_8U);
+    const ddepth = cv.CV_32F;
+    const anchor = new cv.Point(0, 0);
+    const borderType = cv.BORDER_CONSTANT;
+
+    describe('bilateralFilter', () => {
+      const d = 3;
+      const sigmaColor = 0.5;
+      const sigmaSpace = 0.5;
+      generateAPITests({
+        getDut,
+        methodName: 'bilateralFilter',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          d,
+          sigmaColor,
+          sigmaSpace
+        ]),
+        getOptionalArgs: () => ([
+          borderType
+        ]),
+        expectOutput: (res) => {
+          assertMetaData(res)(100, 100, cv.CV_8U);
+        }
+      });
+    });
+
+    describe('boxFilters', () => {
+      const normalize = false;
+      const kSize = new cv.Size(3, 3);
+      const getRequiredArgs = () => ([
+        ddepth,
+        kSize
+      ]);
+      const getOptionalArgsMap = () => ([
+        ['anchor', anchor],
+        ['normalize', normalize],
+        ['borderType', cv.BORDER_CONSTANT]
+      ]);
+
+      describe('boxFilter', () => {
+        generateAPITests({
+          getDut,
+          methodName: 'boxFilter',
+          methodNameSpace: 'Mat',
+          getRequiredArgs,
+          getOptionalArgsMap,
+          expectOutput
+        });
+      });
+
+      describe('sqrBoxFilter', () => {
+        generateAPITests({
+          getDut,
+          methodName: 'sqrBoxFilter',
+          methodNameSpace: 'Mat',
+          getRequiredArgs,
+          getOptionalArgsMap,
+          expectOutput
+        });
+      });
+    });
+
+    describe('filter2D', () => {
+      const getOptionalArgsMap = () => ([
+        ['anchor', anchor],
+        ['delta', 0.5],
+        ['borderType', cv.BORDER_CONSTANT]
+      ]);
+
+      describe('filter2D', () => {
+        const kernel = cv.Mat.eye(3, 3, cv.CV_8U);
+        generateAPITests({
+          getDut,
+          methodName: 'filter2D',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            ddepth,
+            kernel
+          ]),
+          getOptionalArgsMap,
+          expectOutput
+        });
+      });
+
+      describe('sepFilter2D', () => {
+        const kernelX = new cv.Mat(3, 1, cv.CV_8U, 255);
+        const kernelY = new cv.Mat(3, 1, cv.CV_8U, 255);
+        generateAPITests({
+          getDut,
+          methodName: 'sepFilter2D',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            ddepth,
+            kernelX,
+            kernelY
+          ]),
+          getOptionalArgsMap,
+          expectOutput
+        });
+      });
+    });
+  });
 };
