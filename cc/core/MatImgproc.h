@@ -154,6 +154,25 @@ public:
 	struct FloodFillWorker;
 	static NAN_METHOD(FloodFill);
 	static NAN_METHOD(FloodFillAsync);
+
+	struct BilateralFilterWorker;
+	static NAN_METHOD(BilateralFilter);
+	static NAN_METHOD(BilateralFilterAsync);
+
+	struct BoxFilterWorker;
+	static NAN_METHOD(BoxFilter);
+	static NAN_METHOD(BoxFilterAsync);
+	struct SqrBoxFilterWorker;
+	static NAN_METHOD(SqrBoxFilter);
+	static NAN_METHOD(SqrBoxFilterAsync);
+
+	struct Filter2DWorker;
+	static NAN_METHOD(Filter2D);
+	static NAN_METHOD(Filter2DAsync);
+
+	struct SepFilter2DWorker;
+	static NAN_METHOD(SepFilter2D);
+	static NAN_METHOD(SepFilter2DAsync);
 };
 
 #endif
