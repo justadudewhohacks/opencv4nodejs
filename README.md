@@ -83,9 +83,19 @@ Check out my <a href="https://medium.com/@muehler.v/machine-learning-with-opencv
 $ npm install --save opencv4nodejs
 ```
 
-Make sure to have OpenCV 3+ ( extra modules are optional ) installed on your System https://github.com/opencv/opencv/releases/. In case you are running Windows or have OpenCV set up in a custom directory make sure to set the following environment variables:
+Make sure to have OpenCV 3+ ( extra modules are optional ) installed on your System https://github.com/opencv/opencv/releases/. In case you are running on Windows or have OpenCV set up in a custom directory make sure to set the following environment variables:
 1. OPENCV_DIR pointing to the root path containing include directory or set OPENCV_INCLUDE_DIR explicitly.
-2. OPENCV_LIB_DIR pointing to the library dir containing the OpenCV .lib or .so files.
+2. OPENCV_LIB_DIR pointing to the library dir containing the OpenCV .lib, .so or .dylib files.
+
+### On Windows
+On windows you will need the windows build tools to compile opencv4nodejs:
+```
+npm install --global windows-build-tools
+```
+
+Also you will need to add the OpenCV binaries to your system path:
+Add an environment variable OPENCV_BIN_DIR pointing to the library dir containing the OpenCV .dll files.
+Append ';%OPENCV_BIN_DIR%;' to your path variable.
 
 If you are running into issues also check the requirements for node-gyp specific to your OS https://github.com/nodejs/node-gyp.
 
