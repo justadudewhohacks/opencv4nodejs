@@ -94,10 +94,12 @@ npm install --global windows-build-tools
 ```
 
 Also you will need to add the OpenCV binaries to your system path:
-Add an environment variable OPENCV_BIN_DIR pointing to the library dir containing the OpenCV .dll files.
-Append ';%OPENCV_BIN_DIR%;' to your path variable.
+- Add an environment variable OPENCV_BIN_DIR pointing to the library dir containing the OpenCV .dll files.
+- Append `;%OPENCV_BIN_DIR%;` to your path variable.
 
-If you are running into issues also check the requirements for node-gyp specific to your OS https://github.com/nodejs/node-gyp.
+Note: Restart your current console session after making changes to your environment.
+
+If you are running into issues also check the requirements for node-gyp specific to your OS: https://github.com/nodejs/node-gyp.
 
 <a name="usage-with-docker"></a>
 
