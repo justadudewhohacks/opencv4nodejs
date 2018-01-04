@@ -52,15 +52,39 @@ module.exports = (getTestImg) => {
         assertMetaData(res)(rows, cols, cv.CV_8UC3);
       };
 
-      generateAPITests({
-        getDut: () => mat,
-        methodName: 'resize',
-        methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([
-          rows,
-          cols
-        ]),
-        expectOutput
+      describe('with rows and cols', () => {
+        generateAPITests({
+          getDut: () => mat,
+          methodName: 'resize',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            rows,
+            cols
+          ]),
+          getOptionalArgsMap: () => ([
+            ['fx', 0.5],
+            ['fy', 0.5],
+            ['interpolation', cv.INTER_CUBIC]
+          ]),
+          expectOutput
+        });
+      });
+
+      describe('with dsize', () => {
+        generateAPITests({
+          getDut: () => mat,
+          methodName: 'resize',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            new cv.Size(cols, rows)
+          ]),
+          getOptionalArgsMap: () => ([
+            ['fx', 0.5],
+            ['fy', 0.5],
+            ['interpolation', cv.INTER_CUBIC]
+          ]),
+          expectOutput
+        });
       });
     });
 
@@ -784,6 +808,29 @@ module.exports = (getTestImg) => {
     });
   });
 
+  describe('watershed', () => {
+    const markers = new cv.Mat([
+      [0, 0, 0, 0, 0],
+      [0, 2, 0, 0, 0],
+      [0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 0]
+    ], cv.CV_32S);
+
+    generateAPITests({
+      getDut: () => rgbMat,
+      methodName: 'watershed',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        markers.copy()
+      ]),
+      expectOutput: (outMarkers) => {
+        expect(outMarkers).to.be.instanceOf(cv.Mat);
+        assertMetaData(markers)(outMarkers);
+        expect(dangerousDeepEquals(markers.getDataAsArray(), outMarkers.getDataAsArray())).to.be.false;
+      }
+    });
+  });
+
   describe('moments', () => {
     let grayImg;
     before(() => {
@@ -1333,6 +1380,91 @@ module.exports = (getTestImg) => {
           getOptionalArgsMap,
           expectOutput
         });
+      });
+    });
+  });
+
+  describe('corner detection', () => {
+    const getDut = () => getTestImg().bgrToGray();
+    const makeExpectOutput = expectedType => (out) => {
+      expect(out).to.be.instanceOf(cv.Mat);
+      const { cols, rows } = getTestImg();
+      assertMetaData(out)(cols, rows, expectedType);
+    };
+
+    const blockSize = 4;
+    const borderType = cv.BORDER_CONSTANT;
+
+    describe('cornerHarris', () => {
+      const ksize = 3;
+      const k = 0.04;
+      generateAPITests({
+        getDut,
+        methodName: 'cornerHarris',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          blockSize,
+          ksize,
+          k
+        ]),
+        getOptionalArgs: () => ([
+          borderType
+        ]),
+        expectOutput: makeExpectOutput(cv.CV_32F)
+      });
+    });
+
+    describe('cornerSubPix', () => {
+      const corners = [new cv.Point(10, 10), new cv.Point(100, 100), new cv.Point(50, 50)];
+      const winSize = new cv.Size(5, 5);
+      const zeroZone = new cv.Size(-1, -1);
+      const criteria = new cv.TermCriteria(cv.termCriteria.EPS + cv.termCriteria.MAX_ITER, 40, 0.001);
+      generateAPITests({
+        getDut,
+        methodName: 'cornerSubPix',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          corners,
+          winSize,
+          zeroZone,
+          criteria
+        ]),
+        expectOutput: (adjustedCorners) => {
+          expect(adjustedCorners).to.be.an('array').lengthOf(corners.length);
+        }
+      });
+    });
+
+    describe('cornerMinEigenVal', () => {
+      generateAPITests({
+        getDut,
+        methodName: 'cornerMinEigenVal',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          blockSize
+        ]),
+        getOptionalArgsMap: () => ([
+          ['ksize', 5],
+          ['borderType', borderType]
+        ]),
+        expectOutput: makeExpectOutput(cv.CV_32F)
+      });
+    });
+
+    describe('cornerEigenValsAndVecs', () => {
+      const cv32fc6 = 45;
+      generateAPITests({
+        getDut,
+        methodName: 'cornerEigenValsAndVecs',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          blockSize
+        ]),
+        getOptionalArgsMap: () => ([
+          ['ksize', 5],
+          ['borderType', borderType]
+        ]),
+        expectOutput: makeExpectOutput(cv32fc6)
       });
     });
   });
