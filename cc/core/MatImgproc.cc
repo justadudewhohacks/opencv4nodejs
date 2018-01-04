@@ -1,6 +1,7 @@
 #include "MatImgproc.h"
 #include "imgproc/Moments.h"
 #include "imgproc/Contour.h"
+#include "TermCriteria.h"
 
 void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "rescale", Rescale);
@@ -45,6 +46,8 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "connectedComponentsWithStatsAsync", ConnectedComponentsWithStatsAsync);
 	Nan::SetPrototypeMethod(ctor, "grabCut", GrabCut);
 	Nan::SetPrototypeMethod(ctor, "grabCutAsync", GrabCutAsync);
+	Nan::SetPrototypeMethod(ctor, "watershed", Watershed);
+	Nan::SetPrototypeMethod(ctor, "watershedAsync", WatershedAsync);
 	Nan::SetPrototypeMethod(ctor, "moments", _Moments);
 	Nan::SetPrototypeMethod(ctor, "momentsAsync", _MomentsAsync);
 	Nan::SetPrototypeMethod(ctor, "findContours", FindContours);
@@ -93,6 +96,14 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "filter2DAsync", Filter2DAsync);
 	Nan::SetPrototypeMethod(ctor, "sepFilter2D", SepFilter2D);
 	Nan::SetPrototypeMethod(ctor, "sepFilter2DAsync", SepFilter2DAsync);
+	Nan::SetPrototypeMethod(ctor, "cornerHarris", CornerHarris);
+	Nan::SetPrototypeMethod(ctor, "cornerHarrisAsync", CornerHarrisAsync);
+	Nan::SetPrototypeMethod(ctor, "cornerSubPix", CornerSubPix);
+	Nan::SetPrototypeMethod(ctor, "cornerSubPixAsync", CornerSubPixAsync);
+	Nan::SetPrototypeMethod(ctor, "cornerMinEigenVal", CornerMinEigenVal);
+	Nan::SetPrototypeMethod(ctor, "cornerMinEigenValAsync", CornerMinEigenValAsync);
+	Nan::SetPrototypeMethod(ctor, "cornerEigenValsAndVecs", CornerEigenValsAndVecs);
+	Nan::SetPrototypeMethod(ctor, "cornerEigenValsAndVecsAsync", CornerEigenValsAndVecsAsync);
 };
 
 struct MatImgproc::BaseResizeWorker : public SimpleWorker {
@@ -146,17 +157,54 @@ public:
 
 	int rows;
 	int cols;
+	cv::Size2d dsize;
+	double fx = 0; 
+	double fy = 0;
+	int interpolation = cv::INTER_LINEAR;
 
 	const char* execute() {
-		cv::resize(self, dst, cv::Size(cols, rows));
+		cv::resize(self, dst, dsize, fx, fy, interpolation);
 		return "";
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		if (hasDsize(info)) {
+			return Size::Converter::arg(0, &dsize, info);
+		}
+		bool didThrow = IntConverter::arg(0, &rows, info)
+			|| IntConverter::arg(1, &cols, info);
+		dsize = cv::Size2d(cols, rows);
+		return didThrow;
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		int o = hasDsize(info) ? 0 : 1;
 		return (
-			IntConverter::arg(0, &rows, info) ||
-			IntConverter::arg(1, &cols, info)
+			DoubleConverter::optArg(1 + o, &fx, info) ||
+			DoubleConverter::optArg(2 + o, &fy, info) ||
+			IntConverter::optArg(3 + o, &interpolation, info)
 		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(getOptArgIndex(info));
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		FF_OBJ opts = info[getOptArgIndex(info)]->ToObject();
+		return (
+			DoubleConverter::optProp(&fx, "fx", opts) ||
+			DoubleConverter::optProp(&fy, "fy", opts) ||
+			IntConverter::optProp(&interpolation, "interpolation", opts)
+		);
+	}
+
+	bool hasDsize(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (Size::Converter::hasInstance(info[0]));
+	}
+
+	int getOptArgIndex(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return hasDsize(info) ? 1 : 2;
 	}
 };
 
@@ -279,7 +327,7 @@ public:
 			IntConverter::arg(2, &thresholdType, info) ||
 			IntConverter::arg(3, &blockSize, info) ||
 			DoubleConverter::arg(4, &C, info)
-			);
+		);
 	}
 };
 
@@ -1005,6 +1053,43 @@ NAN_METHOD(MatImgproc::GrabCut) {
 NAN_METHOD(MatImgproc::GrabCutAsync) {
 	GrabCutWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::GrabCutAsync", GrabCutWorker, worker);
+}
+
+
+struct MatImgproc::WatershedWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	WatershedWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	cv::Mat markers;
+
+	const char* execute() {
+		cv::watershed(self, markers);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(markers);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::arg(0, &markers, info)
+		);
+	}
+};
+
+NAN_METHOD(MatImgproc::Watershed) {
+	WatershedWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Watershed", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::WatershedAsync) {
+	WatershedWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::WatershedAsync", WatershedWorker, worker);
 }
 
 struct MatImgproc::MomentsWorker : public SimpleWorker {
@@ -2254,7 +2339,7 @@ public:
 			IntConverter::arg(0, &ddepth, info) ||
 			Mat::Converter::arg(1, &kernelX, info) ||
 			Mat::Converter::arg(2, &kernelY, info)
-			);
+		);
 	}
 
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -2288,4 +2373,183 @@ NAN_METHOD(MatImgproc::SepFilter2D) {
 NAN_METHOD(MatImgproc::SepFilter2DAsync) {
 	SepFilter2DWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::SepFilter2DAsync", SepFilter2DWorker, worker);
+}
+
+struct MatImgproc::CornerHarrisWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	CornerHarrisWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int blockSize;
+	int ksize;
+	double k;
+	int borderType = cv::BORDER_DEFAULT;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::cornerHarris(self, dst, blockSize, ksize, k, borderType);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &blockSize, info) ||
+			IntConverter::arg(1, &ksize, info) ||
+			DoubleConverter::arg(2, &k, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(3, &borderType, info)
+		);
+	}
+};
+
+NAN_METHOD(MatImgproc::CornerHarris) {
+	CornerHarrisWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::CornerHarris", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::CornerHarrisAsync) {
+	CornerHarrisWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::CornerHarrisAsync", CornerHarrisWorker, worker);
+}
+
+struct MatImgproc::CornerSubPixWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	CornerSubPixWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	std::vector<cv::Point2f> corners;
+	cv::Size2d winSize;
+	cv::Size2d zeroZone;
+	cv::TermCriteria criteria;
+
+
+	const char* execute() {
+		cv::cornerSubPix(self, corners, winSize, zeroZone, criteria);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(corners);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &corners, info) ||
+			Size::Converter::arg(1, &winSize, info) ||
+			Size::Converter::arg(2, &zeroZone, info) ||
+			TermCriteria::Converter::arg(3, &criteria, info)
+		);
+	}
+};
+
+NAN_METHOD(MatImgproc::CornerSubPix) {
+	CornerSubPixWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::CornerSubPix", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::CornerSubPixAsync) {
+	CornerSubPixWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::CornerSubPixAsync", CornerSubPixWorker, worker);
+}
+
+struct MatImgproc::BaseCornerEigenValWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	BaseCornerEigenValWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int blockSize;
+	int ksize = 3;
+	int borderType = cv::BORDER_DEFAULT;
+
+	cv::Mat dst;
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &blockSize, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(1, &ksize, info) ||
+			IntConverter::optArg(2, &borderType, info)
+			);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(1);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[1]->ToObject();
+		return (
+			IntConverter::optProp(&ksize, "ksize", opts) ||
+			IntConverter::optProp(&borderType, "borderType", opts)
+		);
+	}
+};
+
+struct MatImgproc::CornerMinEigenValWorker : public MatImgproc::BaseCornerEigenValWorker {
+public:
+	CornerMinEigenValWorker(cv::Mat self) : BaseCornerEigenValWorker(self) {
+	}
+
+	const char* execute() {
+		cv::cornerMinEigenVal(self, dst, blockSize, ksize, borderType);
+		return "";
+	}
+};
+
+NAN_METHOD(MatImgproc::CornerMinEigenVal) {
+	CornerMinEigenValWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::CornerMinEigenVal", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::CornerMinEigenValAsync) {
+	CornerMinEigenValWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::CornerMinEigenValAsync", CornerMinEigenValWorker, worker);
+}
+
+struct MatImgproc::CornerEigenValsAndVecsWorker : public MatImgproc::BaseCornerEigenValWorker {
+public:
+	CornerEigenValsAndVecsWorker(cv::Mat self) : BaseCornerEigenValWorker(self) {
+	}
+
+	const char* execute() {
+		cv::cornerEigenValsAndVecs(self, dst, blockSize, ksize, borderType);
+		return "";
+	}
+};
+
+NAN_METHOD(MatImgproc::CornerEigenValsAndVecs) {
+	CornerEigenValsAndVecsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::CornerEigenValsAndVecs", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::CornerEigenValsAndVecsAsync) {
+	CornerEigenValsAndVecsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::CornerEigenValsAndVecsAsync", CornerEigenValsAndVecsWorker, worker);
 }

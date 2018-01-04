@@ -87,9 +87,15 @@ public:
 	struct GrabCutWorker;
 	static NAN_METHOD(GrabCut);
 	static NAN_METHOD(GrabCutAsync);
+
+	struct WatershedWorker;
+	static NAN_METHOD(Watershed);
+	static NAN_METHOD(WatershedAsync);
+
 	struct MomentsWorker;
 	static NAN_METHOD(_Moments);
 	static NAN_METHOD(_MomentsAsync);
+
 	struct FindContoursWorker;
 	static NAN_METHOD(FindContours);
 	static NAN_METHOD(FindContoursAsync);
@@ -173,6 +179,22 @@ public:
 	struct SepFilter2DWorker;
 	static NAN_METHOD(SepFilter2D);
 	static NAN_METHOD(SepFilter2DAsync);
+
+	struct CornerHarrisWorker;
+	static NAN_METHOD(CornerHarris);
+	static NAN_METHOD(CornerHarrisAsync);
+
+	struct CornerSubPixWorker;
+	static NAN_METHOD(CornerSubPix);
+	static NAN_METHOD(CornerSubPixAsync);
+	
+	struct BaseCornerEigenValWorker;
+	struct CornerMinEigenValWorker;
+	static NAN_METHOD(CornerMinEigenVal);
+	static NAN_METHOD(CornerMinEigenValAsync);
+	struct CornerEigenValsAndVecsWorker;
+	static NAN_METHOD(CornerEigenValsAndVecs);
+	static NAN_METHOD(CornerEigenValsAndVecsAsync);
 };
 
 #endif
