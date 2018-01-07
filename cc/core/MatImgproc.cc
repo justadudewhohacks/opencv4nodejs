@@ -158,7 +158,7 @@ public:
 	int rows;
 	int cols;
 	cv::Size2d dsize;
-	double fx = 0; 
+	double fx = 0;
 	double fy = 0;
 	int interpolation = cv::INTER_LINEAR;
 
@@ -350,13 +350,19 @@ public:
 		this->mat = mat;
 	}
 
-	cv::Vec3d lower;
-	cv::Vec3d upper;
+	double lower;
+	double upper;
+	cv::Vec3d lowerVec;
+	cv::Vec3d upperVec;
 
 	cv::Mat inRangeMat;
 
 	const char* execute() {
-		cv::inRange(mat, lower, upper, inRangeMat);
+		if (mat.channels() == 3) {
+			cv::inRange(mat, lowerVec, upperVec, inRangeMat);
+		} else {
+			cv::inRange(mat, lower, upper, inRangeMat);
+		}
 		return "";
 	}
 
@@ -365,9 +371,15 @@ public:
 	}
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		if (mat.channels() == 3) {
+			return (
+				Vec3::Converter::arg(0, &lowerVec, info)
+				|| Vec3::Converter::arg(1, &upperVec, info)
+			);
+		}
 		return (
-			Vec3::Converter::arg(0, &lower, info) ||
-			Vec3::Converter::arg(1, &upper, info)
+			DoubleConverter::arg(0, &lower, info)
+			|| DoubleConverter::arg(1, &upper, info)
 		);
 	}
 };
@@ -2038,17 +2050,17 @@ public:
 
 	const char* execute() {
 		switch (self.channels()) {
-		case 1: 
+		case 1:
 			returnValue = cv::floodFill(self, mask, seedPoint, newVal1, &rect, loDiff1, upDiff1, flags);
-			break;		
+			break;
 		case 3:
 			returnValue = cv::floodFill(self, mask, seedPoint, newVal3, &rect, loDiff3, upDiff3, flags);
 			break;
 		default:
 			return "expected single or 3 channel mat";
-			break; 
+			break;
 		}
-		
+
 		return "";
 	}
 

@@ -350,23 +350,46 @@ describe('Mat', () => {
       );
     };
 
-    const mat = new cv.Mat([
-      [[255, 255, 255], [255, 255, 255], [255, 255, 255]],
-      [[0, 0, 0], [100, 100, 100], [101, 101, 101]]
-    ], cv.CV_8UC3);
+    describe('C1', () => {
+      const mat = new cv.Mat([
+        [255, 255, 255],
+        [0, 100, 101]
+      ], cv.CV_8U);
 
-    const lower = new cv.Vec(101, 101, 101);
-    const upper = new cv.Vec(255, 255, 255);
+      const lower = 101;
+      const upper = 255;
 
-    generateAPITests({
-      getDut: () => mat,
-      methodName: 'inRange',
-      methodNameSpace: 'Mat',
-      getRequiredArgs: () => ([
-        lower,
-        upper
-      ]),
-      expectOutput
+      generateAPITests({
+        getDut: () => mat,
+        methodName: 'inRange',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          lower,
+          upper
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('C3', () => {
+      const mat = new cv.Mat([
+        [[255, 255, 255], [255, 255, 255], [255, 255, 255]],
+        [[0, 0, 0], [100, 100, 100], [101, 101, 101]]
+      ], cv.CV_8UC3);
+
+      const lower = new cv.Vec(101, 101, 101);
+      const upper = new cv.Vec(255, 255, 255);
+
+      generateAPITests({
+        getDut: () => mat,
+        methodName: 'inRange',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          lower,
+          upper
+        ]),
+        expectOutput
+      });
     });
   });
 
