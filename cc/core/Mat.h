@@ -28,6 +28,12 @@ public:
 	static FF_GETTER(Mat, GetDims, mat.dims);
 	static FF_GETTER(Mat, GetDepth, mat.depth());
 	static FF_GETTER(Mat, GetIsEmpty, mat.empty());
+	static NAN_GETTER(GetElemSize) {
+		info.GetReturnValue().Set((int)Converter::unwrap(info.This()).elemSize());
+	};
+	static NAN_GETTER(GetStep) {
+		info.GetReturnValue().Set((int)Converter::unwrap(info.This()).step.operator size_t());
+	};
 	static NAN_GETTER(GetSizes) {
 		cv::Mat m = Converter::unwrap(info.This());
 		std::vector<int> sizes;
