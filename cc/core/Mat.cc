@@ -67,6 +67,10 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "perspectiveTransformAsync", PerspectiveTransformAsync);
 	Nan::SetPrototypeMethod(ctor, "flip", Flip);
 	Nan::SetPrototypeMethod(ctor, "flipAsync", FlipAsync);
+	Nan::SetPrototypeMethod(ctor, "convertScaleAbs", ConvertScaleAbs);
+	Nan::SetPrototypeMethod(ctor, "convertScaleAbsAsync", ConvertScaleAbsAsync);
+	Nan::SetPrototypeMethod(ctor, "sum", Sum);
+	Nan::SetPrototypeMethod(ctor, "sumAsync", SumAsync);
 #if CV_VERSION_MINOR > 1
 	Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
 	Nan::SetPrototypeMethod(ctor, "rotateAsync", RotateAsync);
@@ -1003,6 +1007,100 @@ NAN_METHOD(Mat::FlipAsync) {
 	FF_WORKER_ASYNC("Mat::FlipAsync", FlipWorker, worker);
 }
 
+struct Mat::SumWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	SumWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	cv::Scalar sum;
+
+	const char* execute() {
+		sum = cv::sum(self);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		switch (self.channels()) {
+		case 1:
+			return DoubleConverter::wrap(sum[0]);
+		case 2:
+			return Vec2::Converter::wrap(cv::Vec2f(sum[0], sum[1]));
+		case 3:
+			return Vec3::Converter::wrap(cv::Vec3f(sum[0], sum[1], sum[2]));
+		case 4:
+			return Vec4::Converter::wrap(cv::Vec4f(sum));
+		default:
+			return Nan::Undefined();
+		}
+	}
+};
+
+NAN_METHOD(Mat::Sum) {
+	SumWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Sum", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::SumAsync) {
+	SumWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::SumAsync", SumWorker, worker);
+}
+
+
+struct Mat::ConvertScaleAbsWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	ConvertScaleAbsWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	double alpha = 1;
+	double beta = 0;
+
+	cv::Mat dst;
+
+	const char* execute() {
+		cv::convertScaleAbs(self, dst, alpha, beta);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Mat::Converter::wrap(dst);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DoubleConverter::optArg(0, &alpha, info) ||
+			DoubleConverter::optArg(1, &beta, info)
+			);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(0);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[0]->ToObject();
+		return (
+			DoubleConverter::optProp(&alpha, "alpha", opts) ||
+			DoubleConverter::optProp(&beta, "beta", opts)
+			);
+	}
+};
+
+NAN_METHOD(Mat::ConvertScaleAbs) {
+	ConvertScaleAbsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::ConvertScaleAbs", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::ConvertScaleAbsAsync) {
+	ConvertScaleAbsWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::ConvertScaleAbsAsync", ConvertScaleAbsWorker, worker);
+}
+
 
 #if CV_VERSION_MINOR > 1
 struct Mat::RotateWorker : public OpWithCodeWorker {
@@ -1068,3 +1166,4 @@ NAN_METHOD(Mat::Row) {
 void Mat::setNativeProps(cv::Mat mat) {
 	this->mat = mat;
 };
+

@@ -7,7 +7,10 @@ const {
   assertDataDeepEquals,
   readTestImage,
   MatValuesComparator,
-  isZeroMat
+  isZeroMat,
+  expectToBeVec2,
+  expectToBeVec3,
+  expectToBeVec4
 } = global.utils;
 const { expect } = require('chai');
 const accessorTests = require('./accessorTests');
@@ -624,6 +627,97 @@ describe('Mat', () => {
       methodNameSpace: 'Mat',
       getRequiredArgs: () => [flipCode],
       expectOutput
+    });
+  });
+
+  describe('convertScaleAbs', () => {
+    generateAPITests({
+      getDut: () => srcMat,
+      methodName: 'convertScaleAbs',
+      methodNameSpace: 'Mat',
+      getOptionalArgsMap: () => ([
+        ['alpha', 0.5],
+        ['beta', 0.5]
+      ]),
+      expectOutput: (res) => {
+        expect(srcMat).to.be.instanceOf(cv.Mat);
+        assertMetaData(res)(srcMat.rows, srcMat.cols, cv.CV_8U);
+      }
+    });
+  });
+
+  describe('sum', () => {
+    describe('C1', () => {
+      const src = new cv.Mat([
+        [0.5, 0.5],
+        [0.5, 0.5]
+      ], cv.CV_64F);
+
+      generateAPITests({
+        getDut: () => src,
+        methodName: 'sum',
+        methodNameSpace: 'Mat',
+        expectOutput: (res) => {
+          expect(res).to.equal(2);
+        }
+      });
+    });
+
+    describe('C2', () => {
+      const src = new cv.Mat([
+        [[0.5, 1.5], [0.5, 1.5]],
+        [[0.5, 1.5], [0.5, 1.5]]
+      ], cv.CV_64FC2);
+
+      generateAPITests({
+        getDut: () => src,
+        methodName: 'sum',
+        methodNameSpace: 'Mat',
+        expectOutput: (res) => {
+          expectToBeVec2(res);
+          expect(res.x).to.equal(2);
+          expect(res.y).to.equal(6);
+        }
+      });
+    });
+
+    describe('C3', () => {
+      const src = new cv.Mat([
+        [[0.5, 1.5, 2.5], [0.5, 1.5, 2.5]],
+        [[0.5, 1.5, 2.5], [0.5, 1.5, 2.5]]
+      ], cv.CV_64FC3);
+
+      generateAPITests({
+        getDut: () => src,
+        methodName: 'sum',
+        methodNameSpace: 'Mat',
+        expectOutput: (res) => {
+          expectToBeVec3(res);
+          expect(res.x).to.equal(2);
+          expect(res.y).to.equal(6);
+          expect(res.z).to.equal(10);
+        }
+      });
+    });
+
+    describe('C4', () => {
+      const src = new cv.Mat([
+        [[0.5, 1.5, 2.5, 3.5], [0.5, 1.5, 2.5, 3.5]],
+        [[0.5, 1.5, 2.5, 3.5], [0.5, 1.5, 2.5, 3.5]]
+      ], cv.CV_64FC4);
+
+      generateAPITests({
+        getDut: () => src,
+        methodName: 'sum',
+        methodNameSpace: 'Mat',
+        expectOutput: (res) => {
+          expectToBeVec4(res);
+          expect(res.w).to.equal(2);
+          expect(res.x).to.equal(6);
+          expect(res.y).to.equal(10);
+          expect(res.z).to.equal(14);
+        }
+      });
     });
   });
 
