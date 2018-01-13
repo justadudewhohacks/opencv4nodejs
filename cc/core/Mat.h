@@ -94,6 +94,14 @@ public:
 	static NAN_METHOD(PadToSquare);
 	static NAN_METHOD(PadToSquareAsync);
 
+	struct SumWorker;
+	static NAN_METHOD(Sum);
+	static NAN_METHOD(SumAsync);
+
+	struct ConvertScaleAbsWorker;
+	static NAN_METHOD(ConvertScaleAbs);
+	static NAN_METHOD(ConvertScaleAbsAsync);
+
 
 	FF_INIT_MAT_OPERATIONS();
 	static NAN_METHOD(Dot) {
