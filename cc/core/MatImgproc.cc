@@ -1206,13 +1206,13 @@ NAN_METHOD(MatImgproc::DrawContours) {
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
 	FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject() : FF_NEW_OBJ();
-	FF_GET_UINT_IFDEF(optArgs, uint contourIdx, "contourIdx", 0);
+	FF_GET_INT_IFDEF(optArgs, int contourIdx, "contourIdx", 0);
 	FF_GET_INT_IFDEF(optArgs, int maxLevel, "maxLevel", INT_MAX);
 	FF_GET_INSTANCE_IFDEF(optArgs, cv::Point2d offset, "offset", Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2, cv::Point2d());
 	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
 	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
 	if (!hasOptArgsObj) {
-		FF_ARG_UINT_IFDEF(2, contourIdx, contourIdx);
+		FF_ARG_INT_IFDEF(2, contourIdx, contourIdx);
 		FF_ARG_UINT_IFDEF(3, maxLevel, maxLevel);
 		FF_ARG_INSTANCE_IFDEF(4, offset, Point2::constructor, FF_UNWRAP_PT2_AND_GET, offset);
 		FF_ARG_INT_IFDEF(5, lineType, lineType);
@@ -1230,7 +1230,7 @@ NAN_METHOD(MatImgproc::DrawContours) {
 	cv::drawContours(
 		FF_UNWRAP_MAT_AND_GET(info.This()),
 		contours,
-		(int)contourIdx,
+		contourIdx,
 		color,
 		thickness,
 		lineType,

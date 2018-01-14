@@ -1,4 +1,5 @@
 #include "Converters.h"
+#include "Workers.h"
 #include <opencv2/core.hpp>
 
 #ifndef __FF_RECT_H__
@@ -15,6 +16,20 @@ public:
 	static FF_GETTER(Rect, GetY, rect.y);
 	static FF_GETTER(Rect, GetWidth, rect.width);
 	static FF_GETTER(Rect, GetHeight, rect.height);
+
+	struct LogicOpWorker;
+	struct AndWorker;
+	static NAN_METHOD(And);
+	struct OrWorker;
+	static NAN_METHOD(Or);
+
+	struct ToSquareWorker;
+	static NAN_METHOD(ToSquare);
+	static NAN_METHOD(ToSquareAsync);
+
+	struct RescaleWorker;
+	static NAN_METHOD(Rescale);
+	static NAN_METHOD(RescaleAsync);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
