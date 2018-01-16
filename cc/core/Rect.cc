@@ -1,4 +1,5 @@
 #include "Rect.h"
+#include "Size.h"
 
 Nan::Persistent<v8::FunctionTemplate> Rect::constructor;
 
@@ -16,6 +17,8 @@ NAN_MODULE_INIT(Rect::Init) {
 	Nan::SetPrototypeMethod(ctor, "or", Or);
 	Nan::SetPrototypeMethod(ctor, "toSquare", ToSquare);
 	Nan::SetPrototypeMethod(ctor, "toSquareAsync", ToSquareAsync);
+	Nan::SetPrototypeMethod(ctor, "pad", Pad);
+	Nan::SetPrototypeMethod(ctor, "padAsync", PadAsync);
 	Nan::SetPrototypeMethod(ctor, "rescale", Rescale);
 	Nan::SetPrototypeMethod(ctor, "rescaleAsync", RescaleAsync);
 
@@ -132,6 +135,54 @@ NAN_METHOD(Rect::ToSquareAsync) {
 }
 
 
+struct Rect::PadWorker : SimpleWorker {
+public:
+	cv::Rect2d rect;
+	cv::Size2d newSize = cv::Size2d();
+	cv::Rect2d outRect;
+
+	PadWorker(cv::Rect2d rect) {
+		this->rect = rect;
+	}
+
+	const char* execute() {
+		double offX = (rect.width - newSize.width) / 2;
+		double offY = (rect.height - newSize.height) / 2;
+		outRect = cv::Rect(rect.x + offX, rect.y + offY, newSize.width, newSize.height);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		bool isSizeArg = Size::Converter::hasInstance(info[0]);
+		double f = 1;
+		bool didThrow = 
+			(!isSizeArg && DoubleConverter::arg(0, &f, info))
+			|| (isSizeArg && Size::Converter::arg(0, &newSize, info));
+
+		if (!isSizeArg) {
+			newSize = cv::Size2d(rect.width * f, rect.height * f);
+		}
+		return didThrow;
+	}
+
+	FF_VAL getReturnValue() {
+		return Rect::Converter::wrap(outRect);
+	}
+};
+
+NAN_METHOD(Rect::Pad) {
+	PadWorker worker(Rect::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Rect::Pad", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+
+}
+
+NAN_METHOD(Rect::PadAsync) {
+	PadWorker worker(Rect::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Rect::PadAsync", PadWorker, worker);
+}
+
+
 struct Rect::RescaleWorker : SimpleWorker {
 public:
 	cv::Rect2d rect;
@@ -143,11 +194,7 @@ public:
 	}
 
 	const char* execute() {
-		double newWidth = rect.width * f;
-		double newHeight = rect.height * f;
-		double offX = (rect.width - newWidth) / 2;
-		double offY = (rect.height - newHeight) / 2;
-		outRect = cv::Rect(rect.x + offX, rect.y + offY, newWidth, newHeight);
+		outRect = cv::Rect(f * rect.x, f * rect.y, f * rect.width, f * rect.height);
 		return "";
 	}
 
