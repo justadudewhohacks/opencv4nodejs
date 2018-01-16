@@ -101,10 +101,25 @@ public:
 	static NAN_METHOD(FindContoursAsync);
 
 	static NAN_METHOD(DrawContours);
+
+	struct DrawWorker;
+	struct DrawLineWorker;
 	static NAN_METHOD(DrawLine);
+	struct DrawArrowedLineWorker;
+	static NAN_METHOD(DrawArrowedLine);
+	struct DrawCircleWorker;
 	static NAN_METHOD(DrawCircle);
+	struct DrawRectangleWorker;
 	static NAN_METHOD(DrawRectangle);
+	struct DrawEllipseWorker;
 	static NAN_METHOD(DrawEllipse);
+	struct DrawPolylinesWorker;
+	static NAN_METHOD(DrawPolylines);
+	struct DrawFillPolyWorker;
+	static NAN_METHOD(DrawFillPoly);
+	struct DrawFillConvexPolyWorker;
+	static NAN_METHOD(DrawFillConvexPoly);
+	struct PutTextWorker;
 	static NAN_METHOD(PutText);
 
 	struct MatchTemplateWorker;

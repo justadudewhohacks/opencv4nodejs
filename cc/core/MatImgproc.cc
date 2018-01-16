@@ -54,9 +54,13 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "findContoursAsync", FindContoursAsync);
 	Nan::SetPrototypeMethod(ctor, "drawContours", DrawContours);
 	Nan::SetPrototypeMethod(ctor, "drawLine", DrawLine);
+	Nan::SetPrototypeMethod(ctor, "drawArrowedLine", DrawArrowedLine);
 	Nan::SetPrototypeMethod(ctor, "drawCircle", DrawCircle);
 	Nan::SetPrototypeMethod(ctor, "drawRectangle", DrawRectangle);
 	Nan::SetPrototypeMethod(ctor, "drawEllipse", DrawEllipse);
+	Nan::SetPrototypeMethod(ctor, "drawPolylines", DrawPolylines);
+	Nan::SetPrototypeMethod(ctor, "drawFillPoly", DrawFillPoly);
+	Nan::SetPrototypeMethod(ctor, "drawFillConvexPoly", DrawFillConvexPoly);
 	Nan::SetPrototypeMethod(ctor, "putText", PutText);
 	Nan::SetPrototypeMethod(ctor, "matchTemplate", MatchTemplate);
 	Nan::SetPrototypeMethod(ctor, "matchTemplateAsync", MatchTemplateAsync);
@@ -1241,130 +1245,402 @@ NAN_METHOD(MatImgproc::DrawContours) {
 	FF_RETURN(info.This());
 }
 
+struct MatImgproc::DrawWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	bool hasThickness;
+
+	DrawWorker(cv::Mat self, bool hasThickness = true) {
+		this->self = self;
+		this->hasThickness = hasThickness;
+	}
+
+	cv::Vec3d color = cv::Vec3d(0, 0, 0);
+	int thickness = 1;
+	int lineType = cv::LINE_8;
+	int shift = 0;
+
+	virtual int getDrawParamsIndex() = 0;
+
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		return ret;
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		int idx = getDrawParamsIndex();
+		int off = hasThickness ? 1 : 0;
+		return (
+			Vec3::Converter::optArg(idx, &color, info) ||
+			(hasThickness && IntConverter::optArg(idx + 1, &thickness, info)) ||
+			IntConverter::optArg(idx + off + 1, &lineType, info) ||
+			IntConverter::optArg(idx + off + 2, &shift, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(getDrawParamsIndex());
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[getDrawParamsIndex()]->ToObject();
+		return (
+			Vec3::Converter::optProp(&color, "color", opts) ||
+			(hasThickness && IntConverter::optProp(&thickness, "thickness", opts)) ||
+			IntConverter::optProp(&lineType, "lineType", opts) ||
+			IntConverter::optProp(&shift, "shift", opts)
+		);
+	}
+};
+
+struct MatImgproc::DrawLineWorker : public MatImgproc::DrawWorker {
+	DrawLineWorker(cv::Mat self) : DrawWorker(self) {
+	}
+
+	cv::Point2d pt1;
+	cv::Point2d pt2;
+
+	const char* execute() {
+		cv::line(self, pt1, pt2, color, thickness, lineType, shift);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Point2::Converter::arg(0, &pt1, info) ||
+			Point2::Converter::arg(1, &pt2, info)
+		);
+	}
+
+	int getDrawParamsIndex() {
+		return 2;
+	}
+};
+
 NAN_METHOD(MatImgproc::DrawLine) {
-	FF_METHOD_CONTEXT("Mat::DrawLine");
-
-	FF_ARG_INSTANCE(0, cv::Point2d pt1, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Point2d pt2, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
-	FF_ARG_INSTANCE(2, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
-	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
-	FF_GET_INT_IFDEF(optArgs, int shift, "shift", 0);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(3, lineType, lineType);
-		FF_ARG_INT_IFDEF(4, thickness, thickness);
-		FF_ARG_INT_IFDEF(5, shift, shift);
-	}
-
-	cv::line(FF_UNWRAP_MAT_AND_GET(info.This()), pt1, pt2, color, thickness, lineType, shift);
-	FF_RETURN(info.This());
+	DrawLineWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::DrawLine", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
-NAN_METHOD(MatImgproc::DrawCircle) {
-	FF_METHOD_CONTEXT("Mat::DrawCircle");
-
-	FF_ARG_INSTANCE(0, cv::Point2d center, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
-	FF_ARG_UINT(1, uint radius);
-	FF_ARG_INSTANCE(2, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
-	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
-	FF_GET_INT_IFDEF(optArgs, int shift, "shift", 0);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(3, lineType, lineType);
-		FF_ARG_INT_IFDEF(4, thickness, thickness);
-		FF_ARG_INT_IFDEF(5, shift, shift);
+struct MatImgproc::DrawArrowedLineWorker : public MatImgproc::DrawWorker {
+	DrawArrowedLineWorker(cv::Mat self) : DrawWorker(self) {
 	}
 
-	cv::circle(FF_UNWRAP_MAT_AND_GET(info.This()), center, (int)radius, color, thickness, lineType, shift);
-	FF_RETURN(info.This());
+	cv::Point2d pt1;
+	cv::Point2d pt2;
+	double tipLength = 0.1;
+
+	const char* execute() {
+		cv::line(self, pt1, pt2, color, thickness, lineType, shift);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Point2::Converter::arg(0, &pt1, info) ||
+			Point2::Converter::arg(1, &pt2, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DrawWorker::unwrapOptionalArgs(info) ||
+			DoubleConverter::optArg(6, &tipLength, info)
+		);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DrawWorker::unwrapOptionalArgsFromOpts(info) ||
+			DoubleConverter::optProp(&tipLength, "tipLength", info[getDrawParamsIndex()]->ToObject())
+		);
+	}
+
+	int getDrawParamsIndex() {
+		return 2;
+	}
+};
+
+NAN_METHOD(MatImgproc::DrawArrowedLine) {
+	DrawArrowedLineWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::DrawArrowedLine", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+struct MatImgproc::DrawRectangleWorker : public MatImgproc::DrawWorker {
+	DrawRectangleWorker(cv::Mat self) : DrawWorker(self) {
+	}
+
+	cv::Point2d pt1;
+	cv::Point2d pt2;
+	cv::Rect2d rect;
+
+	bool isArgRect = false;
+
+	const char* execute() {
+		if (isArgRect) {
+			cv::rectangle(self, rect, color, thickness, lineType, shift);
+		}
+		else {
+			cv::rectangle(self, pt1, pt2, color, thickness, lineType, shift);
+		}
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		isArgRect = Rect::Converter::hasInstance(info[0]);
+		return (
+			(
+				!isArgRect && (
+					Point2::Converter::arg(0, &pt1, info) ||
+					Point2::Converter::arg(1, &pt2, info)
+				)
+			) || (isArgRect && Rect::Converter::arg(0, &rect, info))
+
+		);
+	}
+
+	int getDrawParamsIndex() {
+		return isArgRect ? 1 : 2;
+	}
+};
 
 NAN_METHOD(MatImgproc::DrawRectangle) {
-	FF_METHOD_CONTEXT("Mat::DrawRectangle");
+	DrawRectangleWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::DrawRectangle", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
 
-	FF_ARG_INSTANCE(0, cv::Point2d pt1, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Point2d pt2, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
-	FF_ARG_INSTANCE(2, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
-	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
-	FF_GET_INT_IFDEF(optArgs, int shift, "shift", 0);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(3, lineType, lineType);
-		FF_ARG_INT_IFDEF(4, thickness, thickness);
-		FF_ARG_INT_IFDEF(5, shift, shift);
+struct MatImgproc::DrawCircleWorker : public MatImgproc::DrawWorker {
+	DrawCircleWorker(cv::Mat self) : DrawWorker(self) {
 	}
 
-	cv::rectangle(FF_UNWRAP_MAT_AND_GET(info.This()), pt1, pt2, color, thickness, lineType, shift);
-	FF_RETURN(info.This());
+	cv::Point2d center;
+	double radius;
+
+	const char* execute() {
+		cv::circle(self, center, radius, color, thickness, lineType, shift);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Point2::Converter::arg(0, &center, info) ||
+			DoubleConverter::arg(1, &radius, info)
+		);
+	}
+
+	int getDrawParamsIndex() {
+		return 2;
+	}
+};
+
+NAN_METHOD(MatImgproc::DrawCircle) {
+	DrawCircleWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::DrawCircle", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+struct MatImgproc::DrawEllipseWorker : public MatImgproc::DrawWorker {
+	DrawEllipseWorker(cv::Mat self) : DrawWorker(self) {
+	}
+
+	cv::RotatedRect box;
+
+	cv::Point2d center; 
+	cv::Size2d axes; 
+	double angle; 
+	double startAngle; 
+	double endAngle;
+
+	bool isArgBox = false;
+
+	const char* execute() {
+		if (isArgBox) {
+			cv::ellipse(self, box, color, thickness, lineType);
+		}
+		else {
+			cv::ellipse(self, center, axes, angle, startAngle, endAngle, color, thickness, lineType, shift);
+		}
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		isArgBox = RotatedRect::Converter::hasInstance(info[0]);
+		return (
+			(
+				!isArgBox && (
+					Point2::Converter::arg(0, &center, info) ||
+					Size::Converter::arg(1, &axes, info) ||
+					DoubleConverter::arg(2, &angle, info) ||
+					DoubleConverter::arg(3, &startAngle, info) ||
+					DoubleConverter::arg(4, &endAngle, info)
+				)
+			) || (isArgBox && RotatedRect::Converter::arg(0, &box, info))
+		);
+	}
+
+	int getDrawParamsIndex() {
+		return isArgBox ? 1 : 5;
+	}
+};
 
 NAN_METHOD(MatImgproc::DrawEllipse) {
-	FF_METHOD_CONTEXT("Mat::DrawEllipse");
+	DrawEllipseWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::DrawEllipse", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
 
-	FF_ARG_INSTANCE(0, cv::RotatedRect box, RotatedRect::constructor, FF_UNWRAP_ROTATEDRECT_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
-	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(2, lineType, lineType);
-		FF_ARG_INT_IFDEF(3, thickness, thickness);
+struct MatImgproc::DrawPolylinesWorker : public MatImgproc::DrawWorker {
+	DrawPolylinesWorker(cv::Mat self) : DrawWorker(self) {
 	}
 
-	cv::ellipse(FF_UNWRAP_MAT_AND_GET(info.This()), box, color, thickness, lineType);
-	FF_RETURN(info.This());
+	std::vector<std::vector<cv::Point2i>> pts;
+	bool isClosed;
+
+	const char* execute() {
+		cv::polylines(self, pts, isClosed, color, thickness, lineType, shift);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2i>::arg(0, &pts, info) ||
+			BoolConverter::arg(1, &isClosed, info)
+		);
+	}
+
+	int getDrawParamsIndex() {
+		return 2;
+	}
+};
+
+NAN_METHOD(MatImgproc::DrawPolylines) {
+	DrawPolylinesWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::DrawPolylines", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
+struct MatImgproc::DrawFillPolyWorker : public MatImgproc::DrawWorker {
+	DrawFillPolyWorker(cv::Mat self) : DrawWorker(self, false) {
+	}
+
+	std::vector<std::vector<cv::Point2i>> pts;
+	cv::Point2d offset = cv::Point2d();
+
+	const char* execute() {
+		cv::fillPoly(self, pts, color, lineType, shift, offset);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2i>::arg(0, &pts, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DrawWorker::unwrapOptionalArgs(info) ||
+			Point2::Converter::optArg(4, &offset, info)
+		);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DrawWorker::unwrapOptionalArgsFromOpts(info) ||
+			Point2::Converter::optProp(&offset, "offset", info[getDrawParamsIndex()]->ToObject())
+		);
+	}
+
+	int getDrawParamsIndex() {
+		return 1;
+	}
+};
+
+NAN_METHOD(MatImgproc::DrawFillPoly) {
+	DrawFillPolyWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::DrawFillPoly", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+struct MatImgproc::DrawFillConvexPolyWorker : public MatImgproc::DrawWorker {
+	DrawFillConvexPolyWorker(cv::Mat self) : DrawWorker(self, false) {
+	}
+
+	std::vector<cv::Point2i> pts;
+
+	const char* execute() {
+		cv::fillConvexPoly(self, pts, color, lineType, shift);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			ObjectArrayConverter<Point2, cv::Point2d, cv::Point2i>::arg(0, &pts, info)
+		);
+	}
+
+	int getDrawParamsIndex() {
+		return 1;
+	}
+};
+
+NAN_METHOD(MatImgproc::DrawFillConvexPoly) {
+	DrawFillConvexPolyWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::DrawFillConvexPoly", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+struct MatImgproc::PutTextWorker : public MatImgproc::DrawWorker {
+	PutTextWorker(cv::Mat self) : DrawWorker(self, false) {
+	}
+
+	std::string text;
+	cv::Point2d org;
+	int fontFace;
+	double fontScale;
+	bool bottomLeftOrigin = false;
+
+	const char* execute() {
+		cv::putText(self, text, org, fontFace, fontScale, color, lineType, shift, bottomLeftOrigin);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			StringConverter::arg(0, &text, info) ||
+			Point2::Converter::arg(1, &org, info) ||
+			IntConverter::arg(2, &fontFace, info) ||
+			DoubleConverter::arg(3, &fontScale, info)
+		);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DrawWorker::unwrapOptionalArgs(info) ||
+			BoolConverter::optArg(8, &bottomLeftOrigin, info)
+		);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			DrawWorker::unwrapOptionalArgsFromOpts(info) ||
+			BoolConverter::optProp(&bottomLeftOrigin, "bottomLeftOrigin", info[getDrawParamsIndex()]->ToObject())
+		);
+	}
+
+	int getDrawParamsIndex() {
+		return 4;
+	}
+};
 
 NAN_METHOD(MatImgproc::PutText) {
-	FF_METHOD_CONTEXT("Mat::PutText");
-
-	FF_ARG_STRING(0, std::string text);
-	FF_ARG_INSTANCE(1, cv::Point2d org, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
-	FF_ARG_UINT(2, uint fontFace);
-	FF_ARG_NUMBER(3, double fontScale);
-	FF_ARG_INSTANCE(4, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(5) && info[5]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[5]->ToObject() : FF_NEW_OBJ();
-	FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
-	FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
-	FF_GET_BOOL_IFDEF(optArgs, bool bottomLeftOrigin, "bottomLeftOrigin", false);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(5, lineType, lineType);
-		FF_ARG_INT_IFDEF(6, thickness, thickness);
-		FF_ARG_INT_IFDEF(7, bottomLeftOrigin, bottomLeftOrigin);
-	}
-
-	cv::putText(
-		FF_UNWRAP_MAT_AND_GET(info.This()),
-		text,
-		org,
-		(int)fontFace,
-		fontScale,
-		color,
-		thickness,
-		lineType,
-		bottomLeftOrigin
-	);
-	FF_RETURN(info.This());
+	PutTextWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::PutText", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
-
 
 struct MatImgproc::MatchTemplateWorker : SimpleWorker {
 public:

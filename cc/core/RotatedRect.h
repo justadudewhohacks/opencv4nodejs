@@ -35,6 +35,15 @@ public:
 	}
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::RotatedRect* getNativeObjectPtr() { return &rect; }
+	cv::RotatedRect getNativeObject() { return rect; }
+
+	typedef InstanceConverter<RotatedRect, cv::RotatedRect> Converter;
+
+	static const char* getClassName() {
+		return "RotatedRect";
+	}
 };
 
 #endif

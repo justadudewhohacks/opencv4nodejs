@@ -3,14 +3,14 @@ const cv = global.dut;
 const {
   generateAPITests,
   asyncFuncShouldRequireArgs,
-  funcShouldRequireArgs,
   _funcShouldRequireArgs,
   assertMetaData,
   assertDataDeepEquals,
   assertMatValueEquals,
   dangerousDeepEquals,
   expectToBeVec2,
-  isZeroMat
+  isZeroMat,
+  isUniformMat
 } = global.utils;
 const { expect } = require('chai');
 
@@ -263,233 +263,245 @@ module.exports = (getTestImg) => {
   });
 
   describe('drawing', () => {
-    const getImg = () => new cv.Mat(10, 10, cv.CV_8UC3, [0, 0, 0]);
-    const color = new cv.Vec(255, 255, 255);
-    const thickness = 2;
-    const lineType = cv.LINE_4;
+    const getDut = () => new cv.Mat(10, 10, cv.CV_8UC3, [128, 128, 128]);
+
+    const getDrawParams = () => ([
+      ['color', new cv.Vec(255, 255, 255)],
+      ['thickness', 2],
+      ['lineType', cv.LINE_4],
+      ['shift', 0]
+    ]);
+
+    const expectOutput = (_, dut) => {
+      assertMetaData(getDut())(dut);
+      expect(isUniformMat(dut, 128)).to.be.false;
+    };
 
     describe('drawLine', () => {
       const ptFrom = new cv.Point(0, 0);
       const ptTo = new cv.Point(9, 9);
 
-      funcShouldRequireArgs((() => new cv.Mat().drawLine.bind(new cv.Mat()))());
-
-      it('can be called if required args passed', () => {
-        expect(() => getImg().drawLine(
+      generateAPITests({
+        getDut,
+        methodName: 'drawLine',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
           ptFrom,
-          ptTo,
-          color
-        )).to.not.throw();
-      });
-
-      it('can be called with optional args', () => {
-        expect(() => getImg().drawLine(
-          ptFrom,
-          ptTo,
-          color,
-          lineType,
-          thickness
-        )).to.not.throw();
-      });
-
-      it('can be called with optional args object', () => {
-        expect(() => getImg().drawLine(
-          ptFrom,
-          ptTo,
-          color,
-          { thickness })).to.not.throw();
-      });
-
-      it('should draw something', () => {
-        const img = getImg();
-        const ret = img.drawLine(
-          ptFrom,
-          ptTo,
-          color
-        );
-        expect(ret).to.equal(img);
-        expect(isZeroMat(img)).to.be.false;
+          ptTo
+        ]),
+        getOptionalArgsMap: getDrawParams,
+        expectOutput,
+        hasAsync: false
       });
     });
 
-    describe('drawCircle', () => {
-      const center = new cv.Point(4, 4);
-      const radius = 2;
-      funcShouldRequireArgs((() => new cv.Mat().drawCircle.bind(new cv.Mat()))());
+    describe('drawArrowedLine', () => {
+      const ptFrom = new cv.Point(0, 0);
+      const ptTo = new cv.Point(9, 9);
+      const tipLength = 0.2;
 
-      it('can be called if required args passed', () => {
-        expect(() => getImg().drawCircle(
-          center,
-          radius,
-          color
-        )).to.not.throw();
-      });
+      const getOptionalArgsMap = () => {
+        const drawParams = getDrawParams();
+        drawParams.push(['tipLength', tipLength]);
+        return drawParams;
+      };
 
-      it('can be called with optional args', () => {
-        expect(() => getImg().drawCircle(
-          center,
-          radius,
-          color,
-          lineType,
-          thickness
-        )).to.not.throw();
-      });
-
-      it('can be called with optional args object', () => {
-        expect(() => getImg().drawCircle(
-          center,
-          radius,
-          color,
-          { thickness })).to.not.throw();
-      });
-
-      it('should draw something', () => {
-        const mat = getImg();
-        const ret = mat.drawCircle(
-          center,
-          radius,
-          color
-        );
-        expect(ret).to.equal(mat);
-        expect(isZeroMat(mat)).to.be.false;
+      generateAPITests({
+        getDut,
+        methodName: 'drawArrowedLine',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          ptFrom,
+          ptTo
+        ]),
+        getOptionalArgsMap,
+        expectOutput,
+        hasAsync: false
       });
     });
 
     describe('drawRectangle', () => {
       const upperLeft = new cv.Point(2, 2);
       const bottomRight = new cv.Point(8, 8);
-      funcShouldRequireArgs((() => new cv.Mat().drawRectangle.bind(new cv.Mat()))());
 
-      it('can be called if required args passed', () => {
-        expect(() => getImg().drawRectangle(
-          upperLeft,
-          bottomRight,
-          color
-        )).to.not.throw();
+      describe('with points', () => {
+        generateAPITests({
+          getDut,
+          methodName: 'drawRectangle',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            upperLeft,
+            bottomRight
+          ]),
+          getOptionalArgsMap: getDrawParams,
+          expectOutput,
+          hasAsync: false
+        });
       });
 
-      it('can be called with optional args', () => {
-        expect(() => getImg().drawRectangle(
-          upperLeft,
-          bottomRight,
-          color,
-          lineType,
-          thickness
-        )).to.not.throw();
+      describe('with rect', () => {
+        generateAPITests({
+          getDut,
+          methodName: 'drawRectangle',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            new cv.Rect(1, 1, 8, 8)
+          ]),
+          getOptionalArgsMap: getDrawParams,
+          expectOutput,
+          hasAsync: false
+        });
       });
+    });
 
-      it('can be called with optional args object', () => {
-        expect(() => getImg().drawRectangle(
-          upperLeft,
-          bottomRight,
-          color,
-          { thickness })).to.not.throw();
-      });
+    describe('drawCircle', () => {
+      const center = new cv.Point(4, 4);
+      const radius = 2;
 
-      it('should draw something', () => {
-        const mat = getImg();
-        const ret = mat.drawRectangle(
-          upperLeft,
-          bottomRight,
-          color
-        );
-        expect(ret).to.equal(mat);
-        expect(isZeroMat(mat)).to.be.false;
+      generateAPITests({
+        getDut,
+        methodName: 'drawCircle',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          center,
+          radius
+        ]),
+        getOptionalArgsMap: getDrawParams,
+        expectOutput,
+        hasAsync: false
       });
     });
 
     describe('drawEllipse', () => {
       const center = new cv.Point(4, 4);
-      const box = new cv.RotatedRect(center, new cv.Size(4, 4), Math.PI / 4);
+      const size = new cv.Size(4, 4);
+      const angle = Math.PI / 4;
 
-      funcShouldRequireArgs((() => new cv.Mat().drawEllipse.bind(new cv.Mat()))());
-
-      it('can be called if required args passed', () => {
-        expect(() => getImg().drawEllipse(
-          box,
-          color
-        )).to.not.throw();
+      describe('with rotated rect', () => {
+        const box = new cv.RotatedRect(center, size, angle);
+        generateAPITests({
+          getDut,
+          methodName: 'drawEllipse',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            box
+          ]),
+          getOptionalArgsMap: () => getDrawParams()
+            // no shift
+            .slice(0, 3),
+          expectOutput,
+          hasAsync: false
+        });
       });
 
-      it('can be called with optional args', () => {
-        expect(() => getImg().drawEllipse(
-          box,
-          color,
-          lineType,
-          thickness
-        )).to.not.throw();
+      describe('with center, axes and angles', () => {
+        const startAngle = 0;
+        const endAngle = 2 * angle;
+
+        generateAPITests({
+          getDut,
+          methodName: 'drawEllipse',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            center,
+            size,
+            angle,
+            startAngle,
+            endAngle
+          ]),
+          getOptionalArgsMap: getDrawParams,
+          expectOutput,
+          hasAsync: false
+        });
       });
 
-      it('can be called with optional args object', () => {
-        expect(() => getImg().drawEllipse(
-          box,
-          color,
-          { thickness })).to.not.throw();
+      describe('drawPolylines', () => {
+        const pts = [
+          [new cv.Point(4, 4), new cv.Point(4, 8), new cv.Point(8, 8)],
+          [new cv.Point(2, 2), new cv.Point(2, 6), new cv.Point(6, 6)]
+        ];
+        const isClosed = false;
+
+        generateAPITests({
+          getDut,
+          methodName: 'drawPolylines',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            pts,
+            isClosed
+          ]),
+          getOptionalArgsMap: getDrawParams,
+          expectOutput,
+          hasAsync: false
+        });
       });
 
-      it('should draw something', () => {
-        const mat = getImg();
-        const ret = mat.drawEllipse(
-          box,
-          color
-        );
-        expect(ret).to.equal(mat);
-        expect(isZeroMat(mat)).to.be.false;
-      });
-    });
+      describe('drawFillPoly', () => {
+        const pts = [
+          [new cv.Point(4, 4), new cv.Point(4, 8), new cv.Point(8, 8)],
+          [new cv.Point(2, 2), new cv.Point(2, 6), new cv.Point(6, 6)]
+        ];
 
-    describe('putText', () => {
-      const text = 'a';
-      const origin = new cv.Point(0, 20);
-      const fontFace = cv.FONT_ITALIC;
-      const fontScale = 1.2;
-
-      funcShouldRequireArgs((() => new cv.Mat().putText.bind(new cv.Mat()))());
-
-      it('can be called if required args passed', () => {
-        expect(() => getImg().putText(
-          text,
-          origin,
-          fontFace,
-          fontScale,
-          color
-        )).to.not.throw();
+        generateAPITests({
+          getDut,
+          methodName: 'drawFillPoly',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            pts
+          ]),
+          getOptionalArgsMap: () => ([
+            ['color', new cv.Vec(255, 255, 255)],
+            ['lineType', cv.LINE_4],
+            ['shift', 0],
+            ['offset', new cv.Point(0, 0)]
+          ]),
+          expectOutput,
+          hasAsync: false
+        });
       });
 
-      it('can be called with optional args', () => {
-        expect(() => getImg().putText(
-          text,
-          origin,
-          fontFace,
-          fontScale,
-          color,
-          lineType,
-          thickness
-        )).to.not.throw();
+      describe('drawFillConvexPoly', () => {
+        const pts = [new cv.Point(4, 4), new cv.Point(4, 8), new cv.Point(8, 8)];
+
+        generateAPITests({
+          getDut,
+          methodName: 'drawFillConvexPoly',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            pts
+          ]),
+          getOptionalArgsMap: getDrawParams,
+          expectOutput,
+          hasAsync: false
+        });
       });
 
-      it('can be called with optional args object', () => {
-        expect(() => getImg().putText(
-          text,
-          origin,
-          fontFace,
-          fontScale,
-          color,
-          { thickness }
-        )).to.not.throw();
-      });
+      describe('putText', () => {
+        const text = 'a';
+        const origin = new cv.Point(0, 20);
+        const fontFace = cv.FONT_ITALIC;
+        const fontScale = 1.2;
 
-      it('should draw something', () => {
-        const mat = new cv.Mat(20, 20, cv.CV_8UC3, [0, 0, 0]);
-        const ret = mat.putText(
-          text,
-          origin,
-          fontFace,
-          fontScale,
-          color
-        );
-        expect(ret).to.equal(mat);
-        expect(isZeroMat(mat)).to.be.false;
+        const getOptionalArgsMap = () => {
+          const drawParams = getDrawParams();
+          drawParams.push(['bottomLeftOrigin', false]);
+          return drawParams;
+        };
+
+        generateAPITests({
+          getDut,
+          methodName: 'putText',
+          methodNameSpace: 'Mat',
+          getRequiredArgs: () => ([
+            text,
+            origin,
+            fontFace,
+            fontScale
+          ]),
+          getOptionalArgsMap,
+          expectOutput,
+          hasAsync: false
+        });
       });
     });
   });
