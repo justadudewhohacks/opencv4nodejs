@@ -252,6 +252,17 @@ cv.imwriteAsync('./path/img.jpg', mat,(err) => {
 cv.imshow('a window name', mat);
 cv.waitKey();
 
+// load base64 encoded image
+const base64text='data:image/gif;base64,R0lGO..';//Base64 encoded string
+const base64data =base64text.replace('data:image/jpeg;base64','')
+                            .replace('data:image/png;base64','');//Strip image type prefix
+const buffer = Buffer.from(base64data,'base64');
+const image = cv.imdecode(buffer); //Image is now represented as Mat
+
+// convert Mat to base4 encoded jpg image
+const outBase64 =  cv.imencode('.jpg', croppedImage).toString('base64'); // Perform base64 encoding
+const htmlImg='<img src='data:image/jpeg;base64,"+outBase64 + "'>'; //Create insert into HTML compatible <img> tag
+
 // open capture from webcam
 const devicePort = 0;
 const wCap = new cv.VideoCapture(devicePort);
