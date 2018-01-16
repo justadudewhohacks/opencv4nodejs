@@ -67,12 +67,16 @@ exports.MatValuesComparator = (mat0, mat1) => (cmpFunc) => {
   }
 };
 
-exports.isZeroMat = (mat) => {
+const isUniformMat = (mat, matVal) => {
   if (mat.channels === 1) {
-    return mat.getDataAsArray().every(r => r.every(val => val === 0));
+    return mat.getDataAsArray().every(r => r.every(val => val === matVal));
   }
-  return mat.getDataAsArray().every(r => r.every(vec => vec.every(val => val === 0)));
+  return mat.getDataAsArray().every(r => r.every(vec => vec.every(val => val === matVal)));
 };
+
+exports.isUniformMat = isUniformMat;
+
+exports.isZeroMat = mat => isUniformMat(mat, 0);
 
 exports.assertMetaData = mat => (arg0, cols, type) => {
   let propsWithValues = {

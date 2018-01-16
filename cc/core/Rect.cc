@@ -213,7 +213,6 @@ NAN_METHOD(Rect::Rescale) {
 	RescaleWorker worker(Rect::Converter::unwrap(info.This()));
 	FF_WORKER_SYNC("Rect::Rescale", worker);
 	info.GetReturnValue().Set(worker.getReturnValue());
-
 }
 
 NAN_METHOD(Rect::RescaleAsync) {
