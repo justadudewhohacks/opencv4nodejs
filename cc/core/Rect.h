@@ -27,6 +27,10 @@ public:
 	static NAN_METHOD(ToSquare);
 	static NAN_METHOD(ToSquareAsync);
 
+	struct PadWorker;
+	static NAN_METHOD(Pad);
+	static NAN_METHOD(PadAsync);
+
 	struct RescaleWorker;
 	static NAN_METHOD(Rescale);
 	static NAN_METHOD(RescaleAsync);

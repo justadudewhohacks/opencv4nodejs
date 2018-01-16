@@ -95,10 +95,59 @@ describe('Rect', () => {
     });
   });
 
+  describe('pad', () => {
+    describe('by factor', () => {
+      describe('pad down', () => {
+        generateAPITests({
+          getDut: () => new cv.Rect(0, 0, 100, 100),
+          methodName: 'pad',
+          methodNameSpace: 'Rect',
+          getRequiredArgs: () => [0.5],
+          expectOutput: (res) => {
+            expect(res.x).to.equal(25);
+            expect(res.y).to.equal(25);
+            expect(res.width).to.equal(50);
+            expect(res.height).to.equal(50);
+          }
+        });
+      });
+
+      describe('pad up', () => {
+        generateAPITests({
+          getDut: () => new cv.Rect(0, 0, 100, 100),
+          methodName: 'pad',
+          methodNameSpace: 'Rect',
+          getRequiredArgs: () => [2],
+          expectOutput: (res) => {
+            expect(res.x).to.equal(-50);
+            expect(res.y).to.equal(-50);
+            expect(res.width).to.equal(200);
+            expect(res.height).to.equal(200);
+          }
+        });
+      });
+    });
+
+    describe('by Size', () => {
+      generateAPITests({
+        getDut: () => new cv.Rect(0, 0, 100, 100),
+        methodName: 'pad',
+        methodNameSpace: 'Rect',
+        getRequiredArgs: () => [new cv.Size(50, 200)],
+        expectOutput: (res) => {
+          expect(res.x).to.equal(25);
+          expect(res.y).to.equal(-50);
+          expect(res.width).to.equal(50);
+          expect(res.height).to.equal(200);
+        }
+      });
+    });
+  });
+
   describe('rescale', () => {
     describe('scale down', () => {
       generateAPITests({
-        getDut: () => new cv.Rect(0, 0, 100, 100),
+        getDut: () => new cv.Rect(50, 50, 100, 100),
         methodName: 'rescale',
         methodNameSpace: 'Rect',
         getRequiredArgs: () => [0.5],
@@ -113,13 +162,13 @@ describe('Rect', () => {
 
     describe('scale up', () => {
       generateAPITests({
-        getDut: () => new cv.Rect(0, 0, 100, 100),
+        getDut: () => new cv.Rect(50, 50, 100, 100),
         methodName: 'rescale',
         methodNameSpace: 'Rect',
         getRequiredArgs: () => [2],
         expectOutput: (res) => {
-          expect(res.x).to.equal(-50);
-          expect(res.y).to.equal(-50);
+          expect(res.x).to.equal(100);
+          expect(res.y).to.equal(100);
           expect(res.width).to.equal(200);
           expect(res.height).to.equal(200);
         }
