@@ -1279,7 +1279,8 @@ public:
 	}
 
 	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return FF_ARG_IS_OBJECT(getDrawParamsIndex());
+		return FF_ARG_IS_OBJECT(getDrawParamsIndex())
+			&& !Vec3::Converter::hasInstance(info[getDrawParamsIndex()]);
 	}
 
 	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1448,10 +1449,10 @@ struct MatImgproc::DrawEllipseWorker : public MatImgproc::DrawWorker {
 
 	cv::RotatedRect box;
 
-	cv::Point2d center; 
-	cv::Size2d axes; 
-	double angle; 
-	double startAngle; 
+	cv::Point2d center;
+	cv::Size2d axes;
+	double angle;
+	double startAngle;
 	double endAngle;
 
 	bool isArgBox = false;
@@ -1594,7 +1595,7 @@ NAN_METHOD(MatImgproc::DrawFillConvexPoly) {
 }
 
 struct MatImgproc::PutTextWorker : public MatImgproc::DrawWorker {
-	PutTextWorker(cv::Mat self) : DrawWorker(self, false) {
+	PutTextWorker(cv::Mat self) : DrawWorker(self) {
 	}
 
 	std::string text;
@@ -1604,7 +1605,7 @@ struct MatImgproc::PutTextWorker : public MatImgproc::DrawWorker {
 	bool bottomLeftOrigin = false;
 
 	const char* execute() {
-		cv::putText(self, text, org, fontFace, fontScale, color, lineType, shift, bottomLeftOrigin);
+		cv::putText(self, text, org, fontFace, fontScale, color, thickness, lineType, bottomLeftOrigin);
 		return "";
 	}
 

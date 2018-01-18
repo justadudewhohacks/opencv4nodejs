@@ -57,11 +57,10 @@ exports.drawRectAroundBlobs = (binaryImg, dstImg, minPxSize, fixedRectWidth) => 
 
 const drawRect = (image, rect, color, opts = { thickness: 2 }) =>
   image.drawRectangle(
-    new cv.Point(rect.x, rect.y),
-    new cv.Point(rect.x + rect.width, rect.y + rect.height),
+    rect,
     color,
-    cv.LINE_8,
-    opts.thickness
+    opts.thickness,
+    cv.LINE_8
   );
 
 exports.drawRect = drawRect;

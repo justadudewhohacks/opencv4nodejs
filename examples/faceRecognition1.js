@@ -59,8 +59,10 @@ faces.forEach((faceRect) => {
   twoFacesImg.drawRectangle(
     upperLeftLarge,
     bottomRight,
-    new cv.Vec(255, 0, 0),
-    { thickness }
+    {
+      color: new cv.Vec(255, 0, 0),
+      thickness
+    }
   );
 
   // label the rectangle with prediction result
@@ -69,8 +71,10 @@ faces.forEach((faceRect) => {
     upperLeftLarge.add(new cv.Point(0, 140)),
     cv.FONT_ITALIC,
     1.2,
-    new cv.Vec(0, 0, 255),
-    { thickness }
+    {
+      color: new cv.Vec(0, 0, 255),
+      thickness
+    }
   );
 });
 

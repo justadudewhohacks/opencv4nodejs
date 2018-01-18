@@ -15,16 +15,15 @@ const findWaldo = async () => {
 
   // Draw bounding rectangle
   originalMat.drawRectangle(
-    new cv.Point(x, y),
-    new cv.Point(x + waldoMat.cols, y + waldoMat.rows),
+    new cv.Rect(x, y, waldoMat.cols, waldoMat.rows),
     new cv.Vec(0, 255, 0),
-    cv.LINE_8,
-    2
+    2,
+    cv.LINE_8
   );
 
   // Open result in new window
   cv.imshow('We\'ve found Waldo!', originalMat);
-  cv.waitKey(7000);
+  cv.waitKey();
 };
 
 // noinspection JSIgnoredPromiseFromCall

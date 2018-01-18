@@ -147,24 +147,20 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
     resizedImg.drawLine(
       v.pt,
       v.d1,
-      green,
-      { thickness: 2 }
+      { color: green, thickness: 2 }
     );
     resizedImg.drawLine(
       v.pt,
       v.d2,
-      green,
-      { thickness: 2 }
+      { color: green, thickness: 2 }
     );
     resizedImg.drawEllipse(
       new cv.RotatedRect(v.pt, new cv.Size(20, 20), 0),
-      red,
-      { thickness: 2 }
+      { color: red, thickness: 2 }
     );
     result.drawEllipse(
       new cv.RotatedRect(v.pt, new cv.Size(20, 20), 0),
-      red,
-      { thickness: 2 }
+      { color: red, thickness: 2 }
     );
   });
 
@@ -173,8 +169,7 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
   result.drawRectangle(
     new cv.Point(10, 10),
     new cv.Point(70, 70),
-    green,
-    { thickness: 2 }
+    { color: green, thickness: 2 }
   );
 
   const fontScale = 2;
@@ -183,8 +178,7 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
     new cv.Point(20, 60),
     cv.FONT_ITALIC,
     fontScale,
-    green,
-    { thickness: 2 }
+    { color: green, thickness: 2 }
   );
 
   const { rows, cols } = result;
