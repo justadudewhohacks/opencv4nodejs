@@ -14,6 +14,7 @@ opencv4nodejs
  * **[How to install](#how-to-install)**
  * **[Usage with Docker](#usage-with-docker)**
  * **[Usage with Electron](#usage-with-electron)**
+ * **[Usage with NW.js](#usage-with-nwjs)**
  * **[Quick Start](#quick-start)**
  * **[Async API](#async-api)**
  * **[Available Modules](#available-modules)**
@@ -135,6 +136,18 @@ Require it in the application:
 ``` javascript
 const electron = require('electron');
 const cv = electron.remote.require('opencv4nodejs');
+```
+
+<a name="usage-with-nwjs"></a>
+
+## Usage with NW.js
+
+Any native modules, including opencv4nodejs, must be recompiled to be used with [NW.js](https://nwjs.io/). Instructions on how to do this are available in the **[Use Native Modules] (http://docs.nwjs.io/en/latest/For%20Users/Advanced/Use%20Native%20Node%20Modules/)** section of the the NW.js documentation. 
+
+Once recompiled, the module can be installed and required as usual:
+
+``` javascript
+const cv = require('opencv4nodejs');
 ```
 
 <a name="quick-start"></a>
