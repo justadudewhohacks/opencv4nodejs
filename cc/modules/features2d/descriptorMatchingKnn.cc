@@ -113,10 +113,10 @@ void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, int matcher
 
 	FF_ARG_INSTANCE(0, cv::Mat descFrom, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 	FF_ARG_INSTANCE(1, cv::Mat descTo, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INT(2, int n);
+	FF_ARG_INT(2, int k);
 
 	std::vector<std::vector<cv::DMatch>> dmatches;
-	cv::DescriptorMatcher::create(matcherType)->knnMatch(descFrom, descTo, dmatches, n);
+	cv::DescriptorMatcher::create(matcherType)->knnMatch(descFrom, descTo, dmatches, k);
 
 	FF_ARR jsMatches = FF_NEW_ARRAY(dmatches.size());
 	uint i = 0;
@@ -144,7 +144,7 @@ void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, int ma
 	ctx.matcher = cv::DescriptorMatcher::create(matcherType);
 	FF_ARG_INSTANCE(0, ctx.descFrom, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 	FF_ARG_INSTANCE(1, ctx.descTo, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INT(2, ctx.n);
+	FF_ARG_INT(2, ctx.k);
 	FF_ARG_FUNC(3, v8::Local<v8::Function> cbFunc);
 
 	Nan::AsyncQueueWorker(new GenericAsyncWorker<MatchContext>(

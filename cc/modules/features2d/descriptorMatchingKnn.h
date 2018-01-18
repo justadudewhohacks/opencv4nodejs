@@ -37,11 +37,11 @@ public:
 		cv::Ptr<cv::DescriptorMatcher> matcher;
 		cv::Mat descFrom;
 		cv::Mat descTo;
-		int n;
+		int k;
 		std::vector<std::vector<cv::DMatch>> dmatches;
 
 		const char* execute() {
-			matcher->knnMatch(descFrom, descTo, dmatches, n);
+			matcher->knnMatch(descFrom, descTo, dmatches, k);
 			return "";
 		}
 
