@@ -83,6 +83,7 @@
 			"cc/modules/features2d/DescriptorMatch.cc",
 			"cc/modules/features2d/FeatureDetector.cc",
 			"cc/modules/features2d/descriptorMatching.cc",
+			"cc/modules/features2d/descriptorMatchingKnn.cc",
 			"cc/modules/features2d/detectors/AGASTDetector.cc",
 			"cc/modules/features2d/detectors/AKAZEDetector.cc",
 			"cc/modules/features2d/detectors/BRISKDetector.cc",

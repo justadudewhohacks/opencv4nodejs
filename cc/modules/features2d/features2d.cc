@@ -3,6 +3,7 @@
 #include "KeyPointMatch.h"
 #include "DescriptorMatch.h"
 #include "descriptorMatching.h"
+#include "descriptorMatchingKnn.h"
 #include "detectors/AGASTDetector.h"
 #include "detectors/AKAZEDetector.h"
 #include "detectors/BRISKDetector.h"
@@ -18,6 +19,7 @@ NAN_MODULE_INIT(Features2d::Init) {
 	KeyPointMatch::Init(target);
 	DescriptorMatch::Init(target);
 	DescriptorMatching::Init(target);
+	DescriptorMatchingKnn::Init(target);
 	AGASTDetector::Init(target);
 	AKAZEDetector::Init(target);
 	BRISKDetector::Init(target);
