@@ -273,8 +273,12 @@ public:
 		return "";
 	}
 
+	static void freeBufferCallback(char* data, void* hint) {
+		free(data);
+	}
+
 	FF_VAL getReturnValue() {
-		return Nan::NewBuffer(data, size).ToLocalChecked();
+		return Nan::NewBuffer(data, size, freeBufferCallback, 0).ToLocalChecked();
 	}
 };
 
