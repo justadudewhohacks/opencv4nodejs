@@ -134,15 +134,14 @@ $ npm run electron-rebuild
 
 Require it in the application:
 ``` javascript
-const electron = require('electron');
-const cv = electron.remote.require('opencv4nodejs');
+const cv = require('opencv4nodejs');
 ```
 
 <a name="usage-with-nwjs"></a>
 
 ## Usage with NW.js
 
-Any native modules, including opencv4nodejs, must be recompiled to be used with [NW.js](https://nwjs.io/). Instructions on how to do this are available in the **[Use Native Modules] (http://docs.nwjs.io/en/latest/For%20Users/Advanced/Use%20Native%20Node%20Modules/)** section of the the NW.js documentation. 
+Any native modules, including opencv4nodejs, must be recompiled to be used with [NW.js](https://nwjs.io/). Instructions on how to do this are available in the **[Use Native Modules] (http://docs.nwjs.io/en/latest/For%20Users/Advanced/Use%20Native%20Node%20Modules/)** section of the the NW.js documentation.
 
 Once recompiled, the module can be installed and required as usual:
 
