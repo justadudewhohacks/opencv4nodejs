@@ -8,19 +8,19 @@ exports.extractResults = function (outputBlob, imgDimensions) {
     .map((res, i) => {
       const classLabel = outputBlob.at(i, 1);
       const confidence = outputBlob.at(i, 2);
-      const topLeft = new cv.Point(
+      const bottomLeft = new cv.Point(
         outputBlob.at(i, 3) * imgDimensions.cols,
         outputBlob.at(i, 6) * imgDimensions.rows
       );
-      const bottomRight = new cv.Point(
+      const topRight = new cv.Point(
         outputBlob.at(i, 5) * imgDimensions.cols,
         outputBlob.at(i, 4) * imgDimensions.rows
       );
       const rect = new cv.Rect(
-        topLeft.x,
-        topLeft.y,
-        bottomRight.x - topLeft.x,
-        bottomRight.y - topLeft.y
+        bottomLeft.x,
+        topRight.y,
+        topRight.x - bottomLeft.x,
+        bottomLeft.y - topRight.y
       );
 
       return ({

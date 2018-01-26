@@ -22,7 +22,7 @@ opencv4nodejs
 
 <a name="examples"></a>
 
-## Examples
+# Examples
 
 See <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/examples"><b>examples</b></a> for implementation.
 
@@ -31,19 +31,25 @@ See <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/exam
 ![face0](https://user-images.githubusercontent.com/31125521/29702727-c796acc4-8972-11e7-8043-117dd2761833.jpg)
 ![face1](https://user-images.githubusercontent.com/31125521/29702730-c79d3904-8972-11e7-8ccb-e8c467244ad8.jpg)
 
-### Face Recognition
+### Face Recognition with the OpenCV face module
 
-Check out my <a href="https://medium.com/@muehler.v/node-js-opencv-for-face-recognition-37fa7cb860e8"><b>article</b></a> about face recognition.
+Check out <a href="https://medium.com/@muehler.v/node-js-opencv-for-face-recognition-37fa7cb860e8"><b>Node.js + OpenCV for Face Recognition</b></a>.
 
-![facerec](https://user-images.githubusercontent.com/31125521/32416405-d71ad684-c248-11e7-9a6f-016d0edf2c15.jpg)
+![facerec](https://user-images.githubusercontent.com/31125521/35453007-eac9d516-02c8-11e8-9c4d-a77c01ae1f77.jpg)
+
+### Face Recognition with <a href="https://github.com/justadudewhohacks/face-recognition.js"><b>face-recognition.js</b></a>
+
+Check out <a href="https://medium.com/@muehler.v/node-js-face-recognition-js-simple-and-robust-face-recognition-using-deep-learning-ea5ba8e852"><b>Node.js + face-recognition.js : Simple and Robust Face Recognition using Deep Learning</b></a>.
+
+[![IMAGE ALT TEXT](https://user-images.githubusercontent.com/31125521/35453884-055f3bde-02cc-11e8-8fa6-945f320652c3.jpg)](https://www.youtube.com/watch?v=ArcFHpX-usQ "Nodejs Face Recognition using face-recognition.js and opencv4nodejs")
 
 ### Hand Gesture Recognition
-Check out my <a href="https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0"><b>article</b></a> about fingertip detection.
+Check out <a href="https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0"><b>Simple Hand Gesture Recognition using OpenCV and JavaScript</b></a>.
 
 ![gesture-rec_sm](https://user-images.githubusercontent.com/31125521/30052864-41bd5680-9227-11e7-8a62-6205f3d99d5c.gif)
 
 ### Object Recognition with Deep Neural Networks
-Check out my <a href="https://medium.com/@muehler.v/node-js-meets-opencvs-deep-neural-networks-fun-with-tensorflow-and-caffe-ff8d52a0f072"><b>article</b></a> about using OpenCV's Deep Neural Networks with Node.js.
+Check out <a href="https://medium.com/@muehler.v/node-js-meets-opencvs-deep-neural-networks-fun-with-tensorflow-and-caffe-ff8d52a0f072"><b>Node.js meets OpenCV’s Deep Neural Networks — Fun with Tensorflow and Caffe</b></a>.
 
 #### Tensorflow Inception
 
@@ -58,7 +64,7 @@ Check out my <a href="https://medium.com/@muehler.v/node-js-meets-opencvs-deep-n
 ![car-detection](https://user-images.githubusercontent.com/31125521/32703229-eb081e36-c7f2-11e7-8b26-4d253b4702b4.jpg)
 
 ### Machine Learning
-Check out my <a href="https://medium.com/@muehler.v/machine-learning-with-opencv-and-javascript-part-1-recognizing-handwritten-letters-using-hog-and-88719b70efaa"><b>article</b></a> about recognition of handwritten letters using Histogram of oriented Gradients (HOG) and Support Vector Machines (SVM).
+Check out <a href="https://medium.com/@muehler.v/machine-learning-with-opencv-and-javascript-part-1-recognizing-handwritten-letters-using-hog-and-88719b70efaa"><b>Machine Learning with OpenCV and JavaScript: Recognizing Handwritten Letters using HOG and SVM</b></a>.
 
 ![resulttable](https://user-images.githubusercontent.com/31125521/30635645-5a466ea8-9df3-11e7-8498-527e1293c4fa.png)
 
@@ -78,7 +84,7 @@ Check out my <a href="https://medium.com/@muehler.v/machine-learning-with-opencv
 
 <a name="how-to-install"></a>
 
-## How to install
+# How to install
 
 ``` bash
 $ npm install --save opencv4nodejs
@@ -151,7 +157,7 @@ const cv = require('opencv4nodejs');
 
 <a name="quick-start"></a>
 
-## Quick Start
+# Quick Start
 
 ``` javascript
 const cv = require('opencv4nodejs');
@@ -381,7 +387,7 @@ const dst2 = src.gaussianBlur(new cv.Size(5, 5), 1.2, optionalArgs);
 
 <a name="async-api"></a>
 
-## Async API
+# Async API
 
 The async API can be consumed by passing a callback as the last argument of the function call. By default, if an async method is called without passing a callback, the function call will yield a Promise.
 
@@ -428,7 +434,7 @@ try {
 
 <a name="available-modules"></a>
 
-## Available Modules
+# Available Modules
 
 ### <a href="https://opencv4nodejs.herokuapp.com/docs"><b>API doc overview</b></a>
 

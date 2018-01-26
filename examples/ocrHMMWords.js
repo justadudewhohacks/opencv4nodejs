@@ -2,7 +2,7 @@ const cv = require('../');
 const path = require('path');
 
 if (!cv.xmodules.text) {
-  return console.log('exiting: opencv4nodejs compiled without text module');
+  throw new Error('exiting: opencv4nodejs compiled without text module');
 }
 
 const dataPath = path.resolve('../data/text-data/');
@@ -26,7 +26,7 @@ const wordImages = ['scenetext_word01.jpg', 'scenetext_word02.jpg']
   .map(cv.imread);
 
 wordImages.forEach((img) => {
-  const grayImg = img.bgrToGray();
+  const grayImg = img.type === cv.CV_8U ? img : img.bgrToGray();
   const mask = grayImg.threshold(100, 255, cv.THRESH_BINARY_INV);
 
   const ret = hmmDecoder.runWithInfo(grayImg, mask);

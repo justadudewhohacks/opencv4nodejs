@@ -3,7 +3,7 @@ const path = require('path');
 const cv = require('../');
 
 if (!cv.xmodules.face) {
-  return console.log('exiting: opencv4nodejs compiled without face module');
+  throw new Error('exiting: opencv4nodejs compiled without face module');
 }
 
 const basePath = '../data/face-recognition';

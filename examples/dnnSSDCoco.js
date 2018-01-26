@@ -5,22 +5,22 @@ const {
 const fs = require('fs');
 const path = require('path');
 const classNames = require('./dnnCocoClassNames');
-const { extractResults } = require('./dnn/ssdUtils')
+const { extractResults } = require('./dnn/ssdUtils');
 
 if (!cv.xmodules.dnn) {
-  return console.log('exiting: opencv4nodejs compiled without dnn module');
+  throw new Error('exiting: opencv4nodejs compiled without dnn module');
 }
 
 // replace with path where you unzipped inception model
-const ssdcocoModelPath = '../data/dnn/coco-SSD_300x300'
+const ssdcocoModelPath = '../data/dnn/coco-SSD_300x300';
 
 const prototxt = path.resolve(ssdcocoModelPath, 'deploy.prototxt');
 const modelFile = path.resolve(ssdcocoModelPath, 'VGG_coco_SSD_300x300_iter_400000.caffemodel');
 
 if (!fs.existsSync(prototxt) || !fs.existsSync(modelFile)) {
-  console.log('exiting: could not find ssdcoco model');
+  console.log('could not find ssdcoco model');
   console.log('download the model from: https://drive.google.com/file/d/0BzKzrI_SkD1_dUY1Ml9GRTFpUWc/view');
-  return;
+  throw new Error('exiting: could not find ssdcoco model');
 }
 
 // initialize ssdcoco model from prototxt and modelFile
@@ -42,7 +42,7 @@ function classifyImg(img) {
 
   return extractResults(outputBlob, img)
     .map(r => Object.assign({}, r, { className: classNames[r.classLabel] }));
-};
+}
 
 const makeDrawClassDetections = predictions => (drawImg, className, getColor, thickness = 2) => {
   predictions
@@ -66,27 +66,21 @@ const runDetectDishesExample = () => {
     cup: new cv.Vec(0, 255, 255)
   };
 
-  const legendLeftTop = new cv.Point(550, 20);
-  Object.keys(classColors).forEach((className, i) => {
+  const legendLeftTop = new cv.Point(580, 20);
+  const alpha = 0.4;
+  cv.drawTextBox(
+    img,
+    legendLeftTop,
+    Object.keys(classColors).map(className => ({
+      text: className,
+      fontSize: 0.8,
+      color: classColors[className]
+    })),
+    alpha
+  );
+
+  Object.keys(classColors).forEach((className) => {
     const color = classColors[className];
-
-    // const draw legend
-    const offY = i * 30;
-    img.drawCircle(
-      legendLeftTop.add(new cv.Point(0, offY)),
-      3,
-      color,
-      { thickness: 4 }
-    );
-    img.putText(
-      className,
-      legendLeftTop.add(new cv.Point(20, offY + 8)),
-      cv.FONT_ITALIC,
-      0.8,
-      color,
-      { thickness: 2 }
-    );
-
     // draw detections
     drawClassDetections(img, className, () => color);
   });

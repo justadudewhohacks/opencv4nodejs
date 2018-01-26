@@ -3,7 +3,7 @@ const path = require('path');
 const cv = require('../');
 
 if (!cv.xmodules.face) {
-  return console.log('exiting: opencv4nodejs compiled without face module');
+  throw new Error('exiting: opencv4nodejs compiled without face module');
 }
 
 const basePath = '../data/face-recognition';
@@ -47,34 +47,18 @@ faces.forEach((faceRect) => {
   const faceImg = twoFacesImg.getRegion(faceRect).bgrToGray();
   const who = nameMappings[lbph.predict(faceImg).label];
 
-  const upperLeft = new cv.Point(faceRect.x, faceRect.y);
-  const size = new cv.Point(faceRect.width, faceRect.height);
-
-  // make rectangle a bit larger
-  const off = size.div(2);
-  const upperLeftLarge = upperLeft.sub(off);
-  const bottomRight = upperLeft.add(size).add(off);
-  const thickness = 2;
-  // draw rectangle
-  twoFacesImg.drawRectangle(
-    upperLeftLarge,
-    bottomRight,
-    {
-      color: new cv.Vec(255, 0, 0),
-      thickness
-    }
+  const rect = cv.drawDetection(
+    twoFacesImg,
+    faceRect,
+    { color: new cv.Vec(255, 0, 0), segmentFraction: 4 }
   );
 
-  // label the rectangle with prediction result
-  twoFacesImg.putText(
-    who.substr(0, 1).toUpperCase() + who.substr(1),
-    upperLeftLarge.add(new cv.Point(0, 140)),
-    cv.FONT_ITALIC,
-    1.2,
-    {
-      color: new cv.Vec(0, 0, 255),
-      thickness
-    }
+  const alpha = 0.4;
+  cv.drawTextBox(
+    twoFacesImg,
+    new cv.Point(rect.x, rect.y + rect.height + 10),
+    [{ text: who }],
+    alpha
   );
 });
 

@@ -11,7 +11,7 @@ exports.getDataFilePath = fileName => path.resolve(dataPath, fileName);
 exports.grabFrames = (videoFile, delay, onFrame) => {
   const cap = new cv.VideoCapture(videoFile);
   let done = false;
-  var intvl = setInterval(() => {
+  const intvl = setInterval(() => {
     let frame = cap.read();
     // loop back to start on end of stream reached
     if (frame.empty) {
@@ -26,7 +26,7 @@ exports.grabFrames = (videoFile, delay, onFrame) => {
       clearInterval(intvl);
       console.log('Key pressed, exiting.');
     }
-  }, delay);
+  }, 0);
 };
 
 exports.drawRectAroundBlobs = (binaryImg, dstImg, minPxSize, fixedRectWidth) => {
@@ -48,8 +48,7 @@ exports.drawRectAroundBlobs = (binaryImg, dstImg, minPxSize, fixedRectWidth) => 
       dstImg.drawRectangle(
         new cv.Point(x1, y1),
         new cv.Point(x2, y2),
-        blue,
-        { thickness: 2 }
+        { color: blue, thickness: 2 }
       );
     }
   }

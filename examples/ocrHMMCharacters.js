@@ -2,7 +2,7 @@ const cv = require('../');
 const path = require('path');
 
 if (!cv.xmodules.text) {
-  return console.log('exiting: opencv4nodejs compiled without text module');
+  throw new Error('exiting: opencv4nodejs compiled without text module');
 }
 
 const dataPath = path.resolve('../data/text-data/');

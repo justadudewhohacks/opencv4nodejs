@@ -3,22 +3,22 @@ const fs = require('fs');
 const path = require('path');
 
 if (!cv.xmodules.dnn) {
-  return console.log('exiting: opencv4nodejs compiled without dnn module');
+  throw new Error('exiting: opencv4nodejs compiled without dnn module');
 }
 
 // replace with path where you unzipped inception model
-const inceptionModelPath = '../data/dnn/tf-inception'
+const inceptionModelPath = '../data/dnn/tf-inception';
 
 const modelFile = path.resolve(inceptionModelPath, 'tensorflow_inception_graph.pb');
 const classNamesFile = path.resolve(inceptionModelPath, 'imagenet_comp_graph_label_strings.txt');
 if (!fs.existsSync(modelFile) || !fs.existsSync(classNamesFile)) {
-  console.log('exiting: could not find inception model');
+  console.log('could not find inception model');
   console.log('download the model from: https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip');
-  return;
+  throw new Error('exiting');
 }
 
 // read classNames and store them in an array
-const classNames = fs.readFileSync(classNamesFile).toString().split("\n");
+const classNames = fs.readFileSync(classNamesFile).toString().split('\n');
 
 // initialize tensorflow inception model from modelFile
 const net = cv.readNetFromTensorflow(modelFile);
@@ -57,7 +57,7 @@ const classifyImg = (img) => {
       .map(res => `${res.className} (${res.confidence})`);
 
   return result;
-}
+};
 
 const testData = [
   {
@@ -85,5 +85,12 @@ testData.forEach((data) => {
   predictions.forEach(p => console.log(p));
   console.log();
 
+  const alpha = 0.4;
+  cv.drawTextBox(
+    img,
+    { x: 0, y: 0 },
+    predictions.map(p => ({ text: p, fontSize: 0.5, thickness: 1 })),
+    alpha
+  );
   cv.imshowWait('img', img);
 });

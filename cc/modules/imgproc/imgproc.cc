@@ -31,6 +31,8 @@ NAN_MODULE_INIT(Imgproc::Init) {
 	Nan::SetMethod(target, "fitLine", FitLine);
 	Nan::SetMethod(target, "getAffineTransform", GetAffineTransform);
 	Nan::SetMethod(target, "getPerspectiveTransform", GetPerspectiveTransform);
+	Nan::SetMethod(target, "getTextSize", GetTextSize);
+	Nan::SetMethod(target, "getTextSizeAsync", GetTextSizeAsync);
 #if CV_VERSION_MINOR > 1
 	Nan::SetMethod(target, "canny", Canny);
 #endif
@@ -255,6 +257,50 @@ NAN_METHOD(Imgproc::FitLine) {
 	}
 	FF_RETURN(jsLineParams);
 }
+
+struct Imgproc::GetTextSizeWorker : public SimpleWorker {
+public:
+	std::string text;
+	int fontFace;
+	double fontScale;
+	int thickness;
+
+	cv::Size2d returnValue;
+	int baseLine;
+
+	const char* execute() {
+		returnValue = cv::getTextSize(text, fontFace, fontScale, thickness, &baseLine);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		Nan::Set(ret, Nan::New("size").ToLocalChecked(), Size::Converter::wrap(returnValue));
+		Nan::Set(ret, Nan::New("baseLine").ToLocalChecked(), IntConverter::wrap(baseLine));
+		return ret;
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			StringConverter::arg(0, &text, info) ||
+			IntConverter::arg(1, &fontFace, info) ||
+			DoubleConverter::arg(2, &fontScale, info) ||
+			IntConverter::arg(3, &thickness, info)
+		);
+	}
+};
+
+NAN_METHOD(Imgproc::GetTextSize) {
+	GetTextSizeWorker worker;
+	FF_WORKER_SYNC("GetTextSize", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Imgproc::GetTextSizeAsync) {
+	GetTextSizeWorker worker;
+	FF_WORKER_ASYNC("GetTextSizeAsync", GetTextSizeWorker, worker);
+}
+
 
 #if CV_VERSION_MINOR > 1
 NAN_METHOD(Imgproc::Canny) {
