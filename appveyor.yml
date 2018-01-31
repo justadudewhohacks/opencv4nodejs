@@ -24,7 +24,7 @@ environment:
       PYTHON_VERSION: "2.7"
       opencv_version: 3.3.0
       # use self build
-      OPENCV4NODEJS_NO_AUTOBUILD: 1
+      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
     # node 6
     - nodejs_version: 6
       PYTHON: "C:\\Python27-x64"
