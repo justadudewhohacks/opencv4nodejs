@@ -86,23 +86,34 @@ Check out <a href="https://medium.com/@muehler.v/machine-learning-with-opencv-an
 
 # How to install
 
+## Requirements
+- cmake (unless you are using a prebuilt OpenCV release)
+
+### On Windows
+On windows you will need Windows Build Tools to compile OpenCV and opencv4nodejs. If you don't have Visual Studio or Windows Build Tools installed, you can easily install the VS2015 build tools:
+``` bash
+npm install --global windows-build-tools
+```
+
+## Auto build
+If you do not want to set up OpenCV on your own you can simply let this package auto install OpenCV 3.4 + <a href="https://github.com/opencv/opencv_contrib"><b>OpenCV contrib 3.4</b></a> (might some time):
 ``` bash
 $ npm install --save opencv4nodejs
 ```
 
-Make sure to have OpenCV 3+ ( extra modules are optional ) installed on your System https://github.com/opencv/opencv/releases/. In case you are running on Windows or have OpenCV set up in a custom directory make sure to set the following environment variables:
-1. OPENCV_DIR pointing to the root path containing include directory or set OPENCV_INCLUDE_DIR explicitly.
-2. OPENCV_LIB_DIR pointing to the library dir containing the OpenCV .lib, .so or .dylib files.
+## Manual build
+Setting up OpenCV on your own will require you to set an environment variable: *OPENCV4NODEJS_DISABLE_AUTOBUILD=1*.
+
+You can either install any of the OpenCV 3+ <a href="https://github.com/opencv/opencv/releases/"><b>releases</b></a> (note, this will come without contrib) or build OpenCV with or without <a href="https://github.com/opencv/opencv_contrib"><b>OpenCV contrib</b></a> from source on your own. On Linux and MacOSX the library should be installed under usr/local (which is the default).
 
 ### On Windows
-On windows you will need the windows build tools to compile opencv4nodejs:
-```
-npm install --global windows-build-tools
-```
+If you choose to set up OpenCV on your own you have to set the following environment variables before installing opencv4nodejs:
+- *OPENCV_INCLUDE_DIR* pointing to the directory with the subfolders *opencv* and *opencv2* containing the header files
+- *OPENCV_LIB_DIR* pointing to the lib directory containing the OpenCV .lib files
 
 Also you will need to add the OpenCV binaries to your system path:
-- Add an environment variable OPENCV_BIN_DIR pointing to the library dir containing the OpenCV .dll files.
-- Append `;%OPENCV_BIN_DIR%;` to your path variable.
+- add an environment variable *OPENCV_BIN_DIR* pointing to the binary directory containing the OpenCV .dll files
+- append `;%OPENCV_BIN_DIR%;` to your system path variable
 
 Note: Restart your current console session after making changes to your environment.
 
