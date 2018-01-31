@@ -96,7 +96,7 @@ npm install --global windows-build-tools
 ```
 
 ## Auto build
-If you do not want to set up OpenCV on your own you can simply let this package auto install OpenCV 3.4 + <a href="https://github.com/opencv/opencv_contrib"><b>OpenCV contrib 3.4</b></a> (might some time):
+If you do not want to set up OpenCV on your own you can simply let this package auto install OpenCV 3.4 + <a href="https://github.com/opencv/opencv_contrib"><b>OpenCV contrib 3.4</b></a> (might take some time):
 ``` bash
 $ npm install --save opencv4nodejs
 ```
@@ -104,7 +104,7 @@ $ npm install --save opencv4nodejs
 ## Manual build
 Setting up OpenCV on your own will require you to set an environment variable: *OPENCV4NODEJS_DISABLE_AUTOBUILD=1*.
 
-You can either install any of the OpenCV 3+ <a href="https://github.com/opencv/opencv/releases/"><b>releases</b></a> (note, this will come without contrib) or build OpenCV with or without <a href="https://github.com/opencv/opencv_contrib"><b>OpenCV contrib</b></a> from source on your own. On Linux and MacOSX the library should be installed under usr/local (which is the default).
+You can either install any of the OpenCV 3+ <a href="https://github.com/opencv/opencv/releases/"><b>releases</b></a> (note, this will come without contrib) or build OpenCV with or without <a href="https://github.com/opencv/opencv_contrib"><b>OpenCV contrib</b></a> from source on your own. On Linux and MacOSX the library should be installed under *usr/local* (which is the default).
 
 ### On Windows
 If you choose to set up OpenCV on your own you have to set the following environment variables before installing opencv4nodejs:
