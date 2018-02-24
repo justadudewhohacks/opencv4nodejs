@@ -1,0 +1,13 @@
+{
+  "name": "opencv4nodejs_examles_typescript",
+  "version": "0.0.0",
+  "author": "justadudewhohacks",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^9.4.0",
+    "ts-lint": "^4.5.1",
+    "ts-node": "^4.1.0",
+    "tslint-microsoft-contrib": "^5.0.2",
+    "typescript": "^2.7.1"
+  }
+}
