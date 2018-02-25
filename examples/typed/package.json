@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "author": "justadudewhohacks",
   "license": "MIT",
+  "scripts": {
+    "ts-node": "./node_modules/.bin/ts-node"
+  },
   "devDependencies": {
     "@types/node": "^9.4.0",
     "ts-lint": "^4.5.1",
