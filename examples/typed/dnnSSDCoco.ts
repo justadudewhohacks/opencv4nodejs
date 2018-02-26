@@ -13,7 +13,7 @@ if (!cv.xmodules.dnn) {
 }
 
 // replace with path where you unzipped inception model
-const ssdcocoModelPath = '../data/dnn/coco-SSD_300x300';
+const ssdcocoModelPath = '../../data/dnn/coco-SSD_300x300';
 
 const prototxt = path.resolve(ssdcocoModelPath, 'deploy.prototxt');
 const modelFile = path.resolve(ssdcocoModelPath, 'VGG_coco_SSD_300x300_iter_400000.caffemodel');
@@ -54,7 +54,7 @@ const makeDrawClassDetections = (predictions: Prediction[]) =>
   };
 
 const runDetectDishesExample = () => {
-  const img = cv.imread('../data/dishes.jpg');
+  const img = cv.imread('../../data/dishes.jpg');
   const minConfidence = 0.2;
 
   const predictions = classifyImg(img).filter(res => res.confidence > minConfidence);
@@ -92,7 +92,7 @@ const runDetectDishesExample = () => {
 };
 
 const runDetectPeopleExample = () => {
-  const img = cv.imread('../data/cars.jpeg');
+  const img = cv.imread('../../data/cars.jpeg');
   const minConfidence = 0.4;
 
   const predictions = classifyImg(img).filter(res => res.confidence > minConfidence);

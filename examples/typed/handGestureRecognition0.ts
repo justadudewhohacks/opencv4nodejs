@@ -125,7 +125,7 @@ const red = new cv.Vec3(0, 0, 255);
 
 // main
 const delay = 20;
-grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
+grabFrames('../../data/hand-gesture.mp4', delay, (frame) => {
   const resizedImg = frame.resizeToMax(640);
 
   const handMask = makeHandMask(resizedImg);

@@ -1,6 +1,6 @@
 import * as cv from '../../';
 
-const img = cv.imread('../data/Lenna.png');
+const img = cv.imread('../../data/Lenna.png');
 
 // single axis for 1D hist
 const getHistAxis = (channel: number) => ([

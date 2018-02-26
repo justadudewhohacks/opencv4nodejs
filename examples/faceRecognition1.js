@@ -41,9 +41,13 @@ const lbph = new cv.LBPHFaceRecognizer();
 lbph.train(trainImgs, labels);
 
 const twoFacesImg = cv.imread(path.resolve(basePath, 'daryl-rick.jpg'));
-const faces = classifier.detectMultiScale(twoFacesImg.bgrToGray()).objects;
+const result = classifier.detectMultiScale(twoFacesImg.bgrToGray());
 
-faces.forEach((faceRect) => {
+const minDetections = 10;
+result.objects.forEach((faceRect, i) => {
+  if (result.numDetections[i] < minDetections) {
+    return;
+  }
   const faceImg = twoFacesImg.getRegion(faceRect).bgrToGray();
   const who = nameMappings[lbph.predict(faceImg).label];
 

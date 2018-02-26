@@ -7,9 +7,9 @@ import {
   saveConfusionMatrix
 } from './OCRTools';
 
-const trainDataPath = '../data/ocr/traindata';
-const testDataPath = '../data/ocr/testdata';
-const outPath = '../data/ocr';
+const trainDataPath = '../../data/ocr/traindata';
+const testDataPath = '../../data/ocr/testdata';
+const outPath = '../../data/ocr';
 const SVMFile = 'lcletters.xml';
 
 const hog = new cv.HOGDescriptor({

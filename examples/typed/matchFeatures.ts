@@ -32,8 +32,8 @@ const matchFeatures = (
   );
 };
 
-const img1 = cv.imread('../data/s0.jpg');
-const img2 = cv.imread('../data/s1.jpg');
+const img1 = cv.imread('../../data/s0.jpg');
+const img2 = cv.imread('../../data/s1.jpg');
 
 // check if opencv compiled with extra modules and nonfree
 if (cv.xmodules.xfeatures2d) {

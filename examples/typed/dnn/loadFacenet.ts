@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as cv from '../../../';
 
 export function loadFacenet (): cv.Net {
-  const modelPath = '../../../data/dnn/facenet';
+  const modelPath = path.resolve(__dirname, '../../../data/dnn/facenet');
 
   const prototxt = path.resolve(modelPath, 'facenet.prototxt');
   const modelFile = path.resolve(modelPath, 'res10_300x300_ssd_iter_140000.caffemodel');

@@ -2,7 +2,7 @@ import * as cv from '../../';
 import { grabFrames, drawRectAroundBlobs } from './utils';
 
 const delay = 100;
-grabFrames('../data/horses.mp4', delay, (frame: cv.Mat) => {
+grabFrames('../../data/horses.mp4', delay, (frame: cv.Mat) => {
   const frameHLS = frame.cvtColor(cv.COLOR_BGR2HLS);
 
   const brownUpper = new cv.Vec3(10, 60, 165);

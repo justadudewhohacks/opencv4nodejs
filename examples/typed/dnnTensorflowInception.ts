@@ -61,19 +61,19 @@ const classifyImg = (img: cv.Mat) => {
 
 const testData = [
   {
-    image: '../data/banana.jpg',
+    image: '../../data/banana.jpg',
     label: 'banana'
   },
   {
-    image: '../data/husky.jpg',
+    image: '../../data/husky.jpg',
     label: 'husky'
   },
   {
-    image: '../data/car.jpeg',
+    image: '../../data/car.jpeg',
     label: 'car'
   },
   {
-    image: '../data/lenna.png',
+    image: '../../data/lenna.png',
     label: 'lenna'
   }
 ];
