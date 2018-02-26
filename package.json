@@ -1,20 +1,20 @@
 {
   "name": "opencv4nodejs",
   "version": "3.1.0",
-  "description": "Asynchronous OpenCV 3.x API for node.js",
+  "description": "Asynchronous OpenCV 3.x nodejs bindings with JavaScript and TypeScript API.",
   "keywords": [
     "opencv",
     "cv",
     "computer vision",
+    "face",
     "detection",
     "recognition",
-    "face",
-    "gesture",
     "machine",
     "learning",
     "neural",
     "network",
-    "async"
+    "async",
+    "typescript"
   ],
   "author": "justadudewhohacks",
   "license": "MIT",
