@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/justadudewhohacks/opencv4nodejs#readme",
   "main": "./lib/opencv4nodejs.js",
+  "typings": "./lib/index.d.ts",
   "scripts": {
     "install": "node-gyp rebuild",
     "configure": "node-gyp configure",

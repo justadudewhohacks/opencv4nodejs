@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "declaration": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "moduleResolution": "node",
+        "module": "commonjs",
+        "target": "es6",
+        "outDir": "dist",
+        "baseUrl": ".",
+        "importHelpers": true,
+        "types": [
+            "node"
+        ],
+        "typeRoots": [
+            "typings",
+            "node_modules/@types"
+        ]
+    },
+    "formatCodeOptions": {
+        "indentSize": 2,
+        "tabSize": 2
+    },
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

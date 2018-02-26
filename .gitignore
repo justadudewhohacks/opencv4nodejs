@@ -10,3 +10,4 @@ coverage-report
 tmpdata
 data/dnn
 .idea/
+dist

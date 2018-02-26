@@ -2,7 +2,7 @@
   "name": "opencv4nodejs_examples",
   "version": "1.1.0",
   "author": "justadudewhohacks",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "eslint": "^3.18.0",

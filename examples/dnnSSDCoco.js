@@ -46,7 +46,7 @@ function classifyImg(img) {
 
 const makeDrawClassDetections = predictions => (drawImg, className, getColor, thickness = 2) => {
   predictions
-    .filter(p => p.className === className)
+    .filter(p => classNames[p.classLabel] === className)
     .forEach(p => drawRect(drawImg, p.rect, getColor(), { thickness }));
   return drawImg;
 };

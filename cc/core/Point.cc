@@ -29,6 +29,8 @@ NAN_MODULE_INIT(Point::Init) {
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("Point").ToLocalChecked());
   target->Set(Nan::New("Point").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("Point2").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("Point3").ToLocalChecked(), ctor->GetFunction());
 };
 
 NAN_METHOD(Point::New) {

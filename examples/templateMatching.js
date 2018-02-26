@@ -3,8 +3,8 @@ const cv = require('../');
 
 const findWaldo = async () => {
   // Load images
-  const originalMat = await cv.imreadAsync(`${__dirname}/templateMatching/original.jpg`);
-  const waldoMat = await cv.imreadAsync(`${__dirname}/templateMatching/waldo.jpg`);
+  const originalMat = await cv.imreadAsync(`${__dirname}/../data/findwaldo.jpg`);
+  const waldoMat = await cv.imreadAsync(`${__dirname}/../data/waldo.jpg`);
 
   // Match template (the brightest locations indicate the highest match)
   const matched = originalMat.matchTemplate(waldoMat, 5);
