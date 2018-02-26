@@ -11,7 +11,7 @@ cv.imreadAsync(getDataFilePath('got.jpg'))
     img.bgrToGrayAsync()
       .then(grayImg => classifier.detectMultiScaleAsync(grayImg))
       .then(
-        (res: { objects: cv.Rect[], numDetections: number[] }) => {
+        (res): any => {
           const { objects, numDetections } = res;
           if (!objects.length) {
             return Promise.reject('No faces detected!');

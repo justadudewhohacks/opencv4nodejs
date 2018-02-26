@@ -70,6 +70,7 @@ const runDetectDishesExample = () => {
 
   const legendLeftTop = new cv.Point2(580, 20);
   const alpha = 0.4;
+
   cv.drawTextBox(
     img,
     legendLeftTop,
