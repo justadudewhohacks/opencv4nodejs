@@ -1,7 +1,6 @@
-import { Mat } from './Mat.d';
-import { KeyPoint } from './KeyPoint.d';
+import { FeatureDetector } from './FeatureDetector.d';
 
-export class ORBDetector {
+export class ORBDetector extends FeatureDetector {
   readonly nfeatures: number;
   readonly nlevels: number;
   readonly edgeThreshold: number;
@@ -12,8 +11,5 @@ export class ORBDetector {
   readonly fastThreshold: number;
   readonly scaleFactor: number;
   constructor(nfeatures?: number, scaleFactor?: number, nlevels?: number, edgeThreshold?: number, firstLevel?: number, WTA_K?: number, scoreType?: number, patchSize?: number, fastThreshold?: number);
-  compute(image: Mat, keypoints: KeyPoint[]): Mat;
-  computeAsync(image: Mat, keypoints: KeyPoint[]): Promise<Mat>;
-  detect(image: Mat): KeyPoint[];
-  detectAsync(image: Mat): Promise<KeyPoint[]>;
+  constructor(params: { nfeatures?: number, scaleFactor?: number, nlevels?: number, edgeThreshold?: number, firstLevel?: number, WTA_K?: number, scoreType?: number, patchSize?: number, fastThreshold?: number });
 }

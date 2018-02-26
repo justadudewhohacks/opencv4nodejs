@@ -1,11 +1,12 @@
-const {
-  cv,
+import * as fs from 'fs';
+import * as path from 'path';
+import * as cv from '../../';
+import {
   drawRect
-} = require('./utils');
-const fs = require('fs');
-const path = require('path');
-const classNames = require('./dnnCocoClassNames');
-const { extractResults } = require('./dnn/ssdUtils');
+} from './utils';
+
+import { classNames } from './dnnCocoClassNames';
+import { extractResults, Prediction } from './dnn/ssdUtils';
 
 if (!cv.xmodules.dnn) {
   throw new Error('exiting: opencv4nodejs compiled without dnn module');
@@ -26,7 +27,7 @@ if (!fs.existsSync(prototxt) || !fs.existsSync(modelFile)) {
 // initialize ssdcoco model from prototxt and modelFile
 const net = cv.readNetFromCaffe(prototxt, modelFile);
 
-function classifyImg(img) {
+function classifyImg(img: cv.Mat) {
   // ssdcoco model works with 300 x 300 images
   const imgResized = img.resize(300, 300);
 
@@ -44,12 +45,13 @@ function classifyImg(img) {
     .map(r => Object.assign({}, r, { className: classNames[r.classLabel] }));
 }
 
-const makeDrawClassDetections = predictions => (drawImg, className, getColor, thickness = 2) => {
-  predictions
-    .filter(p => classNames[p.classLabel] === className)
-    .forEach(p => drawRect(drawImg, p.rect, getColor(), { thickness }));
-  return drawImg;
-};
+const makeDrawClassDetections = (predictions: Prediction[]) =>
+  (drawImg: cv.Mat, className: string, getColor: () => cv.Vec3, thickness = 2) => {
+    predictions
+      .filter(p => classNames[p.classLabel] === className)
+      .forEach(p => drawRect(drawImg, p.rect, getColor(), thickness));
+    return drawImg;
+  };
 
 const runDetectDishesExample = () => {
   const img = cv.imread('../data/dishes.jpg');
@@ -60,13 +62,13 @@ const runDetectDishesExample = () => {
   const drawClassDetections = makeDrawClassDetections(predictions);
 
   const classColors = {
-    fork: new cv.Vec(0, 255, 0),
-    bowl: new cv.Vec(255, 0, 0),
-    'wine glass': new cv.Vec(0, 0, 255),
-    cup: new cv.Vec(0, 255, 255)
+    fork: new cv.Vec3(0, 255, 0),
+    bowl: new cv.Vec3(255, 0, 0),
+    'wine glass': new cv.Vec3(0, 0, 255),
+    cup: new cv.Vec3(0, 255, 255)
   };
 
-  const legendLeftTop = new cv.Point(580, 20);
+  const legendLeftTop = new cv.Point2(580, 20);
   const alpha = 0.4;
   cv.drawTextBox(
     img,
@@ -96,7 +98,7 @@ const runDetectPeopleExample = () => {
 
   const drawClassDetections = makeDrawClassDetections(predictions);
 
-  const getRandomColor = () => new cv.Vec(Math.random() * 255, Math.random() * 255, 255);
+  const getRandomColor = () => new cv.Vec3(Math.random() * 255, Math.random() * 255, 255);
 
   drawClassDetections(img, 'car', getRandomColor);
   cv.imshowWait('img', img);

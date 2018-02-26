@@ -14,6 +14,7 @@ export class SVM {
   readonly varCount: number;
   readonly isTrained: boolean;
   constructor(c?: number, coef0?: number, degree?: number, gamma?: number, nu?: number, p?: number, kernelType?: number, classWeights?: Mat);
+  constructor(params: { c?: number, coef0?: number, degree?: number, gamma?: number, nu?: number, p?: number, kernelType?: number, classWeights?: Mat });
   calcError(trainData: TrainData, test: boolean): { error: number, responses: Mat };
   getSupportVectors(): Mat;
   load(file: string): void;

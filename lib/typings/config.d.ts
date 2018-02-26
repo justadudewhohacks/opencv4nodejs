@@ -6,3 +6,8 @@ export const xmodules: {
   xfeatures2d: boolean;
   ximgproc: boolean;
 }
+
+export const version: {
+  major: number;
+  minor: number;
+}

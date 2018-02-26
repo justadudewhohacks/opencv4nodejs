@@ -1,7 +1,6 @@
-import { Mat } from './Mat.d';
-import { KeyPoint } from './KeyPoint.d';
+import { KeyPointDetector } from './KeyPointDetector';
 
-export class GFTTDetector {
+export class GFTTDetector  extends KeyPointDetector {
   readonly maxCorners: number;
   readonly blockSize: number;
   readonly qualityLevel: number;
@@ -9,6 +8,5 @@ export class GFTTDetector {
   readonly k: number;
   readonly useHarrisDetector: boolean;
   constructor(maxCorners?: number, qualityLevel?: number, minDistance?: number, blockSize?: number, useHarrisDetector?: boolean, k?: number);
-  detect(image: Mat): KeyPoint[];
-  detectAsync(image: Mat): Promise<KeyPoint[]>;
+  constructor(params: { maxCorners?: number, qualityLevel?: number, minDistance?: number, blockSize?: number, useHarrisDetector?: boolean, k?: number });
 }

@@ -1,15 +1,11 @@
-import { Mat } from './Mat.d';
-import { KeyPoint } from './KeyPoint.d';
+import { FeatureDetector } from './FeatureDetector.d';
 
-export class SURFDetector {
+export class SURFDetector extends FeatureDetector {
   readonly nOctaves: number;
   readonly nOctaveLayers: number;
   readonly hessianThreshold: number;
   readonly extended: boolean;
   readonly upright: boolean;
   constructor(hessianThreshold?: number, nOctaves?: number, nOctaveLayers?: number, extended?: boolean, upright?: boolean);
-  compute(image: Mat, keypoints: KeyPoint[]): Mat;
-  computeAsync(image: Mat, keypoints: KeyPoint[]): Promise<Mat>;
-  detect(image: Mat): KeyPoint[];
-  detectAsync(image: Mat): Promise<KeyPoint[]>;
+  constructor(params: { hessianThreshold?: number, nOctaves?: number, nOctaveLayers?: number, extended?: boolean, upright?: boolean });
 }

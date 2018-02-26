@@ -146,6 +146,7 @@ export class Mat {
   findEssentialMatAsync(points1: Point2[], points2: Point2[], method?: number, prob?: number, threshold?: number): Promise<{ E: Mat, mask: Mat }>;
   findNonZero(): Point2[];
   findNonZeroAsync(): Promise<Point2[]>;
+  flattenFloat(rows: number, cols: number): Mat;
   flip(flipCode: number): Mat;
   flipAsync(flipCode: number): Promise<Mat>;
   floodFill(seedPoint: Point2, newVal: number, mask?: Mat, loDiff?: number, upDiff?: number, flags?: number): { returnValue: number, rect: Rect };
@@ -203,6 +204,7 @@ export class Mat {
   norm(normType?: number, mask?: Mat): number;
   normalize(alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat): Mat;
   or(otherMat: Mat): Mat;
+  padToSquare(color: Vec3): Mat;
   perspectiveTransform(m: Mat): Mat;
   perspectiveTransformAsync(m: Mat): Promise<Mat>;
   putText(text: string, origin: Point2, fontFace: number, fontScale: number, color?: Vec3, lineType?: number, thickness?: number, bottomLeftOrigin?: boolean): void;
@@ -274,4 +276,6 @@ export class Mat {
   warpPerspectiveAsync(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number): Promise<Mat>;
   watershed(markers: Mat): Mat;
   watershedAsync(markers: Mat): Promise<Mat>;
+
+  static eye(rows: number, cols: number, type: number): Mat;
 }

@@ -1,7 +1,6 @@
-import { Mat } from './Mat.d';
-import { KeyPoint } from './KeyPoint.d';
+import { KeyPointDetector } from './KeyPointDetector.d';
 
-export class MSERDetector {
+export class MSERDetector extends KeyPointDetector {
   readonly delta: number;
   readonly minArea: number;
   readonly maxArea: number;
@@ -12,6 +11,5 @@ export class MSERDetector {
   readonly areaThreshold: number;
   readonly minMargin: number;
   constructor(delta?: number, minArea?: number, maxArea?: number, maxVariation?: number, minDiversity?: number, maxEvolution?: number, areaThreshold?: number, minMargin?: number, edgeBlurSize?: number);
-  detect(image: Mat): KeyPoint[];
-  detectAsync(image: Mat): Promise<KeyPoint[]>;
+  constructor(params: { delta?: number, minArea?: number, maxArea?: number, maxVariation?: number, minDiversity?: number, maxEvolution?: number, areaThreshold?: number, minMargin?: number, edgeBlurSize?: number });
 }

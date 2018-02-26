@@ -1,7 +1,6 @@
-import { Mat } from './Mat.d';
-import { KeyPoint } from './KeyPoint.d';
+import { FeatureDetector } from './FeatureDetector.d';
 
-export class AKAZEDetector {
+export class AKAZEDetector extends FeatureDetector {
   readonly descriptorType: number;
   readonly descriptorSize: number;
   readonly descriptorChannels: number;
@@ -10,8 +9,5 @@ export class AKAZEDetector {
   readonly diffusivity: number;
   readonly threshold: number;
   constructor(descriptorType?: number, descriptorSize?: number, descriptorChannels?: number, threshold?: number, nOctaves?: number, nOctaveLayers?: number, diffusivity?: number);
-  compute(image: Mat, keypoints: KeyPoint[]): Mat;
-  computeAsync(image: Mat, keypoints: KeyPoint[]): Promise<Mat>;
-  detect(image: Mat): KeyPoint[];
-  detectAsync(image: Mat): Promise<KeyPoint[]>;
+  constructor(params: { descriptorType?: number, descriptorSize?: number, descriptorChannels?: number, threshold?: number, nOctaves?: number, nOctaveLayers?: number, diffusivity?: number });
 }

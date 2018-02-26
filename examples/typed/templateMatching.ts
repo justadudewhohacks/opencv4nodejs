@@ -1,10 +1,9 @@
-const cv = require('../');
-
+import * as cv from '../../';
 
 const findWaldo = async () => {
   // Load images
-  const originalMat = await cv.imreadAsync(`${__dirname}/../data/findwaldo.jpg`);
-  const waldoMat = await cv.imreadAsync(`${__dirname}/../data/waldo.jpg`);
+  const originalMat = await cv.imreadAsync(`${__dirname}/../../data/findwaldo.jpg`);
+  const waldoMat = await cv.imreadAsync(`${__dirname}/../../data/waldo.jpg`);
 
   // Match template (the brightest locations indicate the highest match)
   const matched = originalMat.matchTemplate(waldoMat, 5);
@@ -16,7 +15,7 @@ const findWaldo = async () => {
   // Draw bounding rectangle
   originalMat.drawRectangle(
     new cv.Rect(x, y, waldoMat.cols, waldoMat.rows),
-    new cv.Vec(0, 255, 0),
+    new cv.Vec3(0, 255, 0),
     2,
     cv.LINE_8
   );

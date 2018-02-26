@@ -1,11 +1,9 @@
-import { KeyPoint } from './KeyPoint.d';
-import { Mat } from './Mat.d';
+import { KeyPointDetector } from './KeyPointDetector.d';
 
-export class AGASTDetector {
+export class AGASTDetector extends KeyPointDetector {
   readonly threshold: number;
   readonly type: number;
   readonly nonmaxSuppression: boolean;
   constructor(threshold?: number, nonmaxSuppression?: boolean, type?: number);
-  detect(image: Mat): KeyPoint[];
-  detectAsync(image: Mat): Promise<KeyPoint[]>;
+  constructor(params: { threshold?: number, nonmaxSuppression?: boolean, type?: number });
 }

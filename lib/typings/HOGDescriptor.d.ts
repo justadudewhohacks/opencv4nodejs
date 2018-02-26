@@ -17,6 +17,7 @@ export class HOGDescriptor {
   readonly gammaCorrection: boolean;
   readonly signedGradient: boolean;
   constructor(winSize?: Size, blockSize?: Size, blockStride?: Size, cellSize?: Size, nbins?: number, derivAperture?: number, winSigma?: number, histogramNormType?: number, L2HysThreshold?: number, gammaCorrection?: boolean, nlevels?: number, signedGradient?: boolean);
+  constructor(params: { winSize?: Size, blockSize?: Size, blockStride?: Size, cellSize?: Size, nbins?: number, derivAperture?: number, winSigma?: number, histogramNormType?: number, L2HysThreshold?: number, gammaCorrection?: boolean, nlevels?: number, signedGradient?: boolean });
   checkDetectorSize(): boolean;
   compute(img: Mat, winStride?: Size, padding?: Size, locations?: Point2[]): number[];
   computeAsync(img: Mat, winStride?: Size, padding?: Size, locations?: Point2[]): Promise<number[]>;

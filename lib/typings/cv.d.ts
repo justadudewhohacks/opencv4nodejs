@@ -128,4 +128,4 @@ export function stereoCalibrate(objectPoints: Point3[], imagePoints1: Point2[], 
 export function stereoCalibrateAsync(objectPoints: Point3[], imagePoints1: Point2[], imagePoints2: Point2[], cameraMatrix1: Mat, distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], imageSize: Size, flags?: number, criteria?: TermCriteria): Promise<{ returnValue: number, R: Mat, T: Vec3[], E: Mat, F: Mat }>;
 export function stereoRectifyUncalibrated(points1: Point2[], points2: Point2[], F: Mat, imageSize: Size, threshold?: number): { returnValue: boolean, H1: Mat, H2: Mat };
 export function stereoRectifyUncalibratedAsync(points1: Point2[], points2: Point2[], F: Mat, imageSize: Size, threshold?: number): Promise<{ returnValue: boolean, H1: Mat, H2: Mat }>;
-export function waitKey(delay: number): number;
+export function waitKey(delay?: number): number;
