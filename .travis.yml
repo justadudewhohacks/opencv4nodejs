@@ -52,11 +52,12 @@ before_install:
 
 install: travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci:$TAG
 
-script: ./ci/$BUILD_TASK/$BUILD_TASK.sh $TAG
+script:
+  - cd ./ci/$BUILD_TASK
+  - ./$BUILD_TASK.sh $TAG
 
 after_success:
   - if [ $BUILD_TASK = 'cover' ]; then
-    cd ./ci/cover;
     npm install;
     npm run codecov -- -t $CODECOV_TOKEN;
     fi
