@@ -11,40 +11,53 @@ services:
 matrix:
   include:
   - env:
-    - BUILD_TASK=build-opencv3.0
-    - DOCKER_IMAGE=opencv3.0-node6
+    - BUILD_TASK=test
+    - TAG=3.0.0
   - env:
-    - BUILD_TASK=build-opencv3.0-contrib
-    - DOCKER_IMAGE=opencv3.0-contrib-node6
+    - BUILD_TASK=test
+    - TAG=3.0.0-contrib
   - env:
-    - BUILD_TASK=build-opencv3.1
-    - DOCKER_IMAGE=opencv3.1-node6
+    - BUILD_TASK=test
+    - TAG=3.1.0
   - env:
-    - BUILD_TASK=build-opencv3.1-contrib
-    - DOCKER_IMAGE=opencv3.1-contrib-node6
+    - BUILD_TASK=test
+    - TAG=3.1.0-contrib
   - env:
-    - BUILD_TASK=build-opencv3.3
-    - DOCKER_IMAGE=opencv3.3-node6
+    - BUILD_TASK=test
+    - TAG=3.2.0
   - env:
-    - BUILD_TASK=build-opencv3.3-contrib
-    - DOCKER_IMAGE=opencv3.3-contrib-node6
+    - BUILD_TASK=test
+    - TAG=3.2.0-contrib
   - env:
-    - BUILD_TASK=build-opencv3.4
-    - DOCKER_IMAGE=opencv3.4-node6
+    - BUILD_TASK=test
+    - TAG=3.3.0
   - env:
-    - BUILD_TASK=build-opencv3.4-contrib
-    - DOCKER_IMAGE=opencv3.4-contrib-node6
+    - BUILD_TASK=test
+    - TAG=3.3.0-contrib
   - env:
-    - BUILD_TASK=build-opencv3.2-contrib-with-coverage
-    - DOCKER_IMAGE=opencv3.2-contrib-node6
+    - BUILD_TASK=test
+    - TAG=3.4.0
+  - env:
+    - BUILD_TASK=cover
+    - TAG=3.4.0-contrib
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.4.1
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.4.1-contrib
 
-install: travis_wait 30 docker pull justadudewhohacks/$DOCKER_IMAGE
+before_install:
+  - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh
 
-script: npm run $BUILD_TASK
+install: travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci:$TAG
+
+script:
+  - cd ./ci/$BUILD_TASK
+  - npm run $BUILD_TASK $TAG
 
 after_success:
-  - if [ $BUILD_TASK = 'build-opencv3.2-contrib-with-coverage' ]; then
-    cd ./ci;
+  - if [ $BUILD_TASK = 'cover' ]; then
     npm install;
     npm run codecov -- -t $CODECOV_TOKEN;
     fi

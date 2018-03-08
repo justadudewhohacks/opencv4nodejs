@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "test": "bash ./test.sh"
+  }
+}
