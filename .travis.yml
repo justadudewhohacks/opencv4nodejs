@@ -49,7 +49,7 @@ matrix:
 
 install: travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci:$TAG
 
-script: ./ci/$BUILD_TASK/$build.sh
+script: ./ci/$BUILD_TASK/$BUILD_TASK.sh
 
 after_success:
   - if [ $BUILD_TASK = 'cover' ]; then
