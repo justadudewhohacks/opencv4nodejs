@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "cover": "bash ./cover.sh",
     "codecov": "codecov -f ./coverage-report/opencv4nodejs.info"
   },
   "dependencies": {

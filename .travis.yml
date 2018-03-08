@@ -16,36 +16,36 @@ matrix:
   - env:
     - BUILD_TASK=test
     - TAG=3.0.0-contrib
-  #- env:
-    #- BUILD_TASK=test
-    #- TAG=3.1.0
-  #- env:
-    #- BUILD_TASK=test
-    #- TAG=3.1.0-contrib
-  #- env:
-    #- BUILD_TASK=test
-    #- TAG=3.2.0
-  #- env:
-    #- BUILD_TASK=test
-    #- TAG=3.2.0-contrib
-  #- env:
-    #- BUILD_TASK=test
-    #- TAG=3.3.0
-  #- env:
-    #- BUILD_TASK=test
-    #- TAG=3.3.0-contrib
-  #- env:
-    #- BUILD_TASK=test
-    #- TAG=3.4.0
-  #- env:
-    #- BUILD_TASK=cover
-    #- TAG=3.4.0-contrib
-  #- env:
-    #- BUILD_TASK=test
-    #- TAG=3.4.1
-  #- env:
-    #- BUILD_TASK=test
-    #- TAG=3.4.1-contrib
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.1.0
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.1.0-contrib
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.2.0
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.2.0-contrib
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.3.0
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.3.0-contrib
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.4.0
+  - env:
+    - BUILD_TASK=cover
+    - TAG=3.4.0-contrib
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.4.1
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.4.1-contrib
 
 before_install:
   - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh
@@ -54,8 +54,7 @@ install: travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci:$TAG
 
 script:
   - cd ./ci/$BUILD_TASK
-  #- bash ./$BUILD_TASK.sh $TAG
-  - image=opencv4nodejs-ci_$TAG && docker build -t $image -f ./Dockerfile --build-arg TAG=$TAG ../../ && docker run $image
+  - npm run $BUILD_TASK $TAG
 
 after_success:
   - if [ $BUILD_TASK = 'cover' ]; then
