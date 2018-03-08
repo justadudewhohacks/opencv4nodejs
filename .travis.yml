@@ -55,7 +55,7 @@ install: travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci:$TAG
 script:
   - cd ./ci/$BUILD_TASK
   #- bash ./$BUILD_TASK.sh $TAG
-  - image=opencv4nodejs-ci_$1 && docker build -t $image -f ./Dockerfile --build-arg TAG=$1 ../../ && docker run $image
+  - image=opencv4nodejs-ci_$TAG && docker build -t $image -f ./Dockerfile --build-arg TAG=$TAG ../../ && docker run $image
 
 after_success:
   - if [ $BUILD_TASK = 'cover' ]; then
