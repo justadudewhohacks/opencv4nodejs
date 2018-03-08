@@ -47,7 +47,7 @@ matrix:
     - BUILD_TASK=test
     - TAG=3.4.1-contrib
 
-install: travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci_$TAG
+install: travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci:$TAG
 
 script: ./ci/$BUILD_TASK/$build.sh
 
