@@ -42,6 +42,9 @@ matrix:
     - TAG=3.4.0-contrib
   - env:
     - BUILD_TASK=test
+    - TAG=3.4.0-contrib-world
+  - env:
+    - BUILD_TASK=test
     - TAG=3.4.1
   - env:
     - BUILD_TASK=test
