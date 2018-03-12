@@ -1,5 +1,8 @@
 opencv4nodejs
 =============
+
+![opencv4nodejs](https://user-images.githubusercontent.com/31125521/37272529-28ea5ef2-25d7-11e8-8d43-11c72b455c62.jpg)
+
 [![Build Status](https://travis-ci.org/justadudewhohacks/opencv4nodejs.svg?branch=master)](http://travis-ci.org/justadudewhohacks/opencv4nodejs)
 [![Build status](https://ci.appveyor.com/api/projects/status/cv3o65nrosh1udbb/branch/master?svg=true)](https://ci.appveyor.com/project/justadudewhohacks/opencv4nodejs/branch/master)
 [![Coverage](https://codecov.io/github/justadudewhohacks/opencv4nodejs/coverage.svg?branch=master)](https://codecov.io/gh/justadudewhohacks/opencv4nodejs)
@@ -10,15 +13,16 @@ opencv4nodejs
 
 **The ultimate goal of this project is to provide a collection of Node.js bindings, which supports the entire OpenCV and OpenCV-contrib API. An overview of available bindings can be found in the [API Documentation](https://opencv4nodejs.herokuapp.com/docs). The implementation of missing bindings can be specifically prioritized by [requesting new features](#request-features). Furthermore, contribution is highly appreciated. If you want to get involved you can have a look at the <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b>.**
 
- * **[Examples](#examples)**
- * **[How to install](#how-to-install)**
- * **[Usage with Docker](#usage-with-docker)**
- * **[Usage with Electron](#usage-with-electron)**
- * **[Usage with NW.js](#usage-with-nwjs)**
- * **[Quick Start](#quick-start)**
- * **[Async API](#async-api)**
- * **[Available Modules](#available-modules)**
- * **[Request new Features](#request-features)**
+* **[Examples](#examples)**
+* **[How to install](#how-to-install)**
+* **[Usage with Docker](#usage-with-docker)**
+* **[Usage with Electron](#usage-with-electron)**
+* **[Usage with NW.js](#usage-with-nwjs)**
+* **[Quick Start](#quick-start)**
+* **[Async API](#async-api)**
+* **[With TypeScript](#with-typescript)**
+* **[Available Modules](#available-modules)**
+* **[Request new Features](#request-features)**
 
 <a name="examples"></a>
 
@@ -442,6 +446,15 @@ try {
   console.error(err);
 }
 ```
+
+<a name="with-typescript"></a>
+# With TypeScript
+
+``` javascript
+import * as cv from 'opencv4nodejs'
+```
+
+Check out the TypeScript [examples](https://github.com/justadudewhohacks/opencv4nodejs/tree/master/examples/typed).
 
 <a name="available-modules"></a>
 
