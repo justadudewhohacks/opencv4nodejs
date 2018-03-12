@@ -1,7 +1,8 @@
 opencv4nodejs
 =============
 
-![opencv4nodejs](https://user-images.githubusercontent.com/31125521/37272529-28ea5ef2-25d7-11e8-8d43-11c72b455c62.jpg)
+![opencv4nodejs](https://user-images.githubusercontent.com/31125521/37272906-67187fdc-25d8-11e8-9704-40e9e94c1e80.jpg)
+
 
 [![Build Status](https://travis-ci.org/justadudewhohacks/opencv4nodejs.svg?branch=master)](http://travis-ci.org/justadudewhohacks/opencv4nodejs)
 [![Build status](https://ci.appveyor.com/api/projects/status/cv3o65nrosh1udbb/branch/master?svg=true)](https://ci.appveyor.com/project/justadudewhohacks/opencv4nodejs/branch/master)
