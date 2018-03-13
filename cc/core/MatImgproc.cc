@@ -2308,18 +2308,12 @@ public:
 
 	cv::Point2d seedPoint;
 	double newVal1;
-	cv::Vec2d newVal2 = cv::Vec2d();
 	cv::Vec3d newVal3 = cv::Vec3d();
-	cv::Vec4d newVal4 = cv::Vec4d();
 	cv::Mat mask = cv::noArray().getMat();
 	double loDiff1;
-	cv::Vec2d loDiff2 = cv::Vec2d();
 	cv::Vec3d loDiff3 = cv::Vec3d();
-	cv::Vec4d loDiff4 = cv::Vec4d();
 	double upDiff1;
-	cv::Vec2d upDiff2 = cv::Vec2d();
 	cv::Vec3d upDiff3 = cv::Vec3d();
-	cv::Vec4d upDiff4 = cv::Vec4d();
 	int flags = 4;
 
 	int returnValue;
@@ -2352,9 +2346,7 @@ public:
 		return (
 			Point2::Converter::arg(0, &seedPoint, info) ||
 			(self.channels() == 1 && DoubleConverter::optArg(1, &newVal1, info)) ||
-			(self.channels() == 2 && Vec2::Converter::optArg(1, &newVal2, info)) ||
-			(self.channels() == 3 && Vec3::Converter::optArg(1, &newVal3, info)) ||
-			(self.channels() == 4 && Vec4::Converter::optArg(1, &newVal4, info))
+			(self.channels() == 3 && Vec3::Converter::optArg(1, &newVal3, info))
 		);
 	}
 

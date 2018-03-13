@@ -207,6 +207,14 @@ export class Mat {
   padToSquare(color: Vec3): Mat;
   perspectiveTransform(m: Mat): Mat;
   perspectiveTransformAsync(m: Mat): Promise<Mat>;
+  pop_back(numRows?: number): Mat;
+  pop_backAsync(numRows?: number): Promise<Mat>;
+  popBack(numRows?: number): Mat;
+  popBackAsync(numRows?: number): Promise<Mat>;
+  push_back(mat: Mat): Mat;
+  push_backAsync(mat: Mat): Promise<Mat>;
+  pushBack(mat: Mat): Mat;
+  pushBackAsync(mat: Mat): Promise<Mat>;
   putText(text: string, origin: Point2, fontFace: number, fontScale: number, color?: Vec3, lineType?: number, thickness?: number, bottomLeftOrigin?: boolean): void;
   pyrDown(size?: Size, borderType?: number): Mat;
   pyrDownAsync(size?: Size, borderType?: number): Promise<Mat>;
@@ -245,6 +253,8 @@ export class Mat {
   set(row: number, col: number, value: Vec4): void;
   sobel(ddepth: number, dx: number, dy: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Mat;
   sobelAsync(ddepth: number, dx: number, dy: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
+  split(): Mat[];
+  splitAsync(): Promise<Mat[]>;
   splitChannels(): Mat[];
   splitChannelsAsync(): Promise<Mat[]>;
   sqrBoxFilter(ddepth: number, ksize: Size, anchor?: Point2, normalize?: boolean, borderType?: number): Mat;

@@ -14,7 +14,7 @@ void ImgprocConstants::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(target, MORPH_GRADIENT);
 	FF_SET_CV_CONSTANT(target, MORPH_TOPHAT);
 	FF_SET_CV_CONSTANT(target, MORPH_BLACKHAT);
-#if CV_VERSION_MINOR > 0
+#if CV_VERSION_MINOR >= 1
 	FF_SET_CV_CONSTANT(target, MORPH_HITMISS);
 #endif
 	FF_SET_CV_CONSTANT(target, BORDER_CONSTANT);
@@ -32,6 +32,9 @@ void ImgprocConstants::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(target, INTER_AREA);
 	FF_SET_CV_CONSTANT(target, INTER_LANCZOS4);
 	FF_SET_CV_CONSTANT(target, INTER_MAX);
+#if CV_VERSION_MINOR >= 4
+	FF_SET_CV_CONSTANT(target, INTER_LINEAR_EXACT);
+#endif
 	FF_SET_CV_CONSTANT(target, WARP_FILL_OUTLIERS);
 	FF_SET_CV_CONSTANT(target, WARP_INVERSE_MAP);
 
