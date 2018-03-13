@@ -47,6 +47,13 @@ public:
 	static NAN_METHOD(AtRaw);
 	static NAN_METHOD(Set);
 
+	struct PushBackWorker;
+	static NAN_METHOD(PushBack);
+	static NAN_METHOD(PushBackAsync);
+	struct PopBackWorker;
+	static NAN_METHOD(PopBack);
+	static NAN_METHOD(PopBackAsync);
+
 	struct GetDataWorker;
 	static NAN_METHOD(GetData);
 	static NAN_METHOD(GetDataAsync);

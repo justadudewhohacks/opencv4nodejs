@@ -747,5 +747,69 @@ describe('Mat', () => {
       expectOutput
     });
   });
+
+  describe('pushBack', () => {
+    const getPushBackData = () => [
+      [0, 1, 2, 3],
+      [4, 5, 6, 7]
+    ];
+
+    const expectOutput = (res) => {
+      expect(res).to.be.instanceOf(cv.Mat);
+      expect(res.rows).to.equal(3);
+      assertDataDeepEquals(
+        [
+          [0, 0, 0, 0]
+        ].concat(getPushBackData()),
+        res.getDataAsArray()
+      );
+    };
+
+    generateAPITests({
+      getDut: () => new cv.Mat(
+        [[0, 0, 0, 0]],
+        cv.CV_8U
+      ),
+      methodName: 'pushBack',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        new cv.Mat(
+          getPushBackData(),
+          cv.CV_8U
+        )
+      ]),
+      expectOutput
+    });
+  });
+
+  describe('popBack', () => {
+    const getDut = () => new cv.Mat(
+      [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ],
+      cv.CV_8U
+    );
+
+    const expectOutput = (res, _, args) => {
+      expect(res).to.be.instanceOf(cv.Mat);
+
+      const origRows = getDut().rows;
+      const expectedRows = origRows - ((typeof args[0] === 'number' && args[0]) || 1);
+      expect(res.rows).to.equal(expectedRows);
+    };
+
+    const numRowsToPop = 2;
+    generateAPITests({
+      getDut,
+      methodName: 'popBack',
+      methodNameSpace: 'Mat',
+      getOptionalArgs: () => ([
+        numRowsToPop
+      ]),
+      expectOutput
+    });
+  });
 });
 

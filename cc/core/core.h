@@ -10,6 +10,14 @@ public:
 
 	static NAN_METHOD(Partition);
 	static NAN_METHOD(Kmeans);
+
+	struct CartToPolarWorker;
+	static NAN_METHOD(CartToPolar);
+	static NAN_METHOD(CartToPolarAsync);
+
+	struct PolarToCartWorker;
+	static NAN_METHOD(PolarToCart);
+	static NAN_METHOD(PolarToCartAsync);
 };
 
 #endif

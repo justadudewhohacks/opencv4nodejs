@@ -26,6 +26,14 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "at", At);
 	Nan::SetPrototypeMethod(ctor, "atRaw", AtRaw);
 	Nan::SetPrototypeMethod(ctor, "set", Set);
+	Nan::SetPrototypeMethod(ctor, "push_back", PushBack);
+	Nan::SetPrototypeMethod(ctor, "push_backAsync", PushBackAsync);
+	Nan::SetPrototypeMethod(ctor, "pushBack", PushBack);
+	Nan::SetPrototypeMethod(ctor, "pushBackAsync", PushBackAsync);
+	Nan::SetPrototypeMethod(ctor, "pop_back", PopBack);
+	Nan::SetPrototypeMethod(ctor, "pop_backAsync", PopBackAsync);
+	Nan::SetPrototypeMethod(ctor, "popBack", PopBack);
+	Nan::SetPrototypeMethod(ctor, "popBackAsync", PopBackAsync);
 	Nan::SetPrototypeMethod(ctor, "getData", GetData);
 	Nan::SetPrototypeMethod(ctor, "getDataAsync", GetDataAsync);
 	Nan::SetPrototypeMethod(ctor, "getDataAsArray", GetDataAsArray);
@@ -39,6 +47,8 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "convertToAsync", ConvertToAsync);
 	Nan::SetPrototypeMethod(ctor, "norm", Norm);
 	Nan::SetPrototypeMethod(ctor, "normalize", Normalize);
+	Nan::SetPrototypeMethod(ctor, "split", SplitChannels);
+	Nan::SetPrototypeMethod(ctor, "splitAsync", SplitChannelsAsync);
 	Nan::SetPrototypeMethod(ctor, "splitChannels", SplitChannels);
 	Nan::SetPrototypeMethod(ctor, "splitChannelsAsync", SplitChannelsAsync);
 	Nan::SetPrototypeMethod(ctor, "addWeighted", AddWeighted);
@@ -253,6 +263,79 @@ NAN_METHOD(Mat::Set) {
 	else {
 		return Nan::ThrowError(FF_NEW_STRING("Mat::Set - unexpected argument 2"));
 	}
+}
+
+struct Mat::PushBackWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	PushBackWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	cv::Mat mat;
+
+	const char* execute() {
+		self.push_back(mat);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::arg(0, &mat, info)
+		);
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(self);
+	}
+};
+
+NAN_METHOD(Mat::PushBack) {
+	PushBackWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::PushBack", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::PushBackAsync) {
+	PushBackWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::PushBackAsync", PushBackWorker, worker);
+}
+
+
+struct Mat::PopBackWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	PopBackWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int num = 1;
+
+	const char* execute() {
+		self.pop_back(num);
+		return "";
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(0, &num, info)
+		);
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(self);
+	}
+};
+
+NAN_METHOD(Mat::PopBack) {
+	PopBackWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::PopBack", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::PopBackAsync) {
+	PopBackWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::PopBackAsync", PopBackWorker, worker);
 }
 
 struct Mat::GetDataWorker : SimpleWorker {

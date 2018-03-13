@@ -1,5 +1,9 @@
 const cv = global.dut;
-const { funcShouldRequireArgs } = global.utils;
+const {
+  funcShouldRequireArgs,
+  generateAPITests,
+  assertMetaData
+} = global.utils;
 const { expect } = require('chai');
 
 const partitionTests = (createInstance) => {
@@ -96,6 +100,56 @@ describe('core', () => {
       expect(ret.centers[l1].y).to.equal(950);
       expect(ret.centers[l2].x).to.equal(-1050);
       expect(ret.centers[l2].y).to.equal(-950);
+    });
+  });
+
+  describe('cartToPolar', () => {
+    const x = new cv.Mat([[0, 1, 100]], cv.CV_32F);
+    const y = new cv.Mat([[0, 1, 100]], cv.CV_32F);
+    const angleInDegrees = true;
+
+    const expectOutput = (res) => {
+      expect(res).to.have.property('magnitude').to.be.instanceOf(cv.Mat);
+      expect(res).to.have.property('angle').to.be.instanceOf(cv.Mat);
+      assertMetaData(res.magnitude)(1, 3, cv.CV_32F);
+      assertMetaData(res.angle)(1, 3, cv.CV_32F);
+    };
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'cartToPolar',
+      getRequiredArgs: () => ([
+        x, y
+      ]),
+      getOptionalArgs: () => ([
+        angleInDegrees
+      ]),
+      expectOutput
+    });
+  });
+
+  describe('polarToCart', () => {
+    const magnitude = new cv.Mat([[0, 1, 100]], cv.CV_32F);
+    const angle = new cv.Mat([[0, Math.PI / 2, Math.PI]], cv.CV_32F);
+    const angleInDegrees = true;
+
+    const expectOutput = (res) => {
+      expect(res).to.have.property('x').to.be.instanceOf(cv.Mat);
+      expect(res).to.have.property('y').to.be.instanceOf(cv.Mat);
+      assertMetaData(res.x)(1, 3, cv.CV_32F);
+      assertMetaData(res.y)(1, 3, cv.CV_32F);
+    };
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'polarToCart',
+      getRequiredArgs: () => ([
+        magnitude, angle
+      ]),
+      getOptionalArgs: () => ([
+        angleInDegrees
+      ]),
+      expectOutput
     });
   });
 });
