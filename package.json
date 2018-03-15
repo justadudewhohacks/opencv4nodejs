@@ -40,6 +40,6 @@
   "dependencies": {
     "macro-inferno": "^0.2.1",
     "nan": "^2.7.0",
-    "opencv-build": "0.0.9"
+    "opencv-build": "0.0.10"
   }
 }
