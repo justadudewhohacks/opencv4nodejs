@@ -149,6 +149,9 @@ public:
 	static NAN_METHOD(RotateAsync);
 #endif
 
+	static NAN_METHOD(Release);
+
+
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	void setNativeProps(cv::Mat);
