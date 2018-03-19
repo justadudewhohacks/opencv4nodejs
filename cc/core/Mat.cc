@@ -85,6 +85,9 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
 	Nan::SetPrototypeMethod(ctor, "rotateAsync", RotateAsync);
 #endif
+
+	Nan::SetPrototypeMethod(ctor, "release", Release);
+
 	FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
 	MatImgproc::Init(ctor);
@@ -1252,5 +1255,12 @@ NAN_METHOD(Mat::Row) {
 
 void Mat::setNativeProps(cv::Mat mat) {
 	this->mat = mat;
+};
+
+// free memory for this mat
+NAN_METHOD(Mat::Release) {
+    // must get pointer to the original; else we are just getting a COPY and then releasing that!
+    cv::Mat *mat = &(Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat);
+    mat->release();
 };
 
