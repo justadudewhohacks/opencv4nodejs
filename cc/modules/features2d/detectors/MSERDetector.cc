@@ -1,4 +1,6 @@
 #include "MSERDetector.h"
+#include "Rect.h"
+#include "Point.h"
 
 Nan::Persistent<v8::FunctionTemplate> MSERDetector::constructor;
 
@@ -11,6 +13,9 @@ NAN_MODULE_INIT(MSERDetector::Init) {
 	ctor->SetClassName(Nan::New("MSERDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 
+    Nan::SetPrototypeMethod(ctor, "detectRegions", MSERDetector::DetectRegions);
+	Nan::SetPrototypeMethod(ctor, "detectRegionsAsync", MSERDetector::DetectRegionsAsync);
+  
 	Nan::SetAccessor(instanceTemplate, Nan::New("delta").ToLocalChecked(), MSERDetector::GetDelta);
 	Nan::SetAccessor(instanceTemplate, Nan::New("minArea").ToLocalChecked(), MSERDetector::GetMinArea);
 	Nan::SetAccessor(instanceTemplate, Nan::New("maxArea").ToLocalChecked(), MSERDetector::GetMaxArea);
@@ -57,4 +62,61 @@ NAN_METHOD(MSERDetector::New) {
 	self->detector = cv::MSER::create(self->delta, self->minArea, self->maxArea, self->maxVariation, 
 		self->minDiversity, self->maxEvolution, self->areaThreshold, self->minMargin, self->edgeBlurSize);
   FF_RETURN(info.Holder());
+}
+
+struct DetectRegionsWorker : public SimpleWorker {
+public:
+    cv::Ptr<cv::MSER> det;
+
+    DetectRegionsWorker( MSERDetector *mser){
+        this->det = mser->getMSERDetector();
+    }
+    
+    cv::Mat img;
+    std::vector<std::vector<cv::Point> > regions;
+    std::vector<cv::Rect> mser_bbox;
+    
+    const char* execute() {
+        det->detectRegions(img, regions, mser_bbox);
+        return "";
+    }
+
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+        // we only need input image
+		return Mat::Converter::arg(0, &img, info);
+	}        
+    
+    
+    FF_VAL getReturnValue() {
+        FF_ARR jsRegions = FF_NEW_ARRAY(regions.size());
+        
+        for (int r = 0; r < regions.size(); r++){
+            FF_ARR jsRegion = Point::packJSPoint2Array(regions[r]);
+            jsRegions->Set(r, jsRegion);
+        }
+        
+        FF_ARR jsBbox = FF_NEW_ARRAY(mser_bbox.size());
+        for (int i = 0; i < mser_bbox.size(); i++) {
+            FF_OBJ jsR = FF_NEW_INSTANCE(Rect::constructor);
+            FF_UNWRAP_RECT_AND_GET(jsR) = mser_bbox.at(i);
+            jsBbox->Set(i, jsR);
+        }
+
+        FF_OBJ ret = FF_NEW_OBJ();            
+        Nan::Set(ret, FF_NEW_STRING("msers"), jsRegions);
+        Nan::Set(ret, FF_NEW_STRING("bboxes"), jsBbox);
+        return ret;
+    }
+};
+
+
+NAN_METHOD(MSERDetector::DetectRegions) {
+    DetectRegionsWorker worker( FF_UNWRAP(info.This(), MSERDetector) );
+    FF_WORKER_SYNC("MSERDetector::DetectRegions", worker);
+    info.GetReturnValue().Set(worker.getReturnValue());    
+}
+
+NAN_METHOD(MSERDetector::DetectRegionsAsync) {
+    DetectRegionsWorker worker( FF_UNWRAP(info.This(), MSERDetector) );
+    FF_WORKER_ASYNC("MSERDetector::DetectRegionsAsync", DetectRegionsWorker, worker);
 }

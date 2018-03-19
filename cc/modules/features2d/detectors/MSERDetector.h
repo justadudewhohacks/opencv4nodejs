@@ -32,9 +32,18 @@ public:
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-	cv::Ptr<cv::FeatureDetector> getDetector() {
+  
+    cv::Ptr<cv::FeatureDetector> getDetector(void){
+		return detector;
+    }
+  
+	cv::Ptr<cv::MSER> getMSERDetector() {
 		return detector;
 	}
+    
+    static NAN_METHOD(DetectRegions);
+	static NAN_METHOD(DetectRegionsAsync);
+
 };
 
 #endif
