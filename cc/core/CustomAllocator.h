@@ -1,6 +1,9 @@
 #ifndef __FF_CUSTOMALLOCATOR_H__
 #define __FF_CUSTOMALLOCATOR_H__
 
+// only valid for 3.1.0+
+#if CV_VERSION_MINOR > 0
+
 #include <thread>
 #include <stdint.h>
 
@@ -66,5 +69,8 @@ public:
     
     const cv::MatAllocator* stdAllocator;
 };
+
+// end only valid for 3.1.0+
+#endif
 
 #endif

@@ -7,8 +7,11 @@
 #include "Rect.h"
 #include "RotatedRect.h"
 #include "Workers.h"
-#include "CustomAllocator.h"
 
+// only valid for 3.1.0+
+#if CV_VERSION_MINOR > 0
+#include "CustomAllocator.h"
+#endif
 
 #ifndef __FF_MAT_H__
 #define __FF_MAT_H__
@@ -17,7 +20,10 @@ class Mat : public Nan::ObjectWrap {
 public:
   cv::Mat mat;
   
+// only valid for 3.1.0+
+#if CV_VERSION_MINOR > 0
   static CustomMatAllocator *custommatallocator;
+#endif
 
   static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);

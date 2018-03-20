@@ -226,12 +226,15 @@ NAN_METHOD(Core::GetMemMetrics) {
   int64_t NumAllocations = -1;
   int64_t NumDeAllocations = -1;
 
+// only valid for 3.1.0+
+#if CV_VERSION_MINOR > 0
   if (Mat::custommatallocator != NULL){
     TotalAlloc = Mat::custommatallocator->readtotalmem();
     TotalKnownByJS = Mat::custommatallocator->readmeminformed();
     NumAllocations = Mat::custommatallocator->readnumallocated();
     NumDeAllocations = Mat::custommatallocator->readnumdeallocated();
   }
+#endif
 
   FF_OBJ result = FF_NEW_OBJ(); 
   Nan::Set(result, FF_NEW_STRING("TotalAlloc"), Nan::New((double)TotalAlloc));

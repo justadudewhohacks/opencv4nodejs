@@ -1,3 +1,7 @@
+
+// only valid for 3.1.0+
+#if CV_VERSION_MINOR > 0
+
 #include "CustomAllocator.h"
 //#include <iostream>
 
@@ -102,4 +106,7 @@ void CustomMatAllocator::FixupJSMem() const {
         //std::cout << "thead not main " << this_id << "\n";
     }
 }
+
+// end only valid for 3.1.0+
+#endif
 

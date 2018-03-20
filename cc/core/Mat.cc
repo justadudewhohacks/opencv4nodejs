@@ -1,20 +1,25 @@
 #include "Mat.h"
 #include "MatImgproc.h"
 #include "MatCalib3d.h"
-#include "CustomAllocator.h"
 
 
 Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
 
+// only valid for 3.1.0+
+#if CV_VERSION_MINOR > 0
 CustomMatAllocator *Mat::custommatallocator = NULL;
+#endif  
   
 
 NAN_MODULE_INIT(Mat::Init) {
     
+// only valid for 3.1.0+
+#if CV_VERSION_MINOR > 0
   if (NULL == custommatallocator){
     custommatallocator = new CustomMatAllocator();
     cv::Mat::setDefaultAllocator(custommatallocator);
   }
+#endif  
 
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Mat::New);
   constructor.Reset(ctor);
@@ -182,11 +187,15 @@ NAN_METHOD(Mat::New) {
 	}
 	self->Wrap(info.Holder());
     
+// only valid for 3.1.0+
+#if CV_VERSION_MINOR > 0
     // I *think* New should be called in JS thread where cv::mat has been created async,
     // so a good place to rationalise memory
     if (self->custommatallocator){
         self->custommatallocator->FixupJSMem();
     }
+#endif
+    
 	FF_RETURN(info.Holder());
 }
 
