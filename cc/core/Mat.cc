@@ -99,8 +99,6 @@ NAN_MODULE_INIT(Mat::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "release", Release);
 
-	Nan::SetPrototypeMethod(ctor, "getMemMetrics", GetMemMetrics);
-
 	FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
 	MatImgproc::Init(ctor);
@@ -1284,29 +1282,3 @@ NAN_METHOD(Mat::Release) {
     mat->release();
 };
 
-
-
-NAN_METHOD(Mat::GetMemMetrics) {
-  Nan::HandleScope scope;
-    
-  __int64 TotalAlloc = -1;
-  __int64 TotalKnownByJS = -1;
-  __int64 NumAllocations = -1;
-  __int64 NumDeAllocations = -1;
-
-  if (Mat::custommatallocator != NULL){
-    TotalAlloc = Mat::custommatallocator->readtotalmem();
-    TotalKnownByJS = Mat::custommatallocator->readmeminformed();
-    NumAllocations = Mat::custommatallocator->readnumallocated();
-    NumDeAllocations = Mat::custommatallocator->readnumdeallocated();
-  }
-
-  FF_OBJ result = FF_NEW_OBJ(); 
-  Nan::Set(result, FF_NEW_STRING("TotalAlloc"), Nan::New((int)TotalAlloc));
-  Nan::Set(result, FF_NEW_STRING("TotalKnownByJS"), Nan::New((int)TotalKnownByJS));
-  Nan::Set(result, FF_NEW_STRING("NumAllocations"), Nan::New((int)NumAllocations));
-  Nan::Set(result, FF_NEW_STRING("NumDeAllocations"), Nan::New((int)NumDeAllocations));
-
-  info.GetReturnValue().Set(result);
-  return;
-}

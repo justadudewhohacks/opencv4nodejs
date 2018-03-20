@@ -49,32 +49,32 @@ void CustomMatAllocator::deallocate(cv::UMatData* u) const
 
 
 // method to read the total mem, but mutex protected.
-__int64 CustomMatAllocator::readtotalmem(){
-    __int64 Total;
+int64_t CustomMatAllocator::readtotalmem(){
+    int64_t Total;
     variables->MemTotalChangeMutex.lock();
     Total = variables->TotalMem;
     variables->MemTotalChangeMutex.unlock();
     return Total;
 }
 
-__int64 CustomMatAllocator::readmeminformed(){
-    __int64 Total;
+int64_t CustomMatAllocator::readmeminformed(){
+    int64_t Total;
     variables->MemTotalChangeMutex.lock();
     Total = variables->TotalJSMem;
     variables->MemTotalChangeMutex.unlock();
     return Total;
 }
 
-__int64 CustomMatAllocator::readnumallocated(){
-    __int64 Total;
+int64_t CustomMatAllocator::readnumallocated(){
+    int64_t Total;
     variables->MemTotalChangeMutex.lock();
     Total = variables->CountMemAllocs;
     variables->MemTotalChangeMutex.unlock();
     return Total;
 }
 
-__int64 CustomMatAllocator::readnumdeallocated(){
-    __int64 Total;
+int64_t CustomMatAllocator::readnumdeallocated(){
+    int64_t Total;
     variables->MemTotalChangeMutex.lock();
     Total = variables->CountMemDeAllocs;
     variables->MemTotalChangeMutex.unlock();

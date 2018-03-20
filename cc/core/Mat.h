@@ -155,9 +155,6 @@ public:
 
 	static NAN_METHOD(Release);
 
-    static NAN_METHOD(GetMemMetrics);
-
-
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	void setNativeProps(cv::Mat);

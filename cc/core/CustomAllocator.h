@@ -2,6 +2,7 @@
 #define __FF_CUSTOMALLOCATOR_H__
 
 #include <thread>
+#include <stdint.h>
 
 #include "Converters.h"
 #include "Size.h"
@@ -12,7 +13,6 @@
 #include "Rect.h"
 #include "RotatedRect.h"
 #include "Workers.h"
-#include "CustomAllocator.h"
 
 
 class CustomMatAllocator : public cv::MatAllocator
@@ -24,10 +24,10 @@ public:
     // from a const function.
     typedef struct tag_Variables {
         cv::Mutex MemTotalChangeMutex;
-        __int64 TotalMem; // total mem allocated by this allocator
-        __int64 CountMemAllocs;
-        __int64 CountMemDeAllocs;
-        __int64 TotalJSMem; // total mem told to JS so far
+        int64_t TotalMem; // total mem allocated by this allocator
+        int64_t CountMemAllocs;
+        int64_t CountMemDeAllocs;
+        int64_t TotalJSMem; // total mem told to JS so far
 
         // the main JS thread
         std::thread::id main_thread_id;
@@ -52,10 +52,10 @@ public:
     bool allocate(cv::UMatData* u, int /*accessFlags*/, cv::UMatUsageFlags /*usageFlags*/) const;
     void deallocate(cv::UMatData* u) const;
 
-    __int64 readtotalmem();
-    __int64 readmeminformed();
-    __int64 readnumallocated();
-    __int64 readnumdeallocated();
+    int64_t readtotalmem();
+    int64_t readmeminformed();
+    int64_t readnumallocated();
+    int64_t readnumdeallocated();
 
     // function which adjusts NAN mem to match allocated mem.
     // WILL ONLY ACTUALLY DO ANYTHING FROM MAIN JS LOOP

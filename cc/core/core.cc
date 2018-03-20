@@ -45,6 +45,8 @@ NAN_MODULE_INIT(Core::Init) {
 	Nan::SetMethod(target, "cartToPolarAsync", CartToPolarAsync);
 	Nan::SetMethod(target, "polarToCart", PolarToCart);
 	Nan::SetMethod(target, "polarToCartAsync", PolarToCartAsync);
+	Nan::SetMethod(target, "getMemMetrics", GetMemMetrics);
+    
 };
 
 NAN_METHOD(Core::Partition) {
@@ -215,3 +217,30 @@ NAN_METHOD(Core::PolarToCartAsync) {
 	PolarToCartWorker worker;
 	FF_WORKER_ASYNC("Mat::PolarToCartAsync", PolarToCartWorker, worker);
 }
+
+
+NAN_METHOD(Core::GetMemMetrics) {
+    
+  int64_t TotalAlloc = -1;
+  int64_t TotalKnownByJS = -1;
+  int64_t NumAllocations = -1;
+  int64_t NumDeAllocations = -1;
+
+  if (Mat::custommatallocator != NULL){
+    TotalAlloc = Mat::custommatallocator->readtotalmem();
+    TotalKnownByJS = Mat::custommatallocator->readmeminformed();
+    NumAllocations = Mat::custommatallocator->readnumallocated();
+    NumDeAllocations = Mat::custommatallocator->readnumdeallocated();
+  }
+
+  FF_OBJ result = FF_NEW_OBJ(); 
+  Nan::Set(result, FF_NEW_STRING("TotalAlloc"), Nan::New((double)TotalAlloc));
+  Nan::Set(result, FF_NEW_STRING("TotalKnownByJS"), Nan::New((double)TotalKnownByJS));
+  Nan::Set(result, FF_NEW_STRING("NumAllocations"), Nan::New((double)NumAllocations));
+  Nan::Set(result, FF_NEW_STRING("NumDeAllocations"), Nan::New((double)NumDeAllocations));
+
+  info.GetReturnValue().Set(result);
+  return;
+}
+
+
