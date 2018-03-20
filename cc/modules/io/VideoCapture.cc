@@ -13,6 +13,7 @@ NAN_MODULE_INIT(VideoCapture::Init) {
 	Nan::SetPrototypeMethod(ctor, "readAsync", ReadAsync);
 	Nan::SetPrototypeMethod(ctor, "get", Get);
 	Nan::SetPrototypeMethod(ctor, "set", Set);
+	Nan::SetPrototypeMethod(ctor, "setAsync", SetAsync);
 	Nan::SetPrototypeMethod(ctor, "release", Release);
   target->Set(FF_NEW_STRING("VideoCapture"), ctor->GetFunction());
 };
@@ -73,13 +74,48 @@ NAN_METHOD(VideoCapture::Get) {
 	FF_RETURN(FF_UNWRAP(info.This(), VideoCapture)->cap.get(prop));
 }
 
-NAN_METHOD(VideoCapture::Set) {
-	FF_METHOD_CONTEXT("VideoCapture::Set");
-	FF_ARG_INT(0, int prop);
-	FF_ARG_NUMBER(1, double value);
-	FF_UNWRAP(info.This(), VideoCapture)->cap.set(prop, value);
-}
-
 NAN_METHOD(VideoCapture::Release) {
 	FF_UNWRAP(info.This(), VideoCapture)->cap.release();
+}
+
+
+struct VideoCapture::SetWorker : public SimpleWorker {
+public:
+	cv::VideoCapture self;
+	SetWorker(cv::VideoCapture self) {
+		this->self = self;
+	}
+
+	// required fn args
+	int prop;
+	double value;
+	bool ret;
+
+	const char* execute() {
+		ret = this->self.set(prop, value);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+				IntConverter::arg(0, &prop, info) ||
+				DoubleConverter::arg(1, &value, info)
+		);
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		return Nan::New(ret);
+	}
+};
+
+NAN_METHOD(VideoCapture::Set) {
+	FF_METHOD_CONTEXT("VideoCapture::Set");
+	SetWorker worker(FF_UNWRAP(info.This(), VideoCapture)->cap);
+	FF_WORKER_SYNC("VideoCapture::SetAsync", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+NAN_METHOD(VideoCapture::SetAsync) {
+	FF_METHOD_CONTEXT("VideoCapture::SetAsync");
+	SetWorker worker(FF_UNWRAP(info.This(), VideoCapture)->cap);
+	FF_WORKER_ASYNC("VideoCapture::SetAsync", SetWorker, worker);
 }
