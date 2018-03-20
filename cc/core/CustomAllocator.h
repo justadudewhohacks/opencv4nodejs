@@ -1,6 +1,8 @@
 #ifndef __FF_CUSTOMALLOCATOR_H__
 #define __FF_CUSTOMALLOCATOR_H__
 
+#include <thread>
+
 #include "Converters.h"
 #include "Size.h"
 #include "coreUtils.h"
@@ -28,7 +30,7 @@ public:
         __int64 TotalJSMem; // total mem told to JS so far
 
         // the main JS thread
-        uv_thread_t main_thread;
+        std::thread::id main_thread_id;
     } VARIABLES;
 
     CustomMatAllocator( ) { 
@@ -39,7 +41,7 @@ public:
         variables->CountMemDeAllocs = 0;
         variables->TotalJSMem = 0; // total mem told to JS so far
         
-        variables->main_thread = uv_thread_self(); // get the main thread at create
+        variables->main_thread_id = std::this_thread::get_id();
     }
     ~CustomMatAllocator( ) { 
         delete variables;
