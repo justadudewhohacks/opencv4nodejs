@@ -88,24 +88,10 @@ public:
     
     
     FF_VAL getReturnValue() {
-        FF_ARR jsRegions = FF_NEW_ARRAY(regions.size());
-        
-        for (int r = 0; r < regions.size(); r++){
-            FF_ARR jsRegion = Point::packJSPoint2Array(regions[r]);
-            jsRegions->Set(r, jsRegion);
-        }
-        
-        FF_ARR jsBbox = FF_NEW_ARRAY(mser_bbox.size());
-        for (int i = 0; i < mser_bbox.size(); i++) {
-            FF_OBJ jsR = FF_NEW_INSTANCE(Rect::constructor);
-            FF_UNWRAP_RECT_AND_GET(jsR) = mser_bbox.at(i);
-            jsBbox->Set(i, jsR);
-        }
-
         FF_OBJ ret = FF_NEW_OBJ();            
-        Nan::Set(ret, FF_NEW_STRING("msers"), jsRegions);
-        Nan::Set(ret, FF_NEW_STRING("bboxes"), jsBbox);
-        return ret;
+        Nan::Set(ret, FF_NEW_STRING("msers"), ObjectArrayOfArraysConverter<Point2, cv::Point>::wrap(regions));
+        Nan::Set(ret, FF_NEW_STRING("bboxes"), ObjectArrayConverter<Rect, cv::Rect>::wrap(mser_bbox));
+        return ret;        
     }
 };
 
