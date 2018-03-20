@@ -153,6 +153,8 @@ public:
 	static NAN_METHOD(RotateAsync);
 #endif
 
+	static NAN_METHOD(Release);
+
     static NAN_METHOD(GetMemMetrics);
 
 
