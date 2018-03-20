@@ -89,7 +89,7 @@ void CustomMatAllocator::FixupJSMem() const {
     if (variables->main_thread_id == this_id){
         //std::cout << "thead is main " << this_id << "\n";
         variables->MemTotalChangeMutex.lock();
-        __int64 adjust = variables->TotalMem - variables->TotalJSMem;
+        int64_t adjust = variables->TotalMem - variables->TotalJSMem;
         variables->TotalJSMem += adjust;
         variables->MemTotalChangeMutex.unlock();
         
