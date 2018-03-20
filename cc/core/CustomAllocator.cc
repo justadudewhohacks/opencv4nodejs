@@ -1,10 +1,10 @@
 
-// only valid for 3.1.0+
-#if CV_VERSION_MINOR > 0
 
 #include "CustomAllocator.h"
 //#include <iostream>
 
+// only valid for 3.1.0+
+#if CV_VERSION_MINOR > 0
 
 cv::UMatData* CustomMatAllocator::allocate(int dims, const int* sizes, int type,
                        void* data0, size_t* step, int flags, cv::UMatUsageFlags usageFlags) const
