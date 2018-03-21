@@ -8,5 +8,6 @@ export class VideoCapture {
   readAsync(): Promise<Mat>;
   release(): void;
   reset(): void;
-  set(property: number, value: number): void;
+  set(property: number, value: number): boolean;
+  setAsync(property: number, value: number): Promise<boolean>;
 }

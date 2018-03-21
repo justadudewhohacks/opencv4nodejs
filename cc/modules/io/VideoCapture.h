@@ -1,3 +1,4 @@
+#include "Converters.h"
 #include "macros.h"
 #include <opencv2/highgui.hpp>
 #include "Mat.h"
@@ -17,6 +18,7 @@ public:
 	static NAN_METHOD(ReadAsync);
 	static NAN_METHOD(Get);
 	static NAN_METHOD(Set);
+	static NAN_METHOD(SetAsync);
 	static NAN_METHOD(Release);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
@@ -37,6 +39,7 @@ public:
 			return jsMat;
 		}
 	};
+	struct SetWorker;
 };
 
 #endif
