@@ -54,13 +54,15 @@ module.exports = () => {
         expect(wasSet).to.equal(true);
       });
     });
+
     describe('setAsync', () => {
-      it('should set properties', () => {
+      it('should set properties', (done) => {
         const cap = new cv.VideoCapture(getTestVideoPath());
         cap.setAsync(cv.CAP_PROP_POS_MSEC, 1000, (err, wasSet) => {
-           expect(cap.get(cv.CAP_PROP_POS_MSEC)|0).to.equal(1001);
-           expect(wasSet).to.equal(true);
-        })
+          expect(cap.get(cv.CAP_PROP_POS_MSEC)|0).to.equal(1001);
+          expect(wasSet).to.equal(true);
+          done();
+        });
       });
     });
 
