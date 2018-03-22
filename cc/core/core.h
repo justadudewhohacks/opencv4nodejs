@@ -19,6 +19,9 @@ public:
 	static NAN_METHOD(PolarToCart);
 	static NAN_METHOD(PolarToCartAsync);
     
+	static NAN_METHOD(GetCustomAllocator);
+	static NAN_METHOD(SetCustomAllocator);
+    
     static NAN_METHOD(GetMemMetrics);
     
 };

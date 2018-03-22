@@ -17,7 +17,14 @@
 
 // only valid for 3.1.0+
 #if CV_VERSION_MINOR > 0
+    #define OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING 1
+#endif
 
+
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING
+
+// un-comment to enable by default
+// #define OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING_DEFAULT_ON
 
 class CustomMatAllocator : public cv::MatAllocator
 {
@@ -49,6 +56,7 @@ public:
     }
     ~CustomMatAllocator( ) { 
         delete variables;
+        variables = NULL;
     }
 
     cv::UMatData* allocate(int dims, const int* sizes, int type,

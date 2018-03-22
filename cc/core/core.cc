@@ -45,6 +45,8 @@ NAN_MODULE_INIT(Core::Init) {
 	Nan::SetMethod(target, "cartToPolarAsync", CartToPolarAsync);
 	Nan::SetMethod(target, "polarToCart", PolarToCart);
 	Nan::SetMethod(target, "polarToCartAsync", PolarToCartAsync);
+	Nan::SetMethod(target, "getCustomAllocator", GetCustomAllocator);
+	Nan::SetMethod(target, "setCustomAllocator", SetCustomAllocator);
 	Nan::SetMethod(target, "getMemMetrics", GetMemMetrics);
     
 };
@@ -226,8 +228,7 @@ NAN_METHOD(Core::GetMemMetrics) {
   int64_t NumAllocations = -1;
   int64_t NumDeAllocations = -1;
 
-// only valid for 3.1.0+
-#if CV_VERSION_MINOR > 0
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING
   if (Mat::custommatallocator != NULL){
     TotalAlloc = Mat::custommatallocator->readtotalmem();
     TotalKnownByJS = Mat::custommatallocator->readmeminformed();
@@ -246,4 +247,45 @@ NAN_METHOD(Core::GetMemMetrics) {
   return;
 }
 
+
+NAN_METHOD(Core::GetCustomAllocator) {
+    int allocatorOn = 0;
+    if (Mat::custommatallocator != NULL){
+        allocatorOn = 1;
+    }
+    info.GetReturnValue().Set(allocatorOn);
+}
+
+NAN_METHOD(Core::SetCustomAllocator) {
+    int input = 1;
+	if (info.Length() == 1 && info[0]->IsInt32()) {
+		input = info[0]->Int32Value();
+    }
+
+    if (input){
+        if (Mat::custommatallocator == NULL){
+            Mat::custommatallocator = new CustomMatAllocator();
+            cv::Mat::setDefaultAllocator(Mat::custommatallocator);
+        }
+    } else {
+        if (Mat::custommatallocator != NULL){
+            CustomMatAllocator *allocator = Mat::custommatallocator;
+
+            // return default allocator
+            if (allocator->variables){
+                allocator->variables->MemTotalChangeMutex.lock();
+            }
+            cv::Mat::setDefaultAllocator(NULL);
+            Mat::custommatallocator = NULL;
+            if (allocator->variables){
+                allocator->variables->MemTotalChangeMutex.unlock();
+            }
+
+            // sorry, can't delete it, since it may be references by a number of outstanding Mats -> memory leak, but it's small
+            // and should not happen often, or ever!.
+            //delete allocator;
+        }
+    }
+    
+}
 

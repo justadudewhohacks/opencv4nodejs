@@ -8,10 +8,7 @@
 #include "RotatedRect.h"
 #include "Workers.h"
 
-// only valid for 3.1.0+
-#if CV_VERSION_MINOR > 0
 #include "CustomAllocator.h"
-#endif
 
 #ifndef __FF_MAT_H__
 #define __FF_MAT_H__
@@ -20,8 +17,7 @@ class Mat : public Nan::ObjectWrap {
 public:
   cv::Mat mat;
   
-// only valid for 3.1.0+
-#if CV_VERSION_MINOR > 0
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING
   static CustomMatAllocator *custommatallocator;
 #endif
 

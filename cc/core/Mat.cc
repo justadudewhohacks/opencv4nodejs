@@ -5,20 +5,24 @@
 
 Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
 
-// only valid for 3.1.0+
-#if CV_VERSION_MINOR > 0
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING
 CustomMatAllocator *Mat::custommatallocator = NULL;
 #endif  
-  
+
 
 NAN_MODULE_INIT(Mat::Init) {
     
-// only valid for 3.1.0+
-#if CV_VERSION_MINOR > 0
+// defined in CustomAllocator.h, depends on ocv >= 3.1.0
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING
+
+// defined in CustomAllocator.h
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING_DEFAULT_ON
   if (NULL == custommatallocator){
     custommatallocator = new CustomMatAllocator();
     cv::Mat::setDefaultAllocator(custommatallocator);
   }
+#endif
+  
 #endif  
 
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Mat::New);
@@ -187,8 +191,7 @@ NAN_METHOD(Mat::New) {
 	}
 	self->Wrap(info.Holder());
     
-// only valid for 3.1.0+
-#if CV_VERSION_MINOR > 0
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING
     // I *think* New should be called in JS thread where cv::mat has been created async,
     // so a good place to rationalise memory
     if (self->custommatallocator){
@@ -1283,11 +1286,10 @@ void Mat::setNativeProps(cv::Mat mat) {
 	this->mat = mat;
 };
 
-
 // free memory for this mat
 NAN_METHOD(Mat::Release) {
     // must get pointer to the original; else we are just getting a COPY and then releasing that!
     cv::Mat *mat = &(Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat);
     mat->release();
-};
+}
 
