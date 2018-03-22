@@ -109,6 +109,9 @@ public:
 	static NAN_METHOD(ConvertScaleAbs);
 	static NAN_METHOD(ConvertScaleAbsAsync);
 
+	struct GoodFeaturesToTrackWorker;
+	static NAN_METHOD(GoodFeaturesToTrack);
+	static NAN_METHOD(GoodFeaturesToTrackAsync);
 
 	FF_INIT_MAT_OPERATIONS();
 	static NAN_METHOD(Dot) {
