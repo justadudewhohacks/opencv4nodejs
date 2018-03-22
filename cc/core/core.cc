@@ -250,13 +250,16 @@ NAN_METHOD(Core::GetMemMetrics) {
 
 NAN_METHOD(Core::GetCustomAllocator) {
     int allocatorOn = 0;
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING
     if (Mat::custommatallocator != NULL){
         allocatorOn = 1;
     }
+#endif    
     info.GetReturnValue().Set(allocatorOn);
 }
 
 NAN_METHOD(Core::SetCustomAllocator) {
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING
     int input = 1;
 	if (info.Length() == 1 && info[0]->IsInt32()) {
 		input = info[0]->Int32Value();
@@ -286,6 +289,11 @@ NAN_METHOD(Core::SetCustomAllocator) {
             //delete allocator;
         }
     }
+    info.GetReturnValue().Set(input);
+#else    
+    // indicate can't enable in ocv < 3.1.0
+    info.GetReturnValue().Set(0);
+#endif        
     
 }
 
