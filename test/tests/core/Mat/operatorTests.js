@@ -304,6 +304,19 @@ module.exports = () => {
       assertMetaData(res)(2, 2, cv.CV_64F);
     });
   });
+  describe('log', () => {
+    it('apply log to matrix', () => {
+      const res = new cv.Mat([
+        [Math.exp(0)]
+      ], cv.CV_64F).log();
+      const expectedResult = [
+        [0]
+      ];
+
+      assertMetaData(res)(1, 1, cv.CV_64F);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
+    });
+  });
 
   describe('sqrt', () => {
     it('apply sqrt to matrix', () => {
