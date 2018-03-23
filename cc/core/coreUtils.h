@@ -75,6 +75,7 @@
 	Nan::SetPrototypeMethod(ctor, "hDiv", HDiv);							\
 	Nan::SetPrototypeMethod(ctor, "absdiff", Absdiff);				\
 	Nan::SetPrototypeMethod(ctor, "exp", Exp);								\
+	Nan::SetPrototypeMethod(ctor, "log", Log);								\
 	Nan::SetPrototypeMethod(ctor, "mean", Mean);							\
 	Nan::SetPrototypeMethod(ctor, "sqrt", Sqrt);							\
 	Nan::SetPrototypeMethod(ctor, "dot", Dot);
@@ -118,6 +119,9 @@
 	}																																			\
 	static NAN_METHOD(Exp) {																							\
 		FF_SELF_OPERATOR(cv::exp, unwrapper);																\
+	}																																			\
+	static NAN_METHOD(Log) {																							\
+		FF_SELF_OPERATOR(cv::log, unwrapper);																\
 	}																																			\
 	static NAN_METHOD(Mean) {																							\
 		FF_SELF_OPERATOR(cv::mean, unwrapper);															\
