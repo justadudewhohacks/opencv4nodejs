@@ -81,6 +81,8 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "convertScaleAbsAsync", ConvertScaleAbsAsync);
 	Nan::SetPrototypeMethod(ctor, "sum", Sum);
 	Nan::SetPrototypeMethod(ctor, "sumAsync", SumAsync);
+	Nan::SetPrototypeMethod(ctor, "goodFeaturesToTrack", GoodFeaturesToTrack);
+	Nan::SetPrototypeMethod(ctor, "goodFeaturesToTrackAsync", GoodFeaturesToTrackAsync);
 #if CV_VERSION_MINOR > 1
 	Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
 	Nan::SetPrototypeMethod(ctor, "rotateAsync", RotateAsync);
@@ -1191,6 +1193,106 @@ NAN_METHOD(Mat::ConvertScaleAbsAsync) {
 	FF_WORKER_ASYNC("Mat::ConvertScaleAbsAsync", ConvertScaleAbsWorker, worker);
 }
 
+
+struct Mat::GoodFeaturesToTrackWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	GoodFeaturesToTrackWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	// required function arguments
+	int maxCorners;
+	double qualityLevel;
+	double minDistance;
+
+	// optional args
+	cv::Mat mask = cv::noArray().getMat();
+	// default values from: https://docs.opencv.org/3.4.1/dd/d1a/group__imgproc__feature.html#ga1d6bb77486c8f92d79c8793ad995d541
+	int blockSize = 3;
+	int gradientSize = 3;
+	bool useHarrisDetector = false;
+	double harrisK = 0.04;
+
+	// function return value
+	std::vector<cv::Point2f> corners;
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::arg(0, &maxCorners, info) ||
+			DoubleConverter::arg(1, &qualityLevel, info) ||
+			DoubleConverter::arg(2, &minDistance, info)
+		);
+	}
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		// if 5th arg is Boolean, then we check for the 7 param signature
+		if (info[5]->IsBoolean()){
+			return (
+				Mat::Converter::optArg(3, &mask, info) ||
+				IntConverter::optArg(4, &blockSize, info) ||
+				BoolConverter::optArg(5, &useHarrisDetector, info) ||
+				DoubleConverter::optArg(6, &harrisK, info)
+			);
+
+		} // else we check for the 8 param signature
+		else {
+			return (
+				Mat::Converter::optArg(3, &mask, info) ||
+				IntConverter::optArg(4, &blockSize, info) ||
+				IntConverter::optArg(5, &gradientSize, info) ||
+				BoolConverter::optArg(6, &useHarrisDetector, info) ||
+				DoubleConverter::optArg(7, &harrisK, info)
+			);
+		}
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(3);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[3]->ToObject();
+		return (
+			Mat::Converter::optProp(&mask, "mask", opts) ||
+			IntConverter::optProp(&blockSize, "blockSize", opts) ||
+			IntConverter::optProp(&gradientSize, "gradientSize", opts) ||
+			BoolConverter::optProp(&useHarrisDetector, "useHarrisDetector", opts) ||
+			DoubleConverter::optProp(&harrisK, "harrisK", opts)
+		);
+	}
+
+	const char* execute() {
+#if CV_VERSION_MINOR >= 4
+		cv::goodFeaturesToTrack(
+				self, corners,
+				maxCorners, qualityLevel, minDistance,
+				mask, blockSize, gradientSize,
+				useHarrisDetector, harrisK);
+#else
+		cv::goodFeaturesToTrack(
+				self, corners,
+				maxCorners, qualityLevel, minDistance,
+				mask, blockSize,
+				useHarrisDetector, harrisK);
+#endif
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return ObjectArrayConverter<Point2, cv::Point2f>::wrap(corners);
+	}
+};
+
+NAN_METHOD(Mat::GoodFeaturesToTrack) {
+	GoodFeaturesToTrackWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::GoodFeaturesToTrack", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::GoodFeaturesToTrackAsync) {
+	GoodFeaturesToTrackWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::GoodFeaturesToTrackAsync", GoodFeaturesToTrackWorker, worker);
+}
 
 #if CV_VERSION_MINOR > 1
 struct Mat::RotateWorker : public OpWithCodeWorker {

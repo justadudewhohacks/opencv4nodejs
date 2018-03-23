@@ -1479,5 +1479,51 @@ module.exports = (getTestImg) => {
         expectOutput: makeExpectOutput(cv32fc6)
       });
     });
+
+    describe('goodFeaturesToTrack', () => {
+      generateAPITests({
+        getDut,
+        methodName: 'goodFeaturesToTrack',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          20, 0.04, 1
+        ]),
+        getOptionalArgsMap: () => ([
+          ['mask', new cv.Mat(512,512,cv.CV_U8)],
+          ['blockSize', 3],
+          ['gradientSize', 3],
+          ['useHarrisDetector', false],
+          ['harrisK', 0.04 ]
+        ]),
+        expectOutput: (out) => {
+          expect(out).to.be.instanceOf(Array);
+          expect(out.length).to.be.equal(20);
+          expect(out[0]).to.have.property('x');
+          expect(out[0]).to.have.property('y');
+        }
+      });
+
+      generateAPITests({
+        getDut,
+        methodName: 'goodFeaturesToTrack',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          20, 0.04, 1
+        ]),
+        getOptionalArgsMap: () => ([
+          ['mask', new cv.Mat(512,512,cv.CV_U8)],
+          ['blockSize', 3],
+          ['useHarrisDetector', false],
+          ['harrisK', 0.04 ]
+        ]),
+        expectOutput: (out) => {
+          expect(out).to.be.instanceOf(Array);
+          expect(out.length).to.be.equal(20);
+          expect(out[0]).to.have.property('x');
+          expect(out[0]).to.have.property('y');
+        }
+      });
+    });
+
   });
 };
