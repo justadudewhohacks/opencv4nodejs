@@ -1210,7 +1210,6 @@ public:
 	cv::Mat mask = cv::noArray().getMat();
 	// default values from: https://docs.opencv.org/3.4.1/dd/d1a/group__imgproc__feature.html#ga1d6bb77486c8f92d79c8793ad995d541
 	int blockSize = 3;
-	int gradientSize = 3;
 	bool useHarrisDetector = false;
 	double harrisK = 0.04;
 
@@ -1229,7 +1228,6 @@ public:
 		return (
 			Mat::Converter::optArg(3, &mask, info) ||
 			IntConverter::optArg(4, &blockSize, info) ||
-			IntConverter::optArg(5, &gradientSize, info) ||
 			BoolConverter::optArg(6, &useHarrisDetector, info) ||
 			DoubleConverter::optArg(7, &harrisK, info)
 		);
@@ -1239,7 +1237,7 @@ public:
 		cv::goodFeaturesToTrack(
 				self, corners,
 				maxCorners, qualityLevel, minDistance,
-				mask, blockSize, gradientSize,
+				mask, blockSize,
 				useHarrisDetector, harrisK);
 		return "";
 	}
