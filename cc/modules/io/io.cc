@@ -42,7 +42,7 @@ NAN_MODULE_INIT(Io::Init) {
 	FF_SET_JS_PROP(target, IMWRITE_PXM_BINARY, Nan::New<v8::Integer>(cv::IMWRITE_PXM_BINARY));
 	FF_SET_JS_PROP(target, IMWRITE_WEBP_QUALITY, Nan::New<v8::Integer>(cv::IMWRITE_WEBP_QUALITY));
 
-#if OPENCV_MINOR_VERSION >= 1
+#if CV_VERSION_MINOR >= 1
 	FF_SET_JS_PROP(target, IMREAD_REDUCED_GRAYSCALE_2, Nan::New<v8::Integer>(cv::IMREAD_REDUCED_GRAYSCALE_2));
 	FF_SET_JS_PROP(target, IMREAD_REDUCED_COLOR_2, Nan::New<v8::Integer>(cv::IMREAD_REDUCED_COLOR_2));
 	FF_SET_JS_PROP(target, IMREAD_REDUCED_GRAYSCALE_4, Nan::New<v8::Integer>(cv::IMREAD_REDUCED_GRAYSCALE_4));
@@ -50,7 +50,7 @@ NAN_MODULE_INIT(Io::Init) {
 	FF_SET_JS_PROP(target, IMREAD_REDUCED_GRAYSCALE_8, Nan::New<v8::Integer>(cv::IMREAD_REDUCED_GRAYSCALE_8));
 	FF_SET_JS_PROP(target, IMREAD_REDUCED_COLOR_8, Nan::New<v8::Integer>(cv::IMREAD_REDUCED_COLOR_8));
 #endif
-#if OPENCV_MINOR_VERSION >= 2
+#if CV_VERSION_MINOR >= 2
 	FF_SET_JS_PROP(target, IMREAD_IGNORE_ORIENTATION, Nan::New<v8::Integer>(cv::IMREAD_IGNORE_ORIENTATION));
 	FF_SET_JS_PROP(target, IMWRITE_PAM_TUPLETYPE, Nan::New<v8::Integer>(cv::IMWRITE_PAM_TUPLETYPE));
 
@@ -237,7 +237,7 @@ NAN_METHOD(Io::ImencodeAsync) {
 	else {
 		FF_ARG_FUNC(2, cbFunc);
 	}
-	
+
 	Nan::AsyncQueueWorker(new GenericAsyncWorker<ImencodeContext>(
 		new Nan::Callback(cbFunc),
 		ctx
