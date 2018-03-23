@@ -1488,6 +1488,47 @@ module.exports = (getTestImg) => {
         getRequiredArgs: () => ([
           20, 0.04, 1
         ]),
+        getOptionalArgs: () => ([
+          new cv.Mat(512,512,cv.CV_U8), // mask
+          3, // blockSize
+          3, // gradientSize
+          false, // useHarrisDetector
+          0.04 // harrisK
+        ]),
+        getOptionalArgsMap: () => ([
+          ['mask', new cv.Mat(512,512,cv.CV_U8)],
+          ['blockSize', 3],
+          ['gradientSize', 3],
+          ['useHarrisDetector', false],
+          ['harrisK', 0.04 ]
+        ]),
+        expectOutput: (out) => {
+          expect(out).to.be.instanceOf(Array);
+          expect(out.length).to.be.equal(20);
+          expect(out[0]).to.have.property('x');
+          expect(out[0]).to.have.property('y');
+        }
+      });
+
+      generateAPITests({
+        getDut,
+        methodName: 'goodFeaturesToTrack',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          20, 0.04, 1
+        ]),
+        getOptionalArgs: () => ([
+          new cv.Mat(512,512,cv.CV_U8), // mask
+          3, // blockSize
+          false, // useHarrisDetector
+          0.04 // harrisK
+        ]),
+        getOptionalArgsMap: () => ([
+          ['mask', new cv.Mat(512,512,cv.CV_U8)],
+          ['blockSize', 3],
+          ['useHarrisDetector', false],
+          ['harrisK', 0.04 ]
+        ]),
         expectOutput: (out) => {
           expect(out).to.be.instanceOf(Array);
           expect(out.length).to.be.equal(20);

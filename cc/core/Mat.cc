@@ -1210,12 +1210,12 @@ public:
 	cv::Mat mask = cv::noArray().getMat();
 	// default values from: https://docs.opencv.org/3.4.1/dd/d1a/group__imgproc__feature.html#ga1d6bb77486c8f92d79c8793ad995d541
 	int blockSize = 3;
+	int gradientSize = 3;
 	bool useHarrisDetector = false;
 	double harrisK = 0.04;
 
 	// function return value
 	std::vector<cv::Point2f> corners;
-
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
@@ -1225,20 +1225,56 @@ public:
 		);
 	}
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		// if 5th arg is Boolean, then we check for the 7 param signature
+		if (info[5]->IsBoolean()){
+			return (
+				Mat::Converter::optArg(3, &mask, info) ||
+				IntConverter::optArg(4, &blockSize, info) ||
+				BoolConverter::optArg(5, &useHarrisDetector, info) ||
+				DoubleConverter::optArg(6, &harrisK, info)
+			);
+
+		} // else we check for the 8 param signature
+		else {
+			return (
+				Mat::Converter::optArg(3, &mask, info) ||
+				IntConverter::optArg(4, &blockSize, info) ||
+				IntConverter::optArg(5, &gradientSize, info) ||
+				BoolConverter::optArg(6, &useHarrisDetector, info) ||
+				DoubleConverter::optArg(7, &harrisK, info)
+			);
+		}
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(3);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[3]->ToObject();
 		return (
-			Mat::Converter::optArg(3, &mask, info) ||
-			IntConverter::optArg(4, &blockSize, info) ||
-			BoolConverter::optArg(6, &useHarrisDetector, info) ||
-			DoubleConverter::optArg(7, &harrisK, info)
+			Mat::Converter::optProp(&mask, "mask", opts) ||
+			IntConverter::optProp(&blockSize, "blockSize", opts) ||
+			IntConverter::optProp(&gradientSize, "gradientSize", opts) ||
+			BoolConverter::optProp(&useHarrisDetector, "useHarrisDetector", opts) ||
+			DoubleConverter::optProp(&harrisK, "harrisK", opts)
 		);
 	}
 
 	const char* execute() {
+#if OPENCV_MINOR_VERSION >= 4
+		cv::goodFeaturesToTrack(
+				self, corners,
+				maxCorners, qualityLevel, minDistance,
+				mask, blockSize, gradientSize,
+				useHarrisDetector, harrisK);
+#else
 		cv::goodFeaturesToTrack(
 				self, corners,
 				maxCorners, qualityLevel, minDistance,
 				mask, blockSize,
 				useHarrisDetector, harrisK);
+#endif
 		return "";
 	}
 
