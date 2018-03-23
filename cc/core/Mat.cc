@@ -1214,7 +1214,7 @@ public:
 	double harrisK = 0.04;
 
 	// function return value
-	cv::Mat corners;
+	std::vector<cv::Point2f> corners;
 
 
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1243,7 +1243,7 @@ public:
 	}
 
 	FF_VAL getReturnValue() {
-		return Mat::Converter::wrap(corners);
+		return ObjectArrayConverter<Point2, cv::Point2f>::wrap(corners);
 	}
 };
 

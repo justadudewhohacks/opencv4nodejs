@@ -1489,8 +1489,10 @@ module.exports = (getTestImg) => {
           20, 0.04, 1
         ]),
         expectOutput: (out) => {
-          expect(out).to.be.instanceOf(cv.Mat);
-          assertMetaData(out)(20, 1, cv.CV_32FC2);
+          expect(out).to.be.instanceOf(Array);
+          expect(out.length).to.be.equal(20);
+          expect(out[0]).to.have.property('x');
+          expect(out[0]).to.have.property('y');
         }
       });
     });

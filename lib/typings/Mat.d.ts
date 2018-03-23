@@ -286,8 +286,8 @@ export class Mat {
   warpPerspectiveAsync(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number): Promise<Mat>;
   watershed(markers: Mat): Mat;
   watershedAsync(markers: Mat): Promise<Mat>;
-  goodFeaturesToTrack(maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, useHarrisDetector?: boolean, harrisK?: number): Mat;
-  goodFeaturesToTrackAsync(maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, useHarrisDetector?: boolean, harrisK?: number): Promise<Mat>;
+  goodFeaturesToTrack(maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, useHarrisDetector?: boolean, harrisK?: number): Point2[];
+  goodFeaturesToTrackAsync(maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, useHarrisDetector?: boolean, harrisK?: number): Promise<Point2[]>;
 
   static eye(rows: number, cols: number, type: number): Mat;
 }
