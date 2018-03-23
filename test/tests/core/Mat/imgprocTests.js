@@ -1479,5 +1479,21 @@ module.exports = (getTestImg) => {
         expectOutput: makeExpectOutput(cv32fc6)
       });
     });
+
+    describe('goodFeaturesToTrack', () => {
+      generateAPITests({
+        getDut,
+        methodName: 'goodFeaturesToTrack',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          20, 0.04, 1
+        ]),
+        expectOutput: (out) => {
+          expect(out).to.be.instanceOf(cv.Mat);
+          assertMetaData(out)(20, 1, cv.CV_32FC2);
+        }
+      });
+    });
+
   });
 };
