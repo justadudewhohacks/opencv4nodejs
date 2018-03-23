@@ -1488,13 +1488,6 @@ module.exports = (getTestImg) => {
         getRequiredArgs: () => ([
           20, 0.04, 1
         ]),
-        getOptionalArgs: () => ([
-          new cv.Mat(512,512,cv.CV_U8), // mask
-          3, // blockSize
-          3, // gradientSize
-          false, // useHarrisDetector
-          0.04 // harrisK
-        ]),
         getOptionalArgsMap: () => ([
           ['mask', new cv.Mat(512,512,cv.CV_U8)],
           ['blockSize', 3],
@@ -1516,12 +1509,6 @@ module.exports = (getTestImg) => {
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           20, 0.04, 1
-        ]),
-        getOptionalArgs: () => ([
-          new cv.Mat(512,512,cv.CV_U8), // mask
-          3, // blockSize
-          false, // useHarrisDetector
-          0.04 // harrisK
         ]),
         getOptionalArgsMap: () => ([
           ['mask', new cv.Mat(512,512,cv.CV_U8)],

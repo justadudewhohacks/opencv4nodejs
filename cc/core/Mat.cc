@@ -1262,7 +1262,7 @@ public:
 	}
 
 	const char* execute() {
-#if OPENCV_MINOR_VERSION >= 4
+#if CV_VERSION_MINOR >= 4
 		cv::goodFeaturesToTrack(
 				self, corners,
 				maxCorners, qualityLevel, minDistance,
