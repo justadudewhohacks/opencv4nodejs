@@ -1,6 +1,8 @@
 #include <node.h>
-#include "cvTypes/cvTypes.h"
+#include "ExternalMemTracking.h"
+#include <iostream>
 
+#include "cvTypes/cvTypes.h"
 #include "core.h"
 #include "modules/io/io.h"
 #include "modules/video/video.h"
@@ -31,6 +33,10 @@
 #endif
 
 void init(v8::Local<v8::Object> target) {
+	// can be disabled by defining env variable: OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING
+	ExternalMemTracking::Init(target);
+
+
 	v8::Local<v8::Object> version = Nan::New<v8::Object>();
 	Nan::Set(version, FF_NEW_STRING("major"), Nan::New(CV_MAJOR_VERSION));
 	Nan::Set(version, FF_NEW_STRING("minor"), Nan::New(CV_MINOR_VERSION));

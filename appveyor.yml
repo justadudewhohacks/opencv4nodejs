@@ -55,3 +55,4 @@ test_script:
   - cmd: cd c:\projects\opencv4nodejs\test
   - npm install
   - npm run test-appveyor
+  - npm run test-externalMemTracking
