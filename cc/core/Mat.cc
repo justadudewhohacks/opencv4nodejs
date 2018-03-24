@@ -175,7 +175,7 @@ NAN_METHOD(Mat::New) {
 	}
 	self->Wrap(info.Holder());
     
-	// if ExternalMemTracking, the following instruction will be a no op
+	// if ExternalMemTracking is disabled, the following instruction will be a no op
     // notes: I *think* New should be called in JS thread where cv::mat has been created async,
     // so a good place to rationalise memory
 	ExternalMemTracking::onMatAllocated();
