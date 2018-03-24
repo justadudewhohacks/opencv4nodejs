@@ -8,12 +8,18 @@
 #include "RotatedRect.h"
 #include "Workers.h"
 
+#include "CustomAllocator.h"
+
 #ifndef __FF_MAT_H__
 #define __FF_MAT_H__
 
 class Mat : public Nan::ObjectWrap {
 public:
   cv::Mat mat;
+  
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING
+  static CustomMatAllocator *custommatallocator;
+#endif
 
   static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
@@ -153,7 +159,6 @@ public:
 #endif
 
 	static NAN_METHOD(Release);
-
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
 

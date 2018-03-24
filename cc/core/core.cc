@@ -45,6 +45,10 @@ NAN_MODULE_INIT(Core::Init) {
 	Nan::SetMethod(target, "cartToPolarAsync", CartToPolarAsync);
 	Nan::SetMethod(target, "polarToCart", PolarToCart);
 	Nan::SetMethod(target, "polarToCartAsync", PolarToCartAsync);
+	Nan::SetMethod(target, "getCustomAllocator", GetCustomAllocator);
+	Nan::SetMethod(target, "setCustomAllocator", SetCustomAllocator);
+	Nan::SetMethod(target, "getMemMetrics", GetMemMetrics);
+    
 };
 
 NAN_METHOD(Core::Partition) {
@@ -215,3 +219,81 @@ NAN_METHOD(Core::PolarToCartAsync) {
 	PolarToCartWorker worker;
 	FF_WORKER_ASYNC("Mat::PolarToCartAsync", PolarToCartWorker, worker);
 }
+
+
+NAN_METHOD(Core::GetMemMetrics) {
+    
+  int64_t TotalAlloc = -1;
+  int64_t TotalKnownByJS = -1;
+  int64_t NumAllocations = -1;
+  int64_t NumDeAllocations = -1;
+
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING
+  if (Mat::custommatallocator != NULL){
+    TotalAlloc = Mat::custommatallocator->readtotalmem();
+    TotalKnownByJS = Mat::custommatallocator->readmeminformed();
+    NumAllocations = Mat::custommatallocator->readnumallocated();
+    NumDeAllocations = Mat::custommatallocator->readnumdeallocated();
+  }
+#endif
+
+  FF_OBJ result = FF_NEW_OBJ(); 
+  Nan::Set(result, FF_NEW_STRING("TotalAlloc"), Nan::New((double)TotalAlloc));
+  Nan::Set(result, FF_NEW_STRING("TotalKnownByJS"), Nan::New((double)TotalKnownByJS));
+  Nan::Set(result, FF_NEW_STRING("NumAllocations"), Nan::New((double)NumAllocations));
+  Nan::Set(result, FF_NEW_STRING("NumDeAllocations"), Nan::New((double)NumDeAllocations));
+
+  info.GetReturnValue().Set(result);
+  return;
+}
+
+
+NAN_METHOD(Core::GetCustomAllocator) {
+    int allocatorOn = 0;
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING
+    if (Mat::custommatallocator != NULL){
+        allocatorOn = 1;
+    }
+#endif    
+    info.GetReturnValue().Set(allocatorOn);
+}
+
+NAN_METHOD(Core::SetCustomAllocator) {
+#ifdef OPENCV4NODEJS_ENABLE_EXTERNALMEMTRACKING
+    int input = 1;
+	if (info.Length() == 1 && info[0]->IsInt32()) {
+		input = info[0]->Int32Value();
+    }
+
+    if (input){
+        if (Mat::custommatallocator == NULL){
+            Mat::custommatallocator = new CustomMatAllocator();
+            cv::Mat::setDefaultAllocator(Mat::custommatallocator);
+        }
+    } else {
+        if (Mat::custommatallocator != NULL){
+            CustomMatAllocator *allocator = Mat::custommatallocator;
+
+            // return default allocator
+            if (allocator->variables){
+                allocator->variables->MemTotalChangeMutex.lock();
+            }
+            cv::Mat::setDefaultAllocator(NULL);
+            Mat::custommatallocator = NULL;
+            if (allocator->variables){
+                allocator->variables->MemTotalChangeMutex.unlock();
+            }
+
+            // sorry, can't delete it, since it may be references by a number of outstanding Mats -> memory leak, but it's small
+            // and should not happen often, or ever!.
+            //delete allocator;
+        }
+    }
+    info.GetReturnValue().Set(input);
+#else    
+    // indicate can't enable in ocv < 3.1.0
+    info.GetReturnValue().Set(0);
+#endif        
+    
+}
+

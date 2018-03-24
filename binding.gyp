@@ -21,6 +21,7 @@
 			"cc/cvTypes/imgprocConstants.cc",
 			"cc/cvTypes/videoCaptureProps.cc",
 			"cc/core/core.cc",
+			"cc/core/CustomAllocator.cc",
 			"cc/core/Mat.cc",
 			"cc/core/MatImgproc.cc",
 			"cc/core/MatCalib3d.cc",
