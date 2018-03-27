@@ -1,4 +1,5 @@
 #include "Converters.h"
+#include "macros.h"
 #include "opencv2/face.hpp"
 
 #ifndef __FF_FACE_H__

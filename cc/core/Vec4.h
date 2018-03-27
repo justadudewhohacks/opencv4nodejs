@@ -1,6 +1,7 @@
-#include "Converters.h"
 #include <opencv2/core.hpp>
 #include "coreUtils.h"
+#include "Converters.h"
+#include "macros.h"
 
 #ifndef __FF_VEC4_H__
 #define __FF_VEC4_H__

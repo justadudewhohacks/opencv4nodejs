@@ -1,4 +1,5 @@
 #include "Converters.h"
+#include "macros.h"
 #include "../FeatureDetector.h"
 
 #ifndef __FF_SIMPLEBLOBDETECTOR_H__

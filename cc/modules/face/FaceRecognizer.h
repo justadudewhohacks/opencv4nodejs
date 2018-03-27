@@ -1,4 +1,5 @@
 #include "Converters.h"
+#include "macros.h"
 #include "Workers.h"
 #include "Mat.h"
 #include <opencv2/face.hpp>

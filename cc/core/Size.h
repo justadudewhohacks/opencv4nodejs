@@ -1,5 +1,6 @@
-#include "Converters.h"
 #include <opencv2/core.hpp>
+#include "Converters.h"
+#include "macros.h"
 
 #ifndef __FF_SIZE_H__
 #define __FF_SIZE_H__

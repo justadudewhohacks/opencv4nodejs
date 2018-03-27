@@ -18,7 +18,7 @@ NAN_MODULE_INIT(FisherFaceRecognizer::Init) {
 
 NAN_METHOD(FisherFaceRecognizer::New) {
 	FaceRecognizer::NewWorker worker;
-	FF_TRY_UNWRAP_ARGS("FisherFaceRecognizer::New", worker);
+	FF_WORKER_TRY_UNWRAP_ARGS("FisherFaceRecognizer::New", worker);
 
 	FisherFaceRecognizer* self = new FisherFaceRecognizer();
 	self->Wrap(info.Holder());

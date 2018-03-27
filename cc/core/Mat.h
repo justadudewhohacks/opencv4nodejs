@@ -1,4 +1,3 @@
-#include "Converters.h"
 #include "Size.h"
 #include "coreUtils.h"
 #include "matUtils.h"
@@ -6,7 +5,9 @@
 #include "Point2.h"
 #include "Rect.h"
 #include "RotatedRect.h"
+#include "Converters.h"
 #include "Workers.h"
+#include "macros.h"
 
 #ifndef __FF_MAT_H__
 #define __FF_MAT_H__

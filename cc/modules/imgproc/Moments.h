@@ -1,4 +1,5 @@
 #include "Converters.h"
+#include "macros.h"
 #include <opencv2/core.hpp>
 
 #ifndef __FF_MOMENTS_H__

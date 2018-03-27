@@ -18,7 +18,7 @@ NAN_MODULE_INIT(EigenFaceRecognizer::Init) {
 
 NAN_METHOD(EigenFaceRecognizer::New) {
 	FaceRecognizer::NewWorker worker;
-	FF_TRY_UNWRAP_ARGS("EigenFaceRecognizer::New", worker);
+	FF_WORKER_TRY_UNWRAP_ARGS("EigenFaceRecognizer::New", worker);
 
 	EigenFaceRecognizer* self = new EigenFaceRecognizer();
 	self->Wrap(info.Holder());
