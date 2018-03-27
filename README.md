@@ -23,6 +23,7 @@ opencv4nodejs
 * **[Quick Start](#quick-start)**
 * **[Async API](#async-api)**
 * **[With TypeScript](#with-typescript)**
+* **[External Memory Tracking (v4.0.0)](#external-mem-tracking)**
 * **[Available Modules](#available-modules)**
 * **[Request new Features](#request-features)**
 
@@ -457,6 +458,25 @@ import * as cv from 'opencv4nodejs'
 ```
 
 Check out the TypeScript [examples](https://github.com/justadudewhohacks/opencv4nodejs/tree/master/examples/typed).
+
+<a name="external-mem-tracking"></a>
+
+# External Memory Tracking (v4.0.0)
+
+Since version 4.0.0 external memory tracking will be enabled by default. Simply put, the memory allocated for Matrices (cv.Mat) will be manually reported to the node process. This solves the issue of inconsistent Garbage Collection, which could have resulted in spiking memory usage of the node process eventually leading to overflowing the RAM of your system, prior to version 4.0.0.
+
+Note, that in doubt this feature can be **disabled** by setting and environment variable `OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING` before requiring the module:
+
+``` bash
+export OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING=1 // linux
+set OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING=1 // windows
+```
+
+Or directly in your code:
+``` javascript
+process.env.OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING = 1
+const cv = require('opencv4nodejs')
+```
 
 <a name="available-modules"></a>
 
