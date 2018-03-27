@@ -50,7 +50,7 @@ public:
 
 NAN_METHOD(OCRHMMDecoder::New) {
 	NewWorker worker;
-	FF_TRY_UNWRAP_ARGS("OCRHMMDecoder::New", worker);
+	FF_WORKER_TRY_UNWRAP_ARGS("OCRHMMDecoder::New", worker);
 	OCRHMMDecoder* self = new OCRHMMDecoder();
 	self->decoder = cv::text::OCRHMMDecoder::create(
 		worker.classifier,

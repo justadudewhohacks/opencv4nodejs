@@ -1,4 +1,5 @@
 #include "Converters.h"
+#include "macros.h"
 #include <opencv2/text.hpp>
 
 #ifndef __FF_OCRHMMCLASSIFIER_H__

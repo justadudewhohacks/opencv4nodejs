@@ -1,4 +1,5 @@
 #include "Converters.h"
+#include "macros.h"
 #include "OCRHMMClassifier.h"
 #include "OCRHMMDecoder.h"
 

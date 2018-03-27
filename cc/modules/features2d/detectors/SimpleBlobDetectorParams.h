@@ -1,4 +1,5 @@
 #include "Converters.h"
+#include "macros.h"
 #include <opencv2/features2d.hpp>
 
 #ifndef __FF_SIMPLEBLOBDETECTORPARAMS_H__

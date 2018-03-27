@@ -1,6 +1,7 @@
+#include <opencv2/core.hpp>
 #include "Converters.h"
 #include "Workers.h"
-#include <opencv2/core.hpp>
+#include "macros.h"
 
 #ifndef __FF_RECT_H__
 #define __FF_RECT_H__

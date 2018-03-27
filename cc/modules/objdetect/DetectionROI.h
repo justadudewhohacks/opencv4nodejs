@@ -1,4 +1,5 @@
 #include "Converters.h"
+#include "macros.h"
 #include <opencv2/objdetect.hpp>
 #include "Point.h"
 

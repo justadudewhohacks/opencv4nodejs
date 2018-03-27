@@ -41,7 +41,7 @@ public:
 
 NAN_METHOD(VideoWriter::New) {
 	NewWorker worker;
-	FF_TRY_UNWRAP_ARGS("VideoWriter::New", worker);
+	FF_WORKER_TRY_UNWRAP_ARGS("VideoWriter::New", worker);
 
 	VideoWriter* self = new VideoWriter();
 	self->writer.open(worker.fileName, worker.fourccCode, worker.fps, (cv::Size)worker.frameSize, worker.isColor);
@@ -71,7 +71,7 @@ public:
 
 NAN_METHOD(VideoWriter::Fourcc) {
 	FourccWorker worker;
-	FF_TRY_UNWRAP_ARGS("VideoWriter::Fourcc", worker);
+	FF_WORKER_TRY_UNWRAP_ARGS("VideoWriter::Fourcc", worker);
 	if (worker.fourcc.size() != 4) {
 		FF_METHOD_CONTEXT("VideoWriter::Fourcc");
 		FF_THROW("expected charCode to be a string of 4 characters");

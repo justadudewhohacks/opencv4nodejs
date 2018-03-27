@@ -52,7 +52,7 @@ public:
 
 NAN_METHOD(LBPHFaceRecognizer::New) {
 	LBPHFaceRecognizer::NewWorker worker;
-	FF_TRY_UNWRAP_ARGS("LBPHFaceRecognizer::New", worker);
+	FF_WORKER_TRY_UNWRAP_ARGS("LBPHFaceRecognizer::New", worker);
 
 	LBPHFaceRecognizer* self = new LBPHFaceRecognizer();
 	self->Wrap(info.Holder());
