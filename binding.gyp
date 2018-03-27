@@ -111,6 +111,9 @@
 			"-fno-rtti",
 			"-fno-exceptions"
 		],
+		"ldflags" : [
+			"-Wl,-rpath,'$$ORIGIN'"
+		],
 		"xcode_settings": {
 			"OTHER_CFLAGS": [
 				"-std=c++11",
