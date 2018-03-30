@@ -10,6 +10,9 @@ public:
   static NAN_MODULE_INIT(Init);
   static NAN_METHOD(FastNlMeansDenoisingColored);
 
+	struct InpaintWorker;
+	static NAN_METHOD(Inpaint);
+	static NAN_METHOD(InpaintAsync);
 };
 
 #endif

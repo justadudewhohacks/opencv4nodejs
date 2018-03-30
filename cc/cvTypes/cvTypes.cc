@@ -1,6 +1,7 @@
 #include "cvTypes.h"
 #include "matTypes.h"
 #include "imgprocConstants.h"
+#include "photoConstants.h"
 #include "videoCaptureProps.h"
 
 using namespace cv;
@@ -8,6 +9,7 @@ using namespace cv;
 void CvTypes::Init(v8::Local<v8::Object> target) {
 	initMatTypes(target);
 	ImgprocConstants::Init(target);
+	PhotoConstants::Init(target);
 	VideoCaptureProps::Init(target);
 
 	FF_SET_CV_CONSTANT(target, NORM_INF);
