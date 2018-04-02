@@ -73,19 +73,23 @@ NAN_METHOD(Calib3d::FindHomography) {
 	FF_GET_UINT_IFDEF(optArgs, uint method, "method", 0);
 	FF_GET_NUMBER_IFDEF(optArgs, double ransacReprojThreshold, "ransacReprojThreshold", 3);
 	FF_GET_UINT_IFDEF(optArgs, uint maxIters, "maxIters", 2000);
-	FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat mask, "mask", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat())
 	FF_GET_NUMBER_IFDEF(optArgs, double confidence, "confidence", 0.995);
 	if (!hasOptArgsObj) {
 		FF_ARG_UINT_IFDEF(2, method, method);
 		FF_ARG_NUMBER_IFDEF(3, ransacReprojThreshold, ransacReprojThreshold);
 		FF_ARG_UINT_IFDEF(4, maxIters, maxIters);
-		FF_ARG_INSTANCE_IFDEF(5, mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
-		FF_ARG_NUMBER_IFDEF(4, confidence, confidence);
+		FF_ARG_NUMBER_IFDEF(5, confidence, confidence);
 	}
 
 	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
-	FF_UNWRAP_MAT_AND_GET(jsMat) = cv::findHomography(srcPoints, dstPoints, method, ransacReprojThreshold, mask, maxIters, confidence);
-	FF_RETURN(jsMat);
+	FF_OBJ mask = FF_NEW_INSTANCE(Mat::constructor);
+	FF_UNWRAP_MAT_AND_GET(jsMat) = cv::findHomography(srcPoints, dstPoints, method, ransacReprojThreshold, FF_UNWRAP_MAT_AND_GET(mask), maxIters, confidence);
+
+	FF_ARR output = FF_NEW_ARRAY(2);
+	output->Set(0, jsMat);
+	output->Set(1, mask);
+
+	FF_RETURN(output);
 }
 
 struct Calib3d::ComposeRTWorker : public SimpleWorker {
