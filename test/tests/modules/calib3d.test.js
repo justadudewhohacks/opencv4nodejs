@@ -65,8 +65,8 @@ describe('calib3d', () => {
     });
 
     it('should calculate a valid homography', () => {
-      const homography = cv.findHomography(srcPoints, dstPoints);
-      assertPropsWithValue(homography)({ type: cv.CV_64F, rows: 3, cols: 3 });
+      const output = cv.findHomography(srcPoints, dstPoints);
+      assertPropsWithValue(output.homography)({ type: cv.CV_64F, rows: 3, cols: 3 });
     });
   });
 

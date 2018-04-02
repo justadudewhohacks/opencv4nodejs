@@ -85,11 +85,10 @@ NAN_METHOD(Calib3d::FindHomography) {
 	FF_OBJ mask = FF_NEW_INSTANCE(Mat::constructor);
 	FF_UNWRAP_MAT_AND_GET(jsMat) = cv::findHomography(srcPoints, dstPoints, method, ransacReprojThreshold, FF_UNWRAP_MAT_AND_GET(mask), maxIters, confidence);
 
-	FF_ARR output = FF_NEW_ARRAY(2);
-	output->Set(0, jsMat);
-	output->Set(1, mask);
-
-	FF_RETURN(output);
+	v8::Local<v8::Object> output = Nan::New<v8::Object>();
+	Nan::Set(output, Nan::New("homography").ToLocalChecked(), jsMat);
+	Nan::Set(output, Nan::New("mask").ToLocalChecked(), mask);
+	info.GetReturnValue().Set(output);
 }
 
 struct Calib3d::ComposeRTWorker : public SimpleWorker {
