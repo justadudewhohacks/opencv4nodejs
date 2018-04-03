@@ -85,6 +85,8 @@ NAN_MODULE_INIT(Mat::Init) {
 	Nan::SetPrototypeMethod(ctor, "sumAsync", SumAsync);
 	Nan::SetPrototypeMethod(ctor, "goodFeaturesToTrack", GoodFeaturesToTrack);
 	Nan::SetPrototypeMethod(ctor, "goodFeaturesToTrackAsync", GoodFeaturesToTrackAsync);
+	Nan::SetPrototypeMethod(ctor, "meanStdDev", MeanStdDev);
+	Nan::SetPrototypeMethod(ctor, "meanStdDevAsync", MeanStdDevAsync);
 #if CV_VERSION_MINOR > 1
 	Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
 	Nan::SetPrototypeMethod(ctor, "rotateAsync", RotateAsync);
@@ -1269,6 +1271,7 @@ public:
 		);
 	}
 
+
 	const char* execute() {
 #if CV_VERSION_MINOR >= 4
 		cv::goodFeaturesToTrack(
@@ -1300,6 +1303,48 @@ NAN_METHOD(Mat::GoodFeaturesToTrack) {
 NAN_METHOD(Mat::GoodFeaturesToTrackAsync) {
 	GoodFeaturesToTrackWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::GoodFeaturesToTrackAsync", GoodFeaturesToTrackWorker, worker);
+}
+
+struct Mat::MeanStdDevWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	MeanStdDevWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	cv::Mat mask = cv::noArray().getMat();
+
+	cv::Mat mean;
+	cv::Mat stddev;
+
+	const char* execute() {
+		cv::meanStdDev(self, mean, stddev, mask);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		Nan::Set(ret, Nan::New("mean").ToLocalChecked(), Mat::Converter::wrap(mean));
+		Nan::Set(ret, Nan::New("stddev").ToLocalChecked(), Mat::Converter::wrap(stddev));
+		return ret;
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::optArg(0, &mask, info)
+		);
+	}
+};
+
+NAN_METHOD(Mat::MeanStdDev) {
+	MeanStdDevWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::MeanStdDev", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Mat::MeanStdDevAsync) {
+	MeanStdDevWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::MeanStdDevAsync", MeanStdDevWorker, worker);
 }
 
 #if CV_VERSION_MINOR > 1
@@ -1373,4 +1418,5 @@ NAN_METHOD(Mat::Release) {
     cv::Mat *mat = &(Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat);
     mat->release();
 }
+
 

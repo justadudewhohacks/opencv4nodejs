@@ -108,6 +108,8 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "cornerMinEigenValAsync", CornerMinEigenValAsync);
 	Nan::SetPrototypeMethod(ctor, "cornerEigenValsAndVecs", CornerEigenValsAndVecs);
 	Nan::SetPrototypeMethod(ctor, "cornerEigenValsAndVecsAsync", CornerEigenValsAndVecsAsync);
+	Nan::SetPrototypeMethod(ctor, "integral", Integral);
+	Nan::SetPrototypeMethod(ctor, "integralAsync", IntegralAsync);
 };
 
 struct MatImgproc::BaseResizeWorker : public SimpleWorker {
@@ -2833,4 +2835,62 @@ NAN_METHOD(MatImgproc::CornerEigenValsAndVecs) {
 NAN_METHOD(MatImgproc::CornerEigenValsAndVecsAsync) {
 	CornerEigenValsAndVecsWorker worker(Mat::Converter::unwrap(info.This()));
 	FF_WORKER_ASYNC("Mat::CornerEigenValsAndVecsAsync", CornerEigenValsAndVecsWorker, worker);
+}
+
+struct MatImgproc::IntegralWorker : public SimpleWorker {
+public:
+	cv::Mat self;
+	IntegralWorker(cv::Mat self) {
+		this->self = self;
+	}
+
+	int sdepth = -1;
+	int sqdepth = -1;
+
+	cv::Mat sum;
+	cv::Mat sqsum;
+	cv::Mat tilted;
+
+	const char* execute() {
+		cv::integral(self, sum, sqsum, tilted, sdepth, sqdepth);
+		return "";
+	}
+
+	v8::Local<v8::Value> getReturnValue() {
+		v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		Nan::Set(ret, Nan::New("sum").ToLocalChecked(), Mat::Converter::wrap(sum));
+		Nan::Set(ret, Nan::New("sqsum").ToLocalChecked(), Mat::Converter::wrap(sqsum));
+		Nan::Set(ret, Nan::New("tilted").ToLocalChecked(), Mat::Converter::wrap(tilted));
+		return ret;
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(0, &sdepth, info) ||
+			IntConverter::optArg(1, &sqdepth, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF_ARG_IS_OBJECT(0);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[0]->ToObject();
+		return (
+			IntConverter::optProp(&sdepth, "sdepth", opts) ||
+			IntConverter::optProp(&sqdepth, "sqdepth", opts)
+		);
+	}
+};
+
+NAN_METHOD(MatImgproc::Integral) {
+	IntegralWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_SYNC("Mat::Integral", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(MatImgproc::IntegralAsync) {
+	IntegralWorker worker(Mat::Converter::unwrap(info.This()));
+	FF_WORKER_ASYNC("Mat::IntegralAsync", IntegralWorker, worker);
 }
