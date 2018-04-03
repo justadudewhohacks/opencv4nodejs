@@ -142,6 +142,7 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CONST_WITH_VALUE(lbpCascades, LBP_FRONTALFACE_IMPROVED, FF_NEW_STRING("./lbpcascade_frontalface_improved.xml"));
 	FF_SET_CONST_WITH_VALUE(lbpCascades, LBP_PROFILEFACE, FF_NEW_STRING("./lbpcascade_profileface.xml"));
 	FF_SET_CONST_WITH_VALUE(lbpCascades, LBP_SILVERWARE, FF_NEW_STRING("./lbpcascade_silverware.xml"));
+	target->Set(FF_NEW_STRING("lbpCascades"), lbpCascades);
 
 	FF_SET_JS_PROP(target, REGULAR, Nan::New<v8::Integer>(0));
 	FF_SET_CV_CONSTANT(target, LMEDS);
