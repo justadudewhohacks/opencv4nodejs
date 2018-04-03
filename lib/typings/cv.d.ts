@@ -64,10 +64,10 @@ export function getRotationMatrix2D(center: Point2, angle: number, scale?: numbe
 export function getStructuringElement(shape: number, kernelSize: Size, anchor?: Point2): Mat;
 export function getValidDisparityROI(roi1: Rect[], roi2: Rect[], minDisparity: number, numberOfDisparities: number, SADWindowSize: number): Rect;
 export function getValidDisparityROIAsync(roi1: Rect[], roi2: Rect[], minDisparity: number, numberOfDisparities: number, SADWindowSize: number): Promise<Rect>;
-export function imdecode(buffer: number[], flags?: number): Mat;
-export function imdecodeAsync(buffer: number[], flags?: number): Promise<Mat>;
-export function imencode(fileExt: string, img: Mat, flags?: number[]): number[];
-export function imencodeAsync(fileExt: string, img: Mat, flags?: number[]): Promise<number[]>;
+export function imdecode(buffer: Buffer, flags?: number): Mat;
+export function imdecodeAsync(buffer: Buffer, flags?: number): Promise<Mat>;
+export function imencode(fileExt: string, img: Mat, flags?: number[]): Buffer;
+export function imencodeAsync(fileExt: string, img: Mat, flags?: number[]): Promise<Buffer>;
 export function imread(filePath: string, flags?: number): Mat;
 export function imreadAsync(filePath: string, flags?: number): Promise<Mat>;
 export function imshow(winName: string, img: Mat): void;

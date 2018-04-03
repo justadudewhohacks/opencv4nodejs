@@ -42,5 +42,8 @@
     "nan": "^2.7.0",
     "native-node-utils": "0.0.4",
     "opencv-build": "0.0.11"
+  },
+  "optionalDependencies": {
+    "@types/node": ">6"
   }
 }
