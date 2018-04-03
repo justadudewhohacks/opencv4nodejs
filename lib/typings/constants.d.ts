@@ -479,6 +479,8 @@ export const VIDEOWRITER_PROP_NSTRIPES: number;
 export const VIDEOWRITER_PROP_QUALITY: number;
 export const WARP_FILL_OUTLIERS: number;
 export const WARP_INVERSE_MAP: number;
+export const INPAINT_NS: number;
+export const INPAINT_TELEA: number;
 
 export const HAAR_EYE: string;
 export const HAAR_EYE_TREE_EYEGLASSES: string;

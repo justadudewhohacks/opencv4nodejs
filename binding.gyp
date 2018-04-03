@@ -22,6 +22,7 @@
 			"cc/ExternalMemTracking.cc",
 			"cc/cvTypes/cvTypes.cc",
 			"cc/cvTypes/imgprocConstants.cc",
+			"cc/cvTypes/photoConstants.cc",
 			"cc/cvTypes/videoCaptureProps.cc",
 			"cc/core/core.cc",
 			"cc/core/Mat.cc",
