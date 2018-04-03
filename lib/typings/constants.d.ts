@@ -500,6 +500,12 @@ export const HAAR_RUSSIAN_PLATE_NUMBER: string;
 export const HAAR_SMILE: string;
 export const HAAR_UPPERBODY: string;
 
+export const LBP_FRONTALCATFACE: string;
+export const LBP_FRONTALFACE: string;
+export const LBP_FRONTALFACE_IMPROVED: string;
+export const LBP_PROFILEFACE: string;
+export const LBP_SILVERWARE: string;
+
 export const termCriteria: {
   COUNT: number;
   MAX_ITER: number;
