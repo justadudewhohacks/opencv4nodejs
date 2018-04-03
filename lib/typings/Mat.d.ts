@@ -32,7 +32,7 @@ export class Mat {
   constructor(dataArray: number[][][], type: number);
   constructor(dataArray: number[][][], type: number);
   constructor(dataArray: number[][][], type: number);
-  constructor(data: number[], rows: number, cols: number, type?: number);
+  constructor(data: Buffer, rows: number, cols: number, type?: number);
   abs(): Mat;
   absdiff(otherMat: Mat): Mat;
   adaptiveThreshold(maxVal: number, adaptiveMethod: number, thresholdType: number, blockSize: number, C: number): Mat;
@@ -156,8 +156,8 @@ export class Mat {
   floodFillAsync(seedPoint: Point2, newVal: Vec3, mask?: Mat, loDiff?: Vec3, upDiff?: Vec3, flags?: number): Promise<{ returnValue: number, rect: Rect }>;
   gaussianBlur(kSize: Size, sigmaX: number, sigmaY?: number, borderType?: number): Mat;
   gaussianBlurAsync(kSize: Size, sigmaX: number, sigmaY?: number, borderType?: number): Promise<Mat>;
-  getData(): number[];
-  getDataAsync(): Promise<number[]>;
+  getData(): Buffer;
+  getDataAsync(): Promise<Buffer>;
   getDataAsArray(): number[][];
   getDataAsArray(): number[][][];
   getDataAsArray(): number[][][];
