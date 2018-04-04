@@ -210,6 +210,10 @@ public:
 	struct CornerEigenValsAndVecsWorker;
 	static NAN_METHOD(CornerEigenValsAndVecs);
 	static NAN_METHOD(CornerEigenValsAndVecsAsync);
+
+	struct IntegralWorker;
+	static NAN_METHOD(Integral);
+	static NAN_METHOD(IntegralAsync);
 };
 
 #endif
