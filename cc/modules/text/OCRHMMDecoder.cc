@@ -2,7 +2,7 @@
 
 #include "OCRHMMDecoder.h"
 #include "OCRHMMClassifier.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 #include "Mat.h"
 #include "Rect.h"
 
@@ -24,7 +24,7 @@ NAN_MODULE_INIT(OCRHMMDecoder::Init) {
 	target->Set(FF_NEW_STRING("OCRHMMDecoder"), ctor->GetFunction());
 };
 
-struct OCRHMMDecoder::NewWorker : public SimpleWorker {
+struct OCRHMMDecoder::NewWorker : public SimpleWorker  {
 public:
 	cv::Ptr <cv::text::OCRHMMDecoder::ClassifierCallback> classifier;
 	std::string vocabulary;
@@ -66,7 +66,7 @@ NAN_METHOD(OCRHMMDecoder::New) {
 	info.GetReturnValue().Set(info.Holder());
 }
 
-struct OCRHMMDecoder::BaseRunWorker : public SimpleWorker {
+struct OCRHMMDecoder::BaseRunWorker : public CatchCvExceptionWorker {
 public:
 	cv::Ptr <cv::text::OCRHMMDecoder> decoder;
 
@@ -87,7 +87,7 @@ public:
 	RunWorker(cv::Ptr<cv::text::OCRHMMDecoder> decoder) : BaseRunWorker(decoder) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 #if CV_MINOR_VERSION > 0
 		if (mask.empty()) {
 			output_text = decoder->run(img, min_confidence, component_level);
@@ -144,7 +144,7 @@ public:
 	std::vector<float> component_confidences;
 
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 #if CV_MINOR_VERSION > 0
 		if (mask.empty()) {
 			decoder->run(img, output_text, &component_rects, &component_texts, &component_confidences, component_level);

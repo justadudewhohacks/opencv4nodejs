@@ -258,7 +258,7 @@ NAN_METHOD(Imgproc::FitLine) {
 	FF_RETURN(jsLineParams);
 }
 
-struct Imgproc::GetTextSizeWorker : public SimpleWorker {
+struct Imgproc::GetTextSizeWorker : public CatchCvExceptionWorker {
 public:
 	std::string text;
 	int fontFace;
@@ -268,7 +268,7 @@ public:
 	cv::Size2d returnValue;
 	int baseLine;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		returnValue = cv::getTextSize(text, fontFace, fontScale, thickness, &baseLine);
 		return "";
 	}

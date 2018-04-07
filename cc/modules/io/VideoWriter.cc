@@ -1,5 +1,5 @@
 #include "VideoWriter.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 
 Nan::Persistent<v8::FunctionTemplate> VideoWriter::constructor;
 
@@ -17,7 +17,7 @@ NAN_MODULE_INIT(VideoWriter::Init) {
   target->Set(FF_NEW_STRING("VideoWriter"), ctor->GetFunction());
 };
 
-struct VideoWriter::NewWorker : SimpleWorker {
+struct VideoWriter::NewWorker : CatchCvExceptionWorker {
 public:
 	std::string fileName;
 	int fourccCode;
@@ -37,6 +37,10 @@ public:
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return BoolConverter::optArg(4, &isColor, info);
 	}
+
+	const char* executeCatchCvExceptionWorker() {
+		return "";
+	}
 };
 
 NAN_METHOD(VideoWriter::New) {
@@ -49,13 +53,13 @@ NAN_METHOD(VideoWriter::New) {
 	FF_RETURN(info.Holder());
 }
 
-struct VideoWriter::FourccWorker : SimpleWorker {
+struct VideoWriter::FourccWorker : CatchCvExceptionWorker {
 public:
 	std::string fourcc;
 
 	int code;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		code = cv::VideoWriter::fourcc(fourcc.at(0), fourcc.at(1), fourcc.at(2), fourcc.at(3));
 		return "";
 	}
@@ -76,11 +80,11 @@ NAN_METHOD(VideoWriter::Fourcc) {
 		FF_METHOD_CONTEXT("VideoWriter::Fourcc");
 		FF_THROW("expected charCode to be a string of 4 characters");
 	}
-	worker.execute();
+	worker.executeCatchCvExceptionWorker();
 	FF_RETURN(worker.getReturnValue());
 }
 
-struct VideoWriter::WriteWorker : SimpleWorker {
+struct VideoWriter::WriteWorker : CatchCvExceptionWorker {
 public:
 	cv::VideoWriter writer;
 	WriteWorker(cv::VideoWriter writer) {
@@ -89,7 +93,7 @@ public:
 
 	cv::Mat frame;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		writer.write(frame);
 		return "";
 	}

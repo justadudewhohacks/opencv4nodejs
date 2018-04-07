@@ -6,7 +6,7 @@
 //#ifdef HAVE_DNN
 
 #include "dnn.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 #include "Net.h"
 #include "Mat.h"
 
@@ -24,13 +24,13 @@ NAN_MODULE_INIT(Dnn::Init) {
 	Nan::SetMethod(target, "blobFromImagesAsync", BlobFromImagesAsync);
 };
 
-struct Dnn::ReadNetFromTensorflowWorker : public SimpleWorker {
+struct Dnn::ReadNetFromTensorflowWorker : public CatchCvExceptionWorker {
 public:
 	std::string modelFile;
 
 	cv::dnn::Net net;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		net = cv::dnn::readNetFromTensorflow(modelFile);
 		if (net.empty()) {
 			return std::string("failed to load net: " + modelFile).data();
@@ -61,14 +61,14 @@ NAN_METHOD(Dnn::ReadNetFromTensorflowAsync) {
 }
 
 
-struct Dnn::ReadNetFromCaffeWorker : public SimpleWorker {
+struct Dnn::ReadNetFromCaffeWorker : public CatchCvExceptionWorker {
 public:
 	std::string prototxt;
 	std::string modelFile = "";
 
 	cv::dnn::Net net;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		net = cv::dnn::readNetFromCaffe(prototxt, modelFile);
 		if (net.empty()) {
 			return std::string("failed to prototxt: " + prototxt + ", modelFile: " + modelFile).data();
@@ -105,7 +105,7 @@ NAN_METHOD(Dnn::ReadNetFromCaffeAsync) {
 }
 
 
-struct Dnn::BlobFromImageWorker : public SimpleWorker {
+struct Dnn::BlobFromImageWorker : public CatchCvExceptionWorker {
 public:
 	bool isSingleImage;
 	BlobFromImageWorker(bool isSingleImage = true) {
@@ -121,7 +121,7 @@ public:
 
 	cv::Mat returnValue;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		if (isSingleImage) {
 			returnValue = cv::dnn::blobFromImage(image, scalefactor, size, mean, swapRB);
 		}

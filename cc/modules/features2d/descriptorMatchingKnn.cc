@@ -1,5 +1,5 @@
 #include "descriptorMatchingKnn.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 
 NAN_MODULE_INIT(DescriptorMatchingKnn::Init) {
 	Nan::SetMethod(target, "matchKnnFlannBased", MatchKnnFlannBased);
@@ -104,33 +104,42 @@ NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForceSL2Async) {
 
 #endif
 
+struct DescriptorMatchingKnn::MatchKnnWorker : public CatchCvExceptionWorker {
+public:
+	cv::Ptr<cv::DescriptorMatcher> matcher;
+	MatchKnnWorker(cv::Ptr<cv::DescriptorMatcher> _matcher) {
+		this->matcher = _matcher;
+	}
+
+	cv::Mat descFrom;
+	cv::Mat descTo;
+	int k;
+	std::vector<std::vector<cv::DMatch>> dmatches;
+
+	const char* executeCatchCvExceptionWorker() {
+		matcher->knnMatch(descFrom, descTo, dmatches, k);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return Mat::Converter::arg(0, &descFrom, info)
+			|| Mat::Converter::arg(1, &descTo, info)
+			|| IntConverter::arg(2, &k, info);
+	}
+
+	FF_VAL getReturnValue() {
+		return ObjectArrayOfArraysConverter<DescriptorMatch, cv::DMatch>::wrap(dmatches);
+	}
+};
+
 #if CV_VERSION_MINOR < 2
 void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
 #else
 void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	FF_METHOD_CONTEXT("matchKnn");
-
-	FF_ARG_INSTANCE(0, cv::Mat descFrom, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Mat descTo, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INT(2, int k);
-
-	std::vector<std::vector<cv::DMatch>> dmatches;
-	cv::DescriptorMatcher::create(matcherType)->knnMatch(descFrom, descTo, dmatches, k);
-
-	FF_ARR jsMatches = FF_NEW_ARRAY(dmatches.size());
-	uint i = 0;
-	for (auto dmatch : dmatches) {
-		FF_ARR jsMatchesKnn = FF_NEW_ARRAY(dmatch.size());
-		uint j = 0;
-		for (auto dmatchKnn : dmatch) {
-			FF_OBJ jsMatchKnn = FF_NEW_INSTANCE(DescriptorMatch::constructor);
-			FF_UNWRAP(jsMatchKnn, DescriptorMatch)->dmatch = dmatchKnn;
-			jsMatchesKnn->Set(j++, jsMatchKnn);
-		}
-		jsMatches->Set(i++, jsMatchesKnn);
-	}
-	FF_RETURN(jsMatches);
+	MatchKnnWorker worker(cv::DescriptorMatcher::create(matcherType));
+	FF_WORKER_SYNC("MatchKnn", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
 #if CV_VERSION_MINOR < 2
@@ -138,17 +147,6 @@ void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::s
 #else
 void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	FF_METHOD_CONTEXT("matchKnnAsync");
-
-	MatchContext ctx;
-	ctx.matcher = cv::DescriptorMatcher::create(matcherType);
-	FF_ARG_INSTANCE(0, ctx.descFrom, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(1, ctx.descTo, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INT(2, ctx.k);
-	FF_ARG_FUNC(3, v8::Local<v8::Function> cbFunc);
-
-	Nan::AsyncQueueWorker(new GenericAsyncWorker<MatchContext>(
-		new Nan::Callback(cbFunc),
-		ctx
-	));
+	MatchKnnWorker worker(cv::DescriptorMatcher::create(matcherType));
+	FF_WORKER_ASYNC("MatchAsync", MatchKnnWorker, worker);
 }

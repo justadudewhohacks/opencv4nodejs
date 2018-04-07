@@ -34,7 +34,7 @@ NAN_METHOD(Photo::FastNlMeansDenoisingColored) {
   FF_RETURN(jsDst);
 }
 
-struct Photo::InpaintWorker : public SimpleWorker {
+struct Photo::InpaintWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat src;
 	InpaintWorker(cv::Mat self) {
@@ -57,7 +57,7 @@ public:
 		);
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::inpaint(
 				src, inpaintMask, dst,
 				inpaintRadius, flags

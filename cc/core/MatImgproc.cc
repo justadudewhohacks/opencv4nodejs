@@ -112,7 +112,7 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "integralAsync", IntegralAsync);
 };
 
-struct MatImgproc::BaseResizeWorker : public SimpleWorker {
+struct MatImgproc::BaseResizeWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	BaseResizeWorker(cv::Mat self) {
@@ -133,7 +133,7 @@ public:
 
 	double factor;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::resize(self, dst, cv::Size(), factor, factor);
 		return "";
 	}
@@ -168,7 +168,7 @@ public:
 	double fy = 0;
 	int interpolation = cv::INTER_LINEAR;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::resize(self, dst, dsize, fx, fy, interpolation);
 		return "";
 	}
@@ -232,7 +232,7 @@ public:
 
 	int maxRowsOrCols;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		double ratioY = (double)maxRowsOrCols / (double)self.rows;
 		double ratioX = (double)maxRowsOrCols / (double)self.cols;
 		double scale = (std::min)(ratioY, ratioX);
@@ -258,7 +258,7 @@ NAN_METHOD(MatImgproc::ResizeToMaxAsync) {
 	FF_WORKER_ASYNC("Mat::ResizeToMaxAsync", ResizeToMaxWorker, worker);
 }
 
-struct MatImgproc::ThresholdWorker : SimpleWorker {
+struct MatImgproc::ThresholdWorker : CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -272,7 +272,7 @@ public:
 
 	cv::Mat thresholdMat;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::threshold(mat, thresholdMat, thresh, maxVal, (int)type);
 		return "";
 	}
@@ -301,7 +301,7 @@ NAN_METHOD(MatImgproc::ThresholdAsync) {
 	FF_WORKER_ASYNC("Mat::ThresholdAsync", ThresholdWorker, worker);
 }
 
-struct MatImgproc::AdaptiveThresholdWorker : SimpleWorker {
+struct MatImgproc::AdaptiveThresholdWorker : CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -317,7 +317,7 @@ public:
 
 	cv::Mat thresholdMat;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::adaptiveThreshold(mat, thresholdMat, maxVal, adaptiveMethod, thresholdType, blockSize, C);
 		return "";
 	}
@@ -348,7 +348,7 @@ NAN_METHOD(MatImgproc::AdaptiveThresholdAsync) {
 	FF_WORKER_ASYNC("Mat::AdaptiveThresholdAsync", AdaptiveThresholdWorker, worker);
 }
 
-struct MatImgproc::InRangeWorker : SimpleWorker {
+struct MatImgproc::InRangeWorker : CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -363,7 +363,7 @@ public:
 
 	cv::Mat inRangeMat;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		if (mat.channels() == 3) {
 			cv::inRange(mat, lowerVec, upperVec, inRangeMat);
 		} else {
@@ -402,7 +402,7 @@ NAN_METHOD(MatImgproc::InRangeAsync) {
 }
 
 
-struct MatImgproc::CvtColorWorker : public SimpleWorker {
+struct MatImgproc::CvtColorWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	CvtColorWorker(cv::Mat self) {
@@ -414,7 +414,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::cvtColor(self, dst, code, dstCn);
 		return "";
 	}
@@ -448,7 +448,7 @@ NAN_METHOD(MatImgproc::CvtColorAsync) {
 }
 
 
-struct MatImgproc::BgrToGrayWorker : public SimpleWorker {
+struct MatImgproc::BgrToGrayWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	BgrToGrayWorker(cv::Mat self) {
@@ -459,7 +459,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::cvtColor(self, dst, CV_BGR2GRAY);
 		return "";
 	}
@@ -480,7 +480,7 @@ NAN_METHOD(MatImgproc::BgrToGrayAsync) {
 	FF_WORKER_ASYNC("Mat::BgrToGrayAsync", BgrToGrayWorker, worker);
 }
 
-struct MatImgproc::WarpWorker {
+struct MatImgproc::WarpWorker: public CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -530,7 +530,7 @@ struct MatImgproc::WarpAffineWorker : public WarpWorker {
 	WarpAffineWorker(cv::Mat mat) : WarpWorker(mat) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::warpAffine(mat, warpedMat, transformationMatrix, (cv::Size)size, flags, borderMode, cv::Scalar());
 		return "";
 	}
@@ -551,7 +551,7 @@ struct MatImgproc::WarpPerspectiveWorker : public WarpWorker {
 	WarpPerspectiveWorker(cv::Mat mat) : WarpWorker(mat) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::warpPerspective(mat, warpedMat, transformationMatrix, (cv::Size)size, flags, borderMode, cv::Scalar());
 		return "";
 	}
@@ -569,7 +569,7 @@ NAN_METHOD(MatImgproc::WarpPerspectiveAsync) {
 }
 
 
-struct MatImgproc::MorphWorker {
+struct MatImgproc::MorphWorker: public CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 	bool withOp;
@@ -628,7 +628,7 @@ struct MatImgproc::ErodeWorker : public MorphWorker {
 	ErodeWorker(cv::Mat mat) : MorphWorker(mat) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::erode(mat, resultMat, kernel, anchor, iterations, borderType, cv::morphologyDefaultBorderValue());
 		return "";
 	}
@@ -650,7 +650,7 @@ struct MatImgproc::DilateWorker : public MorphWorker {
 	DilateWorker(cv::Mat mat) : MorphWorker(mat) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::dilate(mat, resultMat, kernel, anchor, iterations, borderType, cv::morphologyDefaultBorderValue());
 		return "";
 	}
@@ -673,7 +673,7 @@ public:
 	MorphologyExWorker(cv::Mat mat) : MorphWorker(mat, true) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::morphologyEx(mat, resultMat, op, kernel, anchor, iterations, borderType, cv::morphologyDefaultBorderValue());
 		return "";
 	}
@@ -690,7 +690,7 @@ NAN_METHOD(MatImgproc::MorphologyExAsync) {
 	FF_WORKER_ASYNC("Mat::MorphologyExAsync", MorphologyExWorker, worker);
 }
 
-struct MatImgproc::DistanceTransformWorker : public SimpleWorker {
+struct MatImgproc::DistanceTransformWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	DistanceTransformWorker(cv::Mat self) {
@@ -703,7 +703,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::distanceTransform(self, dst, distanceType, maskSize, dstType);
 		return "";
 	}
@@ -744,7 +744,7 @@ struct MatImgproc::DistanceTransformWithLabelsWorker : public DistanceTransformW
 	int labelType = cv::DIST_LABEL_CCOMP;
 	cv::Mat labels;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::distanceTransform(self, dst, labels, distanceType, maskSize, labelType);
 		return "";
 	}
@@ -775,7 +775,7 @@ NAN_METHOD(MatImgproc::DistanceTransformWithLabelsAsync) {
 }
 
 
-struct MatImgproc::BlurWorker {
+struct MatImgproc::BlurWorker: public CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -789,7 +789,7 @@ public:
 
 	cv::Mat blurMat;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::blur(mat, blurMat, kSize, anchor, borderType);
 		return "";
 	}
@@ -834,7 +834,7 @@ NAN_METHOD(MatImgproc::BlurAsync) {
 }
 
 
-struct MatImgproc::GaussianBlurWorker {
+struct MatImgproc::GaussianBlurWorker: public CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -849,7 +849,7 @@ public:
 
 	cv::Mat blurMat;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::GaussianBlur(mat, blurMat, kSize, sigmaX, sigmaY, borderType);
 		return "";
 	}
@@ -897,7 +897,7 @@ NAN_METHOD(MatImgproc::GaussianBlurAsync) {
 }
 
 
-struct MatImgproc::MedianBlurWorker : public SimpleWorker {
+struct MatImgproc::MedianBlurWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -909,7 +909,7 @@ public:
 
 	cv::Mat blurMat;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::medianBlur(mat, blurMat, kSize);
 		return "";
 	}
@@ -935,7 +935,7 @@ NAN_METHOD(MatImgproc::MedianBlurAsync) {
 }
 
 
-struct MatImgproc::ConnectedComponentsWorker : public SimpleWorker {
+struct MatImgproc::ConnectedComponentsWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	ConnectedComponentsWorker(cv::Mat self) {
@@ -947,7 +947,7 @@ public:
 
 	cv::Mat labels;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::connectedComponents(self, labels, connectivity, ltype);
 		return "";
 	}
@@ -995,7 +995,7 @@ struct MatImgproc::ConnectedComponentsWithStatsWorker : public ConnectedComponen
 	cv::Mat stats;
 	cv::Mat centroids;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::connectedComponentsWithStats(self, labels, stats, centroids, connectivity, ltype);
 		return "";
 	}
@@ -1021,7 +1021,7 @@ NAN_METHOD(MatImgproc::ConnectedComponentsWithStatsAsync) {
 }
 
 
-struct MatImgproc::GrabCutWorker : public SimpleWorker {
+struct MatImgproc::GrabCutWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	GrabCutWorker(cv::Mat self) {
@@ -1036,7 +1036,7 @@ public:
 	int mode = cv::GC_EVAL;
 
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::grabCut(self, mask, rect, bgdModel, fgdModel, iterCount, mode);
 		return "";
 	}
@@ -1074,7 +1074,7 @@ NAN_METHOD(MatImgproc::GrabCutAsync) {
 }
 
 
-struct MatImgproc::WatershedWorker : public SimpleWorker {
+struct MatImgproc::WatershedWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	WatershedWorker(cv::Mat self) {
@@ -1083,7 +1083,7 @@ public:
 
 	cv::Mat markers;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::watershed(self, markers);
 		return "";
 	}
@@ -1110,7 +1110,7 @@ NAN_METHOD(MatImgproc::WatershedAsync) {
 	FF_WORKER_ASYNC("Mat::WatershedAsync", WatershedWorker, worker);
 }
 
-struct MatImgproc::MomentsWorker : public SimpleWorker {
+struct MatImgproc::MomentsWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	MomentsWorker(cv::Mat self) {
@@ -1121,7 +1121,7 @@ public:
 
 	cv::Moments returnValue;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::moments(self, binaryImage);
 		return "";
 	}
@@ -1148,7 +1148,7 @@ NAN_METHOD(MatImgproc::_MomentsAsync) {
 	FF_WORKER_ASYNC("Mat::MomentsAsync", MomentsWorker, worker);
 }
 
-struct MatImgproc::FindContoursWorker : public SimpleWorker {
+struct MatImgproc::FindContoursWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	FindContoursWorker(cv::Mat self) {
@@ -1162,7 +1162,7 @@ public:
 	std::vector<cv::Mat> contours;
 	std::vector<cv::Vec4i> hierarchy;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::findContours(self, contours, hierarchy, mode, method, offset);
 		return "";
 	}
@@ -1247,7 +1247,7 @@ NAN_METHOD(MatImgproc::DrawContours) {
 	FF_RETURN(info.This());
 }
 
-struct MatImgproc::DrawWorker : public SimpleWorker {
+struct MatImgproc::DrawWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	bool hasThickness;
@@ -1303,7 +1303,7 @@ struct MatImgproc::DrawLineWorker : public MatImgproc::DrawWorker {
 	cv::Point2d pt1;
 	cv::Point2d pt2;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::line(self, pt1, pt2, color, thickness, lineType, shift);
 		return "";
 	}
@@ -1334,7 +1334,7 @@ struct MatImgproc::DrawArrowedLineWorker : public MatImgproc::DrawWorker {
 	cv::Point2d pt2;
 	double tipLength = 0.1;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::line(self, pt1, pt2, color, thickness, lineType, shift);
 		return "";
 	}
@@ -1381,7 +1381,7 @@ struct MatImgproc::DrawRectangleWorker : public MatImgproc::DrawWorker {
 
 	bool isArgRect = false;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		if (isArgRect) {
 			cv::rectangle(self, rect, color, thickness, lineType, shift);
 		}
@@ -1422,7 +1422,7 @@ struct MatImgproc::DrawCircleWorker : public MatImgproc::DrawWorker {
 	cv::Point2d center;
 	double radius;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::circle(self, center, radius, color, thickness, lineType, shift);
 		return "";
 	}
@@ -1459,7 +1459,7 @@ struct MatImgproc::DrawEllipseWorker : public MatImgproc::DrawWorker {
 
 	bool isArgBox = false;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		if (isArgBox) {
 			cv::ellipse(self, box, color, thickness, lineType);
 		}
@@ -1502,7 +1502,7 @@ struct MatImgproc::DrawPolylinesWorker : public MatImgproc::DrawWorker {
 	std::vector<std::vector<cv::Point2i>> pts;
 	bool isClosed;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::polylines(self, pts, isClosed, color, thickness, lineType, shift);
 		return "";
 	}
@@ -1532,7 +1532,7 @@ struct MatImgproc::DrawFillPolyWorker : public MatImgproc::DrawWorker {
 	std::vector<std::vector<cv::Point2i>> pts;
 	cv::Point2d offset = cv::Point2d();
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::fillPoly(self, pts, color, lineType, shift, offset);
 		return "";
 	}
@@ -1574,7 +1574,7 @@ struct MatImgproc::DrawFillConvexPolyWorker : public MatImgproc::DrawWorker {
 
 	std::vector<cv::Point2i> pts;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::fillConvexPoly(self, pts, color, lineType, shift);
 		return "";
 	}
@@ -1606,7 +1606,7 @@ struct MatImgproc::PutTextWorker : public MatImgproc::DrawWorker {
 	double fontScale;
 	bool bottomLeftOrigin = false;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::putText(self, text, org, fontFace, fontScale, color, thickness, lineType, bottomLeftOrigin);
 		return "";
 	}
@@ -1645,7 +1645,7 @@ NAN_METHOD(MatImgproc::PutText) {
 	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
-struct MatImgproc::MatchTemplateWorker : SimpleWorker {
+struct MatImgproc::MatchTemplateWorker : CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -1659,7 +1659,7 @@ public:
 
 	cv::Mat resultsMat;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::matchTemplate(mat, templ, resultsMat, method, mask);
 		return "";
 	}
@@ -1692,7 +1692,7 @@ NAN_METHOD(MatImgproc::MatchTemplateAsync) {
 }
 
 
-struct MatImgproc::CannyWorker {
+struct MatImgproc::CannyWorker: public CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -1707,7 +1707,7 @@ public:
 
 	cv::Mat cannyMat;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::Canny(mat, cannyMat, threshold1, threshold2, apertureSize, L2gradient);
 		return "";
 	}
@@ -1755,7 +1755,7 @@ NAN_METHOD(MatImgproc::CannyAsync) {
 }
 
 
-struct MatImgproc::SobelScharrWorker {
+struct MatImgproc::SobelScharrWorker: public CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 	bool hasKsize;
@@ -1816,7 +1816,7 @@ struct MatImgproc::SobelWorker : SobelScharrWorker {
 	SobelWorker(cv::Mat mat, bool hasKsize) : SobelScharrWorker(mat, hasKsize) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::Sobel(mat, resultMat, ddepth, dx, dy, ksize, scale, delta, borderType);
 		return "";
 	}
@@ -1837,7 +1837,7 @@ struct MatImgproc::ScharrWorker : SobelScharrWorker {
 	ScharrWorker(cv::Mat mat, bool hasKsize) : SobelScharrWorker(mat, hasKsize) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::Scharr(mat, resultMat, ddepth, dx, dy, scale, delta, borderType);
 		return "";
 	}
@@ -1855,7 +1855,7 @@ NAN_METHOD(MatImgproc::ScharrAsync) {
 }
 
 
-struct MatImgproc::LaplacianWorker {
+struct MatImgproc::LaplacianWorker: public CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -1871,7 +1871,7 @@ public:
 
 	cv::Mat resultMat;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::Laplacian(mat, resultMat, ddepth, ksize, scale, delta, borderType);
 		return "";
 	}
@@ -1921,7 +1921,7 @@ NAN_METHOD(MatImgproc::LaplacianAsync) {
 }
 
 
-struct MatImgproc::PyrWorker {
+struct MatImgproc::PyrWorker: public CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 	bool isUp;
@@ -1936,7 +1936,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		if (isUp) {
 			cv::pyrUp(mat, dst, size, borderType);
 		}
@@ -1996,7 +1996,7 @@ NAN_METHOD(MatImgproc::PyrUpAsync) {
 	FF_WORKER_ASYNC("Mat::PyrUpAsync", PyrWorker, worker);
 }
 
-struct MatImgproc::BuildPyramidWorker : public SimpleWorker {
+struct MatImgproc::BuildPyramidWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -2009,7 +2009,7 @@ public:
 
 	std::vector<cv::Mat> dst;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::buildPyramid(mat, dst, maxlevel, borderType);
 		return "";
 	}
@@ -2038,7 +2038,7 @@ NAN_METHOD(MatImgproc::BuildPyramidAsync) {
 	FF_WORKER_ASYNC("Mat::BuildPyramidAsync", BuildPyramidWorker, worker);
 }
 
-struct MatImgproc::HoughLinesWorker {
+struct MatImgproc::HoughLinesWorker: public CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -2056,7 +2056,7 @@ public:
 
 	std::vector<cv::Vec2f> lines;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::HoughLines(mat, lines, rho, theta, threshold, srn, stn, min_theta, max_theta);
 		return "";
 	}
@@ -2118,7 +2118,7 @@ public:
 
 	std::vector<cv::Vec4f> linesP;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::HoughLinesP(mat, linesP, rho, theta, threshold, minLineLength, maxLineGap);
 		return "";
 	}
@@ -2158,7 +2158,7 @@ NAN_METHOD(MatImgproc::HoughLinesPAsync) {
 	FF_WORKER_ASYNC("Mat::HoughLinesPAsync", HoughLinesPWorker, worker);
 }
 
-struct MatImgproc::HoughCirclesWorker {
+struct MatImgproc::HoughCirclesWorker: public CatchCvExceptionWorker {
 public:
 	cv::Mat mat;
 
@@ -2176,7 +2176,7 @@ public:
 
 	std::vector<cv::Vec3f> circles;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::HoughCircles(mat, circles, method, dp, minDist, param1, param2, minRadius, maxRadius);
 		return "";
 	}
@@ -2229,7 +2229,7 @@ NAN_METHOD(MatImgproc::HoughCirclesAsync) {
 }
 
 
-struct MatImgproc::EqualizeHistWorker : public SimpleWorker {
+struct MatImgproc::EqualizeHistWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	EqualizeHistWorker(cv::Mat self) {
@@ -2238,7 +2238,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::equalizeHist(self, dst);
 		return "";
 	}
@@ -2260,7 +2260,7 @@ NAN_METHOD(MatImgproc::EqualizeHistAsync) {
 }
 
 
-struct MatImgproc::CompareHistWorker : public SimpleWorker {
+struct MatImgproc::CompareHistWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	CompareHistWorker(cv::Mat self) {
@@ -2272,7 +2272,7 @@ public:
 
 	double returnValue;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		returnValue = cv::compareHist(self, H2, method);
 		return "";
 	}
@@ -2301,7 +2301,7 @@ NAN_METHOD(MatImgproc::CompareHistAsync) {
 }
 
 
-struct MatImgproc::FloodFillWorker : public SimpleWorker {
+struct MatImgproc::FloodFillWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	FloodFillWorker(cv::Mat self) {
@@ -2321,7 +2321,7 @@ public:
 	int returnValue;
 	cv::Rect rect;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		switch (self.channels()) {
 		case 1:
 			returnValue = cv::floodFill(self, mask, seedPoint, newVal1, &rect, loDiff1, upDiff1, flags);
@@ -2392,7 +2392,7 @@ NAN_METHOD(MatImgproc::FloodFillAsync) {
 	FF_WORKER_ASYNC("Mat::FloodFillAsync", FloodFillWorker, worker);
 }
 
-struct MatImgproc::BilateralFilterWorker : public SimpleWorker {
+struct MatImgproc::BilateralFilterWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	BilateralFilterWorker(cv::Mat self) {
@@ -2406,7 +2406,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::bilateralFilter(self, dst, d, sigmaColor, sigmaSpace, borderType);
 		return "";
 	}
@@ -2441,7 +2441,7 @@ NAN_METHOD(MatImgproc::BilateralFilterAsync) {
 	FF_WORKER_ASYNC("Mat::BilateralFilterAsync", BilateralFilterWorker, worker);
 }
 
-struct MatImgproc::BoxFilterWorker : public SimpleWorker {
+struct MatImgproc::BoxFilterWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	BoxFilterWorker(cv::Mat self) {
@@ -2456,7 +2456,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::boxFilter(self, dst, ddepth, ksize, anchor, normalize, borderType);
 		return "";
 	}
@@ -2510,7 +2510,7 @@ public:
 	SqrBoxFilterWorker(cv::Mat self) : BoxFilterWorker(self) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::sqrBoxFilter(self, dst, ddepth, ksize, anchor, normalize, borderType);
 		return "";
 	}
@@ -2528,7 +2528,7 @@ NAN_METHOD(MatImgproc::SqrBoxFilterAsync) {
 }
 
 
-struct MatImgproc::Filter2DWorker : public SimpleWorker {
+struct MatImgproc::Filter2DWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	Filter2DWorker(cv::Mat self) {
@@ -2543,7 +2543,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::filter2D(self, dst, ddepth, kernel, anchor, delta, borderType);
 		return "";
 	}
@@ -2592,7 +2592,7 @@ NAN_METHOD(MatImgproc::Filter2DAsync) {
 	FF_WORKER_ASYNC("Mat::Filter2DAsync", Filter2DWorker, worker);
 }
 
-struct MatImgproc::SepFilter2DWorker : public SimpleWorker {
+struct MatImgproc::SepFilter2DWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	SepFilter2DWorker(cv::Mat self) {
@@ -2608,7 +2608,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::sepFilter2D(self, dst, ddepth, kernelX, kernelY, anchor, delta, borderType);
 		return "";
 	}
@@ -2658,7 +2658,7 @@ NAN_METHOD(MatImgproc::SepFilter2DAsync) {
 	FF_WORKER_ASYNC("Mat::SepFilter2DAsync", SepFilter2DWorker, worker);
 }
 
-struct MatImgproc::CornerHarrisWorker : public SimpleWorker {
+struct MatImgproc::CornerHarrisWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	CornerHarrisWorker(cv::Mat self) {
@@ -2672,7 +2672,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::cornerHarris(self, dst, blockSize, ksize, k, borderType);
 		return "";
 	}
@@ -2707,7 +2707,7 @@ NAN_METHOD(MatImgproc::CornerHarrisAsync) {
 	FF_WORKER_ASYNC("Mat::CornerHarrisAsync", CornerHarrisWorker, worker);
 }
 
-struct MatImgproc::CornerSubPixWorker : public SimpleWorker {
+struct MatImgproc::CornerSubPixWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	CornerSubPixWorker(cv::Mat self) {
@@ -2720,7 +2720,7 @@ public:
 	cv::TermCriteria criteria;
 
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::cornerSubPix(self, corners, winSize, zeroZone, criteria);
 		return "";
 	}
@@ -2750,7 +2750,7 @@ NAN_METHOD(MatImgproc::CornerSubPixAsync) {
 	FF_WORKER_ASYNC("Mat::CornerSubPixAsync", CornerSubPixWorker, worker);
 }
 
-struct MatImgproc::BaseCornerEigenValWorker : public SimpleWorker {
+struct MatImgproc::BaseCornerEigenValWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	BaseCornerEigenValWorker(cv::Mat self) {
@@ -2798,7 +2798,7 @@ public:
 	CornerMinEigenValWorker(cv::Mat self) : BaseCornerEigenValWorker(self) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::cornerMinEigenVal(self, dst, blockSize, ksize, borderType);
 		return "";
 	}
@@ -2820,7 +2820,7 @@ public:
 	CornerEigenValsAndVecsWorker(cv::Mat self) : BaseCornerEigenValWorker(self) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::cornerEigenValsAndVecs(self, dst, blockSize, ksize, borderType);
 		return "";
 	}
@@ -2837,7 +2837,7 @@ NAN_METHOD(MatImgproc::CornerEigenValsAndVecsAsync) {
 	FF_WORKER_ASYNC("Mat::CornerEigenValsAndVecsAsync", CornerEigenValsAndVecsWorker, worker);
 }
 
-struct MatImgproc::IntegralWorker : public SimpleWorker {
+struct MatImgproc::IntegralWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	IntegralWorker(cv::Mat self) {
@@ -2851,7 +2851,7 @@ public:
 	cv::Mat sqsum;
 	cv::Mat tilted;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::integral(self, sum, sqsum, tilted, sdepth, sqdepth);
 		return "";
 	}

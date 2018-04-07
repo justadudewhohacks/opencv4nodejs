@@ -4,7 +4,6 @@ const path = require('path');
 
 const {
   assertDataDeepEquals,
-  assertError,
   assertMetaData,
   _asyncFuncShouldRequireArgs,
   funcShouldRequireArgs,
@@ -12,10 +11,11 @@ const {
   clearTmpData,
   getTmpDataFilePath,
   fileExists,
-  readTestImage
+  readTestImage,
+  generateAPITests
 } = global.utils;
 
-const { assert, expect } = require('chai');
+const { expect } = require('chai');
 
 const videoCaptureTests = require('./videoCaptureTests');
 const videoWriterTests = require('./videoWriterTests');
@@ -43,130 +43,84 @@ describe('io', () => {
   }
 
   describe('imread', () => {
-    describe('sync', () => {
-      funcShouldRequireArgs(cv.imread);
-
-      it('should throw empty Mat if path invalid', () => {
-        assertError(() => cv.imread('foo.png'), 'empty Mat');
-      });
-
-      it('should read image with flags', () => {
-        const flags = cv.IMREAD_UNCHANGED;
-        const img = cv.imread(getTestImagePath(), flags);
+    const flags = cv.IMREAD_UNCHANGED;
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'imread',
+      getRequiredArgs: () => ([
+        getTestImagePath()
+      ]),
+      getOptionalArgs: () => ([
+        flags
+      ]),
+      expectOutput: (img) => {
         expect(img).to.be.instanceOf(cv.Mat);
         assertMetaData(img)(512, 512, cv.CV_8UC3);
-      });
-    });
-
-    describe('async', () => {
-      _asyncFuncShouldRequireArgs(cv.imreadAsync);
-
-      it('should throw empty Mat if path invalid', (done) => {
-        cv.imreadAsync('foo.png', (err) => {
-          assert.include(err.toString(), 'empty Mat');
-          done();
-        });
-      });
-
-      it('should read image', (done) => {
-        cv.imreadAsync(getTestImagePath(), (err, img) => {
-          expect(img).to.be.instanceOf(cv.Mat);
-          assertMetaData(img)(512, 512, cv.CV_8UC3);
-          done();
-        });
-      });
-
-      it('should read image with flags', (done) => {
-        const flags = cv.IMREAD_UNCHANGED;
-        cv.imreadAsync(getTestImagePath(), flags, (err, img) => {
-          expect(img).to.be.instanceOf(cv.Mat);
-          assertMetaData(img)(512, 512, cv.CV_8UC3);
-          done();
-        });
-      });
+      }
     });
   });
 
   describe('imwrite', () => {
-    beforeEach(() => { clearTmpData(); });
-    afterEach(() => { clearTmpData(); });
-
-    describe('sync', () => {
-      funcShouldRequireArgs(cv.imwrite);
-
-      it('should write image', () => {
-        const file = getTmpDataFilePath('written_sync.png');
-        cv.imwrite(file, lenna);
+    const file = getTmpDataFilePath('written_sync.png');
+    const flags = [cv.IMWRITE_PNG_COMPRESSION];
+    generateAPITests({
+      beforeHook: () => { clearTmpData(); },
+      afterHook: () => { clearTmpData(); },
+      getDut: () => cv,
+      methodName: 'imwrite',
+      getRequiredArgs: () => ([
+        file,
+        lenna
+      ]),
+      getOptionalArgs: () => ([
+        flags
+      ]),
+      expectOutput: () => {
         expect(fileExists(file)).to.be.true;
-      });
-
-      it('should write image with flags', () => {
-        const flags = [cv.IMWRITE_PNG_COMPRESSION];
-        const file = getTmpDataFilePath('written_sync.png');
-        cv.imwrite(file, lenna, flags);
-        expect(fileExists(file)).to.be.true;
-      });
-    });
-
-    describe('async', () => {
-      const file = getTmpDataFilePath('written_async.png');
-      _asyncFuncShouldRequireArgs(cv.imwriteAsync);
-
-      it('should write image', (done) => {
-        cv.imwriteAsync(file, lenna, () => {
-          expect(fileExists(file)).to.be.true;
-          done();
-        });
-      });
-
-      it('should write image with flags', (done) => {
-        const flags = [cv.IMWRITE_PNG_COMPRESSION];
-        cv.imwriteAsync(file, lenna, flags, () => {
-          expect(fileExists(file)).to.be.true;
-          done();
-        });
-      });
+      }
     });
   });
 
   describe('imencode', () => {
-    describe('sync', () => {
+    describe('png', () => {
       const pngPrefixLength = 18;
-      const jpgPrefixLength = 12;
-      funcShouldRequireArgs(cv.imencode);
 
-      it('should encode png img', () => {
-        const enc = cv.imencode('.png', lenna);
-        const buf = getLennaBase64Buf();
-        expect(enc.slice(0, pngPrefixLength)).to.deep.equal(buf.slice(0, pngPrefixLength));
-      });
-
-      it('should encode jpg img', () => {
-        const enc = cv.imencode('.jpg', got);
-        const buf = getGotBase64Buf();
-        expect(enc.slice(0, jpgPrefixLength)).to.deep.equal(buf.slice(0, jpgPrefixLength));
+      const ext = '.png';
+      const flags = [cv.IMWRITE_PNG_COMPRESSION];
+      generateAPITests({
+        getDut: () => cv,
+        methodName: 'imencode',
+        getRequiredArgs: () => ([
+          ext,
+          lenna
+        ]),
+        getOptionalArgs: () => ([
+          flags
+        ]),
+        expectOutput: (enc) => {
+          expect(enc.slice(0, pngPrefixLength)).to.deep.equal(getLennaBase64Buf().slice(0, pngPrefixLength));
+        }
       });
     });
 
-    describe('async', () => {
-      const pngPrefixLength = 18;
+    describe('jpg', () => {
       const jpgPrefixLength = 12;
-      _asyncFuncShouldRequireArgs(cv.imencodeAsync);
 
-      it('should encode png img', (done) => {
-        cv.imencodeAsync('.png', lenna, (err, enc) => {
-          const buf = getLennaBase64Buf();
-          expect(enc.slice(0, pngPrefixLength)).to.deep.equal(buf.slice(0, pngPrefixLength));
-          done();
-        });
-      });
-
-      it('should encode jpg img', (done) => {
-        cv.imencodeAsync('.jpg', got, (err, enc) => {
-          const buf = getGotBase64Buf();
-          expect(enc.slice(0, jpgPrefixLength)).to.deep.equal(buf.slice(0, jpgPrefixLength));
-          done();
-        });
+      const ext = '.jpg';
+      const flags = [cv.IMWRITE_JPEG_QUALITY];
+      generateAPITests({
+        getDut: () => cv,
+        methodName: 'imencode',
+        getRequiredArgs: () => ([
+          ext,
+          got
+        ]),
+        getOptionalArgs: () => ([
+          flags
+        ]),
+        expectOutput: (enc) => {
+          expect(enc.slice(0, jpgPrefixLength)).to.deep.equal(getGotBase64Buf().slice(0, jpgPrefixLength));
+        }
       });
     });
   });

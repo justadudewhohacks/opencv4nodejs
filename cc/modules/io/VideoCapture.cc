@@ -1,5 +1,5 @@
 #include "VideoCapture.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 
 Nan::Persistent<v8::FunctionTemplate> VideoCapture::constructor;
 
@@ -39,12 +39,6 @@ NAN_METHOD(VideoCapture::New) {
 	FF_RETURN(info.Holder());
 }
 
-NAN_METHOD(VideoCapture::Read) {
-	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
-	FF_UNWRAP(info.This(), VideoCapture)->cap.read(FF_UNWRAP_MAT_AND_GET(jsMat));
-	FF_RETURN(jsMat);
-}
-
 NAN_METHOD(VideoCapture::Reset) {
 	FF_METHOD_CONTEXT("VideoCapture::Reset");
 	VideoCapture* self = FF_UNWRAP(info.This(), VideoCapture);
@@ -55,17 +49,33 @@ NAN_METHOD(VideoCapture::Reset) {
 	}
 }
 
+struct VideoCapture::ReadWorker : public CatchCvExceptionWorker {
+public:
+	cv::VideoCapture self;
+	ReadWorker(cv::VideoCapture self) {
+		this->self = self;
+	}
+	cv::Mat frame;
+
+	const char* executeCatchCvExceptionWorker() {
+		self.read(frame);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(frame);
+	}
+};
+
+NAN_METHOD(VideoCapture::Read) {
+	ReadWorker worker(FF_UNWRAP(info.This(), VideoCapture)->cap);
+	FF_WORKER_SYNC("VideoCapture::Read", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
 NAN_METHOD(VideoCapture::ReadAsync) {
-	FF_METHOD_CONTEXT("VideoCapture::ReadAsync");
-
-	ReadContext ctx;
-	ctx.cap = FF_UNWRAP(info.This(), VideoCapture)->cap;
-
-	FF_ARG_FUNC(0, v8::Local<v8::Function> cbFunc);
-	Nan::AsyncQueueWorker(new GenericAsyncWorker<ReadContext>(
-		new Nan::Callback(cbFunc),
-		ctx
-	));
+	ReadWorker worker(FF_UNWRAP(info.This(), VideoCapture)->cap);
+	FF_WORKER_ASYNC("VideoCapture::ReadAsync", ReadWorker, worker);
 }
 
 NAN_METHOD(VideoCapture::Get) {
@@ -79,7 +89,7 @@ NAN_METHOD(VideoCapture::Release) {
 }
 
 
-struct VideoCapture::SetWorker : public SimpleWorker {
+struct VideoCapture::SetWorker : public CatchCvExceptionWorker {
 public:
 	cv::VideoCapture self;
 	SetWorker(cv::VideoCapture self) {
@@ -91,7 +101,7 @@ public:
 	double value;
 	bool ret;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		ret = this->self.set(prop, value);
 		return "";
 	}
@@ -109,13 +119,12 @@ public:
 };
 
 NAN_METHOD(VideoCapture::Set) {
-	FF_METHOD_CONTEXT("VideoCapture::Set");
 	SetWorker worker(FF_UNWRAP(info.This(), VideoCapture)->cap);
 	FF_WORKER_SYNC("VideoCapture::SetAsync", worker);
 	info.GetReturnValue().Set(worker.getReturnValue());
 }
+
 NAN_METHOD(VideoCapture::SetAsync) {
-	FF_METHOD_CONTEXT("VideoCapture::SetAsync");
 	SetWorker worker(FF_UNWRAP(info.This(), VideoCapture)->cap);
 	FF_WORKER_ASYNC("VideoCapture::SetAsync", SetWorker, worker);
 }

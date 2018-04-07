@@ -45,7 +45,7 @@ void MatCalib3d::Init(v8::Local<v8::FunctionTemplate> ctor) {
 #endif
 };
 
-struct MatCalib3d::RodriguesWorker : public SimpleWorker {
+struct MatCalib3d::RodriguesWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	RodriguesWorker(cv::Mat self) {
@@ -55,7 +55,7 @@ public:
 	cv::Mat dst;
 	cv::Mat jacobian;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::Rodrigues(self, dst, jacobian);
 		return "";
 	}
@@ -80,7 +80,7 @@ NAN_METHOD(MatCalib3d::RodriguesAsync) {
 }
 
 
-struct MatCalib3d::RQDecomp3x3Worker : public SimpleWorker {
+struct MatCalib3d::RQDecomp3x3Worker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	RQDecomp3x3Worker(cv::Mat self) {
@@ -94,7 +94,7 @@ public:
 	cv::Mat Qy;
 	cv::Mat Qz;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		returnValue = cv::RQDecomp3x3(self, mtxR, mtxQ, Qx, Qy, Qz);
 		return "";
 	}
@@ -123,7 +123,7 @@ NAN_METHOD(MatCalib3d::RQDecomp3x3Async) {
 }
 
 
-struct MatCalib3d::DecomposeProjectionMatrixWorker : public SimpleWorker {
+struct MatCalib3d::DecomposeProjectionMatrixWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	DecomposeProjectionMatrixWorker(cv::Mat self) {
@@ -138,7 +138,7 @@ public:
 	cv::Mat rotMatrixZ;
 	cv::Mat eulerAngles;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::decomposeProjectionMatrix(self, cameraMatrix, rotMatrix, transVect, rotMatrixX, rotMatrixY, rotMatrixZ, eulerAngles);
 		return "";
 	}
@@ -167,7 +167,7 @@ NAN_METHOD(MatCalib3d::DecomposeProjectionMatrixAsync) {
 }
 
 
-struct MatCalib3d::MatMulDerivWorker : public SimpleWorker {
+struct MatCalib3d::MatMulDerivWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	MatMulDerivWorker(cv::Mat self) {
@@ -179,7 +179,7 @@ public:
 	cv::Mat dABdA;
 	cv::Mat dABdB;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::matMulDeriv(self, B, dABdA, dABdB);
 		return "";
 	}
@@ -210,7 +210,7 @@ NAN_METHOD(MatCalib3d::MatMulDerivAsync) {
 }
 
 
-struct MatCalib3d::FindChessboardCornersWorker : public SimpleWorker {
+struct MatCalib3d::FindChessboardCornersWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	FindChessboardCornersWorker(cv::Mat self) {
@@ -223,7 +223,7 @@ public:
 	bool returnValue;
 	std::vector<cv::Point2d> corners;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		returnValue = cv::findChessboardCorners(self, patternSize, corners, flags);
 		return "";
 	}
@@ -260,7 +260,7 @@ NAN_METHOD(MatCalib3d::FindChessboardCornersAsync) {
 }
 
 
-struct MatCalib3d::DrawChessboardCornersWorker : public SimpleWorker {
+struct MatCalib3d::DrawChessboardCornersWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	DrawChessboardCornersWorker(cv::Mat self) {
@@ -272,7 +272,7 @@ public:
 	bool patternWasFound;
 
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::drawChessboardCorners(self, patternSize, corners, patternWasFound);
 		return "";
 	}
@@ -298,7 +298,7 @@ NAN_METHOD(MatCalib3d::DrawChessboardCornersAsync) {
 }
 
 
-struct MatCalib3d::Find4QuadCornerSubpixWorker : public SimpleWorker {
+struct MatCalib3d::Find4QuadCornerSubpixWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	Find4QuadCornerSubpixWorker(cv::Mat self) {
@@ -310,7 +310,7 @@ public:
 
 	bool returnValue;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		returnValue = cv::find4QuadCornerSubpix(self, corners, region_size);
 		return "";
 	}
@@ -339,7 +339,7 @@ NAN_METHOD(MatCalib3d::Find4QuadCornerSubpixAsync) {
 }
 
 
-struct MatCalib3d::CalibrationMatrixValuesWorker : public SimpleWorker {
+struct MatCalib3d::CalibrationMatrixValuesWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	CalibrationMatrixValuesWorker(cv::Mat self) {
@@ -356,7 +356,7 @@ public:
 	cv::Point2d principalPoint;
 	double aspectRatio;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::calibrationMatrixValues(self, imageSize, apertureWidth, apertureHeight, fovx, fovy, focalLength, principalPoint, aspectRatio);
 		return "";
 	}
@@ -392,7 +392,7 @@ NAN_METHOD(MatCalib3d::CalibrationMatrixValuesAsync) {
 }
 
 
-struct MatCalib3d::StereoRectifyWorker : public SimpleWorker {
+struct MatCalib3d::StereoRectifyWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	StereoRectifyWorker(cv::Mat self) {
@@ -417,7 +417,7 @@ public:
 	cv::Rect roi1;
 	cv::Rect roi2;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::stereoRectify(self, distCoeffs1, cameraMatrix2, distCoeffs2, imageSize, R, T, R1, R2, P1, P2, Q, flags, alpha, newImageSize, &roi1, &roi2);
 		return "";
 	}
@@ -478,7 +478,7 @@ NAN_METHOD(MatCalib3d::StereoRectifyAsync) {
 	FF_WORKER_ASYNC("Mat::StereoRectifyAsync", StereoRectifyWorker, worker);
 }
 
-struct MatCalib3d::Rectify3CollinearWorker : public SimpleWorker {
+struct MatCalib3d::Rectify3CollinearWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	Rectify3CollinearWorker(cv::Mat self) {
@@ -513,7 +513,7 @@ public:
 	cv::Rect roi1;
 	cv::Rect roi2;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		returnValue = cv::rectify3Collinear(self, distCoeffs1, cameraMatrix2, distCoeffs2, cameraMatrix3, distCoeffs3, imgpt1, imgpt3, imageSize, R12, T12, R13, T13, R1, R2, R3, P1, P2, P3, Q, alpha, newImgSize, &roi1, &roi2, flags);
 		return "";
 	}
@@ -566,7 +566,7 @@ NAN_METHOD(MatCalib3d::Rectify3CollinearAsync) {
 }
 
 
-struct MatCalib3d::GetOptimalNewCameraMatrixWorker : public SimpleWorker {
+struct MatCalib3d::GetOptimalNewCameraMatrixWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	GetOptimalNewCameraMatrixWorker(cv::Mat self) {
@@ -582,7 +582,7 @@ public:
 	cv::Mat out;
 	cv::Rect validPixROI;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		out = cv::getOptimalNewCameraMatrix(self, distCoeffs, imageSize, alpha, newImgSize, &validPixROI, centerPrincipalPoint);
 		return "";
 	}
@@ -634,7 +634,7 @@ NAN_METHOD(MatCalib3d::GetOptimalNewCameraMatrixAsync) {
 }
 
 
-struct MatCalib3d::DecomposeEssentialMatWorker : public SimpleWorker {
+struct MatCalib3d::DecomposeEssentialMatWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	DecomposeEssentialMatWorker(cv::Mat self) {
@@ -645,7 +645,7 @@ public:
 	cv::Mat R2;
 	cv::Vec3d T;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::decomposeEssentialMat(self, R1, R2, T);
 		return "";
 	}
@@ -671,7 +671,7 @@ NAN_METHOD(MatCalib3d::DecomposeEssentialMatAsync) {
 }
 
 
-struct MatCalib3d::TriangulatePointsWorker : public SimpleWorker {
+struct MatCalib3d::TriangulatePointsWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	TriangulatePointsWorker(cv::Mat self) {
@@ -684,7 +684,7 @@ public:
 
 	cv::Mat points4D;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::triangulatePoints(self, projMatr2, projPoints1, projPoints2, points4D);
 		return "";
 	}
@@ -714,7 +714,7 @@ NAN_METHOD(MatCalib3d::TriangulatePointsAsync) {
 }
 
 
-struct MatCalib3d::CorrectMatchesWorker : public SimpleWorker {
+struct MatCalib3d::CorrectMatchesWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	CorrectMatchesWorker(cv::Mat self) {
@@ -727,7 +727,7 @@ public:
 	std::vector<cv::Point2f> newPoints1;
 	std::vector<cv::Point2f> newPoints2;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::correctMatches(self, points1, points2, newPoints1, newPoints2);
 		return "";
 	}
@@ -759,7 +759,7 @@ NAN_METHOD(MatCalib3d::CorrectMatchesAsync) {
 }
 
 
-struct MatCalib3d::FilterSpecklesWorker : public SimpleWorker {
+struct MatCalib3d::FilterSpecklesWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	FilterSpecklesWorker(cv::Mat self) {
@@ -770,7 +770,7 @@ public:
 	int maxSpeckleSize;
 	double maxDiff;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::filterSpeckles(self, newVal, maxSpeckleSize, maxDiff, cv::noArray());
 		return "";
 	}
@@ -800,7 +800,7 @@ NAN_METHOD(MatCalib3d::FilterSpecklesAsync) {
 	FF_WORKER_ASYNC("Mat::FilterSpecklesAsync", FilterSpecklesWorker, worker);
 }
 
-struct MatCalib3d::ValidateDisparityWorker : public SimpleWorker {
+struct MatCalib3d::ValidateDisparityWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	ValidateDisparityWorker(cv::Mat self) {
@@ -813,7 +813,7 @@ public:
 	int disp12MaxDisp = 1;
 
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::validateDisparity(self, cost, minDisparity, numberOfDisparities, disp12MaxDisp);
 		return "";
 	}
@@ -850,7 +850,7 @@ NAN_METHOD(MatCalib3d::ValidateDisparityAsync) {
 }
 
 
-struct MatCalib3d::ReprojectImageTo3DWorker : public SimpleWorker {
+struct MatCalib3d::ReprojectImageTo3DWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	ReprojectImageTo3DWorker(cv::Mat self) {
@@ -863,7 +863,7 @@ public:
 
 	cv::Mat _3dImage;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::reprojectImageTo3D(self, _3dImage, Q, handleMissingValues, ddepth);
 		return "";
 	}
@@ -910,7 +910,7 @@ NAN_METHOD(MatCalib3d::ReprojectImageTo3DAsync) {
 }
 
 
-struct MatCalib3d::DecomposeHomographyMatWorker : public SimpleWorker {
+struct MatCalib3d::DecomposeHomographyMatWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	DecomposeHomographyMatWorker(cv::Mat self) {
@@ -924,7 +924,7 @@ public:
 	std::vector<cv::Mat> translations;
 	std::vector<cv::Mat> normals;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		returnValue = cv::decomposeHomographyMat(self, K, rotations, translations, normals);
 		return "";
 	}
@@ -959,7 +959,7 @@ NAN_METHOD(MatCalib3d::DecomposeHomographyMatAsync) {
 
 #if CV_VERSION_MINOR > 0
 
-struct MatCalib3d::FindEssentialMatWorker : public SimpleWorker {
+struct MatCalib3d::FindEssentialMatWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	FindEssentialMatWorker(cv::Mat self) {
@@ -975,7 +975,7 @@ public:
 	cv::Mat E;
 	cv::Mat mask = cv::noArray().getMat();
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		E = cv::findEssentialMat(points1, points2, self, method, prob, threshold, mask);
 		return "";
 	}
@@ -1028,7 +1028,7 @@ NAN_METHOD(MatCalib3d::FindEssentialMatAsync) {
 }
 
 
-struct MatCalib3d::RecoverPoseWorker : public SimpleWorker {
+struct MatCalib3d::RecoverPoseWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat self;
 	RecoverPoseWorker(cv::Mat self) {
@@ -1044,7 +1044,7 @@ public:
 	cv::Mat R;
 	cv::Vec3d T;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		returnValue = cv::recoverPose(E, points1, points2, self, R, T, mask);
 		return "";
 	}

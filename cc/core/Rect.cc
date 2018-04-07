@@ -43,7 +43,7 @@ NAN_METHOD(Rect::New) {
 	info.GetReturnValue().Set(info.Holder());
 }
 
-struct Rect::LogicOpWorker : public SimpleWorker {
+struct Rect::LogicOpWorker : public CatchCvExceptionWorker {
 public:
 	cv::Rect2d rect;
 	cv::Rect2d rect2;
@@ -69,7 +69,7 @@ public:
 	AndWorker(cv::Rect2d rect) : LogicOpWorker(rect) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		outRect = rect & rect2;
 		return "";
 	}
@@ -86,7 +86,7 @@ public:
 	OrWorker(cv::Rect2d rect) : LogicOpWorker(rect) {
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		outRect = rect | rect2;
 		return "";
 	}
@@ -98,7 +98,7 @@ NAN_METHOD(Rect::Or) {
 	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
-struct Rect::ToSquareWorker : SimpleWorker {
+struct Rect::ToSquareWorker : CatchCvExceptionWorker {
 public:
 	cv::Rect2d rect;
 	cv::Rect2d outRect;
@@ -107,7 +107,7 @@ public:
 		this->rect = rect;
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		double diff = rect.width - rect.height;
 		if (diff < 0) {
 			outRect = cv::Rect(rect.x + (diff / 2), rect.y, rect.width - diff, rect.height);
@@ -135,7 +135,7 @@ NAN_METHOD(Rect::ToSquareAsync) {
 }
 
 
-struct Rect::PadWorker : SimpleWorker {
+struct Rect::PadWorker : CatchCvExceptionWorker {
 public:
 	cv::Rect2d rect;
 	cv::Size2d newSize = cv::Size2d();
@@ -145,7 +145,7 @@ public:
 		this->rect = rect;
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		double offX = (rect.width - newSize.width) / 2;
 		double offY = (rect.height - newSize.height) / 2;
 		outRect = cv::Rect(rect.x + offX, rect.y + offY, newSize.width, newSize.height);
@@ -183,7 +183,7 @@ NAN_METHOD(Rect::PadAsync) {
 }
 
 
-struct Rect::RescaleWorker : SimpleWorker {
+struct Rect::RescaleWorker : CatchCvExceptionWorker {
 public:
 	cv::Rect2d rect;
 	double f;
@@ -193,7 +193,7 @@ public:
 		this->rect = rect;
 	}
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		outRect = cv::Rect(f * rect.x, f * rect.y, f * rect.width, f * rect.height);
 		return "";
 	}

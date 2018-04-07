@@ -23,22 +23,7 @@ public:
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-	struct ReadContext {
-	public:
-		cv::Mat frame;
-		cv::VideoCapture cap;
-
-		const char* execute() {
-			cap.read(frame);
-			return "";
-		}
-
-		FF_VAL getReturnValue() {
-			FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
-			FF_UNWRAP_MAT_AND_GET(jsMat) = frame;
-			return jsMat;
-		}
-	};
+	struct ReadWorker;
 	struct SetWorker;
 };
 

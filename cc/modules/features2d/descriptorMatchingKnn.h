@@ -1,4 +1,5 @@
 #include "macros.h"
+#include "Converters.h"
 #include <opencv2/core.hpp>
 #include <opencv2/features2d.hpp>
 #include "Mat.h"
@@ -32,35 +33,7 @@ public:
 	static void matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType);
 #endif
 
-	struct MatchContext {
-	public:
-		cv::Ptr<cv::DescriptorMatcher> matcher;
-		cv::Mat descFrom;
-		cv::Mat descTo;
-		int k;
-		std::vector<std::vector<cv::DMatch>> dmatches;
-
-		const char* execute() {
-			matcher->knnMatch(descFrom, descTo, dmatches, k);
-			return "";
-		}
-
-		FF_VAL getReturnValue() {
-			FF_ARR jsMatches = FF_NEW_ARRAY(dmatches.size());
-			uint i = 0;
-			for (auto dmatch : dmatches) {
-				FF_ARR jsMatchesKnn = FF_NEW_ARRAY(dmatch.size());
-				uint j = 0;
-				for (auto dmatchKnn : dmatch) {
-					FF_OBJ jsMatchKnn = FF_NEW_INSTANCE(DescriptorMatch::constructor);
-					FF_UNWRAP(jsMatchKnn, DescriptorMatch)->dmatch = dmatchKnn;
-					jsMatchesKnn->Set(j++, jsMatchKnn);
-				}
-				jsMatches->Set(i++, jsMatchesKnn);
-			}
-			return jsMatches;
-		}
-	};
+	struct MatchKnnWorker;
 };
 
 #endif

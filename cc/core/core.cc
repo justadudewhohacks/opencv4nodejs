@@ -124,7 +124,7 @@ NAN_METHOD(Core::Kmeans) {
 	FF_RETURN(ret);
 }
 
-struct Core::CartToPolarWorker : public SimpleWorker {
+struct Core::CartToPolarWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat x;
 	cv::Mat y;
@@ -133,7 +133,7 @@ public:
 	cv::Mat magnitude;
 	cv::Mat angle;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::cartToPolar(x, y, magnitude, angle, angleInDegrees);
 		return "";
 	}
@@ -170,7 +170,7 @@ NAN_METHOD(Core::CartToPolarAsync) {
 	FF_WORKER_ASYNC("Mat::CartToPolarAsync", CartToPolarWorker, worker);
 }
 
-struct Core::PolarToCartWorker : public SimpleWorker {
+struct Core::PolarToCartWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat magnitude;
 	cv::Mat angle;
@@ -179,7 +179,7 @@ public:
 	cv::Mat x;
 	cv::Mat y;
 
-	const char* execute() {
+	const char* executeCatchCvExceptionWorker() {
 		cv::polarToCart(magnitude, angle, x, y, angleInDegrees);
 		return "";
 	}

@@ -1,6 +1,6 @@
 #include <opencv2/core.hpp>
 #include "Converters.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 #include "macros.h"
 
 #ifndef __FF_RECT_H__
