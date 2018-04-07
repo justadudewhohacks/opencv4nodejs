@@ -38,7 +38,7 @@ public:
 		return BoolConverter::optArg(4, &isColor, info);
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		return "";
 	}
 };
@@ -59,7 +59,7 @@ public:
 
 	int code;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		code = cv::VideoWriter::fourcc(fourcc.at(0), fourcc.at(1), fourcc.at(2), fourcc.at(3));
 		return "";
 	}
@@ -93,7 +93,7 @@ public:
 
 	cv::Mat frame;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		writer.write(frame);
 		return "";
 	}

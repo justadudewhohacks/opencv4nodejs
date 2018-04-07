@@ -1,6 +1,5 @@
 #include <node.h>
 #include "ExternalMemTracking.h"
-#include <iostream>
 
 #include "cvTypes/cvTypes.h"
 #include "core.h"
@@ -39,7 +38,6 @@ int customCvErrorHandler(int status, const char* func_name, const char* err_msg,
       + ", line " + std::to_string(line)
       + ", status " + std::to_string(status);
 
-		std::cout << msg << std::endl;
     throw std::runtime_error(msg);
     return 0;
 }

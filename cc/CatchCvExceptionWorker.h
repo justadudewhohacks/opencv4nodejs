@@ -5,15 +5,15 @@
 
 struct CatchCvExceptionWorker : public SimpleWorker {
 public:
-	const char* execute() {
+	std::string execute() {
 		try {
 			return executeCatchCvExceptionWorker();
 		} catch (std::exception e) {
-			return e.what();
+			return std::string(e.what());
 		}
 	}
 
-	virtual const char* executeCatchCvExceptionWorker() = 0;
+	virtual std::string executeCatchCvExceptionWorker() = 0;
 };
 
 #endif

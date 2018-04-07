@@ -115,7 +115,7 @@ public:
 	cv::Mat descTo;
 	std::vector<cv::DMatch> dmatches;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		matcher->match(descFrom, descTo, dmatches);
 		return "";
 	}

@@ -42,7 +42,7 @@ public:
 	std::string name = "";
 
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self.setInput(blob, name);
 		return "";
 	}
@@ -83,7 +83,7 @@ public:
 
 	cv::Mat returnValue;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = self.forward(outputName);
 		return "";
 	}

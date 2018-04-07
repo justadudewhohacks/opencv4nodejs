@@ -122,7 +122,7 @@ public:
 
 	std::vector<float> descriptors;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		hog.compute(img, descriptors, winStride, padding, locations);
 		return "";
 	}
@@ -183,7 +183,7 @@ public:
 	cv::Mat grad;
 	cv::Mat angleOfs;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self.computeGradient(img, grad, angleOfs, paddingTL, paddingBR);
 		return "";
 	}
@@ -249,7 +249,7 @@ public:
 	std::vector<cv::Point> foundLocations;
 	std::vector<double> weights;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self.detect(img, foundLocations, weights, hitThreshold, winStride, padding, searchLocations);
 		return "";
 	}
@@ -319,7 +319,7 @@ public:
 	std::vector<cv::Point> foundLocations;
 	std::vector<double> confidences;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self.detectROI(img, locations, foundLocations, confidences, hitThreshold, winStride, padding);
 		return "";
 	}
@@ -391,7 +391,7 @@ public:
 	std::vector<double> foundWeights;
 
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self.detectMultiScale(img, foundLocations, foundWeights, hitThreshold, winStride, padding, scale, finalThreshold, useMeanshiftGrouping);
 		return "";
 	}
@@ -463,7 +463,7 @@ public:
 
 	std::vector<cv::Rect> foundLocations;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self.detectMultiScaleROI(img, foundLocations, locations, hitThreshold, groupThreshold);
 		return "";
 	}
@@ -523,7 +523,7 @@ public:
 	double eps;
 
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self.groupRectangles(rectList, weights, groupThreshold, eps);
 		return "";
 	}

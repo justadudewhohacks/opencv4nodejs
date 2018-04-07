@@ -126,7 +126,7 @@ public:
 	int flags = cv::IMREAD_COLOR;
 	cv::Mat img;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		img = cv::imread(path, flags);
 		if (img.rows == 0 && img.cols == 0) {
 			return "empty Mat";
@@ -164,7 +164,7 @@ public:
 	cv::Mat img;
 	std::vector<int> flags;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::imwrite(path, img);
 		return "";
 	}
@@ -198,7 +198,7 @@ public:
 	char *data;
 	size_t dataSize;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		std::vector<uchar> dataVec;
 		cv::imencode(ext, img, dataVec, flags);
 		dataSize = dataVec.size() * sizeof(char);
@@ -239,7 +239,7 @@ public:
 	char *data;
 	size_t dataSize;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		std::vector<uchar> vec(dataSize);
 		memcpy(vec.data(), data, dataSize);
 		img = cv::imdecode(vec, flags);

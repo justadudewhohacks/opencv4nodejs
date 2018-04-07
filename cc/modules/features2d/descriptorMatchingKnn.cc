@@ -116,7 +116,7 @@ public:
 	int k;
 	std::vector<std::vector<cv::DMatch>> dmatches;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		matcher->knnMatch(descFrom, descTo, dmatches, k);
 		return "";
 	}

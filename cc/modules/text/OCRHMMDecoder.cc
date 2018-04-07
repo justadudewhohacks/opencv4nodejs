@@ -87,7 +87,7 @@ public:
 	RunWorker(cv::Ptr<cv::text::OCRHMMDecoder> decoder) : BaseRunWorker(decoder) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 #if CV_MINOR_VERSION > 0
 		if (mask.empty()) {
 			output_text = decoder->run(img, min_confidence, component_level);
@@ -144,7 +144,7 @@ public:
 	std::vector<float> component_confidences;
 
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 #if CV_MINOR_VERSION > 0
 		if (mask.empty()) {
 			decoder->run(img, output_text, &component_rects, &component_texts, &component_confidences, component_level);

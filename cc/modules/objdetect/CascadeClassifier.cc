@@ -55,7 +55,7 @@ public:
 	std::vector<cv::Rect> objectRects;
 	std::vector<int> numDetections;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		if (isGpu) {
 			cv::UMat oclMat = img.getUMat(cv::ACCESS_READ);
 			classifier.detectMultiScale(oclMat, objectRects, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize);
@@ -133,7 +133,7 @@ public:
 	std::vector<int> rejectLevels;
 	std::vector<double> levelWeights;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		if (isGpu) {
 			cv::UMat oclMat = img.getUMat(cv::ACCESS_READ);
 			classifier.detectMultiScale(oclMat, objectRects, rejectLevels, levelWeights, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize, true);

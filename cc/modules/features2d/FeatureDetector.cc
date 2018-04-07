@@ -18,7 +18,7 @@ public:
 	cv::Mat img;
 	std::vector<cv::KeyPoint> kps;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		det->detect(img, kps);
 		return "";
 	}
@@ -55,7 +55,7 @@ public:
 	std::vector<cv::KeyPoint> kps;
 	cv::Mat desc;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		det->compute(img, kps, desc);
 		return "";
 	}

@@ -34,7 +34,7 @@ public:
 };
 
 struct Text::LoadOCRHMMClassifierNMWorker : public LoadOCRHMMClassifierWorker {
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		classifier = cv::text::loadOCRHMMClassifierNM(file);
 		return "";
 	}
@@ -55,7 +55,7 @@ NAN_METHOD(Text::LoadOCRHMMClassifierNMAsync) {
 #if CV_MINOR_VERSION > 0
 
 struct Text::LoadOCRHMMClassifierCNNWorker : public LoadOCRHMMClassifierWorker {
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		classifier = cv::text::loadOCRHMMClassifierCNN(file);
 		return "";
 	}
@@ -80,7 +80,7 @@ public:
 
 	cv::Mat transition_probabilities_table;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::text::createOCRHMMTransitionsTable(vocabulary, lexicon, transition_probabilities_table);
 		return "";
 	}

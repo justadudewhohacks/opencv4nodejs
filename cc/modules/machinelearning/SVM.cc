@@ -183,7 +183,7 @@ public:
 
 	bool ret;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		ret = svm->train(trainData, (int)flags);
 		return "";
 	}
@@ -215,7 +215,7 @@ public:
 
 	bool ret;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		ret = svm->train(samples, (int)layout, responses);
 		return "";
 	}
@@ -287,7 +287,7 @@ public:
 
 	bool ret;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		ret = svm->trainAuto(trainData, (int)kFold, cGrid, gammaGrid, pGrid, nuGrid, coeffGrid, degreeGrid, balanced);
 		return "";
 	}

@@ -21,7 +21,7 @@ public:
 	std::vector<cv::Mat> images;
 	std::vector<int> labels;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self->train(images, labels);
 		return "";
 	}
@@ -57,7 +57,7 @@ public:
 	int label;
 	double confidence;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self->predict(image, label, confidence);
 		return "";
 	}

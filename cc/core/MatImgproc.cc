@@ -133,7 +133,7 @@ public:
 
 	double factor;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::resize(self, dst, cv::Size(), factor, factor);
 		return "";
 	}
@@ -168,7 +168,7 @@ public:
 	double fy = 0;
 	int interpolation = cv::INTER_LINEAR;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::resize(self, dst, dsize, fx, fy, interpolation);
 		return "";
 	}
@@ -232,7 +232,7 @@ public:
 
 	int maxRowsOrCols;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		double ratioY = (double)maxRowsOrCols / (double)self.rows;
 		double ratioX = (double)maxRowsOrCols / (double)self.cols;
 		double scale = (std::min)(ratioY, ratioX);
@@ -272,7 +272,7 @@ public:
 
 	cv::Mat thresholdMat;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::threshold(mat, thresholdMat, thresh, maxVal, (int)type);
 		return "";
 	}
@@ -317,7 +317,7 @@ public:
 
 	cv::Mat thresholdMat;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::adaptiveThreshold(mat, thresholdMat, maxVal, adaptiveMethod, thresholdType, blockSize, C);
 		return "";
 	}
@@ -363,7 +363,7 @@ public:
 
 	cv::Mat inRangeMat;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		if (mat.channels() == 3) {
 			cv::inRange(mat, lowerVec, upperVec, inRangeMat);
 		} else {
@@ -414,7 +414,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::cvtColor(self, dst, code, dstCn);
 		return "";
 	}
@@ -459,7 +459,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::cvtColor(self, dst, CV_BGR2GRAY);
 		return "";
 	}
@@ -530,7 +530,7 @@ struct MatImgproc::WarpAffineWorker : public WarpWorker {
 	WarpAffineWorker(cv::Mat mat) : WarpWorker(mat) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::warpAffine(mat, warpedMat, transformationMatrix, (cv::Size)size, flags, borderMode, cv::Scalar());
 		return "";
 	}
@@ -551,7 +551,7 @@ struct MatImgproc::WarpPerspectiveWorker : public WarpWorker {
 	WarpPerspectiveWorker(cv::Mat mat) : WarpWorker(mat) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::warpPerspective(mat, warpedMat, transformationMatrix, (cv::Size)size, flags, borderMode, cv::Scalar());
 		return "";
 	}
@@ -628,7 +628,7 @@ struct MatImgproc::ErodeWorker : public MorphWorker {
 	ErodeWorker(cv::Mat mat) : MorphWorker(mat) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::erode(mat, resultMat, kernel, anchor, iterations, borderType, cv::morphologyDefaultBorderValue());
 		return "";
 	}
@@ -650,7 +650,7 @@ struct MatImgproc::DilateWorker : public MorphWorker {
 	DilateWorker(cv::Mat mat) : MorphWorker(mat) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::dilate(mat, resultMat, kernel, anchor, iterations, borderType, cv::morphologyDefaultBorderValue());
 		return "";
 	}
@@ -673,7 +673,7 @@ public:
 	MorphologyExWorker(cv::Mat mat) : MorphWorker(mat, true) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::morphologyEx(mat, resultMat, op, kernel, anchor, iterations, borderType, cv::morphologyDefaultBorderValue());
 		return "";
 	}
@@ -703,7 +703,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::distanceTransform(self, dst, distanceType, maskSize, dstType);
 		return "";
 	}
@@ -744,7 +744,7 @@ struct MatImgproc::DistanceTransformWithLabelsWorker : public DistanceTransformW
 	int labelType = cv::DIST_LABEL_CCOMP;
 	cv::Mat labels;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::distanceTransform(self, dst, labels, distanceType, maskSize, labelType);
 		return "";
 	}
@@ -789,7 +789,7 @@ public:
 
 	cv::Mat blurMat;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::blur(mat, blurMat, kSize, anchor, borderType);
 		return "";
 	}
@@ -849,7 +849,7 @@ public:
 
 	cv::Mat blurMat;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::GaussianBlur(mat, blurMat, kSize, sigmaX, sigmaY, borderType);
 		return "";
 	}
@@ -909,7 +909,7 @@ public:
 
 	cv::Mat blurMat;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::medianBlur(mat, blurMat, kSize);
 		return "";
 	}
@@ -947,7 +947,7 @@ public:
 
 	cv::Mat labels;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::connectedComponents(self, labels, connectivity, ltype);
 		return "";
 	}
@@ -995,7 +995,7 @@ struct MatImgproc::ConnectedComponentsWithStatsWorker : public ConnectedComponen
 	cv::Mat stats;
 	cv::Mat centroids;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::connectedComponentsWithStats(self, labels, stats, centroids, connectivity, ltype);
 		return "";
 	}
@@ -1036,7 +1036,7 @@ public:
 	int mode = cv::GC_EVAL;
 
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::grabCut(self, mask, rect, bgdModel, fgdModel, iterCount, mode);
 		return "";
 	}
@@ -1083,7 +1083,7 @@ public:
 
 	cv::Mat markers;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::watershed(self, markers);
 		return "";
 	}
@@ -1121,7 +1121,7 @@ public:
 
 	cv::Moments returnValue;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::moments(self, binaryImage);
 		return "";
 	}
@@ -1162,7 +1162,7 @@ public:
 	std::vector<cv::Mat> contours;
 	std::vector<cv::Vec4i> hierarchy;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::findContours(self, contours, hierarchy, mode, method, offset);
 		return "";
 	}
@@ -1303,7 +1303,7 @@ struct MatImgproc::DrawLineWorker : public MatImgproc::DrawWorker {
 	cv::Point2d pt1;
 	cv::Point2d pt2;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::line(self, pt1, pt2, color, thickness, lineType, shift);
 		return "";
 	}
@@ -1334,7 +1334,7 @@ struct MatImgproc::DrawArrowedLineWorker : public MatImgproc::DrawWorker {
 	cv::Point2d pt2;
 	double tipLength = 0.1;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::line(self, pt1, pt2, color, thickness, lineType, shift);
 		return "";
 	}
@@ -1381,7 +1381,7 @@ struct MatImgproc::DrawRectangleWorker : public MatImgproc::DrawWorker {
 
 	bool isArgRect = false;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		if (isArgRect) {
 			cv::rectangle(self, rect, color, thickness, lineType, shift);
 		}
@@ -1422,7 +1422,7 @@ struct MatImgproc::DrawCircleWorker : public MatImgproc::DrawWorker {
 	cv::Point2d center;
 	double radius;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::circle(self, center, radius, color, thickness, lineType, shift);
 		return "";
 	}
@@ -1459,7 +1459,7 @@ struct MatImgproc::DrawEllipseWorker : public MatImgproc::DrawWorker {
 
 	bool isArgBox = false;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		if (isArgBox) {
 			cv::ellipse(self, box, color, thickness, lineType);
 		}
@@ -1502,7 +1502,7 @@ struct MatImgproc::DrawPolylinesWorker : public MatImgproc::DrawWorker {
 	std::vector<std::vector<cv::Point2i>> pts;
 	bool isClosed;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::polylines(self, pts, isClosed, color, thickness, lineType, shift);
 		return "";
 	}
@@ -1532,7 +1532,7 @@ struct MatImgproc::DrawFillPolyWorker : public MatImgproc::DrawWorker {
 	std::vector<std::vector<cv::Point2i>> pts;
 	cv::Point2d offset = cv::Point2d();
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::fillPoly(self, pts, color, lineType, shift, offset);
 		return "";
 	}
@@ -1574,7 +1574,7 @@ struct MatImgproc::DrawFillConvexPolyWorker : public MatImgproc::DrawWorker {
 
 	std::vector<cv::Point2i> pts;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::fillConvexPoly(self, pts, color, lineType, shift);
 		return "";
 	}
@@ -1606,7 +1606,7 @@ struct MatImgproc::PutTextWorker : public MatImgproc::DrawWorker {
 	double fontScale;
 	bool bottomLeftOrigin = false;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::putText(self, text, org, fontFace, fontScale, color, thickness, lineType, bottomLeftOrigin);
 		return "";
 	}
@@ -1659,7 +1659,7 @@ public:
 
 	cv::Mat resultsMat;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::matchTemplate(mat, templ, resultsMat, method, mask);
 		return "";
 	}
@@ -1707,7 +1707,7 @@ public:
 
 	cv::Mat cannyMat;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::Canny(mat, cannyMat, threshold1, threshold2, apertureSize, L2gradient);
 		return "";
 	}
@@ -1816,7 +1816,7 @@ struct MatImgproc::SobelWorker : SobelScharrWorker {
 	SobelWorker(cv::Mat mat, bool hasKsize) : SobelScharrWorker(mat, hasKsize) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::Sobel(mat, resultMat, ddepth, dx, dy, ksize, scale, delta, borderType);
 		return "";
 	}
@@ -1837,7 +1837,7 @@ struct MatImgproc::ScharrWorker : SobelScharrWorker {
 	ScharrWorker(cv::Mat mat, bool hasKsize) : SobelScharrWorker(mat, hasKsize) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::Scharr(mat, resultMat, ddepth, dx, dy, scale, delta, borderType);
 		return "";
 	}
@@ -1871,7 +1871,7 @@ public:
 
 	cv::Mat resultMat;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::Laplacian(mat, resultMat, ddepth, ksize, scale, delta, borderType);
 		return "";
 	}
@@ -1936,7 +1936,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		if (isUp) {
 			cv::pyrUp(mat, dst, size, borderType);
 		}
@@ -2009,7 +2009,7 @@ public:
 
 	std::vector<cv::Mat> dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::buildPyramid(mat, dst, maxlevel, borderType);
 		return "";
 	}
@@ -2056,7 +2056,7 @@ public:
 
 	std::vector<cv::Vec2f> lines;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::HoughLines(mat, lines, rho, theta, threshold, srn, stn, min_theta, max_theta);
 		return "";
 	}
@@ -2118,7 +2118,7 @@ public:
 
 	std::vector<cv::Vec4f> linesP;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::HoughLinesP(mat, linesP, rho, theta, threshold, minLineLength, maxLineGap);
 		return "";
 	}
@@ -2176,7 +2176,7 @@ public:
 
 	std::vector<cv::Vec3f> circles;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::HoughCircles(mat, circles, method, dp, minDist, param1, param2, minRadius, maxRadius);
 		return "";
 	}
@@ -2238,7 +2238,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::equalizeHist(self, dst);
 		return "";
 	}
@@ -2272,7 +2272,7 @@ public:
 
 	double returnValue;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::compareHist(self, H2, method);
 		return "";
 	}
@@ -2321,7 +2321,7 @@ public:
 	int returnValue;
 	cv::Rect rect;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		switch (self.channels()) {
 		case 1:
 			returnValue = cv::floodFill(self, mask, seedPoint, newVal1, &rect, loDiff1, upDiff1, flags);
@@ -2406,7 +2406,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::bilateralFilter(self, dst, d, sigmaColor, sigmaSpace, borderType);
 		return "";
 	}
@@ -2456,7 +2456,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::boxFilter(self, dst, ddepth, ksize, anchor, normalize, borderType);
 		return "";
 	}
@@ -2510,7 +2510,7 @@ public:
 	SqrBoxFilterWorker(cv::Mat self) : BoxFilterWorker(self) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::sqrBoxFilter(self, dst, ddepth, ksize, anchor, normalize, borderType);
 		return "";
 	}
@@ -2543,7 +2543,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::filter2D(self, dst, ddepth, kernel, anchor, delta, borderType);
 		return "";
 	}
@@ -2608,7 +2608,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::sepFilter2D(self, dst, ddepth, kernelX, kernelY, anchor, delta, borderType);
 		return "";
 	}
@@ -2672,7 +2672,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::cornerHarris(self, dst, blockSize, ksize, k, borderType);
 		return "";
 	}
@@ -2720,7 +2720,7 @@ public:
 	cv::TermCriteria criteria;
 
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::cornerSubPix(self, corners, winSize, zeroZone, criteria);
 		return "";
 	}
@@ -2798,7 +2798,7 @@ public:
 	CornerMinEigenValWorker(cv::Mat self) : BaseCornerEigenValWorker(self) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::cornerMinEigenVal(self, dst, blockSize, ksize, borderType);
 		return "";
 	}
@@ -2820,7 +2820,7 @@ public:
 	CornerEigenValsAndVecsWorker(cv::Mat self) : BaseCornerEigenValWorker(self) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::cornerEigenValsAndVecs(self, dst, blockSize, ksize, borderType);
 		return "";
 	}
@@ -2851,7 +2851,7 @@ public:
 	cv::Mat sqsum;
 	cv::Mat tilted;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::integral(self, sum, sqsum, tilted, sdepth, sqdepth);
 		return "";
 	}

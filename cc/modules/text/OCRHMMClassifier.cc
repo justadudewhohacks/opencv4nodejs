@@ -34,7 +34,7 @@ public:
 	std::vector<double> confidence;
 
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		classifier->eval(img, clazz, confidence);
 		return "";
 	}

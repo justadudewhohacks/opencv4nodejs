@@ -69,7 +69,7 @@ public:
 	AndWorker(cv::Rect2d rect) : LogicOpWorker(rect) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		outRect = rect & rect2;
 		return "";
 	}
@@ -86,7 +86,7 @@ public:
 	OrWorker(cv::Rect2d rect) : LogicOpWorker(rect) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		outRect = rect | rect2;
 		return "";
 	}
@@ -107,7 +107,7 @@ public:
 		this->rect = rect;
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		double diff = rect.width - rect.height;
 		if (diff < 0) {
 			outRect = cv::Rect(rect.x + (diff / 2), rect.y, rect.width - diff, rect.height);
@@ -145,7 +145,7 @@ public:
 		this->rect = rect;
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		double offX = (rect.width - newSize.width) / 2;
 		double offY = (rect.height - newSize.height) / 2;
 		outRect = cv::Rect(rect.x + offX, rect.y + offY, newSize.width, newSize.height);
@@ -193,7 +193,7 @@ public:
 		this->rect = rect;
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		outRect = cv::Rect(f * rect.x, f * rect.y, f * rect.width, f * rect.height);
 		return "";
 	}

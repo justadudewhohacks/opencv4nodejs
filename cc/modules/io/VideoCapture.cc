@@ -57,7 +57,7 @@ public:
 	}
 	cv::Mat frame;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self.read(frame);
 		return "";
 	}
@@ -101,7 +101,7 @@ public:
 	double value;
 	bool ret;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		ret = this->self.set(prop, value);
 		return "";
 	}

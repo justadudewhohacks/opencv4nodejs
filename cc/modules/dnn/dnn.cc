@@ -30,7 +30,7 @@ public:
 
 	cv::dnn::Net net;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		net = cv::dnn::readNetFromTensorflow(modelFile);
 		if (net.empty()) {
 			return std::string("failed to load net: " + modelFile).data();
@@ -68,7 +68,7 @@ public:
 
 	cv::dnn::Net net;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		net = cv::dnn::readNetFromCaffe(prototxt, modelFile);
 		if (net.empty()) {
 			return std::string("failed to prototxt: " + prototxt + ", modelFile: " + modelFile).data();
@@ -121,7 +121,7 @@ public:
 
 	cv::Mat returnValue;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		if (isSingleImage) {
 			returnValue = cv::dnn::blobFromImage(image, scalefactor, size, mean, swapRB);
 		}

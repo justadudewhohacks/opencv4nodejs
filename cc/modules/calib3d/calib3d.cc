@@ -109,7 +109,7 @@ public:
 	cv::Mat dt3dr2;
 	cv::Mat dt3dt2;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::composeRT(rvec1, tvec1, rvec2, tvec2, rvec3, tvec3, dr3dr1, dr3dt1, dr3dr2, dr3dt2, dt3dr1, dt3dt1, dt3dr2, dt3dt2);
 		return "";
 	}
@@ -185,7 +185,7 @@ public:
 	bool useExtrinsicGuess = false;
 	int flags = cv::SOLVEPNP_ITERATIVE;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::solvePnP(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvec, tvec, useExtrinsicGuess, flags);
 		return "";
 	}
@@ -232,7 +232,7 @@ public:
 
 	std::vector<int> inliers;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::solvePnPRansac(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvec, tvec, useExtrinsicGuess, iterationsCount, reprojectionError, confidence, inliers, flags);
 		return "";
 	}
@@ -293,7 +293,7 @@ public:
 	std::vector<cv::Point2d> imagePoints;
 	cv::Mat jacobian;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::projectPoints(objectPoints, rvec, tvec, cameraMatrix, distCoeffs, imagePoints, jacobian, aspectRatio);
 		return "";
 	}
@@ -343,7 +343,7 @@ public:
 
 	cv::Mat returnValue;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::initCameraMatrix2D(objectPoints, imagePoints, imageSize, aspectRatio);
 		return "";
 	}
@@ -397,7 +397,7 @@ public:
 	cv::Mat E;
 	cv::Mat F;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::stereoCalibrate(objectPoints, imagePoints1, imagePoints2, cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2, imageSize, R, T, E, F, flags, criteria);
 		return "";
 	}
@@ -469,7 +469,7 @@ public:
 	cv::Mat H1;
 	cv::Mat H2;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::stereoRectifyUncalibrated(points1, points2, F, imgSize, H1, H2, threshold);
 		return "";
 	}
@@ -521,7 +521,7 @@ public:
 	cv::Mat F;
 	cv::Mat mask;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		F = cv::findFundamentalMat(points1, points2, method, param1, param2, mask);
 		return "";
 	}
@@ -586,7 +586,7 @@ public:
 	cv::Mat E;
 	cv::Mat mask = cv::noArray().getMat();
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		E = cv::findEssentialMat(points1, points2, focal, pp, method, prob, threshold, mask);
 		return "";
 	}
@@ -656,7 +656,7 @@ public:
 	cv::Mat R;
 	cv::Vec3d T;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::recoverPose(E, points1, points2, R, T, focal, pp, mask);
 		return "";
 	}
@@ -719,7 +719,7 @@ public:
 
 	std::vector<cv::Point3d> lines;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::computeCorrespondEpilines(points, whichImage, F, lines);
 		return "";
 	}
@@ -759,7 +759,7 @@ public:
 
 	cv::Rect2d returnValue;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::getValidDisparityROI(roi1, roi2, minDisparity, numberOfDisparities, SADWindowSize);
 		return "";
 	}
@@ -802,7 +802,7 @@ public:
 	cv::Mat out;
 	cv::Mat inliers;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::estimateAffine3D(src, dst, out, inliers, ransacThreshold, confidence);
 		return "";
 	}
@@ -863,7 +863,7 @@ public:
 
 	double returnValue;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::sampsonDistance(pt1, pt2, F);
 		return "";
 	}
@@ -909,7 +909,7 @@ public:
 	cv::Mat _rvecs;
 	cv::Mat _tvecs;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs, flags, criteria);
 		return "";
 	}
@@ -973,7 +973,7 @@ public:
 	cv::Mat stdDeviationsExtrinsics;
 	std::vector<double> perViewErrors;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs, stdDeviationsIntrinsics, stdDeviationsExtrinsics, perViewErrors, flags, criteria);
 		return "";
 	}
@@ -1012,7 +1012,7 @@ public:
 	cv::Mat out;
 	cv::Mat inliers;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		out = cv::estimateAffine2D(from, to, inliers, method, ransacReprojThreshold, maxIters, confidence, refineIters);
 		return "";
 	}
@@ -1070,7 +1070,7 @@ NAN_METHOD(Calib3d::EstimateAffine2DAsync) {
 
 
 struct Calib3d::EstimateAffinePartial2DWorker : public Calib3d::EstimateAffine2DWorker {
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		out = cv::estimateAffinePartial2D(from, to, inliers, method, ransacReprojThreshold, maxIters, confidence, refineIters);
 		return "";
 	}
@@ -1099,7 +1099,7 @@ public:
 	std::vector<cv::Mat> rvecs;
 	std::vector<cv::Mat> tvecs;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::solveP3P(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvecs, tvecs, flags);
 		return "";
 	}

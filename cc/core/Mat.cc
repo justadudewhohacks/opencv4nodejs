@@ -289,7 +289,7 @@ public:
 
 	cv::Mat mat;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self.push_back(mat);
 		return "";
 	}
@@ -326,7 +326,7 @@ public:
 
 	int num = 1;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self.pop_back(num);
 		return "";
 	}
@@ -364,7 +364,7 @@ public:
 	size_t size;
 	char *data;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		size = mat.rows * mat.cols * mat.elemSize();
 		data = static_cast<char *>(malloc(size));
 		memcpy(data, mat.data, size);
@@ -418,7 +418,7 @@ public:
 	cv::Mat dst;
 	cv::Mat mask = cv::noArray().getMat();
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self.copyTo(dst, mask);
 		return "";
 	}
@@ -489,7 +489,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		self.convertTo(dst, rtype, alpha, beta);
 		return "";
 	}
@@ -596,7 +596,7 @@ public:
 
 	std::vector<cv::Mat> mv;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::split(self, mv);
 		return "";
 	}
@@ -632,7 +632,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::addWeighted(self, alpha, src2, beta, gamma, dst, dtype);
 		return "";
 	}
@@ -680,7 +680,7 @@ public:
 	cv::Point2i minLoc, maxLoc;
 	cv::Mat mask = cv::noArray().getMat();
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::minMaxLoc(self, &minVal, &maxVal, &minLoc, &maxLoc, mask);
 		return "";
 	}
@@ -719,7 +719,7 @@ public:
 
 	std::vector<cv::Point> idx;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::findNonZero(self, idx);
 		return "";
 	}
@@ -749,7 +749,7 @@ public:
 
 	int num;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		num = cv::countNonZero(self);
 		return "";
 	}
@@ -779,7 +779,7 @@ public:
 
 	cv::Vec3d fillVec = cv::Vec3d();
 	cv::Mat out;
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		int maxDim = (std::max)(self.cols, self.rows);
 		out = cv::Mat(maxDim, maxDim, self.type(), (cv::Vec3b)fillVec);
 
@@ -843,7 +843,7 @@ struct Mat::DCTWorker : public DTWorker {
 	DCTWorker(cv::Mat mat, bool isInverse = false) : DTWorker(mat, isInverse) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		if (isInverse) {
 			cv::idct(mat, dst, flags);
 		}
@@ -864,7 +864,7 @@ struct Mat::DFTWorker : public DTWorker {
 
 	int nonzeroRows = 0;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		if (isInverse) {
 			cv::idft(mat, dst, flags, nonzeroRows);
 		}
@@ -953,7 +953,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		int flags = (dftRows ? cv::DFT_ROWS : 0);
 		cv::mulSpectrums(mat, mat2, dst, flags, conjB);
 		return "";
@@ -1010,7 +1010,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::transform(self, dst, m);
 		return "";
 	}
@@ -1042,7 +1042,7 @@ public:
 	PerspectiveTransformWorker(cv::Mat self) : Mat::TransformWorker(self) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::perspectiveTransform(self, dst, m);
 		return "";
 	}
@@ -1071,7 +1071,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::flip(self, dst, code);
 		return "";
 	}
@@ -1092,7 +1092,7 @@ public:
 	FlipWorker(cv::Mat self) : OpWithCodeWorker(self) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::flip(self, dst, code);
 		return "";
 	}
@@ -1118,7 +1118,7 @@ public:
 
 	cv::Scalar sum;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		sum = cv::sum(self);
 		return "";
 	}
@@ -1163,7 +1163,7 @@ public:
 
 	cv::Mat dst;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::convertScaleAbs(self, dst, alpha, beta);
 		return "";
 	}
@@ -1272,7 +1272,7 @@ public:
 	}
 
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 #if CV_VERSION_MINOR >= 4
 		cv::goodFeaturesToTrack(
 				self, corners,
@@ -1317,7 +1317,7 @@ public:
 	cv::Mat mean;
 	cv::Mat stddev;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::meanStdDev(self, mean, stddev, mask);
 		return "";
 	}
@@ -1353,7 +1353,7 @@ public:
 	RotateWorker(cv::Mat self) : OpWithCodeWorker(self) {
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::rotate(self, dst, code);
 		return "";
 	}

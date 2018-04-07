@@ -57,7 +57,7 @@ public:
 		);
 	}
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::inpaint(
 				src, inpaintMask, dst,
 				inpaintRadius, flags

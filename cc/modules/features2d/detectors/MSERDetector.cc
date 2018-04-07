@@ -76,7 +76,7 @@ public:
     std::vector<std::vector<cv::Point> > regions;
     std::vector<cv::Rect> mser_bbox;
     
-    const char* executeCatchCvExceptionWorker() {
+    std::string executeCatchCvExceptionWorker() {
         det->detectRegions(img, regions, mser_bbox);
         return "";
     }

@@ -268,7 +268,7 @@ public:
 	cv::Size2d returnValue;
 	int baseLine;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::getTextSize(text, fontFace, fontScale, thickness, &baseLine);
 		return "";
 	}

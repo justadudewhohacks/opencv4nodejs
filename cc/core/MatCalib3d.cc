@@ -55,7 +55,7 @@ public:
 	cv::Mat dst;
 	cv::Mat jacobian;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::Rodrigues(self, dst, jacobian);
 		return "";
 	}
@@ -94,7 +94,7 @@ public:
 	cv::Mat Qy;
 	cv::Mat Qz;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::RQDecomp3x3(self, mtxR, mtxQ, Qx, Qy, Qz);
 		return "";
 	}
@@ -138,7 +138,7 @@ public:
 	cv::Mat rotMatrixZ;
 	cv::Mat eulerAngles;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::decomposeProjectionMatrix(self, cameraMatrix, rotMatrix, transVect, rotMatrixX, rotMatrixY, rotMatrixZ, eulerAngles);
 		return "";
 	}
@@ -179,7 +179,7 @@ public:
 	cv::Mat dABdA;
 	cv::Mat dABdB;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::matMulDeriv(self, B, dABdA, dABdB);
 		return "";
 	}
@@ -223,7 +223,7 @@ public:
 	bool returnValue;
 	std::vector<cv::Point2d> corners;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::findChessboardCorners(self, patternSize, corners, flags);
 		return "";
 	}
@@ -272,7 +272,7 @@ public:
 	bool patternWasFound;
 
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::drawChessboardCorners(self, patternSize, corners, patternWasFound);
 		return "";
 	}
@@ -310,7 +310,7 @@ public:
 
 	bool returnValue;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::find4QuadCornerSubpix(self, corners, region_size);
 		return "";
 	}
@@ -356,7 +356,7 @@ public:
 	cv::Point2d principalPoint;
 	double aspectRatio;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::calibrationMatrixValues(self, imageSize, apertureWidth, apertureHeight, fovx, fovy, focalLength, principalPoint, aspectRatio);
 		return "";
 	}
@@ -417,7 +417,7 @@ public:
 	cv::Rect roi1;
 	cv::Rect roi2;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::stereoRectify(self, distCoeffs1, cameraMatrix2, distCoeffs2, imageSize, R, T, R1, R2, P1, P2, Q, flags, alpha, newImageSize, &roi1, &roi2);
 		return "";
 	}
@@ -513,7 +513,7 @@ public:
 	cv::Rect roi1;
 	cv::Rect roi2;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::rectify3Collinear(self, distCoeffs1, cameraMatrix2, distCoeffs2, cameraMatrix3, distCoeffs3, imgpt1, imgpt3, imageSize, R12, T12, R13, T13, R1, R2, R3, P1, P2, P3, Q, alpha, newImgSize, &roi1, &roi2, flags);
 		return "";
 	}
@@ -582,7 +582,7 @@ public:
 	cv::Mat out;
 	cv::Rect validPixROI;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		out = cv::getOptimalNewCameraMatrix(self, distCoeffs, imageSize, alpha, newImgSize, &validPixROI, centerPrincipalPoint);
 		return "";
 	}
@@ -645,7 +645,7 @@ public:
 	cv::Mat R2;
 	cv::Vec3d T;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::decomposeEssentialMat(self, R1, R2, T);
 		return "";
 	}
@@ -684,7 +684,7 @@ public:
 
 	cv::Mat points4D;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::triangulatePoints(self, projMatr2, projPoints1, projPoints2, points4D);
 		return "";
 	}
@@ -727,7 +727,7 @@ public:
 	std::vector<cv::Point2f> newPoints1;
 	std::vector<cv::Point2f> newPoints2;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::correctMatches(self, points1, points2, newPoints1, newPoints2);
 		return "";
 	}
@@ -770,7 +770,7 @@ public:
 	int maxSpeckleSize;
 	double maxDiff;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::filterSpeckles(self, newVal, maxSpeckleSize, maxDiff, cv::noArray());
 		return "";
 	}
@@ -813,7 +813,7 @@ public:
 	int disp12MaxDisp = 1;
 
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::validateDisparity(self, cost, minDisparity, numberOfDisparities, disp12MaxDisp);
 		return "";
 	}
@@ -863,7 +863,7 @@ public:
 
 	cv::Mat _3dImage;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::reprojectImageTo3D(self, _3dImage, Q, handleMissingValues, ddepth);
 		return "";
 	}
@@ -924,7 +924,7 @@ public:
 	std::vector<cv::Mat> translations;
 	std::vector<cv::Mat> normals;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::decomposeHomographyMat(self, K, rotations, translations, normals);
 		return "";
 	}
@@ -975,7 +975,7 @@ public:
 	cv::Mat E;
 	cv::Mat mask = cv::noArray().getMat();
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		E = cv::findEssentialMat(points1, points2, self, method, prob, threshold, mask);
 		return "";
 	}
@@ -1044,7 +1044,7 @@ public:
 	cv::Mat R;
 	cv::Vec3d T;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::recoverPose(E, points1, points2, self, R, T, mask);
 		return "";
 	}

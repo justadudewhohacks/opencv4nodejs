@@ -133,7 +133,7 @@ public:
 	cv::Mat magnitude;
 	cv::Mat angle;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::cartToPolar(x, y, magnitude, angle, angleInDegrees);
 		return "";
 	}
@@ -179,7 +179,7 @@ public:
 	cv::Mat x;
 	cv::Mat y;
 
-	const char* executeCatchCvExceptionWorker() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::polarToCart(magnitude, angle, x, y, angleInDegrees);
 		return "";
 	}
