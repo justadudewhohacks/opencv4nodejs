@@ -1,5 +1,5 @@
 #include "FeatureDetector.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 
 void FeatureDetector::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "detect", FeatureDetector::Detect);
@@ -8,64 +8,77 @@ void FeatureDetector::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "computeAsync", FeatureDetector::ComputeAsync);
 };
 
-NAN_METHOD(FeatureDetector::Detect) {
-	FF_METHOD_CONTEXT("FeatureDetector::Detect");
+struct FeatureDetector::DetectWorker : public CatchCvExceptionWorker {
+public:
+	cv::Ptr<cv::FeatureDetector> det;
+	DetectWorker(cv::Ptr<cv::FeatureDetector> _det) {
+		this->det = _det;
+	}
 
-	FF_ARG_INSTANCE(0, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-
+	cv::Mat img;
 	std::vector<cv::KeyPoint> kps;
-	FF_UNWRAP(info.This(), FeatureDetector)->getDetector()->detect(
-		img, 
-		kps
-	);
-	FF_PACK_KEYPOINT_ARRAY(jsKps, kps);
-	FF_RETURN(jsKps);
+
+	std::string executeCatchCvExceptionWorker() {
+		det->detect(img, kps);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return Mat::Converter::arg(0, &img, info);
+	}
+
+
+	FF_VAL getReturnValue() {
+		return ObjectArrayConverter<KeyPoint, cv::KeyPoint>::wrap(kps);
+	}
+};
+
+NAN_METHOD(FeatureDetector::Detect) {
+	DetectWorker worker(FF_UNWRAP(info.This(), FeatureDetector)->getDetector());
+	FF_WORKER_SYNC("FeatureDetector::Detect", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
-
-NAN_METHOD(FeatureDetector::Compute) {
-	FF_METHOD_CONTEXT("FeatureDetector::Compute");
-
-	FF_ARG_INSTANCE(0, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_ARRAY(1, FF_ARR jsKps);
-	FF_UNPACK_KEYPOINT_ARRAY(kps, jsKps);
-
-	FF_OBJ jsDesc = FF_NEW_INSTANCE(Mat::constructor);
-	FF_UNWRAP(info.This(), FeatureDetector)->getDetector()->compute(
-		img, 
-		kps, 
-		FF_UNWRAP_MAT_AND_GET(jsDesc)
-	);
-	FF_RETURN(jsDesc);
-}
-
 
 NAN_METHOD(FeatureDetector::DetectAsync) {
-	FF_METHOD_CONTEXT("FeatureDetector::DetectAsync");
+	DetectWorker worker(FF_UNWRAP(info.This(), FeatureDetector)->getDetector());
+	FF_WORKER_ASYNC("FeatureDetector::DetectAsync", DetectWorker, worker);
+}
 
-	DetectContext ctx;
-	ctx.det = FF_UNWRAP(info.This(), FeatureDetector)->getDetector();
+struct FeatureDetector::ComputeWorker : public CatchCvExceptionWorker {
+public:
+	cv::Ptr<cv::FeatureDetector> det;
+	ComputeWorker(cv::Ptr<cv::FeatureDetector> _det) {
+		this->det = _det;
+	}
 
-	FF_ARG_INSTANCE(0, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_FUNC(1, v8::Local<v8::Function> cbFunc);
+	cv::Mat img;
+	std::vector<cv::KeyPoint> kps;
+	cv::Mat desc;
 
-	Nan::AsyncQueueWorker(new GenericAsyncWorker<DetectContext>(
-		new Nan::Callback(cbFunc),
-		ctx
-	));
+	std::string executeCatchCvExceptionWorker() {
+		det->compute(img, kps, desc);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			Mat::Converter::arg(0, &img, info)
+			|| ObjectArrayConverter<KeyPoint, cv::KeyPoint>::arg(1, &kps, info)
+		);
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(desc);
+	}
+};
+
+NAN_METHOD(FeatureDetector::Compute) {
+	ComputeWorker worker(FF_UNWRAP(info.This(), FeatureDetector)->getDetector());
+	FF_WORKER_SYNC("FeatureDetector::Compute", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
 }
 
 NAN_METHOD(FeatureDetector::ComputeAsync) {
-	FF_METHOD_CONTEXT("FeatureDetector::ComputeAsync");
-
-	ComputeContext ctx;
-	ctx.det = FF_UNWRAP(info.This(), FeatureDetector)->getDetector();
-	FF_ARG_INSTANCE(0, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_ARRAY(1, FF_ARR jsKps);
-	FF_UNPACK_KEYPOINT_ARRAY_TO(ctx.kps, jsKps);
-	FF_ARG_FUNC(2, v8::Local<v8::Function> cbFunc);
-
-	Nan::AsyncQueueWorker(new GenericAsyncWorker<ComputeContext>(
-		new Nan::Callback(cbFunc),
-		ctx
-	));
+	ComputeWorker worker(FF_UNWRAP(info.This(), FeatureDetector)->getDetector());
+	FF_WORKER_ASYNC("FeatureDetector::ComputeAsync", ComputeWorker, worker);
 }

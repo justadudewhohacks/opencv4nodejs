@@ -14,6 +14,8 @@ const getEmptyArray = () => ([]);
 const emptyFunc = () => {};
 
 exports.generateAPITests = ({
+  beforeHook = null,
+  afterHook = null,
   getDut,
   methodName,
   methodNameSpace,
@@ -154,6 +156,13 @@ exports.generateAPITests = ({
   };
 
   describe('sync', () => {
+    if (beforeHook) {
+      beforeEach(() => beforeHook());
+    }
+    if (afterHook) {
+      afterEach(() => afterHook());
+    }
+
     if (hasRequiredArgs) {
       funcShouldRequireArgs(() => getDut()[methodName]());
     }
@@ -170,12 +179,26 @@ exports.generateAPITests = ({
       }
 
       describe('callbacked', () => {
+        if (beforeHook) {
+          beforeEach(() => beforeHook());
+        }
+        if (afterHook) {
+          afterEach(() => afterHook());
+        }
+
         generateTests('callbacked');
 
         otherAsyncCallbackedTests();
       });
 
       describe('promisified', () => {
+        if (beforeHook) {
+          beforeEach(() => beforeHook());
+        }
+        if (afterHook) {
+          afterEach(() => afterHook());
+        }
+
         generateTests('promised');
 
         otherAsyncPromisedTests();

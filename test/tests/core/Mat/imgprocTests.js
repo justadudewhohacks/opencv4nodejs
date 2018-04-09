@@ -114,7 +114,7 @@ module.exports = (getTestImg) => {
     };
 
     generateAPITests({
-      getDut: () => rgbMat,
+      getDut: () => rgbMat.copy(),
       methodName: 'bgrToGray',
       methodNameSpace: 'Mat',
       expectOutput
@@ -128,7 +128,7 @@ module.exports = (getTestImg) => {
     };
 
     generateAPITests({
-      getDut: () => rgbMat,
+      getDut: () => rgbMat.copy(),
       methodName: 'cvtColor',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
@@ -576,7 +576,7 @@ module.exports = (getTestImg) => {
       const kSize = new cv.Size(3, 3);
 
       generateAPITests({
-        getDut: () => rgbMat,
+        getDut: () => rgbMat.copy(),
         methodName: 'blur',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
@@ -595,7 +595,7 @@ module.exports = (getTestImg) => {
       const sigmaX = 1.2;
 
       generateAPITests({
-        getDut: () => rgbMat,
+        getDut: () => rgbMat.copy(),
         methodName: 'gaussianBlur',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
@@ -614,7 +614,7 @@ module.exports = (getTestImg) => {
       const kSize = 3;
 
       generateAPITests({
-        getDut: () => rgbMat,
+        getDut: () => rgbMat.copy(),
         methodName: 'medianBlur',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
@@ -829,7 +829,7 @@ module.exports = (getTestImg) => {
     ], cv.CV_32S);
 
     generateAPITests({
-      getDut: () => rgbMat,
+      getDut: () => rgbMat.copy(),
       methodName: 'watershed',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([

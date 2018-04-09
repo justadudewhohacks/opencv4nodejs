@@ -1,5 +1,5 @@
 #include "calib3d.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 #include "TermCriteria.h"
 #include "Rect.h"
 
@@ -91,7 +91,7 @@ NAN_METHOD(Calib3d::FindHomography) {
 	info.GetReturnValue().Set(output);
 }
 
-struct Calib3d::ComposeRTWorker : public SimpleWorker {
+struct Calib3d::ComposeRTWorker : public CatchCvExceptionWorker {
 public:
 	cv::Vec3d rvec1;
 	cv::Vec3d tvec1;
@@ -109,7 +109,7 @@ public:
 	cv::Mat dt3dr2;
 	cv::Mat dt3dt2;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::composeRT(rvec1, tvec1, rvec2, tvec2, rvec3, tvec3, dr3dr1, dr3dt1, dr3dr2, dr3dt2, dt3dr1, dt3dt1, dt3dr2, dt3dt2);
 		return "";
 	}
@@ -151,7 +151,7 @@ NAN_METHOD(Calib3d::ComposeRTAsync) {
 }
 
 
-struct Calib3d::SolvePxPWorker : public SimpleWorker {
+struct Calib3d::SolvePxPWorker : public CatchCvExceptionWorker {
 public:
 	std::vector<cv::Point3d> objectPoints;
 	std::vector<cv::Point2d> imagePoints;
@@ -185,7 +185,7 @@ public:
 	bool useExtrinsicGuess = false;
 	int flags = cv::SOLVEPNP_ITERATIVE;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::solvePnP(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvec, tvec, useExtrinsicGuess, flags);
 		return "";
 	}
@@ -232,7 +232,7 @@ public:
 
 	std::vector<int> inliers;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::solvePnPRansac(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvec, tvec, useExtrinsicGuess, iterationsCount, reprojectionError, confidence, inliers, flags);
 		return "";
 	}
@@ -281,7 +281,7 @@ NAN_METHOD(Calib3d::SolvePnPRansacAsync) {
 }
 
 
-struct Calib3d::ProjectPointsWorker : public SimpleWorker {
+struct Calib3d::ProjectPointsWorker : public CatchCvExceptionWorker {
 public:
 	std::vector<cv::Point3d> objectPoints;
 	cv::Vec3d rvec;
@@ -293,7 +293,7 @@ public:
 	std::vector<cv::Point2d> imagePoints;
 	cv::Mat jacobian;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::projectPoints(objectPoints, rvec, tvec, cameraMatrix, distCoeffs, imagePoints, jacobian, aspectRatio);
 		return "";
 	}
@@ -334,7 +334,7 @@ NAN_METHOD(Calib3d::ProjectPointsAsync) {
 }
 
 
-struct Calib3d::InitCameraMatrix2DWorker : public SimpleWorker {
+struct Calib3d::InitCameraMatrix2DWorker : public CatchCvExceptionWorker {
 public:
 	std::vector<std::vector<cv::Point3f>> objectPoints;
 	std::vector<std::vector<cv::Point2f>> imagePoints;
@@ -343,7 +343,7 @@ public:
 
 	cv::Mat returnValue;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::initCameraMatrix2D(objectPoints, imagePoints, imageSize, aspectRatio);
 		return "";
 	}
@@ -378,7 +378,7 @@ NAN_METHOD(Calib3d::InitCameraMatrix2DAsync) {
 	FF_WORKER_ASYNC("Mat::InitCameraMatrix2DAsync", InitCameraMatrix2DWorker, worker);
 }
 
-struct Calib3d::StereoCalibrateWorker : public SimpleWorker {
+struct Calib3d::StereoCalibrateWorker : public CatchCvExceptionWorker {
 public:
 	std::vector<std::vector<cv::Point3f>> objectPoints;
 	std::vector<std::vector<cv::Point2f>> imagePoints1;
@@ -397,7 +397,7 @@ public:
 	cv::Mat E;
 	cv::Mat F;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::stereoCalibrate(objectPoints, imagePoints1, imagePoints2, cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2, imageSize, R, T, E, F, flags, criteria);
 		return "";
 	}
@@ -457,7 +457,7 @@ NAN_METHOD(Calib3d::StereoCalibrateAsync) {
 }
 
 
-struct Calib3d::StereoRectifyUncalibratedWorker : public SimpleWorker {
+struct Calib3d::StereoRectifyUncalibratedWorker : public CatchCvExceptionWorker {
 public:
 	std::vector<cv::Point2d> points1;
 	std::vector<cv::Point2d> points2;
@@ -469,7 +469,7 @@ public:
 	cv::Mat H1;
 	cv::Mat H2;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::stereoRectifyUncalibrated(points1, points2, F, imgSize, H1, H2, threshold);
 		return "";
 	}
@@ -510,7 +510,7 @@ NAN_METHOD(Calib3d::StereoRectifyUncalibratedAsync) {
 }
 
 
-struct Calib3d::FindFundamentalMatWorker : public SimpleWorker {
+struct Calib3d::FindFundamentalMatWorker : public CatchCvExceptionWorker {
 public:
 	std::vector<cv::Point2d> points1;
 	std::vector<cv::Point2d> points2;
@@ -521,7 +521,7 @@ public:
 	cv::Mat F;
 	cv::Mat mask;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		F = cv::findFundamentalMat(points1, points2, method, param1, param2, mask);
 		return "";
 	}
@@ -573,7 +573,7 @@ NAN_METHOD(Calib3d::FindFundamentalMatAsync) {
 	FF_WORKER_ASYNC("Mat::FindFundamentalMatAsync", FindFundamentalMatWorker, worker);
 }
 
-struct Calib3d::FindEssentialMatWorker : public SimpleWorker {
+struct Calib3d::FindEssentialMatWorker : public CatchCvExceptionWorker {
 public:
 	std::vector<cv::Point2d> points1;
 	std::vector<cv::Point2d> points2;
@@ -586,7 +586,7 @@ public:
 	cv::Mat E;
 	cv::Mat mask = cv::noArray().getMat();
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		E = cv::findEssentialMat(points1, points2, focal, pp, method, prob, threshold, mask);
 		return "";
 	}
@@ -643,7 +643,7 @@ NAN_METHOD(Calib3d::FindEssentialMatAsync) {
 }
 
 
-struct Calib3d::RecoverPoseWorker : public SimpleWorker {
+struct Calib3d::RecoverPoseWorker : public CatchCvExceptionWorker {
 public:
 	cv::Mat E;
 	std::vector<cv::Point2d> points1;
@@ -656,7 +656,7 @@ public:
 	cv::Mat R;
 	cv::Vec3d T;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::recoverPose(E, points1, points2, R, T, focal, pp, mask);
 		return "";
 	}
@@ -711,7 +711,7 @@ NAN_METHOD(Calib3d::RecoverPoseAsync) {
 }
 
 
-struct Calib3d::ComputeCorrespondEpilinesWorker : public SimpleWorker {
+struct Calib3d::ComputeCorrespondEpilinesWorker : public CatchCvExceptionWorker {
 public:
 	std::vector<cv::Point2d> points;
 	int whichImage;
@@ -719,7 +719,7 @@ public:
 
 	std::vector<cv::Point3d> lines;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::computeCorrespondEpilines(points, whichImage, F, lines);
 		return "";
 	}
@@ -749,7 +749,7 @@ NAN_METHOD(Calib3d::ComputeCorrespondEpilinesAsync) {
 }
 
 
-struct Calib3d::GetValidDisparityROIWorker : public SimpleWorker {
+struct Calib3d::GetValidDisparityROIWorker : public CatchCvExceptionWorker {
 public:
 	cv::Rect2d roi1;
 	cv::Rect2d roi2;
@@ -759,7 +759,7 @@ public:
 
 	cv::Rect2d returnValue;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::getValidDisparityROI(roi1, roi2, minDisparity, numberOfDisparities, SADWindowSize);
 		return "";
 	}
@@ -791,7 +791,7 @@ NAN_METHOD(Calib3d::GetValidDisparityROIAsync) {
 }
 
 
-struct Calib3d::EstimateAffine3DWorker : public SimpleWorker {
+struct Calib3d::EstimateAffine3DWorker : public CatchCvExceptionWorker {
 public:
 	std::vector<cv::Point3d> src;
 	std::vector<cv::Point3d> dst;
@@ -802,7 +802,7 @@ public:
 	cv::Mat out;
 	cv::Mat inliers;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::estimateAffine3D(src, dst, out, inliers, ransacThreshold, confidence);
 		return "";
 	}
@@ -855,7 +855,7 @@ NAN_METHOD(Calib3d::EstimateAffine3DAsync) {
 
 #if CV_VERSION_MINOR > 0
 
-struct Calib3d::SampsonDistanceWorker : public SimpleWorker {
+struct Calib3d::SampsonDistanceWorker : public CatchCvExceptionWorker {
 public:
 	cv::Vec2d pt1;
 	cv::Vec2d pt2;
@@ -863,7 +863,7 @@ public:
 
 	double returnValue;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::sampsonDistance(pt1, pt2, F);
 		return "";
 	}
@@ -892,7 +892,7 @@ NAN_METHOD(Calib3d::SampsonDistanceAsync) {
 	FF_WORKER_ASYNC("Mat::SampsonDistanceAsync", SampsonDistanceWorker, worker);
 }
 
-struct Calib3d::CalibrateCameraWorker : public SimpleWorker {
+struct Calib3d::CalibrateCameraWorker : public CatchCvExceptionWorker {
 public:
 	std::vector<std::vector<cv::Point3f>> objectPoints;
 	std::vector<std::vector<cv::Point2f>> imagePoints;
@@ -909,7 +909,7 @@ public:
 	cv::Mat _rvecs;
 	cv::Mat _tvecs;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs, flags, criteria);
 		return "";
 	}
@@ -973,7 +973,7 @@ public:
 	cv::Mat stdDeviationsExtrinsics;
 	std::vector<double> perViewErrors;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::calibrateCamera(objectPoints, imagePoints, imageSize, cameraMatrix, distCoeffs, rvecs, tvecs, stdDeviationsIntrinsics, stdDeviationsExtrinsics, perViewErrors, flags, criteria);
 		return "";
 	}
@@ -999,7 +999,7 @@ NAN_METHOD(Calib3d::CalibrateCameraExtendedAsync) {
 }
 
 
-struct Calib3d::EstimateAffine2DWorker : public SimpleWorker {
+struct Calib3d::EstimateAffine2DWorker : public CatchCvExceptionWorker {
 public:
 	std::vector<cv::Point2d> from;
 	std::vector<cv::Point2d> to;
@@ -1012,7 +1012,7 @@ public:
 	cv::Mat out;
 	cv::Mat inliers;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		out = cv::estimateAffine2D(from, to, inliers, method, ransacReprojThreshold, maxIters, confidence, refineIters);
 		return "";
 	}
@@ -1070,7 +1070,7 @@ NAN_METHOD(Calib3d::EstimateAffine2DAsync) {
 
 
 struct Calib3d::EstimateAffinePartial2DWorker : public Calib3d::EstimateAffine2DWorker {
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		out = cv::estimateAffinePartial2D(from, to, inliers, method, ransacReprojThreshold, maxIters, confidence, refineIters);
 		return "";
 	}
@@ -1099,7 +1099,7 @@ public:
 	std::vector<cv::Mat> rvecs;
 	std::vector<cv::Mat> tvecs;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = cv::solveP3P(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvecs, tvecs, flags);
 		return "";
 	}

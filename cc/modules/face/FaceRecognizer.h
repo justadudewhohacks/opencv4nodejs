@@ -1,6 +1,6 @@
 #include "Converters.h"
 #include "macros.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 #include "Mat.h"
 #include <opencv2/face.hpp>
 
@@ -26,7 +26,8 @@ public:
 	static NAN_METHOD(Save);
 	static NAN_METHOD(Load);
 
-	struct NewWorker : public SimpleWorker {
+
+	struct NewWorker : public SimpleWorker  {
 	public:
 		int num_components = 0;
 		double threshold = DBL_MAX;
@@ -50,6 +51,7 @@ public:
 			);
 		}
 	};
+
 };
 
 #endif

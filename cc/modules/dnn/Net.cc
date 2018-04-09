@@ -6,7 +6,7 @@
 //#ifdef HAVE_DNN
 
 #include "Net.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 #include "Mat.h"
 
 Nan::Persistent<v8::FunctionTemplate> Net::constructor;
@@ -31,7 +31,7 @@ NAN_METHOD(Net::New) {
 	info.GetReturnValue().Set(info.Holder());
 }
 
-struct Net::SetInputWorker : public SimpleWorker {
+struct Net::SetInputWorker : public CatchCvExceptionWorker {
 public:
 	cv::dnn::Net self;
 	SetInputWorker(cv::dnn::Net self) {
@@ -42,7 +42,7 @@ public:
 	std::string name = "";
 
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		self.setInput(blob, name);
 		return "";
 	}
@@ -72,7 +72,7 @@ NAN_METHOD(Net::SetInputAsync) {
 }
 
 
-struct Net::ForwardWorker : public SimpleWorker {
+struct Net::ForwardWorker : public CatchCvExceptionWorker {
 public:
 	cv::dnn::Net self;
 	ForwardWorker(cv::dnn::Net self) {
@@ -83,7 +83,7 @@ public:
 
 	cv::Mat returnValue;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		returnValue = self.forward(outputName);
 		return "";
 	}

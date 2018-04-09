@@ -1,4 +1,5 @@
 #include "macros.h"
+#include "Converters.h"
 #include <opencv2/features2d.hpp>
 
 #ifndef __FF_DESCRIPTORMATCH_H__
@@ -16,6 +17,15 @@ public:
 	static FF_GETTER(DescriptorMatch, GetDistance, dmatch.distance)
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::DMatch* getNativeObjectPtr() { return &dmatch; }
+	cv::DMatch getNativeObject() { return dmatch; }
+
+	typedef InstanceConverter<DescriptorMatch, cv::DMatch> Converter;
+
+	static const char* getClassName() {
+		return "DescriptorMatch";
+	}
 };
 
 #endif

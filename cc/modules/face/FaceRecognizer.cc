@@ -11,7 +11,7 @@ void FaceRecognizer::Init(v8::Local<v8::FunctionTemplate> ctor) {
 	Nan::SetPrototypeMethod(ctor, "load", Load);
 };
 
-struct FaceRecognizer::TrainWorker : public SimpleWorker {
+struct FaceRecognizer::TrainWorker : public CatchCvExceptionWorker {
 public:
 	cv::Ptr<cv::face::FaceRecognizer> self;
 	TrainWorker(cv::Ptr<cv::face::FaceRecognizer> self) {
@@ -21,7 +21,7 @@ public:
 	std::vector<cv::Mat> images;
 	std::vector<int> labels;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		self->train(images, labels);
 		return "";
 	}
@@ -46,7 +46,7 @@ NAN_METHOD(FaceRecognizer::TrainAsync) {
 }
 
 
-struct FaceRecognizer::PredictWorker : public SimpleWorker {
+struct FaceRecognizer::PredictWorker : public CatchCvExceptionWorker {
 public:
 	cv::Ptr<cv::face::FaceRecognizer> self;
 	PredictWorker(cv::Ptr<cv::face::FaceRecognizer> self) {
@@ -57,7 +57,7 @@ public:
 	int label;
 	double confidence;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		self->predict(image, label, confidence);
 		return "";
 	}

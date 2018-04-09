@@ -1,7 +1,7 @@
 #ifdef HAVE_TEXT
 
 #include "OCRHMMClassifier.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 #include "Mat.h"
 
 Nan::Persistent<v8::FunctionTemplate> OCRHMMClassifier::constructor;
@@ -21,7 +21,7 @@ NAN_MODULE_INIT(OCRHMMClassifier::Init) {
 };
 
 
-struct OCRHMMClassifier::EvalWorker : public SimpleWorker {
+struct OCRHMMClassifier::EvalWorker : public CatchCvExceptionWorker {
 public:
 	cv::Ptr <cv::text::OCRHMMDecoder::ClassifierCallback> classifier;
 
@@ -34,7 +34,7 @@ public:
 	std::vector<double> confidence;
 
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		classifier->eval(img, clazz, confidence);
 		return "";
 	}

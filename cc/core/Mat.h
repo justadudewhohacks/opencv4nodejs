@@ -6,7 +6,7 @@
 #include "Rect.h"
 #include "RotatedRect.h"
 #include "Converters.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 #include "macros.h"
 
 #ifndef __FF_MAT_H__

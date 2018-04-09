@@ -64,7 +64,7 @@ NAN_METHOD(MSERDetector::New) {
   FF_RETURN(info.Holder());
 }
 
-struct DetectRegionsWorker : public SimpleWorker {
+struct DetectRegionsWorker : public CatchCvExceptionWorker {
 public:
     cv::Ptr<cv::MSER> det;
 
@@ -76,7 +76,7 @@ public:
     std::vector<std::vector<cv::Point> > regions;
     std::vector<cv::Rect> mser_bbox;
     
-    const char* execute() {
+    std::string executeCatchCvExceptionWorker() {
         det->detectRegions(img, regions, mser_bbox);
         return "";
     }

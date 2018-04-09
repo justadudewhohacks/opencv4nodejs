@@ -1,7 +1,7 @@
 #include "SVM.h"
 #include "TrainData.h"
 #include "ParamGrid.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 
 Nan::Persistent<v8::FunctionTemplate> SVM::constructor;
 
@@ -170,7 +170,7 @@ void SVM::setParams(v8::Local<v8::Object> params) {
 	this->svm->setClassWeights(classWeights);
 }
 
-struct SVM::TrainFromTrainDataWorker : SimpleWorker {
+struct SVM::TrainFromTrainDataWorker : CatchCvExceptionWorker {
 public:
 	cv::Ptr<cv::ml::SVM> svm;
 
@@ -183,7 +183,7 @@ public:
 
 	bool ret;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		ret = svm->train(trainData, (int)flags);
 		return "";
 	}
@@ -201,7 +201,7 @@ public:
 	}
 };
 
-struct SVM::TrainFromMatWorker : SimpleWorker {
+struct SVM::TrainFromMatWorker : CatchCvExceptionWorker {
 public:
 	cv::Ptr<cv::ml::SVM> svm;
 
@@ -215,7 +215,7 @@ public:
 
 	bool ret;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		ret = svm->train(samples, (int)layout, responses);
 		return "";
 	}
@@ -267,7 +267,7 @@ NAN_METHOD(SVM::TrainAsync) {
 	}
 }
 
-struct SVM::TrainAutoWorker {
+struct SVM::TrainAutoWorker : CatchCvExceptionWorker  {
 public:
 	cv::Ptr<cv::ml::SVM> svm;
 
@@ -287,7 +287,7 @@ public:
 
 	bool ret;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		ret = svm->trainAuto(trainData, (int)kFold, cGrid, gammaGrid, pGrid, nuGrid, coeffGrid, degreeGrid, balanced);
 		return "";
 	}

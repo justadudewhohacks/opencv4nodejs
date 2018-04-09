@@ -3,7 +3,7 @@
 #include "Rect.h"
 #include "Point.h"
 #include "DetectionROI.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 
 Nan::Persistent<v8::FunctionTemplate> HOGDescriptor::constructor;
 
@@ -107,7 +107,7 @@ NAN_METHOD(HOGDescriptor::New) {
 	FF_RETURN(info.Holder());
 };
 
-struct HOGDescriptor::ComputeWorker {
+struct HOGDescriptor::ComputeWorker : CatchCvExceptionWorker  {
 public:
 	cv::HOGDescriptor hog;
 
@@ -122,7 +122,7 @@ public:
 
 	std::vector<float> descriptors;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		hog.compute(img, descriptors, winStride, padding, locations);
 		return "";
 	}
@@ -169,7 +169,7 @@ NAN_METHOD(HOGDescriptor::ComputeAsync) {
 }
 
 
-struct HOGDescriptor::ComputeGradientWorker : public SimpleWorker {
+struct HOGDescriptor::ComputeGradientWorker : public CatchCvExceptionWorker {
 public:
 	cv::HOGDescriptor self;
 	ComputeGradientWorker(cv::HOGDescriptor self) {
@@ -183,7 +183,7 @@ public:
 	cv::Mat grad;
 	cv::Mat angleOfs;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		self.computeGradient(img, grad, angleOfs, paddingTL, paddingBR);
 		return "";
 	}
@@ -233,7 +233,7 @@ NAN_METHOD(HOGDescriptor::ComputeGradientAsync) {
 }
 
 
-struct HOGDescriptor::DetectWorker : public SimpleWorker {
+struct HOGDescriptor::DetectWorker : public CatchCvExceptionWorker {
 public:
 	cv::HOGDescriptor self;
 	DetectWorker(cv::HOGDescriptor self) {
@@ -249,7 +249,7 @@ public:
 	std::vector<cv::Point> foundLocations;
 	std::vector<double> weights;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		self.detect(img, foundLocations, weights, hitThreshold, winStride, padding, searchLocations);
 		return "";
 	}
@@ -303,7 +303,7 @@ NAN_METHOD(HOGDescriptor::DetectAsync) {
 }
 
 
-struct HOGDescriptor::DetectROIWorker : public SimpleWorker {
+struct HOGDescriptor::DetectROIWorker : public CatchCvExceptionWorker {
 public:
 	cv::HOGDescriptor self;
 	DetectROIWorker(cv::HOGDescriptor self) {
@@ -319,7 +319,7 @@ public:
 	std::vector<cv::Point> foundLocations;
 	std::vector<double> confidences;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		self.detectROI(img, locations, foundLocations, confidences, hitThreshold, winStride, padding);
 		return "";
 	}
@@ -372,7 +372,7 @@ NAN_METHOD(HOGDescriptor::DetectROIAsync) {
 }
 
 
-struct HOGDescriptor::DetectMultiScaleWorker : public SimpleWorker {
+struct HOGDescriptor::DetectMultiScaleWorker : public CatchCvExceptionWorker {
 public:
 	cv::HOGDescriptor self;
 	DetectMultiScaleWorker(cv::HOGDescriptor self) {
@@ -391,7 +391,7 @@ public:
 	std::vector<double> foundWeights;
 
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		self.detectMultiScale(img, foundLocations, foundWeights, hitThreshold, winStride, padding, scale, finalThreshold, useMeanshiftGrouping);
 		return "";
 	}
@@ -449,7 +449,7 @@ NAN_METHOD(HOGDescriptor::DetectMultiScaleAsync) {
 }
 
 
-struct HOGDescriptor::DetectMultiScaleROIWorker : public SimpleWorker {
+struct HOGDescriptor::DetectMultiScaleROIWorker : public CatchCvExceptionWorker {
 public:
 	cv::HOGDescriptor self;
 	DetectMultiScaleROIWorker(cv::HOGDescriptor self) {
@@ -463,7 +463,7 @@ public:
 
 	std::vector<cv::Rect> foundLocations;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		self.detectMultiScaleROI(img, foundLocations, locations, hitThreshold, groupThreshold);
 		return "";
 	}
@@ -510,7 +510,7 @@ NAN_METHOD(HOGDescriptor::DetectMultiScaleROIAsync) {
 	FF_WORKER_ASYNC("HOGDescriptor::DetectMultiScaleROIAsync", DetectMultiScaleROIWorker, worker);
 }
 
-struct HOGDescriptor::GroupRectanglesWorker : public SimpleWorker {
+struct HOGDescriptor::GroupRectanglesWorker : public CatchCvExceptionWorker {
 public:
 	cv::HOGDescriptor self;
 	GroupRectanglesWorker(cv::HOGDescriptor self) {
@@ -523,7 +523,7 @@ public:
 	double eps;
 
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		self.groupRectangles(rectList, weights, groupThreshold, eps);
 		return "";
 	}

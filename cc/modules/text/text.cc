@@ -1,7 +1,7 @@
 #ifdef HAVE_TEXT
 
 #include "text.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 #include "Mat.h"
 
 NAN_MODULE_INIT(Text::Init) {
@@ -17,7 +17,7 @@ NAN_MODULE_INIT(Text::Init) {
 #endif
 }
 
-struct Text::LoadOCRHMMClassifierWorker : public SimpleWorker {
+struct Text::LoadOCRHMMClassifierWorker : public CatchCvExceptionWorker {
 public:
 	cv::Ptr <cv::text::OCRHMMDecoder::ClassifierCallback> classifier;
 	std::string file;
@@ -34,7 +34,7 @@ public:
 };
 
 struct Text::LoadOCRHMMClassifierNMWorker : public LoadOCRHMMClassifierWorker {
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		classifier = cv::text::loadOCRHMMClassifierNM(file);
 		return "";
 	}
@@ -49,13 +49,13 @@ NAN_METHOD(Text::LoadOCRHMMClassifierNM) {
 
 NAN_METHOD(Text::LoadOCRHMMClassifierNMAsync) {
 	LoadOCRHMMClassifierNMWorker worker;
-	FF_WORKER_ASYNC("Text::LoadOCRHMMClassifierNMAsync", LoadOCRHMMClassifierWorker, worker);
+	FF_WORKER_ASYNC("Text::LoadOCRHMMClassifierNMAsync", LoadOCRHMMClassifierNMWorker, worker);
 }
 
 #if CV_MINOR_VERSION > 0
 
 struct Text::LoadOCRHMMClassifierCNNWorker : public LoadOCRHMMClassifierWorker {
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		classifier = cv::text::loadOCRHMMClassifierCNN(file);
 		return "";
 	}
@@ -69,18 +69,18 @@ NAN_METHOD(Text::LoadOCRHMMClassifierCNN) {
 
 NAN_METHOD(Text::LoadOCRHMMClassifierCNNAsync) {
 	LoadOCRHMMClassifierCNNWorker worker;
-	FF_WORKER_ASYNC("Text::LoadOCRHMMClassifierCNNAsync", LoadOCRHMMClassifierWorker, worker);
+	FF_WORKER_ASYNC("Text::LoadOCRHMMClassifierCNNAsync", LoadOCRHMMClassifierCNNWorker, worker);
 }
 
 
-struct Text::CreateOCRHMMTransitionsTableWorker : public SimpleWorker {
+struct Text::CreateOCRHMMTransitionsTableWorker : public CatchCvExceptionWorker {
 public:
 	std::string vocabulary;
 	std::vector<std::string> lexicon;
 
 	cv::Mat transition_probabilities_table;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		cv::text::createOCRHMMTransitionsTable(vocabulary, lexicon, transition_probabilities_table);
 		return "";
 	}

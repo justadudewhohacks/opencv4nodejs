@@ -1,5 +1,5 @@
 #include "CascadeClassifier.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 #include <iostream>
 Nan::Persistent<v8::FunctionTemplate> CascadeClassifier::constructor;
 
@@ -35,7 +35,7 @@ NAN_METHOD(CascadeClassifier::New) {
 	FF_RETURN(info.Holder());
 };
 
-struct CascadeClassifier::DetectMultiScaleWorker {
+struct CascadeClassifier::DetectMultiScaleWorker : CatchCvExceptionWorker {
 public:
 	cv::CascadeClassifier classifier;
 	bool isGpu;
@@ -55,7 +55,7 @@ public:
 	std::vector<cv::Rect> objectRects;
 	std::vector<int> numDetections;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		if (isGpu) {
 			cv::UMat oclMat = img.getUMat(cv::ACCESS_READ);
 			classifier.detectMultiScale(oclMat, objectRects, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize);
@@ -133,7 +133,7 @@ public:
 	std::vector<int> rejectLevels;
 	std::vector<double> levelWeights;
 
-	const char* execute() {
+	std::string executeCatchCvExceptionWorker() {
 		if (isGpu) {
 			cv::UMat oclMat = img.getUMat(cv::ACCESS_READ);
 			classifier.detectMultiScale(oclMat, objectRects, rejectLevels, levelWeights, scaleFactor, (int)minNeighbors, (int)flags, minSize, maxSize, true);

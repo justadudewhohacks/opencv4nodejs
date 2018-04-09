@@ -1,7 +1,7 @@
 #include "io.h"
 #include "VideoCapture.h"
 #include "VideoWriter.h"
-#include "Workers.h"
+#include "CatchCvExceptionWorker.h"
 
 NAN_MODULE_INIT(Io::Init) {
 	VideoCapture::Init(target);
@@ -68,31 +68,6 @@ NAN_MODULE_INIT(Io::Init) {
 	FF_SET_JS_PROP(target, IMWRITE_PNG_STRATEGY_FIXED, Nan::New<v8::Integer>(cv::IMWRITE_PNG_STRATEGY_FIXED));
 };
 
-NAN_METHOD(Io::Imread) {
-	FF_METHOD_CONTEXT("Imread");
-
-	FF_ARG_STRING(0, std::string path);
-	FF_ARG_INT_IFDEF(1, int flags, cv::IMREAD_COLOR);
-
-	cv::Mat img = cv::imread(path, flags);
-	if (img.rows == 0 && img.cols == 0) {
-		FF_THROW("empty Mat");
-	}
-	FF_OBJ jsImg = FF_NEW_INSTANCE(Mat::constructor);
-	FF_UNWRAP_MAT_AND_GET(jsImg) = img;
-	FF_RETURN(jsImg);
-}
-
-NAN_METHOD(Io::Imwrite) {
-	FF_METHOD_CONTEXT("Imwrite");
-
-	FF_ARG_STRING(0, std::string path);
-	FF_ARG_INSTANCE(1, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_UNPACK_INT_ARRAY_IFDEF(2, flags, std::vector<int>());
-
-	cv::imwrite(path, img, flags);
-}
-
 NAN_METHOD(Io::Imshow) {
 	FF_METHOD_CONTEXT("Imshow");
   if (!info[0]->IsString()) {
@@ -126,24 +101,158 @@ NAN_METHOD(Io::WaitKey) {
 	FF_RETURN(Nan::New(key));
 }
 
-NAN_METHOD(Io::Imencode) {
-	FF_METHOD_CONTEXT("Io::Imencode");
-	FF_ARG_STRING(0, std::string ext);
-	FF_ARG_INSTANCE(1, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_UNPACK_INT_ARRAY_IFDEF(2, flags, std::vector<int>());
-
-	std::vector<uchar> data;
-	cv::imencode(ext, img, data, flags);
-
-	size_t size = data.size() * sizeof(char);
-	char *ndata = static_cast<char *>(malloc(size));
-	memcpy(ndata, reinterpret_cast<char*>(data.data()), size);
-
-	FF_RETURN(Nan::NewBuffer(ndata, size).ToLocalChecked());
+NAN_METHOD(Io::MoveWindow) {
+	FF_METHOD_CONTEXT("MoveWindow");
+	FF_ARG_STRING(0, std::string winName);
+	FF_ARG_INT(1, int x);
+	FF_ARG_INT(2, int y);
+	cv::moveWindow(winName, x, y);
 }
 
+NAN_METHOD(Io::DestroyWindow) {
+	FF_METHOD_CONTEXT("DestroyWindow");
+	FF_ARG_STRING(0, std::string winName);
+	cv::destroyWindow(winName);
+}
+
+NAN_METHOD(Io::DestroyAllWindows) {
+	FF_METHOD_CONTEXT("DestroyAllWindows");
+	cv::destroyAllWindows();
+}
+
+struct Io::ImreadWorker : CatchCvExceptionWorker {
+public:
+	std::string path;
+	int flags = cv::IMREAD_COLOR;
+	cv::Mat img;
+
+	std::string executeCatchCvExceptionWorker() {
+		img = cv::imread(path, flags);
+		if (img.rows == 0 && img.cols == 0) {
+			return "empty Mat";
+		}
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return StringConverter::arg(0, &path, info);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return IntConverter::optArg(1, &flags, info);
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(img);
+	}
+};
+
+NAN_METHOD(Io::Imread) {
+	ImreadWorker worker;
+	FF_WORKER_SYNC("Imread", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Io::ImreadAsync) {
+	ImreadWorker worker;
+	FF_WORKER_ASYNC("ImreadAsync", ImreadWorker, worker);
+}
+
+struct Io::ImwriteWorker : CatchCvExceptionWorker {
+public:
+	std::string path;
+	cv::Mat img;
+	std::vector<int> flags;
+
+	std::string executeCatchCvExceptionWorker() {
+		cv::imwrite(path, img);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return StringConverter::arg(0, &path, info)
+			|| Mat::Converter::arg(1, &img, info);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return IntArrayConverter::optArg(2, &flags, info);
+	}
+};
+
+NAN_METHOD(Io::Imwrite) {
+	ImwriteWorker worker;
+	FF_WORKER_SYNC("Imwrite", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Io::ImwriteAsync) {
+	ImwriteWorker worker;
+	FF_WORKER_ASYNC("ImwriteAsync", ImwriteWorker, worker);
+}
+
+struct Io::ImencodeWorker : CatchCvExceptionWorker {
+public:
+	std::string ext;
+	cv::Mat img;
+	std::vector<int> flags;
+	char *data;
+	size_t dataSize;
+
+	std::string executeCatchCvExceptionWorker() {
+		std::vector<uchar> dataVec;
+		cv::imencode(ext, img, dataVec, flags);
+		dataSize = dataVec.size() * sizeof(char);
+		data = static_cast<char *>(malloc(dataSize));
+		memcpy(data, reinterpret_cast<char*>(dataVec.data()), dataSize);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return StringConverter::arg(0, &ext, info)
+			|| Mat::Converter::arg(1, &img, info);
+	}
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return IntArrayConverter::optArg(2, &flags, info);
+	}
+
+	FF_VAL getReturnValue() {
+		return Nan::NewBuffer(data, dataSize).ToLocalChecked();
+	}
+};
+
+NAN_METHOD(Io::Imencode) {
+	ImencodeWorker worker;
+	FF_WORKER_SYNC("Imencode", worker);
+	info.GetReturnValue().Set(worker.getReturnValue());
+}
+
+NAN_METHOD(Io::ImencodeAsync) {
+	ImencodeWorker worker;
+	FF_WORKER_ASYNC("ImencodeAsync", ImencodeWorker, worker);
+}
+
+struct Io::ImdecodeWorker : CatchCvExceptionWorker {
+public:
+	int flags;
+	cv::Mat img;
+	char *data;
+	size_t dataSize;
+
+	std::string executeCatchCvExceptionWorker() {
+		std::vector<uchar> vec(dataSize);
+		memcpy(vec.data(), data, dataSize);
+		img = cv::imdecode(vec, flags);
+		return "";
+	}
+
+	FF_VAL getReturnValue() {
+		return Mat::Converter::wrap(img);
+	}
+};
+
 NAN_METHOD(Io::Imdecode) {
-	FF_METHOD_CONTEXT("Io::Imencode");
+	FF_METHOD_CONTEXT("Imencode");
 
 	if (!info[0]->IsUint8Array()) {
 		FF_THROW("expected arg 0 to be a Buffer of Uint8 Values");
@@ -160,114 +269,30 @@ NAN_METHOD(Io::Imdecode) {
 	FF_RETURN(jsDecodedMat);
 }
 
-NAN_METHOD(Io::MoveWindow) {
-	FF_METHOD_CONTEXT("Io::MoveWindow");
-	FF_ARG_STRING(0, std::string winName);
-	FF_ARG_INT(1, int x);
-	FF_ARG_INT(2, int y);
-	cv::moveWindow(winName, x, y);
-}
-
-NAN_METHOD(Io::DestroyWindow) {
-	FF_METHOD_CONTEXT("Io::DestroyWindow");
-	FF_ARG_STRING(0, std::string winName);
-	cv::destroyWindow(winName);
-}
-
-NAN_METHOD(Io::DestroyAllWindows) {
-	FF_METHOD_CONTEXT("Io::DestroyAllWindows");
-	cv::destroyAllWindows();
-}
-
-NAN_METHOD(Io::ImreadAsync) {
-	FF_METHOD_CONTEXT("ImreadAsync");
-
-	ImreadContext ctx;
-	FF_ARG_STRING(0, ctx.path);
-	v8::Local<v8::Function> cbFunc;
-	if (FF_HAS_ARG(1) && !FF_IS_FUNC(info[1])) {
-		FF_ARG_INT(1, ctx.flags);
-		FF_ARG_FUNC(2, cbFunc);
-	}
-	else {
-		FF_ARG_FUNC(1, cbFunc);
-	}
-
-	Nan::AsyncQueueWorker(new GenericAsyncWorker<ImreadContext>(
-		new Nan::Callback(cbFunc),
-		ctx
-	));
-}
-
-NAN_METHOD(Io::ImwriteAsync) {
-	FF_METHOD_CONTEXT("ImwriteAsync");
-
-	ImwriteContext ctx;
-	FF_ARG_STRING(0, ctx.path);
-	FF_ARG_INSTANCE(1, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	v8::Local<v8::Function> cbFunc;
-	if (FF_HAS_ARG(2) && !FF_IS_FUNC(info[2])) {
-		FF_ARG_UNPACK_INT_ARRAY(2, flags);
-		ctx.flags = flags;
-		FF_ARG_FUNC(3, cbFunc);
-	}
-	else {
-		FF_ARG_FUNC(2, cbFunc);
-
-	}
-
-	Nan::AsyncQueueWorker(new GenericAsyncWorker<ImwriteContext>(
-		new Nan::Callback(cbFunc),
-		ctx
-	));
-}
-
-NAN_METHOD(Io::ImencodeAsync) {
-	FF_METHOD_CONTEXT("Io::ImencodeAsync");
-
-	ImencodeContext ctx;
-	FF_ARG_STRING(0, ctx.ext);
-	FF_ARG_INSTANCE(1, ctx.img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-
-	v8::Local<v8::Function> cbFunc;
-	if (FF_HAS_ARG(2) && FF_IS_ARRAY(info[2])) {
-		FF_ARG_UNPACK_INT_ARRAY_TO(2, ctx.flags);
-		FF_ARG_FUNC(3, cbFunc);
-	}
-	else {
-		FF_ARG_FUNC(2, cbFunc);
-	}
-
-	Nan::AsyncQueueWorker(new GenericAsyncWorker<ImencodeContext>(
-		new Nan::Callback(cbFunc),
-		ctx
-	));
-}
-
 NAN_METHOD(Io::ImdecodeAsync) {
-	FF_METHOD_CONTEXT("Io::ImdecodeAsync");
+	FF_METHOD_CONTEXT("ImdecodeAsync");
 
-	ImdecodeContext ctx;
+	ImdecodeWorker worker;
 	if (!info[0]->IsUint8Array()) {
 		FF_THROW("expected arg 0 to be a Buffer of Uint8 Values");
 	}
 
 	v8::Local<v8::Function> cbFunc;
 	if (FF_HAS_ARG(1) && FF_IS_INT(info[1])) {
-		FF_ARG_INT(1, ctx.flags);
+		FF_ARG_INT(1, worker.flags);
 		FF_ARG_FUNC(2, cbFunc);
 	}
 	else {
 		FF_ARG_FUNC(1, cbFunc);
-		ctx.flags = cv::IMREAD_ANYCOLOR;
+		worker.flags = cv::IMREAD_ANYCOLOR;
 	}
 
 	FF_OBJ jsBuf = info[0]->ToObject();
-	ctx.data = static_cast<char *>(node::Buffer::Data(jsBuf));
-	ctx.dataSize = node::Buffer::Length(jsBuf);
+	worker.data = static_cast<char *>(node::Buffer::Data(jsBuf));
+	worker.dataSize = node::Buffer::Length(jsBuf);
 
-	Nan::AsyncQueueWorker(new GenericAsyncWorker<ImdecodeContext>(
+	Nan::AsyncQueueWorker(new GenericAsyncWorker<ImdecodeWorker>(
 		new Nan::Callback(cbFunc),
-		ctx
+		worker
 	));
 }

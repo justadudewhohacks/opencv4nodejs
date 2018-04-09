@@ -42,6 +42,15 @@ public:
 	static FF_GETTER(KeyPoint, GetOctave, keyPoint.octave);
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::KeyPoint* getNativeObjectPtr() { return &keyPoint; }
+	cv::KeyPoint getNativeObject() { return keyPoint; }
+
+	typedef InstanceConverter<KeyPoint, cv::KeyPoint> Converter;
+
+	static const char* getClassName() {
+		return "KeyPoint";
+	}
 };
 
 #endif
