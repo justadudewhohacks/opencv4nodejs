@@ -1,3 +1,6 @@
+#include "macros.h"
+#include <opencv2/core.hpp>
+
 #ifndef __FF_COREUTILS_H__
 #define __FF_COREUTILS_H__
 

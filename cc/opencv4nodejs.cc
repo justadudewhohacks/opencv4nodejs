@@ -5,7 +5,7 @@
 #include "core.h"
 #include "modules/io/io.h"
 #include "modules/video/video.h"
-#include "modules/photo.h"
+#include "modules/photo/photo.h"
 #include "modules/calib3d/calib3d.h"
 #include "modules/imgproc/imgproc.h"
 #include "modules/features2d/features2d.h"

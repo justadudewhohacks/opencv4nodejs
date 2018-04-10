@@ -1,10 +1,11 @@
 #include "macros.h"
-#include "Converters.h"
+#include "NativeNodeUtils.h"
 #include <opencv2/core.hpp>
 #include <opencv2/features2d.hpp>
 #include "Mat.h"
 #include "KeyPoint.h"
 #include "DescriptorMatch.h"
+#include "CatchCvExceptionWorker.h"
 
 #ifndef __FF_DESCRIPTORMATCHINGKNN_H__
 #define __FF_DESCRIPTORMATCHINGKNN_H__

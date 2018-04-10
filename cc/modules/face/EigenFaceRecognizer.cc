@@ -1,6 +1,7 @@
 #ifdef HAVE_FACE
 
 #include "EigenFaceRecognizer.h"
+#include "FaceRecognizerBindings.h"
 
 Nan::Persistent<v8::FunctionTemplate> EigenFaceRecognizer::constructor;
 
@@ -17,8 +18,14 @@ NAN_MODULE_INIT(EigenFaceRecognizer::Init) {
 };
 
 NAN_METHOD(EigenFaceRecognizer::New) {
-	FaceRecognizer::NewWorker worker;
-	FF_WORKER_TRY_UNWRAP_ARGS("EigenFaceRecognizer::New", worker);
+	FF::TryCatch tryCatch;
+	FaceRecognizerBindings::NewWorker worker;
+
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("EigenFaceRecognizer::New");
+		tryCatch.throwNew(err);
+		return;
+	}
 
 	EigenFaceRecognizer* self = new EigenFaceRecognizer();
 	self->Wrap(info.Holder());

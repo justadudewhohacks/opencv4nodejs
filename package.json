@@ -40,8 +40,8 @@
   "dependencies": {
     "macro-inferno": "^0.2.1",
     "nan": "^2.7.0",
-    "native-node-utils": "0.0.5",
-    "opencv-build": "0.0.11"
+    "native-node-utils": "0.1.2",
+    "opencv-build": "^0.0.11"
   },
   "optionalDependencies": {
     "@types/node": ">6"

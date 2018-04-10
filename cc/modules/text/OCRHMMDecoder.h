@@ -1,5 +1,9 @@
-#include "Converters.h"
+#include "NativeNodeUtils.h"
 #include "macros.h"
+#include "OCRHMMClassifier.h"
+#include "CatchCvExceptionWorker.h"
+#include "Mat.h"
+#include "Rect.h"
 #include <opencv2/text.hpp>
 
 #ifndef __FF_OCRHMMDECODER_H__
@@ -8,19 +12,6 @@
 class OCRHMMDecoder : public Nan::ObjectWrap {
 public:
 	cv::Ptr <cv::text::OCRHMMDecoder> decoder;
-
-	static NAN_MODULE_INIT(Init);
-
-	struct NewWorker;
-	static NAN_METHOD(New);
-
-	struct BaseRunWorker;
-	struct RunWorker;
-	struct RunWithInfoWorker;
-	static NAN_METHOD(Run);
-	static NAN_METHOD(RunAsync);
-	static NAN_METHOD(RunWithInfo);
-	static NAN_METHOD(RunWithInfoAsync);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
@@ -32,6 +23,14 @@ public:
 	static const char* getClassName() {
 		return "OCRHMMDecoder";
 	}
+
+	static NAN_MODULE_INIT(Init);
+
+	static NAN_METHOD(New);
+	static NAN_METHOD(Run);
+	static NAN_METHOD(RunAsync);
+	static NAN_METHOD(RunWithInfo);
+	static NAN_METHOD(RunWithInfoAsync);
 };
 
 #endif

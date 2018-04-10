@@ -1,5 +1,5 @@
 #include <macro-inferno.h>
-#include "Workers.h"
+#include "NativeNodeUtils.h"
 
 #ifndef __FF_MACROS_H__
 #define __FF_MACROS_H__
@@ -21,20 +21,6 @@
 #define FF_SET_CV_CONSTANT(obj, cvConstant) \
 	FF_SET_JS_PROP(obj, cvConstant, Nan::New<v8::Integer>(cvConstant));
 
-#define FF_ASSERT_EQUALS(expected, have, what, atmsg)															\
-	if (expected != have) {																													\
-		return Nan::ThrowError(FF_NEW_STRING(std::string(what) + " mismatch, expected "	\
-			+ std::to_string(expected) + ", have " + std::to_string(have) + atmsg));		\
-	}
-
-#define FF_GET_JSARR_REQUIRED_WITH_LENGTH(args, var, prop, length)	\
-	FF_GET_ARRAY_REQUIRED(args, var, #prop)														\
-	if (!var->Length() == length) {																		\
-		return Nan::ThrowError(FF_NEW_STRING("expected "								\
-			+ std::string(#prop) + "to be an array of length "						\
-			+ std::to_string(length)));																		\
-	}
-
 #define FF_REQUIRE_INSTANCE(objCtor, obj, err)	\
 	if (!FF_IS_INSTANCE(objCtor, obj)) {					\
 			return Nan::ThrowError(err);							\
@@ -42,10 +28,6 @@
 
 #define FF_GET_UNPACK_UCHAR_ARRAY_IFDEF(ff_obj, ff_var, ff_prop, ff_defaultValue) FF_GET_UNPACK_ARRAY_IFDEF(ff_obj, ff_var, ff_prop, uchar, ff_uint, ff_defaultValue)
 #define FF_ARG_UNPACK_UCHAR_ARRAY_TO_IFDEF(ff_argN, ff_var, ff_defaultValue) FF_ARG_UNPACK_ARRAY_TO_IFDEF(ff_argN, ff_var, ff_uint, ff_defaultValue)
-
-#define FF_ARG_UNPACK_FLOAT_ARRAY(ff_argN, ff_var) FF_ARG_UNPACK_ARRAY(ff_argN, ff_var, float, ff_number);
-#define FF_GET_UNPACK_FLOAT_ARRAY_IFDEF(ff_obj, ff_var, ff_prop, ff_defaultValue) FF_GET_UNPACK_ARRAY_IFDEF(ff_obj, ff_var, ff_prop, float, ff_number, ff_defaultValue)
-#define FF_ARG_UNPACK_FLOAT_ARRAY_TO_IFDEF(ff_argN, ff_var, ff_defaultValue) FF_ARG_UNPACK_ARRAY_TO_IFDEF(ff_argN, ff_var, ff_number, ff_defaultValue)
 
 /* unwrappers */
 
@@ -84,9 +66,6 @@
 #define FF_UNWRAP_TRAINDATA(obj) FF_UNWRAP(obj, TrainData)
 #define FF_UNWRAP_TRAINDATA_AND_GET(obj) FF_UNWRAP_TRAINDATA(obj)->trainData
 
-#define FF_UNWRAP_PARAMGRID(obj) FF_UNWRAP(obj, ParamGrid)
-#define FF_UNWRAP_PARAMGRID_AND_GET(obj) FF_UNWRAP_PARAMGRID(obj)->paramGrid
-
 #define FF_UNWRAP_TERMCRITERA(obj) FF_UNWRAP(obj, TermCriteria)
 #define FF_UNWRAP_TERMCRITERA_AND_GET(obj) FF_UNWRAP_TERMCRITERA(obj)->termCriteria
 
@@ -97,19 +76,7 @@ struct FF_TYPE(FUNC, v8::Local<v8::Function>, FF_IS_FUNC, FF_CAST_FUNC);
 static FF_FUNC_TYPE ff_func = FF_FUNC_TYPE();
 #define FF_ARG_FUNC(argN, var) FF_ARG(argN, var, ff_func)
 
-#define FF_ARG_IFDEF_NOT_FUNC(argN, ff_arg_getter)		\
-	if (FF_HAS_ARG(argN) && !FF_IS_FUNC(info[argN])) {	\
-		ff_arg_getter																			\
-	}
-
-#define FF_ARG_UINT_IFDEF_NOT_FUNC(argN, ff_var, ff_default)	\
-	FF_ARG_IFDEF_NOT_FUNC(argN, FF_ARG_UINT_IFDEF(argN, ff_var, ff_default))
-
-#define FF_ARG_BOOL_IFDEF_NOT_FUNC(argN, ff_var, ff_default)	\
-	FF_ARG_IFDEF_NOT_FUNC(argN, FF_ARG_BOOL_IFDEF(argN, ff_var, ff_default))
-
-#define FF_ARG_IS_OBJECT(argN) \
-	FF_HAS_ARG(argN) && info[argN]->IsObject() && !info[argN]->IsArray() && !info[argN]->IsFunction()
+#define FF_ARG_IS_OBJECT(argN) FF_HAS_ARG(argN) && info[argN]->IsObject() && !info[argN]->IsArray() && !info[argN]->IsFunction()
 
 /* for setters */
 #define FF_REQUIRE_VALUE(ff_value, ff_type)													\
@@ -128,16 +95,5 @@ static FF_FUNC_TYPE ff_func = FF_FUNC_TYPE();
 #define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_uint)
 #define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_number)
 #define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_bool)
-
-namespace FF {
-	template<typename toType, typename type>
-	static inline v8::Local<v8::Array> stdVecToJSArray(std::vector<type> vec) {
-		v8::Local<v8::Array> jsArray = Nan::New<v8::Array>(vec.size());
-		for (int i = 0; i < jsArray->Length(); i++) {
-			jsArray->Set(i, Nan::New((toType)vec.at(i)));
-		}
-		return jsArray;
-	}
-}
 
 #endif

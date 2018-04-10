@@ -3,6 +3,7 @@
 #include <opencv2/features2d.hpp>
 #include "KeyPoint.h"
 #include "Mat.h"
+#include "CatchCvExceptionWorker.h"
 
 #ifndef FF_FEATUREDETECTOR_H_
 #define FF_FEATUREDETECTOR_H_
@@ -13,11 +14,8 @@ public:
 
 	static void Init(v8::Local<v8::FunctionTemplate>);
 
-	struct DetectWorker;
 	static NAN_METHOD(Detect);
 	static NAN_METHOD(DetectAsync);
-
-	struct ComputeWorker;
 	static NAN_METHOD(Compute);
 	static NAN_METHOD(ComputeAsync);
 };
