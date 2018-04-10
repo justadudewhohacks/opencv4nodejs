@@ -123,8 +123,8 @@ NAN_METHOD(Imgproc::CalcHist) {
     ranges.push_back(new float[dims]);
     FF_OBJ jsAxis = FF_CAST_OBJ(jsHistAxes->Get(i));
     FF_ARR jsRanges;
-
-	if (!jsRanges->Length() == 2) {
+	FF_GET_ARRAY_REQUIRED(jsAxis, jsRanges, "ranges");
+	if (jsRanges->Length() != 2) {
 		return Nan::ThrowError(FF_NEW_STRING("expected ranges to be an array of length " + std::to_string(2)));
 	}
     ranges.at(i)[0] = jsRanges->Get(0)->NumberValue();
