@@ -145,6 +145,6 @@ void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string 
 #else
 void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	MatchWorker worker(cv::DescriptorMatcher::create(matcherType));
-	FF_WORKER_ASYNC("MatchAsync", MatchWorker, worker);
+	std::shared_ptr<MatchWorker> worker = std::make_shared<MatchWorker>(cv::DescriptorMatcher::create(matcherType));
+	FF_WORKER_ASYNC("MatchAsync", worker);
 }

@@ -37,7 +37,7 @@
 			"cc/modules/io/io.cc",
 			"cc/modules/io/VideoCapture.cc",
 			"cc/modules/io/VideoWriter.cc",
-			"cc/modules/photo.cc",
+			"cc/modules/photo/photo.cc",
 			"cc/modules/video/video.cc",
 			"cc/modules/video/BackgroundSubtractor.cc",
 			"cc/modules/video/BackgroundSubtractorMOG2.cc",

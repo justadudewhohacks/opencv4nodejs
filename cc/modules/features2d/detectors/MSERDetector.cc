@@ -103,6 +103,6 @@ NAN_METHOD(MSERDetector::DetectRegions) {
 }
 
 NAN_METHOD(MSERDetector::DetectRegionsAsync) {
-    DetectRegionsWorker worker( FF_UNWRAP(info.This(), MSERDetector) );
-    FF_WORKER_ASYNC("MSERDetector::DetectRegionsAsync", DetectRegionsWorker, worker);
+	std::shared_ptr<DetectRegionsWorker> worker = std::make_shared<DetectRegionsWorker>(FF_UNWRAP(info.This(), MSERDetector));
+	FF_WORKER_ASYNC("MSERDetector::DetectRegionsAsync", worker);
 }

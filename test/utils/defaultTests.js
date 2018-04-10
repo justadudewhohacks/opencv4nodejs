@@ -96,16 +96,17 @@ exports.generateAPITests = ({
       }
 
       if (isCallbacked) {
-        args.push((err) => {
-          expect(err).to.be.an('error');
-          assert.include(err.toString(), errMsg);
-          done();
+        const argsWithCb = args.concat((err) => {
+          try {
+            expect(err).to.be.an('error');
+            assert.include(err.toString(), errMsg);
+            done();
+          } catch (e) {
+            done(e);
+          }
         });
-        assertError(
-          () => dut[method].apply(dut, args),
-          errMsg
-        );
-        return done();
+
+        return dut[method].apply(dut, argsWithCb);
       }
 
       assertError(

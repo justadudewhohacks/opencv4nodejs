@@ -1,6 +1,7 @@
 #ifdef HAVE_FACE
 
 #include "LBPHFaceRecognizer.h"
+#include "FaceRecognizerBindings.h"
 
 Nan::Persistent<v8::FunctionTemplate> LBPHFaceRecognizer::constructor;
 
@@ -16,7 +17,7 @@ NAN_MODULE_INIT(LBPHFaceRecognizer::Init) {
 	target->Set(Nan::New("LBPHFaceRecognizer").ToLocalChecked(), ctor->GetFunction());
 };
 
-struct LBPHFaceRecognizer::NewWorker : public SimpleWorker {
+struct LBPHFaceRecognizer::NewWorker : public FF::SimpleWorker {
 public:
 	int radius = 1;
 	int neighbors = 8;
@@ -51,8 +52,14 @@ public:
 };
 
 NAN_METHOD(LBPHFaceRecognizer::New) {
+	FF::TryCatch tryCatch;
 	LBPHFaceRecognizer::NewWorker worker;
-	FF_WORKER_TRY_UNWRAP_ARGS("LBPHFaceRecognizer::New", worker);
+
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("LBPHFaceRecognizer::New");
+		tryCatch.throwNew(err);
+		return;
+	}
 
 	LBPHFaceRecognizer* self = new LBPHFaceRecognizer();
 	self->Wrap(info.Holder());

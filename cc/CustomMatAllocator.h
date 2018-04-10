@@ -4,7 +4,7 @@
 #include <thread>
 #include <stdint.h>
 
-#include "Converters.h"
+#include "NativeNodeUtils.h"
 #include "Size.h"
 #include "coreUtils.h"
 #include "matUtils.h"
@@ -12,7 +12,6 @@
 #include "Point2.h"
 #include "Rect.h"
 #include "RotatedRect.h"
-#include "Workers.h"
 
 // only valid for 3.1.0+
 #if CV_VERSION_MINOR > 0

@@ -1,5 +1,5 @@
 #include <macro-inferno.h>
-#include "Workers.h"
+#include "NativeNodeUtils.h"
 
 #ifndef __FF_MACROS_H__
 #define __FF_MACROS_H__

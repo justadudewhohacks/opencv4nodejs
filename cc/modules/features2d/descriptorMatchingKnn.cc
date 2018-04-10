@@ -147,6 +147,6 @@ void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::s
 #else
 void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	MatchKnnWorker worker(cv::DescriptorMatcher::create(matcherType));
-	FF_WORKER_ASYNC("MatchAsync", MatchKnnWorker, worker);
+	std::shared_ptr<MatchKnnWorker> worker = std::make_shared<MatchKnnWorker>(cv::DescriptorMatcher::create(matcherType));
+	FF_WORKER_ASYNC("MatchKnnAsync", worker);
 }
