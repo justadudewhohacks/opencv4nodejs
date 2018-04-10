@@ -24,9 +24,6 @@ NAN_MODULE_INIT(Net::Init) {
   target->Set(Nan::New("Net").ToLocalChecked(), ctor->GetFunction());
 };
 
-//#endif
-
-#endif
 NAN_METHOD(Net::New) {
   Net* self = new Net();
   self->Wrap(info.Holder());
@@ -64,3 +61,5 @@ NAN_METHOD(Net::ForwardAsync) {
     info
   );
 }
+
+#endif

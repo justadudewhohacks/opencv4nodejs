@@ -1677,12 +1677,12 @@ namespace MatImgprocBindings {
     }
   
     cv::Point2d seedPoint;
-    double newVal1;
+    double newVal1 = 0;
     cv::Vec3d newVal3 = cv::Vec3d();
     cv::Mat mask = cv::noArray().getMat();
-    double loDiff1;
+    double loDiff1 = 0;
     cv::Vec3d loDiff3 = cv::Vec3d();
-    double upDiff1;
+    double upDiff1 = 0;
     cv::Vec3d upDiff3 = cv::Vec3d();
     int flags = 4;
   
