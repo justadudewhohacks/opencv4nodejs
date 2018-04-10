@@ -169,8 +169,6 @@ NAN_METHOD(SVM::Load) {
 }
 
 NAN_METHOD(SVM::Train) {
-  FF::TryCatch tryCatch;
-
   bool isTrainFromTrainData = FF_IS_INSTANCE(TrainData::constructor, info[0]);
   if (isTrainFromTrainData) {
 	FF::SyncBinding(

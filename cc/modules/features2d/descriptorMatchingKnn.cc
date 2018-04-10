@@ -1,5 +1,4 @@
 #include "descriptorMatchingKnn.h"
-#include "CatchCvExceptionWorker.h"
 
 NAN_MODULE_INIT(DescriptorMatchingKnn::Init) {
 	Nan::SetMethod(target, "matchKnnFlannBased", MatchKnnFlannBased);
@@ -137,9 +136,12 @@ void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, std::string
 #else
 void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	MatchKnnWorker worker(cv::DescriptorMatcher::create(matcherType));
-	FF_WORKER_SYNC("MatchKnn", worker);
-	info.GetReturnValue().Set(worker.getReturnValue());
+	MatchKnnWorker worker();
+	FF::SyncBinding(
+		std::make_shared<MatchKnnWorker>(cv::DescriptorMatcher::create(matcherType)),
+		"MSERDetector::MatchKnn",
+		info
+	);
 }
 
 #if CV_VERSION_MINOR < 2
@@ -147,6 +149,9 @@ void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::s
 #else
 void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	std::shared_ptr<MatchKnnWorker> worker = std::make_shared<MatchKnnWorker>(cv::DescriptorMatcher::create(matcherType));
-	FF_WORKER_ASYNC("MatchKnnAsync", worker);
+	FF::AsyncBinding(
+		std::make_shared<MatchKnnWorker>(cv::DescriptorMatcher::create(matcherType)),
+		"MSERDetector::MatchKnnAsync",
+		info
+	);
 }

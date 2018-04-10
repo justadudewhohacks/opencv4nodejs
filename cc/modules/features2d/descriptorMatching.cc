@@ -1,5 +1,4 @@
 #include "descriptorMatching.h"
-#include "CatchCvExceptionWorker.h"
 
 NAN_MODULE_INIT(DescriptorMatching::Init) {
 	Nan::SetMethod(target, "matchFlannBased", MatchFlannBased);
@@ -135,9 +134,11 @@ void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, std::string match
 #else
 void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	MatchWorker worker(cv::DescriptorMatcher::create(matcherType));
-	FF_WORKER_SYNC("Match", worker);
-	info.GetReturnValue().Set(worker.getReturnValue());
+	FF::SyncBinding(
+		std::make_shared<MatchWorker>(cv::DescriptorMatcher::create(matcherType)),
+		"MSERDetector::Match",
+		info
+	);
 }
 
 #if CV_VERSION_MINOR < 2
@@ -145,6 +146,9 @@ void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string 
 #else
 void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	std::shared_ptr<MatchWorker> worker = std::make_shared<MatchWorker>(cv::DescriptorMatcher::create(matcherType));
-	FF_WORKER_ASYNC("MatchAsync", worker);
+	FF::AsyncBinding(
+		std::make_shared<MatchWorker>(cv::DescriptorMatcher::create(matcherType)),
+		"MSERDetector::MatchAsync",
+		info
+	);
 }

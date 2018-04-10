@@ -44,7 +44,7 @@ NAN_METHOD(VideoWriter::New) {
 
 NAN_METHOD(VideoWriter::Fourcc) {
   FF::SyncBinding(
-    std::make_shared<VideoWriterBindings::FourccWorker>(VideoWriter::Converter::unwrap(info.This())),
+    std::make_shared<VideoWriterBindings::FourccWorker>(),
     "VideoWriter::Fourcc",
     info
   );

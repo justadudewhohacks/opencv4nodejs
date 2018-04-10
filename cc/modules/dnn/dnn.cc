@@ -24,7 +24,7 @@ NAN_MODULE_INIT(Dnn::Init) {
 NAN_METHOD(Dnn::ReadNetFromTensorflow) {
   FF::SyncBinding(
     std::make_shared<DnnBindings::ReadNetFromTensorflowWorker>(),
-    "Dnn::ReadNetFromTensorflow",
+    "ReadNetFromTensorflow",
     info
   );
 }
@@ -32,7 +32,7 @@ NAN_METHOD(Dnn::ReadNetFromTensorflow) {
 NAN_METHOD(Dnn::ReadNetFromTensorflowAsync) {
   FF::AsyncBinding(
     std::make_shared<DnnBindings::ReadNetFromTensorflowWorker>(),
-    "Dnn::ReadNetFromTensorflowAsync",
+    "ReadNetFromTensorflowAsync",
     info
   );
 }
@@ -40,7 +40,7 @@ NAN_METHOD(Dnn::ReadNetFromTensorflowAsync) {
 NAN_METHOD(Dnn::ReadNetFromCaffe) {
   FF::SyncBinding(
     std::make_shared<DnnBindings::ReadNetFromCaffeWorker>(),
-    "Dnn::ReadNetFromCaffe",
+    "ReadNetFromCaffe",
     info
   );
 }
@@ -48,39 +48,39 @@ NAN_METHOD(Dnn::ReadNetFromCaffe) {
 NAN_METHOD(Dnn::ReadNetFromCaffeAsync) {
   FF::AsyncBinding(
     std::make_shared<DnnBindings::ReadNetFromCaffeWorker>(),
-    "Dnn::ReadNetFromCaffeAsync",
+    "ReadNetFromCaffeAsync",
     info
   );
 }
 
 NAN_METHOD(Dnn::BlobFromImage) {
   FF::SyncBinding(
-    std::make_shared<DnnBindings::BlobFromImageWorker>(),
-    "Dnn::BlobFromImage",
+    std::make_shared<DnnBindings::BlobFromImageWorker>(true),
+    "BlobFromImage",
     info
   );
 }
 
 NAN_METHOD(Dnn::BlobFromImageAsync) {
   FF::AsyncBinding(
-    std::make_shared<DnnBindings::BlobFromImageWorker>(),
-    "Dnn::BlobFromImageAsync",
+    std::make_shared<DnnBindings::BlobFromImageWorker>(true),
+    "BlobFromImageAsync",
     info
   );
 }
 
 NAN_METHOD(Dnn::BlobFromImages) {
   FF::SyncBinding(
-    std::make_shared<DnnBindings::BlobFromImageWorker>(),
-    "Dnn::BlobFromImages",
+    std::make_shared<DnnBindings::BlobFromImageWorker>(false),
+    "BlobFromImages",
     info
   );
 }
 
 NAN_METHOD(Dnn::BlobFromImagesAsync) {
   FF::AsyncBinding(
-    std::make_shared<DnnBindings::BlobFromImageWorker>(),
-    "Dnn::BlobFromImagesAsync",
+    std::make_shared<DnnBindings::BlobFromImageWorker>(false),
+    "BlobFromImagesAsync",
     info
   );
 }

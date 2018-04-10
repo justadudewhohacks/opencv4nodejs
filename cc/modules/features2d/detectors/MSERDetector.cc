@@ -97,12 +97,17 @@ public:
 
 
 NAN_METHOD(MSERDetector::DetectRegions) {
-    DetectRegionsWorker worker( FF_UNWRAP(info.This(), MSERDetector) );
-    FF_WORKER_SYNC("MSERDetector::DetectRegions", worker);
-    info.GetReturnValue().Set(worker.getReturnValue());    
+	FF::SyncBinding(
+		std::make_shared<DetectRegionsWorker>(FF_UNWRAP(info.This(), MSERDetector)),
+		"MSERDetector::DetectRegions",
+		info
+	);  
 }
 
 NAN_METHOD(MSERDetector::DetectRegionsAsync) {
-	std::shared_ptr<DetectRegionsWorker> worker = std::make_shared<DetectRegionsWorker>(FF_UNWRAP(info.This(), MSERDetector));
-	FF_WORKER_ASYNC("MSERDetector::DetectRegionsAsync", worker);
+	FF::AsyncBinding(
+		std::make_shared<DetectRegionsWorker>(FF_UNWRAP(info.This(), MSERDetector)),
+		"MSERDetector::DetectRegionsAsync",
+		info
+	);
 }

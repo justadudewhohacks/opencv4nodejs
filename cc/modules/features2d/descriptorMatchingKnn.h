@@ -5,6 +5,7 @@
 #include "Mat.h"
 #include "KeyPoint.h"
 #include "DescriptorMatch.h"
+#include "CatchCvExceptionWorker.h"
 
 #ifndef __FF_DESCRIPTORMATCHINGKNN_H__
 #define __FF_DESCRIPTORMATCHINGKNN_H__

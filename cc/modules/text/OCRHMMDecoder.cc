@@ -22,16 +22,33 @@ NAN_MODULE_INIT(OCRHMMDecoder::Init) {
 };
 
 NAN_METHOD(OCRHMMDecoder::New) {
-  FF::SyncBinding(
-    std::make_shared<OCRHMMDecoderBindings::NewWorker>(),
-    "OCRHMMDecoder::New",
-    info
-  );
+	FF::TryCatch tryCatch;
+	OCRHMMDecoderBindings::NewWorker worker;
+
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("OCRHMMDecoder::New");
+		tryCatch.throwNew(err);
+		return;
+	}
+
+	OCRHMMDecoder* self = new OCRHMMDecoder();
+	self->decoder = cv::text::OCRHMMDecoder::create(
+		worker.classifier,
+		worker.vocabulary,
+		worker.transition_probabilities_table,
+		worker.emission_probabilities_table
+#if CV_MINOR_VERSION > 0
+		, worker.mode
+#endif
+	);
+
+	self->Wrap(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(OCRHMMDecoder::Run) {
   FF::SyncBinding(
-    std::make_shared<OCRHMMDecoderBindings::RunWorker>(OCRHMMDecoder::Converter::unwrap(info.This())),
+	std::make_shared<OCRHMMDecoderBindings::RunWorker>(OCRHMMDecoder::Converter::unwrap(info.This())),
     "OCRHMMDecoder::Run",
     info
   );
