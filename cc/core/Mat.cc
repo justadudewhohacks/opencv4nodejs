@@ -775,6 +775,7 @@ NAN_METHOD(Mat::MeanStdDevAsync) {
   );
 }
 
+#if CV_VERSION_MINOR > 1
 NAN_METHOD(Mat::Rotate) {
   FF::SyncBinding(
     std::make_shared<MatBindings::RotateWorker>(Mat::Converter::unwrap(info.This())),
@@ -790,3 +791,4 @@ NAN_METHOD(Mat::RotateAsync) {
     info
   );
 }
+#endif

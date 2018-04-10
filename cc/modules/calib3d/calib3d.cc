@@ -378,6 +378,8 @@ NAN_METHOD(Calib3d::EstimateAffine3DAsync) {
   );
 }
 
+#if CV_VERSION_MINOR > 0
+
 NAN_METHOD(Calib3d::SampsonDistance) {
   FF::SyncBinding(
     std::make_shared<Calib3dBindings::SampsonDistanceWorker>(),
@@ -409,6 +411,10 @@ NAN_METHOD(Calib3d::CalibrateCameraAsync) {
     info
   );
 }
+
+#endif
+
+#if CV_VERSION_MINOR > 1
 
 NAN_METHOD(Calib3d::CalibrateCameraExtended) {
   FF::SyncBinding(
@@ -457,6 +463,9 @@ NAN_METHOD(Calib3d::EstimateAffinePartial2DAsync) {
     info
   );
 }
+#endif
+
+#if CV_VERSION_MINOR > 2
 
 NAN_METHOD(Calib3d::SolveP3P) {
   FF::SyncBinding(
@@ -473,3 +482,5 @@ NAN_METHOD(Calib3d::SolveP3PAsync) {
     info
   );
 }
+
+#endif
