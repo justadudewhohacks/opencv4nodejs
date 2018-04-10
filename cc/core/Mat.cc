@@ -120,12 +120,12 @@ NAN_METHOD(Mat::New) {
       channels.push_back(channelMat);
       if (i > 0) {
 		if (channels.at(i - 1).rows != channelMat.rows) {
-			return Nan::ThrowError(FF_NEW_STRING("Mat::New - rows "
+			return Nan::ThrowError(FF_NEW_STRING("Mat::New - rows mismatch "
 				+ std::to_string(channels.at(i - 1).rows) + ", have " + std::to_string(channelMat.rows)
 				+ " at channel " + std::to_string(i)));
 		}
 		if (channels.at(i - 1).cols != channelMat.cols) {
-			return Nan::ThrowError(FF_NEW_STRING("Mat::New - cols "
+			return Nan::ThrowError(FF_NEW_STRING("Mat::New - cols mismatch "
 				+ std::to_string(channels.at(i - 1).cols) + ", have " + std::to_string(channelMat.rows)
 				+ " at channel " + std::to_string(i)));
 		}
