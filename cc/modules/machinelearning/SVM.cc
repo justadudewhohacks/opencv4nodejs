@@ -98,7 +98,8 @@ NAN_METHOD(SVM::Predict) {
 
   cv::Mat results;
   if (info[0]->IsArray()) {
-    FF_ARG_UNPACK_FLOAT_ARRAY(0, samples);
+	std::vector<float> samples;
+	FloatArrayConverter::arg(0, &samples, info);
     FF_ARG_UINT_IFDEF(1, unsigned int flags, 0);
     FF_UNWRAP(info.This(), SVM)->svm->predict(samples, results, (int)flags);
   }

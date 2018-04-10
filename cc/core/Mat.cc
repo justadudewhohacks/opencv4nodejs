@@ -119,8 +119,16 @@ NAN_METHOD(Mat::New) {
       cv::Mat channelMat = FF_UNWRAP_MAT_AND_GET(jsChannelMat);
       channels.push_back(channelMat);
       if (i > 0) {
-        FF_ASSERT_EQUALS(channels.at(i - 1).rows, channelMat.rows, "Mat::New - rows", " at channel " + std::to_string(i));
-        FF_ASSERT_EQUALS(channels.at(i - 1).cols, channelMat.cols, "Mat::New - cols", " at channel " + std::to_string(i));
+		if (channels.at(i - 1).rows != channelMat.rows) {
+			return Nan::ThrowError(FF_NEW_STRING("Mat::New - rows "
+				+ std::to_string(channels.at(i - 1).rows) + ", have " + std::to_string(channelMat.rows)
+				+ " at channel " + std::to_string(i)));
+		}
+		if (channels.at(i - 1).cols != channelMat.cols) {
+			return Nan::ThrowError(FF_NEW_STRING("Mat::New - cols "
+				+ std::to_string(channels.at(i - 1).cols) + ", have " + std::to_string(channelMat.rows)
+				+ " at channel " + std::to_string(i)));
+		}
       }
     }
     cv::Mat mat;

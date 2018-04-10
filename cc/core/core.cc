@@ -84,7 +84,7 @@ NAN_METHOD(Core::Partition) {
   }
 
   FF_OBJ ret = FF_NEW_OBJ();
-  Nan::Set(ret, FF_NEW_STRING("labels"), FF::stdVecToJSArray<int>(labels));
+  Nan::Set(ret, FF_NEW_STRING("labels"), IntArrayConverter::wrap(labels));
   Nan::Set(ret, FF_NEW_STRING("numLabels"), Nan::New(numLabels));
   FF_RETURN(ret);
 }

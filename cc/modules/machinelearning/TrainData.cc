@@ -33,12 +33,13 @@ NAN_METHOD(TrainData::New) {
 		FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
 		FF_GET_UNPACK_INT_ARRAY_IFDEF(optArgs, varIdx, "varIdx", varIdx);
 		FF_GET_UNPACK_INT_ARRAY_IFDEF(optArgs, sampleIdx, "sampleIdx", sampleIdx);
-		FF_GET_UNPACK_FLOAT_ARRAY_IFDEF(optArgs, sampleWeights, "sampleWeights", sampleWeights);
+		std::vector<float> sampleWeights;
+		FloatArrayConverter::optProp(&sampleWeights, "sampleWeights", optArgs);
 		FF_GET_UNPACK_UCHAR_ARRAY_IFDEF(optArgs, varType, "varType", varType);
 		if (!hasOptArgsObj) {
 			FF_ARG_UNPACK_INT_ARRAY_TO_IFDEF(3, varIdx, varIdx);
 			FF_ARG_UNPACK_INT_ARRAY_TO_IFDEF(4, sampleIdx, sampleIdx);
-			FF_ARG_UNPACK_FLOAT_ARRAY_TO_IFDEF(5, sampleWeights, sampleWeights);
+			FloatArrayConverter::optArg(5, &sampleWeights, info);
 			FF_ARG_UNPACK_UCHAR_ARRAY_TO_IFDEF(6, varType, varType);
 		}
 

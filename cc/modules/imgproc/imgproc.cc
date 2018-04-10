@@ -123,7 +123,10 @@ NAN_METHOD(Imgproc::CalcHist) {
     ranges.push_back(new float[dims]);
     FF_OBJ jsAxis = FF_CAST_OBJ(jsHistAxes->Get(i));
     FF_ARR jsRanges;
-    FF_GET_JSARR_REQUIRED_WITH_LENGTH(jsAxis, jsRanges, ranges, 2);
+
+	if (!jsRanges->Length() == 2) {
+		return Nan::ThrowError(FF_NEW_STRING("expected ranges to be an array of length " + std::to_string(2)));
+	}
     ranges.at(i)[0] = jsRanges->Get(0)->NumberValue();
     ranges.at(i)[1] = jsRanges->Get(1)->NumberValue();
     int channel, bins;
@@ -168,8 +171,11 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 
   FF_ARG_INSTANCE(0, cv::Mat hist, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
   FF_ARG_INSTANCE(1, cv::Mat plot, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-  FF_ARG_INSTANCE(2, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-  FF_ASSERT_EQUALS(1, hist.cols, "Plot1DHist - hist rows", "");
+  FF_ARG_INSTANCE(2, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);											
+  if (1 != hist.cols) {																													
+	return Nan::ThrowError(FF_NEW_STRING("Plot1DHist - hist rows mismatch, expected "	
+	  + std::to_string(1) + ", have " + std::to_string(hist.cols)));		
+  }
   if (hist.channels() != 1) {
     FF_THROW("expected hist to be single channeled");
   }

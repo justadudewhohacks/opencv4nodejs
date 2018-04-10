@@ -1241,7 +1241,7 @@ module.exports = (getTestImg) => {
     });
   });
 
-  describe.only('floodFill', () => {
+  describe('floodFill', () => {
     const expectOutput = (out) => {
       expect(!!out).to.be.true;
       expect(out).to.have.property('returnValue').to.be.a('number');
