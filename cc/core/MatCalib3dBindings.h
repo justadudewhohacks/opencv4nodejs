@@ -702,7 +702,8 @@ namespace MatCalib3dBindings {
       );
     }
   };
-  
+
+#if CV_VERSION_MINOR > 0
   struct FindEssentialMatWorker : public CatchCvExceptionWorker {
   public:
     cv::Mat self;
@@ -803,6 +804,8 @@ namespace MatCalib3dBindings {
       );
     }
   };
+
+#endif
   
 
 }

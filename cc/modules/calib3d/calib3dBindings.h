@@ -620,7 +620,8 @@ namespace Calib3dBindings {
       );
     }
   };
-  
+
+#if CV_VERSION_MINOR > 0
   struct SampsonDistanceWorker : public CatchCvExceptionWorker {
   public:
     cv::Vec2d pt1;
@@ -706,7 +707,9 @@ namespace Calib3dBindings {
         );
     }
   };
-  
+#endif
+
+#if CV_VERSION_MINOR > 1 
   struct CalibrateCameraExtendedWorker : public CalibrateCameraWorker {
   public:
     cv::Mat stdDeviationsIntrinsics;
@@ -791,7 +794,9 @@ namespace Calib3dBindings {
       return "";
     }
   };
-  
+#endif
+
+#if CV_VERSION_MINOR > 2
   struct SolveP3PWorker : public SolvePxPWorker {
   public:
     int flags = cv::SOLVEPNP_P3P;
@@ -819,6 +824,7 @@ namespace Calib3dBindings {
       );
     }
   };
+#endif
   
 
 }

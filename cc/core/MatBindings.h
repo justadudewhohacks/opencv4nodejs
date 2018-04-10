@@ -731,7 +731,8 @@ namespace MatBindings {
       );
     }
   };
-  
+
+#if CV_VERSION_MINOR > 1
   struct RotateWorker : public OpWithCodeWorker {
   public:
     RotateWorker(cv::Mat self) : OpWithCodeWorker(self) {
@@ -742,6 +743,7 @@ namespace MatBindings {
       return "";
     }
   };
+#endif
   
 
 }
