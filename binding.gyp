@@ -139,7 +139,16 @@
 						"RuntimeLibrary": "2"
 					},
 				}
-			}]
+			}],
+	        ["OS==\"mac\"",
+	          {
+	            "link_settings": {
+	              "libraries": [
+					"-Wl,-rpath,@loader_path/../../../opencv-build/opencv/build/lib"
+	              ],
+	            }
+	          }
+	        ]
 		],
 
 		"configurations": {
