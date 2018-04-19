@@ -219,8 +219,8 @@ NAN_METHOD(Mat::FlattenFloat) {
 NAN_METHOD(Mat::At) {
   FF_METHOD_CONTEXT("Mat::At");
   cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-  FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.rows - 1, "Mat::At row");
-  FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.cols - 1, "Mat::At col");
+  FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.size[0] - 1, "Mat::At row");
+  FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.size[1] - 1, "Mat::At col");
   v8::Local<v8::Value> val;
   FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
   v8::Local<v8::Value> jsVal;
@@ -250,8 +250,8 @@ NAN_METHOD(Mat::At) {
 NAN_METHOD(Mat::AtRaw) {
   FF_METHOD_CONTEXT("Mat::AtRaw");
   cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-  FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.rows - 1, "Mat::At row");
-  FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.cols - 1, "Mat::At col");
+  FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.size[0] - 1, "Mat::At row");
+  FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.size[1] - 1, "Mat::At col");
   v8::Local<v8::Value> val;
   FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
   FF_RETURN(val);
@@ -260,8 +260,8 @@ NAN_METHOD(Mat::AtRaw) {
 NAN_METHOD(Mat::Set) {
   FF_METHOD_CONTEXT("Mat::Set");
   cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-  FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.rows - 1, "Mat::Set row");
-  FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.cols - 1, "Mat::Set col");
+  FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.size[0] - 1, "Mat::At row");
+  FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.size[1] - 1, "Mat::At col");
 
   int cn = matSelf.channels();
   if (info[2]->IsArray()) {
