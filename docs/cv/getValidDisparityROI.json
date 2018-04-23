@@ -1,0 +1,41 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "getValidDisparityROI",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Rect",
+          "name": "roi1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Rect",
+          "name": "roi2",
+          "arrayDepth": 1
+        },
+        {
+          "type": "int",
+          "name": "minDisparity"
+        },
+        {
+          "type": "int",
+          "name": "numberOfDisparities"
+        },
+        {
+          "type": "int",
+          "name": "SADWindowSize"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Rect",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

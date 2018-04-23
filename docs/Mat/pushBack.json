@@ -1,0 +1,24 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "pushBack",
+  "hasAsync": true,
+  "category": null,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "mat"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

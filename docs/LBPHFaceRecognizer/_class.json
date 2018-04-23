@@ -1,0 +1,37 @@
+{
+  "className": "LBPHFaceRecognizer",
+  "cvModule": "face",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "radius",
+          "defaultValue": "1"
+        },
+        {
+          "type": "int",
+          "name": "neighbors",
+          "defaultValue": "8"
+        },
+        {
+          "type": "int",
+          "name": "grid_x",
+          "defaultValue": "8"
+        },
+        {
+          "type": "int",
+          "name": "grid_y",
+          "defaultValue": "8"
+        },
+        {
+          "type": "number",
+          "name": "threshold",
+          "defaultValue": "DBL_MAX"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "cvModule": "text",
+  "owner": "cv",
+  "fnName": "createOCRHMMTransitionsTable",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "vocabulary"
+        },
+        {
+          "type": "string",
+          "name": "lexicon",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

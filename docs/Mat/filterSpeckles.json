@@ -1,0 +1,38 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "filterSpeckles",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "newVal"
+        },
+        {
+          "type": "int",
+          "name": "maxSpeckleSize"
+        },
+        {
+          "type": "number",
+          "name": "maxDiff"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Point2",
+          "name": "newPoints1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "newPoints2",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

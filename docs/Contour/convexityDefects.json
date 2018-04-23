@@ -1,0 +1,25 @@
+{
+  "cvModule": "imgproc",
+  "owner": "Contour",
+  "fnName": "convexityDefects",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "hullIndices",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Vec4",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

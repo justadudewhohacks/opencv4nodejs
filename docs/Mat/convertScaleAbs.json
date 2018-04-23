@@ -1,0 +1,28 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "convertScaleAbs",
+  "hasAsync": true,
+  "category": null,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "alpha"
+        },
+        {
+          "type": "number",
+          "name": "beta"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

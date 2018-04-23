@@ -1,0 +1,38 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "distanceTransformWithLabels",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "distanceType"
+        },
+        {
+          "type": "uint",
+          "name": "maskSize"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "uint",
+          "name": "labelType",
+          "defaultValue": "DIST_LABEL_CCOMP"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "labels"
+        },
+        {
+          "type": "Mat",
+          "name": "dist"
+        }
+      ]
+    }
+  ]
+}

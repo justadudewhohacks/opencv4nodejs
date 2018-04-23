@@ -1,0 +1,19 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "equalizeHist",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

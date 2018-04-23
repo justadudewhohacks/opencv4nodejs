@@ -1,0 +1,65 @@
+{
+  "className": "KeyPoint",
+  "cvModule": "features2d",
+  "fields": [
+    {
+      "type": "Point2",
+      "name": "point"
+    },
+    {
+      "type": "number",
+      "name": "size"
+    },
+    {
+      "type": "number",
+      "name": "angle"
+    },
+    {
+      "type": "number",
+      "name": "response"
+    },
+    {
+      "type": "int",
+      "name": "octave"
+    },
+    {
+      "type": "int",
+      "name": "classId"
+    },
+    {
+      "type": "int",
+      "name": "localId"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "point"
+        },
+        {
+          "type": "number",
+          "name": "size"
+        },
+        {
+          "type": "number",
+          "name": "angle"
+        },
+        {
+          "type": "number",
+          "name": "response"
+        },
+        {
+          "type": "int",
+          "name": "octave"
+        },
+        {
+          "type": "int",
+          "name": "classId"
+        }
+      ],
+      "optionalArgs": []
+    }
+  ]
+}

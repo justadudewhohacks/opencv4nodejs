@@ -1,0 +1,18 @@
+{
+  "cvModule": "core",
+  "owner": "Rect",
+  "fnName": "toSquare",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Rect",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

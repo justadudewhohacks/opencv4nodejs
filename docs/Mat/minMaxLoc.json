@@ -1,0 +1,36 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "minMaxLoc",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "minVal"
+        },
+        {
+          "type": "number",
+          "name": "maxVal"
+        },
+        {
+          "type": "Point2",
+          "name": "minLoc"
+        },
+        {
+          "type": "Point2",
+          "name": "maxLoc"
+        }
+      ]
+    }
+  ]
+}

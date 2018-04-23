@@ -1,0 +1,36 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "correctMatches",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "points1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "points2",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Point2",
+          "name": "newPoints1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "newPoints2",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

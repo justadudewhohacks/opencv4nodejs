@@ -1,0 +1,54 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "solveP3P",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point3",
+          "name": "objectPoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "imagePoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "cameraMatrix"
+        },
+        {
+          "type": "number",
+          "name": "distCoeffs",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "flags",
+          "defaultValue": "cv.SOLVEPNP_P3P"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "boolean",
+          "name": "returnValue"
+        },
+        {
+          "type": "Mat",
+          "name": "rvecs",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "tvecs",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "cvModule": "face",
+  "owner": "FisherFaceRecognizer",
+  "fnName": "predict",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "label"
+        },
+        {
+          "type": "number",
+          "name": "confidence"
+        }
+      ]
+    }
+  ]
+}

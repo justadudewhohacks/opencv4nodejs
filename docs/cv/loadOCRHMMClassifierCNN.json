@@ -1,0 +1,23 @@
+{
+  "cvModule": "text",
+  "owner": "cv",
+  "fnName": "loadOCRHMMClassifierCNN",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "file"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "OCRHMMClassifier",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

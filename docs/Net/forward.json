@@ -1,0 +1,24 @@
+{
+  "cvModule": "dnn",
+  "owner": "Net",
+  "fnName": "forward",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "string",
+          "name": "inputName",
+          "defaultValue": "''"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

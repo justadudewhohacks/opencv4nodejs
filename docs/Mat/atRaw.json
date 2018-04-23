@@ -1,0 +1,87 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "atRaw",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "row"
+        },
+        {
+          "type": "uint",
+          "name": "col"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "row"
+        },
+        {
+          "type": "uint",
+          "name": "col"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "row"
+        },
+        {
+          "type": "uint",
+          "name": "col"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "row"
+        },
+        {
+          "type": "uint",
+          "name": "col"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

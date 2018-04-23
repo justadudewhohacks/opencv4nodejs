@@ -1,0 +1,55 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "norm",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "src2"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "uint",
+          "name": "normType",
+          "defaultValue": "NORM_L2"
+        },
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "uint",
+          "name": "normType",
+          "defaultValue": "NORM_L2"
+        },
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

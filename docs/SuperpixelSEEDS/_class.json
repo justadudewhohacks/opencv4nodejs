@@ -1,0 +1,77 @@
+{
+  "className": "SuperpixelSEEDS",
+  "cvModule": "ximgproc",
+  "fields": [
+    {
+      "type": "Mat",
+      "name": "img"
+    },
+    {
+      "type": "Mat",
+      "name": "labels"
+    },
+    {
+      "type": "Mat",
+      "name": "labelContourMask"
+    },
+    {
+      "type": "int",
+      "name": "numSuperpixels"
+    },
+    {
+      "type": "int",
+      "name": "numLevels"
+    },
+    {
+      "type": "int",
+      "name": "prior"
+    },
+    {
+      "type": "int",
+      "name": "histogramBins"
+    },
+    {
+      "type": "int",
+      "name": "numCalculatedSuperpixels"
+    },
+    {
+      "type": "boolean",
+      "name": "doubleStep"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        },
+        {
+          "type": "int",
+          "name": "numSuperpixels"
+        },
+        {
+          "type": "int",
+          "name": "numLevels"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "prior",
+          "defaultValue": "2"
+        },
+        {
+          "type": "int",
+          "name": "histogramBins",
+          "defaultValue": "5"
+        },
+        {
+          "type": "boolean",
+          "name": "doubleStep",
+          "defaultValue": "false"
+        }
+      ]
+    }
+  ]
+}

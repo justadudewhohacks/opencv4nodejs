@@ -1,0 +1,23 @@
+{
+  "cvModule": "core",
+  "owner": "Vec",
+  "fnName": "at",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "index"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

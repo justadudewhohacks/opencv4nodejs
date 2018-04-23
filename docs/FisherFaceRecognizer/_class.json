@@ -1,0 +1,22 @@
+{
+  "className": "FisherFaceRecognizer",
+  "cvModule": "face",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "num_components",
+          "defaultValue": "0"
+        },
+        {
+          "type": "number",
+          "name": "threshold",
+          "defaultValue": "DBL_MAX"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "drawChessboardCorners",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Size",
+          "name": "patternSize"
+        },
+        {
+          "type": "Point2",
+          "name": "corners",
+          "arrayDepth": 1
+        },
+        {
+          "type": "boolean",
+          "name": "patternWasFound"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

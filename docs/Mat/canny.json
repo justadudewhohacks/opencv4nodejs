@@ -1,0 +1,39 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "canny",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "threshold1"
+        },
+        {
+          "type": "number",
+          "name": "threshold2"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "apertureSize",
+          "defaultValue": "3"
+        },
+        {
+          "type": "boolean",
+          "name": "L2gradient",
+          "defaultValue": "false"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

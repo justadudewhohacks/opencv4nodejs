@@ -1,0 +1,55 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "findHomography",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "srcPoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "dstPoints",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "uint",
+          "name": "method",
+          "defaultValue": "0"
+        },
+        {
+          "type": "number",
+          "name": "ransacReprojThreshold",
+          "defaultValue": "3"
+        },
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        },
+        {
+          "type": "uint",
+          "name": "maxIters",
+          "defaultValue": "2000"
+        },
+        {
+          "type": "number",
+          "name": "confidence",
+          "defaultValue": "0.995"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

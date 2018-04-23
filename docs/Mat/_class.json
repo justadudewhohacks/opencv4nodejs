@@ -1,0 +1,247 @@
+{
+  "className": "Mat",
+  "cvModule": "core",
+  "fields": [
+    {
+      "type": "number",
+      "name": "rows"
+    },
+    {
+      "type": "number",
+      "name": "cols"
+    },
+    {
+      "type": "number",
+      "name": "type"
+    },
+    {
+      "type": "number",
+      "name": "channels"
+    },
+    {
+      "type": "number",
+      "name": "depth"
+    },
+    {
+      "type": "number",
+      "name": "dims"
+    },
+    {
+      "type": "boolean",
+      "name": "empty"
+    },
+    {
+      "type": "number",
+      "name": "step"
+    },
+    {
+      "type": "number",
+      "name": "elemSize"
+    },
+    {
+      "type": "number",
+      "name": "sizes",
+      "arrayDepth": 1
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "channels",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "rows"
+        },
+        {
+          "type": "uint",
+          "name": "cols"
+        },
+        {
+          "type": "uint",
+          "name": "type"
+        }
+      ],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "rows"
+        },
+        {
+          "type": "uint",
+          "name": "cols"
+        },
+        {
+          "type": "uint",
+          "name": "type"
+        },
+        {
+          "type": "number",
+          "name": "fillValue"
+        }
+      ],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "rows"
+        },
+        {
+          "type": "uint",
+          "name": "cols"
+        },
+        {
+          "type": "uint",
+          "name": "type"
+        },
+        {
+          "type": "number",
+          "name": "fillValue",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "rows"
+        },
+        {
+          "type": "uint",
+          "name": "cols"
+        },
+        {
+          "type": "uint",
+          "name": "type"
+        },
+        {
+          "type": "number",
+          "name": "fillValue",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "rows"
+        },
+        {
+          "type": "uint",
+          "name": "cols"
+        },
+        {
+          "type": "uint",
+          "name": "type"
+        },
+        {
+          "type": "number",
+          "name": "fillValue",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "dataArray",
+          "arrayDepth": 2
+        },
+        {
+          "type": "uint",
+          "name": "type"
+        }
+      ],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "dataArray",
+          "arrayDepth": 3
+        },
+        {
+          "type": "uint",
+          "name": "type"
+        }
+      ],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "dataArray",
+          "arrayDepth": 3
+        },
+        {
+          "type": "uint",
+          "name": "type"
+        }
+      ],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "dataArray",
+          "arrayDepth": 3
+        },
+        {
+          "type": "uint",
+          "name": "type"
+        }
+      ],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uchar",
+          "name": "data",
+          "arrayDepth": 1
+        },
+        {
+          "type": "uint",
+          "name": "rows"
+        },
+        {
+          "type": "uint",
+          "name": "cols"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "uint",
+          "name": "type",
+          "defaultValue": "CV_8U"
+        }
+      ]
+    }
+  ]
+}

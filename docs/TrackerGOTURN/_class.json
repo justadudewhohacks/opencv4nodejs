@@ -1,0 +1,11 @@
+{
+  "className": "TrackerGOTURN",
+  "cvModule": "tracking",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    }
+  ]
+}

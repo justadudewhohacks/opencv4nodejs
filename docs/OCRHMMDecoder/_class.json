@@ -1,0 +1,34 @@
+{
+  "className": "OCRHMMDecoder",
+  "cvModule": "text",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [
+        {
+          "type": "OCRHMMClassifier",
+          "name": "classifier"
+        },
+        {
+          "type": "string",
+          "name": "vocabulary"
+        },
+        {
+          "type": "Mat",
+          "name": "transitionPropabilitiesTable"
+        },
+        {
+          "type": "Mat",
+          "name": "emissionPropabilitiesTable"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "mode",
+          "defaultValue": "OCR_DECODER_VITERBI"
+        }
+      ]
+    }
+  ]
+}

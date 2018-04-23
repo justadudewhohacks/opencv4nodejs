@@ -1,0 +1,19 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "countNonZero",
+  "hasAsync": true,
+  "category": null,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

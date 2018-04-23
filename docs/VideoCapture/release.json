@@ -1,0 +1,13 @@
+{
+  "cvModule": "io",
+  "owner": "VideoCapture",
+  "fnName": "release",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "estimateAffinePartial2D",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "from",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "to",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "method",
+          "defaultValue": "cv.RANSAC"
+        },
+        {
+          "type": "number",
+          "name": "ransacReprojThreshold",
+          "defaultValue": "3.0"
+        },
+        {
+          "type": "int",
+          "name": "maxIters",
+          "defaultValue": "2000"
+        },
+        {
+          "type": "number",
+          "name": "confidence",
+          "defaultValue": "0.99"
+        },
+        {
+          "type": "int",
+          "name": "refineIters",
+          "defaultValue": "10"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "out"
+        },
+        {
+          "type": "Mat",
+          "name": "inliers"
+        }
+      ]
+    }
+  ]
+}

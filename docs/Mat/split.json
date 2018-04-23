@@ -1,0 +1,20 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "split",
+  "hasAsync": true,
+  "category": null,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

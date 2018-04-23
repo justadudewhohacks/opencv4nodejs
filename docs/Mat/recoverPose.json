@@ -1,0 +1,48 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "recoverPose",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "E"
+        },
+        {
+          "type": "Point2",
+          "name": "points1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "points2",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "returnValue"
+        },
+        {
+          "type": "Mat",
+          "name": "R"
+        },
+        {
+          "type": "Vec3",
+          "name": "T"
+        }
+      ]
+    }
+  ]
+}

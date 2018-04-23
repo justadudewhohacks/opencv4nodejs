@@ -1,0 +1,60 @@
+{
+  "cvModule": "objdetect",
+  "owner": "HOGDescriptor",
+  "fnName": "detectMultiScale",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "hitThreshold",
+          "defaultValue": "0.0"
+        },
+        {
+          "type": "Size",
+          "name": "winStride",
+          "defaultValue": "Size()"
+        },
+        {
+          "type": "Size",
+          "name": "padding",
+          "defaultValue": "Size()"
+        },
+        {
+          "type": "number",
+          "name": "scale",
+          "defaultValue": "1.05"
+        },
+        {
+          "type": "number",
+          "name": "finalThreshold",
+          "defaultValue": "2.0"
+        },
+        {
+          "type": "boolean",
+          "name": "useMeanshiftGrouping",
+          "defaultValue": "false"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Rect",
+          "name": "foundLocations",
+          "arrayDepth": 1
+        },
+        {
+          "type": "number",
+          "name": "foundWeights",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

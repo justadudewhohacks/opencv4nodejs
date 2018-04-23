@@ -1,0 +1,23 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "getRegion",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Rect",
+          "name": "region"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

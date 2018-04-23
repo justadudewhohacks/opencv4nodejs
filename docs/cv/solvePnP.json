@@ -1,0 +1,126 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "solvePnP",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point3",
+          "name": "objectPoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "imagePoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "cameraMatrix"
+        },
+        {
+          "type": "number",
+          "name": "distCoeffs",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "boolean",
+          "name": "useExtrinsicGuess",
+          "defaultValue": "false"
+        },
+        {
+          "type": "int",
+          "name": "flags",
+          "defaultValue": "cv.SOLVEPNP_ITERATIVE"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "boolean",
+          "name": "returnValue"
+        },
+        {
+          "type": "Vec3",
+          "name": "rvec"
+        },
+        {
+          "type": "Vec3",
+          "name": "tvec"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Point3",
+          "name": "objectPoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "imagePoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "cameraMatrix"
+        },
+        {
+          "type": "number",
+          "name": "distCoeffs",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "boolean",
+          "name": "useExtrinsicGuess",
+          "defaultValue": "false"
+        },
+        {
+          "type": "int",
+          "name": "iterationsCount",
+          "defaultValue": "100"
+        },
+        {
+          "type": "number",
+          "name": "reprojectionError",
+          "defaultValue": "8.0"
+        },
+        {
+          "type": "number",
+          "name": "confidence",
+          "defaultValue": "0.99"
+        },
+        {
+          "type": "int",
+          "name": "flags",
+          "defaultValue": "cv.SOLVEPNP_ITERATIVE"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "boolean",
+          "name": "returnValue"
+        },
+        {
+          "type": "Vec3",
+          "name": "rvec"
+        },
+        {
+          "type": "Vec3",
+          "name": "tvec"
+        },
+        {
+          "type": "int",
+          "name": "inliers",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "mulSpectrums",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "mat2"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "boolean",
+          "name": "dftRows",
+          "defaultValue": "false"
+        },
+        {
+          "type": "boolean",
+          "name": "conjB",
+          "defaultValue": "false"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

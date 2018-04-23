@@ -1,0 +1,25 @@
+{
+  "cvModule": "imgproc",
+  "owner": "Contour",
+  "fnName": "convexHullIndices",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "boolean",
+          "name": "clockwise",
+          "defaultValue": "false"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "uint",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

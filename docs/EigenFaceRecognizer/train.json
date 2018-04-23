@@ -1,0 +1,24 @@
+{
+  "cvModule": "face",
+  "owner": "EigenFaceRecognizer",
+  "fnName": "train",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "trainImages",
+          "arrayDepth": 1
+        },
+        {
+          "type": "int",
+          "name": "labels",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

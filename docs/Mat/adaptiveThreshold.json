@@ -1,0 +1,40 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "adaptiveThreshold",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "maxVal"
+        },
+        {
+          "type": "int",
+          "name": "adaptiveMethod"
+        },
+        {
+          "type": "int",
+          "name": "thresholdType"
+        },
+        {
+          "type": "int",
+          "name": "blockSize"
+        },
+        {
+          "type": "number",
+          "name": "C"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

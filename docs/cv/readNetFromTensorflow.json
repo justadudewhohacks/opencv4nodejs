@@ -1,0 +1,23 @@
+{
+  "cvModule": "dnn",
+  "owner": "cv",
+  "fnName": "readNetFromTensorflow",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "modelPath"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Net",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

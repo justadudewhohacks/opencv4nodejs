@@ -1,0 +1,58 @@
+{
+  "className": "SURFDetector",
+  "cvModule": "xfeatures2d",
+  "fields": [
+    {
+      "type": "int",
+      "name": "nOctaves"
+    },
+    {
+      "type": "int",
+      "name": "nOctaveLayers"
+    },
+    {
+      "type": "number",
+      "name": "hessianThreshold"
+    },
+    {
+      "type": "boolean",
+      "name": "extended"
+    },
+    {
+      "type": "boolean",
+      "name": "upright"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "hessianThreshold",
+          "defaultValue": "100"
+        },
+        {
+          "type": "int",
+          "name": "nOctaves",
+          "defaultValue": "4"
+        },
+        {
+          "type": "int",
+          "name": "nOctaveLayers",
+          "defaultValue": "3"
+        },
+        {
+          "type": "boolean",
+          "name": "extended",
+          "defaultValue": "false"
+        },
+        {
+          "type": "boolean",
+          "name": "upright",
+          "defaultValue": "false"
+        }
+      ]
+    }
+  ]
+}

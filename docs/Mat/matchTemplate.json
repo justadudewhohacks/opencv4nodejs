@@ -1,0 +1,34 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "matchTemplate",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "template"
+        },
+        {
+          "type": "int",
+          "name": "method"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

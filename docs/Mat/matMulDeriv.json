@@ -1,0 +1,28 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "matMulDeriv",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "B"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "dABdA"
+        },
+        {
+          "type": "Mat",
+          "name": "dABdB"
+        }
+      ]
+    }
+  ]
+}

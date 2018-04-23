@@ -1,0 +1,46 @@
+{
+  "cvModule": "core",
+  "owner": "cv",
+  "fnName": "kmeans",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "data",
+          "arrayDepth": 1
+        },
+        {
+          "type": "int",
+          "name": "k"
+        },
+        {
+          "type": "int",
+          "name": "attempts"
+        },
+        {
+          "type": "TermCriteria",
+          "name": "termCriteria"
+        },
+        {
+          "type": "int",
+          "name": "flags"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "labels",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "centers",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

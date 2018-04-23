@@ -1,0 +1,111 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "rectify3Collinear",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "distCoeffs1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "cameraMatrix2"
+        },
+        {
+          "type": "number",
+          "name": "distCoeffs2",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "cameraMatrix3"
+        },
+        {
+          "type": "number",
+          "name": "distCoeffs3",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Size",
+          "name": "imageSize"
+        },
+        {
+          "type": "Mat",
+          "name": "R12"
+        },
+        {
+          "type": "Vec3",
+          "name": "T12"
+        },
+        {
+          "type": "Mat",
+          "name": "R13"
+        },
+        {
+          "type": "Vec3",
+          "name": "T13"
+        },
+        {
+          "type": "number",
+          "name": "alpha"
+        },
+        {
+          "type": "Size",
+          "name": "newImageSize"
+        },
+        {
+          "type": "int",
+          "name": "flags"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        },
+        {
+          "type": "Mat",
+          "name": "R1"
+        },
+        {
+          "type": "Mat",
+          "name": "R2"
+        },
+        {
+          "type": "Mat",
+          "name": "R3"
+        },
+        {
+          "type": "Mat",
+          "name": "P1"
+        },
+        {
+          "type": "Mat",
+          "name": "P2"
+        },
+        {
+          "type": "Mat",
+          "name": "P3"
+        },
+        {
+          "type": "Mat",
+          "name": "Q"
+        },
+        {
+          "type": "Rect",
+          "name": "roi1"
+        },
+        {
+          "type": "Rect",
+          "name": "roi2"
+        }
+      ]
+    }
+  ]
+}

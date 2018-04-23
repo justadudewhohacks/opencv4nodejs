@@ -1,0 +1,19 @@
+{
+  "cvModule": "imgproc",
+  "owner": "Contour",
+  "fnName": "getPoints",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Point2",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "cvModule": "core",
+  "owner": "Rect",
+  "fnName": "rescale",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "factor"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Rect",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "cvModule": "imgproc",
+  "owner": "Contour",
+  "fnName": "approxPolyDP",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "epsilon"
+        },
+        {
+          "type": "boolean",
+          "name": "closed"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Point2",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

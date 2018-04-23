@@ -1,0 +1,28 @@
+{
+  "cvModule": "features2d",
+  "owner": "ORBDetector",
+  "fnName": "compute",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "image"
+        },
+        {
+          "type": "KeyPoint",
+          "name": "keypoints",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

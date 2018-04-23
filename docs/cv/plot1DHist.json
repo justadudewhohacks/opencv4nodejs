@@ -1,0 +1,47 @@
+{
+  "cvModule": "imgproc",
+  "owner": "cv",
+  "fnName": "plot1DHist",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "hist"
+        },
+        {
+          "type": "Mat",
+          "name": "plotImg"
+        },
+        {
+          "type": "Vec3",
+          "name": "color"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "uint",
+          "name": "lineType",
+          "defaultValue": "LINE_8"
+        },
+        {
+          "type": "uint",
+          "name": "thickness",
+          "defaultValue": "1"
+        },
+        {
+          "type": "uint",
+          "name": "shift",
+          "defaultValue": "0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "pop_back",
+  "hasAsync": true,
+  "category": null,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "numRows",
+          "defaultValue": "1"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

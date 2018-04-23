@@ -1,0 +1,24 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "medianBlur",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "int",
+          "name": "kSize"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

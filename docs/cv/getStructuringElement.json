@@ -1,0 +1,33 @@
+{
+  "cvModule": "imgproc",
+  "owner": "cv",
+  "fnName": "getStructuringElement",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "shape"
+        },
+        {
+          "type": "Size",
+          "name": "kernelSize"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Point2",
+          "name": "anchor",
+          "defaultValue": "new Point(-1, -1)"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

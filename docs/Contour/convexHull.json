@@ -1,0 +1,24 @@
+{
+  "cvModule": "imgproc",
+  "owner": "Contour",
+  "fnName": "convexHull",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "boolean",
+          "name": "clockwise",
+          "defaultValue": "false"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Contour",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

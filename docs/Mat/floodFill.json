@@ -1,0 +1,97 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "floodFill",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "seedPoint"
+        },
+        {
+          "type": "number",
+          "name": "newVal"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        },
+        {
+          "type": "number",
+          "name": "loDiff",
+          "defaultValue": "0"
+        },
+        {
+          "type": "number",
+          "name": "upDiff",
+          "defaultValue": "0"
+        },
+        {
+          "type": "int",
+          "name": "flags",
+          "defaultValue": "4"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "returnValue"
+        },
+        {
+          "type": "Rect",
+          "name": "rect"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "seedPoint"
+        },
+        {
+          "type": "Vec3",
+          "name": "newVal"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        },
+        {
+          "type": "Vec3",
+          "name": "loDiff",
+          "defaultValue": "Vec3()"
+        },
+        {
+          "type": "Vec3",
+          "name": "upDiff",
+          "defaultValue": "Vec3()"
+        },
+        {
+          "type": "int",
+          "name": "flags",
+          "defaultValue": "4"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "returnValue"
+        },
+        {
+          "type": "Rect",
+          "name": "rect"
+        }
+      ]
+    }
+  ]
+}

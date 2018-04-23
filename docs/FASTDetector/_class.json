@@ -1,0 +1,40 @@
+{
+  "className": "FASTDetector",
+  "cvModule": "features2d",
+  "fields": [
+    {
+      "type": "int",
+      "name": "threshold"
+    },
+    {
+      "type": "int",
+      "name": "type"
+    },
+    {
+      "type": "boolean",
+      "name": "nonmaxSuppression"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "threshold",
+          "defaultValue": "10"
+        },
+        {
+          "type": "boolean",
+          "name": "nonmaxSuppression",
+          "defaultValue": "true"
+        },
+        {
+          "type": "int",
+          "name": "type",
+          "defaultValue": "FAST.TYPE_9_16"
+        }
+      ]
+    }
+  ]
+}

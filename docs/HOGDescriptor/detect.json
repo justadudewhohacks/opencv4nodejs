@@ -1,0 +1,51 @@
+{
+  "cvModule": "objdetect",
+  "owner": "HOGDescriptor",
+  "fnName": "detect",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "hitThreshold",
+          "defaultValue": "0.0"
+        },
+        {
+          "type": "Size",
+          "name": "winStride",
+          "defaultValue": "Size()"
+        },
+        {
+          "type": "Size",
+          "name": "padding",
+          "defaultValue": "Size()"
+        },
+        {
+          "type": "Point2",
+          "name": "searchLocations",
+          "arrayDepth": 1,
+          "defaultValue": "[]"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Point2",
+          "name": "foundLocations",
+          "arrayDepth": 1
+        },
+        {
+          "type": "number",
+          "name": "weights",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

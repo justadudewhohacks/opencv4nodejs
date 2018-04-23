@@ -1,0 +1,52 @@
+{
+  "cvModule": "machinelearning",
+  "owner": "SVM",
+  "fnName": "train",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "TrainData",
+          "name": "trainData"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "uint",
+          "name": "flags",
+          "defaultValue": "0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "boolean",
+          "name": "returnValue"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "samples"
+        },
+        {
+          "type": "uint",
+          "name": "layout"
+        },
+        {
+          "type": "Mat",
+          "name": "responses"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "boolean",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

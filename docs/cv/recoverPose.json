@@ -1,0 +1,57 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "recoverPose",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "E"
+        },
+        {
+          "type": "Point2",
+          "name": "points1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "points2",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "focal",
+          "defaultValue": "1.0"
+        },
+        {
+          "type": "Point2",
+          "name": "pp",
+          "defaultValue": "new Point(0, 0)"
+        },
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "returnValue"
+        },
+        {
+          "type": "Mat",
+          "name": "R"
+        },
+        {
+          "type": "Vec3",
+          "name": "T"
+        }
+      ]
+    }
+  ]
+}

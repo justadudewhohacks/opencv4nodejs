@@ -1,0 +1,24 @@
+{
+  "cvModule": "core",
+  "owner": "Rect",
+  "fnName": "and",
+  "hasAsync": false,
+  "category": "operators",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Rect",
+          "name": "rect2"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Rect",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

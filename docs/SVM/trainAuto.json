@@ -1,0 +1,64 @@
+{
+  "cvModule": "machinelearning",
+  "owner": "SVM",
+  "fnName": "trainAuto",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "TrainData",
+          "name": "trainData"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "uint",
+          "name": "kFold",
+          "defaultValue": "10"
+        },
+        {
+          "type": "ParamGrid",
+          "name": "cGrid",
+          "defaultValue": "ParamGrid(ml.SVM.C)"
+        },
+        {
+          "type": "ParamGrid",
+          "name": "gammaGrid",
+          "defaultValue": "ParamGrid(ml.SVM.GAMMA)"
+        },
+        {
+          "type": "ParamGrid",
+          "name": "pGrid",
+          "defaultValue": "ParamGrid(ml.SVM.P)"
+        },
+        {
+          "type": "ParamGrid",
+          "name": "nuGrid",
+          "defaultValue": "ParamGrid(ml.SVM.NU)"
+        },
+        {
+          "type": "ParamGrid",
+          "name": "coeffGrid",
+          "defaultValue": "ParamGrid(ml.SVM.COEF)"
+        },
+        {
+          "type": "ParamGrid",
+          "name": "degreeGrid",
+          "defaultValue": "ParamGrid(ml.SVM.DEGREE)"
+        },
+        {
+          "type": "boolean",
+          "name": "balanced",
+          "defaultValue": "false"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

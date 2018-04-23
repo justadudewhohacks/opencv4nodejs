@@ -1,0 +1,48 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "getOptimalNewCameraMatrix",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "distCoeffs",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Size",
+          "name": "imageSize"
+        },
+        {
+          "type": "number",
+          "name": "alpha"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Size",
+          "name": "newImageSize",
+          "defaultValue": "new Size()"
+        },
+        {
+          "type": "boolean",
+          "name": "centerPrincipalPoint",
+          "defaultValue": "false"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "out"
+        },
+        {
+          "type": "Rect",
+          "name": "validPixROI"
+        }
+      ]
+    }
+  ]
+}

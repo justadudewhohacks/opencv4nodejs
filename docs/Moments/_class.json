@@ -1,0 +1,103 @@
+{
+  "className": "Moments",
+  "cvModule": "imgproc",
+  "fields": [
+    {
+      "type": "number",
+      "name": "m00"
+    },
+    {
+      "type": "number",
+      "name": "m10"
+    },
+    {
+      "type": "number",
+      "name": "m01"
+    },
+    {
+      "type": "number",
+      "name": "m20"
+    },
+    {
+      "type": "number",
+      "name": "m11"
+    },
+    {
+      "type": "number",
+      "name": "m02"
+    },
+    {
+      "type": "number",
+      "name": "m30"
+    },
+    {
+      "type": "number",
+      "name": "m21"
+    },
+    {
+      "type": "number",
+      "name": "m12"
+    },
+    {
+      "type": "number",
+      "name": "m03"
+    },
+    {
+      "type": "number",
+      "name": "mu20"
+    },
+    {
+      "type": "number",
+      "name": "mu11"
+    },
+    {
+      "type": "number",
+      "name": "mu02"
+    },
+    {
+      "type": "number",
+      "name": "mu30"
+    },
+    {
+      "type": "number",
+      "name": "mu21"
+    },
+    {
+      "type": "number",
+      "name": "mu12"
+    },
+    {
+      "type": "number",
+      "name": "mu03"
+    },
+    {
+      "type": "number",
+      "name": "nu20"
+    },
+    {
+      "type": "number",
+      "name": "nu11"
+    },
+    {
+      "type": "number",
+      "name": "nu02"
+    },
+    {
+      "type": "number",
+      "name": "nu30"
+    },
+    {
+      "type": "number",
+      "name": "nu21"
+    },
+    {
+      "type": "number",
+      "name": "nu12"
+    },
+    {
+      "type": "number",
+      "name": "nu03"
+    }
+  ],
+  "constructors": []
+}

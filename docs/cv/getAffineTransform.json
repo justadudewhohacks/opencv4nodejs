@@ -1,0 +1,29 @@
+{
+  "cvModule": "imgproc",
+  "owner": "cv",
+  "fnName": "getAffineTransform",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "srcPoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "dstPoints",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

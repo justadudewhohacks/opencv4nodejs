@@ -1,0 +1,27 @@
+{
+  "cvModule": "imgproc",
+  "owner": "Contour",
+  "fnName": "matchShapes",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Contour",
+          "name": "contour2"
+        },
+        {
+          "type": "uint",
+          "name": "method"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

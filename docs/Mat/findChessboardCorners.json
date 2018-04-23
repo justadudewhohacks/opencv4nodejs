@@ -1,0 +1,35 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "findChessboardCorners",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Size",
+          "name": "patternSize"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "flags",
+          "defaultValue": "cv.CALIB_CB_ADAPTIVE_THRESH + cv.CALIB_CB_NORMALIZE_IMAGE"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "boolean",
+          "name": "returnValue"
+        },
+        {
+          "type": "Point2",
+          "name": "corners",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

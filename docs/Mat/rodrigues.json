@@ -1,0 +1,23 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "rodrigues",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "dst"
+        },
+        {
+          "type": "Mat",
+          "name": "jacobian"
+        }
+      ]
+    }
+  ]
+}

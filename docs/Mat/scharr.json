@@ -1,0 +1,48 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "scharr",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "int",
+          "name": "ddepth"
+        },
+        {
+          "type": "int",
+          "name": "dx"
+        },
+        {
+          "type": "int",
+          "name": "dy"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "scale",
+          "defaultValue": "1.0"
+        },
+        {
+          "type": "number",
+          "name": "delta",
+          "defaultValue": "0.0"
+        },
+        {
+          "type": "int",
+          "name": "borderType",
+          "defaultValue": "BORDER_DEFAULT"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

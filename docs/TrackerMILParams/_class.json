@@ -1,0 +1,40 @@
+{
+  "className": "TrackerMILParams",
+  "cvModule": "tracking",
+  "fields": [
+    {
+      "type": "number",
+      "name": "samplerInitInRadius"
+    },
+    {
+      "type": "number",
+      "name": "samplerSearchWinSize"
+    },
+    {
+      "type": "number",
+      "name": "samplerTrackInRadius"
+    },
+    {
+      "type": "int",
+      "name": "samplerInitMaxNegNum"
+    },
+    {
+      "type": "int",
+      "name": "samplerTrackMaxPosNum"
+    },
+    {
+      "type": "int",
+      "name": "samplerTrackMaxNegNum"
+    },
+    {
+      "type": "int",
+      "name": "featureSetNumFeatures"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    }
+  ]
+}

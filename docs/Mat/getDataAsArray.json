@@ -1,0 +1,52 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "getDataAsArray",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue",
+          "arrayDepth": 2
+        }
+      ]
+    },
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue",
+          "arrayDepth": 3
+        }
+      ]
+    },
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue",
+          "arrayDepth": 3
+        }
+      ]
+    },
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue",
+          "arrayDepth": 3
+        }
+      ]
+    }
+  ]
+}

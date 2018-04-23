@@ -1,0 +1,29 @@
+{
+  "cvModule": "text",
+  "owner": "OCRHMMClassifier",
+  "fnName": "eval",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "classes",
+          "arrayDepth": 1
+        },
+        {
+          "type": "number",
+          "name": "confidences",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

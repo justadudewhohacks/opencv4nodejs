@@ -1,0 +1,19 @@
+{
+  "cvModule": "imgproc",
+  "owner": "Moments",
+  "fnName": "huMoments",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

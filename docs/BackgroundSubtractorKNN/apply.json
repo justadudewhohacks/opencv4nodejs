@@ -1,0 +1,29 @@
+{
+  "cvModule": "video",
+  "owner": "BackgroundSubtractorKNN",
+  "fnName": "apply",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "frame"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "learningRate",
+          "defaultValue": "-1"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "cvModule": "ximgproc",
+  "owner": "SuperpixelSLIC",
+  "fnName": "iterate",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "uint",
+          "name": "iterations",
+          "defaultValue": "10"
+        }
+      ],
+      "returnValues": []
+    }
+  ]
+}

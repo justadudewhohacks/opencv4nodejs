@@ -1,0 +1,23 @@
+{
+  "cvModule": "imgproc",
+  "owner": "Contour",
+  "fnName": "pointPolygonTest",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "pt"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

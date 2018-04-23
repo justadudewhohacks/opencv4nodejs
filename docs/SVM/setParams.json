@@ -1,0 +1,54 @@
+{
+  "cvModule": "machinelearning",
+  "owner": "SVM",
+  "fnName": "setParams",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "c",
+          "defaultValue": "this.c"
+        },
+        {
+          "type": "number",
+          "name": "coef0",
+          "defaultValue": "this.coef0"
+        },
+        {
+          "type": "number",
+          "name": "degree",
+          "defaultValue": "this.degree"
+        },
+        {
+          "type": "number",
+          "name": "gamma",
+          "defaultValue": "this.gamma"
+        },
+        {
+          "type": "number",
+          "name": "nu",
+          "defaultValue": "this.nu"
+        },
+        {
+          "type": "number",
+          "name": "p",
+          "defaultValue": "this.p"
+        },
+        {
+          "type": "uint",
+          "name": "kernelType",
+          "defaultValue": "this.kernelType"
+        },
+        {
+          "type": "Mat",
+          "name": "classWeights",
+          "defaultValue": "this.classWeights"
+        }
+      ],
+      "returnValues": []
+    }
+  ]
+}

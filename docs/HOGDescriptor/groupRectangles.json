@@ -1,0 +1,32 @@
+{
+  "cvModule": "objdetect",
+  "owner": "HOGDescriptor",
+  "fnName": "groupRectangles",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Rect",
+          "name": "rectList",
+          "arrayDepth": 1
+        },
+        {
+          "type": "number",
+          "name": "weights",
+          "arrayDepth": 1
+        },
+        {
+          "type": "int",
+          "name": "groupThreshold"
+        },
+        {
+          "type": "number",
+          "name": "eps"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "cvModule": "imgproc",
+  "owner": "cv",
+  "fnName": "fitLine",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "points",
+          "arrayDepth": 1
+        },
+        {
+          "type": "uint",
+          "name": "distType"
+        },
+        {
+          "type": "number",
+          "name": "param"
+        },
+        {
+          "type": "number",
+          "name": "reps"
+        },
+        {
+          "type": "number",
+          "name": "aeps"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Point3",
+          "name": "points",
+          "arrayDepth": 1
+        },
+        {
+          "type": "uint",
+          "name": "distType"
+        },
+        {
+          "type": "number",
+          "name": "param"
+        },
+        {
+          "type": "number",
+          "name": "reps"
+        },
+        {
+          "type": "number",
+          "name": "aeps"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "moments",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Moments",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "cvModule": "objdetect",
+  "owner": "HOGDescriptor",
+  "fnName": "checkDetectorSize",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "boolean",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

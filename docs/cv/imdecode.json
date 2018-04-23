@@ -1,0 +1,30 @@
+{
+  "cvModule": "io",
+  "owner": "cv",
+  "fnName": "imdecode",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "uchar",
+          "name": "buffer",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "flags",
+          "defaultValue": "IMREAD_ANYCOLOR"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

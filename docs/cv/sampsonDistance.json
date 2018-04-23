@@ -1,0 +1,31 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "sampsonDistance",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Vec2",
+          "name": "pt1"
+        },
+        {
+          "type": "Vec2",
+          "name": "pt2"
+        },
+        {
+          "type": "Mat",
+          "name": "F"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "cvModule": "core",
+  "owner": "Rect",
+  "fnName": "pad",
+  "hasAsync": true,
+  "category": null,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "factor"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Rect",
+          "name": "returnValue"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Size",
+          "name": "size"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Rect",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

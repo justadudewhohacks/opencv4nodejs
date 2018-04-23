@@ -1,0 +1,38 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "cornerHarris",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "int",
+          "name": "blockSize"
+        },
+        {
+          "type": "int",
+          "name": "ksize"
+        },
+        {
+          "type": "number",
+          "name": "k"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "borderType",
+          "defaultValue": "BORDER_DEFAULT"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

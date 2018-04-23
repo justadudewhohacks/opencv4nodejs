@@ -1,0 +1,18 @@
+{
+  "cvModule": "io",
+  "owner": "VideoWriter",
+  "fnName": "write",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

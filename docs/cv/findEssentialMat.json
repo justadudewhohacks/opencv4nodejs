@@ -1,0 +1,59 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "findEssentialMat",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "points1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "points2",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "focal",
+          "defaultValue": "1.0"
+        },
+        {
+          "type": "Point2",
+          "name": "pp",
+          "defaultValue": "new Point(0, 0)"
+        },
+        {
+          "type": "int",
+          "name": "method",
+          "defaultValue": "cv.RANSAC"
+        },
+        {
+          "type": "number",
+          "name": "prob",
+          "defaultValue": "0.999"
+        },
+        {
+          "type": "number",
+          "name": "threshold",
+          "defaultValue": "1.0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "E"
+        },
+        {
+          "type": "Mat",
+          "name": "mask"
+        }
+      ]
+    }
+  ]
+}

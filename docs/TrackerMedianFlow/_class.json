@@ -1,0 +1,17 @@
+{
+  "className": "TrackerMedianFlow",
+  "cvModule": "tracking",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "pointsInGrid",
+          "defaultValue": "null"
+        }
+      ]
+    }
+  ]
+}

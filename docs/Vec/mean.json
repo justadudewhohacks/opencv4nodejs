@@ -1,0 +1,19 @@
+{
+  "cvModule": "core",
+  "owner": "Vec",
+  "fnName": "mean",
+  "hasAsync": false,
+  "category": "operators",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Vec",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

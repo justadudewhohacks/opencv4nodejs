@@ -1,0 +1,35 @@
+{
+  "cvModule": "io",
+  "owner": "cv",
+  "fnName": "imencode",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "fileExt"
+        },
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "flags",
+          "arrayDepth": 1,
+          "defaultValue": "[]"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "uchar",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

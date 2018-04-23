@@ -1,0 +1,24 @@
+{
+  "cvModule": "core",
+  "owner": "Vec",
+  "fnName": "hDiv",
+  "hasAsync": false,
+  "category": "operators",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Vec",
+          "name": "otherVec"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Vec",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

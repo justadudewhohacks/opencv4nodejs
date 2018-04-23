@@ -1,0 +1,44 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "drawCircle",
+  "hasAsync": false,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "center"
+        },
+        {
+          "type": "int",
+          "name": "radius"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Vec3",
+          "name": "color",
+          "defaultValue": "new Vec(0, 0; 0)"
+        },
+        {
+          "type": "int",
+          "name": "thickness",
+          "defaultValue": "1"
+        },
+        {
+          "type": "int",
+          "name": "lineType",
+          "defaultValue": "LINE_8"
+        },
+        {
+          "type": "int",
+          "name": "shift",
+          "defaultValue": "0"
+        }
+      ],
+      "returnValues": []
+    }
+  ]
+}

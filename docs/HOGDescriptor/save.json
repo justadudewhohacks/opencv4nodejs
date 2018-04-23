@@ -1,0 +1,18 @@
+{
+  "cvModule": "objdetect",
+  "owner": "HOGDescriptor",
+  "fnName": "save",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "path"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

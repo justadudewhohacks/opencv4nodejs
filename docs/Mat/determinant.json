@@ -1,0 +1,19 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "determinant",
+  "hasAsync": false,
+  "category": "operators",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "className": "SVM",
+  "cvModule": "machinelearning",
+  "fields": [
+    {
+      "type": "number",
+      "name": "c"
+    },
+    {
+      "type": "number",
+      "name": "coef0"
+    },
+    {
+      "type": "number",
+      "name": "degree"
+    },
+    {
+      "type": "number",
+      "name": "gamma"
+    },
+    {
+      "type": "number",
+      "name": "nu"
+    },
+    {
+      "type": "number",
+      "name": "p"
+    },
+    {
+      "type": "uint",
+      "name": "kernelType"
+    },
+    {
+      "type": "Mat",
+      "name": "classWeights"
+    },
+    {
+      "type": "uint",
+      "name": "varCount"
+    },
+    {
+      "type": "boolean",
+      "name": "isTrained"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "c",
+          "defaultValue": "0"
+        },
+        {
+          "type": "number",
+          "name": "coef0",
+          "defaultValue": "0"
+        },
+        {
+          "type": "number",
+          "name": "degree",
+          "defaultValue": "0"
+        },
+        {
+          "type": "number",
+          "name": "gamma",
+          "defaultValue": "0"
+        },
+        {
+          "type": "number",
+          "name": "nu",
+          "defaultValue": "0"
+        },
+        {
+          "type": "number",
+          "name": "p",
+          "defaultValue": "0"
+        },
+        {
+          "type": "uint",
+          "name": "kernelType",
+          "defaultValue": "0"
+        },
+        {
+          "type": "Mat",
+          "name": "classWeights",
+          "defaultValue": "Mat()"
+        }
+      ]
+    }
+  ]
+}

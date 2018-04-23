@@ -1,0 +1,19 @@
+{
+  "cvModule": "core",
+  "owner": "Vec",
+  "fnName": "sqrt",
+  "hasAsync": false,
+  "category": "operators",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Vec",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

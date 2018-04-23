@@ -1,0 +1,33 @@
+{
+  "cvModule": "imgproc",
+  "owner": "cv",
+  "fnName": "getRotationMatrix2D",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "center"
+        },
+        {
+          "type": "number",
+          "name": "angle"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "scale",
+          "defaultValue": "1.0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

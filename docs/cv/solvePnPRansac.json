@@ -1,0 +1,7 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "solvePnPRansac",
+  "hasAsync": true,
+  "signatures": []
+}

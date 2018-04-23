@@ -1,0 +1,57 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "projectPoints",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point3",
+          "name": "objectPoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "imagePoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Vec3",
+          "name": "rvec"
+        },
+        {
+          "type": "Vec3",
+          "name": "tvec"
+        },
+        {
+          "type": "Mat",
+          "name": "cameraMatrix"
+        },
+        {
+          "type": "number",
+          "name": "distCoeffs",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "aspectRatio",
+          "defaultValue": "0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Point2",
+          "name": "imagePoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "jacobian"
+        }
+      ]
+    }
+  ]
+}

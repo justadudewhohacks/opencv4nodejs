@@ -1,0 +1,28 @@
+{
+  "cvModule": "features2d",
+  "owner": "cv",
+  "fnName": "matchBruteForceL1",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "descriptors1"
+        },
+        {
+          "type": "Mat",
+          "name": "descriptors2"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "DescriptorMatch",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

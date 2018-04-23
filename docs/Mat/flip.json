@@ -1,0 +1,23 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "flip",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "int",
+          "name": "flipCode"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

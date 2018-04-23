@@ -1,0 +1,49 @@
+{
+  "className": "Rect",
+  "cvModule": "core",
+  "fields": [
+    {
+      "type": "number",
+      "name": "x"
+    },
+    {
+      "type": "number",
+      "name": "y"
+    },
+    {
+      "type": "number",
+      "name": "width"
+    },
+    {
+      "type": "number",
+      "name": "height"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "x"
+        },
+        {
+          "type": "number",
+          "name": "y"
+        },
+        {
+          "type": "number",
+          "name": "width"
+        },
+        {
+          "type": "number",
+          "name": "height"
+        }
+      ],
+      "optionalArgs": []
+    }
+  ]
+}

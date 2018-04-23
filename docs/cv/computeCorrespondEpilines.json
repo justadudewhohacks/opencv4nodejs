@@ -1,0 +1,33 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "computeCorrespondEpilines",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "points",
+          "arrayDepth": 1
+        },
+        {
+          "type": "int",
+          "name": "whichImage"
+        },
+        {
+          "type": "Mat",
+          "name": "F"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Vec3",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

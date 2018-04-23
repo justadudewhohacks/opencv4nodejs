@@ -1,0 +1,45 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "drawPolylines",
+  "hasAsync": false,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "pts",
+          "arrayDepth": 2
+        },
+        {
+          "type": "boolean",
+          "name": "isClosed"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Vec3",
+          "name": "color",
+          "defaultValue": "new cv.Vec(0, 0; 0)"
+        },
+        {
+          "type": "int",
+          "name": "thickness",
+          "defaultValue": "1"
+        },
+        {
+          "type": "int",
+          "name": "lineType",
+          "defaultValue": "LINE_8"
+        },
+        {
+          "type": "int",
+          "name": "shift",
+          "defaultValue": "0"
+        }
+      ],
+      "returnValues": []
+    }
+  ]
+}

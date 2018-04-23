@@ -1,0 +1,137 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "set",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "row"
+        },
+        {
+          "type": "uint",
+          "name": "col"
+        },
+        {
+          "type": "number",
+          "name": "value"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "row"
+        },
+        {
+          "type": "uint",
+          "name": "col"
+        },
+        {
+          "type": "number",
+          "name": "value",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "row"
+        },
+        {
+          "type": "uint",
+          "name": "col"
+        },
+        {
+          "type": "number",
+          "name": "value",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "row"
+        },
+        {
+          "type": "uint",
+          "name": "col"
+        },
+        {
+          "type": "number",
+          "name": "value",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "row"
+        },
+        {
+          "type": "uint",
+          "name": "col"
+        },
+        {
+          "type": "Vec2",
+          "name": "value"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "row"
+        },
+        {
+          "type": "uint",
+          "name": "col"
+        },
+        {
+          "type": "Vec3",
+          "name": "value"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "row"
+        },
+        {
+          "type": "uint",
+          "name": "col"
+        },
+        {
+          "type": "Vec4",
+          "name": "value"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

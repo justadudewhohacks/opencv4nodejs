@@ -1,0 +1,55 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "drawContours",
+  "hasAsync": false,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Contour",
+          "name": "contours",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Vec3",
+          "name": "color"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "contourIdx",
+          "defaultValue": "0"
+        },
+        {
+          "type": "int",
+          "name": "maxLevel",
+          "defaultValue": "INT_MAX"
+        },
+        {
+          "type": "Point2",
+          "name": "offset",
+          "defaultValue": "new Point2(0, 0)"
+        },
+        {
+          "type": "uint",
+          "name": "lineType",
+          "defaultValue": "LINE_8"
+        },
+        {
+          "type": "uint",
+          "name": "thickness",
+          "defaultValue": "1"
+        },
+        {
+          "type": "uint",
+          "name": "shift",
+          "defaultValue": "0"
+        }
+      ],
+      "returnValues": []
+    }
+  ]
+}

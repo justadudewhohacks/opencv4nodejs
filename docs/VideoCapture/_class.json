@@ -1,0 +1,25 @@
+{
+  "className": "VideoCapture",
+  "cvModule": "io",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "filePath"
+        }
+      ],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "devicePort"
+        }
+      ],
+      "optionalArgs": []
+    }
+  ]
+}

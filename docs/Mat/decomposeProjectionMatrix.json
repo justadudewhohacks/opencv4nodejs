@@ -1,0 +1,43 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "decomposeProjectionMatrix",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "cameraMatrix"
+        },
+        {
+          "type": "Mat",
+          "name": "rotMatrix"
+        },
+        {
+          "type": "Vec4",
+          "name": "transVect"
+        },
+        {
+          "type": "Mat",
+          "name": "rotMatrixX"
+        },
+        {
+          "type": "Mat",
+          "name": "rotMatrixY"
+        },
+        {
+          "type": "Mat",
+          "name": "rotMatrixZ"
+        },
+        {
+          "type": "Mat",
+          "name": "eulerAngles"
+        }
+      ]
+    }
+  ]
+}

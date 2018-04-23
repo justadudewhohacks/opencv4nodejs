@@ -1,0 +1,18 @@
+{
+  "cvModule": "machinelearning",
+  "owner": "SVM",
+  "fnName": "getSupportVectors",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

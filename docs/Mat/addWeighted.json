@@ -1,0 +1,41 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "addWeighted",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "alpha"
+        },
+        {
+          "type": "Mat",
+          "name": "mat2"
+        },
+        {
+          "type": "number",
+          "name": "beta"
+        },
+        {
+          "type": "number",
+          "name": "gamma"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "dtype",
+          "defaultValue": "-1"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

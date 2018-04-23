@@ -1,0 +1,22 @@
+{
+  "cvModule": "io",
+  "owner": "cv",
+  "fnName": "imshow",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "winName"
+        },
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

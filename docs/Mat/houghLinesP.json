@@ -1,0 +1,44 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "houghLinesP",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "rho"
+        },
+        {
+          "type": "number",
+          "name": "theta"
+        },
+        {
+          "type": "int",
+          "name": "threshold"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "minLineLength",
+          "defaultValue": "0.0"
+        },
+        {
+          "type": "number",
+          "name": "maxLineGap",
+          "defaultValue": "0.0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Vec4",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

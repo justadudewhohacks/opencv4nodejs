@@ -1,0 +1,41 @@
+{
+  "className": "RotatedRect",
+  "cvModule": "core",
+  "fields": [
+    {
+      "type": "Point2",
+      "name": "center"
+    },
+    {
+      "type": "Size",
+      "name": "size"
+    },
+    {
+      "type": "number",
+      "name": "angle"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "center"
+        },
+        {
+          "type": "Size",
+          "name": "size"
+        },
+        {
+          "type": "number",
+          "name": "angle"
+        }
+      ],
+      "optionalArgs": []
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "cvModule": "machinelearning",
+  "owner": "SVM",
+  "fnName": "calcError",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "TrainData",
+          "name": "trainData"
+        },
+        {
+          "type": "boolean",
+          "name": "test"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "error"
+        },
+        {
+          "type": "Mat",
+          "name": "responses"
+        }
+      ]
+    }
+  ]
+}

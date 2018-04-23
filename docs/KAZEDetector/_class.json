@@ -1,0 +1,67 @@
+{
+  "className": "KAZEDetector",
+  "cvModule": "features2d",
+  "fields": [
+    {
+      "type": "boolean",
+      "name": "extended"
+    },
+    {
+      "type": "boolean",
+      "name": "upright"
+    },
+    {
+      "type": "int",
+      "name": "nOctaves"
+    },
+    {
+      "type": "int",
+      "name": "nOctaveLayers"
+    },
+    {
+      "type": "int",
+      "name": "diffusivity"
+    },
+    {
+      "type": "number",
+      "name": "threshold"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "boolean",
+          "name": "extended",
+          "defaultValue": "false"
+        },
+        {
+          "type": "boolean",
+          "name": "upright",
+          "defaultValue": "false"
+        },
+        {
+          "type": "number",
+          "name": "threshold",
+          "defaultValue": "0.01"
+        },
+        {
+          "type": "int",
+          "name": "nOctaves",
+          "defaultValue": "4"
+        },
+        {
+          "type": "int",
+          "name": "nOctaveLayers",
+          "defaultValue": "4"
+        },
+        {
+          "type": "int",
+          "name": "diffusivity",
+          "defaultValue": "KAZE.DIFF_PM_G2"
+        }
+      ]
+    }
+  ]
+}

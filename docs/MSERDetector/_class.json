@@ -1,0 +1,94 @@
+{
+  "className": "MSERDetector",
+  "cvModule": "features2d",
+  "fields": [
+    {
+      "type": "int",
+      "name": "delta"
+    },
+    {
+      "type": "int",
+      "name": "minArea"
+    },
+    {
+      "type": "int",
+      "name": "maxArea"
+    },
+    {
+      "type": "int",
+      "name": "maxEvolution"
+    },
+    {
+      "type": "int",
+      "name": "edgeBlurSize"
+    },
+    {
+      "type": "number",
+      "name": "maxVariation"
+    },
+    {
+      "type": "number",
+      "name": "minDiversity"
+    },
+    {
+      "type": "number",
+      "name": "areaThreshold"
+    },
+    {
+      "type": "number",
+      "name": "minMargin"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "delta",
+          "defaultValue": "5"
+        },
+        {
+          "type": "int",
+          "name": "minArea",
+          "defaultValue": "60"
+        },
+        {
+          "type": "int",
+          "name": "maxArea",
+          "defaultValue": "14400"
+        },
+        {
+          "type": "number",
+          "name": "maxVariation",
+          "defaultValue": "0.25"
+        },
+        {
+          "type": "number",
+          "name": "minDiversity",
+          "defaultValue": "0.2"
+        },
+        {
+          "type": "int",
+          "name": "maxEvolution",
+          "defaultValue": "200"
+        },
+        {
+          "type": "number",
+          "name": "areaThreshold",
+          "defaultValue": "1.01"
+        },
+        {
+          "type": "number",
+          "name": "minMargin",
+          "defaultValue": "0.003"
+        },
+        {
+          "type": "int",
+          "name": "edgeBlurSize",
+          "defaultValue": "5"
+        }
+      ]
+    }
+  ]
+}

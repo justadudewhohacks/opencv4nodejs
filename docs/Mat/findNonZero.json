@@ -1,0 +1,20 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "findNonZero",
+  "hasAsync": true,
+  "category": null,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Point2",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

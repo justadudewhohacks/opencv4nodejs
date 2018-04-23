@@ -1,0 +1,71 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "composeRT",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Vec3",
+          "name": "rvec1"
+        },
+        {
+          "type": "Vec3",
+          "name": "tvec1"
+        },
+        {
+          "type": "Vec3",
+          "name": "rvec2"
+        },
+        {
+          "type": "Vec3",
+          "name": "tvec2"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Vec3",
+          "name": "rvec3"
+        },
+        {
+          "type": "Vec3",
+          "name": "tvec3"
+        },
+        {
+          "type": "Mat",
+          "name": "dr3dr1"
+        },
+        {
+          "type": "Mat",
+          "name": "dr3dt1"
+        },
+        {
+          "type": "Mat",
+          "name": "dr3dr2"
+        },
+        {
+          "type": "Mat",
+          "name": "dr3dt2"
+        },
+        {
+          "type": "Mat",
+          "name": "dt3dr1"
+        },
+        {
+          "type": "Mat",
+          "name": "dt3dt1"
+        },
+        {
+          "type": "Mat",
+          "name": "dt3dr2"
+        },
+        {
+          "type": "Mat",
+          "name": "dt3dt2"
+        }
+      ]
+    }
+  ]
+}

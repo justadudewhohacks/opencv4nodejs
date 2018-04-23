@@ -1,0 +1,23 @@
+{
+  "className": "Contour",
+  "cvModule": "imgproc",
+  "fields": [
+    {
+      "type": "number",
+      "name": "numPoints"
+    },
+    {
+      "type": "number",
+      "name": "area"
+    },
+    {
+      "type": "boolean",
+      "name": "isConvex"
+    },
+    {
+      "type": "Vec4",
+      "name": "hierarchy"
+    }
+  ],
+  "constructors": []
+}

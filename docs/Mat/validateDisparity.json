@@ -1,0 +1,33 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "validateDisparity",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "cost"
+        },
+        {
+          "type": "int",
+          "name": "minDisparity"
+        },
+        {
+          "type": "int",
+          "name": "numberOfDisparities"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "disp12MaxDisp",
+          "defaultValue": "1"
+        }
+      ],
+      "returnValues": []
+    }
+  ]
+}

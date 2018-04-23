@@ -1,0 +1,55 @@
+{
+  "cvModule": "objdetect",
+  "owner": "CascadeClassifier",
+  "fnName": "detectMultiScale",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "scaleFactor",
+          "defaultValue": "1.1"
+        },
+        {
+          "type": "int",
+          "name": "minNeighbors",
+          "defaultValue": "3"
+        },
+        {
+          "type": "uint",
+          "name": "flags",
+          "defaultValue": "0"
+        },
+        {
+          "type": "Size",
+          "name": "minSize",
+          "defaultValue": "Size()"
+        },
+        {
+          "type": "Size",
+          "name": "maxSize",
+          "defaultValue": "Size()"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Rect",
+          "name": "objects",
+          "arrayDepth": 1
+        },
+        {
+          "type": "int",
+          "name": "numDetections",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "cvModule": "features2d",
+  "owner": "cv",
+  "fnName": "matchKnnBruteForceHamming",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "descriptors1"
+        },
+        {
+          "type": "Mat",
+          "name": "descriptors2"
+        },
+        {
+          "type": "int",
+          "name": "k"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "DescriptorMatch",
+          "name": "returnValue",
+          "arrayDepth": 2
+        }
+      ]
+    }
+  ]
+}

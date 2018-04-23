@@ -1,0 +1,158 @@
+{
+  "cvModule": "core",
+  "owner": "cv",
+  "fnName": "partition",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "data",
+          "arrayDepth": 1
+        },
+        {
+          "type": "func",
+          "name": "predicate"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "labels",
+          "arrayDepth": 1
+        },
+        {
+          "type": "int",
+          "name": "numLabels"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Point3",
+          "name": "data",
+          "arrayDepth": 1
+        },
+        {
+          "type": "func",
+          "name": "predicate"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "labels",
+          "arrayDepth": 1
+        },
+        {
+          "type": "int",
+          "name": "numLabels"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Vec2",
+          "name": "data",
+          "arrayDepth": 1
+        },
+        {
+          "type": "func",
+          "name": "predicate"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "labels",
+          "arrayDepth": 1
+        },
+        {
+          "type": "int",
+          "name": "numLabels"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Vec3",
+          "name": "data",
+          "arrayDepth": 1
+        },
+        {
+          "type": "func",
+          "name": "predicate"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "labels",
+          "arrayDepth": 1
+        },
+        {
+          "type": "int",
+          "name": "numLabels"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Vec4",
+          "name": "data",
+          "arrayDepth": 1
+        },
+        {
+          "type": "func",
+          "name": "predicate"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "labels",
+          "arrayDepth": 1
+        },
+        {
+          "type": "int",
+          "name": "numLabels"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "data",
+          "arrayDepth": 1
+        },
+        {
+          "type": "func",
+          "name": "predicate"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "labels",
+          "arrayDepth": 1
+        },
+        {
+          "type": "int",
+          "name": "numLabels"
+        }
+      ]
+    }
+  ]
+}

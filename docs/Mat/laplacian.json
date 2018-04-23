@@ -1,0 +1,45 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "laplacian",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "int",
+          "name": "ddepth"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "ksize",
+          "defaultValue": "1"
+        },
+        {
+          "type": "number",
+          "name": "scale",
+          "defaultValue": "1.0"
+        },
+        {
+          "type": "number",
+          "name": "delta",
+          "defaultValue": "0.0"
+        },
+        {
+          "type": "int",
+          "name": "borderType",
+          "defaultValue": "BORDER_DEFAULT"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

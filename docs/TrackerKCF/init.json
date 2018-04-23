@@ -1,0 +1,27 @@
+{
+  "cvModule": "tracking",
+  "owner": "TrackerKCF",
+  "fnName": "init",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "frame"
+        },
+        {
+          "type": "Rect",
+          "name": "boundingBox"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "boolean",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

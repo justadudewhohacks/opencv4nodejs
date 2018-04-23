@@ -1,0 +1,67 @@
+{
+  "className": "TrainData",
+  "cvModule": "machinelearning",
+  "fields": [
+    {
+      "type": "Mat",
+      "name": "samples"
+    },
+    {
+      "type": "uint",
+      "name": "layout"
+    },
+    {
+      "type": "Mat",
+      "name": "responses"
+    },
+    {
+      "type": "uchar",
+      "name": "varType",
+      "arrayDepth": 1
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "samples"
+        },
+        {
+          "type": "uint",
+          "name": "layout"
+        },
+        {
+          "type": "Mat",
+          "name": "responses"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "varIdx",
+          "arrayDepth": 1,
+          "defaultValue": "[]"
+        },
+        {
+          "type": "int",
+          "name": "sampleIdx",
+          "arrayDepth": 1,
+          "defaultValue": "[]"
+        },
+        {
+          "type": "number",
+          "name": "sampleWeights",
+          "arrayDepth": 1,
+          "defaultValue": "[]"
+        },
+        {
+          "type": "uchar",
+          "name": "varType",
+          "arrayDepth": 1,
+          "defaultValue": "[]"
+        }
+      ]
+    }
+  ]
+}

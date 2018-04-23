@@ -1,0 +1,49 @@
+{
+  "cvModule": "text",
+  "owner": "OCRHMMDecoder",
+  "fnName": "runWithInfo",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        },
+        {
+          "type": "int",
+          "name": "componentLevel",
+          "defaultValue": "0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "string",
+          "name": "outputText"
+        },
+        {
+          "type": "Rect",
+          "name": "rects",
+          "arrayDepth": 1
+        },
+        {
+          "type": "string",
+          "name": "words",
+          "arrayDepth": 1
+        },
+        {
+          "type": "number",
+          "name": "confidences",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

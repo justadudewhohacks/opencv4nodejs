@@ -1,0 +1,32 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "threshold",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "thresh"
+        },
+        {
+          "type": "number",
+          "name": "maxVal"
+        },
+        {
+          "type": "uint",
+          "name": "type"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

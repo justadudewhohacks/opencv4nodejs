@@ -1,0 +1,42 @@
+{
+  "cvModule": "features2d",
+  "owner": "cv",
+  "fnName": "drawMatches",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img1"
+        },
+        {
+          "type": "Mat",
+          "name": "img2"
+        },
+        {
+          "type": "KeyPoint",
+          "name": "keyPoints1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "KeyPoint",
+          "name": "keyPoints2",
+          "arrayDepth": 1
+        },
+        {
+          "type": "DescriptorMatch",
+          "name": "matches",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "cvModule": "io",
+  "owner": "VideoWriter",
+  "fnName": "fourcc",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "fourcc"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

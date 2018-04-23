@@ -1,0 +1,38 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "connectedComponentsWithStats",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "uint",
+          "name": "connectivity",
+          "defaultValue": "8"
+        },
+        {
+          "type": "uint",
+          "name": "ltype",
+          "defaultValue": "CV_32S"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "labels"
+        },
+        {
+          "type": "Mat",
+          "name": "stats"
+        },
+        {
+          "type": "Mat",
+          "name": "centroids"
+        }
+      ]
+    }
+  ]
+}

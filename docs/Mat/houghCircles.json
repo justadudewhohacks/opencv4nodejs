@@ -1,0 +1,54 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "houghCircles",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "int",
+          "name": "method"
+        },
+        {
+          "type": "number",
+          "name": "dp"
+        },
+        {
+          "type": "number",
+          "name": "minDist"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "param1",
+          "defaultValue": "100.0"
+        },
+        {
+          "type": "number",
+          "name": "param2",
+          "defaultValue": "100.0"
+        },
+        {
+          "type": "int",
+          "name": "minRadius",
+          "defaultValue": "0"
+        },
+        {
+          "type": "int",
+          "name": "maxRadius",
+          "defaultValue": "0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Vec3",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

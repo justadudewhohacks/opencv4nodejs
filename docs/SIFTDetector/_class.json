@@ -1,0 +1,58 @@
+{
+  "className": "SIFTDetector",
+  "cvModule": "xfeatures2d",
+  "fields": [
+    {
+      "type": "int",
+      "name": "nfeatures"
+    },
+    {
+      "type": "int",
+      "name": "nOctaveLayers"
+    },
+    {
+      "type": "number",
+      "name": "contrastThreshold"
+    },
+    {
+      "type": "number",
+      "name": "edgeThreshold"
+    },
+    {
+      "type": "number",
+      "name": "sigma"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "nfeatures",
+          "defaultValue": "0"
+        },
+        {
+          "type": "int",
+          "name": "nOctaveLayers",
+          "defaultValue": "3"
+        },
+        {
+          "type": "number",
+          "name": "contrastThreshold",
+          "defaultValue": "0.04"
+        },
+        {
+          "type": "number",
+          "name": "edgeThreshold",
+          "defaultValue": "10"
+        },
+        {
+          "type": "number",
+          "name": "sigma",
+          "defaultValue": "1.6"
+        }
+      ]
+    }
+  ]
+}

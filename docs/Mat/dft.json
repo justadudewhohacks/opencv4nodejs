@@ -1,0 +1,29 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "dft",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "flags",
+          "defaultValue": "0"
+        },
+        {
+          "type": "int",
+          "name": "nonzeroRows",
+          "defaultValue": "0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

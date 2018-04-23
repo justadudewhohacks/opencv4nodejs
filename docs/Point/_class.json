@@ -1,0 +1,52 @@
+{
+  "className": "Point",
+  "cvModule": "core",
+  "fields": [
+    {
+      "type": "number",
+      "name": "x"
+    },
+    {
+      "type": "number",
+      "name": "y"
+    },
+    {
+      "type": "number",
+      "name": "z"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "x"
+        },
+        {
+          "type": "number",
+          "name": "y"
+        }
+      ],
+      "optionalArgs": [],
+      "returnsOther": "Point2"
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "x"
+        },
+        {
+          "type": "number",
+          "name": "y"
+        },
+        {
+          "type": "number",
+          "name": "z"
+        }
+      ],
+      "optionalArgs": [],
+      "returnsOther": "Point3"
+    }
+  ]
+}

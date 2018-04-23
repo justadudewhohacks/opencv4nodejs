@@ -1,0 +1,19 @@
+{
+  "cvModule": "core",
+  "owner": "Vec",
+  "fnName": "norm",
+  "hasAsync": false,
+  "category": "operators",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

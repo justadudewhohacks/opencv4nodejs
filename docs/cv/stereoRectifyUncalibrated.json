@@ -1,0 +1,51 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "stereoRectifyUncalibrated",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "points1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "points2",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "F"
+        },
+        {
+          "type": "Size",
+          "name": "imageSize"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "threshold",
+          "defaultValue": "5.0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "boolean",
+          "name": "returnValue"
+        },
+        {
+          "type": "Mat",
+          "name": "H1"
+        },
+        {
+          "type": "Mat",
+          "name": "H2"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "className": "TrackerMIL",
+  "cvModule": "tracking",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "TrackerMILParams",
+          "name": "params"
+        }
+      ],
+      "optionalArgs": []
+    }
+  ]
+}

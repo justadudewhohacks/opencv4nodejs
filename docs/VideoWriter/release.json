@@ -1,0 +1,13 @@
+{
+  "cvModule": "io",
+  "owner": "VideoWriter",
+  "fnName": "release",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cvModule": "tracking",
+  "owner": "TrackerTLD",
+  "fnName": "clear",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "className": "VideoWriter",
+  "cvModule": "io",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "filePath"
+        },
+        {
+          "type": "int",
+          "name": "fourccCode"
+        },
+        {
+          "type": "number",
+          "name": "fps"
+        },
+        {
+          "type": "Size",
+          "name": "frameSize"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "boolean",
+          "name": "isColor",
+          "defaultValue": "true"
+        }
+      ]
+    }
+  ]
+}

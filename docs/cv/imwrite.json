@@ -1,0 +1,29 @@
+{
+  "cvModule": "io",
+  "owner": "cv",
+  "fnName": "imwrite",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "filePath"
+        },
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "flags",
+          "arrayDepth": 1,
+          "defaultValue": "[]"
+        }
+      ],
+      "returnValues": []
+    }
+  ]
+}

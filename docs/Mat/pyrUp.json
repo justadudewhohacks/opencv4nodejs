@@ -1,0 +1,30 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "pyrUp",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "Size",
+          "name": "size",
+          "defaultValue": "Size()"
+        },
+        {
+          "type": "int",
+          "name": "borderType",
+          "defaultValue": "BORDER_DEFAULT"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

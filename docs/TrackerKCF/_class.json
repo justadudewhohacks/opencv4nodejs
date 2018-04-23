@@ -1,0 +1,20 @@
+{
+  "className": "TrackerKCF",
+  "cvModule": "tracking",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "TrackerKCFParams",
+          "name": "params"
+        }
+      ],
+      "optionalArgs": []
+    }
+  ]
+}

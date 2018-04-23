@@ -1,0 +1,29 @@
+{
+  "cvModule": "dnn",
+  "owner": "cv",
+  "fnName": "readNetFromCaffe",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "prototxt"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "string",
+          "name": "modelPath",
+          "defaultValue": "''"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Net",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

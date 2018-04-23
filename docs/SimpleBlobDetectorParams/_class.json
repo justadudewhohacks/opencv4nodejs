@@ -1,0 +1,88 @@
+{
+  "className": "SimpleBlobDetectorParams",
+  "cvModule": "features2d",
+  "fields": [
+    {
+      "type": "uchar",
+      "name": "blobColor"
+    },
+    {
+      "type": "boolean",
+      "name": "filterByArea"
+    },
+    {
+      "type": "boolean",
+      "name": "filterByCircularity"
+    },
+    {
+      "type": "boolean",
+      "name": "filterByColor"
+    },
+    {
+      "type": "boolean",
+      "name": "filterByConvexity"
+    },
+    {
+      "type": "boolean",
+      "name": "filterByInertia"
+    },
+    {
+      "type": "number",
+      "name": "maxArea"
+    },
+    {
+      "type": "number",
+      "name": "maxCircularity"
+    },
+    {
+      "type": "number",
+      "name": "maxConvexity"
+    },
+    {
+      "type": "number",
+      "name": "maxInertiaRatio"
+    },
+    {
+      "type": "number",
+      "name": "maxThreshold"
+    },
+    {
+      "type": "number",
+      "name": "minArea"
+    },
+    {
+      "type": "number",
+      "name": "minCircularity"
+    },
+    {
+      "type": "number",
+      "name": "minConvexity"
+    },
+    {
+      "type": "number",
+      "name": "minDistBetweenBlobs"
+    },
+    {
+      "type": "number",
+      "name": "minInertiaRatio"
+    },
+    {
+      "type": "int",
+      "name": "minRepeatability"
+    },
+    {
+      "type": "number",
+      "name": "minThreshold"
+    },
+    {
+      "type": "number",
+      "name": "thresholdStep"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    }
+  ]
+}

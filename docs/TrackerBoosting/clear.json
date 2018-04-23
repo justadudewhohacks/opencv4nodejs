@@ -1,0 +1,13 @@
+{
+  "cvModule": "tracking",
+  "owner": "TrackerBoosting",
+  "fnName": "clear",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

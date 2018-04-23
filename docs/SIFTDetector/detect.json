@@ -1,0 +1,24 @@
+{
+  "cvModule": "xfeatures2d",
+  "owner": "SIFTDetector",
+  "fnName": "detect",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "image"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "KeyPoint",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

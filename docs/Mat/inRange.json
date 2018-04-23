@@ -1,0 +1,47 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "inRange",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "lower"
+        },
+        {
+          "type": "number",
+          "name": "upper"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Vec3",
+          "name": "lower"
+        },
+        {
+          "type": "Vec3",
+          "name": "upper"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "warpAffine",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "transforMationMatrix"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Size",
+          "name": "size",
+          "defaultValue": "new Size(this.cols, this.rows)"
+        },
+        {
+          "type": "uint",
+          "name": "flags",
+          "defaultValue": "INTER_LINEAR"
+        },
+        {
+          "type": "uint",
+          "name": "borderMode",
+          "defaultValue": "BORDER_CONSTANT"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

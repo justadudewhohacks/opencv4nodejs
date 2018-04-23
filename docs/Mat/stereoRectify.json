@@ -1,0 +1,86 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "stereoRectify",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "distCoeffs1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "cameraMatrix2"
+        },
+        {
+          "type": "number",
+          "name": "distCoeffs2",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Size",
+          "name": "imageSize"
+        },
+        {
+          "type": "Mat",
+          "name": "R"
+        },
+        {
+          "type": "Vec3",
+          "name": "T"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "flags",
+          "defaultValue": "cv.CALIB_ZERO_DISPARITY"
+        },
+        {
+          "type": "number",
+          "name": "alpha",
+          "defaultValue": "-1"
+        },
+        {
+          "type": "Size",
+          "name": "newImageSize",
+          "defaultValue": "new Size()"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "R1"
+        },
+        {
+          "type": "Mat",
+          "name": "R2"
+        },
+        {
+          "type": "Mat",
+          "name": "P1"
+        },
+        {
+          "type": "Mat",
+          "name": "P2"
+        },
+        {
+          "type": "Mat",
+          "name": "Q"
+        },
+        {
+          "type": "Rect",
+          "name": "roi1"
+        },
+        {
+          "type": "Rect",
+          "name": "roi2"
+        }
+      ]
+    }
+  ]
+}

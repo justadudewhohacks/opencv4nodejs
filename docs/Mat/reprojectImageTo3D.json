@@ -1,0 +1,35 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "reprojectImageTo3D",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "Q"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "boolean",
+          "name": "handleMissingValues",
+          "defaultValue": "false"
+        },
+        {
+          "type": "int",
+          "name": "ddepth",
+          "defaultValue": "-1"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

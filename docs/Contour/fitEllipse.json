@@ -1,0 +1,18 @@
+{
+  "cvModule": "imgproc",
+  "owner": "Contour",
+  "fnName": "fitEllipse",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "RotatedRect",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "resize",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "rows"
+        },
+        {
+          "type": "uint",
+          "name": "cols"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "fx",
+          "defaultValue": "0"
+        },
+        {
+          "type": "number",
+          "name": "fy",
+          "defaultValue": "0"
+        },
+        {
+          "type": "int",
+          "name": "interpolation",
+          "defaultValue": "INTER_LINEAR"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Size",
+          "name": "dsize"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "fx",
+          "defaultValue": "0"
+        },
+        {
+          "type": "number",
+          "name": "fy",
+          "defaultValue": "0"
+        },
+        {
+          "type": "int",
+          "name": "interpolation",
+          "defaultValue": "INTER_LINEAR"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

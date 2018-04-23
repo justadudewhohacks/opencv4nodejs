@@ -1,0 +1,40 @@
+{
+  "className": "BRISKDetector",
+  "cvModule": "features2d",
+  "fields": [
+    {
+      "type": "int",
+      "name": "thresh"
+    },
+    {
+      "type": "int",
+      "name": "octaves"
+    },
+    {
+      "type": "number",
+      "name": "patternScale"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "thresh",
+          "defaultValue": "30"
+        },
+        {
+          "type": "int",
+          "name": "octaves",
+          "defaultValue": "3"
+        },
+        {
+          "type": "number",
+          "name": "patternScale",
+          "defaultValue": "1.0"
+        }
+      ]
+    }
+  ]
+}

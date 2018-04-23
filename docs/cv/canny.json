@@ -1,0 +1,41 @@
+{
+  "cvModule": "imgproc",
+  "owner": "cv",
+  "fnName": "canny",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "dx"
+        },
+        {
+          "type": "Mat",
+          "name": "dy"
+        },
+        {
+          "type": "number",
+          "name": "threshold1"
+        },
+        {
+          "type": "number",
+          "name": "threshold2"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "boolean",
+          "name": "L2gradient",
+          "defaultValue": "false"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

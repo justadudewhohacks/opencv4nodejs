@@ -1,0 +1,39 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "decomposeHomographyMat",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "K"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "int",
+          "name": "returnValue"
+        },
+        {
+          "type": "Mat",
+          "name": "rotations",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "translations",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "normals",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

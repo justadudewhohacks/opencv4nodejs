@@ -1,0 +1,45 @@
+{
+  "cvModule": "dnn",
+  "owner": "cv",
+  "fnName": "blobFromImages",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "image",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "scaleFactor",
+          "defaultValue": "1.0"
+        },
+        {
+          "type": "Size",
+          "name": "size",
+          "defaultValue": "Size()"
+        },
+        {
+          "type": "Vec3",
+          "name": "mean",
+          "defaultValue": "Vec3()"
+        },
+        {
+          "type": "boolean",
+          "name": "swapRB",
+          "defaultValue": "true"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

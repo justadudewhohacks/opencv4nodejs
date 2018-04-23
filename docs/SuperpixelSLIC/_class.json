@@ -1,0 +1,61 @@
+{
+  "className": "SuperpixelSLIC",
+  "cvModule": "ximgproc",
+  "fields": [
+    {
+      "type": "Mat",
+      "name": "img"
+    },
+    {
+      "type": "Mat",
+      "name": "labels"
+    },
+    {
+      "type": "Mat",
+      "name": "labelContourMask"
+    },
+    {
+      "type": "int",
+      "name": "algorithm"
+    },
+    {
+      "type": "int",
+      "name": "regionSize"
+    },
+    {
+      "type": "number",
+      "name": "ruler"
+    },
+    {
+      "type": "int",
+      "name": "numCalculatedSuperpixels"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "algorithm",
+          "defaultValue": "cv.SLICO"
+        },
+        {
+          "type": "int",
+          "name": "regionSize",
+          "defaultValue": "10"
+        },
+        {
+          "type": "number",
+          "name": "ruler",
+          "defaultValue": "10"
+        }
+      ]
+    }
+  ]
+}

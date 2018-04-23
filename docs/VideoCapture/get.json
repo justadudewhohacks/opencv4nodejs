@@ -1,0 +1,18 @@
+{
+  "cvModule": "io",
+  "owner": "VideoCapture",
+  "fnName": "get",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "int",
+          "name": "property"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

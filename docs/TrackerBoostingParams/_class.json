@@ -1,0 +1,32 @@
+{
+  "className": "TrackerBoostingParams",
+  "cvModule": "tracking",
+  "fields": [
+    {
+      "type": "int",
+      "name": "numClassifiers"
+    },
+    {
+      "type": "number",
+      "name": "samplerOverlap"
+    },
+    {
+      "type": "number",
+      "name": "samplerSearchFactor"
+    },
+    {
+      "type": "int",
+      "name": "iterationInit"
+    },
+    {
+      "type": "int",
+      "name": "featureSetNumFeatures"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "buildPyramid",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "int",
+          "name": "maxLevel"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "borderType",
+          "defaultValue": "BORDER_DEFAULT"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

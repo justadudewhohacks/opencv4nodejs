@@ -1,0 +1,38 @@
+{
+  "cvModule": "core",
+  "owner": "cv",
+  "fnName": "cartToPolar",
+  "hasAsync": true,
+  "category": null,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "x"
+        },
+        {
+          "type": "Mat",
+          "name": "y"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "boolean",
+          "name": "angleInDegrees",
+          "defaultValue": "false"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "magnitude"
+        },
+        {
+          "type": "Mat",
+          "name": "angle"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "className": "TrackerTLD",
+  "cvModule": "tracking",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    }
+  ]
+}

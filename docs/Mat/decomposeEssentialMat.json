@@ -1,0 +1,27 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "decomposeEssentialMat",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "R1"
+        },
+        {
+          "type": "Mat",
+          "name": "R2"
+        },
+        {
+          "type": "Vec3",
+          "name": "T"
+        }
+      ]
+    }
+  ]
+}

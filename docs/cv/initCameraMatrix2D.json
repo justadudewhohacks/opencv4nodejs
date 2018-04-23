@@ -1,0 +1,39 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "initCameraMatrix2D",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point3",
+          "name": "objectPoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "imagePoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Size",
+          "name": "imageSize"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "aspectRatio",
+          "defaultValue": "1.0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

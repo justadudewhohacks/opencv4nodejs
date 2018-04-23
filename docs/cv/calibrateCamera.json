@@ -1,0 +1,63 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "calibrateCamera",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point3",
+          "name": "objectPoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "imagePoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Size",
+          "name": "imageSize"
+        },
+        {
+          "type": "Mat",
+          "name": "cameraMatrix"
+        },
+        {
+          "type": "number",
+          "name": "distCoeffs",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "flags",
+          "defaultValue": "0"
+        },
+        {
+          "type": "TermCriteria",
+          "name": "criteria",
+          "defaultValue": "new TermCriteria(cv.TermCriteria.COUNT + cv.TermCriteria.EPS, 30; DBL_EPSILON)"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        },
+        {
+          "type": "Vec3",
+          "name": "rvecs",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Vec3",
+          "name": "tvecs",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

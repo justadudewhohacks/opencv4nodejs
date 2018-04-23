@@ -1,0 +1,35 @@
+{
+  "cvModule": "objdetect",
+  "owner": "HOGDescriptor",
+  "fnName": "detectMultiScaleROI",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "hitThreshold",
+          "defaultValue": "0.0"
+        },
+        {
+          "type": "int",
+          "name": "groupThreshold",
+          "defaultValue": "0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Rect",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

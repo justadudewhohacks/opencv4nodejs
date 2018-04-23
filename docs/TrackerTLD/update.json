@@ -1,0 +1,23 @@
+{
+  "cvModule": "tracking",
+  "owner": "TrackerTLD",
+  "fnName": "update",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "frame"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Rect",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

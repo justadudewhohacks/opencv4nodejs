@@ -1,0 +1,64 @@
+{
+  "className": "TrackerKCFParams",
+  "cvModule": "tracking",
+  "fields": [
+    {
+      "type": "number",
+      "name": "sigma"
+    },
+    {
+      "type": "number",
+      "name": "lambda"
+    },
+    {
+      "type": "number",
+      "name": "interp_factor"
+    },
+    {
+      "type": "number",
+      "name": "output_sigma_factor"
+    },
+    {
+      "type": "number",
+      "name": "pca_learning_rate"
+    },
+    {
+      "type": "boolean",
+      "name": "resize"
+    },
+    {
+      "type": "boolean",
+      "name": "split_coeff"
+    },
+    {
+      "type": "boolean",
+      "name": "wrap_kernel"
+    },
+    {
+      "type": "boolean",
+      "name": "compress_feature"
+    },
+    {
+      "type": "int",
+      "name": "max_patch_size"
+    },
+    {
+      "type": "int",
+      "name": "compressed_size"
+    },
+    {
+      "type": "uint",
+      "name": "desc_pca"
+    },
+    {
+      "type": "uint",
+      "name": "desc_npca"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "cvModule": "core",
+  "owner": "Point",
+  "fnName": "sub",
+  "hasAsync": false,
+  "category": "operators",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point",
+          "name": "otherPoint"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Point",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

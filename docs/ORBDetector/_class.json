@@ -1,0 +1,94 @@
+{
+  "className": "ORBDetector",
+  "cvModule": "features2d",
+  "fields": [
+    {
+      "type": "int",
+      "name": "nfeatures"
+    },
+    {
+      "type": "int",
+      "name": "nlevels"
+    },
+    {
+      "type": "int",
+      "name": "edgeThreshold"
+    },
+    {
+      "type": "int",
+      "name": "firstLevel"
+    },
+    {
+      "type": "int",
+      "name": "WTA_K"
+    },
+    {
+      "type": "int",
+      "name": "scoreType"
+    },
+    {
+      "type": "int",
+      "name": "patchSize"
+    },
+    {
+      "type": "int",
+      "name": "fastThreshold"
+    },
+    {
+      "type": "number",
+      "name": "scaleFactor"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "nfeatures",
+          "defaultValue": "500"
+        },
+        {
+          "type": "number",
+          "name": "scaleFactor",
+          "defaultValue": "1.2"
+        },
+        {
+          "type": "int",
+          "name": "nlevels",
+          "defaultValue": "8"
+        },
+        {
+          "type": "int",
+          "name": "edgeThreshold",
+          "defaultValue": "31"
+        },
+        {
+          "type": "int",
+          "name": "firstLevel",
+          "defaultValue": "0"
+        },
+        {
+          "type": "int",
+          "name": "WTA_K",
+          "defaultValue": "2"
+        },
+        {
+          "type": "int",
+          "name": "scoreType",
+          "defaultValue": "ORB.HARRIS_SCORE"
+        },
+        {
+          "type": "int",
+          "name": "patchSize",
+          "defaultValue": "31"
+        },
+        {
+          "type": "int",
+          "name": "fastThreshold",
+          "defaultValue": "20"
+        }
+      ]
+    }
+  ]
+}

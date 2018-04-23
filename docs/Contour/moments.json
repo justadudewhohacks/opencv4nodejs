@@ -1,0 +1,18 @@
+{
+  "cvModule": "imgproc",
+  "owner": "Contour",
+  "fnName": "moments",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Moments",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

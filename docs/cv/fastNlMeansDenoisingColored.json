@@ -1,0 +1,44 @@
+{
+  "cvModule": "photo",
+  "owner": "cv",
+  "fnName": "fastNlMeansDenoisingColored",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "src"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "h",
+          "defaultValue": "3"
+        },
+        {
+          "type": "number",
+          "name": "hColor",
+          "defaultValue": "3"
+        },
+        {
+          "type": "uint",
+          "name": "templateWindowSize",
+          "defaultValue": "7"
+        },
+        {
+          "type": "uint",
+          "name": "searchWindowSize",
+          "defaultValue": "21"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

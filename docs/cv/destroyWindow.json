@@ -1,0 +1,24 @@
+{
+  "cvModule": "io",
+  "owner": "cv",
+  "fnName": "destroyWindow",
+  "hasAsync": false,
+  "category": null,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "winName"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "void",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "className": "HOGDescriptor",
+  "cvModule": "objdetect",
+  "fields": [
+    {
+      "type": "Size",
+      "name": "winSize"
+    },
+    {
+      "type": "Size",
+      "name": "blockSize"
+    },
+    {
+      "type": "Size",
+      "name": "blockStride"
+    },
+    {
+      "type": "Size",
+      "name": "cellSize"
+    },
+    {
+      "type": "uint",
+      "name": "nbins"
+    },
+    {
+      "type": "int",
+      "name": "derivAperture"
+    },
+    {
+      "type": "uint",
+      "name": "histogramNormType"
+    },
+    {
+      "type": "int",
+      "name": "nlevels"
+    },
+    {
+      "type": "number",
+      "name": "winSigma"
+    },
+    {
+      "type": "number",
+      "name": "L2HysThreshold"
+    },
+    {
+      "type": "boolean",
+      "name": "gammaCorrection"
+    },
+    {
+      "type": "boolean",
+      "name": "signedGradient"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "Size",
+          "name": "winSize",
+          "defaultValue": "Size(64, 128)"
+        },
+        {
+          "type": "Size",
+          "name": "blockSize",
+          "defaultValue": "Size(16, 16)"
+        },
+        {
+          "type": "Size",
+          "name": "blockStride",
+          "defaultValue": "Size(8, 8)"
+        },
+        {
+          "type": "Size",
+          "name": "cellSize",
+          "defaultValue": "Size(8, 8)"
+        },
+        {
+          "type": "uint",
+          "name": "nbins",
+          "defaultValue": "9"
+        },
+        {
+          "type": "int",
+          "name": "derivAperture",
+          "defaultValue": "1"
+        },
+        {
+          "type": "number",
+          "name": "winSigma",
+          "defaultValue": "-1"
+        },
+        {
+          "type": "uint",
+          "name": "histogramNormType",
+          "defaultValue": "L2Hys"
+        },
+        {
+          "type": "number",
+          "name": "L2HysThreshold",
+          "defaultValue": "0.2"
+        },
+        {
+          "type": "boolean",
+          "name": "gammaCorrection",
+          "defaultValue": "false"
+        },
+        {
+          "type": "int",
+          "name": "nlevels",
+          "defaultValue": "HOGDescriptor.DEFAULT_NLEVELS"
+        },
+        {
+          "type": "boolean",
+          "name": "signedGradient",
+          "defaultValue": "false"
+        }
+      ]
+    }
+  ]
+}

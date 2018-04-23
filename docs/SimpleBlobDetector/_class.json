@@ -1,0 +1,16 @@
+{
+  "className": "SimpleBlobDetector",
+  "cvModule": "features2d",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [
+        {
+          "type": "SimpleBlobDetectorParams",
+          "name": "params"
+        }
+      ],
+      "optionalArgs": []
+    }
+  ]
+}

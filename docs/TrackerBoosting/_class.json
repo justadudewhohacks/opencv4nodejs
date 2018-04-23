@@ -1,0 +1,20 @@
+{
+  "className": "TrackerBoosting",
+  "cvModule": "tracking",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "TrackerBoostingParams",
+          "name": "params"
+        }
+      ],
+      "optionalArgs": []
+    }
+  ]
+}

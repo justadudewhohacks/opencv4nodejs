@@ -1,0 +1,30 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "connectedComponents",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "uint",
+          "name": "connectivity",
+          "defaultValue": "8"
+        },
+        {
+          "type": "uint",
+          "name": "ltype",
+          "defaultValue": "CV_32S"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

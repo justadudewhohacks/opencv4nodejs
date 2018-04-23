@@ -1,0 +1,24 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "resizeToMax",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "maxRowsOrCols"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

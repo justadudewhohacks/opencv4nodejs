@@ -1,0 +1,41 @@
+{
+  "cvModule": "objdetect",
+  "owner": "HOGDescriptor",
+  "fnName": "compute",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Size",
+          "name": "winStride",
+          "defaultValue": "Size()"
+        },
+        {
+          "type": "Size",
+          "name": "padding",
+          "defaultValue": "Size()"
+        },
+        {
+          "type": "Point2",
+          "name": "locations",
+          "arrayDepth": 1,
+          "defaultValue": "[]"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

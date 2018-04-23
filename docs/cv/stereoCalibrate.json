@@ -1,0 +1,84 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "stereoCalibrate",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point3",
+          "name": "objectPoints",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "imagePoints1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "imagePoints2",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "cameraMatrix1"
+        },
+        {
+          "type": "number",
+          "name": "distCoeffs1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "cameraMatrix2"
+        },
+        {
+          "type": "number",
+          "name": "distCoeffs2",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Size",
+          "name": "imageSize"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "flags",
+          "defaultValue": "cv.CALIB_FIX_INTRINSIC"
+        },
+        {
+          "type": "TermCriteria",
+          "name": "criteria",
+          "defaultValue": "new TermCriteria(cv.TermCriteria.COUNT + cv.TermCriteria.EPS, 30; 1e-6)"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        },
+        {
+          "type": "Mat",
+          "name": "R"
+        },
+        {
+          "type": "Vec3",
+          "name": "T",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Mat",
+          "name": "E"
+        },
+        {
+          "type": "Mat",
+          "name": "F"
+        }
+      ]
+    }
+  ]
+}

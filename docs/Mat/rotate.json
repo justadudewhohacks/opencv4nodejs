@@ -1,0 +1,23 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "rotate",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "int",
+          "name": "rotateCode"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

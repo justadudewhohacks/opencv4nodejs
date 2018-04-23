@@ -1,0 +1,35 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "cornerMinEigenVal",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "int",
+          "name": "blockSize"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "ksize",
+          "defaultValue": "3"
+        },
+        {
+          "type": "int",
+          "name": "borderType",
+          "defaultValue": "BORDER_DEFAULT"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

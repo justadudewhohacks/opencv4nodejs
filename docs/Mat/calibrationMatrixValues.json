@@ -1,0 +1,48 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "calibrationMatrixValues",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Size",
+          "name": "imageSize"
+        },
+        {
+          "type": "number",
+          "name": "apertureWidth"
+        },
+        {
+          "type": "number",
+          "name": "apertureHeight"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "fovx"
+        },
+        {
+          "type": "number",
+          "name": "fovy"
+        },
+        {
+          "type": "number",
+          "name": "focalLength"
+        },
+        {
+          "type": "Point2",
+          "name": "principalPoint"
+        },
+        {
+          "type": "number",
+          "name": "aspectRatio"
+        }
+      ]
+    }
+  ]
+}

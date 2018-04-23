@@ -1,0 +1,41 @@
+{
+  "className": "TermCriteria",
+  "cvModule": "core",
+  "fields": [
+    {
+      "type": "int",
+      "name": "type"
+    },
+    {
+      "type": "int",
+      "name": "maxCount"
+    },
+    {
+      "type": "number",
+      "name": "epsilon"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "int",
+          "name": "type"
+        },
+        {
+          "type": "int",
+          "name": "maxCount"
+        },
+        {
+          "type": "number",
+          "name": "epsilon"
+        }
+      ],
+      "optionalArgs": []
+    }
+  ]
+}

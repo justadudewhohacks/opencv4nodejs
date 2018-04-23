@@ -1,0 +1,49 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "sum",
+  "hasAsync": true,
+  "category": null,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "returnValue"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Vec2",
+          "name": "returnValue"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Vec3",
+          "name": "returnValue"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Vec4",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

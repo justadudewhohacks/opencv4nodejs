@@ -1,0 +1,40 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "erode",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "kernel"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Point2",
+          "name": "anchor",
+          "defaultValue": "new Point2(-1, -1)"
+        },
+        {
+          "type": "uint",
+          "name": "iterations",
+          "defaultValue": "1"
+        },
+        {
+          "type": "uint",
+          "name": "borderType",
+          "defaultValue": "BORDER_CONSTANT"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

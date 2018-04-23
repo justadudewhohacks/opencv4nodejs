@@ -1,0 +1,29 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "find4QuadCornerSubpix",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "corners",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Size",
+          "name": "regionSize"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "boolean",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

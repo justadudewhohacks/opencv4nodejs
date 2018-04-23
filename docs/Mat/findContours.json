@@ -1,0 +1,35 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "findContours",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "mode"
+        },
+        {
+          "type": "uint",
+          "name": "method"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Point2",
+          "name": "offset",
+          "defaultValue": "new Point2(0, 0)"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Contour",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

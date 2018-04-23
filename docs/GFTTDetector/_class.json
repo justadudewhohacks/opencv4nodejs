@@ -1,0 +1,67 @@
+{
+  "className": "GFTTDetector",
+  "cvModule": "features2d",
+  "fields": [
+    {
+      "type": "int",
+      "name": "maxCorners"
+    },
+    {
+      "type": "int",
+      "name": "blockSize"
+    },
+    {
+      "type": "number",
+      "name": "qualityLevel"
+    },
+    {
+      "type": "number",
+      "name": "minDistance"
+    },
+    {
+      "type": "number",
+      "name": "k"
+    },
+    {
+      "type": "boolean",
+      "name": "useHarrisDetector"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "maxCorners",
+          "defaultValue": "1000"
+        },
+        {
+          "type": "number",
+          "name": "qualityLevel",
+          "defaultValue": "0.01"
+        },
+        {
+          "type": "number",
+          "name": "minDistance",
+          "defaultValue": "1.0"
+        },
+        {
+          "type": "int",
+          "name": "blockSize",
+          "defaultValue": "3"
+        },
+        {
+          "type": "boolean",
+          "name": "useHarrisDetector",
+          "defaultValue": "false"
+        },
+        {
+          "type": "number",
+          "name": "k",
+          "defaultValue": "0.04"
+        }
+      ]
+    }
+  ]
+}

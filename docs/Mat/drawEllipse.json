@@ -1,0 +1,82 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "drawEllipse",
+  "hasAsync": false,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "RotatedRect",
+          "name": "box"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Vec3",
+          "name": "color",
+          "defaultValue": "new Vec(0, 0; 0)"
+        },
+        {
+          "type": "int",
+          "name": "thickness",
+          "defaultValue": "1"
+        },
+        {
+          "type": "int",
+          "name": "lineType",
+          "defaultValue": "LINE_8"
+        }
+      ],
+      "returnValues": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "center"
+        },
+        {
+          "type": "Size",
+          "name": "axes"
+        },
+        {
+          "type": "number",
+          "name": "angle"
+        },
+        {
+          "type": "number",
+          "name": "startAngle"
+        },
+        {
+          "type": "number",
+          "name": "endAngle"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Vec3",
+          "name": "color",
+          "defaultValue": "new Vec(0, 0; 0)"
+        },
+        {
+          "type": "int",
+          "name": "thickness",
+          "defaultValue": "1"
+        },
+        {
+          "type": "int",
+          "name": "lineType",
+          "defaultValue": "LINE_8"
+        },
+        {
+          "type": "int",
+          "name": "shift",
+          "defaultValue": "0"
+        }
+      ],
+      "returnValues": []
+    }
+  ]
+}

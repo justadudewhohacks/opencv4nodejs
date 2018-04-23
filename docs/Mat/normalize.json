@@ -1,0 +1,44 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "normalize",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "alpha",
+          "defaultValue": "1.0"
+        },
+        {
+          "type": "number",
+          "name": "beta",
+          "defaultValue": "0.0"
+        },
+        {
+          "type": "uint",
+          "name": "normType",
+          "defaultValue": "NORM_L2"
+        },
+        {
+          "type": "int",
+          "name": "dtype",
+          "defaultValue": "-1"
+        },
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

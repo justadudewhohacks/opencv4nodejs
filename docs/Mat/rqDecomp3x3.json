@@ -1,0 +1,39 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "rqDecomp3x3",
+  "hasAsync": true,
+  "category": "calib3d functions",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Vec3",
+          "name": "returnValue"
+        },
+        {
+          "type": "Mat",
+          "name": "mtxR"
+        },
+        {
+          "type": "Mat",
+          "name": "mtxQ"
+        },
+        {
+          "type": "Mat",
+          "name": "Qx"
+        },
+        {
+          "type": "Mat",
+          "name": "Qy"
+        },
+        {
+          "type": "Mat",
+          "name": "Qz"
+        }
+      ]
+    }
+  ]
+}

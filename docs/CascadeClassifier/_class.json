@@ -1,0 +1,16 @@
+{
+  "className": "CascadeClassifier",
+  "cvModule": "objdetect",
+  "fields": [],
+  "constructors": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "xmlFilePath"
+        }
+      ],
+      "optionalArgs": []
+    }
+  ]
+}

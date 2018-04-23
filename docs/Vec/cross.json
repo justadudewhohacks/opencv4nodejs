@@ -1,0 +1,19 @@
+{
+  "cvModule": "core",
+  "owner": "Vec",
+  "fnName": "cross",
+  "hasAsync": false,
+  "category": "operators",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Vec3",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

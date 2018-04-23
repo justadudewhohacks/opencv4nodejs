@@ -1,0 +1,26 @@
+{
+  "className": "DetectionROI",
+  "cvModule": "objdetect",
+  "fields": [
+    {
+      "type": "number",
+      "name": "scale"
+    },
+    {
+      "type": "Point2",
+      "name": "locations",
+      "arrayDepth": 1
+    },
+    {
+      "type": "number",
+      "name": "confidences",
+      "arrayDepth": 1
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": []
+    }
+  ]
+}

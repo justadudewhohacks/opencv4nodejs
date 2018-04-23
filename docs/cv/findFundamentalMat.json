@@ -1,0 +1,49 @@
+{
+  "cvModule": "calib3d",
+  "owner": "cv",
+  "fnName": "findFundamentalMat",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Point2",
+          "name": "points1",
+          "arrayDepth": 1
+        },
+        {
+          "type": "Point2",
+          "name": "points2",
+          "arrayDepth": 1
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "method",
+          "defaultValue": "cv.FM_RANSAC"
+        },
+        {
+          "type": "number",
+          "name": "param1",
+          "defaultValue": "3.0"
+        },
+        {
+          "type": "number",
+          "name": "param2",
+          "defaultValue": "0.99"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "F"
+        },
+        {
+          "type": "Mat",
+          "name": "mask"
+        }
+      ]
+    }
+  ]
+}

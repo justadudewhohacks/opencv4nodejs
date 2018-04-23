@@ -1,0 +1,38 @@
+{
+  "cvModule": "objdetect",
+  "owner": "HOGDescriptor",
+  "fnName": "computeGradient",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Size",
+          "name": "paddingTL",
+          "defaultValue": "Size()"
+        },
+        {
+          "type": "Size",
+          "name": "paddingBR",
+          "defaultValue": "Size()"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "grad"
+        },
+        {
+          "type": "Mat",
+          "name": "angleOfs"
+        }
+      ]
+    }
+  ]
+}

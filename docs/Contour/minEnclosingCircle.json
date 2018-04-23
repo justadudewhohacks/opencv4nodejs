@@ -1,0 +1,22 @@
+{
+  "cvModule": "imgproc",
+  "owner": "Contour",
+  "fnName": "minEnclosingCircle",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Point2",
+          "name": "center"
+        },
+        {
+          "type": "number",
+          "name": "radius"
+        }
+      ]
+    }
+  ]
+}

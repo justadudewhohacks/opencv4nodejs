@@ -1,0 +1,24 @@
+{
+  "cvModule": "features2d",
+  "owner": "GFTTDetector",
+  "fnName": "detect",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "image"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "KeyPoint",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

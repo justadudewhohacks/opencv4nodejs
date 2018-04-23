@@ -1,0 +1,46 @@
+{
+  "className": "ParamGrid",
+  "cvModule": "machinelearning",
+  "fields": [
+    {
+      "type": "number",
+      "name": "minVal"
+    },
+    {
+      "type": "number",
+      "name": "maxVal"
+    },
+    {
+      "type": "number",
+      "name": "logStep"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [
+        {
+          "type": "uint",
+          "name": "paramId"
+        }
+      ],
+      "optionalArgs": []
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "minVal"
+        },
+        {
+          "type": "number",
+          "name": "maxVal"
+        },
+        {
+          "type": "number",
+          "name": "logStep"
+        }
+      ],
+      "optionalArgs": []
+    }
+  ]
+}

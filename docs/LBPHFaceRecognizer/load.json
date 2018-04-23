@@ -1,0 +1,18 @@
+{
+  "cvModule": "face",
+  "owner": "LBPHFaceRecognizer",
+  "fnName": "load",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "string",
+          "name": "file"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": []
+    }
+  ]
+}

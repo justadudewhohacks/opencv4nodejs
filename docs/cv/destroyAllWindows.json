@@ -1,0 +1,19 @@
+{
+  "cvModule": "io",
+  "owner": "cv",
+  "fnName": "destroyAllWindows",
+  "hasAsync": false,
+  "category": null,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "void",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

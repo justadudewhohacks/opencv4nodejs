@@ -1,0 +1,19 @@
+{
+  "className": "DescriptorMatch",
+  "cvModule": "features2d",
+  "fields": [
+    {
+      "type": "int",
+      "name": "queryIdx"
+    },
+    {
+      "type": "int",
+      "name": "trainIdx"
+    },
+    {
+      "type": "number",
+      "name": "distance"
+    }
+  ],
+  "constructors": []
+}

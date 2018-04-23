@@ -1,0 +1,40 @@
+{
+  "className": "BackgroundSubtractorKNN",
+  "cvModule": "video",
+  "fields": [
+    {
+      "type": "uint",
+      "name": "history"
+    },
+    {
+      "type": "number",
+      "name": "dist2Threshold"
+    },
+    {
+      "type": "boolean",
+      "name": "detectShadows"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "uint",
+          "name": "history",
+          "defaultValue": "500"
+        },
+        {
+          "type": "number",
+          "name": "varThreshold",
+          "defaultValue": "400"
+        },
+        {
+          "type": "boolean",
+          "name": "detectShadows",
+          "defaultValue": "true"
+        }
+      ]
+    }
+  ]
+}

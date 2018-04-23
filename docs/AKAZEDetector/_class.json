@@ -1,0 +1,76 @@
+{
+  "className": "AKAZEDetector",
+  "cvModule": "features2d",
+  "fields": [
+    {
+      "type": "int",
+      "name": "descriptorType"
+    },
+    {
+      "type": "int",
+      "name": "descriptorSize"
+    },
+    {
+      "type": "int",
+      "name": "descriptorChannels"
+    },
+    {
+      "type": "int",
+      "name": "nOctaves"
+    },
+    {
+      "type": "int",
+      "name": "nOctaveLayers"
+    },
+    {
+      "type": "int",
+      "name": "diffusivity"
+    },
+    {
+      "type": "number",
+      "name": "threshold"
+    }
+  ],
+  "constructors": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "int",
+          "name": "descriptorType",
+          "defaultValue": "AKAZE.DESCRIPTOR_MLDB"
+        },
+        {
+          "type": "int",
+          "name": "descriptorSize",
+          "defaultValue": "0"
+        },
+        {
+          "type": "int",
+          "name": "descriptorChannels",
+          "defaultValue": "3"
+        },
+        {
+          "type": "number",
+          "name": "threshold",
+          "defaultValue": "0.01"
+        },
+        {
+          "type": "int",
+          "name": "nOctaves",
+          "defaultValue": "4"
+        },
+        {
+          "type": "int",
+          "name": "nOctaveLayers",
+          "defaultValue": "4"
+        },
+        {
+          "type": "int",
+          "name": "diffusivity",
+          "defaultValue": "KAZE.DIFF_PM_G2"
+        }
+      ]
+    }
+  ]
+}

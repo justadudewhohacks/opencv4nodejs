@@ -1,0 +1,44 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "boxFilter",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "int",
+          "name": "ddepth"
+        },
+        {
+          "type": "Size",
+          "name": "ksize"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Point2",
+          "name": "anchor",
+          "defaultValue": "new Point(-1, -1)"
+        },
+        {
+          "type": "boolean",
+          "name": "normalize",
+          "defaultValue": "true"
+        },
+        {
+          "type": "int",
+          "name": "borderType",
+          "defaultValue": "BORDER_DEFAULT"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}
