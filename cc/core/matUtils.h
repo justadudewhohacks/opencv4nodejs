@@ -4,11 +4,17 @@
 #ifndef __FF_MATUTILS_H__
 #define __FF_MATUTILS_H__
 
-#define FF_MAT_AT(mat, val, get)	\
-	val = get(mat, info[0]->Int32Value(), info[1]->Int32Value());
+#define FF_MAT_AT(mat, val, get)                                                         \
+  if (mat.dims > 2)                                                                      \
+    val = get(mat, info[0]->Int32Value(), info[1]->Int32Value(), info[2]->Int32Value()); \
+  else                                                                                   \
+    val = get(mat, info[0]->Int32Value(), info[1]->Int32Value());
 
-#define FF_MAT_SET(mat, val, put)	\
-	put(mat, val, info[0]->Int32Value(), info[1]->Int32Value());
+#define FF_MAT_SET(mat, val, put)                                                        \
+  if (mat.dims > 2)                                                                      \
+    put(mat, val, info[0]->Int32Value(), info[1]->Int32Value(), info[2]->Int32Value());  \
+  else                                                                                   \
+    put(mat, val, info[0]->Int32Value(), info[1]->Int32Value());
 
 #define FF_MAT_FILL(mat, vec, put)				\
 	for (int r = 0; r < mat.rows; r++) {		\
@@ -33,6 +39,19 @@
 		}																																\
 		rowArray->Set(r, colArray);																			\
 	}
+
+#define FF_JS_ARRAY_FROM_MAT_3D(mat, rowArray, get)                       \
+  for (int r = 0; r < mat.size[0]; r++) {                                 \
+    v8::Local<v8::Array> colArray = Nan::New<v8::Array>(mat.size[1]);     \
+    for (int c = 0; c < mat.size[1]; c++) {                               \
+      v8::Local<v8::Array> depthArray = Nan::New<v8::Array>(mat.size[2]); \
+      for (int z = 0; z < mat.size[2]; z++) {                             \
+        depthArray->Set(z, get(mat, r, c, z));                            \
+      }                                                                   \
+      colArray->Set(c, depthArray);                                       \
+    }                                                                     \
+    rowArray->Set(r, colArray);                                           \
+  }
 
 #define FF_MAT_APPLY_TYPED_OPERATOR(mat, arg, type, ITERATOR, OPERATOR) {	\
 	switch (type) {																													\
@@ -139,6 +158,11 @@ namespace FF {
 	}
 
 	template<typename type>
+	static inline void matPutVal(cv::Mat mat, v8::Local<v8::Value> value, int r, int c, int z) {
+		mat.at<type>(r, c, z) = (type)value->NumberValue();
+	}
+
+	template<typename type>
 	static inline void matPutVec2(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 2> >(r, c) = cv::Vec<type, 2>(
@@ -148,9 +172,28 @@ namespace FF {
 	}
 
 	template<typename type>
+	static inline void matPutVec2(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c, int z) {
+		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
+		mat.at< cv::Vec<type, 2> >(r, c, z) = cv::Vec<type, 2>(
+			(type)vec->Get(0)->NumberValue(),
+			(type)vec->Get(1)->NumberValue()
+		);
+	}
+
+	template<typename type>
 	static inline void matPutVec3(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 3> >(r, c) = cv::Vec<type, 3>(
+			(type)vec->Get(0)->NumberValue(),
+			(type)vec->Get(1)->NumberValue(),
+			(type)vec->Get(2)->NumberValue()
+		);
+	}
+
+	template<typename type>
+	static inline void matPutVec3(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c, int z) {
+		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
+		mat.at< cv::Vec<type, 3> >(r, c, z) = cv::Vec<type, 3>(
 			(type)vec->Get(0)->NumberValue(),
 			(type)vec->Get(1)->NumberValue(),
 			(type)vec->Get(2)->NumberValue()
@@ -169,8 +212,24 @@ namespace FF {
 	}
 
 	template<typename type>
+	static inline void matPutVec4(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c, int z) {
+		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
+		mat.at< cv::Vec<type, 4> >(r, c, z) = cv::Vec<type, 4>(
+			(type)vec->Get(0)->NumberValue(),
+			(type)vec->Get(1)->NumberValue(),
+			(type)vec->Get(2)->NumberValue(),
+			(type)vec->Get(3)->NumberValue()
+		);
+	}
+
+	template<typename type>
 	static inline v8::Local<v8::Value> matGetVal(cv::Mat mat, int r, int c) {
 		return Nan::New(mat.at<type>(r, c));
+	}
+
+	template<typename type>
+	static inline v8::Local<v8::Value> matGetVal(cv::Mat mat, int r, int c, int z) {
+		return Nan::New(mat.at<type>(r, c, z));
 	}
 
 	template<typename type>
@@ -178,6 +237,14 @@ namespace FF {
 		v8::Local<v8::Array> vec = Nan::New<v8::Array>(2);
 		vec->Set(0, Nan::New(mat.at< cv::Vec<type, 2> >(r, c)[0]));
 		vec->Set(1, Nan::New(mat.at< cv::Vec<type, 2> >(r, c)[1]));
+		return vec;
+	}
+
+	template<typename type>
+	static inline v8::Local<v8::Value> matGetVec2(cv::Mat mat, int r, int c, int z) {
+		v8::Local<v8::Array> vec = Nan::New<v8::Array>(2);
+		vec->Set(0, Nan::New(mat.at< cv::Vec<type, 2> >(r, c, z)[0]));
+		vec->Set(1, Nan::New(mat.at< cv::Vec<type, 2> >(r, c, z)[1]));
 		return vec;
 	}
 
@@ -191,12 +258,31 @@ namespace FF {
 	}
 
 	template<typename type>
+	static inline v8::Local<v8::Value> matGetVec3(cv::Mat mat, int r, int c, int z) {
+		v8::Local<v8::Array> vec = Nan::New<v8::Array>(3);
+		vec->Set(0, Nan::New(mat.at< cv::Vec<type, 3> >(r, c, z)[0]));
+		vec->Set(1, Nan::New(mat.at< cv::Vec<type, 3> >(r, c, z)[1]));
+		vec->Set(2, Nan::New(mat.at< cv::Vec<type, 3> >(r, c, z)[2]));
+		return vec;
+	}
+
+	template<typename type>
 	static inline v8::Local<v8::Value> matGetVec4(cv::Mat mat, int r, int c) {
 		v8::Local<v8::Array> vec = Nan::New<v8::Array>(4);
 		vec->Set(0, Nan::New(mat.at< cv::Vec<type, 4> >(r, c)[0]));
 		vec->Set(1, Nan::New(mat.at< cv::Vec<type, 4> >(r, c)[1]));
 		vec->Set(2, Nan::New(mat.at< cv::Vec<type, 4> >(r, c)[2]));
 		vec->Set(3, Nan::New(mat.at< cv::Vec<type, 4> >(r, c)[3]));
+		return vec;
+	}
+
+	template<typename type>
+	static inline v8::Local<v8::Value> matGetVec4(cv::Mat mat, int r, int c, int z) {
+		v8::Local<v8::Array> vec = Nan::New<v8::Array>(4);
+		vec->Set(0, Nan::New(mat.at< cv::Vec<type, 4> >(r, c, z)[0]));
+		vec->Set(1, Nan::New(mat.at< cv::Vec<type, 4> >(r, c, z)[1]));
+		vec->Set(2, Nan::New(mat.at< cv::Vec<type, 4> >(r, c, z)[2]));
+		vec->Set(3, Nan::New(mat.at< cv::Vec<type, 4> >(r, c, z)[3]));
 		return vec;
 	}
 }
