@@ -6,7 +6,7 @@ const {
   clearTmpData,
   getTmpDataFilePath
 } = global.utils;
-const { expect } = require('chai');
+const { assert, expect } = require('chai');
 
 module.exports = () => {
   let testImg;
@@ -212,27 +212,37 @@ module.exports = () => {
           );
         });
 
-        it('should throw if locations invalid', () => {
-          assertError(
-            () => hog.computeAsync(
-              getTestImg(),
-              winStride,
-              padding,
-              invalidLocations,
-              () => {}
-            ),
-            'expected array element at index 1 to be of type Point2'
+        it('should throw if locations invalid', (done) => {
+          hog.computeAsync(
+            getTestImg(),
+            winStride,
+            padding,
+            invalidLocations,
+            (err) => {
+              try {
+                expect(err).to.be.an('error');
+                assert.include(err.toString(), 'expected array element at index 1 to be of type Point2');
+                done();
+              } catch (e) {
+                done(e);
+              }
+            }
           );
         });
 
-        it('should throw if locations invalid for opt arg object', () => {
-          assertError(
-            () => hog.computeAsync(
-              getTestImg(),
-              { locations: invalidLocations },
-              () => {}
-            ),
-            'expected array element at index 1 to be of type Point2'
+        it('should throw if locations invalid for opt arg object', (done) => {
+          hog.computeAsync(
+            getTestImg(),
+            { locations: invalidLocations },
+            (err) => {
+              try {
+                expect(err).to.be.an('error');
+                assert.include(err.toString(), 'expected array element at index 1 to be of type Point2');
+                done();
+              } catch (e) {
+                done(e);
+              }
+            }
           );
         });
       };

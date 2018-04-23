@@ -1,6 +1,7 @@
 #ifdef HAVE_FACE
 
 #include "FisherFaceRecognizer.h"
+#include "FaceRecognizerBindings.h"
 
 Nan::Persistent<v8::FunctionTemplate> FisherFaceRecognizer::constructor;
 
@@ -17,8 +18,14 @@ NAN_MODULE_INIT(FisherFaceRecognizer::Init) {
 };
 
 NAN_METHOD(FisherFaceRecognizer::New) {
-	FaceRecognizer::NewWorker worker;
-	FF_WORKER_TRY_UNWRAP_ARGS("FisherFaceRecognizer::New", worker);
+	FF::TryCatch tryCatch;
+	FaceRecognizerBindings::NewWorker worker;
+
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("FisherFaceRecognizer::New");
+		tryCatch.throwNew(err);
+		return;
+	}
 
 	FisherFaceRecognizer* self = new FisherFaceRecognizer();
 	self->Wrap(info.Holder());

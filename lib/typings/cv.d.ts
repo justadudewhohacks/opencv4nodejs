@@ -49,6 +49,8 @@ export function estimateAffine3DAsync(from: Point2[], to: Point2[], method?: num
 export function estimateAffinePartial2D(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): { out: Mat, inliers: Mat };
 export function estimateAffinePartial2DAsync(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): Promise<{ out: Mat, inliers: Mat }>;
 export function fastNlMeansDenoisingColored(src: Mat, h?: number, hColor?: number, templateWindowSize?: number, searchWindowSize?: number): Mat;
+export function inpaint(src: Mat, mask: Mat, inpaintRadius: number, flags: number): Mat;
+export function inpaintAsync(src: Mat, mask: Mat, inpaintRadius: number, flags: number): Promise<Mat>;
 export function findEssentialMat(points1: Point2[], points2: Point2[], focal?: number, pp?: Point2, method?: number, prob?: number, threshold?: number): { E: Mat, mask: Mat };
 export function findEssentialMatAsync(points1: Point2[], points2: Point2[], focal?: number, pp?: Point2, method?: number, prob?: number, threshold?: number): Promise<{ E: Mat, mask: Mat }>;
 export function findFundamentalMat(points1: Point2[], points2: Point2[], method?: number, param1?: number, param2?: number): { F: Mat, mask: Mat };
@@ -62,10 +64,10 @@ export function getRotationMatrix2D(center: Point2, angle: number, scale?: numbe
 export function getStructuringElement(shape: number, kernelSize: Size, anchor?: Point2): Mat;
 export function getValidDisparityROI(roi1: Rect[], roi2: Rect[], minDisparity: number, numberOfDisparities: number, SADWindowSize: number): Rect;
 export function getValidDisparityROIAsync(roi1: Rect[], roi2: Rect[], minDisparity: number, numberOfDisparities: number, SADWindowSize: number): Promise<Rect>;
-export function imdecode(buffer: number[], flags?: number): Mat;
-export function imdecodeAsync(buffer: number[], flags?: number): Promise<Mat>;
-export function imencode(fileExt: string, img: Mat, flags?: number[]): number[];
-export function imencodeAsync(fileExt: string, img: Mat, flags?: number[]): Promise<number[]>;
+export function imdecode(buffer: Buffer, flags?: number): Mat;
+export function imdecodeAsync(buffer: Buffer, flags?: number): Promise<Mat>;
+export function imencode(fileExt: string, img: Mat, flags?: number[]): Buffer;
+export function imencodeAsync(fileExt: string, img: Mat, flags?: number[]): Promise<Buffer>;
 export function imread(filePath: string, flags?: number): Mat;
 export function imreadAsync(filePath: string, flags?: number): Promise<Mat>;
 export function imshow(winName: string, img: Mat): void;

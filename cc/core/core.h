@@ -1,3 +1,10 @@
+#include "Mat.h"
+#include "Point.h"
+#include "Vec.h"
+#include "Size.h"
+#include "Rect.h"
+#include "RotatedRect.h"
+#include "TermCriteria.h"
 #include "macros.h"
 #include <opencv2/core.hpp>
 
@@ -10,15 +17,10 @@ public:
 
 	static NAN_METHOD(Partition);
 	static NAN_METHOD(Kmeans);
-
-	struct CartToPolarWorker;
 	static NAN_METHOD(CartToPolar);
 	static NAN_METHOD(CartToPolarAsync);
-
-	struct PolarToCartWorker;
 	static NAN_METHOD(PolarToCart);
 	static NAN_METHOD(PolarToCartAsync);
-
 };
 
 #endif

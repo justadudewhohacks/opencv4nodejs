@@ -22,6 +22,7 @@
 			"cc/ExternalMemTracking.cc",
 			"cc/cvTypes/cvTypes.cc",
 			"cc/cvTypes/imgprocConstants.cc",
+			"cc/cvTypes/photoConstants.cc",
 			"cc/cvTypes/videoCaptureProps.cc",
 			"cc/core/core.cc",
 			"cc/core/Mat.cc",
@@ -36,7 +37,7 @@
 			"cc/modules/io/io.cc",
 			"cc/modules/io/VideoCapture.cc",
 			"cc/modules/io/VideoWriter.cc",
-			"cc/modules/photo.cc",
+			"cc/modules/photo/photo.cc",
 			"cc/modules/video/video.cc",
 			"cc/modules/video/BackgroundSubtractor.cc",
 			"cc/modules/video/BackgroundSubtractorMOG2.cc",
@@ -143,7 +144,16 @@
 						"RuntimeLibrary": "2"
 					},
 				}
-			}]
+			}],
+	        ["OS==\"mac\"",
+	          {
+	            "link_settings": {
+	              "libraries": [
+					"-Wl,-rpath,@loader_path/../../../opencv-build/opencv/build/lib"
+	              ],
+	            }
+	          }
+	        ]
 		],
 
 		"configurations": {

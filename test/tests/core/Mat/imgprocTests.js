@@ -114,7 +114,7 @@ module.exports = (getTestImg) => {
     };
 
     generateAPITests({
-      getDut: () => rgbMat,
+      getDut: () => rgbMat.copy(),
       methodName: 'bgrToGray',
       methodNameSpace: 'Mat',
       expectOutput
@@ -128,7 +128,7 @@ module.exports = (getTestImg) => {
     };
 
     generateAPITests({
-      getDut: () => rgbMat,
+      getDut: () => rgbMat.copy(),
       methodName: 'cvtColor',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
@@ -576,7 +576,7 @@ module.exports = (getTestImg) => {
       const kSize = new cv.Size(3, 3);
 
       generateAPITests({
-        getDut: () => rgbMat,
+        getDut: () => rgbMat.copy(),
         methodName: 'blur',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
@@ -595,7 +595,7 @@ module.exports = (getTestImg) => {
       const sigmaX = 1.2;
 
       generateAPITests({
-        getDut: () => rgbMat,
+        getDut: () => rgbMat.copy(),
         methodName: 'gaussianBlur',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
@@ -614,7 +614,7 @@ module.exports = (getTestImg) => {
       const kSize = 3;
 
       generateAPITests({
-        getDut: () => rgbMat,
+        getDut: () => rgbMat.copy(),
         methodName: 'medianBlur',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
@@ -829,7 +829,7 @@ module.exports = (getTestImg) => {
     ], cv.CV_32S);
 
     generateAPITests({
-      getDut: () => rgbMat,
+      getDut: () => rgbMat.copy(),
       methodName: 'watershed',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
@@ -1198,91 +1198,97 @@ module.exports = (getTestImg) => {
         expectOutput
       });
     });
+  });
 
-    describe('equalizeHist', () => {
-      const expectOutput = (out) => {
-        expect(out).to.be.instanceOf(cv.Mat);
-        assertMetaData(img)(out);
-      };
-
-
-      generateAPITests({
-        getDut: () => img,
-        methodName: 'equalizeHist',
-        methodNameSpace: 'Mat',
-        expectOutput
-      });
+  describe('equalizeHist', () => {
+    let img;
+    before(() => {
+      img = getTestImg().rescale(0.25).bgrToGray();
     });
 
-    describe('compareHist', () => {
-      const expectOutput = (out) => {
-        expect(out).to.be.a('number').above(0);
-      };
+    const expectOutput = (out) => {
+      expect(out).to.be.instanceOf(cv.Mat);
+      assertMetaData(img)(out);
+    };
 
-      const method = cv.HISTCMP_CHISQR_ALT;
 
-      const H1 = new cv.Mat(1, 8, cv.CV_32FC3, [0.5, 0.5, 0.5]);
-      const H2 = new cv.Mat(1, 8, cv.CV_32FC3, [0.75, 0.75, 0.75]);
+    generateAPITests({
+      getDut: () => img,
+      methodName: 'equalizeHist',
+      methodNameSpace: 'Mat',
+      expectOutput
+    });
+  });
+
+  describe('compareHist', () => {
+    const expectOutput = (out) => {
+      expect(out).to.be.a('number').above(0);
+    };
+
+    const method = cv.HISTCMP_CHISQR_ALT;
+
+    const H1 = new cv.Mat(1, 8, cv.CV_32FC3, [0.5, 0.5, 0.5]);
+    const H2 = new cv.Mat(1, 8, cv.CV_32FC3, [0.75, 0.75, 0.75]);
+    generateAPITests({
+      getDut: () => H1,
+      methodName: 'compareHist',
+      methodNameSpace: 'Mat',
+      getRequiredArgs: () => ([
+        H2,
+        method
+      ]),
+      expectOutput
+    });
+  });
+
+  describe('floodFill', () => {
+    const expectOutput = (out) => {
+      expect(!!out).to.be.true;
+      expect(out).to.have.property('returnValue').to.be.a('number');
+      expect(out).to.have.property('rect').to.be.instanceOf(cv.Rect);
+    };
+
+    const seedPoint = new cv.Point(50, 50);
+    const mask = new cv.Mat(102, 102, cv.CV_8U, 255);
+    const flags = 4;
+
+    describe('C1', () => {
+      const newVal = 155;
       generateAPITests({
-        getDut: () => H1,
-        methodName: 'compareHist',
+        getDut: () => new cv.Mat(100, 100, cv.CV_8UC1),
+        methodName: 'floodFill',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
-          H2,
-          method
+          seedPoint,
+          newVal
+        ]),
+        getOptionalArgsMap: () => ([
+          ['mask', mask],
+          ['loDiff', 100],
+          ['upDiff', 255],
+          ['flags', flags]
         ]),
         expectOutput
       });
     });
 
-    describe('floodFill', () => {
-      const expectOutput = (out) => {
-        expect(out).to.have.property('returnValue').to.be.a('number');
-        expect(out).to.have.property('rect').to.be.instanceOf(cv.Rect);
-      };
-
-      const seedPoint = new cv.Point(50, 50);
-      const mask = new cv.Mat(102, 102, cv.CV_8U, 255);
-      const flags = 4;
-
-      describe('C1', () => {
-        const newVal = 155;
-        generateAPITests({
-          getDut: () => new cv.Mat(100, 100, cv.CV_8UC1),
-          methodName: 'floodFill',
-          methodNameSpace: 'Mat',
-          getRequiredArgs: () => ([
-            seedPoint,
-            newVal
-          ]),
-          getOptionalArgsMap: () => ([
-            ['mask', mask],
-            ['loDiff', 100],
-            ['upDiff', 255],
-            ['flags', flags]
-          ]),
-          expectOutput
-        });
-      });
-
-      describe('C3', () => {
-        const newVal = new cv.Vec(155, 155, 155);
-        generateAPITests({
-          getDut: () => new cv.Mat(100, 100, cv.CV_8UC3),
-          methodName: 'floodFill',
-          methodNameSpace: 'Mat',
-          getRequiredArgs: () => ([
-            seedPoint,
-            newVal
-          ]),
-          getOptionalArgsMap: () => ([
-            ['mask', mask],
-            ['loDiff', new cv.Vec(100, 100, 100)],
-            ['upDiff', new cv.Vec(255, 255, 255)],
-            ['flags', flags]
-          ]),
-          expectOutput
-        });
+    describe('C3', () => {
+      const newVal = new cv.Vec(155, 155, 155);
+      generateAPITests({
+        getDut: () => new cv.Mat(100, 100, cv.CV_8UC3),
+        methodName: 'floodFill',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          seedPoint,
+          newVal
+        ]),
+        getOptionalArgsMap: () => ([
+          ['mask', mask],
+          ['loDiff', new cv.Vec(100, 100, 100)],
+          ['upDiff', new cv.Vec(255, 255, 255)],
+          ['flags', flags]
+        ]),
+        expectOutput
       });
     });
   });
@@ -1493,7 +1499,7 @@ module.exports = (getTestImg) => {
           ['blockSize', 3],
           ['gradientSize', 3],
           ['useHarrisDetector', false],
-          ['harrisK', 0.04 ]
+          ['harrisK', 0.04]
         ]),
         expectOutput: (out) => {
           expect(out).to.be.instanceOf(Array);
@@ -1511,7 +1517,7 @@ module.exports = (getTestImg) => {
           20, 0.04, 1
         ]),
         getOptionalArgsMap: () => ([
-          ['mask', new cv.Mat(512,512,cv.CV_U8)],
+          ['mask', new cv.Mat(512, 512, cv.CV_U8)],
           ['blockSize', 3],
           ['useHarrisDetector', false],
           ['harrisK', 0.04 ]
@@ -1525,5 +1531,21 @@ module.exports = (getTestImg) => {
       });
     });
 
+    describe('integral', () => {
+      generateAPITests({
+        getDut: () => new cv.Mat(20, 20, cv.CV_32F, 0.5),
+        methodName: 'integral',
+        methodNameSpace: 'Mat',
+        getOptionalArgsMap: () => ([
+          ['sdepth', cv.CV_64F],
+          ['sqdepth', cv.CV_64F]
+        ]),
+        expectOutput: (res) => {
+          expect(res).to.have.property('sum').to.be.instanceOf(cv.Mat);
+          expect(res).to.have.property('sqsum').to.be.instanceOf(cv.Mat);
+          expect(res).to.have.property('tilted').to.be.instanceOf(cv.Mat);
+        }
+      });
+    });
   });
 };

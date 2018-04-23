@@ -1,5 +1,4 @@
 #include "descriptorMatching.h"
-#include "Workers.h"
 
 NAN_MODULE_INIT(DescriptorMatching::Init) {
 	Nan::SetMethod(target, "matchFlannBased", MatchFlannBased);
@@ -104,27 +103,42 @@ NAN_METHOD(DescriptorMatching::MatchBruteForceSL2Async) {
 
 #endif
 
+struct DescriptorMatching::MatchWorker : public CatchCvExceptionWorker {
+public:
+	cv::Ptr<cv::DescriptorMatcher> matcher;
+	MatchWorker(cv::Ptr<cv::DescriptorMatcher> _matcher) {
+		this->matcher = _matcher;
+	}
+
+	cv::Mat descFrom;
+	cv::Mat descTo;
+	std::vector<cv::DMatch> dmatches;
+
+	std::string executeCatchCvExceptionWorker() {
+		matcher->match(descFrom, descTo, dmatches);
+		return "";
+	}
+
+	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return Mat::Converter::arg(0, &descFrom, info)
+			|| Mat::Converter::arg(1, &descTo, info);
+	}
+
+	FF_VAL getReturnValue() {
+		return ObjectArrayConverter<DescriptorMatch, cv::DMatch>::wrap(dmatches);
+	}
+};
+
 #if CV_VERSION_MINOR < 2
 void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
 #else
 void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	FF_METHOD_CONTEXT("match");
-	
-	FF_ARG_INSTANCE(0, cv::Mat descFrom, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Mat descTo, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-
-	std::vector<cv::DMatch> dmatches;
-	cv::DescriptorMatcher::create(matcherType)->match(descFrom, descTo, dmatches);
-
-	FF_ARR jsMatches = FF_NEW_ARRAY(dmatches.size());
-	uint i = 0;
-	for (auto dmatch : dmatches) {
-		FF_OBJ jsMatch = FF_NEW_INSTANCE(DescriptorMatch::constructor);
-		FF_UNWRAP(jsMatch, DescriptorMatch)->dmatch = dmatch;
-		jsMatches->Set(i++, jsMatch);
-	}
-	FF_RETURN(jsMatches);
+	FF::SyncBinding(
+		std::make_shared<MatchWorker>(cv::DescriptorMatcher::create(matcherType)),
+		"MSERDetector::Match",
+		info
+	);
 }
 
 #if CV_VERSION_MINOR < 2
@@ -132,16 +146,9 @@ void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string 
 #else
 void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	FF_METHOD_CONTEXT("matchAsync");
-
-	MatchContext ctx;
-	ctx.matcher = cv::DescriptorMatcher::create(matcherType);
-	FF_ARG_INSTANCE(0, ctx.descFrom, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(1, ctx.descTo, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_FUNC(2, v8::Local<v8::Function> cbFunc);
-
-	Nan::AsyncQueueWorker(new GenericAsyncWorker<MatchContext>(
-		new Nan::Callback(cbFunc),
-		ctx
-	));
+	FF::AsyncBinding(
+		std::make_shared<MatchWorker>(cv::DescriptorMatcher::create(matcherType)),
+		"MSERDetector::MatchAsync",
+		info
+	);
 }

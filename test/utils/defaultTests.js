@@ -14,6 +14,8 @@ const getEmptyArray = () => ([]);
 const emptyFunc = () => {};
 
 exports.generateAPITests = ({
+  beforeHook = null,
+  afterHook = null,
   getDut,
   methodName,
   methodNameSpace,
@@ -94,16 +96,17 @@ exports.generateAPITests = ({
       }
 
       if (isCallbacked) {
-        args.push((err) => {
-          expect(err).to.be.an('error');
-          assert.include(err.toString(), errMsg);
-          done();
+        const argsWithCb = args.concat((err) => {
+          try {
+            expect(err).to.be.an('error');
+            assert.include(err.toString(), errMsg);
+            done();
+          } catch (e) {
+            done(e);
+          }
         });
-        assertError(
-          () => dut[method].apply(dut, args),
-          errMsg
-        );
-        return done();
+
+        return dut[method].apply(dut, argsWithCb);
       }
 
       assertError(
@@ -154,6 +157,13 @@ exports.generateAPITests = ({
   };
 
   describe('sync', () => {
+    if (beforeHook) {
+      beforeEach(() => beforeHook());
+    }
+    if (afterHook) {
+      afterEach(() => afterHook());
+    }
+
     if (hasRequiredArgs) {
       funcShouldRequireArgs(() => getDut()[methodName]());
     }
@@ -170,12 +180,26 @@ exports.generateAPITests = ({
       }
 
       describe('callbacked', () => {
+        if (beforeHook) {
+          beforeEach(() => beforeHook());
+        }
+        if (afterHook) {
+          afterEach(() => afterHook());
+        }
+
         generateTests('callbacked');
 
         otherAsyncCallbackedTests();
       });
 
       describe('promisified', () => {
+        if (beforeHook) {
+          beforeEach(() => beforeHook());
+        }
+        if (afterHook) {
+          afterEach(() => afterHook());
+        }
+
         generateTests('promised');
 
         otherAsyncPromisedTests();

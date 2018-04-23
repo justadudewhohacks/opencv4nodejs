@@ -32,7 +32,7 @@ export class Mat {
   constructor(dataArray: number[][][], type: number);
   constructor(dataArray: number[][][], type: number);
   constructor(dataArray: number[][][], type: number);
-  constructor(data: number[], rows: number, cols: number, type?: number);
+  constructor(data: Buffer, rows: number, cols: number, type?: number);
   abs(): Mat;
   absdiff(otherMat: Mat): Mat;
   adaptiveThreshold(maxVal: number, adaptiveMethod: number, thresholdType: number, blockSize: number, C: number): Mat;
@@ -156,8 +156,8 @@ export class Mat {
   floodFillAsync(seedPoint: Point2, newVal: Vec3, mask?: Mat, loDiff?: Vec3, upDiff?: Vec3, flags?: number): Promise<{ returnValue: number, rect: Rect }>;
   gaussianBlur(kSize: Size, sigmaX: number, sigmaY?: number, borderType?: number): Mat;
   gaussianBlurAsync(kSize: Size, sigmaX: number, sigmaY?: number, borderType?: number): Promise<Mat>;
-  getData(): number[];
-  getDataAsync(): Promise<number[]>;
+  getData(): Buffer;
+  getDataAsync(): Promise<Buffer>;
   getDataAsArray(): number[][];
   getDataAsArray(): number[][][];
   getDataAsArray(): number[][][];
@@ -183,6 +183,8 @@ export class Mat {
   inRange(lower: Vec3, upper: Vec3): Mat;
   inRangeAsync(lower: number, upper: number): Promise<Mat>;
   inRangeAsync(lower: Vec3, upper: Vec3): Promise<Mat>;
+  integral(sdepth?: number, sqdepth?: number): { sum: Mat, sqsum: Mat, tilted: Mat };
+  integralAsync(sdepth?: number, sqdepth?: number): Promise<{ sum: Mat, sqsum: Mat, tilted: Mat }>;
   laplacian(ddepth: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Mat;
   laplacianAsync(ddepth: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
   matMulDeriv(B: Mat): { dABdA: Mat, dABdB: Mat };
@@ -190,6 +192,8 @@ export class Mat {
   matchTemplate(template: Mat, method: number, mask?: Mat): Mat;
   matchTemplateAsync(template: Mat, method: number, mask?: Mat): Promise<Mat>;
   mean(): Mat;
+  meanStdDev(mask?: Mat): { mean: Mat, stddev: Mat };
+  meanStdDevAsync(mask?: Mat): Promise<{ mean: Mat, stddev: Mat }>;
   medianBlur(kSize: number): Mat;
   medianBlurAsync(kSize: number): Promise<Mat>;
   minMaxLoc(mask?: Mat): { minVal: number, maxVal: number, minLoc: Point2, maxLoc: Point2 };

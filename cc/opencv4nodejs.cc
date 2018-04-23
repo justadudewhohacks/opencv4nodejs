@@ -1,12 +1,11 @@
 #include <node.h>
 #include "ExternalMemTracking.h"
-#include <iostream>
 
 #include "cvTypes/cvTypes.h"
 #include "core.h"
 #include "modules/io/io.h"
 #include "modules/video/video.h"
-#include "modules/photo.h"
+#include "modules/photo/photo.h"
 #include "modules/calib3d/calib3d.h"
 #include "modules/imgproc/imgproc.h"
 #include "modules/features2d/features2d.h"
@@ -32,9 +31,24 @@
 #include "modules/dnn/dnn.h"
 #endif
 
+int customCvErrorHandler(int status, const char* func_name, const char* err_msg, const char* file_name, int line, void* userdata) {
+    std::string msg = "OpenCV Error: (" + std::string(err_msg) + ")"
+      + " in " + std::string(func_name)
+      + ", in file " + std::string(file_name)
+      + ", line " + std::to_string(line)
+      + ", status " + std::to_string(status);
+
+    throw std::runtime_error(msg);
+    return 0;
+}
+
 void init(v8::Local<v8::Object> target) {
 	// can be disabled by defining env variable: OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING
 	ExternalMemTracking::Init(target);
+
+	// override cv error handler to prevent printing cv errors and throw std::exception
+	// instead, which can be catched and forwarded to node process
+  cv::redirectError(customCvErrorHandler);
 
 
 	v8::Local<v8::Object> version = Nan::New<v8::Object>();

@@ -11,7 +11,7 @@
     "cover": "BINDINGS_DEBUG=true istanbul cover node_modules/mocha/bin/_mocha --report lcovonly --require ./globals -- --timeout 30000 --recursive ./tests"
   },
   "author": "justadudewhohacks",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "chai": "^4.1.0",
     "istanbul": "^0.4.5",

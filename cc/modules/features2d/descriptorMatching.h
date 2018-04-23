@@ -4,6 +4,7 @@
 #include "Mat.h"
 #include "KeyPoint.h"
 #include "DescriptorMatch.h"
+#include "CatchCvExceptionWorker.h"
 
 #ifndef __FF_DESCRIPTORMATCHING_H__
 #define __FF_DESCRIPTORMATCHING_H__
@@ -32,29 +33,7 @@ public:
 	static void matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType);
 #endif
 
-	struct MatchContext {
-	public:
-		cv::Ptr<cv::DescriptorMatcher> matcher;
-		cv::Mat descFrom;
-		cv::Mat descTo;
-		std::vector<cv::DMatch> dmatches;
-
-		const char* execute() {
-			matcher->match(descFrom, descTo, dmatches);
-			return "";
-		}
-
-		FF_VAL getReturnValue() {
-			FF_ARR jsMatches = FF_NEW_ARRAY(dmatches.size());
-			uint i = 0;
-			for (auto dmatch : dmatches) {
-				FF_OBJ jsMatch = FF_NEW_INSTANCE(DescriptorMatch::constructor);
-				FF_UNWRAP(jsMatch, DescriptorMatch)->dmatch = dmatch;
-				jsMatches->Set(i++, jsMatch);
-			}
-			return jsMatches;
-		}
-	};
+	struct MatchWorker;
 };
 
 #endif

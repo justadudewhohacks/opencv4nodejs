@@ -811,5 +811,21 @@ describe('Mat', () => {
       expectOutput
     });
   });
+
+  describe('meanStdDev', () => {
+    const mask = new cv.Mat(20, 20, cv.CV_8U, 255);
+    generateAPITests({
+      getDut: () => new cv.Mat(20, 20, cv.CV_32F, 0.5),
+      methodName: 'meanStdDev',
+      methodNameSpace: 'Mat',
+      getOptionalArgs: () => ([
+        mask
+      ]),
+      expectOutput: (res) => {
+        expect(res).to.have.property('mean').to.be.instanceOf(cv.Mat);
+        expect(res).to.have.property('stddev').to.be.instanceOf(cv.Mat);
+      }
+    });
+  });
 });
 
