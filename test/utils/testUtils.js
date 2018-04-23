@@ -34,7 +34,10 @@ exports.assertError = assertError;
 const makeCompareValues = floatSafe => (val1, val2) => {
   if (floatSafe && typeof val1 === 'number' && typeof val2 === 'number') {
     return Math.abs(val1 - val2) < 0.001;
+  } else if (typeof val1 === 'object' && typeof val2 === 'object') {
+    return JSON.stringify(val1) === JSON.stringify(val2);
   }
+
   return val1 === val2;
 };
 
