@@ -291,8 +291,12 @@ NAN_METHOD(Mat::Set) {
 
 NAN_METHOD(Mat::GetDataAsArray) {
   cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info.This());
-  FF_ARR rowArray = FF_NEW_ARRAY(mat.rows);
-  FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT, FF::matGet);
+  FF_ARR rowArray = FF_NEW_ARRAY(mat.size[0]);
+  if (mat.dims > 2) { // 3D
+    FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT_3D, FF::matGet);
+  } else { // 2D
+    FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT, FF::matGet);
+  }
   FF_RETURN(rowArray);
 }
 
