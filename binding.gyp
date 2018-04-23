@@ -68,6 +68,7 @@
 			"cc/modules/face/LBPHFaceRecognizer.cc",
 			"cc/modules/face/Facemark.cc",
 			"cc/modules/face/FacemarkAAM.cc",
+			"cc/modules/face/FacemarkAAMData.cc",
 			"cc/modules/face/FacemarkAAMParams.cc",
 			"cc/modules/face/FacemarkLBF.cc",
 			"cc/modules/face/FacemarkLBFParams.cc",
