@@ -11,9 +11,9 @@ opencv4nodejs
 [![node version](https://img.shields.io/badge/node.js-%3E=_6-green.svg?style=flat)](http://nodejs.org/download/)
 [![Slack](https://slack.bri.im/badge.svg)](https://slack.bri.im/)
 
-**By its nature, JavaScript lacks the performance to implement Computer Vision tasks efficiently. Therefore this package brings the performance of the native OpenCV library to your Node.js application. Supports all OpenCV 3 versions. The bindings are available as an asynchronous (via promises or callbacks) and synchronous API.**
+**By its nature, JavaScript lacks the performance to implement Computer Vision tasks efficiently. Therefore this package brings the performance of the native OpenCV library to your Node.js application. This project targets OpenCV 3 and provides an asynchronous as well as an synchronous API.**
 
-**The ultimate goal of this project is to provide a collection of Node.js bindings, which supports the entire OpenCV and OpenCV-contrib API. An overview of available bindings can be found in the [API Documentation](https://opencv4nodejs.herokuapp.com/docs). The implementation of missing bindings can be specifically prioritized by [requesting new features](#request-features). Furthermore, contribution is highly appreciated. If you want to get involved you can have a look at the <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b>.**
+**The ultimate goal of this project is to provide a comprehensive collection of Node.js bindings to the API of OpenCV and the OpenCV-contrib modules. An overview of available bindings can be found in the [API Documentation](https://justadudewhohacks.github.io/opencv4nodejs). Furthermore, contribution is highly appreciated. If you want to get involved you can have a look at the <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b>.**
 
 * **[Examples](#examples)**
 * **[How to install](#how-to-install)**
@@ -25,7 +25,6 @@ opencv4nodejs
 * **[With TypeScript](#with-typescript)**
 * **[External Memory Tracking (v4.0.0)](#external-mem-tracking)**
 * **[Available Modules](#available-modules)**
-* **[Request new Features](#request-features)**
 
 <a name="examples"></a>
 
@@ -204,7 +203,7 @@ const matFromArray = new cv.Mat(matData, cv.CV_8UC3);
 
 // from node buffer
 const charData = [255, 0, ...];
-const matFromArray = new cv.Mat(new Buffer.from(charData), rows, cols, cv.CV_8UC3);
+const matFromArray = new cv.Mat(Buffer.from(charData), rows, cols, cv.CV_8UC3);
 
 // Point
 const pt2 = new cv.Point(100, 100);
@@ -451,6 +450,7 @@ try {
 ```
 
 <a name="with-typescript"></a>
+
 # With TypeScript
 
 ``` javascript
@@ -463,9 +463,9 @@ Check out the TypeScript [examples](https://github.com/justadudewhohacks/opencv4
 
 # External Memory Tracking (v4.0.0)
 
-Since version 4.0.0 external memory tracking will be enabled by default. Simply put, the memory allocated for Matrices (cv.Mat) will be manually reported to the node process. This solves the issue of inconsistent Garbage Collection, which could have resulted in spiking memory usage of the node process eventually leading to overflowing the RAM of your system, prior to version 4.0.0.
+Since version 4.0.0 was released, external memory tracking has been enabled by default. Simply put, the memory allocated for Matrices (cv.Mat) will be manually reported to the node process. This solves the issue of inconsistent Garbage Collection, which could have resulted in spiking memory usage of the node process eventually leading to overflowing the RAM of your system, prior to version 4.0.0.
 
-Note, that in doubt this feature can be **disabled** by setting and environment variable `OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING` before requiring the module:
+Note, that in doubt this feature can be **disabled** by setting an environment variable `OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING` before requiring the module:
 
 ``` bash
 export OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING=1 // linux
@@ -482,28 +482,20 @@ const cv = require('opencv4nodejs')
 
 # Available Modules
 
-### <a href="https://opencv4nodejs.herokuapp.com/docs"><b>API doc overview</b></a>
+### <a href="https://justadudewhohacks.github.io/opencv4nodejs"><b>API doc overview</b></a>
 
-* <a href="https://opencv4nodejs.herokuapp.com/docs/core"><b>core</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/io"><b>io</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/imgproc"><b>imgproc</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/ximgproc"><b>ximgproc</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/objdetect"><b>objdetect</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/machinelearning"><b>machinelearning</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/dnn"><b>deepneuralnetworks</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/video"><b>video</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/calib3d"><b>calib3d</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/photo"><b>photo</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/features2d"><b>features2d</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/xfeatures2d"><b>xfeatures2d</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/tracking"><b>tracking</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/text"><b>text</b></a>
-* <a href="https://opencv4nodejs.herokuapp.com/docs/face"><b>face</b></a>
-
-<a name="request-features"></a>
-
-## Request new Features
-
-Are you missing some functions from OpenCV (<a href="https://opencv4nodejs.herokuapp.com/docs"><b>overview</b></a> of available bindings) or have an idea for utility in regards to the OpenCV API, which you would like to be added to this package? No problem! Open a new <a href="https://github.com/justadudewhohacks/opencv4nodejs/issues"><b>issue</b></a> with a listing of the desired function bindings or features and you will find them in this package soon.
-
-
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/Mat#Mat"><b>core</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/VideoCapture#VideoCapture"><b>io</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/Contour#Contour"><b>imgproc</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/SuperpixelLSC#SuperpixelLSC"><b>ximgproc</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/CascadeClassifier#CascadeClassifier"><b>objdetect</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/SVM#SVM"><b>machinelearning</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/Net#Net"><b>deepneuralnetworks</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/BackgroundSubtractorKNN#BackgroundSubtractorKNN"><b>video</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/cv#calibrateCamera"><b>calib3d</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/cv#fastNlMeansDenoisingColored"><b>photo</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/AGASTDetector#AGASTDetector"><b>features2d</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/SIFTDetector#SIFTDetector"><b>xfeatures2d</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/MultiTracker#MultiTracker"><b>tracking</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/OCRHMMClassifier#OCRHMMClassifier"><b>text</b></a>
+* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/EigenFaceRecognizer#EigenFaceRecognizer"><b>face</b></a>
