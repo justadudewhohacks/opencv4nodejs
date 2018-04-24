@@ -3,6 +3,8 @@
 #include "FacemarkAAM.h"
 #include "FacemarkAAMParams.h"
 
+#if CV_VERSION_MINOR >= 4
+
 Nan::Persistent<v8::FunctionTemplate> FacemarkAAM::constructor;
 
 NAN_MODULE_INIT(FacemarkAAM::Init) {
@@ -35,5 +37,7 @@ NAN_METHOD(FacemarkAAM::New) {
 
   FF_RETURN(info.Holder());
 };
+
+#endif
 
 #endif

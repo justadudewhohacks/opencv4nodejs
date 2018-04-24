@@ -3,6 +3,8 @@
 #include "FacemarkLBF.h"
 #include "FacemarkLBFParams.h"
 
+#if CV_VERSION_MINOR >= 4
+
 Nan::Persistent<v8::FunctionTemplate> FacemarkLBF::constructor;
 
 NAN_MODULE_INIT(FacemarkLBF::Init) {
@@ -35,5 +37,7 @@ NAN_METHOD(FacemarkLBF::New) {
 
   FF_RETURN(info.Holder());
 };
+
+#endif
 
 #endif

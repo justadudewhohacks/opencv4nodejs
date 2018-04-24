@@ -2,6 +2,8 @@
 #include "TypeConverters.h"
 #include <opencv2/face.hpp>
 
+#if CV_VERSION_MINOR >= 4
+
 #ifndef __FF_FACEMARKAAMPARAMS_H__
 #define __FF_FACEMARKAAMPARAMS_H__
 
@@ -39,5 +41,7 @@ public:
 #define FF_UNWRAP_FACEMARKAAMPARAMS(obj) FF_UNWRAP(obj, FacemarkAAMParams)
 #define FF_UNWRAP_FACEMARKAAMPARAMS_AND_GET(obj)                               \
   FF_UNWRAP_FACEMARKAAMPARAMS(obj)->params
+
+#endif
 
 #endif

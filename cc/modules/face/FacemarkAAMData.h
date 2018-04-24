@@ -4,6 +4,8 @@
 #include <opencv2/core.hpp>
 #include <opencv2/face.hpp>
 
+#if CV_VERSION_MINOR >= 4
+
 #ifndef __FF_FACEMARKAAMDATA_H__
 #define __FF_FACEMARKAAMDATA_H__
 
@@ -28,5 +30,7 @@ public:
 #define FF_UNWRAP_FACEMARKAAMDATA(obj) FF_UNWRAP(obj, FacemarkAAMData)
 #define FF_UNWRAP_FACEMARKAAMDATA_AND_GET(obj)                               \
   FF_UNWRAP_FACEMARKAAMDATA(obj)->data
+
+#endif
 
 #endif

@@ -2,6 +2,8 @@
 
 #include "FacemarkLBFParams.h"
 
+#if CV_VERSION_MINOR >= 4
+
 Nan::Persistent<v8::FunctionTemplate> FacemarkLBFParams::constructor;
 
 NAN_MODULE_INIT(FacemarkLBFParams::Init) {
@@ -40,5 +42,7 @@ NAN_METHOD(FacemarkLBFParams::New) {
   self->Wrap(info.Holder());
   FF_RETURN(info.Holder());
 };
+
+#endif
 
 #endif

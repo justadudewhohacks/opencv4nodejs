@@ -3,6 +3,8 @@
 #include "Facemark.h"
 #include "FacemarkBindings.h"
 
+#if CV_VERSION_MINOR >= 4
+
 NAN_METHOD(Facemark::Save) {
   FF_METHOD_CONTEXT("Facemark::Save");
   FF_ARG_STRING(0, std::string path);
@@ -166,5 +168,7 @@ bool Facemark::detector(cv::InputArray image, cv::OutputArray faces,
 
   return true;
 }
+
+#endif
 
 #endif

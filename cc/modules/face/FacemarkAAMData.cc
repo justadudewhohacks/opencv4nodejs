@@ -2,6 +2,8 @@
 
 #include "FacemarkAAMData.h"
 
+#if CV_VERSION_MINOR >= 4
+
 Nan::Persistent<v8::FunctionTemplate> FacemarkAAMData::constructor;
 
 NAN_MODULE_INIT(FacemarkAAMData::Init) {
@@ -25,5 +27,7 @@ NAN_METHOD(FacemarkAAMData::New) {
   self->Wrap(info.Holder());
   FF_RETURN(info.Holder());
 };
+
+#endif
 
 #endif

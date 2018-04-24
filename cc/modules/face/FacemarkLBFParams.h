@@ -4,6 +4,8 @@
 #include "Rect.h"
 #include <opencv2/face.hpp>
 
+#if CV_VERSION_MINOR >= 4
+
 #ifndef __FF_FACEMARKLBFPARAMS_H__
 #define __FF_FACEMARKLBFPARAMS_H__
 
@@ -75,5 +77,7 @@ public:
 #define FF_UNWRAP_FACEMARKLBFPARAMS(obj) FF_UNWRAP(obj, FacemarkLBFParams)
 #define FF_UNWRAP_FACEMARKLBFPARAMS_AND_GET(obj)                               \
   FF_UNWRAP_FACEMARKLBFPARAMS(obj)->params
+
+#endif
 
 #endif

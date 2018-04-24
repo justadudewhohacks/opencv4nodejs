@@ -1,6 +1,8 @@
 #include "Facemark.h"
 #include "FacemarkAAMData.h"
 
+#if CV_VERSION_MINOR >= 4
+
 #ifndef __FF_FACEMARKBINDINGS_H_
 #define __FF_FACEMARKBINDINGS_H_
 
@@ -130,4 +132,7 @@ namespace FacemarkBindings {
     }
   };
 }
+
+#endif
+
 #endif

@@ -2,6 +2,8 @@
 
 #include "FacemarkAAMParams.h"
 
+#if CV_VERSION_MINOR >= 4
+
 Nan::Persistent<v8::FunctionTemplate> FacemarkAAMParams::constructor;
 
 NAN_MODULE_INIT(FacemarkAAMParams::Init) {
@@ -34,5 +36,7 @@ NAN_METHOD(FacemarkAAMParams::New) {
   self->Wrap(info.Holder());
   FF_RETURN(info.Holder());
 };
+
+#endif
 
 #endif

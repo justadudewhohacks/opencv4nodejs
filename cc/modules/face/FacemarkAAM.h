@@ -1,5 +1,7 @@
 #include "Facemark.h"
 
+#if CV_VERSION_MINOR >= 4
+
 #ifndef __FF_FACEMARKAAM_H__
 #define __FF_FACEMARKAAM_H__
 
@@ -19,5 +21,7 @@ public:
   static Nan::Persistent<v8::FunctionTemplate> constructor;
   cv::Ptr<cv::face::Facemark> getFacemark() { return facemark; }
 };
+
+#endif
 
 #endif

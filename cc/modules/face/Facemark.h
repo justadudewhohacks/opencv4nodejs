@@ -6,6 +6,8 @@
 #include <iostream>
 #include <opencv2/face.hpp>
 
+#if CV_VERSION_MINOR >= 4
+
 #ifndef __FF_FACEMARK_H__
 #define __FF_FACEMARK_H__
 
@@ -16,7 +18,7 @@ public:
   virtual void load(std::string) = 0;
 
   static void Init(v8::Local<v8::FunctionTemplate>);
-  
+
   static NAN_METHOD(AddTrainingSample);
   static NAN_METHOD(AddTrainingSampleAsync);
   static NAN_METHOD(LoadModel);
@@ -36,5 +38,7 @@ public:
   static bool detector(cv::InputArray image, cv::OutputArray faces,
                        Nan::Callback *callback);
 };
+
+#endif
 
 #endif
