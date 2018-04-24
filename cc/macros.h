@@ -122,15 +122,4 @@ static FF_FUNC_TYPE ff_func = FF_FUNC_TYPE();
 		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = target;	\
 	}
 
-namespace FF {
-	template<typename toType, typename type>
-	static inline v8::Local<v8::Array> stdVecToJSArray(std::vector<type> vec) {
-		v8::Local<v8::Array> jsArray = Nan::New<v8::Array>(vec.size());
-		for (int i = 0; i < jsArray->Length(); i++) {
-			jsArray->Set(i, Nan::New((toType)vec.at(i)));
-		}
-		return jsArray;
-	}
-}
-
 #endif
