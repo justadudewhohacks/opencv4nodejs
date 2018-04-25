@@ -1,6 +1,8 @@
 const cv = global.dut;
 const { readTestImage } = global.utils;
 const recognizerTests = require('./recognizerTests');
+const facemarkTests = require('./facemarkTests');
+const facemarkStructsTests = require('./facemarkStructsTests');
 
 describe('face', () => {
   if (!cv.xmodules.face) {
@@ -30,5 +32,15 @@ describe('face', () => {
     const args = ['radius', 'neighbors', 'grid_x', 'grid_y'];
     const values = [2, 16, 16, 16];
     recognizerTests(() => testImg, args, values, cv.LBPHFaceRecognizer);
+  });
+
+  facemarkStructsTests();
+
+  describe('FacemarkLBF', () => {
+    facemarkTests(() => testImg, cv.FacemarkLBF, cv.FacemarkLBFParams);
+  });
+
+  describe('FacemarkAAM', () => {
+    facemarkTests(() => testImg, cv.FacemarkAAM, cv.FacemarkAAMParams);
   });
 });

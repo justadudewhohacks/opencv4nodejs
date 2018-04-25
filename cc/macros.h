@@ -9,6 +9,16 @@
 #define FF_GETTER(clazz, name, prop)	\
 	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop); }
 
+#define FF_GETTER_SIMPLE(clazz, name, prop, converter)  \
+	NAN_GETTER(name) { 																		\
+		v8::Local<v8::Value> jsValue = converter::wrap(			\
+			Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop	\
+		);																									\
+		info.GetReturnValue().Set(jsValue);									\
+	}
+
+#define FF_GETTER_COMPLEX(clazz, name, prop, converter) FF_GETTER_SIMPLE(clazz, name, prop, converter)
+
 #define FF_GETTER_JSOBJ(clazz, name, value, unwrapper, ctor)	\
 	NAN_GETTER(name) {																					\
 		v8::Local<v8::Object> jsObj = FF_NEW_INSTANCE(ctor);			\
@@ -95,5 +105,21 @@ static FF_FUNC_TYPE ff_func = FF_FUNC_TYPE();
 #define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_uint)
 #define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_number)
 #define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_bool)
+
+#define FF_SETTER_SIMPLE(clazz, name, prop, converter)  										\
+	NAN_SETTER(name##Set) {																										\
+		FF_METHOD_CONTEXT(#name);												      									\
+		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = converter::unwrap(	\
+			value																																	\
+		);																																			\
+	}
+
+#define FF_SETTER_COMPLEX(clazz, name, prop, type, converter) 	\
+	NAN_SETTER(name##Set) {																				\
+		FF_METHOD_CONTEXT(#name);												    				\
+		type target;																								\
+		converter::unwrap(&target, value);													\
+		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = target;	\
+	}
 
 #endif
