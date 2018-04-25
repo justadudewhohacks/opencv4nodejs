@@ -8,7 +8,7 @@ public:
 	std::string execute() {
 		try {
 			return executeCatchCvExceptionWorker();
-		} catch (std::exception e) {
+		} catch (std::exception &e) {
 			return std::string(e.what());
 		}
 	}
