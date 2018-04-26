@@ -55,7 +55,7 @@ export function findEssentialMat(points1: Point2[], points2: Point2[], focal?: n
 export function findEssentialMatAsync(points1: Point2[], points2: Point2[], focal?: number, pp?: Point2, method?: number, prob?: number, threshold?: number): Promise<{ E: Mat, mask: Mat }>;
 export function findFundamentalMat(points1: Point2[], points2: Point2[], method?: number, param1?: number, param2?: number): { F: Mat, mask: Mat };
 export function findFundamentalMatAsync(points1: Point2[], points2: Point2[], method?: number, param1?: number, param2?: number): Promise<{ F: Mat, mask: Mat }>;
-export function findHomography(srcPoints: Point2[], dstPoints: Point2[], method?: number, ransacReprojThreshold?: number, mask?: Mat, maxIters?: number, confidence?: number): Mat;
+export function findHomography(srcPoints: Point2[], dstPoints: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number): { homography: Mat, mask: Mat };
 export function fitLine(points: Point2[], distType: number, param: number, reps: number, aeps: number): number[];
 export function fitLine(points: Point3[], distType: number, param: number, reps: number, aeps: number): number[];
 export function getAffineTransform(srcPoints: Point2[], dstPoints: Point2[]): Mat;
@@ -157,3 +157,8 @@ export interface TextLine extends FontParams {
 
 export function drawDetection(img: Mat, inputRect: Rect, opts?: DrawDetectionParams): Rect;
 export function drawTextBox(img: Mat, upperLeft: { x: number, y: number }, textLines: TextLine[], alpha: number): Mat;
+
+export function isCustomMatAllocatorEnabled(): boolean;
+export function dangerousEnableCustomMatAllocator(): boolean;
+export function dangerousDisableCustomMatAllocator(): boolean;
+export function getMemMetrics(): { TotalAlloc: number, TotalKnownByJS: number, NumAllocations: number, NumDeAllocations: number };
