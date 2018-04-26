@@ -222,9 +222,8 @@
     {
       "requiredArgs": [
         {
-          "type": "uchar",
-          "name": "data",
-          "arrayDepth": 1
+          "type": "Buffer",
+          "name": "data"
         },
         {
           "type": "uint",

@@ -1,0 +1,35 @@
+{
+  "cvModule": "photo",
+  "owner": "cv",
+  "fnName": "inpaint",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "src"
+        },
+        {
+          "type": "Mat",
+          "name": "mask"
+        },
+        {
+          "type": "number",
+          "name": "inpaintRadius"
+        },
+        {
+          "type": "number",
+          "name": "flags"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

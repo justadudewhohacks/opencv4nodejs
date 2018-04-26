@@ -1,0 +1,161 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "copyMakeBorder",
+  "hasAsync": true,
+  "category": "core",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "top"
+        },
+        {
+          "type": "number",
+          "name": "bottom"
+        },
+        {
+          "type": "number",
+          "name": "left"
+        },
+        {
+          "type": "number",
+          "name": "right"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "borderValue",
+          "defaultValue": "BORDER_CONSTANT"
+        },
+        {
+          "type": "number",
+          "name": "value",
+          "defaultValue": "0"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "result"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "top"
+        },
+        {
+          "type": "number",
+          "name": "bottom"
+        },
+        {
+          "type": "number",
+          "name": "left"
+        },
+        {
+          "type": "number",
+          "name": "right"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "borderValue",
+          "defaultValue": "BORDER_CONSTANT"
+        },
+        {
+          "type": "Vec2",
+          "name": "value",
+          "defaultValue": "new cv.Vec(0, 0)"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "result"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "top"
+        },
+        {
+          "type": "number",
+          "name": "bottom"
+        },
+        {
+          "type": "number",
+          "name": "left"
+        },
+        {
+          "type": "number",
+          "name": "right"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "borderValue",
+          "defaultValue": "BORDER_CONSTANT"
+        },
+        {
+          "type": "Vec3",
+          "name": "value",
+          "defaultValue": "new cv.Vec(0, 0, 0)"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "result"
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "top"
+        },
+        {
+          "type": "number",
+          "name": "bottom"
+        },
+        {
+          "type": "number",
+          "name": "left"
+        },
+        {
+          "type": "number",
+          "name": "right"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "borderValue",
+          "defaultValue": "BORDER_CONSTANT"
+        },
+        {
+          "type": "Vec4",
+          "name": "value",
+          "defaultValue": "new cv.Vec(0, 0, 0, 0)"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "result"
+        }
+      ]
+    }
+  ]
+}

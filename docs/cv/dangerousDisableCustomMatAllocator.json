@@ -1,0 +1,18 @@
+{
+  "cvModule": "utils",
+  "owner": "cv",
+  "fnName": "dangerousDisableCustomMatAllocator",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "boolean",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

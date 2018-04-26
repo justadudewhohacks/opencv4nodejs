@@ -25,9 +25,8 @@
       ],
       "returnValues": [
         {
-          "type": "uchar",
-          "name": "returnValue",
-          "arrayDepth": 1
+          "type": "Buffer",
+          "name": "returnValue"
         }
       ]
     }

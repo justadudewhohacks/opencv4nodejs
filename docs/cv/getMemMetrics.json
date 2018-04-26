@@ -1,0 +1,30 @@
+{
+  "cvModule": "utils",
+  "owner": "cv",
+  "fnName": "getMemMetrics",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "number",
+          "name": "TotalAlloc"
+        },
+        {
+          "type": "number",
+          "name": "TotalKnownByJS"
+        },
+        {
+          "type": "number",
+          "name": "NumAllocations"
+        },
+        {
+          "type": "number",
+          "name": "NumDeAllocations"
+        }
+      ]
+    }
+  ]
+}

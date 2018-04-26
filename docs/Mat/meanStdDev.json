@@ -1,0 +1,29 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "meanStdDev",
+  "hasAsync": true,
+  "category": "operators",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "mean"
+        },
+        {
+          "type": "Mat",
+          "name": "stddev"
+        }
+      ]
+    }
+  ]
+}

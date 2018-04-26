@@ -29,11 +29,6 @@
           "defaultValue": "3"
         },
         {
-          "type": "Mat",
-          "name": "mask",
-          "defaultValue": "noArray()"
-        },
-        {
           "type": "uint",
           "name": "maxIters",
           "defaultValue": "2000"
@@ -48,6 +43,10 @@
         {
           "type": "Mat",
           "name": "returnValue"
+        },
+        {
+          "type": "Mat",
+          "name": "mask"
         }
       ]
     }

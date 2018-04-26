@@ -7,9 +7,8 @@
     {
       "requiredArgs": [
         {
-          "type": "uchar",
-          "name": "buffer",
-          "arrayDepth": 1
+          "type": "Buffer",
+          "name": "buffer"
         }
       ],
       "optionalArgs": [

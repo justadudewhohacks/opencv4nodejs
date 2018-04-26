@@ -1,0 +1,33 @@
+{
+  "cvModule": "utils",
+  "owner": "cv",
+  "fnName": "drawDetection",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        },
+        {
+          "type": "Rect",
+          "name": "inputRect"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "DrawDetectionParams",
+          "name": "opts",
+          "defaultValue": "{}"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Rect",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

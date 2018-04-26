@@ -1,140 +1,140 @@
 {
   "assetsByChunkName": {
     "path---docs-brisk-detector": [
-      "path---docs-brisk-detector-aaa139e9a80d1fc9c1e7.js",
-      "path---docs-brisk-detector-aaa139e9a80d1fc9c1e7.js.map"
+      "path---docs-brisk-detector-9efb5b184e03e3a79d68.js",
+      "path---docs-brisk-detector-9efb5b184e03e3a79d68.js.map"
     ],
     "path---docs-multi-tracker": [
-      "path---docs-multi-tracker-5f4ca320e1463ce7cb71.js",
-      "path---docs-multi-tracker-5f4ca320e1463ce7cb71.js.map"
+      "path---docs-multi-tracker-702ccb5a7af63e087e8a.js",
+      "path---docs-multi-tracker-702ccb5a7af63e087e8a.js.map"
     ],
     "component---src-templates-docs-page-tsx": [
       "component---src-templates-docs-page-tsx-a1d810895b085a97da31.js",
       "component---src-templates-docs-page-tsx-a1d810895b085a97da31.js.map"
     ],
     "path---docs-tracker-kcf-params": [
-      "path---docs-tracker-kcf-params-3dd8ec016e739d52b328.js",
-      "path---docs-tracker-kcf-params-3dd8ec016e739d52b328.js.map"
+      "path---docs-tracker-kcf-params-c6448f9a31a03895f174.js",
+      "path---docs-tracker-kcf-params-c6448f9a31a03895f174.js.map"
     ],
     "path---docs-tracker-goturn": [
-      "path---docs-tracker-goturn-007c33d1e70e22491e81.js",
-      "path---docs-tracker-goturn-007c33d1e70e22491e81.js.map"
+      "path---docs-tracker-goturn-f7b02e7907a94e03a6de.js",
+      "path---docs-tracker-goturn-f7b02e7907a94e03a6de.js.map"
     ],
     "path---docs-video-writer": [
-      "path---docs-video-writer-1b55a63cd4854d8a6595.js",
-      "path---docs-video-writer-1b55a63cd4854d8a6595.js.map"
+      "path---docs-video-writer-15152636653778ba4501.js",
+      "path---docs-video-writer-15152636653778ba4501.js.map"
     ],
     "path---docs-tracker-kcf": [
-      "path---docs-tracker-kcf-f45bb850909ef877d496.js",
-      "path---docs-tracker-kcf-f45bb850909ef877d496.js.map"
+      "path---docs-tracker-kcf-d01ca9abb02448680347.js",
+      "path---docs-tracker-kcf-d01ca9abb02448680347.js.map"
     ],
     "path---docs-descriptor-match": [
-      "path---docs-descriptor-match-0eaa3f33455455424c7f.js",
-      "path---docs-descriptor-match-0eaa3f33455455424c7f.js.map"
+      "path---docs-descriptor-match-f7ee08ce3fd6f693af2d.js",
+      "path---docs-descriptor-match-f7ee08ce3fd6f693af2d.js.map"
     ],
     "path---docs-net": [
-      "path---docs-net-847f67c26bf6bd900168.js",
-      "path---docs-net-847f67c26bf6bd900168.js.map"
+      "path---docs-net-6d5ec1bd64ffe1009a7e.js",
+      "path---docs-net-6d5ec1bd64ffe1009a7e.js.map"
     ],
     "path---docs-mat": [
-      "path---docs-mat-dba5a3b0f644b9d0edc1.js",
-      "path---docs-mat-dba5a3b0f644b9d0edc1.js.map"
+      "path---docs-mat-6f1f273453d5567c2c6e.js",
+      "path---docs-mat-6f1f273453d5567c2c6e.js.map"
     ],
     "path---docs-vec": [
-      "path---docs-vec-1b53ab1a31907c3e6157.js",
-      "path---docs-vec-1b53ab1a31907c3e6157.js.map"
+      "path---docs-vec-2b6b4236554f1157cbe5.js",
+      "path---docs-vec-2b6b4236554f1157cbe5.js.map"
     ],
     "path---docs-superpixel-lsc": [
-      "path---docs-superpixel-lsc-f98fef9f0ee7e5fa7b96.js",
-      "path---docs-superpixel-lsc-f98fef9f0ee7e5fa7b96.js.map"
+      "path---docs-superpixel-lsc-00fcd426e83691cf0ef8.js",
+      "path---docs-superpixel-lsc-00fcd426e83691cf0ef8.js.map"
     ],
     "path---docs-size": [
-      "path---docs-size-83502f68099868cca858.js",
-      "path---docs-size-83502f68099868cca858.js.map"
+      "path---docs-size-45df2346cc2ae75f59aa.js",
+      "path---docs-size-45df2346cc2ae75f59aa.js.map"
     ],
     "path---docs-tracker-boosting": [
-      "path---docs-tracker-boosting-4b8d3380da785090d351.js",
-      "path---docs-tracker-boosting-4b8d3380da785090d351.js.map"
+      "path---docs-tracker-boosting-b956e2bfcadaf3ba60c4.js",
+      "path---docs-tracker-boosting-b956e2bfcadaf3ba60c4.js.map"
     ],
     "path---docs-point": [
-      "path---docs-point-da661971aca2242de837.js",
-      "path---docs-point-da661971aca2242de837.js.map"
+      "path---docs-point-16cf9df9b268110c95d6.js",
+      "path---docs-point-16cf9df9b268110c95d6.js.map"
     ],
     "path---docs-video-capture": [
-      "path---docs-video-capture-46730e8f39b3969e5bed.js",
-      "path---docs-video-capture-46730e8f39b3969e5bed.js.map"
+      "path---docs-video-capture-cecd5f658d776552cbe9.js",
+      "path---docs-video-capture-cecd5f658d776552cbe9.js.map"
     ],
     "path---docs-fast-detector": [
-      "path---docs-fast-detector-4a33c5b48c0297d4785b.js",
-      "path---docs-fast-detector-4a33c5b48c0297d4785b.js.map"
+      "path---docs-fast-detector-b1eeb0584f4808b8875b.js",
+      "path---docs-fast-detector-b1eeb0584f4808b8875b.js.map"
     ],
     "path---docs-cascade-classifier": [
-      "path---docs-cascade-classifier-f501e85cc9f5a1425acf.js",
-      "path---docs-cascade-classifier-f501e85cc9f5a1425acf.js.map"
+      "path---docs-cascade-classifier-6fc12e93a7aa16ce51d3.js",
+      "path---docs-cascade-classifier-6fc12e93a7aa16ce51d3.js.map"
     ],
     "path---docs-rotated-rect": [
-      "path---docs-rotated-rect-9911f9f9088b3b080060.js",
-      "path---docs-rotated-rect-9911f9f9088b3b080060.js.map"
+      "path---docs-rotated-rect-bd89f3eaadeae2e5fc9c.js",
+      "path---docs-rotated-rect-bd89f3eaadeae2e5fc9c.js.map"
     ],
     "path---docs-simple-blob-detector-params": [
-      "path---docs-simple-blob-detector-params-5f861ec43d386eb5f215.js",
-      "path---docs-simple-blob-detector-params-5f861ec43d386eb5f215.js.map"
+      "path---docs-simple-blob-detector-params-a2b3b4b27dbbdb671afa.js",
+      "path---docs-simple-blob-detector-params-a2b3b4b27dbbdb671afa.js.map"
     ],
     "path---docs-kaze-detector": [
-      "path---docs-kaze-detector-a8559d952486297a2b92.js",
-      "path---docs-kaze-detector-a8559d952486297a2b92.js.map"
+      "path---docs-kaze-detector-54600779f3b56fe5a4f9.js",
+      "path---docs-kaze-detector-54600779f3b56fe5a4f9.js.map"
     ],
     "path---docs-lbph-face-recognizer": [
-      "path---docs-lbph-face-recognizer-5e600e591299dc6a2a92.js",
-      "path---docs-lbph-face-recognizer-5e600e591299dc6a2a92.js.map"
+      "path---docs-lbph-face-recognizer-1df31c7e6cd778470156.js",
+      "path---docs-lbph-face-recognizer-1df31c7e6cd778470156.js.map"
     ],
     "path---docs-background-subtractor-mog-2": [
-      "path---docs-background-subtractor-mog-2-5f8bca99acbe33c0e0b3.js",
-      "path---docs-background-subtractor-mog-2-5f8bca99acbe33c0e0b3.js.map"
+      "path---docs-background-subtractor-mog-2-a93380d1024f1ef126a0.js",
+      "path---docs-background-subtractor-mog-2-a93380d1024f1ef126a0.js.map"
     ],
     "path---docs-surf-detector": [
-      "path---docs-surf-detector-c3f85bb02edf663a85c8.js",
-      "path---docs-surf-detector-c3f85bb02edf663a85c8.js.map"
+      "path---docs-surf-detector-f2eb219976e9f5b0e7fe.js",
+      "path---docs-surf-detector-f2eb219976e9f5b0e7fe.js.map"
     ],
     "path---docs-simple-blob-detector": [
-      "path---docs-simple-blob-detector-1446965cce724fb09f4a.js",
-      "path---docs-simple-blob-detector-1446965cce724fb09f4a.js.map"
+      "path---docs-simple-blob-detector-f6d87691f0797f6c62fb.js",
+      "path---docs-simple-blob-detector-f6d87691f0797f6c62fb.js.map"
     ],
     "path---docs-superpixel-slic": [
-      "path---docs-superpixel-slic-1cbfe7fd8fe3205ffb3d.js",
-      "path---docs-superpixel-slic-1cbfe7fd8fe3205ffb3d.js.map"
+      "path---docs-superpixel-slic-4cbd11d1cda45b3ed105.js",
+      "path---docs-superpixel-slic-4cbd11d1cda45b3ed105.js.map"
     ],
     "path---index": [
       "path---index-532b3eed2c86431f7a0f.js",
       "path---index-532b3eed2c86431f7a0f.js.map"
     ],
     "path---docs-contour": [
-      "path---docs-contour-81e0679cd0d56342ca6c.js",
-      "path---docs-contour-81e0679cd0d56342ca6c.js.map"
+      "path---docs-contour-13b2e59fd2af47c02bf5.js",
+      "path---docs-contour-13b2e59fd2af47c02bf5.js.map"
     ],
     "path---docs-fisher-face-recognizer": [
-      "path---docs-fisher-face-recognizer-7df8d1e5f675f245f541.js",
-      "path---docs-fisher-face-recognizer-7df8d1e5f675f245f541.js.map"
+      "path---docs-fisher-face-recognizer-72bf5708d3f070addd99.js",
+      "path---docs-fisher-face-recognizer-72bf5708d3f070addd99.js.map"
     ],
     "path---docs-mser-detector": [
-      "path---docs-mser-detector-d73dee537bc02089efbf.js",
-      "path---docs-mser-detector-d73dee537bc02089efbf.js.map"
+      "path---docs-mser-detector-5f232f92158b3a89f88c.js",
+      "path---docs-mser-detector-5f232f92158b3a89f88c.js.map"
     ],
     "path---docs-tracker-boosting-params": [
-      "path---docs-tracker-boosting-params-10679196013c27657620.js",
-      "path---docs-tracker-boosting-params-10679196013c27657620.js.map"
+      "path---docs-tracker-boosting-params-4d29c4580253996693e6.js",
+      "path---docs-tracker-boosting-params-4d29c4580253996693e6.js.map"
     ],
     "path---docs-tracker-tld": [
-      "path---docs-tracker-tld-1b6ee8d7fb8bd5a7b0c1.js",
-      "path---docs-tracker-tld-1b6ee8d7fb8bd5a7b0c1.js.map"
+      "path---docs-tracker-tld-1ee6dc68aa7fa39355a4.js",
+      "path---docs-tracker-tld-1ee6dc68aa7fa39355a4.js.map"
     ],
     "commons": [
       "commons-1f843147887b775958bc.js",
       "commons-1f843147887b775958bc.js.map"
     ],
     "path---docs-orb-detector": [
-      "path---docs-orb-detector-5de5c181b76df8b84ed5.js",
-      "path---docs-orb-detector-5de5c181b76df8b84ed5.js.map"
+      "path---docs-orb-detector-f8bf3cb144d42f8cf219.js",
+      "path---docs-orb-detector-f8bf3cb144d42f8cf219.js.map"
     ],
     "component---src-pages-404-tsx": [
       "component---src-pages-404-tsx-0ef59857f65b5d25df45.js",
@@ -145,104 +145,104 @@
       "path---404-html-a0e39f21c11f6a62c5ab.js.map"
     ],
     "path---docs-tracker-mil-params": [
-      "path---docs-tracker-mil-params-3c5c2ca288616183533e.js",
-      "path---docs-tracker-mil-params-3c5c2ca288616183533e.js.map"
+      "path---docs-tracker-mil-params-ea87ad674dd3fe9c1a76.js",
+      "path---docs-tracker-mil-params-ea87ad674dd3fe9c1a76.js.map"
     ],
     "path---docs-moments": [
-      "path---docs-moments-79e78d62790511454bec.js",
-      "path---docs-moments-79e78d62790511454bec.js.map"
+      "path---docs-moments-7e7d371ae3c64ee1c475.js",
+      "path---docs-moments-7e7d371ae3c64ee1c475.js.map"
     ],
     "path---docs-term-criteria": [
-      "path---docs-term-criteria-3a376ec0120b3ef0fae7.js",
-      "path---docs-term-criteria-3a376ec0120b3ef0fae7.js.map"
+      "path---docs-term-criteria-aa76322b93452a966c9d.js",
+      "path---docs-term-criteria-aa76322b93452a966c9d.js.map"
     ],
     "path---docs-sift-detector": [
-      "path---docs-sift-detector-f644b74f18b36503032b.js",
-      "path---docs-sift-detector-f644b74f18b36503032b.js.map"
+      "path---docs-sift-detector-83fcc7974de332da9a9b.js",
+      "path---docs-sift-detector-83fcc7974de332da9a9b.js.map"
     ],
     "path---docs-detection-roi": [
-      "path---docs-detection-roi-98a525acdc2dab971e45.js",
-      "path---docs-detection-roi-98a525acdc2dab971e45.js.map"
+      "path---docs-detection-roi-533b9acec9eeb9227db8.js",
+      "path---docs-detection-roi-533b9acec9eeb9227db8.js.map"
     ],
     "path---docs-key-point": [
-      "path---docs-key-point-0578d26054536db42f1a.js",
-      "path---docs-key-point-0578d26054536db42f1a.js.map"
+      "path---docs-key-point-882b1abab5b764fcbe3b.js",
+      "path---docs-key-point-882b1abab5b764fcbe3b.js.map"
     ],
     "path---docs-superpixel-seeds": [
-      "path---docs-superpixel-seeds-3e6753866ac181484ee4.js",
-      "path---docs-superpixel-seeds-3e6753866ac181484ee4.js.map"
+      "path---docs-superpixel-seeds-59c7e635c7e4281b8201.js",
+      "path---docs-superpixel-seeds-59c7e635c7e4281b8201.js.map"
     ],
     "path---docs-rect": [
-      "path---docs-rect-6233f0efa688a4a25ede.js",
-      "path---docs-rect-6233f0efa688a4a25ede.js.map"
+      "path---docs-rect-d9aa32245f989f9c63f5.js",
+      "path---docs-rect-d9aa32245f989f9c63f5.js.map"
     ],
     "path---docs-akaze-detector": [
-      "path---docs-akaze-detector-e365f83e3ac25e76f66b.js",
-      "path---docs-akaze-detector-e365f83e3ac25e76f66b.js.map"
+      "path---docs-akaze-detector-4e4f6ddcce6d61bfc0d1.js",
+      "path---docs-akaze-detector-4e4f6ddcce6d61bfc0d1.js.map"
     ],
     "path---docs-eigen-face-recognizer": [
-      "path---docs-eigen-face-recognizer-f767bb8e99d0fa403511.js",
-      "path---docs-eigen-face-recognizer-f767bb8e99d0fa403511.js.map"
+      "path---docs-eigen-face-recognizer-f880b759bfb10702d5b8.js",
+      "path---docs-eigen-face-recognizer-f880b759bfb10702d5b8.js.map"
     ],
     "path---docs-cv": [
-      "path---docs-cv-383fd311b0e4e739efb6.js",
-      "path---docs-cv-383fd311b0e4e739efb6.js.map"
+      "path---docs-cv-318586805901b11e2d04.js",
+      "path---docs-cv-318586805901b11e2d04.js.map"
     ],
     "component---src-pages-index-tsx": [
       "component---src-pages-index-tsx-046336c5c89758381e3a.js",
       "component---src-pages-index-tsx-046336c5c89758381e3a.js.map"
     ],
     "path---docs-svm": [
-      "path---docs-svm-a23adcc3649eda0c0611.js",
-      "path---docs-svm-a23adcc3649eda0c0611.js.map"
+      "path---docs-svm-621ca5ad04ff1cae1334.js",
+      "path---docs-svm-621ca5ad04ff1cae1334.js.map"
     ],
     "path---docs-agast-detector": [
-      "path---docs-agast-detector-e5b062487b74e110e1a8.js",
-      "path---docs-agast-detector-e5b062487b74e110e1a8.js.map"
+      "path---docs-agast-detector-d14db916d99e2347473a.js",
+      "path---docs-agast-detector-d14db916d99e2347473a.js.map"
     ],
     "path---docs-background-subtractor-knn": [
-      "path---docs-background-subtractor-knn-2fc2626e68206c0763c7.js",
-      "path---docs-background-subtractor-knn-2fc2626e68206c0763c7.js.map"
+      "path---docs-background-subtractor-knn-1a16666c93545ef50fa7.js",
+      "path---docs-background-subtractor-knn-1a16666c93545ef50fa7.js.map"
     ],
     "app": [
       "app-ac4f9c424f88fc645fc8.js",
       "app-ac4f9c424f88fc645fc8.js.map"
     ],
     "path---docs-ocrhmm-classifier": [
-      "path---docs-ocrhmm-classifier-63765a33cac6e078e7dd.js",
-      "path---docs-ocrhmm-classifier-63765a33cac6e078e7dd.js.map"
+      "path---docs-ocrhmm-classifier-2aacf0e6f735ab72ebf0.js",
+      "path---docs-ocrhmm-classifier-2aacf0e6f735ab72ebf0.js.map"
     ],
     "path---docs-gftt-detector": [
-      "path---docs-gftt-detector-8499002fb676e3434a12.js",
-      "path---docs-gftt-detector-8499002fb676e3434a12.js.map"
+      "path---docs-gftt-detector-faacfe1b8635b171b3a3.js",
+      "path---docs-gftt-detector-faacfe1b8635b171b3a3.js.map"
     ],
     "path---docs-hog-descriptor": [
-      "path---docs-hog-descriptor-6e2bc631996451ca3676.js",
-      "path---docs-hog-descriptor-6e2bc631996451ca3676.js.map"
+      "path---docs-hog-descriptor-56fb048239dc4b130279.js",
+      "path---docs-hog-descriptor-56fb048239dc4b130279.js.map"
     ],
     "path---docs-train-data": [
-      "path---docs-train-data-7ffb784111814cb2eef5.js",
-      "path---docs-train-data-7ffb784111814cb2eef5.js.map"
+      "path---docs-train-data-03f800c934410ef15acc.js",
+      "path---docs-train-data-03f800c934410ef15acc.js.map"
     ],
     "path---404": [
       "path---404-a0e39f21c11f6a62c5ab.js",
       "path---404-a0e39f21c11f6a62c5ab.js.map"
     ],
     "path---docs-ocrhmm-decoder": [
-      "path---docs-ocrhmm-decoder-3d2318fa2f18d19df2e5.js",
-      "path---docs-ocrhmm-decoder-3d2318fa2f18d19df2e5.js.map"
+      "path---docs-ocrhmm-decoder-7a6cb161b6427e9b97d8.js",
+      "path---docs-ocrhmm-decoder-7a6cb161b6427e9b97d8.js.map"
     ],
     "path---docs-param-grid": [
-      "path---docs-param-grid-2ddb28c36f9ab5b2da6f.js",
-      "path---docs-param-grid-2ddb28c36f9ab5b2da6f.js.map"
+      "path---docs-param-grid-da94c5289d005da19229.js",
+      "path---docs-param-grid-da94c5289d005da19229.js.map"
     ],
     "path---docs-tracker-mil": [
-      "path---docs-tracker-mil-1e85a1792c7e8037f2df.js",
-      "path---docs-tracker-mil-1e85a1792c7e8037f2df.js.map"
+      "path---docs-tracker-mil-62100d7eedc98b81203f.js",
+      "path---docs-tracker-mil-62100d7eedc98b81203f.js.map"
     ],
     "path---docs-tracker-median-flow": [
-      "path---docs-tracker-median-flow-86dd58783494d27bf96e.js",
-      "path---docs-tracker-median-flow-86dd58783494d27bf96e.js.map"
+      "path---docs-tracker-median-flow-70d30e7074b43dfd6418.js",
+      "path---docs-tracker-median-flow-70d30e7074b43dfd6418.js.map"
     ]
   }
 }

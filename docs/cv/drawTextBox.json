@@ -1,0 +1,36 @@
+{
+  "cvModule": "utils",
+  "owner": "cv",
+  "fnName": "drawTextBox",
+  "hasAsync": false,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "img"
+        },
+        {
+          "type": "Point2",
+          "name": "upperLeft"
+        },
+        {
+          "type": "TextLine",
+          "name": "textLines",
+          "arrayDepth": 1
+        },
+        {
+          "type": "number",
+          "name": "alpha"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "returnValue"
+        }
+      ]
+    }
+  ]
+}

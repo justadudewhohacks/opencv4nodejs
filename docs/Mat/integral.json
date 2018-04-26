@@ -1,0 +1,38 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "integral",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [],
+      "optionalArgs": [
+        {
+          "type": "number",
+          "name": "sdepth",
+          "defaultValue": "-1"
+        },
+        {
+          "type": "number",
+          "name": "sqdepth",
+          "defaultValue": "-1"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Mat",
+          "name": "sum"
+        },
+        {
+          "type": "Mat",
+          "name": "sqsum"
+        },
+        {
+          "type": "Mat",
+          "name": "tilted"
+        }
+      ]
+    }
+  ]
+}

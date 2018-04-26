@@ -1,0 +1,104 @@
+{
+  "cvModule": "core",
+  "owner": "Mat",
+  "fnName": "goodFeaturesToTrack",
+  "hasAsync": true,
+  "category": "imgproc functions",
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "maxCorners"
+        },
+        {
+          "type": "number",
+          "name": "qualityLevel"
+        },
+        {
+          "type": "number",
+          "name": "minDistance"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        },
+        {
+          "type": "int",
+          "name": "blockSize",
+          "defaultValue": "3"
+        },
+        {
+          "type": "boolean",
+          "name": "useHarrisDetector",
+          "defaultValue": "false"
+        },
+        {
+          "type": "number",
+          "name": "harrisK",
+          "defaultValue": "0.04"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Point2",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    },
+    {
+      "requiredArgs": [
+        {
+          "type": "number",
+          "name": "maxCorners"
+        },
+        {
+          "type": "number",
+          "name": "qualityLevel"
+        },
+        {
+          "type": "number",
+          "name": "minDistance"
+        }
+      ],
+      "optionalArgs": [
+        {
+          "type": "Mat",
+          "name": "mask",
+          "defaultValue": "noArray()"
+        },
+        {
+          "type": "int",
+          "name": "blockSize",
+          "defaultValue": "3"
+        },
+        {
+          "type": "int",
+          "name": "gradientSize",
+          "defaultValue": "3"
+        },
+        {
+          "type": "boolean",
+          "name": "useHarrisDetector",
+          "defaultValue": "false"
+        },
+        {
+          "type": "number",
+          "name": "harrisK",
+          "defaultValue": "0.04"
+        }
+      ],
+      "returnValues": [
+        {
+          "type": "Point2",
+          "name": "returnValue",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}

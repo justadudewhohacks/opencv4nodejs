@@ -2,7 +2,7 @@
   "cvModule": "io",
   "owner": "VideoCapture",
   "fnName": "set",
-  "hasAsync": false,
+  "hasAsync": true,
   "signatures": [
     {
       "requiredArgs": [

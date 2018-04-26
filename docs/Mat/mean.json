@@ -2,7 +2,7 @@
   "cvModule": "core",
   "owner": "Mat",
   "fnName": "mean",
-  "hasAsync": false,
+  "hasAsync": true,
   "category": "operators",
   "signatures": [
     {
@@ -10,7 +10,7 @@
       "optionalArgs": [],
       "returnValues": [
         {
-          "type": "Mat",
+          "type": "Vec4",
           "name": "returnValue"
         }
       ]

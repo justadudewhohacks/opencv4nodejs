@@ -1,0 +1,29 @@
+{
+  "cvModule": "features2d",
+  "owner": "MSERDetector",
+  "fnName": "detectRegions",
+  "hasAsync": true,
+  "signatures": [
+    {
+      "requiredArgs": [
+        {
+          "type": "Mat",
+          "name": "image"
+        }
+      ],
+      "optionalArgs": [],
+      "returnValues": [
+        {
+          "type": "Point2",
+          "name": "msers",
+          "arrayDepth": 2
+        },
+        {
+          "type": "Rect",
+          "name": "bboxes",
+          "arrayDepth": 1
+        }
+      ]
+    }
+  ]
+}
