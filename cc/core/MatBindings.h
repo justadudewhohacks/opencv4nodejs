@@ -759,6 +759,76 @@ namespace MatBindings {
     }
   };
 
+  struct CopyMakeBorderWorker : public CatchCvExceptionWorker {
+  public:
+	  cv::Mat self;
+	  CopyMakeBorderWorker(cv::Mat self) {
+		  this->self = self;
+	  }
+
+	  cv::Mat result;
+	  int top, bottom, left, right;
+	  int borderType = cv::BORDER_CONSTANT;
+	  double v1 = 0;
+	  cv::Vec2d v2 = 0;
+	  cv::Vec3d v3 = 0;
+	  cv::Vec4d v4 = 0;
+
+	  std::string executeCatchCvExceptionWorker() {
+		  if (self.channels() == 1)
+			cv::copyMakeBorder(self, result, top, bottom, left, right, borderType, v1);
+		  else if (self.channels() == 2)
+			  cv::copyMakeBorder(self, result, top, bottom, left, right, borderType, v2);
+		  else if (self.channels() == 3)
+			  cv::copyMakeBorder(self, result, top, bottom, left, right, borderType, v3);
+		  else if (self.channels() == 4)
+			  cv::copyMakeBorder(self, result, top, bottom, left, right, borderType, v4);
+		  return "";
+	  }
+
+	  v8::Local<v8::Value> getReturnValue() {
+		  return Mat::Converter::wrap(result);
+	  }
+
+	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return (
+			  IntConverter::arg(0, &top, info) ||
+			  IntConverter::arg(1, &bottom, info) ||
+			  IntConverter::arg(2, &left, info) ||
+			  IntConverter::arg(3, &right, info) 
+			);
+	  }
+
+	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return (
+			  IntConverter::optArg(4, &borderType, info) ||
+			  (
+				  self.channels() == 1 && DoubleConverter::optArg(5, &v1, info) ||
+				  self.channels() == 2 && Vec2::Converter::optArg(5, &v2, info) ||
+				  self.channels() == 3 && Vec3::Converter::optArg(5, &v3, info) ||
+				  self.channels() == 4 && Vec4::Converter::optArg(5, &v4, info)
+				)
+			);
+	  }
+
+	  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return FF_ARG_IS_OBJECT(4);
+	  }
+
+	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  v8::Local<v8::Object> opts = info[4]->ToObject();
+		  return (
+			  IntConverter::optProp(&borderType, "borderType", opts) ||
+			  (
+				self.channels() == 1 && DoubleConverter::optProp(&v1, "value", opts) ||
+				self.channels() == 2 && Vec2::Converter::optProp(&v2, "value", opts) ||
+				self.channels() == 3 && Vec3::Converter::optProp(&v3, "value", opts) ||
+				self.channels() == 4 && Vec4::Converter::optProp(&v4, "value", opts)
+				)
+			);
+	  }
+  };
+
 #if CV_VERSION_MINOR > 1
   struct RotateWorker : public OpWithCodeWorker {
   public:

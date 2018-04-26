@@ -89,6 +89,8 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "meanAsync", MeanAsync);
   Nan::SetPrototypeMethod(ctor, "meanStdDev", MeanStdDev);
   Nan::SetPrototypeMethod(ctor, "meanStdDevAsync", MeanStdDevAsync);
+  Nan::SetPrototypeMethod(ctor, "copyMakeBorder", CopyMakeBorder);
+  Nan::SetPrototypeMethod(ctor, "copyMakeBorderAsync", CopyMakeBorderAsync);
 #if CV_VERSION_MINOR > 1
   Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
   Nan::SetPrototypeMethod(ctor, "rotateAsync", RotateAsync);
@@ -803,6 +805,22 @@ NAN_METHOD(Mat::MeanStdDevAsync) {
     "Mat::MeanStdDevAsync",
     info
   );
+}
+
+NAN_METHOD(Mat::CopyMakeBorder) {
+	FF::SyncBinding(
+		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::CopyMakeBorder",
+		info
+	);
+}
+
+NAN_METHOD(Mat::CopyMakeBorderAsync) {
+	FF::AsyncBinding(
+		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::CopyMakeBorderAsync",
+		info
+	);
 }
 
 #if CV_VERSION_MINOR > 1

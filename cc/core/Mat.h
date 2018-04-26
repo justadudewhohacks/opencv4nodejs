@@ -120,6 +120,8 @@ public:
   static NAN_METHOD(MeanAsync);
   static NAN_METHOD(MeanStdDev);
   static NAN_METHOD(MeanStdDevAsync);
+  static NAN_METHOD(CopyMakeBorder);
+  static NAN_METHOD(CopyMakeBorderAsync);
 #if CV_VERSION_MINOR > 1
   static NAN_METHOD(Rotate);
   static NAN_METHOD(RotateAsync);
