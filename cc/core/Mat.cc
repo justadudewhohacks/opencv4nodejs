@@ -85,6 +85,8 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "sumAsync", SumAsync);
   Nan::SetPrototypeMethod(ctor, "goodFeaturesToTrack", GoodFeaturesToTrack);
   Nan::SetPrototypeMethod(ctor, "goodFeaturesToTrackAsync", GoodFeaturesToTrackAsync);
+  Nan::SetPrototypeMethod(ctor, "mean", Mean);
+  Nan::SetPrototypeMethod(ctor, "meanAsync", MeanAsync);
   Nan::SetPrototypeMethod(ctor, "meanStdDev", MeanStdDev);
   Nan::SetPrototypeMethod(ctor, "meanStdDevAsync", MeanStdDevAsync);
 #if CV_VERSION_MINOR > 1
@@ -769,6 +771,22 @@ NAN_METHOD(Mat::GoodFeaturesToTrackAsync) {
     "Mat::GoodFeaturesToTrackAsync",
     info
   );
+}
+
+NAN_METHOD(Mat::Mean) {
+	FF::SyncBinding(
+		std::make_shared<MatBindings::MeanWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::Mean",
+		info
+	);
+}
+
+NAN_METHOD(Mat::MeanAsync) {
+	FF::AsyncBinding(
+		std::make_shared<MatBindings::MeanWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::MeanAsync",
+		info
+	);
 }
 
 NAN_METHOD(Mat::MeanStdDev) {

@@ -812,6 +812,87 @@ describe('Mat', () => {
     });
   });
 
+  describe('mean', () => {
+    const mask = new cv.Mat(1, 2, cv.CV_8U, 255);
+    describe('C1', () => {
+      const matData = [
+        [0.5, 1]
+      ];
+
+      generateAPITests({
+        getDut: () => new cv.Mat(matData, cv.CV_32FC1),
+        methodName: 'mean',
+        methodNameSpace: 'Mat',
+        getOptionalArgs: () => ([
+          mask
+        ]),
+        expectOutput: (res) => {
+          expect(res.at(0)).to.eq(0.75);
+        }
+      });
+    });
+
+    describe('C2', () => {
+      const matData = [
+        [[0.5, 0.5], [1, 1.5]]
+      ];
+
+      generateAPITests({
+        getDut: () => new cv.Mat(matData, cv.CV_32FC2),
+        methodName: 'mean',
+        methodNameSpace: 'Mat',
+        getOptionalArgs: () => ([
+          mask
+        ]),
+        expectOutput: (res) => {
+          expect(res.at(0)).to.eq(0.75);
+          expect(res.at(1)).to.eq(1);
+        }
+      });
+    });
+
+    describe('C3', () => {
+      const matData = [
+        [[0.5, 0.5, 0.5], [1, 1.5, 2.5]]
+      ];
+
+      generateAPITests({
+        getDut: () => new cv.Mat(matData, cv.CV_32FC3),
+        methodName: 'mean',
+        methodNameSpace: 'Mat',
+        getOptionalArgs: () => ([
+          mask
+        ]),
+        expectOutput: (res) => {
+          expect(res.at(0)).to.eq(0.75);
+          expect(res.at(1)).to.eq(1);
+          expect(res.at(2)).to.eq(1.5);
+        }
+      });
+    });
+
+    describe('C4', () => {
+      const matData = [
+        [[0.5, 0.5, 0.5, 0.5], [1, 1.5, 2.5, 3.5]]
+      ];
+
+      generateAPITests({
+        getDut: () => new cv.Mat(matData, cv.CV_32FC4),
+        methodName: 'mean',
+        methodNameSpace: 'Mat',
+        getOptionalArgs: () => ([
+          mask
+        ]),
+        expectOutput: (res) => {
+          expect(res.at(0)).to.eq(0.75);
+          expect(res.at(1)).to.eq(1);
+          expect(res.at(2)).to.eq(1.5);
+          expect(res.at(3)).to.eq(2);
+        }
+      });
+    });
+  });
+
   describe('meanStdDev', () => {
     const mask = new cv.Mat(20, 20, cv.CV_8U, 255);
     generateAPITests({

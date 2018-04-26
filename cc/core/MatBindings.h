@@ -700,6 +700,33 @@ namespace MatBindings {
       return ObjectArrayConverter<Point2, cv::Point2f>::wrap(corners);
     }
   };
+
+  struct MeanWorker : public CatchCvExceptionWorker {
+  public:
+	  cv::Mat self;
+	  MeanWorker(cv::Mat self) {
+		  this->self = self;
+	  }
+
+	  cv::Mat mask = cv::noArray().getMat();
+
+	  cv::Scalar mean;
+
+	  std::string executeCatchCvExceptionWorker() {
+		  mean = cv::mean(self, mask);
+		  return "";
+	  }
+
+	  v8::Local<v8::Value> getReturnValue() {
+		  return Vec4::Converter::wrap(cv::Vec4d(mean));
+	  }
+
+	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return (
+			  Mat::Converter::optArg(0, &mask, info)
+			);
+	  }
+  };
   
   struct MeanStdDevWorker : public CatchCvExceptionWorker {
   public:
