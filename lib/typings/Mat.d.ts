@@ -79,6 +79,8 @@ export class Mat {
   convertToAsync(type: number, alpha?: number, beta?: number): Promise<Mat>;
   copy(mask?: Mat): Mat;
   copyAsync(mask?: Mat): Promise<Mat>;
+  copyMakeBorder(top: number, bottom: number, left: number, right: number, borderType?: number, value?: number | Vec2 | Vec3 | Vec4): Mat;
+  copyMakeBorderAsync(top: number, bottom: number, left: number, right: number, borderType?: number, value?: number | Vec2 | Vec3 | Vec4): Promise<Mat>;
   copyTo(dst: Mat, mask?: Mat): Mat;
   copyToAsync(dst: Mat, mask?: Mat): Promise<Mat>;
   cornerEigenValsAndVecs(blockSize: number, ksize?: number, borderType?: number): Mat;

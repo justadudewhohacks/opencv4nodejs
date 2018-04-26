@@ -827,5 +827,53 @@ describe('Mat', () => {
       }
     });
   });
+
+  describe('copyMakeBorder', () => {
+    const top = 1;
+    const bottom = 1;
+    const left = 1;
+    const right = 1;
+
+    const getRequiredArgs = () => ([
+      top,
+      bottom,
+      left,
+      right
+    ]);
+
+    const borderType = cv.BORDER_CONSTANT;
+
+    const makeExpectOutput = (type, value) => (res, _, args) => {
+      expect(res).to.be.instanceOf(cv.Mat);
+      assertMetaData(res)(22, 22, type);
+      if (args[5] === 255 || (args[4] && args[4].value)) {
+        const upperLeft = res.at(0, 0);
+        if (typeof upperLeft === 'object') {
+          ['x', 'y', 'z', 'w'].forEach(k => expect(upperLeft[k]).to.eq(value[k]));
+        } else {
+          expect(upperLeft).to.equal(value);
+        }
+      }
+    };
+
+    const makeTest = (type, defaultValue, value) => () => {
+      generateAPITests({
+        getDut: () => new cv.Mat(20, 20, type, defaultValue),
+        methodName: 'copyMakeBorder',
+        methodNameSpace: 'Mat',
+        getRequiredArgs,
+        getOptionalArgsMap: () => ([
+          ['borderType', borderType],
+          ['value', value]
+        ]),
+        expectOutput: makeExpectOutput(type, value)
+      });
+    };
+
+    describe('C1', makeTest(cv.CV_8U, 0, 255));
+    describe('C2', makeTest(cv.CV_8UC2, [0, 0], new cv.Vec(255, 200)));
+    describe('C3', makeTest(cv.CV_8UC3, [0, 0, 0], new cv.Vec(255, 200, 100)));
+    describe('C4', makeTest(cv.CV_8UC4, [0, 0, 0, 0], new cv.Vec(255, 200, 100, 50)));
+  });
 });
 
