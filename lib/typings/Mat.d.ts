@@ -191,7 +191,8 @@ export class Mat {
   matMulDerivAsync(B: Mat): Promise<{ dABdA: Mat, dABdB: Mat }>;
   matchTemplate(template: Mat, method: number, mask?: Mat): Mat;
   matchTemplateAsync(template: Mat, method: number, mask?: Mat): Promise<Mat>;
-  mean(): Mat;
+  mean(): Vec4;
+  meanAsync():  Promise<Vec4>;
   meanStdDev(mask?: Mat): { mean: Mat, stddev: Mat };
   meanStdDevAsync(mask?: Mat): Promise<{ mean: Mat, stddev: Mat }>;
   medianBlur(kSize: number): Mat;

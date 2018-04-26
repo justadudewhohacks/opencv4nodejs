@@ -116,6 +116,8 @@ public:
   static NAN_METHOD(ConvertScaleAbsAsync);
   static NAN_METHOD(GoodFeaturesToTrack);
   static NAN_METHOD(GoodFeaturesToTrackAsync);
+  static NAN_METHOD(Mean);
+  static NAN_METHOD(MeanAsync);
   static NAN_METHOD(MeanStdDev);
   static NAN_METHOD(MeanStdDevAsync);
 #if CV_VERSION_MINOR > 1
