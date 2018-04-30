@@ -11,3 +11,4 @@ tmpdata
 data/dnn
 .idea/
 dist
+.DS_Store
