@@ -15,6 +15,7 @@ class Core : public Nan::ObjectWrap {
 public:
 	static NAN_MODULE_INIT(Init);
 
+	static NAN_METHOD(GetBuildInformation);
 	static NAN_METHOD(Partition);
 	static NAN_METHOD(Kmeans);
 	static NAN_METHOD(CartToPolar);

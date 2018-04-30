@@ -33,6 +33,7 @@ NAN_MODULE_INIT(Core::Init) {
   RotatedRect::Init(target);
   TermCriteria::Init(target);
 
+  Nan::SetMethod(target, "getBuildInformation", GetBuildInformation);
   Nan::SetMethod(target, "partition", Partition);
   Nan::SetMethod(target, "kmeans", Kmeans);
   Nan::SetMethod(target, "cartToPolar", CartToPolar);
@@ -40,6 +41,13 @@ NAN_MODULE_INIT(Core::Init) {
   Nan::SetMethod(target, "polarToCart", PolarToCart);
   Nan::SetMethod(target, "polarToCartAsync", PolarToCartAsync);
 };
+
+NAN_METHOD(Core::GetBuildInformation) {
+  FF_METHOD_CONTEXT("Core::GetBuildInformation");
+
+  v8::Local<v8::Value> ret = FF_NEW_STRING(cv::getBuildInformation());
+  FF_RETURN(ret);
+}
 
 NAN_METHOD(Core::Partition) {
   FF_METHOD_CONTEXT("Core::Partition");

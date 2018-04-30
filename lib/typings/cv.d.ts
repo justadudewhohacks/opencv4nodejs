@@ -59,6 +59,7 @@ export function findHomography(srcPoints: Point2[], dstPoints: Point2[], method?
 export function fitLine(points: Point2[], distType: number, param: number, reps: number, aeps: number): number[];
 export function fitLine(points: Point3[], distType: number, param: number, reps: number, aeps: number): number[];
 export function getAffineTransform(srcPoints: Point2[], dstPoints: Point2[]): Mat;
+export function getBuildInformation(): string;
 export function getPerspectiveTransform(srcPoints: Point2[], dstPoints: Point2[]): Mat;
 export function getRotationMatrix2D(center: Point2, angle: number, scale?: number): Mat;
 export function getStructuringElement(shape: number, kernelSize: Size, anchor?: Point2): Mat;
