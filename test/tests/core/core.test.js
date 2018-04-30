@@ -34,6 +34,15 @@ const partitionTests = (createInstance) => {
 };
 
 describe('core', () => {
+  describe('getBuildInformation', () => {
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'getBuildInformation',
+      hasAsync: false,
+      expectOutput: () => {}
+    });
+  });
+
   describe('partition', () => {
     funcShouldRequireArgs(() => cv.partition());
 
