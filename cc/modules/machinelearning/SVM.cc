@@ -150,7 +150,7 @@ NAN_METHOD(SVM::GetDecisionFunction) {
   FF_OBJ alpha = FF_NEW_INSTANCE(Mat::constructor);
   FF_OBJ svidx = FF_NEW_INSTANCE(Mat::constructor);
   FF_ARG_INT(0, int i);
-  float rho = FF_UNWRAP(info.This(), SVM)->svm->getDecisionFunction(i, FF_UNWRAP_MAT_AND_GET(alpha), FF_UNWRAP_MAT_AND_GET(svidx));
+  double rho = FF_UNWRAP(info.This(), SVM)->svm->getDecisionFunction(i, FF_UNWRAP_MAT_AND_GET(alpha), FF_UNWRAP_MAT_AND_GET(svidx));
 
   FF_OBJ ret = FF_NEW_OBJ();
   Nan::Set(ret, FF_NEW_STRING("rho"), Nan::New((double)rho));
