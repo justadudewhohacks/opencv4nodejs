@@ -26,6 +26,7 @@ NAN_MODULE_INIT(SVM::Init) {
   Nan::SetPrototypeMethod(ctor, "predict", Predict);
   Nan::SetPrototypeMethod(ctor, "getSupportVectors", GetSupportVectors);
   Nan::SetPrototypeMethod(ctor, "getUncompressedSupportVectors", GetUncompressedSupportVectors);
+  Nan::SetPrototypeMethod(ctor, "getDecisionFunction", GetDecisionFunction);
   Nan::SetPrototypeMethod(ctor, "calcError", CalcError);
   Nan::SetPrototypeMethod(ctor, "save", Save);
   Nan::SetPrototypeMethod(ctor, "load", Load);
@@ -137,6 +138,25 @@ NAN_METHOD(SVM::GetUncompressedSupportVectors) {
   FF_UNWRAP_MAT_AND_GET(jsSupportVectors) = FF_UNWRAP(info.This(), SVM)->svm->getUncompressedSupportVectors();
   FF_RETURN(jsSupportVectors);
 #endif
+}
+
+NAN_METHOD(SVM::GetDecisionFunction) {
+  FF_METHOD_CONTEXT("SVM::GetDecisionFunction");
+
+  if (!info[0]->IsNumber()) {
+    FF_THROW("expected arg 0 to be a Int");
+  }
+
+  FF_OBJ alpha = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ svidx = FF_NEW_INSTANCE(Mat::constructor);
+  FF_ARG_INT(0, int i);
+  float rho = FF_UNWRAP(info.This(), SVM)->svm->getDecisionFunction(i, FF_UNWRAP_MAT_AND_GET(alpha), FF_UNWRAP_MAT_AND_GET(svidx));
+
+  FF_OBJ ret = FF_NEW_OBJ();
+  Nan::Set(ret, FF_NEW_STRING("rho"), Nan::New((double)rho));
+  Nan::Set(ret, FF_NEW_STRING("alpha"), alpha);
+  Nan::Set(ret, FF_NEW_STRING("svidx"), svidx);
+  FF_RETURN(ret);
 }
 
 NAN_METHOD(SVM::CalcError) {
