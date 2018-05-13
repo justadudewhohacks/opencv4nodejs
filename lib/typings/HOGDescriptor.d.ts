@@ -33,8 +33,8 @@ export class HOGDescriptor {
   detectROIAsync(img: Mat, locations: Point2[], hitThreshold?: number, winStride?: Size, padding?: Size): Promise<{ foundLocations: Point2[], confidences: number[] }>;
   getDaimlerPeopleDetector(): number[];
   getDefaultPeopleDetector(): number[];
-  groupRectangles(rectList: Rect[], weights: number[], groupThreshold: number, eps: number): void;
-  groupRectanglesAsync(rectList: Rect[], weights: number[], groupThreshold: number, eps: number): Promise<void>;
+  groupRectangles(rectList: Rect[], weights: number[], groupThreshold: number, eps: number): Rect[];
+  groupRectanglesAsync(rectList: Rect[], weights: number[], groupThreshold: number, eps: number): Promise<Rect[]>;
   load(path: string): void;
   save(path: string): void;
   setSVMDetector(detector: number[]): void;
