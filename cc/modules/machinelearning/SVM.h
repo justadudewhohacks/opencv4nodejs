@@ -44,6 +44,7 @@ public:
 	static NAN_METHOD(Predict);
 	static NAN_METHOD(GetSupportVectors);
 	static NAN_METHOD(GetUncompressedSupportVectors);
+	static NAN_METHOD(GetDecisionFunction);
 	static NAN_METHOD(CalcError);
 	static NAN_METHOD(Save);
 	static NAN_METHOD(Load);

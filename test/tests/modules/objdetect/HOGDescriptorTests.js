@@ -412,14 +412,14 @@ module.exports = () => {
     });
 
     describe('groupRectangles', () => {
-      const expectOutput = () => {
-        // expect to not throw
+      const expectOutput = (result) => {
+        expect(result).to.be.an('array');
+        result.forEach(rect => expect(rect).instanceOf(cv.Rect));
       };
-
       const rectList = [new cv.Rect(0, 0, 10, 10), new cv.Rect(0, 0, 20, 20)];
       const weights = [0.5, 1.0];
       const groupThreshold = 1;
-      const eps = 0.5;
+      const eps = 2.0;
 
       generateAPITests({
         getDut: () => getTestHOG(),

@@ -17,6 +17,7 @@ export class SVM {
   constructor(params: { c?: number, coef0?: number, degree?: number, gamma?: number, nu?: number, p?: number, kernelType?: number, classWeights?: Mat });
   calcError(trainData: TrainData, test: boolean): { error: number, responses: Mat };
   getSupportVectors(): Mat;
+  getDecisionFunction(): { rho: number, alpha: Mat, svidx: Mat };
   load(file: string): void;
   predict(sample: number[], flags?: number): number;
   predict(samples: Mat, flags?: number): number[];

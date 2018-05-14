@@ -190,6 +190,15 @@ module.exports = () => {
         });
       });
 
+      describe('getDecisionFunction', () => {
+        it('should return decision function', () => {
+          const ret = svm.getDecisionFunction(0);
+          expect(ret).to.have.property('rho').to.be.a('number');
+          expect(ret).to.have.property('alpha').to.be.instanceOf(cv.Mat);
+          expect(ret).to.have.property('svidx').to.be.instanceOf(cv.Mat);
+        });
+      });
+
       describe('calcError', () => {
         it.skip('calcError', () => {});
       });

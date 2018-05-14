@@ -356,8 +356,7 @@ namespace HOGDescriptorBindings {
     }
   
     v8::Local<v8::Value> getReturnValue() {
-      v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      return ret;
+      return ObjectArrayConverter<Rect, cv::Rect2d, cv::Rect>::wrap(rectList);
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
