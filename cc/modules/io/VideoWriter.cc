@@ -35,11 +35,19 @@ NAN_METHOD(VideoWriter::Release) {
 }
 
 NAN_METHOD(VideoWriter::New) {
-  FF::SyncBinding(
-    std::make_shared<VideoWriterBindings::NewWorker>(),
-    "VideoWriter::New",
-    info
-  );
+  FF::TryCatch tryCatch;
+  VideoWriterBindings::NewWorker worker;
+
+  if (worker.applyUnwrappers(info)) {
+    v8::Local<v8::Value> err = tryCatch.formatCatchedError("VideoWriter::New");
+    tryCatch.throwNew(err);
+    return;
+  }
+
+  VideoWriter* self = new VideoWriter();
+  self->writer.open(worker.fileName, worker.fourccCode, worker.fps, (cv::Size)worker.frameSize, worker.isColor);
+  self->Wrap(info.Holder());
+  FF_RETURN(info.Holder());
 }
 
 NAN_METHOD(VideoWriter::Fourcc) {
