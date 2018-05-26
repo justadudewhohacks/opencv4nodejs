@@ -39,7 +39,7 @@
   "gypfile": true,
   "dependencies": {
     "macro-inferno": "^0.2.1",
-    "nan": "^2.7.0",
+    "nan": "^2.10.0",
     "native-node-utils": "0.1.2",
     "opencv-build": "^0.0.12"
   },
