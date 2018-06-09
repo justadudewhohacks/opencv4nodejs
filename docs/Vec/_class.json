@@ -56,6 +56,10 @@
       "requiredArgs": [
         {
           "type": "number",
+          "name": "w"
+        },
+        {
+          "type": "number",
           "name": "x"
         },
         {
@@ -65,10 +69,6 @@
         {
           "type": "number",
           "name": "z"
-        },
-        {
-          "type": "number",
-          "name": "w"
         }
       ],
       "optionalArgs": [],
