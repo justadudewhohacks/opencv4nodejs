@@ -292,10 +292,10 @@ export class Mat {
   triangulatePointsAsync(projPoints1: Point2[], projPoints2: Point2[]): Promise<Mat>;
   validateDisparity(cost: Mat, minDisparity: number, numberOfDisparities: number, disp12MaxDisp?: number): void;
   validateDisparityAsync(cost: Mat, minDisparity: number, numberOfDisparities: number, disp12MaxDisp?: number): Promise<void>;
-  warpAffine(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number): Mat;
-  warpAffineAsync(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number): Promise<Mat>;
-  warpPerspective(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number): Mat;
-  warpPerspectiveAsync(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number): Promise<Mat>;
+  warpAffine(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number, borderValue?: Vec3): Mat;
+  warpAffineAsync(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number, borderValue?: Vec3): Promise<Mat>;
+  warpPerspective(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number, borderValue?: Vec3): Mat;
+  warpPerspectiveAsync(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number, borderValue?: Vec3): Promise<Mat>;
   watershed(markers: Mat): Mat;
   watershedAsync(markers: Mat): Promise<Mat>;
 

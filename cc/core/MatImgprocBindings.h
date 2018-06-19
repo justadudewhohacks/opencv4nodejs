@@ -296,6 +296,7 @@ namespace MatImgprocBindings {
     cv::Size2d size;
     int flags = cv::INTER_LINEAR;
     int borderMode = cv::BORDER_CONSTANT;
+	cv::Vec3d borderValue = cv::Vec3d();
   
     cv::Mat warpedMat;
   
@@ -311,7 +312,8 @@ namespace MatImgprocBindings {
       return (
         Size::Converter::optArg(1, &size, info) ||
         IntConverter::optArg(2, &flags, info) ||
-        IntConverter::optArg(3, &borderMode, info)
+        IntConverter::optArg(3, &borderMode, info) ||
+		Vec3::Converter::optArg(4, &borderValue, info)
       );
     }
   
@@ -324,7 +326,8 @@ namespace MatImgprocBindings {
       return (
         Size::Converter::optProp(&size, "size", opts) ||
         IntConverter::optProp(&flags, "flags", opts) ||
-        IntConverter::optProp(&borderMode, "borderMode", opts)
+        IntConverter::optProp(&borderMode, "borderMode", opts) ||
+		Vec3::Converter::optProp(&borderValue, "borderValue", opts)
       );
     }
   };
@@ -334,7 +337,7 @@ namespace MatImgprocBindings {
     }
   
     std::string executeCatchCvExceptionWorker() {
-      cv::warpAffine(mat, warpedMat, transformationMatrix, (cv::Size)size, flags, borderMode, cv::Scalar());
+      cv::warpAffine(mat, warpedMat, transformationMatrix, (cv::Size)size, flags, borderMode, borderValue);
       return "";
     }
   };
@@ -344,7 +347,7 @@ namespace MatImgprocBindings {
     }
   
     std::string executeCatchCvExceptionWorker() {
-      cv::warpPerspective(mat, warpedMat, transformationMatrix, (cv::Size)size, flags, borderMode, cv::Scalar());
+      cv::warpPerspective(mat, warpedMat, transformationMatrix, (cv::Size)size, flags, borderMode, borderValue);
       return "";
     }
   };
