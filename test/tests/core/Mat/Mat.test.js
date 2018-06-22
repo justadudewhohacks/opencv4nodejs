@@ -957,7 +957,7 @@ describe('Mat', () => {
     describe('C4', makeTest(cv.CV_8UC4, [0, 0, 0, 0], new cv.Vec(255, 200, 100, 50)));
   });
 
-  describe.only('reduce', () => {
+  describe('reduce', () => {
     const makeTest = (dim, rtype, dtype, expectedResults) => () => {
       generateAPITests({
         getDut: () => new cv.Mat(1, 3, cv.CV_8UC1, [[1]]),
@@ -975,7 +975,7 @@ describe('Mat', () => {
     describe('Column average', makeTest(0, cv.REDUCE_AVG, cv.CV_32F, [ [ 1, 1, 1 ] ]));
     describe('Column max', makeTest(0, cv.REDUCE_MAX, -1, [ [ 1, 1, 1 ] ]));
     describe('Column min', makeTest(0, cv.REDUCE_MIN, -1, [ [ 1, 1, 1 ] ]));
-    
+
     describe('Row sum', makeTest(1, cv.REDUCE_SUM, cv.CV_32F, [ [ 3 ] ]));
     describe('Row average', makeTest(1, cv.REDUCE_AVG, cv.CV_32F, [ [ 1 ] ]));
     describe('Row max', makeTest(1, cv.REDUCE_MAX, -1, [ [ 1 ] ]));
