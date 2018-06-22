@@ -236,7 +236,7 @@ export class Mat {
   recoverPoseAsync(E: Mat, points1: Point2[], points2: Point2[], mask?: Mat): Promise<{ returnValue: number, R: Mat, T: Vec3 }>;
   rectify3Collinear(distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], cameraMatrix3: Mat, distCoeffs3: number[], imageSize: Size, R12: Mat, T12: Vec3, R13: Mat, T13: Vec3, alpha: number, newImageSize: Size, flags: number): { returnValue: number, R1: Mat, R2: Mat, R3: Mat, P1: Mat, P2: Mat, P3: Mat, Q: Mat, roi1: Rect, roi2: Rect };
   rectify3CollinearAsync(distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], cameraMatrix3: Mat, distCoeffs3: number[], imageSize: Size, R12: Mat, T12: Vec3, R13: Mat, T13: Vec3, alpha: number, newImageSize: Size, flags: number): Promise<{ returnValue: number, R1: Mat, R2: Mat, R3: Mat, P1: Mat, P2: Mat, P3: Mat, Q: Mat, roi1: Rect, roi2: Rect }>;
-  reduce(dim: number, rtype: number: dtype?: number);
+  reduce(dim: number, rtype: number, dtype?: number): Mat;
   reprojectImageTo3D(Q: Mat, handleMissingValues?: boolean, ddepth?: number): Mat;
   reprojectImageTo3DAsync(Q: Mat, handleMissingValues?: boolean, ddepth?: number): Promise<Mat>;
   rescale(factor: number): Mat;
