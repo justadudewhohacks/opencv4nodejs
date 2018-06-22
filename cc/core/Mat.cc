@@ -91,6 +91,8 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "meanStdDevAsync", MeanStdDevAsync);
   Nan::SetPrototypeMethod(ctor, "copyMakeBorder", CopyMakeBorder);
   Nan::SetPrototypeMethod(ctor, "copyMakeBorderAsync", CopyMakeBorderAsync);
+  Nan::SetPrototypeMethod(ctor, "reduce", Reduce);
+  Nan::SetPrototypeMethod(ctor, "reduceAsync", ReduceAsync);
 #if CV_VERSION_MINOR > 1
   Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
   Nan::SetPrototypeMethod(ctor, "rotateAsync", RotateAsync);
@@ -191,7 +193,7 @@ NAN_METHOD(Mat::New) {
     self->setNativeProps(mat);
   }
   self->Wrap(info.Holder());
-    
+
   // if ExternalMemTracking is disabled, the following instruction will be a no op
     // notes: I *think* New should be called in JS thread where cv::mat has been created async,
     // so a good place to rationalise memory
@@ -819,6 +821,22 @@ NAN_METHOD(Mat::CopyMakeBorderAsync) {
 	FF::AsyncBinding(
 		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::Converter::unwrap(info.This())),
 		"Mat::CopyMakeBorderAsync",
+		info
+	);
+}
+
+NAN_METHOD(Mat::Reduce) {
+	FF::SyncBinding(
+		std::make_shared<MatBindings::ReduceWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::Reduce",
+		info
+	);
+}
+
+NAN_METHOD(Mat::ReduceAsync) {
+	FF::AsyncBinding(
+		std::make_shared<MatBindings::ReduceWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::ReduceAsync",
 		info
 	);
 }
