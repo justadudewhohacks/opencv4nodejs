@@ -141,7 +141,7 @@ Or simply pull from [justadudewhohacks/opencv-nodejs](https://hub.docker.com/r/j
 FROM justadudewhohacks/opencv-nodejs
 ```
 
-**Note**: The aforementioned Docker image does not have build tools installed. In order to prevent errors during an ```npm install```, you can either install opencv4nodejs globally and link to it in your project or install production packages only in your Dockerfile.
+**Note**: The aforementioned Docker image already has ```opencv4nodejs``` installed globally. In order to prevent build errors during an ```npm install```, your ```package.json``` should not include ```opencv4nodejs```, and instead should include/require the global package either by requiring it by absolute path or setting the ```NODE_PATH``` environment variable to ```/usr/lib/node_modules``` in your Dockerfile and requiring the package as you normally would.
 
 Different OpenCV 3.x base images can be found here: https://hub.docker.com/r/justadudewhohacks/.
 
