@@ -357,9 +357,9 @@ NAN_METHOD(Mat::Normalize) {
   if (!hasOptArgsObj) {
     FF_ARG_NUMBER_IFDEF(0, alpha, 1.0);
     FF_ARG_NUMBER_IFDEF(1, beta, 0.0);
-    FF_ARG_UINT_IFDEF(3, normType, normType);
-    FF_ARG_INT_IFDEF(4, dtype, dtype);
-    FF_ARG_INSTANCE_IFDEF(5, mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
+    FF_ARG_UINT_IFDEF(2, normType, normType);
+    FF_ARG_INT_IFDEF(3, dtype, dtype);
+    FF_ARG_INSTANCE_IFDEF(4, mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
   }
 
   FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
