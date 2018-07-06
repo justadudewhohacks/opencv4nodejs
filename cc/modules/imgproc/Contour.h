@@ -35,6 +35,7 @@ public:
 
 	static NAN_METHOD(GetPoints);
 	static NAN_METHOD(ApproxPolyDP);
+	static NAN_METHOD(ApproxPolyDPContour);
 	static NAN_METHOD(ArcLength);
 	static NAN_METHOD(BoundingRect);
 	static NAN_METHOD(ConvexHull);
