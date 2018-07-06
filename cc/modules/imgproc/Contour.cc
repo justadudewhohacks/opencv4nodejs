@@ -20,8 +20,9 @@ void Contour::Init() {
 
 	Nan::SetPrototypeMethod(ctor, "getPoints", GetPoints);
 	Nan::SetPrototypeMethod(ctor, "approxPolyDP", ApproxPolyDP);
+	Nan::SetPrototypeMethod(ctor, "approxPolyDPContour", ApproxPolyDPContour);
 	Nan::SetPrototypeMethod(ctor, "arcLength", ArcLength);
-	Nan::SetPrototypeMethod(ctor, "boundingRect", BoundingRect); 
+	Nan::SetPrototypeMethod(ctor, "boundingRect", BoundingRect);
 	Nan::SetPrototypeMethod(ctor, "convexHull", ConvexHull);
 	Nan::SetPrototypeMethod(ctor, "convexHullIndices", ConvexHullIndices);
 	Nan::SetPrototypeMethod(ctor, "convexityDefects", ConvexityDefects);
@@ -40,7 +41,7 @@ NAN_METHOD(Contour::GetPoints) {
 
 NAN_METHOD(Contour::ApproxPolyDP) {
 	FF_METHOD_CONTEXT("Contour::ApproxPolyDP");
-	
+
 	FF_ARG_NUMBER(0, double epsilon);
 	FF_ARG_BOOL(1, bool closed);
 
@@ -49,11 +50,26 @@ NAN_METHOD(Contour::ApproxPolyDP) {
 	FF_RETURN(Point::packJSPoint2Array(curve));
 }
 
+NAN_METHOD(Contour::ApproxPolyDPContour) {
+	FF_METHOD_CONTEXT("Contour::ApproxPolyDPContour");
+
+	FF_ARG_NUMBER(0, double epsilon);
+	FF_ARG_BOOL(1, bool closed);
+
+	std::vector<cv::Point> curve;
+	cv::approxPolyDP(FF_UNWRAP_CONTOUR_AND_GET(info.This()), curve, epsilon, closed);
+
+	FF_OBJ jsApprox = FF_NEW_INSTANCE(Contour::constructor);
+	FF_UNWRAP_CONTOUR_AND_GET(jsApprox) = curve;
+	FF_UNWRAP(jsApprox, Contour)->hierarchy = cv::Vec4i(-1, -1, -1, -1);
+	FF_RETURN(jsApprox);
+}
+
 NAN_METHOD(Contour::ArcLength) {
 	FF_METHOD_CONTEXT("Contour::ArcLength");
 
 	FF_ARG_BOOL_IFDEF(0, bool closed, false);
-	
+
 	double arcLength = cv::arcLength(FF_UNWRAP_CONTOUR_AND_GET(info.This()), closed);
 	FF_RETURN(Nan::New(arcLength));
 }
@@ -129,7 +145,7 @@ NAN_METHOD(Contour::MinEnclosingCircle) {
 NAN_METHOD(Contour::MinEnclosingTriangle) {
 	std::vector<cv::Point2f> triangle;
 	cv::minEnclosingTriangle(
-		FF_UNWRAP_CONTOUR_AND_GET(info.This()), 
+		FF_UNWRAP_CONTOUR_AND_GET(info.This()),
 		triangle
 	);
 	FF_RETURN(Point::packJSPoint2Array(triangle));
@@ -139,7 +155,7 @@ NAN_METHOD(Contour::PointPolygonTest) {
 	FF_METHOD_CONTEXT("Contour::PointPolygonTest");
 
 	FF_ARG_INSTANCE(0, cv::Point2d point, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
-	
+
 	double dist = cv::pointPolygonTest(
 		FF_UNWRAP_CONTOUR_AND_GET(info.This()),
 		point,

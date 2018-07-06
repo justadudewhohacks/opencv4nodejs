@@ -10,6 +10,7 @@ export class Contour {
   readonly isConvex: boolean;
   readonly hierarchy: Vec4;
   approxPolyDP(epsilon: number, closed: boolean): Point2[];
+  approxPolyDPContour(epsilon: number, closed: boolean): Contour;
   arcLength(closed?: boolean): number;
   boundingRect(): Rect;
   convexHull(clockwise?: boolean): Contour;
