@@ -23,18 +23,18 @@ namespace MatBindings {
 
     std::string executeCatchCvExceptionWorker() {
       switch (self.channels()) {
-      case 2:
-        returnValue = self.setTo(mask, newVal2);
-        break;
-      case 3:
-        returnValue = self.setTo(mask, newVal3);
-        break;
-      case 4:
-        returnValue = self.setTo(mask, newVal4);
-        break;
-      default:
-        returnValue = self.setTo(mask, newVal1);
-        break;
+        case 2:
+          returnValue = self.setTo(newVal2, mask);
+          break;
+        case 3:
+          returnValue = self.setTo(newVal3, mask);
+          break;
+        case 4:
+          returnValue = self.setTo(newVal4, mask);
+          break;
+        default:
+          returnValue = self.setTo(newVal1, mask);
+          break;
       }
 
       return "";
