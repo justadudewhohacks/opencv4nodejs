@@ -5,10 +5,10 @@
 
 namespace MatBindings {
 
-  struct SetAtWorker : public CatchCvExceptionWorker {
+  struct SetToWorker : public CatchCvExceptionWorker {
   public:
     cv::Mat self;
-    SetAtWorker(cv::Mat self) {
+    SetToWorker(cv::Mat self) {
       this->self = self;
     }
 

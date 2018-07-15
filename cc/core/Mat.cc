@@ -28,8 +28,8 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "at", At);
   Nan::SetPrototypeMethod(ctor, "atRaw", AtRaw);
   Nan::SetPrototypeMethod(ctor, "set", Set);
-  Nan::SetPrototypeMethod(ctor, "setAt", SetAt);
-  Nan::SetPrototypeMethod(ctor, "setAtAsync", SetAtAsync);
+  Nan::SetPrototypeMethod(ctor, "setTo", SetTo);
+  Nan::SetPrototypeMethod(ctor, "setToAsync", SetToAsync);
   Nan::SetPrototypeMethod(ctor, "push_back", PushBack);
   Nan::SetPrototypeMethod(ctor, "push_backAsync", PushBackAsync);
   Nan::SetPrototypeMethod(ctor, "pushBack", PushBack);
@@ -297,18 +297,18 @@ NAN_METHOD(Mat::Set) {
   }
 }
 
-NAN_METHOD(Mat::SetAt) {
+NAN_METHOD(Mat::SetTo) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::SetAtWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::SetAt",
+    std::make_shared<MatBindings::SetToWorker>(Mat::Converter::unwrap(info.This())),
+    "Mat::SetTo",
     info
   );
 }
 
-NAN_METHOD(Mat::SetAtAsync) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::SetAtWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::SetAtAsync",
+NAN_METHOD(Mat::SetToAsync) {
+  FF::AsyncBinding(
+    std::make_shared<MatBindings::SetToWorker>(Mat::Converter::unwrap(info.This())),
+    "Mat::SetToAsync",
     info
   );
 }

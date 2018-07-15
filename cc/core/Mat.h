@@ -64,8 +64,8 @@ public:
   static NAN_METHOD(At);
   static NAN_METHOD(AtRaw);
   static NAN_METHOD(Set);
-  static NAN_METHOD(SetAt);
-  static NAN_METHOD(SetAtAsync);
+  static NAN_METHOD(SetTo);
+  static NAN_METHOD(SetToAsync);
   static NAN_METHOD(GetDataAsArray);
   static NAN_METHOD(GetRegion);
   static NAN_METHOD(Norm);
