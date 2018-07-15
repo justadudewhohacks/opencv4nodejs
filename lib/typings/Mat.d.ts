@@ -264,6 +264,14 @@ export class Mat {
   set(row: number, col: number, value: Vec2): void;
   set(row: number, col: number, value: Vec3): void;
   set(row: number, col: number, value: Vec4): void;
+  setTo(value: number, mask?: Mat): Mat;
+  setTo(value: Vec2, mask?: Mat): Mat;
+  setTo(value: Vec3, mask?: Mat): Mat;
+  setTo(value: Vec4, mask?: Mat): Mat;
+  setToAsync(value: number, mask?: Mat): Promise<Mat>;
+  setToAsync(value: Vec2, mask?: Mat): Promise<Mat>;
+  setToAsync(value: Vec3, mask?: Mat): Promise<Mat>;
+  setToAsync(value: Vec4, mask?: Mat): Promise<Mat>;
   sobel(ddepth: number, dx: number, dy: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Mat;
   sobelAsync(ddepth: number, dx: number, dy: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
   split(): Mat[];

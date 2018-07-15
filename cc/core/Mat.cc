@@ -28,6 +28,8 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "at", At);
   Nan::SetPrototypeMethod(ctor, "atRaw", AtRaw);
   Nan::SetPrototypeMethod(ctor, "set", Set);
+  Nan::SetPrototypeMethod(ctor, "setTo", SetTo);
+  Nan::SetPrototypeMethod(ctor, "setToAsync", SetToAsync);
   Nan::SetPrototypeMethod(ctor, "push_back", PushBack);
   Nan::SetPrototypeMethod(ctor, "push_backAsync", PushBackAsync);
   Nan::SetPrototypeMethod(ctor, "pushBack", PushBack);
@@ -293,6 +295,22 @@ NAN_METHOD(Mat::Set) {
   else {
     return Nan::ThrowError(FF_NEW_STRING("Mat::Set - unexpected argument 2"));
   }
+}
+
+NAN_METHOD(Mat::SetTo) {
+  FF::SyncBinding(
+    std::make_shared<MatBindings::SetToWorker>(Mat::Converter::unwrap(info.This())),
+    "Mat::SetTo",
+    info
+  );
+}
+
+NAN_METHOD(Mat::SetToAsync) {
+  FF::AsyncBinding(
+    std::make_shared<MatBindings::SetToWorker>(Mat::Converter::unwrap(info.This())),
+    "Mat::SetToAsync",
+    info
+  );
 }
 
 NAN_METHOD(Mat::GetDataAsArray) {
