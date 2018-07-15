@@ -5,6 +5,69 @@
 
 namespace MatBindings {
 
+  struct SetAtWorker : public CatchCvExceptionWorker {
+  public:
+    cv::Mat self;
+    SetAtWorker(cv::Mat self) {
+      this->self = self;
+    }
+
+    cv::Mat mask = cv::noArray().getMat();
+
+    double newVal1;
+    cv::Vec2d newVal2;
+    cv::Vec3d newVal3;
+    cv::Vec4d newVal4;
+
+    cv::Mat returnValue;
+
+    std::string executeCatchCvExceptionWorker() {
+      switch (self.channels()) {
+      case 2:
+        returnValue = self.setTo(mask, newVal2);
+        break;
+      case 3:
+        returnValue = self.setTo(mask, newVal3);
+        break;
+      case 4:
+        returnValue = self.setTo(mask, newVal4);
+        break;
+      default:
+        returnValue = self.setTo(mask, newVal1);
+        break;
+      }
+
+      return "";
+    }
+
+    FF_VAL getReturnValue() {
+      return Mat::Converter::wrap(returnValue);
+    }
+
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      switch (self.channels()) {
+        case 2:
+          return (Vec2::Converter::arg(0, &newVal2, info));
+          break;
+        case 3:
+          return (Vec3::Converter::arg(0, &newVal3, info));
+          break;
+        case 4:
+          return (Vec4::Converter::arg(0, &newVal4, info));
+          break;
+        default:
+          return (DoubleConverter::arg(0, &newVal1, info));
+          break;
+      }
+    }
+
+    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        Mat::Converter::optArg(1, &mask, info)
+      );
+    }
+  };
+
   struct PushBackWorker : public CatchCvExceptionWorker {
   public:
     cv::Mat self;
