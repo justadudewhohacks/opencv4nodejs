@@ -2,7 +2,7 @@
 #include "ExternalMemTracking.h"
 
 #include "cvTypes/cvTypes.h"
-#include "core.h"
+#include "core/core.h"
 #include "modules/io/io.h"
 #include "modules/video/video.h"
 #include "modules/photo/photo.h"
