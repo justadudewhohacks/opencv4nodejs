@@ -29,8 +29,13 @@ NAN_METHOD(Tracker::Update) {
 	FF_ARG_INSTANCE(0, cv::Mat image, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 
 	FF_OBJ jsRect = FF_NEW_INSTANCE(Rect::constructor);
-	FF_UNWRAP(info.This(), Tracker)->getTracker()->update(image, FF_UNWRAP_RECT_AND_GET(jsRect));
-	FF_RETURN(jsRect);
+	bool ret = FF_UNWRAP(info.This(), Tracker)->getTracker()->update(image, FF_UNWRAP_RECT_AND_GET(jsRect));
+	
+	if (ret) {
+		FF_RETURN(jsRect);
+	} else {
+		FF_RETURN(NULL);
+	}
 }
 
 NAN_METHOD(Tracker::GetModel) {
