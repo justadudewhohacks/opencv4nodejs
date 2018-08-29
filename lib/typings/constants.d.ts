@@ -482,6 +482,50 @@ export const WARP_INVERSE_MAP: number;
 export const INPAINT_NS: number;
 export const INPAINT_TELEA: number;
 
+export const IMREAD_UNCHANGED: number;
+export const IMREAD_GRAYSCALE: number;
+export const IMREAD_COLOR: number;
+export const IMREAD_ANYDEPTH: number;
+export const IMREAD_ANYCOLOR: number;
+export const IMREAD_LOAD_GDAL: number;
+
+export const IMWRITE_JPEG_QUALITY: number;
+export const IMWRITE_JPEG_PROGRESSIVE: number;
+export const IMWRITE_JPEG_OPTIMIZE: number;
+export const IMWRITE_JPEG_RST_INTERVAL: number;
+export const IMWRITE_JPEG_LUMA_QUALITY: number;
+export const IMWRITE_JPEG_CHROMA_QUALITY: number;
+export const IMWRITE_PNG_COMPRESSION: number;
+export const IMWRITE_PNG_STRATEGY: number;
+export const IMWRITE_PNG_BILEVEL: number;
+export const IMWRITE_PXM_BINARY: number;
+export const IMWRITE_WEBP_QUALITY: number;
+
+
+export const IMWRITE_PNG_STRATEGY_DEFAULT: number;
+export const IMWRITE_PNG_STRATEGY_FILTERED: number;
+export const IMWRITE_PNG_STRATEGY_HUFFMAN_ONLY: number;
+export const IMWRITE_PNG_STRATEGY_RLE: number;
+export const IMWRITE_PNG_STRATEGY_FIXED: number;
+
+
+export const IMREAD_REDUCED_GRAYSCALE_2: number;
+export const IMREAD_REDUCED_COLOR_2: number;
+export const IMREAD_REDUCED_GRAYSCALE_4: number;
+export const IMREAD_REDUCED_COLOR_4: number;
+export const IMREAD_REDUCED_GRAYSCALE_8: number;
+export const IMREAD_REDUCED_COLOR_8: number;
+
+export const IMREAD_IGNORE_ORIENTATION: number;
+export const IMWRITE_PAM_TUPLETYPE: number;
+export const IMWRITE_PAM_FORMAT_NULL: number;
+
+export const IMWRITE_PAM_FORMAT_BLACKANDWHITE: number;
+export const IMWRITE_PAM_FORMAT_GRAYSCALE: number;
+export const IMWRITE_PAM_FORMAT_GRAYSCALE_ALPHA: number;
+export const IMWRITE_PAM_FORMAT_RGB: number;
+export const IMWRITE_PAM_FORMAT_RGB_ALPHA: number;
+
 export const HAAR_EYE: string;
 export const HAAR_EYE_TREE_EYEGLASSES: string;
 export const HAAR_FRONTALCATFACE: string;
