@@ -38,35 +38,37 @@ NAN_MODULE_INIT(Contour::Init) {
 };
 
 NAN_METHOD(Contour::New) {
-	if (info.Length() != 1) {
-		return Nan::ThrowError("Contour::New - expected one argument");
+	if (info.Length() > 1) {
+		return Nan::ThrowError("Contour::New - expected one or zero argument");
 	}
-	if (!info[0]->IsArray()) {
+	if (info.Length() == 1 && !info[0]->IsArray()) {
 		return Nan::ThrowError("Contour::New - expected arg0 to be an array");
 	}
 
 	Contour* self = new Contour();
-	FF_ARR jsPts = FF_ARR::Cast(info[0]);
-	self->contour.reserve(jsPts->Length());
-	for (int i = 0; i < jsPts->Length(); i++) {
-		cv::Point2d cv_pt;
-		auto jsPt = jsPts->Get(i);
-		if (jsPt->IsArray()) {
-			FF_ARR jsObj = FF_ARR::Cast(jsPt);
-			if (jsObj->Length() != 2)
-				return Nan::ThrowError("Contour::New - expected arg0 to have only Point2 or array of length 2");
-			double x = jsObj->Get(0)->NumberValue();
-			double y = jsObj->Get(1)->NumberValue();
-			cv_pt = cv::Point2d(x, y);
+	if (info.Length() == 1) {
+		FF_ARR jsPts = FF_ARR::Cast(info[0]);
+		self->contour.reserve(jsPts->Length());
+		for (int i = 0; i < jsPts->Length(); i++) {
+			cv::Point2d cv_pt;
+			auto jsPt = jsPts->Get(i);
+			if (jsPt->IsArray()) {
+				FF_ARR jsObj = FF_ARR::Cast(jsPt);
+				if (jsObj->Length() != 2)
+					return Nan::ThrowError("Contour::New - expected arg0 to consist of only Point2 or array of length 2");
+				double x = jsObj->Get(0)->NumberValue();
+				double y = jsObj->Get(1)->NumberValue();
+				cv_pt = cv::Point2d(x, y);
+			}
+			else if (FF_IS_INSTANCE(Point2::constructor, jsPt)) {
+				FF_OBJ jsObj = FF_CAST_OBJ(jsPt);
+				cv_pt = FF_UNWRAP_PT2_AND_GET(jsObj);
+			}
+			else {
+				return Nan::ThrowError("Contour::New - expected arg0 to consist of only Point2 or array of length 2");
+			}
+			self->contour.emplace_back(cv::Point2i(cv_pt.x, cv_pt.y));
 		}
-		else if (FF_IS_INSTANCE(Point2::constructor, jsPt)) {
-			FF_OBJ jsObj = FF_CAST_OBJ(jsPt);
-			cv_pt = FF_UNWRAP_PT2_AND_GET(jsObj);
-		}
-		else {
-			return Nan::ThrowError("Contour::New - expected arg0 to have only Point2 or array length 2");
-		}
-		self->contour.emplace_back(cv::Point2i(cv_pt.x, cv_pt.y));
 	}
 	self->hierarchy = cv::Vec4i(-1, -1, -1, -1);
 	self->Wrap(info.Holder());

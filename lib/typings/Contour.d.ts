@@ -9,6 +9,7 @@ export class Contour {
   readonly area: number;
   readonly isConvex: boolean;
   readonly hierarchy: Vec4;
+  constructor();
   constructor(pts: Point2[]);
   constructor(pts: number[][]);
   approxPolyDP(epsilon: number, closed: boolean): Point2[];
