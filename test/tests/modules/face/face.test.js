@@ -34,13 +34,15 @@ describe('face', () => {
     recognizerTests(() => testImg, args, values, cv.LBPHFaceRecognizer);
   });
 
-  facemarkStructsTests();
+  if (cv.version.minor >= 4) {
+    facemarkStructsTests();
 
-  describe('FacemarkLBF', () => {
-    facemarkTests(() => testImg, cv.FacemarkLBF, cv.FacemarkLBFParams);
-  });
+    describe('FacemarkLBF', () => {
+      facemarkTests(() => testImg, cv.FacemarkLBF, cv.FacemarkLBFParams);
+    });
 
-  describe('FacemarkAAM', () => {
-    facemarkTests(() => testImg, cv.FacemarkAAM, cv.FacemarkAAMParams);
-  });
+    describe('FacemarkAAM', () => {
+      facemarkTests(() => testImg, cv.FacemarkAAM, cv.FacemarkAAMParams);
+    });
+  }
 });
