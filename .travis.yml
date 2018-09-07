@@ -12,31 +12,16 @@ matrix:
   include:
   - env:
     - BUILD_TASK=test
-    - TAG=3.0.0
-  - env:
-    - BUILD_TASK=test
     - TAG=3.0.0-contrib
-  - env:
-    - BUILD_TASK=test
-    - TAG=3.1.0
   - env:
     - BUILD_TASK=test
     - TAG=3.1.0-contrib
   - env:
     - BUILD_TASK=test
-    - TAG=3.2.0
-  - env:
-    - BUILD_TASK=test
     - TAG=3.2.0-contrib
   - env:
     - BUILD_TASK=test
-    - TAG=3.3.0
-  - env:
-    - BUILD_TASK=test
     - TAG=3.3.0-contrib
-  - env:
-    - BUILD_TASK=test
-    - TAG=3.4.0
   - env:
     - BUILD_TASK=cover
     - TAG=3.4.0-contrib
@@ -45,10 +30,16 @@ matrix:
     - TAG=3.4.0-contrib-world
   - env:
     - BUILD_TASK=test
-    - TAG=3.4.1
+    - TAG=3.4.1-contrib
   - env:
     - BUILD_TASK=test
-    - TAG=3.4.1-contrib
+    - TAG=3.4.2-contrib
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.4.3
+  - env:
+    - BUILD_TASK=test
+    - TAG=3.4.3-contrib
 
 before_install:
   - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh
