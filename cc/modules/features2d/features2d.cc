@@ -24,6 +24,7 @@ NAN_MODULE_INIT(Features2d::Init) {
 	AGASTDetector::Init(target);
 	AKAZEDetector::Init(target);
 	BRISKDetector::Init(target);
+	BFMatcher::Init(target);
 	FASTDetector::Init(target);
 	GFTTDetector::Init(target);
 	KAZEDetector::Init(target);
