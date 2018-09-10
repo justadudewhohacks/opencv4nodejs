@@ -18,11 +18,16 @@ NAN_METHOD(Facemark::Load) {
 }
 
 void Facemark::Init(v8::Local<v8::FunctionTemplate> ctor) {
-  Nan::SetPrototypeMethod(ctor, "addTrainingSample", AddTrainingSample);
-  Nan::SetPrototypeMethod(ctor, "addTrainingSampleAsync",
-                          AddTrainingSampleAsync);
   Nan::SetPrototypeMethod(ctor, "loadModel", LoadModel);
   Nan::SetPrototypeMethod(ctor, "loadModelAsync", LoadModelAsync);
+  Nan::SetPrototypeMethod(ctor, "fit", Fit);
+  Nan::SetPrototypeMethod(ctor, "fitAsync", FitAsync);
+  Nan::SetPrototypeMethod(ctor, "save", Save);
+  Nan::SetPrototypeMethod(ctor, "load", Load);
+#if CV_MINOR_VERSION < 2
+  Nan::SetPrototypeMethod(ctor, "addTrainingSample", AddTrainingSample);
+  Nan::SetPrototypeMethod(ctor, "addTrainingSampleAsync",
+	  AddTrainingSampleAsync);
   Nan::SetPrototypeMethod(ctor, "getData", GetData);
   Nan::SetPrototypeMethod(ctor, "getDataAsync", GetDataAsync);
   Nan::SetPrototypeMethod(ctor, "getFaces", GetFaces);
@@ -30,27 +35,8 @@ void Facemark::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "setFaceDetector", SetFaceDetector);
   Nan::SetPrototypeMethod(ctor, "training", Training);
   Nan::SetPrototypeMethod(ctor, "trainingAsync", TrainingAsync);
-  Nan::SetPrototypeMethod(ctor, "fit", Fit);
-  Nan::SetPrototypeMethod(ctor, "fitAsync", FitAsync);
-  Nan::SetPrototypeMethod(ctor, "save", Save);
-  Nan::SetPrototypeMethod(ctor, "load", Load);
+#endif
 };
-
-NAN_METHOD(Facemark::AddTrainingSample) {
-  FF::SyncBinding(
-    std::make_shared<FacemarkBindings::AddTrainingSampleWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
-    "Facemark::AddTrainingSample",
-    info
-  );
-}
-
-NAN_METHOD(Facemark::AddTrainingSampleAsync) {
-  FF::AsyncBinding(
-    std::make_shared<FacemarkBindings::AddTrainingSampleWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
-    "Facemark::AddTrainingSampleAsync",
-    info
-  );
-}
 
 NAN_METHOD(Facemark::LoadModel) {
   FF::SyncBinding(
@@ -66,6 +52,40 @@ NAN_METHOD(Facemark::LoadModelAsync) {
     "Facemark::LoadModelAsync",
     info
   );
+}
+
+NAN_METHOD(Facemark::Fit) {
+	FF::SyncBinding(
+		std::make_shared<FacemarkBindings::FitWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+		"Facemark::Fit",
+		info
+	);
+}
+
+NAN_METHOD(Facemark::FitAsync) {
+	FF::AsyncBinding(
+		std::make_shared<FacemarkBindings::FitWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+		"Facemark::FitAsync",
+		info
+	);
+}
+
+#if CV_MINOR_VERSION < 2
+
+NAN_METHOD(Facemark::AddTrainingSample) {
+	FF::SyncBinding(
+		std::make_shared<FacemarkBindings::AddTrainingSampleWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+		"Facemark::AddTrainingSample",
+		info
+	);
+}
+
+NAN_METHOD(Facemark::AddTrainingSampleAsync) {
+	FF::AsyncBinding(
+		std::make_shared<FacemarkBindings::AddTrainingSampleWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+		"Facemark::AddTrainingSampleAsync",
+		info
+	);
 }
 
 NAN_METHOD(Facemark::GetData) {
@@ -135,21 +155,7 @@ NAN_METHOD(Facemark::TrainingAsync) {
   );
 }
 
-NAN_METHOD(Facemark::Fit) {
-  FF::SyncBinding(
-    std::make_shared<FacemarkBindings::FitWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
-    "Facemark::Fit",
-    info
-  );
-}
-
-NAN_METHOD(Facemark::FitAsync) {
-  FF::AsyncBinding(
-    std::make_shared<FacemarkBindings::FitWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
-    "Facemark::FitAsync",
-    info
-  );
-}
+#endif
 
 bool Facemark::detector(cv::InputArray image, cv::OutputArray faces,
                         Nan::Callback *callback) {

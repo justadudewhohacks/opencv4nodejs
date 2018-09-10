@@ -241,7 +241,8 @@ module.exports = (getTestImg) => {
       getOptionalArgsMap: () => ([
         ['size', size],
         ['flags', cv.INTER_CUBIC],
-        ['borderMode', cv.BORDER_REFLECT]
+        ['borderMode', cv.BORDER_CONSTANT],
+        ['borderValue', new cv.Vec(255, 255, 255)]
       ]),
       expectOutput
     });
@@ -256,7 +257,8 @@ module.exports = (getTestImg) => {
       getOptionalArgsMap: () => ([
         ['size', size],
         ['flags', cv.INTER_CUBIC],
-        ['borderMode', cv.BORDER_REFLECT]
+        ['borderMode', cv.BORDER_CONSTANT],
+        ['borderValue', new cv.Vec(255, 255, 255)]
       ]),
       expectOutput
     });
@@ -1495,7 +1497,7 @@ module.exports = (getTestImg) => {
           20, 0.04, 1
         ]),
         getOptionalArgsMap: () => ([
-          ['mask', new cv.Mat(512,512,cv.CV_U8)],
+          ['mask', new cv.Mat(512, 512, cv.CV_U8)],
           ['blockSize', 3],
           ['gradientSize', 3],
           ['useHarrisDetector', false],
@@ -1520,7 +1522,7 @@ module.exports = (getTestImg) => {
           ['mask', new cv.Mat(512, 512, cv.CV_U8)],
           ['blockSize', 3],
           ['useHarrisDetector', false],
-          ['harrisK', 0.04 ]
+          ['harrisK', 0.04]
         ]),
         expectOutput: (out) => {
           expect(out).to.be.instanceOf(Array);

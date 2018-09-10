@@ -51,7 +51,9 @@ const TrackerTestGenerator = getTestImg => (trackerName) => {
         const tracker = newTracker();
         tracker.init(getTestImg(), new cv.Rect(0, 0, 10, 10));
         const rect = tracker.update(getTestImg());
-        expect(rect).to.be.instanceOf(cv.Rect);
+        if (rect !== null) {
+          expect(rect).to.be.instanceOf(cv.Rect);
+        }
       });
     });
 

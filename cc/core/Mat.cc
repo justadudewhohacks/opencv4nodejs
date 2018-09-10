@@ -28,6 +28,8 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "at", At);
   Nan::SetPrototypeMethod(ctor, "atRaw", AtRaw);
   Nan::SetPrototypeMethod(ctor, "set", Set);
+  Nan::SetPrototypeMethod(ctor, "setTo", SetTo);
+  Nan::SetPrototypeMethod(ctor, "setToAsync", SetToAsync);
   Nan::SetPrototypeMethod(ctor, "push_back", PushBack);
   Nan::SetPrototypeMethod(ctor, "push_backAsync", PushBackAsync);
   Nan::SetPrototypeMethod(ctor, "pushBack", PushBack);
@@ -91,6 +93,8 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "meanStdDevAsync", MeanStdDevAsync);
   Nan::SetPrototypeMethod(ctor, "copyMakeBorder", CopyMakeBorder);
   Nan::SetPrototypeMethod(ctor, "copyMakeBorderAsync", CopyMakeBorderAsync);
+  Nan::SetPrototypeMethod(ctor, "reduce", Reduce);
+  Nan::SetPrototypeMethod(ctor, "reduceAsync", ReduceAsync);
 #if CV_VERSION_MINOR > 1
   Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
   Nan::SetPrototypeMethod(ctor, "rotateAsync", RotateAsync);
@@ -191,7 +195,7 @@ NAN_METHOD(Mat::New) {
     self->setNativeProps(mat);
   }
   self->Wrap(info.Holder());
-    
+
   // if ExternalMemTracking is disabled, the following instruction will be a no op
     // notes: I *think* New should be called in JS thread where cv::mat has been created async,
     // so a good place to rationalise memory
@@ -293,6 +297,22 @@ NAN_METHOD(Mat::Set) {
   }
 }
 
+NAN_METHOD(Mat::SetTo) {
+  FF::SyncBinding(
+    std::make_shared<MatBindings::SetToWorker>(Mat::Converter::unwrap(info.This())),
+    "Mat::SetTo",
+    info
+  );
+}
+
+NAN_METHOD(Mat::SetToAsync) {
+  FF::AsyncBinding(
+    std::make_shared<MatBindings::SetToWorker>(Mat::Converter::unwrap(info.This())),
+    "Mat::SetToAsync",
+    info
+  );
+}
+
 NAN_METHOD(Mat::GetDataAsArray) {
   cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info.This());
   FF_ARR rowArray = FF_NEW_ARRAY(mat.size[0]);
@@ -355,9 +375,9 @@ NAN_METHOD(Mat::Normalize) {
   if (!hasOptArgsObj) {
     FF_ARG_NUMBER_IFDEF(0, alpha, 1.0);
     FF_ARG_NUMBER_IFDEF(1, beta, 0.0);
-    FF_ARG_UINT_IFDEF(3, normType, normType);
-    FF_ARG_INT_IFDEF(4, dtype, dtype);
-    FF_ARG_INSTANCE_IFDEF(5, mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
+    FF_ARG_UINT_IFDEF(2, normType, normType);
+    FF_ARG_INT_IFDEF(3, dtype, dtype);
+    FF_ARG_INSTANCE_IFDEF(4, mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
   }
 
   FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
@@ -819,6 +839,22 @@ NAN_METHOD(Mat::CopyMakeBorderAsync) {
 	FF::AsyncBinding(
 		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::Converter::unwrap(info.This())),
 		"Mat::CopyMakeBorderAsync",
+		info
+	);
+}
+
+NAN_METHOD(Mat::Reduce) {
+	FF::SyncBinding(
+		std::make_shared<MatBindings::ReduceWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::Reduce",
+		info
+	);
+}
+
+NAN_METHOD(Mat::ReduceAsync) {
+	FF::AsyncBinding(
+		std::make_shared<MatBindings::ReduceWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::ReduceAsync",
 		info
 	);
 }

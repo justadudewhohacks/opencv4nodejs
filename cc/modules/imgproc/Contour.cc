@@ -7,11 +7,11 @@
 
 Nan::Persistent<v8::FunctionTemplate> Contour::constructor;
 
-void Contour::Init() {
-  v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Contour::New);
-  constructor.Reset(ctor);
-  ctor->InstanceTemplate()->SetInternalFieldCount(1);
-  ctor->SetClassName(Nan::New("Contour").ToLocalChecked());
+NAN_MODULE_INIT(Contour::Init) {
+	v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Contour::New);
+	constructor.Reset(ctor);
+	ctor->InstanceTemplate()->SetInternalFieldCount(1);
+	ctor->SetClassName(Nan::New("Contour").ToLocalChecked());
 
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("isConvex"), GetIsConvex);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("area"), GetArea);
@@ -20,8 +20,9 @@ void Contour::Init() {
 
 	Nan::SetPrototypeMethod(ctor, "getPoints", GetPoints);
 	Nan::SetPrototypeMethod(ctor, "approxPolyDP", ApproxPolyDP);
+	Nan::SetPrototypeMethod(ctor, "approxPolyDPContour", ApproxPolyDPContour);
 	Nan::SetPrototypeMethod(ctor, "arcLength", ArcLength);
-	Nan::SetPrototypeMethod(ctor, "boundingRect", BoundingRect); 
+	Nan::SetPrototypeMethod(ctor, "boundingRect", BoundingRect);
 	Nan::SetPrototypeMethod(ctor, "convexHull", ConvexHull);
 	Nan::SetPrototypeMethod(ctor, "convexHullIndices", ConvexHullIndices);
 	Nan::SetPrototypeMethod(ctor, "convexityDefects", ConvexityDefects);
@@ -32,7 +33,47 @@ void Contour::Init() {
 	Nan::SetPrototypeMethod(ctor, "matchShapes", MatchShapes);
 	Nan::SetPrototypeMethod(ctor, "fitEllipse", FitEllipse);
 	Nan::SetPrototypeMethod(ctor, "moments", _Moments);
+
+	target->Set(Nan::New("Contour").ToLocalChecked(), ctor->GetFunction());
 };
+
+NAN_METHOD(Contour::New) {
+	if (info.Length() > 1) {
+		return Nan::ThrowError("Contour::New - expected one or zero argument");
+	}
+	if (info.Length() == 1 && !info[0]->IsArray()) {
+		return Nan::ThrowError("Contour::New - expected arg0 to be an array");
+	}
+
+	Contour* self = new Contour();
+	if (info.Length() == 1) {
+		FF_ARR jsPts = FF_ARR::Cast(info[0]);
+		self->contour.reserve(jsPts->Length());
+		for (int i = 0; i < jsPts->Length(); i++) {
+			cv::Point2d cv_pt;
+			auto jsPt = jsPts->Get(i);
+			if (jsPt->IsArray()) {
+				FF_ARR jsObj = FF_ARR::Cast(jsPt);
+				if (jsObj->Length() != 2)
+					return Nan::ThrowError("Contour::New - expected arg0 to consist of only Point2 or array of length 2");
+				double x = jsObj->Get(0)->NumberValue();
+				double y = jsObj->Get(1)->NumberValue();
+				cv_pt = cv::Point2d(x, y);
+			}
+			else if (FF_IS_INSTANCE(Point2::constructor, jsPt)) {
+				FF_OBJ jsObj = FF_CAST_OBJ(jsPt);
+				cv_pt = FF_UNWRAP_PT2_AND_GET(jsObj);
+			}
+			else {
+				return Nan::ThrowError("Contour::New - expected arg0 to consist of only Point2 or array of length 2");
+			}
+			self->contour.emplace_back(cv::Point2i(cv_pt.x, cv_pt.y));
+		}
+	}
+	self->hierarchy = cv::Vec4i(-1, -1, -1, -1);
+	self->Wrap(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
+}
 
 NAN_METHOD(Contour::GetPoints) {
 	info.GetReturnValue().Set(Point::packJSPoint2Array(FF_UNWRAP_CONTOUR_AND_GET(info.This())));
@@ -40,7 +81,7 @@ NAN_METHOD(Contour::GetPoints) {
 
 NAN_METHOD(Contour::ApproxPolyDP) {
 	FF_METHOD_CONTEXT("Contour::ApproxPolyDP");
-	
+
 	FF_ARG_NUMBER(0, double epsilon);
 	FF_ARG_BOOL(1, bool closed);
 
@@ -49,11 +90,26 @@ NAN_METHOD(Contour::ApproxPolyDP) {
 	FF_RETURN(Point::packJSPoint2Array(curve));
 }
 
+NAN_METHOD(Contour::ApproxPolyDPContour) {
+	FF_METHOD_CONTEXT("Contour::ApproxPolyDPContour");
+
+	FF_ARG_NUMBER(0, double epsilon);
+	FF_ARG_BOOL(1, bool closed);
+
+	std::vector<cv::Point> curve;
+	cv::approxPolyDP(FF_UNWRAP_CONTOUR_AND_GET(info.This()), curve, epsilon, closed);
+
+	FF_OBJ jsApprox = FF_NEW_INSTANCE(Contour::constructor);
+	FF_UNWRAP_CONTOUR_AND_GET(jsApprox) = curve;
+	FF_UNWRAP(jsApprox, Contour)->hierarchy = cv::Vec4i(-1, -1, -1, -1);
+	FF_RETURN(jsApprox);
+}
+
 NAN_METHOD(Contour::ArcLength) {
 	FF_METHOD_CONTEXT("Contour::ArcLength");
 
 	FF_ARG_BOOL_IFDEF(0, bool closed, false);
-	
+
 	double arcLength = cv::arcLength(FF_UNWRAP_CONTOUR_AND_GET(info.This()), closed);
 	FF_RETURN(Nan::New(arcLength));
 }
@@ -129,7 +185,7 @@ NAN_METHOD(Contour::MinEnclosingCircle) {
 NAN_METHOD(Contour::MinEnclosingTriangle) {
 	std::vector<cv::Point2f> triangle;
 	cv::minEnclosingTriangle(
-		FF_UNWRAP_CONTOUR_AND_GET(info.This()), 
+		FF_UNWRAP_CONTOUR_AND_GET(info.This()),
 		triangle
 	);
 	FF_RETURN(Point::packJSPoint2Array(triangle));
@@ -139,7 +195,7 @@ NAN_METHOD(Contour::PointPolygonTest) {
 	FF_METHOD_CONTEXT("Contour::PointPolygonTest");
 
 	FF_ARG_INSTANCE(0, cv::Point2d point, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
-	
+
 	double dist = cv::pointPolygonTest(
 		FF_UNWRAP_CONTOUR_AND_GET(info.This()),
 		point,

@@ -95,6 +95,21 @@ module.exports = () => {
       });
     });
 
+    describe('approxPolyDPContour', () => {
+      const epsilon = 0.5;
+      const closed = true;
+      it('should approximate polygon contour', () => {
+        const aprox = leftmostContour.approxPolyDPContour(epsilon, closed);
+        expect(aprox).to.have.property('getPoints').to.be.a('function');
+        const aproxPoints = aprox.getPoints();
+        expect(aproxPoints).to.be.an('array').lengthOf(4);
+        aproxPoints.forEach((pt2) => {
+          expect(pt2).to.have.property('x');
+          expect(pt2).to.have.property('y');
+        });
+      });
+    });
+
     describe('arcLength', () => {
       it('arcLength', () => {
         const arcLengths = contours.map(c => c.arcLength(true));

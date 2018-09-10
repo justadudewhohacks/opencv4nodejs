@@ -235,6 +235,7 @@ describe('calib3d', () => {
       res.rvecs.forEach(vec => expectToBeVec3(vec));
       expect(res).to.have.property('tvecs').to.be.an('array').lengthOf(2);
       res.tvecs.forEach(vec => expectToBeVec3(vec));
+      expect(res).to.have.property('distCoeffs').to.be.an('array');
     };
     const _cameraMatrix = new cv.Mat([
       [800, 0, 100],
@@ -296,6 +297,8 @@ describe('calib3d', () => {
       assertMetaData(res.E)(3, 3, cv.CV_64F);
       expect(res).to.have.property('F').to.be.instanceOf(cv.Mat);
       assertMetaData(res.F)(3, 3, cv.CV_64F);
+      expect(res).to.have.property('distCoeffs1').to.be.an('array');
+      expect(res).to.have.property('distCoeffs2').to.be.an('array');
     };
 
     const imageSize = new cv.Size(200, 200);

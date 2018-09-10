@@ -11,13 +11,8 @@ public:
   std::vector<cv::Point2i> contour;
   cv::Vec4i hierarchy;
 
-	static void Init();
-
-	static NAN_METHOD(New) {
-		Contour* self = new Contour();
-		self->Wrap(info.Holder());
-		info.GetReturnValue().Set(info.Holder());
-	}
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 
 	static NAN_GETTER(GetNumPoints) {
 		info.GetReturnValue().Set(Nan::New((uint)FF_UNWRAP_CONTOUR_AND_GET(info.This()).size()));
@@ -35,6 +30,7 @@ public:
 
 	static NAN_METHOD(GetPoints);
 	static NAN_METHOD(ApproxPolyDP);
+	static NAN_METHOD(ApproxPolyDPContour);
 	static NAN_METHOD(ArcLength);
 	static NAN_METHOD(BoundingRect);
 	static NAN_METHOD(ConvexHull);

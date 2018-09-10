@@ -64,6 +64,8 @@ public:
   static NAN_METHOD(At);
   static NAN_METHOD(AtRaw);
   static NAN_METHOD(Set);
+  static NAN_METHOD(SetTo);
+  static NAN_METHOD(SetToAsync);
   static NAN_METHOD(GetDataAsArray);
   static NAN_METHOD(GetRegion);
   static NAN_METHOD(Norm);
@@ -122,6 +124,8 @@ public:
   static NAN_METHOD(MeanStdDevAsync);
   static NAN_METHOD(CopyMakeBorder);
   static NAN_METHOD(CopyMakeBorderAsync);
+  static NAN_METHOD(Reduce);
+  static NAN_METHOD(ReduceAsync);
 #if CV_VERSION_MINOR > 1
   static NAN_METHOD(Rotate);
   static NAN_METHOD(RotateAsync);

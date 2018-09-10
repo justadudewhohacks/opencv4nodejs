@@ -33,7 +33,7 @@ NAN_MODULE_INIT(Imgproc::Init) {
   Nan::SetMethod(target, "canny", Canny);
 #endif
   Moments::Init(target);
-  Contour::Init();
+  Contour::Init(target);
 };
 
 NAN_METHOD(Imgproc::GetStructuringElement) {

@@ -271,6 +271,8 @@ namespace Calib3dBindings {
       Nan::Set(ret, Nan::New("T").ToLocalChecked(), Vec3::Converter::wrap(T));
       Nan::Set(ret, Nan::New("E").ToLocalChecked(), Mat::Converter::wrap(E));
       Nan::Set(ret, Nan::New("F").ToLocalChecked(), Mat::Converter::wrap(F));
+      Nan::Set(ret, Nan::New("distCoeffs1").ToLocalChecked(), DoubleArrayConverter::wrap(distCoeffs1));
+      Nan::Set(ret, Nan::New("distCoeffs2").ToLocalChecked(), DoubleArrayConverter::wrap(distCoeffs2));
       return ret;
     }
   
@@ -675,6 +677,7 @@ namespace Calib3dBindings {
       Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), DoubleConverter::wrap(returnValue));
       Nan::Set(ret, Nan::New("rvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d>::wrap(rvecs));
       Nan::Set(ret, Nan::New("tvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d>::wrap(tvecs));
+      Nan::Set(ret, Nan::New("distCoeffs").ToLocalChecked(), DoubleArrayConverter::wrap(distCoeffs));
       return ret;
     }
   
