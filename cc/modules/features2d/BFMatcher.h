@@ -1,6 +1,9 @@
 #include "macros.h"
-#include "NativeNodeUtils.h"
+#include <opencv2/core.hpp>
 #include <opencv2/features2d.hpp>
+#include "KeyPoint.h"
+#include "Mat.h"
+#include "CatchCvExceptionWorker.h"
 
 #ifndef __FF_BFMATCHER_H__
 #define __FF_BFMATCHER_H__
@@ -25,11 +28,8 @@ public:
 	static NAN_MODULE_INIT(Init);
 
     static NAN_METHOD(New);
-//	static NAN_METHOD(Clone);
-//	static NAN_METHOD(Create);
-//	static NAN_METHOD(IsMaskSupported);
-//	static NAN_METHOD(KnnMatchImpl);
-//	static NAN_METHOD(RadiusMatchImpl);
+    static NAN_METHOD(match);
+    static NAN_METHOD(matchAsync);
 
     static const char* getClassName() {
         return "BFMatcher";

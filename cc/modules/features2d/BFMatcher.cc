@@ -1,4 +1,5 @@
 #include "BFMatcher.h"
+#include "BFMatcherBindings.h"
 
 Nan::Persistent<v8::FunctionTemplate> BFMatcher::constructor;
 
@@ -49,4 +50,19 @@ NAN_METHOD(BFMatcher::New) {
   info.GetReturnValue().Set(info.Holder());
 }
 
+NAN_METHOD(BFMatcher::match) {
+  FF::SyncBinding(
+      std::make_shared<BFMatcherBindings::MatchWorker>(FF_UNWRAP(info.This(), BFMatcher)->bfmatcher),
+    "BFMatcher::match",
+    info
+  );
+}
+
+NAN_METHOD(BFMatcher::matchAsync) {
+  FF::AsyncBinding(
+      std::make_shared<BFMatcherBindings::MatchWorker>(FF_UNWRAP(info.This(), BFMatcher)->bfmatcher),
+      "FeatureDetector::matchAsync",
+      info
+  );
+}
 
