@@ -2,6 +2,7 @@
 #include "KeyPoint.h"
 #include "KeyPointMatch.h"
 #include "DescriptorMatch.h"
+#include "BFMatcher.h"
 #include "descriptorMatching.h"
 #include "descriptorMatchingKnn.h"
 #include "detectors/AGASTDetector.h"
