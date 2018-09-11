@@ -23,6 +23,7 @@ export * from './typings/FisherFaceRecognizer.d';
 export * from './typings/KeyPointDetector.d';
 export * from './typings/FeatureDetector.d';
 export * from './typings/AGASTDetector.d';
+export * from './typings/BFMatcher.d';
 export * from './typings/AKAZEDetector.d';
 export * from './typings/BRISKDetector.d';
 export * from './typings/DescriptorMatch.d';

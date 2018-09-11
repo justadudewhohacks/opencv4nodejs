@@ -31,6 +31,9 @@ module.exports = (getTestImg) => {
         let BFMatcher;
         let crossCheck = true;
 
+        let kazeKps;
+        let kazeDesc;
+
         before(() => {
             BFMatcher = new cv.BFMatcher(cv.NORM_L2, crossCheck);
 
@@ -99,6 +102,9 @@ module.exports = (getTestImg) => {
       describe('no crossCheck match', () => {
           let BFMatcher;
           let crossCheck = false;
+
+          let kazeKps;
+          let kazeDesc;
 
           before(() => {
               BFMatcher = new cv.BFMatcher(cv.NORM_L2, crossCheck);
