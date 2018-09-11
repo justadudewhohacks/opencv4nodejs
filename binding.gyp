@@ -91,6 +91,7 @@
 			"cc/modules/features2d/KeyPoint.cc",
 			"cc/modules/features2d/KeyPointMatch.cc",
 			"cc/modules/features2d/DescriptorMatch.cc",
+			"cc/modules/features2d/BFMatcher.cc",
 			"cc/modules/features2d/FeatureDetector.cc",
 			"cc/modules/features2d/descriptorMatching.cc",
 			"cc/modules/features2d/descriptorMatchingKnn.cc",
