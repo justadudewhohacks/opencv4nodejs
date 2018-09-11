@@ -32,6 +32,37 @@ struct MatchWorker : public CatchCvExceptionWorker {
             return ObjectArrayConverter<DescriptorMatch, cv::DMatch>::wrap(dmatches);
         }
     };
+
+
+struct MatchKnnWorker : public CatchCvExceptionWorker {
+    public:
+        cv::BFMatcher bfmatcher;
+
+        MatchKnnWorker(cv::BFMatcher _bfmatcher) {
+            this->bfmatcher = _bfmatcher;
+        }
+
+        cv::Mat descFrom;
+        cv::Mat descTo;
+        int k;
+        std::vector<std::vector<cv::DMatch>> dmatches;
+
+        std::string executeCatchCvExceptionWorker() {
+            bfmatcher.knnMatch(descFrom, descTo, dmatches, k);
+            return "";
+        }
+
+        bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+            return Mat::Converter::arg(0, &descFrom, info)
+                || Mat::Converter::arg(1, &descTo, info)
+                || IntConverter::arg(2, &k, info);
+        }
+
+        FF_VAL getReturnValue() {
+            return ObjectArrayOfArraysConverter<DescriptorMatch, cv::DMatch>::wrap(dmatches);
+        }
+};
+
 }
 
 #endif

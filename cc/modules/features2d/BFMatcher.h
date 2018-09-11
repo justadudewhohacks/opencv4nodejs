@@ -30,6 +30,8 @@ public:
     static NAN_METHOD(New);
     static NAN_METHOD(match);
     static NAN_METHOD(matchAsync);
+    static NAN_METHOD(knnMatch);
+    static NAN_METHOD(knnMatchAsync);
 
     static const char* getClassName() {
         return "BFMatcher";

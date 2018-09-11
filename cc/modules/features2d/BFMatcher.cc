@@ -17,6 +17,8 @@ NAN_MODULE_INIT(BFMatcher::Init) {
 
     Nan::SetPrototypeMethod(ctor, "match", match);
     Nan::SetPrototypeMethod(ctor, "matchAsync", matchAsync);
+    Nan::SetPrototypeMethod(ctor, "knnMatch", knnMatch);
+    Nan::SetPrototypeMethod(ctor, "knnMatchAsync", knnMatchAsync);
 
     target->Set(Nan::New("BFMatcher").ToLocalChecked(), ctor->GetFunction());
 };
@@ -57,8 +59,24 @@ NAN_METHOD(BFMatcher::match) {
 NAN_METHOD(BFMatcher::matchAsync) {
   FF::AsyncBinding(
     std::make_shared<BFMatcherBindings::MatchWorker>(BFMatcher::Converter::unwrap(info.This())),
-    "FeatureDetector::matchAsync",
+    "BFMatcher::matchAsync",
     info
   );
 }
 
+NAN_METHOD(BFMatcher::knnMatch) {
+  FF::SyncBinding(
+    std::make_shared<BFMatcherBindings::MatchKnnWorker>(BFMatcher::Converter::unwrap(info.This())),
+    "BFMatcher::knnMatch",
+    info
+  );
+}
+
+
+NAN_METHOD(BFMatcher::knnMatchAsync) {
+  FF::AsyncBinding(
+    std::make_shared<BFMatcherBindings::MatchKnnWorker>(BFMatcher::Converter::unwrap(info.This())),
+    "BFMatcher::knnMatchAsync",
+    info
+  );
+}
