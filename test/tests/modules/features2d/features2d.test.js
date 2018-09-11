@@ -5,6 +5,7 @@ const detectorTests = require('./detectorTests');
 const KeyPointTests = require('./KeyPointTests');
 const DescriptorMatchTests = require('./DescriptorMatchTests');
 const descriptorMatchingTests = require('./descriptorMatchingTests');
+const BFMatcherTests = require('./BFMatcherTests');
 
 describe('features2d', () => {
   let testImg;
@@ -15,6 +16,7 @@ describe('features2d', () => {
   KeyPointTests();
   DescriptorMatchTests();
   descriptorMatchingTests(() => testImg);
+  BFMatcherTests(() => testImg);
 
   describe('AGASTDetector', () => {
     const defaults = {

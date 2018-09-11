@@ -11,18 +11,14 @@ NAN_MODULE_INIT(BFMatcher::Init) {
   instanceTemplate->SetInternalFieldCount(1);
 
    ctor->SetClassName(Nan::New("BFMatcher").ToLocalChecked());
-//  ctor->SetClassName(FF_NEW_STRING("BFMatcher"));
-
 
 	Nan::SetAccessor(instanceTemplate, Nan::New("normType").ToLocalChecked(), BFMatcher::GetNormType);
   Nan::SetAccessor(instanceTemplate, Nan::New("crossCheck").ToLocalChecked(), BFMatcher::GetCrossCheck);
 
-//    Nan::SetPrototypeMethod(ctor, "create", create);
-
+    Nan::SetPrototypeMethod(ctor, "match", match);
+    Nan::SetPrototypeMethod(ctor, "matchAsync", matchAsync);
 
     target->Set(Nan::New("BFMatcher").ToLocalChecked(), ctor->GetFunction());
-//  target->Set(FF_NEW_STRING("BFMatcher"), ctor->GetFunction());
-
 };
 
 NAN_METHOD(BFMatcher::New) {
@@ -52,7 +48,7 @@ NAN_METHOD(BFMatcher::New) {
 
 NAN_METHOD(BFMatcher::match) {
   FF::SyncBinding(
-      std::make_shared<BFMatcherBindings::MatchWorker>(FF_UNWRAP(info.This(), BFMatcher)->bfmatcher),
+    std::make_shared<BFMatcherBindings::MatchWorker>(BFMatcher::Converter::unwrap(info.This())),
     "BFMatcher::match",
     info
   );
@@ -60,9 +56,9 @@ NAN_METHOD(BFMatcher::match) {
 
 NAN_METHOD(BFMatcher::matchAsync) {
   FF::AsyncBinding(
-      std::make_shared<BFMatcherBindings::MatchWorker>(FF_UNWRAP(info.This(), BFMatcher)->bfmatcher),
-      "FeatureDetector::matchAsync",
-      info
+    std::make_shared<BFMatcherBindings::MatchWorker>(BFMatcher::Converter::unwrap(info.This())),
+    "FeatureDetector::matchAsync",
+    info
   );
 }
 

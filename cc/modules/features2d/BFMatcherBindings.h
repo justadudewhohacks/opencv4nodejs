@@ -1,4 +1,5 @@
 #include "BFMatcher.h"
+#include "DescriptorMatch.h"
 
 #ifndef __FF_BFMATCHERBINDINGS_H_
 #define __FF_BFMATCHERBINDINGS_H_
@@ -7,8 +8,9 @@ namespace BFMatcherBindings {
 
 struct MatchWorker : public CatchCvExceptionWorker {
     public:
-        cv::Ptr<cv::BFMatcher> bfmatcher;
-        MatchWorker(cv::Ptr<cv::BFMatcher> _bfmatcher) {
+        cv::BFMatcher bfmatcher;
+
+        MatchWorker(cv::BFMatcher _bfmatcher) {
             this->bfmatcher = _bfmatcher;
         }
 
@@ -17,7 +19,7 @@ struct MatchWorker : public CatchCvExceptionWorker {
         std::vector<cv::DMatch> dmatches;
 
         std::string executeCatchCvExceptionWorker() {
-            bfmatcher->match(descFrom, descTo, dmatches);
+            bfmatcher.match(descFrom, descTo, dmatches);
             return "";
         }
 
@@ -27,7 +29,7 @@ struct MatchWorker : public CatchCvExceptionWorker {
         }
 
         FF_VAL getReturnValue() {
-            return ObjectArrayConverter<BFMatcher, cv::DMatch>::wrap(dmatches);
+            return ObjectArrayConverter<DescriptorMatch, cv::DMatch>::wrap(dmatches);
         }
     };
 }
