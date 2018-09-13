@@ -41,7 +41,7 @@
     "macro-inferno": "^0.2.1",
     "nan": "^2.11.0",
     "native-node-utils": "0.1.2",
-    "opencv-build": "0.0.14"
+    "opencv-build": "0.0.15"
   },
   "optionalDependencies": {
     "@types/node": ">6"
