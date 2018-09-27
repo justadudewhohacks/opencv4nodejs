@@ -134,7 +134,7 @@ NAN_METHOD(MatImgproc::DrawContours) {
 
   std::vector<std::vector<cv::Point>> contours;
   std::vector<cv::Vec4i> hierarchy;
-  for (int i = 0; i < jsContours->Length(); i++) {
+  for (uint i = 0; i < jsContours->Length(); i++) {
     FF_OBJ jsContour = jsContours->Get(i)->ToObject();
     contours.push_back(FF_UNWRAP_CONTOUR_AND_GET(jsContour));
     hierarchy.push_back(FF_UNWRAP_CONTOUR(jsContour)->hierarchy);

@@ -6,6 +6,14 @@ const {
 } = global.utils;
 const { expect } = require('chai');
 
+let asyncHooks = null
+
+try {
+  asyncHooks = require('async_hooks')
+} catch (e) {
+  //
+}
+
 const partitionTests = (createInstance) => {
   it('should return labels and numLabels', () => {
     const { labels, numLabels } = cv.partition([createInstance(), createInstance()], () => true);
@@ -161,4 +169,27 @@ describe('core', () => {
       expectOutput
     });
   });
+
+  if (asyncHooks) {
+    describe('async_hooks', () => {
+      it('should trigger `init` callback in async_hooks', () => {
+        let typeFound = false
+        const hook = asyncHooks.createHook({
+          init: (asyncId, type, triggerAsyncId, resource) => {
+            if (type.indexOf('opencv4nodejs') === 0) {
+              typeFound = true
+              hook.disable()
+            }
+          },
+        })
+        hook.enable()
+
+        const createInstance = () => new cv.Point(0, 0)
+        const num = 5;
+        const instances = Array(num).fill(0).map(() => createInstance());
+        const { labels, numLabels } = cv.partition(instances, () => true);
+        expect(typeFound).to.be.equal(true)
+      })
+    })
+  }
 });
