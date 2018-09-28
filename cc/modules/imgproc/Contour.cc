@@ -49,7 +49,7 @@ NAN_METHOD(Contour::New) {
 	if (info.Length() == 1) {
 		FF_ARR jsPts = FF_ARR::Cast(info[0]);
 		self->contour.reserve(jsPts->Length());
-		for (int i = 0; i < jsPts->Length(); i++) {
+		for (uint i = 0; i < jsPts->Length(); i++) {
 			cv::Point2d cv_pt;
 			auto jsPt = jsPts->Get(i);
 			if (jsPt->IsArray()) {

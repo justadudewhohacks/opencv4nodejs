@@ -33,7 +33,7 @@ public:
 
 	static NAN_GETTER(pupilsGet) {
 		v8::Local<v8::Array> jsArr = Nan::New<v8::Array>(2);
-		for (int i = 0; i < jsArr->Length(); i++) {
+		for (uint i = 0; i < jsArr->Length(); i++) {
 			jsArr->Set(i, ArrayConverterType<IntTypeConverter, int>::wrap(
 				Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->params.pupils[i])
 			);
@@ -44,7 +44,7 @@ public:
 	static NAN_SETTER(pupilsSet) {
 		FF_METHOD_CONTEXT("pupils");
 		v8::Local<v8::Array> jsArr = v8::Local<v8::Array>::Cast(value);
-		for (int i = 0; i < jsArr->Length(); i++) {
+		for (uint i = 0; i < jsArr->Length(); i++) {
 			std::vector<int> vec;
 			Nan::TryCatch tryCatch;
 			if (ArrayConverterType<IntTypeConverter, int>::unwrap(&vec, jsArr->Get(i))) {

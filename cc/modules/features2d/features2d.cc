@@ -96,7 +96,7 @@ NAN_METHOD(Features2d::DrawMatches) {
 	FF_UNPACK_KEYPOINT_ARRAY(kps1, jsKps1);
 	FF_UNPACK_KEYPOINT_ARRAY(kps2, jsKps2);
 	std::vector<cv::DMatch> dMatches;
-	for (int i = 0; i < jsMatches->Length(); i++) {
+	for (uint i = 0; i < jsMatches->Length(); i++) {
 		DescriptorMatch* match = FF_UNWRAP(FF_CAST_OBJ(jsMatches->Get(i)), DescriptorMatch);
 		dMatches.push_back(match->dmatch);
 	}

@@ -29,8 +29,8 @@ public:
 			vecs.push_back(FF_UNWRAP_VEC3_AND_GET(Nan::To<v8::Object>(jsVec->Get(i)).ToLocalChecked()));
 		}
 		return vecs;
-	};	
-	
+	};
+
 	static std::vector<cv::Vec4d> unpackJSVec4Array(FF_ARR jsVec) {
 		std::vector<cv::Vec4d> vecs;
 		for (uint i = 0; i < jsVec->Length(); i++) {
@@ -41,7 +41,7 @@ public:
 
 	static v8::Local<v8::Array> packJSVec4Array(std::vector<cv::Vec4d> vecs) {
 		v8::Local<v8::Array> jsVecs = Nan::New<v8::Array>(vecs.size());
-		for (int i = 0; i < jsVecs->Length(); i++) {
+		for (uint i = 0; i < jsVecs->Length(); i++) {
 			v8::Local<v8::Object> jsVec4 = FF_NEW_INSTANCE(Vec4::constructor);
 			FF_UNWRAP_VEC4_AND_GET(jsVec4) = vecs.at(i);
 			jsVecs->Set(i, jsVec4);

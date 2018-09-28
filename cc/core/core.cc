@@ -2,19 +2,21 @@
 #include "coreBindings.h"
 
 #define FF_CV_PREDICATE(ff_name, ff_type, ff_ctor, ff_unwrapper)                      \
-  struct ff_name##Predicate {                                                          \
-    v8::Local<v8::Function> cb;                                                        \
-    ff_name##Predicate(v8::Local<v8::Function> _cb) {                                  \
-      cb = _cb;                                                                        \
-    }                                                                                  \
-    bool operator()(const ff_type& a, const ff_type& b) {                              \
-      FF_VAL cbArgs[2];                                                                \
-      cbArgs[0] = FF_NEW_INSTANCE(ff_ctor);                                            \
-      cbArgs[1] = FF_NEW_INSTANCE(ff_ctor);                                            \
+  struct ff_name##Predicate {                                                         \
+    v8::Local<v8::Function> cb;                                                       \
+    ff_name##Predicate(v8::Local<v8::Function> _cb) {                                 \
+      cb = _cb;                                                                       \
+    }                                                                                 \
+    bool operator()(const ff_type& a, const ff_type& b) {                             \
+      FF_VAL cbArgs[2];                                                               \
+      cbArgs[0] = FF_NEW_INSTANCE(ff_ctor);                                           \
+      cbArgs[1] = FF_NEW_INSTANCE(ff_ctor);                                           \
       ff_unwrapper(cbArgs[0]->ToObject()) = a;                                        \
       ff_unwrapper(cbArgs[1]->ToObject()) = b;                                        \
-      return cb->Call(Nan::GetCurrentContext()->Global(), 2, cbArgs)->BooleanValue();  \
-    }                                                                                  \
+      Nan::AsyncResource resource("opencv4nodejs:Predicate::Constructor");            \
+      return resource.runInAsyncScope(Nan::GetCurrentContext()->Global(),             \
+        cb, 2, cbArgs).ToLocalChecked()->BooleanValue();                              \
+    }                                                                                 \
   }
 
 FF_CV_PREDICATE(Point2, cv::Point2d, Point2::constructor, FF_UNWRAP_PT2_AND_GET);

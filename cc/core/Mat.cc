@@ -120,7 +120,7 @@ NAN_METHOD(Mat::New) {
   if (info.Length() == 1 && info[0]->IsArray()) {
     FF_ARR jsChannelMats = FF_ARR::Cast(info[0]);
     std::vector<cv::Mat> channels;
-    for (int i = 0; i < jsChannelMats->Length(); i++) {
+    for (uint i = 0; i < jsChannelMats->Length(); i++) {
       FF_OBJ jsChannelMat = FF_CAST_OBJ(jsChannelMats->Get(i));
       FF_REQUIRE_INSTANCE(constructor, jsChannelMat,
         FF_NEW_STRING("expected channel " + std::to_string(i) + " to be an instance of Mat"));
