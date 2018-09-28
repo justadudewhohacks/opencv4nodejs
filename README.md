@@ -96,6 +96,8 @@ Check out <a href="https://medium.com/@muehler.v/machine-learning-with-opencv-an
 
 # How to install
 
+**Important note:** node-gyp won't handle whitespaces properly, thus make sure, that the path to your project directory does **not contain any whitespaces**. Installing opencv4nodejs under "C:\Program Files\some_dir" or similar will not work and will fail with: "fatal error C1083: Cannot open include file: 'opencv2/core.hpp'"!**
+
 ## Requirements
 - cmake (unless you are using a prebuilt OpenCV release)
 
