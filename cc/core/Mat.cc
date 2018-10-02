@@ -148,7 +148,7 @@ NAN_METHOD(Mat::New) {
     FF_ARR rowArray = FF_ARR::Cast(info[0]);
     int type = info[1]->Int32Value();
 
-    int numCols = -1;
+    long numCols = -1;
     for (uint i = 0; i < rowArray->Length(); i++) {
       if (!rowArray->Get(i)->IsArray()) {
         return Nan::ThrowError(Nan::New("Mat::New - Column should be an array, at column: " + std::to_string(i)).ToLocalChecked());
@@ -172,7 +172,7 @@ NAN_METHOD(Mat::New) {
     // TODO by Vec
     if (info[3]->IsArray()) {
       FF_ARR vec = FF_ARR::Cast(info[3]);
-      if (mat.channels() != vec->Length()) {
+      if (mat.channels() != (long)vec->Length()) {
         return Nan::ThrowError(FF_NEW_STRING(
           std::string("Mat::New - number of channels (") + std::to_string(mat.channels())
           + std::string(") do not match fill vector length ") + std::to_string(vec->Length()))
@@ -274,7 +274,7 @@ NAN_METHOD(Mat::Set) {
   int cn = matSelf.channels();
   if (info[2]->IsArray()) {
     FF_ARR vec = FF_ARR::Cast(info[2]);
-    FF_ASSERT_CHANNELS(cn, vec->Length(), "Mat::Set");
+    FF_ASSERT_CHANNELS(cn, (long)vec->Length(), "Mat::Set");
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, vec, matSelf.type(), FF_MAT_SET, FF::matPut);
   }
   else if (FF_IS_INSTANCE(Vec2::constructor, info[2])) {
@@ -342,13 +342,13 @@ NAN_METHOD(Mat::Norm) {
   double norm;
 
   // optional args
-  bool hasOptArgsObj = FF_HAS_ARG(i) && info[i]->IsObject();
+  bool hasOptArgsObj = FF_HAS_ARG((long)i) && info[i]->IsObject();
   FF_OBJ optArgs = hasOptArgsObj ? info[i]->ToObject() : FF_NEW_OBJ();
   FF_GET_UINT_IFDEF(optArgs, uint normType, "normType", cv::NORM_L2);
   FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat mask, "mask", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
   if (!hasOptArgsObj) {
-    FF_ARG_UINT_IFDEF(i, normType, normType);
-    FF_ARG_INSTANCE_IFDEF(i + 1, mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
+    FF_ARG_UINT_IFDEF((long)i, normType, normType);
+    FF_ARG_INSTANCE_IFDEF((long)(i + 1), mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
   }
 
   if (withSrc2) {
@@ -411,7 +411,8 @@ NAN_METHOD(Mat::Row) {
         row->Set(c, jsVec);
       }
     } else {
-      return Nan::ThrowError(Nan::New("not implemented yet - mat type:" + mat.type()).ToLocalChecked());
+      // NOTE: std::to_string might not work on mingw.
+      return Nan::ThrowError(Nan::New("not implemented yet - mat type:" + std::to_string(mat.type())).ToLocalChecked());
     }
   } catch(std::exception &e) {
     return Nan::ThrowError(e.what());

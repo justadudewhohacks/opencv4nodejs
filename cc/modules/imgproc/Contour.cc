@@ -211,7 +211,7 @@ NAN_METHOD(Contour::MatchShapes) {
 	FF_ARG_UINT(1, uint method);
 
 	// parameter not supported
-	double parameter;
+	double parameter = 0.0;
 	double cmp = cv::matchShapes(
 		FF_UNWRAP_CONTOUR_AND_GET(info.This()),
 		contour2,
