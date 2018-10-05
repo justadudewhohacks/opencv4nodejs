@@ -29,6 +29,8 @@ NAN_MODULE_INIT(Imgproc::Init) {
   Nan::SetMethod(target, "getPerspectiveTransform", GetPerspectiveTransform);
   Nan::SetMethod(target, "getTextSize", GetTextSize);
   Nan::SetMethod(target, "getTextSizeAsync", GetTextSizeAsync);
+  Nan::SetMethod(target, "applyColorMap", ApplyColorMap);
+  Nan::SetMethod(target, "applyColorMapAsync", ApplyColorMapAsync);
 #if CV_VERSION_MINOR > 1
   Nan::SetMethod(target, "canny", Canny);
 #endif
@@ -171,10 +173,10 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 
   FF_ARG_INSTANCE(0, cv::Mat hist, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
   FF_ARG_INSTANCE(1, cv::Mat plot, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-  FF_ARG_INSTANCE(2, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);											
-  if (1 != hist.cols) {																													
-	return Nan::ThrowError(FF_NEW_STRING("Plot1DHist - hist rows mismatch, expected "	
-	  + std::to_string(1) + ", have " + std::to_string(hist.cols)));		
+  FF_ARG_INSTANCE(2, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
+  if (1 != hist.cols) {
+	return Nan::ThrowError(FF_NEW_STRING("Plot1DHist - hist rows mismatch, expected "
+	  + std::to_string(1) + ", have " + std::to_string(hist.cols)));
   }
   if (hist.channels() != 1) {
     FF_THROW("expected hist to be single channeled");
@@ -292,3 +294,14 @@ NAN_METHOD(Imgproc::Canny) {
 	FF_RETURN(jsMat);
 }
 #endif
+
+
+NAN_METHOD(Imgproc::ApplyColorMap) {
+  FF::SyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
+                  "Imgproc::ApplyColorMap", info);
+}
+
+NAN_METHOD(Imgproc::ApplyColorMapAsync) {
+  FF::AsyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
+                   "Imgproc::ApplyColorMapAsync", info);
+}
