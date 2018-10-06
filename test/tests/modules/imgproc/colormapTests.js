@@ -42,20 +42,22 @@ module.exports = () => {
       });
     });
 
-    it('should process an image with a customized colormap', () => {
-      generateAPITests({
-        getDut: () => cv,
-        methodName: 'applyColorMap',
-        getRequiredArgs: () => ([
-          new cv.Mat([[0, 1, 100]], cv.CV_8UC1),
-          new cv.Mat(256, 1, cv.CV_8UC3),
-        ]),
-        hasAsync: true,
-        usesMacroInferno: false,
-        expectOutput: res => {
-          return expect(res).to.be.instanceOf(cv.Mat)
-        },
+    if (cv.version.minor >= 3) {
+      it('should process an image with a customized colormap', () => {
+        generateAPITests({
+          getDut: () => cv,
+          methodName: 'applyColorMap',
+          getRequiredArgs: () => ([
+            new cv.Mat([[0, 1, 100]], cv.CV_8UC1),
+            new cv.Mat(256, 1, cv.CV_8UC3),
+          ]),
+          hasAsync: true,
+          usesMacroInferno: false,
+          expectOutput: res => {
+            return expect(res).to.be.instanceOf(cv.Mat)
+          },
+        });
       });
-    });
+    }
   });
 };
