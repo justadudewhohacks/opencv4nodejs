@@ -46,8 +46,13 @@ namespace ImgprocBindings {
     int colormap;
     bool useUserColor = 0;
 
-    // TODO(oyyd) Need better polymorphism support.
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+#if CV_VERSION_MINOR < 4
+      return (Mat::Converter::arg(0, &src, info) ||
+              IntConverter::optArg(1, &colormap, info));
+#endif
+
+#if CV_VERSION_MINOR >= 4
       if (info[1]->IsNumber()) {
         return (Mat::Converter::arg(0, &src, info) ||
                 IntConverter::optArg(1, &colormap, info));
@@ -57,15 +62,23 @@ namespace ImgprocBindings {
 
       return (Mat::Converter::arg(0, &src, info) ||
               Mat::Converter::arg(1, &userColor, info));
+#endif
     }
 
     std::string executeCatchCvExceptionWorker() {
+#if CV_VERSION_MINOR < 4
+      cv::applyColorMap(src, dst, colormap);
+      return "";
+#endif
+
+#if CV_VERSION_MINOR >= 4
       if (useUserColor) {
         cv::applyColorMap(src, dst, userColor);
       } else {
         cv::applyColorMap(src, dst, colormap);
       }
       return "";
+#endif
     }
 
     v8::Local<v8::Value> getReturnValue() { return Mat::Converter::wrap(dst); }
