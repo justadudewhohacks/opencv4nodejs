@@ -18,6 +18,7 @@ export interface HistAxes {
   ranges: number[];
 }
 
+export function applyColorMap(src: Mat, colormap: number | Mat): Mat;
 export function blobFromImage(image: Mat, scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean): Mat;
 export function blobFromImageAsync(image: Mat, scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean): Promise<Mat>;
 export function blobFromImages(image: Mat[], scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean): Mat;

@@ -26,6 +26,8 @@ public:
 #if CV_VERSION_MINOR > 1
   static NAN_METHOD(Canny);
 #endif
+  static NAN_METHOD(ApplyColorMap);
+  static NAN_METHOD(ApplyColorMapAsync);
 };
 
 #endif
