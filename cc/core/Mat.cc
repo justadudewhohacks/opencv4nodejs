@@ -411,7 +411,6 @@ NAN_METHOD(Mat::Row) {
         row->Set(c, jsVec);
       }
     } else {
-      // NOTE: std::to_string might not work on mingw.
       return Nan::ThrowError(Nan::New("not implemented yet - mat type:" + std::to_string(mat.type())).ToLocalChecked());
     }
   } catch(std::exception &e) {
