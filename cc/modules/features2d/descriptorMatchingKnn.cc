@@ -136,7 +136,6 @@ void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, std::string
 #else
 void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	MatchKnnWorker worker();
 	FF::SyncBinding(
 		std::make_shared<MatchKnnWorker>(cv::DescriptorMatcher::create(matcherType)),
 		"MSERDetector::MatchKnn",

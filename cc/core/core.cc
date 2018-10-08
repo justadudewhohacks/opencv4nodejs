@@ -64,7 +64,7 @@ NAN_METHOD(Core::Partition) {
   v8::Local<v8::Function> cb = v8::Local<v8::Function>::Cast(info[1]);
   FF_VAL data0 = jsData->Get(0);
 
-  int numLabels;
+  int numLabels = 0;
   std::vector<int> labels;
   if (FF_IS_INSTANCE(Point2::constructor, data0)) {
     std::vector<cv::Point2d> pts;

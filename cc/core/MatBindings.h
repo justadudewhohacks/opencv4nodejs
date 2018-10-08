@@ -866,10 +866,10 @@ namespace MatBindings {
 		  return (
 			  IntConverter::optArg(4, &borderType, info) ||
 			  (
-				  self.channels() == 1 && DoubleConverter::optArg(5, &v1, info) ||
-				  self.channels() == 2 && Vec2::Converter::optArg(5, &v2, info) ||
-				  self.channels() == 3 && Vec3::Converter::optArg(5, &v3, info) ||
-				  self.channels() == 4 && Vec4::Converter::optArg(5, &v4, info)
+				  (self.channels() == 1 && DoubleConverter::optArg(5, &v1, info)) ||
+				  (self.channels() == 2 && Vec2::Converter::optArg(5, &v2, info)) ||
+				  (self.channels() == 3 && Vec3::Converter::optArg(5, &v3, info)) ||
+				  (self.channels() == 4 && Vec4::Converter::optArg(5, &v4, info))
 				)
 			);
 	  }
@@ -883,10 +883,10 @@ namespace MatBindings {
 		  return (
 			  IntConverter::optProp(&borderType, "borderType", opts) ||
 			  (
-				self.channels() == 1 && DoubleConverter::optProp(&v1, "value", opts) ||
-				self.channels() == 2 && Vec2::Converter::optProp(&v2, "value", opts) ||
-				self.channels() == 3 && Vec3::Converter::optProp(&v3, "value", opts) ||
-				self.channels() == 4 && Vec4::Converter::optProp(&v4, "value", opts)
+				(self.channels() == 1 && DoubleConverter::optProp(&v1, "value", opts)) ||
+				(self.channels() == 2 && Vec2::Converter::optProp(&v2, "value", opts)) ||
+				(self.channels() == 3 && Vec3::Converter::optProp(&v3, "value", opts)) ||
+				(self.channels() == 4 && Vec4::Converter::optProp(&v4, "value", opts))
 				)
 			);
 	  }

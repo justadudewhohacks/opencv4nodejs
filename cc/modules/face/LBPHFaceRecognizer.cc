@@ -71,4 +71,4 @@ NAN_METHOD(LBPHFaceRecognizer::New) {
 	FF_RETURN(info.Holder());
 };
 
-#endif HAVE_FACE
+#endif // HAVE_FACE

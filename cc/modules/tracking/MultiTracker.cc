@@ -106,7 +106,7 @@ NAN_METHOD(MultiTracker::Update) {
 	FF_UNWRAP(info.This(), MultiTracker)->tracker.update(image, rects);
 
 	FF_ARR jsRects = FF_NEW_ARRAY(rects.size());
-	for (int i = 0; i < rects.size(); i++) {
+	for (unsigned long i = 0; i < rects.size(); i++) {
 		FF_OBJ jsRect = FF_NEW_INSTANCE(Rect::constructor);
 		FF_UNWRAP_RECT_AND_GET(jsRect) = rects.at(i);
 		jsRects->Set(i, jsRect);
