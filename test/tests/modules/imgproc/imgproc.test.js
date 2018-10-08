@@ -9,6 +9,7 @@ const {
 } = global.utils;
 const { expect } = require('chai');
 const contourTests = require('./contourTests');
+const colormapTests = require('./colormapTests');
 
 describe('imgproc', () => {
   let testImg;
@@ -18,6 +19,7 @@ describe('imgproc', () => {
   });
 
   contourTests();
+  colormapTests();
 
   describe('getStructuringElement', () => {
     const rows = 4;
