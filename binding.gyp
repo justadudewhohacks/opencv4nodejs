@@ -128,7 +128,8 @@
 				"-std=c++11",
 				"-stdlib=libc++"
 			],
-			"GCC_ENABLE_CPP_EXCEPTIONS": "YES"
+			"GCC_ENABLE_CPP_EXCEPTIONS": "YES",
+			"MACOSX_DEPLOYMENT_TARGET": "10.9"
 		},
 
 		"conditions": [
