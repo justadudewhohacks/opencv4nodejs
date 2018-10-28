@@ -326,7 +326,7 @@ NAN_METHOD(Mat::GetDataAsArray) {
 
 NAN_METHOD(Mat::GetRegion) {
   if (!FF_IS_INSTANCE(Rect::constructor, info[0])) {
-    Nan::ThrowError("Mat::GetRegion expected arg0 to be an instance of Rect");
+    return Nan::ThrowError("Mat::GetRegion expected arg0 to be an instance of Rect");
   }
   cv::Rect2d rect = FF_UNWRAP(info[0]->ToObject(), Rect)->rect;
   FF_OBJ jsRegion = FF_NEW_INSTANCE(constructor);
