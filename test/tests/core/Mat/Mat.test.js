@@ -980,5 +980,17 @@ describe('Mat', () => {
     describe('Row average', makeTest(1, cv.REDUCE_AVG, cv.CV_32F, [ [ 1 ] ]));
     describe('Row max', makeTest(1, cv.REDUCE_MAX, -1, [ [ 1 ] ]));
     describe('Row min', makeTest(1, cv.REDUCE_MIN, -1, [ [ 1 ] ]));
-  })
+  });
+
+  describe('checking of non-instance arguments', () => {
+    it('should throw errors with correct error '
+        + 'messages with non-instance arguments', () => {
+      const img = getTestImg().bgrToGray();
+
+      assertError(
+        () => img.getRegion(0, 1, 2, 3),
+        'Error: Mat::GetRegion expected arg0 to be an instance of Rect'
+      );
+    });
+  });
 });
