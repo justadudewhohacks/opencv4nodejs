@@ -170,6 +170,50 @@ describe('core', () => {
     });
   });
 
+  describe('getNumThreads', () => {
+    it('should return the number of threads that used by OpenCV', () => {
+      expect(cv.getNumThreads()).to.be.an('number');
+    });
+  });
+
+  describe('setNumThreads', () => {
+    it('should try to set the number of threads'
+        + ' that used by OpenCV', () => {
+      const number = 2;
+      cv.setNumThreads(number);
+      // OpenCV will **try** to set the number of threads for the
+      // next parallel region so that `cv.getNumThreads()` don't react
+      // to this immediately.
+      // expect(cv.getNumThreads()).to.be.equal(number);
+    });
+
+    it('should throw when the argument is not integer', () => {
+      let err;
+
+      const expectError = (fn, msg) => {
+        try {
+          fn();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).to.be
+          .equal(msg);
+      };
+
+      expectError(() => cv.setNumThreads('hello'),
+        'Core::SetNumThreads expected arg0 to an int');
+      expectError(() => cv.setNumThreads(1.1),
+        'Core::SetNumThreads expected arg0 to an int');
+    });
+  });
+
+  describe('GetThreadNum', () => {
+    it('should returns the index of the currently executed thread', () => {
+      expect(cv.getThreadNum()).to.be.an('number');
+    });
+  });
+
   if (asyncHooks) {
     describe('async_hooks', () => {
       it('should trigger `init` callback in async_hooks', () => {

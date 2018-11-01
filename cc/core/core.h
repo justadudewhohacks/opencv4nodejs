@@ -22,6 +22,9 @@ public:
 	static NAN_METHOD(CartToPolarAsync);
 	static NAN_METHOD(PolarToCart);
 	static NAN_METHOD(PolarToCartAsync);
+	static NAN_METHOD(GetNumThreads);
+	static NAN_METHOD(SetNumThreads);
+	static NAN_METHOD(GetThreadNum);
 };
 
 #endif
