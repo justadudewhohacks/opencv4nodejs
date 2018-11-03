@@ -116,6 +116,9 @@ export function partition(data: Mat[], predicate: (mat1: Mat, mat2: Mat) => bool
 export function plot1DHist(hist: Mat, plotImg: Mat, color: Vec3, lineType?: number, thickness?: number, shift?: number): Mat;
 export function polarToCart(magnitude: Mat, angle: Mat, angleInDegrees?: boolean): { x: Mat, y: Mat };
 export function polarToCartAsync(magnitude: Mat, angle: Mat, angleInDegrees?: boolean): Promise<{ x: Mat, y: Mat }>;
+export function getNumThreads(): number;
+export function setNumThreads(nthreads: number): void;
+export function getThreadNum(): number;
 export function projectPoints(objectPoints: Point3[], imagePoints: Point2[], rvec: Vec3, tvec: Vec3, cameraMatrix: Mat, distCoeffs: number[], aspectRatio?: number): { imagePoints: Point2[], jacobian: Mat };
 export function projectPointsAsync(objectPoints: Point3[], imagePoints: Point2[], rvec: Vec3, tvec: Vec3, cameraMatrix: Mat, distCoeffs: number[], aspectRatio?: number): Promise<{ imagePoints: Point2[], jacobian: Mat }>;
 export function readNetFromCaffe(prototxt: string, modelPath?: string): Net;

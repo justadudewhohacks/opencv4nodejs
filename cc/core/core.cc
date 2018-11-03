@@ -42,6 +42,9 @@ NAN_MODULE_INIT(Core::Init) {
   Nan::SetMethod(target, "cartToPolarAsync", CartToPolarAsync);
   Nan::SetMethod(target, "polarToCart", PolarToCart);
   Nan::SetMethod(target, "polarToCartAsync", PolarToCartAsync);
+  Nan::SetMethod(target, "getNumThreads", GetNumThreads);
+  Nan::SetMethod(target, "setNumThreads", SetNumThreads);
+  Nan::SetMethod(target, "getThreadNum", GetThreadNum);
 };
 
 NAN_METHOD(Core::GetBuildInformation) {
@@ -157,4 +160,26 @@ NAN_METHOD(Core::PolarToCartAsync) {
     "Core::PolarToCartAsync",
     info
   );
+}
+
+NAN_METHOD(Core::GetNumThreads) {
+  FF_METHOD_CONTEXT("Core::GetNumThreads");
+  FF_RETURN(IntConverter::wrap(cv::getNumThreads()));
+}
+
+NAN_METHOD(Core::SetNumThreads) {
+  FF_METHOD_CONTEXT("Core::SetNumThreads");
+
+  if(!FF_IS_INT(info[0])) {
+    return Nan::ThrowError("Core::SetNumThreads expected arg0 to an int");
+  }
+
+  int32_t num = FF_CAST_INT(info[0]);
+
+  cv::setNumThreads(num);
+}
+
+NAN_METHOD(Core::GetThreadNum) {
+  FF_METHOD_CONTEXT("Core::GetNumThreads");
+  FF_RETURN(IntConverter::wrap(cv::getThreadNum()));
 }
