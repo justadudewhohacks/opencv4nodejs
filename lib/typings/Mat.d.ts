@@ -45,6 +45,10 @@ export class Mat {
   at(row: number, col: number): Vec2;
   at(row: number, col: number): Vec3;
   at(row: number, col: number): Vec4;
+  at(idx: number[]): number;
+  at(idx: number[]): Vec2;
+  at(idx: number[]): Vec3;
+  at(idx: number[]): Vec4;
   atRaw(row: number, col: number): number;
   atRaw(row: number, col: number): number[];
   atRaw(row: number, col: number): number[];

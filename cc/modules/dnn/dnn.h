@@ -19,6 +19,7 @@ public:
 	static NAN_METHOD(BlobFromImageAsync);
 	static NAN_METHOD(BlobFromImages);
 	static NAN_METHOD(BlobFromImagesAsync);
+  static NAN_METHOD(NMSBoxes);
 };
 
 #endif

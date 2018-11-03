@@ -19,6 +19,7 @@ NAN_MODULE_INIT(Dnn::Init) {
   Nan::SetMethod(target, "blobFromImageAsync", BlobFromImageAsync);
   Nan::SetMethod(target, "blobFromImages", BlobFromImages);
   Nan::SetMethod(target, "blobFromImagesAsync", BlobFromImagesAsync);
+  Nan::SetMethod(target, "NMSBoxes", NMSBoxes);
 };
 
 NAN_METHOD(Dnn::ReadNetFromTensorflow) {
@@ -81,6 +82,14 @@ NAN_METHOD(Dnn::BlobFromImagesAsync) {
   FF::AsyncBinding(
     std::make_shared<DnnBindings::BlobFromImageWorker>(false),
     "BlobFromImagesAsync",
+    info
+  );
+}
+
+NAN_METHOD(Dnn::NMSBoxes) {
+  FF::SyncBinding(
+    std::make_shared<DnnBindings::NMSBoxes>(),
+    "NMSBoxes",
     info
   );
 }

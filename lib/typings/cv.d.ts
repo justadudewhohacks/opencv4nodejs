@@ -19,10 +19,11 @@ export interface HistAxes {
 }
 
 export function applyColorMap(src: Mat, colormap: number | Mat): Mat;
-export function blobFromImage(image: Mat, scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean): Mat;
-export function blobFromImageAsync(image: Mat, scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean): Promise<Mat>;
-export function blobFromImages(image: Mat[], scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean): Mat;
-export function blobFromImagesAsync(image: Mat[], scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean): Promise<Mat>;
+export function blobFromImage(image: Mat, scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Mat;
+export function blobFromImageAsync(image: Mat, scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Promise<Mat>;
+export function blobFromImages(image: Mat[], scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Mat;
+export function blobFromImagesAsync(image: Mat[], scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Promise<Mat>;
+export function NMSBoxes(bboxes: Rect[], scores: number[], scoreThreshold: number, nmsThreshold: number): number[];
 export function calcHist(img: Mat, histAxes: HistAxes[], mask?: Mat): Mat;
 export function calibrateCamera(objectPoints: Point3[], imagePoints: Point2[], imageSize: Size, cameraMatrix: Mat, distCoeffs: number[], flags?: number, criteria?: TermCriteria): { returnValue: number, rvecs: Vec3[], tvecs: Vec3[], distCoeffs: number[] };
 export function calibrateCameraAsync(objectPoints: Point3[], imagePoints: Point2[], imageSize: Size, cameraMatrix: Mat, distCoeffs: number[], flags?: number, criteria?: TermCriteria): Promise<{ returnValue: number, rvecs: Vec3[], tvecs: Vec3[], distCoeffs: number[] }>;
