@@ -164,9 +164,7 @@ NAN_METHOD(Core::PolarToCartAsync) {
 
 NAN_METHOD(Core::GetNumThreads) {
   FF_METHOD_CONTEXT("Core::GetNumThreads");
-  v8::Local<v8::Integer> ret = v8::Integer::New(v8::Isolate::GetCurrent(),
-      cv::getNumThreads());
-  FF_RETURN(ret);
+  FF_RETURN(IntConverter::wrap(cv::getNumThreads()));
 }
 
 NAN_METHOD(Core::SetNumThreads) {
@@ -183,7 +181,5 @@ NAN_METHOD(Core::SetNumThreads) {
 
 NAN_METHOD(Core::GetThreadNum) {
   FF_METHOD_CONTEXT("Core::GetNumThreads");
-  v8::Local<v8::Integer> ret = v8::Integer::New(v8::Isolate::GetCurrent(),
-      cv::getThreadNum());
-  FF_RETURN(ret);
+  FF_RETURN(IntConverter::wrap(cv::getThreadNum()));
 }
