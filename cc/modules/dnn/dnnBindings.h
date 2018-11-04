@@ -77,7 +77,6 @@ namespace DnnBindings {
     bool swapRB = true;
     bool crop = true;
     int ddepth = CV_32F;
-
     cv::Mat returnValue;
 
     std::string executeCatchCvExceptionWorker() {
@@ -90,10 +89,10 @@ namespace DnnBindings {
       }
 #else
       if (isSingleImage) {
-        returnValue = cv::dnn::blobFromImage(image, scalefactor, size, mean, swapRB, crop);
+        returnValue = cv::dnn::blobFromImage(image, scalefactor, size, mean, swapRB);
       }
       else {
-        returnValue = cv::dnn::blobFromImages(images, scalefactor, size, mean, swapRB, crop);
+        returnValue = cv::dnn::blobFromImages(images, scalefactor, size, mean, swapRB);
       }
 #endif
       return "";
