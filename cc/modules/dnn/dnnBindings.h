@@ -81,12 +81,21 @@ namespace DnnBindings {
     cv::Mat returnValue;
 
     std::string executeCatchCvExceptionWorker() {
+#if CV_VERSION_MINOR > 3 && CV_VERSION_REVISION > 2
       if (isSingleImage) {
         returnValue = cv::dnn::blobFromImage(image, scalefactor, size, mean, swapRB, crop, ddepth);
       }
       else {
         returnValue = cv::dnn::blobFromImages(images, scalefactor, size, mean, swapRB, crop, ddepth);
       }
+#else
+      if (isSingleImage) {
+        returnValue = cv::dnn::blobFromImage(image, scalefactor, size, mean, swapRB, crop);
+      }
+      else {
+        returnValue = cv::dnn::blobFromImages(images, scalefactor, size, mean, swapRB, crop);
+      }
+#endif
       return "";
     }
 
@@ -129,6 +138,7 @@ namespace DnnBindings {
     }
   };
 
+#if CV_VERSION_MINOR > 3
   struct NMSBoxes : public CatchCvExceptionWorker {
   public:
     std::vector<cv::Rect> bboxes;
@@ -156,6 +166,7 @@ namespace DnnBindings {
       );
     }
   };
+#endif
 }
 
 #endif

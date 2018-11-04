@@ -83,21 +83,23 @@ describe('dnn', () => {
     });
   });
 
-  describe('NMSBoxes', () => {
-    generateAPITests({
-      getDut: () => cv,
-      methodName: 'NMSBoxes',
-      hasAsync: false,
-      getRequiredArgs: () => ([
-        [new cv.Rect(0, 0, 1, 1)],
-        [1],
-        0.5,
-        0.4,
-      ]),
-      expectOutput: (res) => {
-        expect(res).to.be.instanceOf(Array);
-        expect(res[0]).to.be.equal(0);
-      },
+  if (cv.version.minor > 3) {
+    describe('NMSBoxes', () => {
+      generateAPITests({
+        getDut: () => cv,
+        methodName: 'NMSBoxes',
+        hasAsync: false,
+        getRequiredArgs: () => ([
+          [new cv.Rect(0, 0, 1, 1)],
+          [1],
+          0.5,
+          0.4,
+        ]),
+        expectOutput: (res) => {
+          expect(res).to.be.instanceOf(Array);
+          expect(res[0]).to.be.equal(0);
+        },
+      });
     });
-  });
+  }
 });

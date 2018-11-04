@@ -11,15 +11,17 @@ class Dnn {
 public:
   static NAN_MODULE_INIT(Init);
 
-	static NAN_METHOD(ReadNetFromTensorflow);
-	static NAN_METHOD(ReadNetFromTensorflowAsync);
-	static NAN_METHOD(ReadNetFromCaffe);
-	static NAN_METHOD(ReadNetFromCaffeAsync);
-	static NAN_METHOD(BlobFromImage);
-	static NAN_METHOD(BlobFromImageAsync);
-	static NAN_METHOD(BlobFromImages);
-	static NAN_METHOD(BlobFromImagesAsync);
+  static NAN_METHOD(ReadNetFromTensorflow);
+  static NAN_METHOD(ReadNetFromTensorflowAsync);
+  static NAN_METHOD(ReadNetFromCaffe);
+  static NAN_METHOD(ReadNetFromCaffeAsync);
+  static NAN_METHOD(BlobFromImage);
+  static NAN_METHOD(BlobFromImageAsync);
+  static NAN_METHOD(BlobFromImages);
+  static NAN_METHOD(BlobFromImagesAsync);
+#if CV_VERSION_MINOR > 3
   static NAN_METHOD(NMSBoxes);
+#endif
 };
 
 #endif
