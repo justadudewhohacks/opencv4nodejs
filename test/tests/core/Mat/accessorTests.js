@@ -60,6 +60,19 @@ const createAndAssertSetsCorrectVecValues = (type) => {
 
 module.exports = () => {
   describe('at', () => {
+    it('should support idx(arraies) as arguments', () => {
+      const type = cv.CV_8U;
+      const mat = new cv.Mat(getExampleMatData(type), type);
+      expect(mat.at([0, 0])).to.be.equal(255);
+    });
+
+    it('should throw when idx.length !== mat.dims', () => {
+      const type = cv.CV_8U;
+      const mat = new cv.Mat(getExampleMatData(type), type);
+      assertError(() => mat.at([0, 0, 0]),
+        'expected array length to be equal to the dims');
+    });
+
     it('should throw index out of bounds', () => {
       const type = cv.CV_8U;
       const mat = new cv.Mat(getExampleMatData(type), type);
@@ -92,4 +105,3 @@ module.exports = () => {
     });
   });
 };
-

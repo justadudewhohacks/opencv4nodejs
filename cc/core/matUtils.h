@@ -10,6 +10,13 @@
   else                                                                                   \
     val = get(mat, info[0]->Int32Value(), info[1]->Int32Value());
 
+#define FF_MAT_AT_ARRAY(mat, val, get)  \
+  {                                     \
+    FF_ARG_UNPACK_INT_ARRAY(0, vec);    \
+    const int* idx = &vec.front();      \
+    val = get(mat, idx);                \
+  }
+
 #define FF_MAT_SET(mat, val, put)                                                        \
   if (mat.dims > 2)                                                                      \
     put(mat, val, info[0]->Int32Value(), info[1]->Int32Value(), info[2]->Int32Value());  \
@@ -232,6 +239,11 @@ namespace FF {
 		return Nan::New(mat.at<type>(r, c, z));
 	}
 
+  template<typename type>
+	static inline v8::Local<v8::Value> matGetVal(cv::Mat mat, const int* idx) {
+		return Nan::New(mat.at<type>(idx));
+	}
+
 	template<typename type>
 	static inline v8::Local<v8::Value> matGetVec2(cv::Mat mat, int r, int c) {
 		v8::Local<v8::Array> vec = Nan::New<v8::Array>(2);
@@ -245,6 +257,14 @@ namespace FF {
 		v8::Local<v8::Array> vec = Nan::New<v8::Array>(2);
 		vec->Set(0, Nan::New(mat.at< cv::Vec<type, 2> >(r, c, z)[0]));
 		vec->Set(1, Nan::New(mat.at< cv::Vec<type, 2> >(r, c, z)[1]));
+		return vec;
+	}
+
+  template<typename type>
+	static inline v8::Local<v8::Value> matGetVec2(cv::Mat mat, const int* idx) {
+		v8::Local<v8::Array> vec = Nan::New<v8::Array>(2);
+		vec->Set(0, Nan::New(mat.at< cv::Vec<type, 2> >(idx)[0]));
+		vec->Set(1, Nan::New(mat.at< cv::Vec<type, 2> >(idx)[1]));
 		return vec;
 	}
 
@@ -263,6 +283,15 @@ namespace FF {
 		vec->Set(0, Nan::New(mat.at< cv::Vec<type, 3> >(r, c, z)[0]));
 		vec->Set(1, Nan::New(mat.at< cv::Vec<type, 3> >(r, c, z)[1]));
 		vec->Set(2, Nan::New(mat.at< cv::Vec<type, 3> >(r, c, z)[2]));
+		return vec;
+	}
+
+  template<typename type>
+	static inline v8::Local<v8::Value> matGetVec3(cv::Mat mat, const int* idx) {
+		v8::Local<v8::Array> vec = Nan::New<v8::Array>(3);
+		vec->Set(0, Nan::New(mat.at< cv::Vec<type, 3> >(idx)[0]));
+		vec->Set(1, Nan::New(mat.at< cv::Vec<type, 3> >(idx)[1]));
+		vec->Set(2, Nan::New(mat.at< cv::Vec<type, 3> >(idx)[2]));
 		return vec;
 	}
 
@@ -285,6 +314,16 @@ namespace FF {
 		vec->Set(3, Nan::New(mat.at< cv::Vec<type, 4> >(r, c, z)[3]));
 		return vec;
 	}
+
+  template<typename type>
+  static inline v8::Local<v8::Value> matGetVec4(cv::Mat mat, const int* idx) {
+    v8::Local<v8::Array> vec = Nan::New<v8::Array>(4);
+    vec->Set(0, Nan::New(mat.at< cv::Vec<type, 4> >(idx)[0]));
+    vec->Set(1, Nan::New(mat.at< cv::Vec<type, 4> >(idx)[1]));
+    vec->Set(2, Nan::New(mat.at< cv::Vec<type, 4> >(idx)[2]));
+    vec->Set(3, Nan::New(mat.at< cv::Vec<type, 4> >(idx)[3]));
+    return vec;
+  }
 }
 
 #endif

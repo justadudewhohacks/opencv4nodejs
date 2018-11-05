@@ -226,12 +226,22 @@ NAN_METHOD(Mat::FlattenFloat) {
 
 NAN_METHOD(Mat::At) {
   FF_METHOD_CONTEXT("Mat::At");
+
   cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-  FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.size[0] - 1, "Mat::At row");
-  FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.size[1] - 1, "Mat::At col");
   v8::Local<v8::Value> val;
-  FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
   v8::Local<v8::Value> jsVal;
+
+  if (FF_IS_ARRAY(info[0])) {
+    if ((long)FF_CAST_ARRAY(info[0])->Length() != matSelf.dims) {
+      FF_THROW("expected array length to be equal to the dims");
+    }
+    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT_ARRAY, FF::matGet);
+  } else {
+    FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.size[0] - 1, "Mat::At row");
+    FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.size[1] - 1, "Mat::At col");
+    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
+  }
+
   if (val->IsArray()) {
     FF_ARR vec = FF_ARR::Cast(val);
     FF_OBJ jsVec;

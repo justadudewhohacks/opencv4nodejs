@@ -62,5 +62,44 @@ describe('dnn', () => {
         expectOutput
       });
     });
+
+    describe('blobFromImage', () => {
+      generateAPITests({
+        getDut: () => cv,
+        methodName: 'blobFromImage',
+        getRequiredArgs: () => ([
+          testImg
+        ]),
+        getOptionalArgsMap: () => ([
+          ['scalefactor', 0.8],
+          ['size', new cv.Size(3, 3)],
+          ['mean', new cv.Vec(0.5, 0.5, 0.5)],
+          ['swapRB', true],
+          ['crop', false],
+          ['ddepth', cv.CV_32F]
+        ]),
+        expectOutput
+      });
+    });
   });
+
+  if (cv.version.minor > 3) {
+    describe('NMSBoxes', () => {
+      generateAPITests({
+        getDut: () => cv,
+        methodName: 'NMSBoxes',
+        hasAsync: false,
+        getRequiredArgs: () => ([
+          [new cv.Rect(0, 0, 1, 1)],
+          [1],
+          0.5,
+          0.4,
+        ]),
+        expectOutput: (res) => {
+          expect(res).to.be.instanceOf(Array);
+          expect(res[0]).to.be.equal(0);
+        },
+      });
+    });
+  }
 });

@@ -75,16 +75,26 @@ namespace DnnBindings {
     cv::Size2d size = cv::Size2d();
     cv::Vec3d mean = cv::Vec3d();
     bool swapRB = true;
-
+    bool crop = true;
+    int ddepth = CV_32F;
     cv::Mat returnValue;
 
     std::string executeCatchCvExceptionWorker() {
+#if CV_VERSION_MINOR > 3 && CV_VERSION_REVISION > 2
+      if (isSingleImage) {
+        returnValue = cv::dnn::blobFromImage(image, scalefactor, size, mean, swapRB, crop, ddepth);
+      }
+      else {
+        returnValue = cv::dnn::blobFromImages(images, scalefactor, size, mean, swapRB, crop, ddepth);
+      }
+#else
       if (isSingleImage) {
         returnValue = cv::dnn::blobFromImage(image, scalefactor, size, mean, swapRB);
       }
       else {
         returnValue = cv::dnn::blobFromImages(images, scalefactor, size, mean, swapRB);
       }
+#endif
       return "";
     }
 
@@ -104,7 +114,9 @@ namespace DnnBindings {
         DoubleConverter::optArg(1, &scalefactor, info) ||
         Size::Converter::optArg(2, &size, info) ||
         Vec3::Converter::optArg(3, &mean, info) ||
-        BoolConverter::optArg(4, &swapRB, info)
+        BoolConverter::optArg(4, &swapRB, info) ||
+        BoolConverter::optArg(5, &crop, info) ||
+        IntConverter::optArg(6, &ddepth, info)
       );
     }
 
@@ -118,12 +130,42 @@ namespace DnnBindings {
         DoubleConverter::optProp(&scalefactor, "scalefactor", opts) ||
         BoolConverter::optProp(&swapRB, "swapRB", opts) ||
         Size::Converter::optProp(&size, "size", opts) ||
-        Vec3::Converter::optProp(&mean, "mean", opts)
+        Vec3::Converter::optProp(&mean, "mean", opts) ||
+        BoolConverter::optProp(&crop, "crop", opts) ||
+        IntConverter::optProp(&ddepth, "ddepth", opts)
       );
     }
   };
 
+#if CV_VERSION_MINOR > 3
+  struct NMSBoxes : public CatchCvExceptionWorker {
+  public:
+    std::vector<cv::Rect> bboxes;
+    std::vector<float> scores;
+    float score_threshold;
+    float nms_threshold;
+    std::vector<int> indices;
 
+    std::string executeCatchCvExceptionWorker() {
+      cv::dnn::NMSBoxes(bboxes, scores, score_threshold,
+          nms_threshold, indices);
+      return "";
+    }
+
+    v8::Local<v8::Value> getReturnValue() {
+      return IntArrayConverter::wrap(indices);
+    }
+
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        ObjectArrayConverter<Rect, cv::Rect>::arg(0, &bboxes, info) ||
+        FloatArrayConverter::arg(1, &scores, info) ||
+        FloatConverter::arg(2, &score_threshold, info) ||
+        FloatConverter::arg(3, &nms_threshold, info)
+      );
+    }
+  };
+#endif
 }
 
 #endif
