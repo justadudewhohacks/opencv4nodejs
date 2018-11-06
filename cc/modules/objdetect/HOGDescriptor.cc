@@ -10,7 +10,7 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
   constructor.Reset(ctor);
   ctor->SetClassName(FF_NEW_STRING("HOGDescriptor"));
   instanceTemplate->SetInternalFieldCount(1);
-  
+
   Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("winSize"), winSize);
   Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("blockSize"), blockSize);
   Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("blockStride"), blockStride);
@@ -50,6 +50,7 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
 };
 
 NAN_METHOD(HOGDescriptor::New) {
+  FF_ASSERT_CONSTRUCT_CALL(HOGDescriptor);
   FF_METHOD_CONTEXT("HOGDescriptor::New");
 
   // optional args
@@ -85,12 +86,12 @@ NAN_METHOD(HOGDescriptor::New) {
 
   HOGDescriptor* self = new HOGDescriptor();
   self->hog = cv::HOGDescriptor(
-    winSize, 
-    blockSize, 
+    winSize,
+    blockSize,
     blockStride,
-    cellSize, 
-    (int)nbins, 
-    derivAperture, 
+    cellSize,
+    (int)nbins,
+    derivAperture,
     winSigma,
     (int)histogramNormType,
     L2HysThreshold,

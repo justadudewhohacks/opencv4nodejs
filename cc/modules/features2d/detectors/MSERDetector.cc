@@ -15,7 +15,7 @@ NAN_MODULE_INIT(MSERDetector::Init) {
 
     Nan::SetPrototypeMethod(ctor, "detectRegions", MSERDetector::DetectRegions);
 	Nan::SetPrototypeMethod(ctor, "detectRegionsAsync", MSERDetector::DetectRegionsAsync);
-  
+
 	Nan::SetAccessor(instanceTemplate, Nan::New("delta").ToLocalChecked(), MSERDetector::GetDelta);
 	Nan::SetAccessor(instanceTemplate, Nan::New("minArea").ToLocalChecked(), MSERDetector::GetMinArea);
 	Nan::SetAccessor(instanceTemplate, Nan::New("maxArea").ToLocalChecked(), MSERDetector::GetMaxArea);
@@ -30,6 +30,7 @@ NAN_MODULE_INIT(MSERDetector::Init) {
 };
 
 NAN_METHOD(MSERDetector::New) {
+  FF_ASSERT_CONSTRUCT_CALL(MSERDetector);
 	FF_METHOD_CONTEXT("MSERDetector::New");
 	MSERDetector* self = new MSERDetector();
 
@@ -59,7 +60,7 @@ NAN_METHOD(MSERDetector::New) {
 	}
 
 	self->Wrap(info.Holder());
-	self->detector = cv::MSER::create(self->delta, self->minArea, self->maxArea, self->maxVariation, 
+	self->detector = cv::MSER::create(self->delta, self->minArea, self->maxArea, self->maxVariation,
 		self->minDiversity, self->maxEvolution, self->areaThreshold, self->minMargin, self->edgeBlurSize);
   FF_RETURN(info.Holder());
 }
@@ -71,11 +72,11 @@ public:
     DetectRegionsWorker( MSERDetector *mser){
         this->det = mser->getMSERDetector();
     }
-    
+
     cv::Mat img;
     std::vector<std::vector<cv::Point> > regions;
     std::vector<cv::Rect> mser_bbox;
-    
+
     std::string executeCatchCvExceptionWorker() {
         det->detectRegions(img, regions, mser_bbox);
         return "";
@@ -84,14 +85,14 @@ public:
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
         // we only need input image
 		return Mat::Converter::arg(0, &img, info);
-	}        
-    
-    
+	}
+
+
     FF_VAL getReturnValue() {
-        FF_OBJ ret = FF_NEW_OBJ();            
+        FF_OBJ ret = FF_NEW_OBJ();
         Nan::Set(ret, FF_NEW_STRING("msers"), ObjectArrayOfArraysConverter<Point2, cv::Point>::wrap(regions));
         Nan::Set(ret, FF_NEW_STRING("bboxes"), ObjectArrayConverter<Rect, cv::Rect>::wrap(mser_bbox));
-        return ret;        
+        return ret;
     }
 };
 
@@ -101,7 +102,7 @@ NAN_METHOD(MSERDetector::DetectRegions) {
 		std::make_shared<DetectRegionsWorker>(FF_UNWRAP(info.This(), MSERDetector)),
 		"MSERDetector::DetectRegions",
 		info
-	);  
+	);
 }
 
 NAN_METHOD(MSERDetector::DetectRegionsAsync) {

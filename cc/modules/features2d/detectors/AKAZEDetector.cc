@@ -23,6 +23,7 @@ NAN_MODULE_INIT(AKAZEDetector::Init) {
 };
 
 NAN_METHOD(AKAZEDetector::New) {
+  FF_ASSERT_CONSTRUCT_CALL(AKAZEDetector);
 	FF_METHOD_CONTEXT("AKAZEDetector::New");
 
 	// optional args

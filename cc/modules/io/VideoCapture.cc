@@ -19,6 +19,7 @@ NAN_MODULE_INIT(VideoCapture::Init) {
 };
 
 NAN_METHOD(VideoCapture::New) {
+  FF_ASSERT_CONSTRUCT_CALL(VideoCapture);
   FF_METHOD_CONTEXT("VideoCapture::New");
   VideoCapture* self = new VideoCapture();
   if (info[0]->IsString()) {

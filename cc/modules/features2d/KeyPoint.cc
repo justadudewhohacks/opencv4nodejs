@@ -22,6 +22,7 @@ NAN_MODULE_INIT(KeyPoint::Init) {
 };
 
 NAN_METHOD(KeyPoint::New) {
+  FF_ASSERT_CONSTRUCT_CALL(KeyPoint);
 	FF_METHOD_CONTEXT("KeyPoint::New");
 	KeyPoint* self = new KeyPoint();
   if (info.Length() > 0) {

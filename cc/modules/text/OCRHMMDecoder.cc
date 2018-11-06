@@ -22,6 +22,7 @@ NAN_MODULE_INIT(OCRHMMDecoder::Init) {
 };
 
 NAN_METHOD(OCRHMMDecoder::New) {
+  FF_ASSERT_CONSTRUCT_CALL(OCRHMMDecoder);
 	FF::TryCatch tryCatch;
 	OCRHMMDecoderBindings::NewWorker worker;
 

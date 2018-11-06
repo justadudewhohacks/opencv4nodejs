@@ -26,6 +26,7 @@ NAN_MODULE_INIT(Rect::Init) {
 };
 
 NAN_METHOD(Rect::New) {
+  FF_ASSERT_CONSTRUCT_CALL(Rect);
   Rect* self = new Rect();
   if (info.Length() == 0) {
     self->rect = cv::Rect2d();

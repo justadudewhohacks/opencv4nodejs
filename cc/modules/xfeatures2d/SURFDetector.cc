@@ -23,6 +23,7 @@ NAN_MODULE_INIT(SURFDetector::Init) {
 };
 
 NAN_METHOD(SURFDetector::New) {
+  FF_ASSERT_CONSTRUCT_CALL(SURFDetector);
 	FF_METHOD_CONTEXT("SURFDetector::New");
 	SURFDetector* self = new SURFDetector();
 
@@ -46,9 +47,9 @@ NAN_METHOD(SURFDetector::New) {
 	self->Wrap(info.Holder());
 	self->detector = cv::xfeatures2d::SURF::create(
 		hessianThreshold,
-		nOctaves, 
-		nOctaveLayers, 
-		extended, 
+		nOctaves,
+		nOctaveLayers,
+		extended,
 		upright
 	);
   FF_RETURN(info.Holder());

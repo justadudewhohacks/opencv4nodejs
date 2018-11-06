@@ -38,6 +38,7 @@ NAN_MODULE_INIT(Contour::Init) {
 };
 
 NAN_METHOD(Contour::New) {
+	FF_ASSERT_CONSTRUCT_CALL(Contour);
 	if (info.Length() > 1) {
 		return Nan::ThrowError("Contour::New - expected one or zero argument");
 	}

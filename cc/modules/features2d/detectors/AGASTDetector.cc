@@ -10,7 +10,7 @@ NAN_MODULE_INIT(AGASTDetector::Init) {
   constructor.Reset(ctor);
 	ctor->SetClassName(Nan::New("AGASTDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
-	
+
 	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), AGASTDetector::GetThreshold);
 	Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), AGASTDetector::GetNonmaxSuppression);
 	Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), AGASTDetector::GetType);
@@ -19,6 +19,7 @@ NAN_MODULE_INIT(AGASTDetector::Init) {
 };
 
 NAN_METHOD(AGASTDetector::New) {
+  FF_ASSERT_CONSTRUCT_CALL(AGASTDetector);
 	FF_METHOD_CONTEXT("AGASTDetector::New");
 
 	// optional args

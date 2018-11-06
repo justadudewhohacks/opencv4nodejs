@@ -17,6 +17,7 @@ NAN_MODULE_INIT(RotatedRect::Init) {
 };
 
 NAN_METHOD(RotatedRect::New) {
+	FF_ASSERT_CONSTRUCT_CALL(RotatedRect);
 	RotatedRect* self = new RotatedRect();
 	if (info.Length() == 0) {
 		self->rect = cv::RotatedRect();

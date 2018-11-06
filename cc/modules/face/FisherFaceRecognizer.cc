@@ -18,6 +18,7 @@ NAN_MODULE_INIT(FisherFaceRecognizer::Init) {
 };
 
 NAN_METHOD(FisherFaceRecognizer::New) {
+	FF_ASSERT_CONSTRUCT_CALL(FisherFaceRecognizer);
 	FF::TryCatch tryCatch;
 	FaceRecognizerBindings::NewWorker worker;
 

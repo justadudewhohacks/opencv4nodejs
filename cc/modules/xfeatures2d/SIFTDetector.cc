@@ -23,6 +23,7 @@ NAN_MODULE_INIT(SIFTDetector::Init) {
 };
 
 NAN_METHOD(SIFTDetector::New) {
+  FF_ASSERT_CONSTRUCT_CALL(SIFTDetector);
 	FF_METHOD_CONTEXT("SIFTDetector::New");
 	SIFTDetector* self = new SIFTDetector();
 
@@ -45,10 +46,10 @@ NAN_METHOD(SIFTDetector::New) {
 
 	self->Wrap(info.Holder());
 	self->detector = cv::xfeatures2d::SIFT::create(
-		self->nFeatures, 
-		self->nOctaveLayers, 
-		self->contrastThreshold, 
-		self->edgeThreshold, 
+		self->nFeatures,
+		self->nOctaveLayers,
+		self->contrastThreshold,
+		self->edgeThreshold,
 		self->sigma
 	);
   FF_RETURN(info.Holder());

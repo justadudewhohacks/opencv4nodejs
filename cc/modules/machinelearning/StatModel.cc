@@ -13,6 +13,7 @@ NAN_MODULE_INIT(StatModel::Init) {
 };
 
 NAN_METHOD(StatModel::New) {
+  FF_ASSERT_CONSTRUCT_CALL(StatModel);
 	StatModel* self = new StatModel();
 
 	self->Wrap(info.Holder());

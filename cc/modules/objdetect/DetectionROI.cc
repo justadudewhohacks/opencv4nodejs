@@ -18,6 +18,7 @@ NAN_MODULE_INIT(DetectionROI::Init) {
 };
 
 NAN_METHOD(DetectionROI::New) {
+	FF_ASSERT_CONSTRUCT_CALL(DetectionROI);
 	DetectionROI* self = new DetectionROI();
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());

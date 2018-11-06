@@ -24,6 +24,7 @@ NAN_MODULE_INIT(BFMatcher::Init) {
 };
 
 NAN_METHOD(BFMatcher::New) {
+  FF_ASSERT_CONSTRUCT_CALL(BFMatcher);
 	FF_METHOD_CONTEXT("BFMatcher::New");
 	BFMatcher* self = new BFMatcher();
 

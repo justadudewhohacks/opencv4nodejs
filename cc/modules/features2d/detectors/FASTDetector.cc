@@ -10,7 +10,7 @@ NAN_MODULE_INIT(FASTDetector::Init) {
   constructor.Reset(ctor);
 	ctor->SetClassName(Nan::New("FASTDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
-	
+
 	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), FASTDetector::GetThreshold);
 	Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), FASTDetector::GetNonmaxSuppression);
 	Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), FASTDetector::GetType);
@@ -19,6 +19,7 @@ NAN_MODULE_INIT(FASTDetector::Init) {
 };
 
 NAN_METHOD(FASTDetector::New) {
+  FF_ASSERT_CONSTRUCT_CALL(FASTDetector);
 	FF_METHOD_CONTEXT("FASTDetector::New");
 
 	// optional args

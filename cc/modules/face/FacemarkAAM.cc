@@ -21,6 +21,7 @@ NAN_MODULE_INIT(FacemarkAAM::Init) {
 };
 
 NAN_METHOD(FacemarkAAM::New) {
+  FF_ASSERT_CONSTRUCT_CALL(FacemarkAAM);
   FF_METHOD_CONTEXT("FacemarkAAM::New");
 
   FF_ARG_INSTANCE_IFDEF(

@@ -35,6 +35,7 @@ NAN_METHOD(VideoWriter::Release) {
 }
 
 NAN_METHOD(VideoWriter::New) {
+  FF_ASSERT_CONSTRUCT_CALL(VideoWriter);
   FF::TryCatch tryCatch;
   VideoWriterBindings::NewWorker worker;
 

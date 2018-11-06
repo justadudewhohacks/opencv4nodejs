@@ -214,6 +214,21 @@ describe('core', () => {
     });
   });
 
+  describe('class constructor call', () => {
+    it('should throw errors if we call a constructor without "new"', () => {
+      let err;
+
+      try {
+        cv.Mat();
+      } catch (e) {
+        err = e;
+      }
+
+      expect(err.message).to.be.equal(
+        'Mat::New -  expect to be called with "new"');
+    });
+  });
+
   if (asyncHooks) {
     describe('async_hooks', () => {
       it('should trigger `init` callback in async_hooks', () => {

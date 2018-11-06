@@ -14,6 +14,7 @@ NAN_MODULE_INIT(Size::Init) {
 };
 
 NAN_METHOD(Size::New) {
+	FF_ASSERT_CONSTRUCT_CALL(Size);
 	Size* self = new Size();
 	if (info.Length() > 0) {
 		if (info.Length() < 2) {

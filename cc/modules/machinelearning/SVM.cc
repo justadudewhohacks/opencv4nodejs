@@ -60,6 +60,7 @@ void SVM::setParams(v8::Local<v8::Object> params) {
 }
 
 NAN_METHOD(SVM::New) {
+  FF_ASSERT_CONSTRUCT_CALL(SVM);
   FF_METHOD_CONTEXT("SVM::New");
   SVM* self = new SVM();
   self->svm = cv::ml::SVM::create();
@@ -78,8 +79,8 @@ NAN_METHOD(SVM::New) {
 
 NAN_METHOD(SVM::SetParams) {
   if (!info[0]->IsObject()) {
-    return Nan::ThrowError("SVM::SetParams - args object required");  
-  }                                                                                            
+    return Nan::ThrowError("SVM::SetParams - args object required");
+  }
   v8::Local<v8::Object> args = info[0]->ToObject();
 
   Nan::TryCatch tryCatch;

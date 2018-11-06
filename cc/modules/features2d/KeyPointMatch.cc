@@ -16,6 +16,7 @@ NAN_MODULE_INIT(KeyPointMatch::Init) {
 };
 
 NAN_METHOD(KeyPointMatch::New) {
+  FF_ASSERT_CONSTRUCT_CALL(KeyPointMatch);
   if (info.Length() > 0) {
     // TODO check args
     KeyPointMatch *keyPointMatch = new KeyPointMatch();
@@ -28,7 +29,7 @@ NAN_METHOD(KeyPointMatch::New) {
   } else {
     (new KeyPointMatch())->Wrap(info.Holder());
   }
-  
+
   info.GetReturnValue().Set(info.Holder());
 }
 

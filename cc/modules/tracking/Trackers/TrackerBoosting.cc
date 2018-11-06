@@ -21,6 +21,7 @@ NAN_MODULE_INIT(TrackerBoosting::Init) {
 
 
 NAN_METHOD(TrackerBoosting::New) {
+	FF_ASSERT_CONSTRUCT_CALL(TrackerBoosting);
 	FF_METHOD_CONTEXT("TrackerBoosting::New");
 
 	FF_ARG_INSTANCE_IFDEF(

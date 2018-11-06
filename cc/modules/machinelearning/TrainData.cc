@@ -20,6 +20,7 @@ NAN_MODULE_INIT(TrainData::Init) {
 };
 
 NAN_METHOD(TrainData::New) {
+  FF_ASSERT_CONSTRUCT_CALL(TrainData);
 	FF_METHOD_CONTEXT("TrainData::New");
 	TrainData* self = new TrainData();
 	if (info.Length() > 0) {

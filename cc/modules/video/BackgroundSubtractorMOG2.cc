@@ -19,6 +19,7 @@ NAN_MODULE_INIT(BackgroundSubtractorMOG2::Init) {
 };
 
 NAN_METHOD(BackgroundSubtractorMOG2::New) {
+	FF_ASSERT_CONSTRUCT_CALL(BackgroundSubtractorMOG2);
 	FF_METHOD_CONTEXT("BackgroundSubtractorMOG2::New");
 
 	// optional args
