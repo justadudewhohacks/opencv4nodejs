@@ -115,6 +115,7 @@ void Mat::setNativeProps(cv::Mat mat) {
 };
 
 NAN_METHOD(Mat::New) {
+  FF_ASSERT_CONSTRUCT_CALL(Mat);
   Mat* self = new Mat();
   /* from channels */
   if (info.Length() == 1 && info[0]->IsArray()) {

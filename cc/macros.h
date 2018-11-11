@@ -88,6 +88,12 @@ static FF_FUNC_TYPE ff_func = FF_FUNC_TYPE();
 
 #define FF_ARG_IS_OBJECT(argN) FF_HAS_ARG(argN) && info[argN]->IsObject() && !info[argN]->IsArray() && !info[argN]->IsFunction()
 
+#define FF_ASSERT_CONSTRUCT_CALL(ctor)																\
+  if (!info.IsConstructCall()) {																			\
+    return Nan::ThrowError(FF_NEW_STRING(std::string(#ctor)						\
+        + "::New -  expect to be called with \"new\"")); 							\
+  }
+
 /* for setters */
 #define FF_REQUIRE_VALUE(ff_value, ff_type)													\
   if (!ff_type.checkType(ff_value)) {																\

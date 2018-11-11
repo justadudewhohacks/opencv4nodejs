@@ -15,17 +15,18 @@ NAN_MODULE_INIT(SuperpixelLSC::Init) {
 
   Nan::SetAccessor(instanceTemplate, Nan::New("img").ToLocalChecked(), SuperpixelLSC::GetImg);
 	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), SuperpixelLSC::GetLabels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), SuperpixelLSC::GetLabelContourMask);  
+	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), SuperpixelLSC::GetLabelContourMask);
 	Nan::SetAccessor(instanceTemplate, Nan::New("regionSize").ToLocalChecked(), SuperpixelLSC::GetRegionSize);
 	Nan::SetAccessor(instanceTemplate, Nan::New("ratio").ToLocalChecked(), SuperpixelLSC::GetRatio);
 	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), SuperpixelLSC::GetNumCalculatedSuperpixels);
-	
+
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelLSC::Iterate);
 
   target->Set(Nan::New("SuperpixelLSC").ToLocalChecked(), ctor->GetFunction());
 };
 
 NAN_METHOD(SuperpixelLSC::New) {
+  FF_ASSERT_CONSTRUCT_CALL(SuperpixelLSC);
 	FF_METHOD_CONTEXT("SuperpixelLSC::New");
 	if (!info.IsConstructCall()) {
 		FF_THROW("expected new key word");
@@ -39,7 +40,7 @@ NAN_METHOD(SuperpixelLSC::New) {
 	self->Wrap(info.Holder());
 	self->superpixelLsc = cv::ximgproc::createSuperpixelLSC(
 		self->img,
-		self->regionSize, 
+		self->regionSize,
 		self->ratio
 	);
   info.GetReturnValue().Set(info.Holder());

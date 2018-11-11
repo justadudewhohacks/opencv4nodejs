@@ -34,6 +34,7 @@ NAN_MODULE_INIT(Point::Init) {
 };
 
 NAN_METHOD(Point::New) {
+	FF_ASSERT_CONSTRUCT_CALL(Point);
 	if (info.Length() < 2) {
 		return Nan::ThrowError("Point::New - expected arguments x, y, (z)");
 	}

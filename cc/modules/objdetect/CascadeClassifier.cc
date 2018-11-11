@@ -22,6 +22,7 @@ NAN_MODULE_INIT(CascadeClassifier::Init) {
 };
 
 NAN_METHOD(CascadeClassifier::New) {
+  FF_ASSERT_CONSTRUCT_CALL(CascadeClassifier);
   FF_METHOD_CONTEXT("CascadeClassifier::New");
 
   FF_ARG_STRING(0, std::string xmlFilePath);

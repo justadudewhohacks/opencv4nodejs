@@ -15,6 +15,7 @@ NAN_MODULE_INIT(TermCriteria::Init) {
 };
 
 NAN_METHOD(TermCriteria::New) {
+	FF_ASSERT_CONSTRUCT_CALL(TermCriteria);
 	FF_METHOD_CONTEXT("TermCriteria::New");
 	TermCriteria* self = new TermCriteria();
 	if (info.Length() > 0) {

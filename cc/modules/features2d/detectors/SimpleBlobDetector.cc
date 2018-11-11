@@ -17,6 +17,7 @@ NAN_MODULE_INIT(SimpleBlobDetector::Init) {
 };
 
 NAN_METHOD(SimpleBlobDetector::New) {
+  FF_ASSERT_CONSTRUCT_CALL(SimpleBlobDetector);
 	FF_METHOD_CONTEXT("SimpleBlobDetector::New");
 
 	FF_ARG_INSTANCE(

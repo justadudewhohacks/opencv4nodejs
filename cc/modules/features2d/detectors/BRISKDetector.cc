@@ -10,7 +10,7 @@ NAN_MODULE_INIT(BRISKDetector::Init) {
   constructor.Reset(ctor);
 	ctor->SetClassName(Nan::New("BRISKDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
-	
+
 	Nan::SetAccessor(instanceTemplate, Nan::New("thresh").ToLocalChecked(), BRISKDetector::GetThresh);
 	Nan::SetAccessor(instanceTemplate, Nan::New("octaves").ToLocalChecked(), BRISKDetector::GetOctaves);
 	Nan::SetAccessor(instanceTemplate, Nan::New("patternScale").ToLocalChecked(), BRISKDetector::GetPatternScale);
@@ -19,6 +19,7 @@ NAN_MODULE_INIT(BRISKDetector::Init) {
 };
 
 NAN_METHOD(BRISKDetector::New) {
+  FF_ASSERT_CONSTRUCT_CALL(BRISKDetector);
 	FF_METHOD_CONTEXT("BRISKDetector::New");
 	BRISKDetector* self = new BRISKDetector();
 

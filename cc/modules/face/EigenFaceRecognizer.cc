@@ -18,6 +18,7 @@ NAN_MODULE_INIT(EigenFaceRecognizer::Init) {
 };
 
 NAN_METHOD(EigenFaceRecognizer::New) {
+	FF_ASSERT_CONSTRUCT_CALL(EigenFaceRecognizer);
 	FF::TryCatch tryCatch;
 	FaceRecognizerBindings::NewWorker worker;
 

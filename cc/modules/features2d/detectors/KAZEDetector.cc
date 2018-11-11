@@ -10,7 +10,7 @@ NAN_MODULE_INIT(KAZEDetector::Init) {
   constructor.Reset(ctor);
 	ctor->SetClassName(Nan::New("KAZEDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
-	
+
 	Nan::SetAccessor(instanceTemplate, Nan::New("extended").ToLocalChecked(), KAZEDetector::GetExtended);
 	Nan::SetAccessor(instanceTemplate, Nan::New("upright").ToLocalChecked(), KAZEDetector::GetUpright);
 	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), KAZEDetector::GetThreshold);
@@ -22,6 +22,7 @@ NAN_MODULE_INIT(KAZEDetector::Init) {
 };
 
 NAN_METHOD(KAZEDetector::New) {
+  FF_ASSERT_CONSTRUCT_CALL(KAZEDetector);
 	FF_METHOD_CONTEXT("KAZEDetector::New");
 
 	// optional args

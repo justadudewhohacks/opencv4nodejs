@@ -21,6 +21,7 @@ NAN_MODULE_INIT(FacemarkLBF::Init) {
 };
 
 NAN_METHOD(FacemarkLBF::New) {
+  FF_ASSERT_CONSTRUCT_CALL(FacemarkLBF);
 	FF_METHOD_CONTEXT("FacemarkLBF::New");
 
   FF_ARG_INSTANCE_IFDEF(

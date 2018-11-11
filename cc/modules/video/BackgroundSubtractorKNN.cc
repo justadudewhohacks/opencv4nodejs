@@ -19,6 +19,7 @@ NAN_MODULE_INIT(BackgroundSubtractorKNN::Init) {
 };
 
 NAN_METHOD(BackgroundSubtractorKNN::New) {
+	FF_ASSERT_CONSTRUCT_CALL(BackgroundSubtractorKNN);
 	FF_METHOD_CONTEXT("BackgroundSubtractorKNN::New");
 
 	// optional args

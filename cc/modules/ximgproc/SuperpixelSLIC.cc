@@ -15,18 +15,19 @@ NAN_MODULE_INIT(SuperpixelSLIC::Init) {
 
   Nan::SetAccessor(instanceTemplate, Nan::New("img").ToLocalChecked(), SuperpixelSLIC::GetImg);
 	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), SuperpixelSLIC::GetLabels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), SuperpixelSLIC::GetLabelContourMask);  
+	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), SuperpixelSLIC::GetLabelContourMask);
 	Nan::SetAccessor(instanceTemplate, Nan::New("algorithm").ToLocalChecked(), SuperpixelSLIC::GetAlgorithm);
 	Nan::SetAccessor(instanceTemplate, Nan::New("regionSize").ToLocalChecked(), SuperpixelSLIC::GetRegionSize);
 	Nan::SetAccessor(instanceTemplate, Nan::New("ruler").ToLocalChecked(), SuperpixelSLIC::GetRuler);
 	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), SuperpixelSLIC::GetNumCalculatedSuperpixels);
-	
+
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelSLIC::Iterate);
 
   target->Set(Nan::New("SuperpixelSLIC").ToLocalChecked(), ctor->GetFunction());
 };
 
 NAN_METHOD(SuperpixelSLIC::New) {
+  FF_ASSERT_CONSTRUCT_CALL(SuperpixelSLIC);
 	FF_METHOD_CONTEXT("SuperpixelSLIC::New");
 	if (!info.IsConstructCall()) {
 		FF_THROW("expected new key word");
@@ -37,12 +38,12 @@ NAN_METHOD(SuperpixelSLIC::New) {
 	FF_ARG_INT_IFDEF(1, self->algorithm, cv::ximgproc::SLICO);
   FF_ARG_INT_IFDEF(2, self->regionSize, 10);
   FF_ARG_INT_IFDEF(3, self->ruler, 10.0);
-	
+
 	self->Wrap(info.Holder());
 	self->superpixelSlic = cv::ximgproc::createSuperpixelSLIC(
 		self->img,
-		self->algorithm, 
-		self->regionSize, 
+		self->algorithm,
+		self->regionSize,
 		self->ruler
 	);
   info.GetReturnValue().Set(info.Holder());

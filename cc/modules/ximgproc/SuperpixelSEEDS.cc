@@ -20,13 +20,14 @@ NAN_MODULE_INIT(SuperpixelSEEDS::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), SuperpixelSEEDS::GetNumCalculatedSuperpixels);
 	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), SuperpixelSEEDS::GetLabels);
 	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), SuperpixelSEEDS::GetLabelContourMask);
-	
+
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelSEEDS::Iterate);
 
   target->Set(Nan::New("SuperpixelSEEDS").ToLocalChecked(), ctor->GetFunction());
 };
 
 NAN_METHOD(SuperpixelSEEDS::New) {
+  FF_ASSERT_CONSTRUCT_CALL(SuperpixelSEEDS);
 	FF_METHOD_CONTEXT("SuperpixelSEEDS::New");
 	if (!info.IsConstructCall()) {
 		FF_THROW("expected new key word");
@@ -53,10 +54,10 @@ NAN_METHOD(SuperpixelSEEDS::New) {
 		self->img.cols,
 		self->img.rows,
 		self->img.channels(),
-		self->numSuperpixels, 
-		self->numLevels, 
-		self->prior, 
-		self->histogramBins, 
+		self->numSuperpixels,
+		self->numLevels,
+		self->prior,
+		self->histogramBins,
 		self->doubleStep
 	);
   info.GetReturnValue().Set(info.Holder());

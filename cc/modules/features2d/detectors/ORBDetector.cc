@@ -25,6 +25,7 @@ NAN_MODULE_INIT(ORBDetector::Init) {
 };
 
 NAN_METHOD(ORBDetector::New) {
+  FF_ASSERT_CONSTRUCT_CALL(ORBDetector);
 	FF_METHOD_CONTEXT("ORBDetector::New");
 
 	// optional args

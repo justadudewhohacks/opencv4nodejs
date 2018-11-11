@@ -10,7 +10,7 @@ NAN_MODULE_INIT(GFTTDetector::Init) {
   constructor.Reset(ctor);
 	ctor->SetClassName(Nan::New("GFTTDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
-	
+
 	Nan::SetAccessor(instanceTemplate, Nan::New("maxCorners").ToLocalChecked(), GFTTDetector::GetMaxFeatures);
 	Nan::SetAccessor(instanceTemplate, Nan::New("qualityLevel").ToLocalChecked(), GFTTDetector::GetQualityLevel);
 	Nan::SetAccessor(instanceTemplate, Nan::New("minDistance").ToLocalChecked(), GFTTDetector::GetMinDistance);
@@ -22,6 +22,7 @@ NAN_MODULE_INIT(GFTTDetector::Init) {
 };
 
 NAN_METHOD(GFTTDetector::New) {
+  FF_ASSERT_CONSTRUCT_CALL(GFTTDetector);
 	FF_METHOD_CONTEXT("GFTTDetector::New");
 
 	// optional args

@@ -49,6 +49,7 @@ NAN_MODULE_INIT(Vec::Init) {
 };
 
 NAN_METHOD(Vec::New) {
+	FF_ASSERT_CONSTRUCT_CALL(Vec);
 	if (info.Length() < 2) {
 		return Nan::ThrowError("Vec::New - expected arguments (w), x, y, (z)");
 	}
@@ -57,9 +58,9 @@ NAN_METHOD(Vec::New) {
 		v8::Local<v8::Function> ct = Nan::New(Vec4::constructor)->GetFunction();
 		jsVec = Nan::NewInstance(ct).ToLocalChecked();
 		Nan::ObjectWrap::Unwrap<Vec4>(jsVec)->vec = cv::Vec4d(
-			info[0]->NumberValue(), 
-			info[1]->NumberValue(), 
-			info[2]->NumberValue(), 
+			info[0]->NumberValue(),
+			info[1]->NumberValue(),
+			info[2]->NumberValue(),
 			info[3]->NumberValue()
 		);
 	} else {

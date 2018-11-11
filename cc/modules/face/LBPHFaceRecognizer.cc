@@ -52,6 +52,7 @@ public:
 };
 
 NAN_METHOD(LBPHFaceRecognizer::New) {
+	FF_ASSERT_CONSTRUCT_CALL(LBPHFaceRecognizer);
 	FF::TryCatch tryCatch;
 	LBPHFaceRecognizer::NewWorker worker;
 

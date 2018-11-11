@@ -21,6 +21,7 @@ NAN_MODULE_INIT(FacemarkAAMData::Init) {
 };
 
 NAN_METHOD(FacemarkAAMData::New) {
+  FF_ASSERT_CONSTRUCT_CALL(FacemarkAAMData);
   FF_METHOD_CONTEXT("FacemarkAAMData::New");
   FacemarkAAMData *self = new FacemarkAAMData();
   self->data = cv::face::FacemarkAAM::Data();
