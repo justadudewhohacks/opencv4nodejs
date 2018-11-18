@@ -2,44 +2,36 @@ language: node_js
 
 node_js:
   - '6'
+  - '8'
+  - '10'
+  - 'node'
 
 sudo: required
 
 services:
   - docker
 
-matrix:
-  include:
-  - env:
-    - BUILD_TASK=test
-    - TAG=3.0.0-contrib
-  - env:
-    - BUILD_TASK=test
-    - TAG=3.1.0-contrib
-  - env:
-    - BUILD_TASK=test
-    - TAG=3.2.0-contrib
-  - env:
-    - BUILD_TASK=test
-    - TAG=3.3.0-contrib
-  - env:
-    - BUILD_TASK=cover
-    - TAG=3.4.0-contrib
-  - env:
-    - BUILD_TASK=test
-    - TAG=3.4.0-contrib-world
-  - env:
-    - BUILD_TASK=test
-    - TAG=3.4.1-contrib
-  - env:
-    - BUILD_TASK=test
-    - TAG=3.4.2-contrib
-  - env:
-    - BUILD_TASK=test
-    - TAG=3.4.3
-  - env:
-    - BUILD_TASK=test
-    - TAG=3.4.3-contrib
+env:
+  - BUILD_TASK=test
+    TAG=3.0.0-contrib
+  - BUILD_TASK=test
+    TAG=3.1.0-contrib
+  - BUILD_TASK=test
+    TAG=3.2.0-contrib
+  - BUILD_TASK=test
+    TAG=3.3.0-contrib
+  - BUILD_TASK=cover
+    TAG=3.4.0-contrib
+  - BUILD_TASK=test
+    TAG=3.4.0-contrib-world
+  - BUILD_TASK=test
+    TAG=3.4.1-contrib
+  - BUILD_TASK=test
+    TAG=3.4.2-contrib
+  - BUILD_TASK=test
+    TAG=3.4.3
+  - BUILD_TASK=test
+    TAG=3.4.3-contrib
 
 before_install:
   - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh
