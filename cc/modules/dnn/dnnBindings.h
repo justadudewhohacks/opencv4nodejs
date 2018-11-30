@@ -5,16 +5,17 @@
 
 namespace DnnBindings {
 
-  struct ReadNetFromTensorflowWorker : public CatchCvExceptionWorker {
+  struct readNetFromDarknetWorker : public CatchCvExceptionWorker{
   public:
-    std::string modelFile;
+    std::string cfgFile;
+    std::string darknetModelFile = "";
 
     cv::dnn::Net net;
 
     std::string executeCatchCvExceptionWorker() {
-      net = cv::dnn::readNetFromTensorflow(modelFile);
+      net = cv::dnn::readNetFromDarknet(cfgFile, darknetModelFile);
       if (net.empty()) {
-        return std::string("failed to load net: " + modelFile).data();
+        return std::string("failed to cfgFile: " + cfgFile + ", darknetModelFile: " + darknetModelFile).data();
       }
       return "";
     }
@@ -25,7 +26,43 @@ namespace DnnBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        StringConverter::arg(0, &modelFile, info)
+          StringConverter::arg(0, &cfgFile, info));
+    }
+
+    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+          StringConverter::optArg(1, &darknetModelFile, info));
+    }
+  };
+
+  struct ReadNetFromTensorflowWorker : public CatchCvExceptionWorker {
+  public:
+    std::string modelFile;
+    std::string configFile = "";
+
+    cv::dnn::Net net;
+
+    std::string executeCatchCvExceptionWorker() {
+      net = cv::dnn::readNetFromTensorflow(modelFile, configFile);
+      if (net.empty()) {
+        return std::string("failed to load net: " + modelFile + "failed to load config: " + configFile).data();
+      }
+      return "";
+    }
+
+    v8::Local<v8::Value> getReturnValue() {
+      return Net::Converter::wrap(net);
+    }
+
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+          StringConverter::arg(0, &modelFile, info)
+      );
+    }
+
+    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+          StringConverter::optArg(1, &configFile, info)
       );
     }
   };

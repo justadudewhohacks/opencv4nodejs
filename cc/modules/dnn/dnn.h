@@ -11,6 +11,8 @@ class Dnn {
 public:
   static NAN_MODULE_INIT(Init);
 
+  static NAN_METHOD(readNetFromDarknet);
+  static NAN_METHOD(readNetFromDarknetAsync);
   static NAN_METHOD(ReadNetFromTensorflow);
   static NAN_METHOD(ReadNetFromTensorflowAsync);
   static NAN_METHOD(ReadNetFromCaffe);
