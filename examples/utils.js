@@ -8,7 +8,7 @@ const dataPath = path.resolve(__dirname, '../data');
 exports.dataPath = dataPath;
 exports.getDataFilePath = fileName => path.resolve(dataPath, fileName);
 
-exports.grabFrames = (videoFile, delay, onFrame) => {
+const grabFrames = (videoFile, delay, onFrame) => {
   const cap = new cv.VideoCapture(videoFile);
   let done = false;
   const intvl = setInterval(() => {
@@ -27,6 +27,13 @@ exports.grabFrames = (videoFile, delay, onFrame) => {
       console.log('Key pressed, exiting.');
     }
   }, 0);
+};
+exports.grabFrames = grabFrames;
+
+exports.runVideoDetection = (src, detect) => {
+  grabFrames(src, 1, frame => {
+    detect(frame);
+  });
 };
 
 exports.drawRectAroundBlobs = (binaryImg, dstImg, minPxSize, fixedRectWidth) => {
