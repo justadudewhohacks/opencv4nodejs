@@ -1,3 +1,7 @@
+/**
+ * Please refer to the python version of "ExploreOpencvDnn" by Saumya Shovan Roy.
+ * For more detail: https://github.com/rdeepc/ExploreOpencvDnn
+ */
 const fs = require("fs");
 const path = require("path");
 const classNames = require("./dnnTensorflowObjectDetectionClassNames");
