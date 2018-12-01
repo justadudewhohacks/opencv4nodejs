@@ -11,8 +11,6 @@
 NAN_MODULE_INIT(Dnn::Init) {
   Net::Init(target);
 
-  Nan::SetMethod(target, "readNetFromDarknet", readNetFromDarknet);
-  Nan::SetMethod(target, "readNetFromDarknetAsync", readNetFromDarknetAsync);
   Nan::SetMethod(target, "readNetFromTensorflow", ReadNetFromTensorflow);
   Nan::SetMethod(target, "readNetFromTensorflowAsync", ReadNetFromTensorflowAsync);
   Nan::SetMethod(target, "readNetFromCaffe", ReadNetFromCaffe);
@@ -22,6 +20,8 @@ NAN_MODULE_INIT(Dnn::Init) {
   Nan::SetMethod(target, "blobFromImages", BlobFromImages);
   Nan::SetMethod(target, "blobFromImagesAsync", BlobFromImagesAsync);
 #if CV_VERSION_MINOR > 3
+  Nan::SetMethod(target, "readNetFromDarknet", readNetFromDarknet);
+  Nan::SetMethod(target, "readNetFromDarknetAsync", readNetFromDarknetAsync);
   Nan::SetMethod(target, "NMSBoxes", NMSBoxes);
 #endif
 };
