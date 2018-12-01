@@ -5,6 +5,7 @@
 
 namespace DnnBindings {
 
+#if CV_VERSION_MINOR > 3
   struct readNetFromDarknetWorker : public CatchCvExceptionWorker{
   public:
     std::string cfgFile;
@@ -34,6 +35,7 @@ namespace DnnBindings {
           StringConverter::optArg(1, &darknetModelFile, info));
     }
   };
+#endif
 
   struct ReadNetFromTensorflowWorker : public CatchCvExceptionWorker {
   public:
