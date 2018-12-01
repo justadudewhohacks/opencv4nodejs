@@ -43,7 +43,11 @@ namespace DnnBindings {
     cv::dnn::Net net;
 
     std::string executeCatchCvExceptionWorker() {
+#if CV_VERSION_MINOR > 3
       net = cv::dnn::readNetFromTensorflow(modelFile, configFile);
+#else
+      net = cv::dnn::readNetFromTensorflow(modelFile);
+#endif
       if (net.empty()) {
         return std::string("failed to load net: " + modelFile + "failed to load config: " + configFile).data();
       }
