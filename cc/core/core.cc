@@ -106,8 +106,14 @@ NAN_METHOD(Core::Kmeans) {
   FF_METHOD_CONTEXT("Core::Kmeans");
 
   FF_ARG_ARRAY(0, FF_ARR jsData);
-  std::vector<cv::Point2f> data;
-  Point::unpackJSPoint2Array<float>(data, jsData);
+  
+  if (jsData->Length() < 1) {
+    FF_THROW("expected data to contain at least 1 element");
+  }
+  
+  FF_VAL data0 = jsData->Get(0);
+  
+
 
   FF_ARG_INT(1, int k);
   FF_ARG_INSTANCE(2, cv::TermCriteria termCriteria, TermCriteria::constructor, FF_UNWRAP_TERMCRITERA_AND_GET);
@@ -116,17 +122,40 @@ NAN_METHOD(Core::Kmeans) {
 
   std::vector<int> labels;
   cv::Mat centersMat;
-  cv::kmeans(data, k, labels, termCriteria, attempts, flags, centersMat);
-
+  
+  if (FF_IS_INSTANCE(Point2::constructor, data0) || FF_IS_INSTANCE(Vec2::constructor, data0)) {
+    std::vector<cv::Point2f> data;
+    Point::unpackJSPoint2Array(data, jsData);
+    cv::kmeans(data, k, labels, termCriteria, attempts, flags, centersMat);
+  }
+  else if (FF_IS_INSTANCE(Point3::constructor, data0) || FF_IS_INSTANCE(Vec3::constructor, data0)) {
+    std::vector<cv::Point3f> data;
+    Point::unpackJSPoint3Array(data, jsData);
+    cv::kmeans(data, k, labels, termCriteria, attempts, flags, centersMat);
+  } 
+  else {
+    FF_THROW("unknowned input data type");
+  }
+  
   FF_OBJ ret = FF_NEW_OBJ();
   FF_PACK_ARRAY(jsLabels, labels);
   Nan::Set(ret, FF_NEW_STRING("labels"), jsLabels);
 
-  std::vector<cv::Point2f> centers;
-  for (int i = 0; i < centersMat.rows; i++) {
-    centers.push_back(cv::Point2f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1)));
+  if (FF_IS_INSTANCE(Point2::constructor, data0) || FF_IS_INSTANCE(Vec2::constructor, data0)) {
+    std::vector<cv::Point2f> centers;
+    for (int i = 0; i < centersMat.rows; i++) {
+      centers.push_back(cv::Point2f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1)));
+    }
+    Nan::Set(ret, FF_NEW_STRING("centers"), Point::packJSPoint2Array<float>(centers));
   }
-  Nan::Set(ret, FF_NEW_STRING("centers"), Point::packJSPoint2Array<float>(centers));
+  else if (FF_IS_INSTANCE(Point3::constructor, data0) || FF_IS_INSTANCE(Vec3::constructor, data0)) {
+    std::vector<cv::Point3f> centers;
+    for (int i = 0; i < centersMat.rows; i++) {
+      centers.push_back(cv::Point3f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1), centersMat.at<float>(i, 2)));
+    }
+    Nan::Set(ret, FF_NEW_STRING("centers"), Point::packJSPoint3Array<float>(centers));
+  } 
+  
   FF_RETURN(ret);
 }
 

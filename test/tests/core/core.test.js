@@ -129,8 +129,8 @@ describe('core', () => {
       const ret = cv.kmeans(points3, k, termCriteria, attempts, flags);
 
       const l0 = ret.labels[0];
-      const l1 = ret.labels[1];
-      const l2 = ret.labels[2];
+      const l1 = ret.labels[2];
+      const l2 = ret.labels[4];
       expect(ret.centers[l0].x).to.equal(255);
       expect(ret.centers[l0].y).to.equal(0);
       expect(ret.centers[l0].z).to.equal(0);
