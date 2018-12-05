@@ -123,32 +123,32 @@ NAN_METHOD(Core::Kmeans) {
   std::vector<int> labels;
   cv::Mat centersMat;
   
-  if (FF_IS_INSTANCE(Point2::constructor, data0) || FF_IS_INSTANCE(Vec2::constructor, data0)) {
+  if (FF_IS_INSTANCE(Point2::constructor, data0)) {
     std::vector<cv::Point2f> data;
     Point::unpackJSPoint2Array(data, jsData);
     cv::kmeans(data, k, labels, termCriteria, attempts, flags, centersMat);
   }
-  else if (FF_IS_INSTANCE(Point3::constructor, data0) || FF_IS_INSTANCE(Vec3::constructor, data0)) {
+  else if (FF_IS_INSTANCE(Point3::constructor, data0)) {
     std::vector<cv::Point3f> data;
     Point::unpackJSPoint3Array(data, jsData);
     cv::kmeans(data, k, labels, termCriteria, attempts, flags, centersMat);
   } 
   else {
-    FF_THROW("unknowned input data type");
+    FF_THROW("expected arg0 to be an Array of Points");
   }
   
   FF_OBJ ret = FF_NEW_OBJ();
   FF_PACK_ARRAY(jsLabels, labels);
   Nan::Set(ret, FF_NEW_STRING("labels"), jsLabels);
 
-  if (FF_IS_INSTANCE(Point2::constructor, data0) || FF_IS_INSTANCE(Vec2::constructor, data0)) {
+  if (FF_IS_INSTANCE(Point2::constructor, data0)) {
     std::vector<cv::Point2f> centers;
     for (int i = 0; i < centersMat.rows; i++) {
       centers.push_back(cv::Point2f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1)));
     }
     Nan::Set(ret, FF_NEW_STRING("centers"), Point::packJSPoint2Array<float>(centers));
   }
-  else if (FF_IS_INSTANCE(Point3::constructor, data0) || FF_IS_INSTANCE(Vec3::constructor, data0)) {
+  else if (FF_IS_INSTANCE(Point3::constructor, data0)) {
     std::vector<cv::Point3f> centers;
     for (int i = 0; i < centersMat.rows; i++) {
       centers.push_back(cv::Point3f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1), centersMat.at<float>(i, 2)));
