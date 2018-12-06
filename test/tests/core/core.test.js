@@ -81,23 +81,24 @@ describe('core', () => {
 
   describe('kmeans', () => {
     funcShouldRequireArgs(() => cv.kmeans());
-    const points = [
+    const points2 = [
       [0, 0], [1000, 900], [-1000, -900], [-1100, -1000], [1100, 1000], [10, 10]
     ].map(([x, y]) => new cv.Point(x, y));
+    
     const k = 3;
     const termCriteria = new cv.TermCriteria(cv.termCriteria.COUNT, 100, 0.8);
     const attempts = 10;
     const flags = cv.KMEANS_RANDOM_CENTERS;
 
     it('should return labels and centers', () => {
-      const ret = cv.kmeans(points, k, termCriteria, attempts, flags);
+      const ret = cv.kmeans(points2, k, termCriteria, attempts, flags);
 
       expect(ret).to.have.property('labels').to.be.an('array').lengthOf(6);
       expect(ret).to.have.property('centers').to.be.an('array').lengthOf(k);
     });
 
     it('should return correct labels', () => {
-      const ret = cv.kmeans(points, k, termCriteria, attempts, flags);
+      const ret = cv.kmeans(points2, k, termCriteria, attempts, flags);
 
       const l0 = ret.labels[0];
       const l1 = ret.labels[1];
@@ -106,7 +107,7 @@ describe('core', () => {
     });
 
     it('should return correct centers', () => {
-      const ret = cv.kmeans(points, k, termCriteria, attempts, flags);
+      const ret = cv.kmeans(points2, k, termCriteria, attempts, flags);
 
       const l0 = ret.labels[0];
       const l1 = ret.labels[1];
@@ -118,8 +119,45 @@ describe('core', () => {
       expect(ret.centers[l2].x).to.equal(-1050);
       expect(ret.centers[l2].y).to.equal(-950);
     });
-  });
+    
+    // related to https://github.com/justadudewhohacks/opencv4nodejs/issues/379
+    const points3 = [
+      [255, 0, 0], [255, 0, 0], [255, 0, 255], [255, 0, 255], [255, 255, 255]
+    ].map(([x, y, z]) => new cv.Point(x, y, z));       
+    
+    it('should return correct centers with Point3', () => {
+      const ret = cv.kmeans(points3, k, termCriteria, attempts, flags);
 
+      const l0 = ret.labels[0];
+      const l1 = ret.labels[2];
+      const l2 = ret.labels[4];
+      expect(ret.centers[l0].x).to.equal(255);
+      expect(ret.centers[l0].y).to.equal(0);
+      expect(ret.centers[l0].z).to.equal(0);
+      expect(ret.centers[l1].x).to.equal(255);
+      expect(ret.centers[l1].y).to.equal(0);
+      expect(ret.centers[l1].z).to.equal(255);
+      expect(ret.centers[l2].x).to.equal(255);
+      expect(ret.centers[l2].y).to.equal(255);
+      expect(ret.centers[l2].y).to.equal(255);
+    });
+    it('should raise error for invalid type', () => {
+      const points3 = [
+        [255, 0, 0], [255, 0, 0], [255, 0, 255], [255, 0, 255], [255, 255, 255]
+      ].map(([x, y, z]) => new cv.Vec(x, y, z));  
+      
+      let err;
+      
+      try {
+        cv.kmeans(points3, k, termCriteria, attempts, flags);
+      } catch(e){
+        err = e;
+      }
+
+      expect(err.message).to.equal("Core::Kmeans - expected arg0 to be an Array of Points");
+    });
+  });
+  
   describe('cartToPolar', () => {
     const x = new cv.Mat([[0, 1, 100]], cv.CV_32F);
     const y = new cv.Mat([[0, 1, 100]], cv.CV_32F);

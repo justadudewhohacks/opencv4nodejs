@@ -46,15 +46,27 @@ public:
 		}
 		return jsPts;
 	}
-
-	static void unpackJSPoint3Array(std::vector<cv::Point3d> &pts, v8::Local<v8::Array> jsPts) {
+	
+	template<typename type>
+	static v8::Local<v8::Array> packJSPoint3Array(std::vector<cv::Point3_<type>> pts) {
+		v8::Local<v8::Array> jsPts = Nan::New<v8::Array>(pts.size());
+		for (uint i = 0; i < jsPts->Length(); i++) {
+			v8::Local<v8::Object> jsPt3 = FF_NEW_INSTANCE(Point3::constructor);
+			FF_UNWRAP_PT3_AND_GET(jsPt3) = pts.at(i);
+			jsPts->Set(i, jsPt3);
+		}
+		return jsPts;
+	}
+	
+	template<typename type>
+	static void unpackJSPoint3Array(std::vector<cv::Point3_<type>> &pts, v8::Local<v8::Array> jsPts) {
 		for (uint i = 0; i < jsPts->Length(); i++) {
 			v8::Local<v8::Object> obj = Nan::To<v8::Object>(jsPts->Get(i)).ToLocalChecked();
 			double x, y, z;
 			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, x, NumberValue)
 			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, y, NumberValue)
 			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, z, NumberValue)
-			pts.push_back(cv::Point3d(x, y, z));
+			pts.push_back(cv::Point3_<type>(x, y, z));
 		}
 	};
 };
