@@ -20,6 +20,10 @@ NAN_MODULE_INIT(Net::Init) {
   Nan::SetPrototypeMethod(ctor, "setInputAsync", SetInputAsync);
   Nan::SetPrototypeMethod(ctor, "forward", Forward);
   Nan::SetPrototypeMethod(ctor, "forwardAsync", ForwardAsync);
+  Nan::SetPrototypeMethod(ctor, "getLayerNames", GetLayerNames);
+  Nan::SetPrototypeMethod(ctor, "getLayerNamesAsync", GetLayerNamesAsync);
+  Nan::SetPrototypeMethod(ctor, "getUnconnectedOutLayers", GetUnconnectedOutLayers);
+  Nan::SetPrototypeMethod(ctor, "getUnconnectedOutLayersAsync", GetUnconnectedOutLayersAsync);
 
   target->Set(Nan::New("Net").ToLocalChecked(), ctor->GetFunction());
 };
@@ -61,6 +65,34 @@ NAN_METHOD(Net::ForwardAsync) {
     "Net::ForwardAsync",
     info
   );
+}
+
+NAN_METHOD(Net::GetLayerNames) {
+  FF::SyncBinding(
+      std::make_shared<NetBindings::GetLayerNamesWorker>(Net::Converter::unwrap(info.This())),
+      "Net::GetLayerNames",
+      info);
+}
+
+NAN_METHOD(Net::GetLayerNamesAsync) {
+  FF::AsyncBinding(
+      std::make_shared<NetBindings::GetLayerNamesWorker>(Net::Converter::unwrap(info.This())),
+      "Net::GetLayerNamesAsync",
+      info);
+}
+
+NAN_METHOD(Net::GetUnconnectedOutLayers) {
+  FF::SyncBinding(
+      std::make_shared<NetBindings::GetUnconnectedOutLayersWorker>(Net::Converter::unwrap(info.This())),
+      "Net::GetUnconnectedOutLayers",
+      info);
+}
+
+NAN_METHOD(Net::GetUnconnectedOutLayersAsync) {
+  FF::AsyncBinding(
+      std::make_shared<NetBindings::GetUnconnectedOutLayersWorker>(Net::Converter::unwrap(info.This())),
+      "Net::GetUnconnectedOutLayersAsync",
+      info);
 }
 
 #endif
