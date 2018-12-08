@@ -3,7 +3,7 @@ import { Size } from './Size.d';
 
 export class VideoWriter {
   constructor(filePath: string, fourccCode: number, fps: number, frameSize: Size, isColor?: boolean);
-  fourcc(fourcc: string): number;
+  static fourcc(fourcc: string): number;
   get(property: number): void;
   release(): void;
   set(property: number, value: number): void;
