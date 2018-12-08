@@ -5,7 +5,7 @@
 const fs = require("fs");
 const path = require("path");
 const classNames = require("./dnnTensorflowObjectDetectionClassNames");
-const { cv, drawBlueRect, runVideoDetection } = require("./utils");
+const { cv, runVideoDetection } = require("./utils");
 
 if (!cv.xmodules.dnn) {
   throw new Error("exiting: opencv4nodejs compiled without dnn module");
@@ -51,7 +51,7 @@ const classifyImg = img => {
 
   // get height and width from the image
   const [imgHeight, imgWidth] = img.sizes;
-  const numRows = outputBlob.sizes.slice(2,3);
+  const numRows = outputBlob.sizes.slice(2, 3);
 
   for (let y = 0; y < numRows; y += 1) {
     const confidence = outputBlob.at([0, 0, y, 2]);
@@ -62,22 +62,25 @@ const classifyImg = img => {
       const boxY = imgHeight * outputBlob.at([0, 0, y, 4]);
       const boxWidht = imgWidth * outputBlob.at([0, 0, y, 5]);
       const boxHeight = imgHeight * outputBlob.at([0, 0, y, 6]);
-      const imgRect = new cv.Rect(boxX, boxY, boxWidht, boxHeight);
 
-      // draw the blue rect for the object
-      drawBlueRect(img, imgRect);
+      const pt1 = new cv.Point(boxX, boxY);
+      const pt2 = new cv.Point(boxWidht, boxHeight);
+      const rectColor = new cv.Vec(23, 230, 210);
+      const rectThickness = 2;
+      const rectLineType = cv.LINE_8;
+
+      // draw the rect for the object
+      img.drawRectangle(pt1, pt2, rectColor, rectThickness, rectLineType);
+
+      const text = `${className} ${confidence.toFixed(5)}`;
+      const org = new cv.Point(boxX, boxY + 15);
+      const fontFace = cv.FONT_HERSHEY_SIMPLEX;
+      const fontScale = 0.5;
+      const textColor = new cv.Vec(255, 0, 0);
+      const thickness = 2;
 
       // put text on the object
-      img.putText(
-        className,
-        new cv.Point(boxX, boxY + 0.1 * imgHeight),
-        cv.FONT_ITALIC,
-        2,
-        {
-          color: new cv.Vec(255, 0, 0),
-          thickness: 2
-        }
-      );
+      img.putText(text, org, fontFace, fontScale, textColor, thickness);
     }
   }
 
