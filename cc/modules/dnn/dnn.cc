@@ -20,8 +20,8 @@ NAN_MODULE_INIT(Dnn::Init) {
   Nan::SetMethod(target, "blobFromImages", BlobFromImages);
   Nan::SetMethod(target, "blobFromImagesAsync", BlobFromImagesAsync);
 #if CV_VERSION_MINOR > 3
-  Nan::SetMethod(target, "readNetFromDarknet", readNetFromDarknet);
-  Nan::SetMethod(target, "readNetFromDarknetAsync", readNetFromDarknetAsync);
+  Nan::SetMethod(target, "readNetFromDarknet", ReadNetFromDarknet);
+  Nan::SetMethod(target, "readNetFromDarknetAsync", ReadNetFromDarknetAsync);
   Nan::SetMethod(target, "NMSBoxes", NMSBoxes);
 #endif
 };
@@ -92,19 +92,17 @@ NAN_METHOD(Dnn::BlobFromImagesAsync) {
 }
 
 #if CV_VERSION_MINOR > 3
-NAN_METHOD(Dnn::readNetFromDarknet)
-{
+NAN_METHOD(Dnn::ReadNetFromDarknet) {
   FF::SyncBinding(
-      std::make_shared<DnnBindings::readNetFromDarknetWorker>(),
-      "readNetFromDarknet",
+      std::make_shared<DnnBindings::ReadNetFromDarknetWorker>(),
+      "ReadNetFromDarknet",
       info);
 }
 
-NAN_METHOD(Dnn::readNetFromDarknetAsync)
-{
+NAN_METHOD(Dnn::ReadNetFromDarknetAsync) {
   FF::AsyncBinding(
-      std::make_shared<DnnBindings::readNetFromDarknetWorker>(),
-      "readNetFromDarknetAsync",
+      std::make_shared<DnnBindings::ReadNetFromDarknetWorker>(),
+      "ReadNetFromDarknetAsync",
       info);
 }
 

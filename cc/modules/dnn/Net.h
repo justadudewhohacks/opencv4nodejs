@@ -28,6 +28,10 @@ public:
 	static NAN_METHOD(SetInputAsync);
 	static NAN_METHOD(Forward);
 	static NAN_METHOD(ForwardAsync);
+  static NAN_METHOD(GetLayerNames);
+  static NAN_METHOD(GetLayerNamesAsync);
+  static NAN_METHOD(GetUnconnectedOutLayers);
+  static NAN_METHOD(GetUnconnectedOutLayersAsync);
 };
 
 #endif

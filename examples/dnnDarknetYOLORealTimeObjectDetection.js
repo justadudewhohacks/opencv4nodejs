@@ -4,7 +4,7 @@
  */
 const fs = require("fs");
 const path = require("path");
-const { cv, drawBlueRect, runVideoDetection } = require("./utils");
+const { cv, runVideoDetection } = require("./utils");
 
 if (!cv.xmodules.dnn) {
   throw new Error("exiting: opencv4nodejs compiled without dnn module");
@@ -41,6 +41,13 @@ const labels = fs
 
 // initialize tensorflow darknet model from modelFile
 const net = cv.readNetFromDarknet(cfgFile, weightsFile);
+const allLayerNames = net.getLayerNames();
+const unconnectedOutLayers = net.getUnconnectedOutLayers();
+
+// determine only the *output* layer names that we need from YOLO
+const layerNames = unconnectedOutLayers.map(layerIndex => {
+  return allLayerNames[layerIndex - 1];
+});
 
 const classifyImg = img => {
   // object detection model works with 416 x 416 images
@@ -49,11 +56,8 @@ const classifyImg = img => {
   const [imgHeight, imgWidth] = img.sizes;
 
   // network accepts blobs as input
-  const inputBlob = cv.blobFromImage(img, 1 / 255.0, size, vec3, true, true);
+  const inputBlob = cv.blobFromImage(img, 1 / 255.0, size, vec3, true, false);
   net.setInput(inputBlob);
-
-  // specify two layers "yolo_16" and "yolo_23"
-  const layerNames = ["yolo_16", "yolo_23"];
 
   console.time("net.forward");
   // forward pass input through entire network
@@ -95,20 +99,25 @@ const classifyImg = img => {
 
         indices.forEach(i => {
           const rect = boxes[i];
-          const imgRect = new cv.Rect(rect.x, rect.y, rect.width, rect.height);
-          drawBlueRect(img, imgRect);
+
+          const pt1 = new cv.Point(rect.x, rect.y);
+          const pt2 = new cv.Point(rect.x + rect.width, rect.y + rect.height);
+          const rectColor = new cv.Vec(255, 0, 0);
+          const rectThickness = 2;
+          const rectLineType = cv.LINE_8;
+
+          // draw the rect for the object
+          img.drawRectangle(pt1, pt2, rectColor, rectThickness, rectLineType);
+
           const text = labels[classIDs[i]];
-          img.putText(
-            text,
-            new cv.Point(rect.x, rect.y + 0.1 * imgHeight),
-            cv.FONT_ITALIC,
-            2,
-            {
-              color: new cv.Vec(255, 0, 0),
-              thickness: 2
-            }
-          );
-          drawBlueRect(img, imgRect);
+          const org = new cv.Point(rect.x, rect.y + 15);
+          const fontFace = cv.FONT_HERSHEY_SIMPLEX;
+          const fontScale = 0.5;
+          const textColor = new cv.Vec(123, 123, 255);
+          const thickness = 2;
+
+          // put text on the object
+          img.putText(text, org, fontFace, fontScale, textColor, thickness);
         });
       }
     });
