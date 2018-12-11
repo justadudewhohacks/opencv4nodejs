@@ -352,4 +352,26 @@ module.exports = () => {
       assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
+  
+  describe('matMul', () => {
+    operatorRequiresArg('matMul');
+
+    it('apply matMul to matrices', () => {
+      const mat0 = new cv.Mat([
+        [20, 40],
+        [60, 80]
+      ], cv.CV_32F);
+      const mat1 = new cv.Mat([
+        [5, 4],
+        [2, 1]
+      ], cv.CV_32F);
+      const expectedResult = [
+        [180, 120],
+        [460, 320]
+      ];
+      const res = mat0.matMul(mat1);
+      assertMetaData(res)(2, 2, cv.CV_32F);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
+    });
+  });
 };

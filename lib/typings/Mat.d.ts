@@ -133,6 +133,8 @@ export class Mat {
   drawPolylines(pts: Point2[][], isClosed: boolean, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
   drawRectangle(pt0: Point2, pt1: Point2, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
   drawRectangle(rect: Rect, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
+  eigen(): Mat;
+  eigenAsync(): Promise<Mat>;
   equalizeHist(): Mat;
   equalizeHistAsync(): Promise<Mat>;
   erode(kernel: Mat, anchor?: Point2, iterations?: number, borderType?: number): Mat;
@@ -197,6 +199,7 @@ export class Mat {
   integralAsync(sdepth?: number, sqdepth?: number): Promise<{ sum: Mat, sqsum: Mat, tilted: Mat }>;
   laplacian(ddepth: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Mat;
   laplacianAsync(ddepth: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
+  matMul(B: Mat): Mat;
   matMulDeriv(B: Mat): { dABdA: Mat, dABdB: Mat };
   matMulDerivAsync(B: Mat): Promise<{ dABdA: Mat, dABdB: Mat }>;
   matchTemplate(template: Mat, method: number, mask?: Mat): Mat;
@@ -278,6 +281,8 @@ export class Mat {
   setToAsync(value: Vec4, mask?: Mat): Promise<Mat>;
   sobel(ddepth: number, dx: number, dy: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Mat;
   sobelAsync(ddepth: number, dx: number, dy: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
+  solve(mat2: Mat, flags?: number): Mat;
+  solveAsync(mat2: Mat, flags?: number): Promise<Mat>;
   split(): Mat[];
   splitAsync(): Promise<Mat[]>;
   splitChannels(): Mat[];

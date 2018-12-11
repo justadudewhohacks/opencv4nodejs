@@ -95,12 +95,18 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "copyMakeBorderAsync", CopyMakeBorderAsync);
   Nan::SetPrototypeMethod(ctor, "reduce", Reduce);
   Nan::SetPrototypeMethod(ctor, "reduceAsync", ReduceAsync);
+  Nan::SetPrototypeMethod(ctor, "eigen", Eigen);
+  Nan::SetPrototypeMethod(ctor, "eigenAsync", EigenAsync);
+  Nan::SetPrototypeMethod(ctor, "solve", Solve);
+  Nan::SetPrototypeMethod(ctor, "solveAsync", SolveAsync);
+    
 #if CV_VERSION_MINOR > 1
   Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
   Nan::SetPrototypeMethod(ctor, "rotateAsync", RotateAsync);
 #endif
 
   Nan::SetPrototypeMethod(ctor, "release", Release);
+
 
   FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
@@ -868,6 +874,38 @@ NAN_METHOD(Mat::ReduceAsync) {
 		"Mat::ReduceAsync",
 		info
 	);
+}
+
+NAN_METHOD(Mat::Eigen) {
+  FF::SyncBinding(
+    std::make_shared<MatBindings::EigenWorker>(Mat::Converter::unwrap(info.This())),
+    "Mat::Eigen",
+    info
+  );
+}
+
+NAN_METHOD(Mat::EigenAsync) {
+  FF::AsyncBinding(
+    std::make_shared<MatBindings::EigenWorker>(Mat::Converter::unwrap(info.This())),
+    "Mat::EigenAsync",
+    info
+  );
+}
+
+NAN_METHOD(Mat::Solve) {
+  FF::SyncBinding(
+    std::make_shared<MatBindings::SolveWorker>(Mat::Converter::unwrap(info.This())),
+    "Mat::Solve",
+    info
+  );
+}
+
+NAN_METHOD(Mat::SolveAsync) {
+  FF::AsyncBinding(
+    std::make_shared<MatBindings::SolveWorker>(Mat::Converter::unwrap(info.This())),
+    "Mat::SolveAsync",
+    info
+  );
 }
 
 #if CV_VERSION_MINOR > 1
