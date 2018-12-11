@@ -6,7 +6,7 @@
 namespace DnnBindings {
 
 #if CV_VERSION_MINOR > 3
-  struct readNetFromDarknetWorker : public CatchCvExceptionWorker{
+  struct ReadNetFromDarknetWorker : public CatchCvExceptionWorker{
   public:
     std::string cfgFile;
     std::string darknetModelFile = "";
