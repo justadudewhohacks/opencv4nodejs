@@ -311,6 +311,7 @@ export class Mat {
   warpPerspectiveAsync(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number, borderValue?: Vec3): Promise<Mat>;
   watershed(markers: Mat): Mat;
   watershedAsync(markers: Mat): Promise<Mat>;
-
+  release(): void;
+  
   static eye(rows: number, cols: number, type: number): Mat;
 }
