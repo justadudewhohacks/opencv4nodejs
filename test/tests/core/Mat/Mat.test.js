@@ -1030,7 +1030,14 @@ describe('Mat', () => {
         getRequiredArgs: () => ([m2]),
         expectOutput: (res, _, args) => {
           expect(res).to.be.instanceOf(cv.Mat);
-          expect(res.getDataAsArray()).to.eql(expectedResults);
+          const arrayRes = res.getDataAsArray();
+          const tolerance = 1e-6;
+          arrayRes.forEach((r,i1) => {
+            r.forEach((n,i2) => {
+              expect(n).to.be.at.least(expectedResults[i1][i2]-tolerance);
+              expect(n).to.be.at.most(expectedResults[i1][i2]+tolerance)
+            })
+          })
         }
       });
     };
