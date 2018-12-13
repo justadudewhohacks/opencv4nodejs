@@ -92,7 +92,8 @@
 	Nan::SetPrototypeMethod(ctor, "bitwiseXor", BitwiseXor);	\
 	Nan::SetPrototypeMethod(ctor, "abs", Abs);								\
 	Nan::SetPrototypeMethod(ctor, "transpose", Transpose);		\
-	Nan::SetPrototypeMethod(ctor, "determinant", Determinant);
+	Nan::SetPrototypeMethod(ctor, "determinant", Determinant);\
+	Nan::SetPrototypeMethod(ctor, "matMul", MatMul);
 
 #define FF_INIT_ARITHMETIC_OPERATIONS(clazz, unwrapper)					\
 	static NAN_METHOD(Add) {																			\
@@ -158,6 +159,9 @@
 	}																																					\
 	static NAN_METHOD(Transpose) {																						\
 		FF_SELF_OPERATOR(cv::transpose, FF_UNWRAP_MAT_AND_GET);									\
+	}																																					\
+	static NAN_METHOD(MatMul) {																								\
+		FF_OPERATOR(*, FF_APPLY_OPERATOR, FF_UNWRAP_MAT_AND_GET, Mat);					\
 	}																																					
 
 #define FF_INIT_VEC2_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec2, FF_UNWRAP_VEC2_AND_GET);

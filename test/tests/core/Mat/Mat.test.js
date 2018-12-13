@@ -993,4 +993,57 @@ describe('Mat', () => {
       );
     });
   });
+  
+  describe('eigen', () => {
+    const makeTest = (values, expectedResults) => () => {
+      generateAPITests({
+        getDut: () => new cv.Mat(values, cv.CV_32F),
+        methodName: 'eigen',
+        methodNameSpace: 'Mat',
+        expectOutput: (res, _, args) => {
+          expect(res).to.be.instanceOf(cv.Mat);
+          const arrayRes = res.getDataAsArray();
+          const tolerance = 1e-6;
+          arrayRes.forEach((r,i1) => {
+            r.forEach((n,i2) => {
+              expect(n).to.be.at.least(expectedResults[i1][i2]-tolerance);
+              expect(n).to.be.at.most(expectedResults[i1][i2]+tolerance)
+            })
+          })
+        }
+      });
+    };
+
+    describe('eigen', makeTest([[2,1],[1,2]], [[3], [1]]))
+  });
+  describe('solve', () => {
+    const makeTest = (values1, values2, flags, expectedResults) => () => {
+      const m2 = new cv.Mat(values2, cv.CV_32F);
+      
+      generateAPITests({
+        getDut: () => new cv.Mat(values1, cv.CV_32F),
+        methodName: 'solve',
+        methodNameSpace: 'Mat',
+        getOptionalArgsMap: () => ([
+          ['flags', flags]
+        ]),
+        getRequiredArgs: () => ([m2]),
+        expectOutput: (res, _, args) => {
+          expect(res).to.be.instanceOf(cv.Mat);
+          const arrayRes = res.getDataAsArray();
+          const tolerance = 1e-6;
+          arrayRes.forEach((r,i1) => {
+            r.forEach((n,i2) => {
+              expect(n).to.be.at.least(expectedResults[i1][i2]-tolerance);
+              expect(n).to.be.at.most(expectedResults[i1][i2]+tolerance)
+            })
+          })
+        }
+      });
+    };
+
+    describe('Solve y = x equation on Id = X Id', makeTest([[1, 0, 0],[0, 1, 0],[0, 0, 1]], [[1, 0, 0],[0, 1, 0],[0, 0, 1]], cv.DECOMP_LU, [[1, 0, 0],[0, 1, 0],[0, 0, 1]]));
+    describe('Solve y = x equation on Id = X Id', makeTest([[1, 2],[3, 4]], [[5, 6],[7, 8]], cv.DECOMP_LU, [[-3, -4],[4, 5]]));
+  });
+  
 });

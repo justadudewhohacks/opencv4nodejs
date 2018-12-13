@@ -926,7 +926,59 @@ namespace MatBindings {
 			);
 	  }
   };
+  
+  struct EigenWorker : public CatchCvExceptionWorker {
+  public:
+	  cv::Mat self;
+	  EigenWorker(cv::Mat self) {
+		  this->self = self;
+	  }
 
+	  cv::Mat eigenvalues;
+
+	  std::string executeCatchCvExceptionWorker() {
+			cv::eigen(self, eigenvalues);
+		  return "";
+	  }
+
+	  v8::Local<v8::Value> getReturnValue() {
+		  return Mat::Converter::wrap(eigenvalues);
+	  }
+  };
+  
+  struct SolveWorker : public CatchCvExceptionWorker {
+  public:
+	  cv::Mat self;
+	  SolveWorker(cv::Mat self) {
+		  this->self = self;
+	  }
+    
+	  cv::Mat mat2;
+	  cv::Mat dst;
+    int flags = 0; // cv.DECOMP_LU
+    
+	  std::string executeCatchCvExceptionWorker() {
+			cv::solve(self, mat2, dst, flags);
+		  return "";
+	  }
+
+	  v8::Local<v8::Value> getReturnValue() {
+		  return Mat::Converter::wrap(dst);
+	  }
+    
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        Mat::Converter::arg(0, &mat2, info)
+      );
+    }
+    
+    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        IntConverter::optArg(1, &flags, info)
+      );
+    }    
+  };
+  
 #if CV_VERSION_MINOR > 1
   struct RotateWorker : public OpWithCodeWorker {
   public:
