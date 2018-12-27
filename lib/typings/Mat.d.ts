@@ -179,6 +179,8 @@ export class Mat {
   goodFeaturesToTrackAsync(maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Promise<Point2[]>;
   grabCut(mask: Mat, rect: Rect, bgdModel: Mat, fgdModel: Mat, iterCount: number, mode: number): void;
   grabCutAsync(mask: Mat, rect: Rect, bgdModel: Mat, fgdModel: Mat, iterCount: number, mode: number): Promise<void>;
+  guidedFilter(guide: Mat, radius: number, eps: number, ddepth?: number): Mat;
+  guidedFilterAsync(guide: Mat, radius: number, eps: number, ddepth?: number): Promise<Mat>;
   hDiv(otherMat: Mat): Mat;
   hMul(otherMat: Mat): Mat;
   houghCircles(method: number, dp: number, minDist: number, param1?: number, param2?: number, minRadius?: number, maxRadius?: number): Vec3[];

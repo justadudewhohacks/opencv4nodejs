@@ -1,5 +1,6 @@
 #include "Mat.h"
 #include "MatImgproc.h"
+#include "MatXimgproc.h"
 #include "MatCalib3d.h"
 #include "MatBindings.h"
 
@@ -111,6 +112,7 @@ NAN_MODULE_INIT(Mat::Init) {
   FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
   MatImgproc::Init(ctor);
+  MatXimgproc::Init(ctor);
   MatCalib3d::Init(ctor);
 
   target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
