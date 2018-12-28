@@ -1,3 +1,5 @@
+#ifdef HAVE_XIMGPROC
+
 #include "MatXimgproc.h"
 #include "MatXimgprocBindings.h"
 
@@ -21,3 +23,5 @@ NAN_METHOD(MatXimgproc::GuidedFilterAsync) {
     info
   );
 }
+
+#endif // HAVE_XIMGPROC
