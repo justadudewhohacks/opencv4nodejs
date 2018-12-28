@@ -7,6 +7,11 @@ const {
 
 module.exports = () => {
     describe('guidedFilter', () => {
+        if (!cv.xmodules.ximgproc) {
+            it('compiled without ximgproc');
+            return;
+        }
+
         const getDut = () => new cv.Mat(100, 100, cv.CV_8UC3);
 
         const guide = new cv.Mat(100, 100, cv.CV_8UC3);
