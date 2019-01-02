@@ -323,7 +323,16 @@ describe('Mat', () => {
         expect(buf).instanceOf(Buffer).lengthOf(18);
       });
     });
-
+    
+    describe('getData after getRegion', () => {
+      it('should return buffer of with data of single channeled Mat', () => {
+        const region = matC3.getRegion(new cv.Rect(0, 0, 2, 2));
+        const buf = region.getData();
+        expect(buf).instanceOf(Buffer).lengthOf(12);
+        expect(new Uint8Array(buf)[6]).to.equal(region.getDataAsArray()[1][0][0])
+      });
+    });
+    
     describe('async', () => {
       it('should return buffer with data of single channeled Mat', (done) => {
         matC1.getDataAsync((err, buf) => {
