@@ -153,7 +153,7 @@ NAN_METHOD(Mat::New) {
   /* data array, type */
   else if (info.Length() == 2 && info[0]->IsArray() && info[1]->IsInt32()) {
     FF_ARR rowArray = FF_ARR::Cast(info[0]);
-    int type = info[1]->Int32Value();
+    int type = info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 
     long numCols = -1;
     for (uint i = 0; i < rowArray->Length(); i++) {
@@ -173,8 +173,8 @@ NAN_METHOD(Mat::New) {
   }
   /* row, col, type */
   else if (info[0]->IsNumber() && info[1]->IsNumber() && info[2]->IsInt32()) {
-    int type = info[2]->Int32Value();
-    cv::Mat mat(info[0]->Int32Value(), info[1]->Int32Value(), type);
+    int type = info[2]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+    cv::Mat mat(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), type);
     /* fill vector */
     // TODO by Vec
     if (info[3]->IsArray()) {
@@ -194,9 +194,9 @@ NAN_METHOD(Mat::New) {
   }
   /* raw data, row, col, type */
   else if (info.Length() == 4 && info[1]->IsNumber() && info[2]->IsNumber() && info[3]->IsInt32()) {
-    int type = info[3]->Int32Value();
+    int type = info[3]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     char *data = static_cast<char *>(node::Buffer::Data(info[0]->ToObject()));
-    cv::Mat mat(info[1]->Int32Value(), info[2]->Int32Value(), type);
+    cv::Mat mat(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[2]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), type);
     size_t size = mat.rows * mat.cols * mat.elemSize();
     memcpy(mat.data, data, size);
     self->setNativeProps(mat);
@@ -244,8 +244,8 @@ NAN_METHOD(Mat::At) {
     }
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT_ARRAY, FF::matGet);
   } else {
-    FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.size[0] - 1, "Mat::At row");
-    FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.size[1] - 1, "Mat::At col");
+    FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[0] - 1, "Mat::At row");
+    FF_ASSERT_INDEX_RANGE(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[1] - 1, "Mat::At col");
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
   }
 
@@ -254,15 +254,15 @@ NAN_METHOD(Mat::At) {
     FF_OBJ jsVec;
     if (vec->Length() == 2) {
       jsVec = FF_NEW_INSTANCE(Vec2::constructor);
-      FF_UNWRAP_VEC2(jsVec)->vec = cv::Vec2d(vec->Get(0)->NumberValue(), vec->Get(1)->NumberValue());
+      FF_UNWRAP_VEC2(jsVec)->vec = cv::Vec2d(vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
     }
     else if (vec->Length() == 3) {
       jsVec = FF_NEW_INSTANCE(Vec3::constructor);
-      FF_UNWRAP_VEC3(jsVec)->vec = cv::Vec3d(vec->Get(0)->NumberValue(), vec->Get(1)->NumberValue(), vec->Get(2)->NumberValue());
+      FF_UNWRAP_VEC3(jsVec)->vec = cv::Vec3d(vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(2)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
     }
     else {
       jsVec = FF_NEW_INSTANCE(Vec4::constructor);
-      FF_UNWRAP_VEC4(jsVec)->vec = cv::Vec4d(vec->Get(0)->NumberValue(), vec->Get(1)->NumberValue(), vec->Get(2)->NumberValue(), vec->Get(3)->NumberValue());
+      FF_UNWRAP_VEC4(jsVec)->vec = cv::Vec4d(vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(2)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(3)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
     }
     jsVal = jsVec;
   }
@@ -275,8 +275,8 @@ NAN_METHOD(Mat::At) {
 NAN_METHOD(Mat::AtRaw) {
   FF_METHOD_CONTEXT("Mat::AtRaw");
   cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-  FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.size[0] - 1, "Mat::At row");
-  FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.size[1] - 1, "Mat::At col");
+  FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[0] - 1, "Mat::At row");
+  FF_ASSERT_INDEX_RANGE(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[1] - 1, "Mat::At col");
   v8::Local<v8::Value> val;
   FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
   FF_RETURN(val);
@@ -285,8 +285,8 @@ NAN_METHOD(Mat::AtRaw) {
 NAN_METHOD(Mat::Set) {
   FF_METHOD_CONTEXT("Mat::Set");
   cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-  FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), matSelf.size[0] - 1, "Mat::At row");
-  FF_ASSERT_INDEX_RANGE(info[1]->Int32Value(), matSelf.size[1] - 1, "Mat::At col");
+  FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[0] - 1, "Mat::At row");
+  FF_ASSERT_INDEX_RANGE(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[1] - 1, "Mat::At col");
 
   int cn = matSelf.channels();
   if (info[2]->IsArray()) {
@@ -406,7 +406,7 @@ NAN_METHOD(Mat::Row) {
   if (!info[0]->IsNumber()) {
     return Nan::ThrowError("usage: row(int r)");
   }
-  int r = (int)info[0]->NumberValue();
+  int r = (int)info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
   cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;
   FF_ARR row = FF_NEW_ARRAY(mat.cols);
   try {

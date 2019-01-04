@@ -38,11 +38,11 @@ NAN_METHOD(Point::New) {
 	if (info.Length() < 2) {
 		return Nan::ThrowError("Point::New - expected arguments x, y, (z)");
 	}
-	double x = info[0]->NumberValue();
-	double y = info[1]->NumberValue();
+	double x = info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+	double y = info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	v8::Local<v8::Object> jsPoint;
 	if (info.Length() == 3) {
-		double z = info[2]->NumberValue();
+		double z = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 		jsPoint = Nan::NewInstance(Nan::New(Point3::constructor)->GetFunction()).ToLocalChecked();
 		Nan::ObjectWrap::Unwrap<Point3>(jsPoint)->pt = cv::Point3d(x, y, z);
 	}

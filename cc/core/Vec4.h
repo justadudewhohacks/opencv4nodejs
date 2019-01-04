@@ -35,9 +35,9 @@ public:
 
 	static NAN_METHOD(At) {
 		FF_METHOD_CONTEXT("Vec4::At");
-		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 3, "Vec4");
+		FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 3, "Vec4");
 		cv::Vec4d vecSelf = FF_UNWRAP_VEC4_AND_GET(info.This());
-		info.GetReturnValue().Set(vecSelf[info[0]->Int32Value()]);
+		info.GetReturnValue().Set(vecSelf[info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value()]);
 	}
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;

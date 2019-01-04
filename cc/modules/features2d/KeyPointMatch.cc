@@ -23,7 +23,7 @@ NAN_METHOD(KeyPointMatch::New) {
     keyPointMatch->setNativeProps(
       Nan::ObjectWrap::Unwrap<KeyPoint>(info[0]->ToObject()),
       Nan::ObjectWrap::Unwrap<KeyPoint>(info[1]->ToObject()),
-      (float)info[2]->NumberValue()
+      (float)info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value()
     );
     keyPointMatch->Wrap(info.Holder());
   } else {

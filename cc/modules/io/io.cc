@@ -92,7 +92,7 @@ NAN_METHOD(Io::ImshowWait) {
 NAN_METHOD(Io::WaitKey) {
   int key;
   if (info[0]->IsNumber()) {
-    key = cv::waitKey(info[0]->NumberValue());
+    key = cv::waitKey(info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
   } else{
     key = cv::waitKey();
   }

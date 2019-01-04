@@ -37,7 +37,7 @@
 	applyFunc(																											\
 		func,																													\
 		unwrapper(info.This()),																				\
-		info[0]->NumberValue(),																				\
+		info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),																				\
 		unwrapper(jsObj)																							\
 	);																															\
 	return info.GetReturnValue().Set(jsObj);																																																										

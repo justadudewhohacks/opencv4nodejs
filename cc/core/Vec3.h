@@ -37,9 +37,9 @@ public:
 
 	static NAN_METHOD(At) {
 		FF_METHOD_CONTEXT("Vec3::At");
-		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 2, "Vec3");
+		FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 2, "Vec3");
 		cv::Vec3d vecSelf = FF_UNWRAP_VEC3_AND_GET(info.This());
-		info.GetReturnValue().Set(vecSelf[info[0]->Int32Value()]);
+		info.GetReturnValue().Set(vecSelf[info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value()]);
 	}
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;

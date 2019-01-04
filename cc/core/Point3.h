@@ -32,10 +32,10 @@ public:
 
 	static NAN_METHOD(At) {
 		FF_METHOD_CONTEXT("Point3::At");
-		FF_ASSERT_INDEX_RANGE(info[0]->Int32Value(), 2, "Point3");
+		FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 2, "Point3");
 		cv::Point3d ptSelf = FF_UNWRAP_PT3_AND_GET(info.This());
 		const double coords[] = { ptSelf.x, ptSelf.y, ptSelf.z };
-		info.GetReturnValue().Set(coords[info[0]->Int32Value()]);
+		info.GetReturnValue().Set(coords[info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value()]);
 	}
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;

@@ -31,7 +31,7 @@ NAN_METHOD(RotatedRect::New) {
 		if (!FF_IS_INSTANCE(Size::constructor, info[1])) {
 			return Nan::ThrowError("RotatedRect::New - expected arg1 to be an instance of Size");
 		}
-		double angle = info[2]->NumberValue();
+		double angle = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 
 		self->rect = cv::RotatedRect(
 			FF_UNWRAP_PT2_AND_GET(info[0]->ToObject()),

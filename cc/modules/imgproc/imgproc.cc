@@ -129,8 +129,8 @@ NAN_METHOD(Imgproc::CalcHist) {
 	if (jsRanges->Length() != 2) {
 		return Nan::ThrowError(FF_NEW_STRING("expected ranges to be an array of length " + std::to_string(2)));
 	}
-    ranges.at(i)[0] = jsRanges->Get(0)->NumberValue();
-    ranges.at(i)[1] = jsRanges->Get(1)->NumberValue();
+    ranges.at(i)[0] = jsRanges->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+    ranges.at(i)[1] = jsRanges->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     int channel, bins;
     FF_DESTRUCTURE_JSPROP_REQUIRED(jsAxis, channel, IntegerValue);
     FF_DESTRUCTURE_JSPROP_REQUIRED(jsAxis, bins, IntegerValue);

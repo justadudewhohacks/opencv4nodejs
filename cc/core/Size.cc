@@ -20,8 +20,8 @@ NAN_METHOD(Size::New) {
 		if (info.Length() < 2) {
 			return Nan::ThrowError("Size::New - expected arguments width, height");
 		}
-		double width = info[0]->NumberValue();
-		double height = info[1]->NumberValue();
+		double width = info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+		double height = info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 		self->size = cv::Size2d(width, height);
 	}
 	self->Wrap(info.Holder());

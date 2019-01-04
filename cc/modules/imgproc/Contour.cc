@@ -57,8 +57,8 @@ NAN_METHOD(Contour::New) {
 				FF_ARR jsObj = FF_ARR::Cast(jsPt);
 				if (jsObj->Length() != 2)
 					return Nan::ThrowError("Contour::New - expected arg0 to consist of only Point2 or array of length 2");
-				double x = jsObj->Get(0)->NumberValue();
-				double y = jsObj->Get(1)->NumberValue();
+				double x = jsObj->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+				double y = jsObj->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 				cv_pt = cv::Point2d(x, y);
 			}
 			else if (FF_IS_INSTANCE(Point2::constructor, jsPt)) {
