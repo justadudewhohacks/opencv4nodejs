@@ -195,7 +195,7 @@ NAN_METHOD(Mat::New) {
   /* raw data, row, col, type */
   else if (info.Length() == 4 && info[1]->IsNumber() && info[2]->IsNumber() && info[3]->IsInt32()) {
     int type = info[3]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-    char *data = static_cast<char *>(node::Buffer::Data(info[0]->ToObject()));
+    char *data = static_cast<char *>(node::Buffer::Data(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
     cv::Mat mat(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[2]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), type);
     size_t size = mat.rows * mat.cols * mat.elemSize();
     memcpy(mat.data, data, size);
@@ -296,15 +296,15 @@ NAN_METHOD(Mat::Set) {
   }
   else if (FF_IS_INSTANCE(Vec2::constructor, info[2])) {
     FF_ASSERT_CHANNELS(cn, 2, "Mat::Set");
-    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<2>(FF_UNWRAP_VEC2_AND_GET(info[2]->ToObject())), matSelf.type(), FF_MAT_SET, FF::matPut);
+    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<2>(FF_UNWRAP_VEC2_AND_GET(info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())), matSelf.type(), FF_MAT_SET, FF::matPut);
   }
   else if (FF_IS_INSTANCE(Vec3::constructor, info[2])) {
     FF_ASSERT_CHANNELS(cn, 3, "Mat::Set");
-    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<3>(FF_UNWRAP_VEC3_AND_GET(info[2]->ToObject())), matSelf.type(), FF_MAT_SET, FF::matPut);
+    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<3>(FF_UNWRAP_VEC3_AND_GET(info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())), matSelf.type(), FF_MAT_SET, FF::matPut);
   }
   else if (FF_IS_INSTANCE(Vec4::constructor, info[2])) {
     FF_ASSERT_CHANNELS(cn, 4, "Mat::Set");
-    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<4>(FF_UNWRAP_VEC4_AND_GET(info[2]->ToObject())), matSelf.type(), FF_MAT_SET, FF::matPut);
+    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<4>(FF_UNWRAP_VEC4_AND_GET(info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())), matSelf.type(), FF_MAT_SET, FF::matPut);
   }
   else if (info[2]->IsNumber()) {
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, info[2], matSelf.type(), FF_MAT_SET, FF::matPut);
@@ -345,7 +345,7 @@ NAN_METHOD(Mat::GetRegion) {
   if (!FF_IS_INSTANCE(Rect::constructor, info[0])) {
     return Nan::ThrowError("Mat::GetRegion expected arg0 to be an instance of Rect");
   }
-  cv::Rect2d rect = FF_UNWRAP(info[0]->ToObject(), Rect)->rect;
+  cv::Rect2d rect = FF_UNWRAP(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked(), Rect)->rect;
   FF_OBJ jsRegion = FF_NEW_INSTANCE(constructor);
   FF_UNWRAP_MAT_AND_GET(jsRegion) = FF_UNWRAP_MAT_AND_GET(info.This())(rect);
   FF_RETURN(jsRegion);
@@ -360,7 +360,7 @@ NAN_METHOD(Mat::Norm) {
 
   // optional args
   bool hasOptArgsObj = FF_HAS_ARG((long)i) && info[i]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[i]->ToObject() : FF_NEW_OBJ();
+  FF_OBJ optArgs = hasOptArgsObj ? info[i]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
   FF_GET_UINT_IFDEF(optArgs, uint normType, "normType", cv::NORM_L2);
   FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat mask, "mask", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
   if (!hasOptArgsObj) {
@@ -383,7 +383,7 @@ NAN_METHOD(Mat::Normalize) {
 
   // optional args
   bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+  FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
   FF_GET_NUMBER_IFDEF(optArgs, double alpha, "alpha", 1.0);
   FF_GET_NUMBER_IFDEF(optArgs, double beta, "beta", 0.0);
   FF_GET_UINT_IFDEF(optArgs, uint normType, "normType", cv::NORM_L2);

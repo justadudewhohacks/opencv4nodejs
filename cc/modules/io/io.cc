@@ -74,7 +74,7 @@ NAN_METHOD(Io::Imshow) {
   if (!FF_IS_INSTANCE(Mat::constructor, info[1])) {
     FF_THROW("expected arg1 to be an instance of Mat");
   }
-  cv::imshow(FF_CAST_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject()));
+  cv::imshow(FF_CAST_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
 }
 
 NAN_METHOD(Io::ImshowWait) {
@@ -85,7 +85,7 @@ NAN_METHOD(Io::ImshowWait) {
   if (!FF_IS_INSTANCE(Mat::constructor, info[1])) {
     FF_THROW("expected arg1 to be an instance of Mat");
   }
-  cv::imshow(FF_CAST_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject()));
+  cv::imshow(FF_CAST_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
   cv::waitKey();
 }
 
@@ -126,8 +126,8 @@ NAN_METHOD(Io::Imdecode) {
   }
   FF_ARG_INT_IFDEF(1, int flags, cv::IMREAD_ANYCOLOR);
 
-  char *data = static_cast<char *>(node::Buffer::Data(info[0]->ToObject()));
-  size_t size = node::Buffer::Length(info[0]->ToObject());
+  char *data = static_cast<char *>(node::Buffer::Data(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
+  size_t size = node::Buffer::Length(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   std::vector<uchar> vec(size);
   memcpy(vec.data(), data, size);
 
@@ -154,7 +154,7 @@ NAN_METHOD(Io::ImdecodeAsync) {
     worker->flags = cv::IMREAD_ANYCOLOR;
   }
 
-  FF_OBJ jsBuf = info[0]->ToObject();
+  FF_OBJ jsBuf = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
   worker->data = static_cast<char *>(node::Buffer::Data(jsBuf));
   worker->dataSize = node::Buffer::Length(jsBuf);
 

@@ -322,7 +322,7 @@ namespace MatCalib3dBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[6]->ToObject();
+      v8::Local<v8::Object> opts = info[6]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         IntConverter::optProp(&flags, "flags", opts) ||
         DoubleConverter::optProp(&alpha, "alpha", opts) ||
@@ -455,7 +455,7 @@ namespace MatCalib3dBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[3]->ToObject();
+      v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Size::Converter::optProp(&newImgSize, "newImgSize", opts) ||
         BoolConverter::optProp(&centerPrincipalPoint, "centerPrincipalPoint", opts)
@@ -660,7 +660,7 @@ namespace MatCalib3dBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[1]->ToObject();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         BoolConverter::optProp(&handleMissingValues, "handleMissingValues", opts) ||
         IntConverter::optProp(&ddepth, "ddepth", opts)
@@ -752,7 +752,7 @@ namespace MatCalib3dBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[2]->ToObject();
+      v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         IntConverter::optProp(&method, "method", opts) ||
         DoubleConverter::optProp(&prob, "prob", opts) ||

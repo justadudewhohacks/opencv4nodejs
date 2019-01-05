@@ -21,8 +21,8 @@ NAN_METHOD(KeyPointMatch::New) {
     // TODO check args
     KeyPointMatch *keyPointMatch = new KeyPointMatch();
     keyPointMatch->setNativeProps(
-      Nan::ObjectWrap::Unwrap<KeyPoint>(info[0]->ToObject()),
-      Nan::ObjectWrap::Unwrap<KeyPoint>(info[1]->ToObject()),
+      Nan::ObjectWrap::Unwrap<KeyPoint>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()),
+      Nan::ObjectWrap::Unwrap<KeyPoint>(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()),
       (float)info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value()
     );
     keyPointMatch->Wrap(info.Holder());

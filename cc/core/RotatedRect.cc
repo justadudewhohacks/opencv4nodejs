@@ -34,8 +34,8 @@ NAN_METHOD(RotatedRect::New) {
 		double angle = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 
 		self->rect = cv::RotatedRect(
-			FF_UNWRAP_PT2_AND_GET(info[0]->ToObject()),
-			FF_UNWRAP_SIZE_AND_GET(info[1]->ToObject()),
+			FF_UNWRAP_PT2_AND_GET(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()),
+			FF_UNWRAP_SIZE_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()),
 			angle
 		);
 	}

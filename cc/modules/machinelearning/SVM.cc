@@ -81,7 +81,7 @@ NAN_METHOD(SVM::SetParams) {
   if (!info[0]->IsObject()) {
     return Nan::ThrowError("SVM::SetParams - args object required");
   }
-  v8::Local<v8::Object> args = info[0]->ToObject();
+  v8::Local<v8::Object> args = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 
   Nan::TryCatch tryCatch;
   FF_UNWRAP(info.This(), SVM)->setParams(args);

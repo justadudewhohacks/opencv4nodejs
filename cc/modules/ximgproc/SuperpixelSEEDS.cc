@@ -39,7 +39,7 @@ NAN_METHOD(SuperpixelSEEDS::New) {
 	FF_ARG_INT(2, self->numLevels);
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
+	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
 
 	FF_GET_INT_IFDEF(optArgs, self->prior, "prior", 2);
 	FF_GET_INT_IFDEF(optArgs, self->histogramBins, "histogramBins", 5);

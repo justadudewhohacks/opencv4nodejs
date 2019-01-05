@@ -30,7 +30,7 @@ NAN_METHOD(ORBDetector::New) {
 
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
 
 	FF_GET_INT_IFDEF(optArgs, int nfeatures, "nfeatures", 500);
 	FF_GET_NUMBER_IFDEF(optArgs, double scaleFactor, "scaleFactor", 1.2f);

@@ -49,7 +49,7 @@
 	applyFunc(																																			\
 		func,																																					\
 		unwrapper(info.This()),																												\
-		unwrapper(info[0]->ToObject()),																								\
+		unwrapper(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()),																								\
 		unwrapper(jsObj)																															\
 	);																																							\
 	return info.GetReturnValue().Set(jsObj);
@@ -61,7 +61,7 @@
 	applyFunc(																																			\
 		func,																																					\
 		unwrapper(info.This()),																												\
-		unwrapper(info[0]->ToObject()),																								\
+		unwrapper(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()),																								\
 		ret																																						\
 	);																																							\
 	return info.GetReturnValue().Set(ret);

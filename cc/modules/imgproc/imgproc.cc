@@ -132,8 +132,10 @@ NAN_METHOD(Imgproc::CalcHist) {
     ranges.at(i)[0] = jsRanges->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     ranges.at(i)[1] = jsRanges->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     int channel, bins;
-    FF_DESTRUCTURE_JSPROP_REQUIRED(jsAxis, channel, IntegerValue);
-    FF_DESTRUCTURE_JSPROP_REQUIRED(jsAxis, bins, IntegerValue);
+
+	if (IntConverter::prop(&channel, "channel", jsAxis) || IntConverter::prop(&bins, "bins", jsAxis)) {
+		return;
+	}
     channels[i] = channel;
     histSize[i] = bins;
   }
@@ -184,7 +186,7 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 
   // optional args
   bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
+  FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
   FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
   FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 2);
   FF_GET_INT_IFDEF(optArgs, int shift, "shift", 0);
@@ -241,7 +243,11 @@ NAN_METHOD(Imgproc::FitLine) {
   FF_ARR jsLineParams;
   if (isPoint2) {
     std::vector<cv::Point2d> pts;
+	Nan::TryCatch tryCatch;
     Point::unpackJSPoint2Array(pts, jsPoints);
+	if (tryCatch.HasCaught()) {
+		return info.GetReturnValue().Set(tryCatch.ReThrow());
+	}
     cv::Vec4f lineParams;
     cv::fitLine(pts, lineParams, (int)distType, param, reps, aeps);
     jsLineParams = FF_NEW_ARRAY(4);
@@ -251,7 +257,11 @@ NAN_METHOD(Imgproc::FitLine) {
   }
   else {
     std::vector<cv::Point3d> pts;
-    Point::unpackJSPoint3Array(pts, jsPoints);
+	Nan::TryCatch tryCatch;
+	Point::unpackJSPoint3Array(pts, jsPoints);
+	if (tryCatch.HasCaught()) {
+		return info.GetReturnValue().Set(tryCatch.ReThrow());
+	}
     cv::Vec6f lineParams;
     cv::fitLine(pts, lineParams, (int)distType, param, reps, aeps);
     jsLineParams = FF_NEW_ARRAY(6);

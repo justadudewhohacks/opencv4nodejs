@@ -6,18 +6,6 @@
 #ifndef __FF_POINT_H__
 #define __FF_POINT_H__
 
-// TODO replace this
-#define FF_GET_JSPROP(obj, prop) Nan::Get(obj, FF_NEW_STRING(#prop)).ToLocalChecked()
-
-#define FF_GET_JSPROP_REQUIRED(obj, var, prop, castType)																	\
-	if (!FF_HAS(obj, #prop)) {																												\
-		return Nan::ThrowError(FF_NEW_STRING("Object has no property: " + std::string(#prop)));	\
-	}																																												\
-	var = FF_GET_JSPROP(obj, prop)->castType();
-
-#define FF_DESTRUCTURE_JSPROP_REQUIRED(obj, prop, castType)	\
-	FF_GET_JSPROP_REQUIRED(obj, prop, prop, castType)
-
 class Point : public Nan::ObjectWrap {
 public:
   static NAN_MODULE_INIT(Init);
@@ -30,8 +18,9 @@ public:
 		for (uint i = 0; i < jsPts->Length(); i++) {
 			v8::Local<v8::Object> obj = Nan::To<v8::Object>(jsPts->Get(i)).ToLocalChecked();
 			double x, y;
-			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, x, NumberValue)
-			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, y, NumberValue)
+			if (DoubleConverter::prop(&x, "x", obj) || DoubleConverter::prop(&y, "y", obj)) {
+				return;
+			}
 			pts.push_back(cv::Point_<type>(x, y));
 		}
 	};
@@ -63,9 +52,10 @@ public:
 		for (uint i = 0; i < jsPts->Length(); i++) {
 			v8::Local<v8::Object> obj = Nan::To<v8::Object>(jsPts->Get(i)).ToLocalChecked();
 			double x, y, z;
-			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, x, NumberValue)
-			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, y, NumberValue)
-			FF_DESTRUCTURE_JSPROP_REQUIRED(obj, z, NumberValue)
+
+			if (DoubleConverter::prop(&x, "x", obj) || DoubleConverter::prop(&y, "y", obj) || DoubleConverter::prop(&z, "z", obj)) {
+				return;
+			}
 			pts.push_back(cv::Point3_<type>(x, y, z));
 		}
 	};

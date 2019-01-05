@@ -31,7 +31,7 @@ NAN_METHOD(TrainData::New) {
 
 		// optional args
 		bool hasOptArgsObj = FF_HAS_ARG(3) && !info[3]->IsArray();
-		FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject() : FF_NEW_OBJ();
+		FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
 		FF_GET_UNPACK_INT_ARRAY_IFDEF(optArgs, varIdx, "varIdx", varIdx);
 		FF_GET_UNPACK_INT_ARRAY_IFDEF(optArgs, sampleIdx, "sampleIdx", sampleIdx);
 		std::vector<float> sampleWeights;

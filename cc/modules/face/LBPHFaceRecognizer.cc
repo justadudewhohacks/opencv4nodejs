@@ -40,7 +40,7 @@ public:
 	}
 
 	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-		v8::Local<v8::Object> opts = info[0]->ToObject();
+		v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 		return (
 			IntConverter::optProp(&radius, "radius", opts) ||
 			IntConverter::optProp(&neighbors, "neighbors", opts) ||

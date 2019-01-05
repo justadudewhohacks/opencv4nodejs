@@ -118,7 +118,7 @@ NAN_METHOD(MatImgproc::DrawContours) {
 
   // optional args
   bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject() : FF_NEW_OBJ();
+  FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
   FF_GET_INT_IFDEF(optArgs, int contourIdx, "contourIdx", 0);
   FF_GET_INT_IFDEF(optArgs, int maxLevel, "maxLevel", INT_MAX);
   FF_GET_INSTANCE_IFDEF(optArgs, cv::Point2d offset, "offset", Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2, cv::Point2d());
@@ -135,7 +135,7 @@ NAN_METHOD(MatImgproc::DrawContours) {
   std::vector<std::vector<cv::Point>> contours;
   std::vector<cv::Vec4i> hierarchy;
   for (uint i = 0; i < jsContours->Length(); i++) {
-    FF_OBJ jsContour = jsContours->Get(i)->ToObject();
+    FF_OBJ jsContour = jsContours->Get(i)->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
     contours.push_back(FF_UNWRAP_CONTOUR_AND_GET(jsContour));
     hierarchy.push_back(FF_UNWRAP_CONTOUR(jsContour)->hierarchy);
   }

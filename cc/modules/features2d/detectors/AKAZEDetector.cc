@@ -28,7 +28,7 @@ NAN_METHOD(AKAZEDetector::New) {
 
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
 
 	FF_GET_INT_IFDEF(optArgs, int descriptorType, "descriptorType", cv::AKAZE::DESCRIPTOR_MLDB);
 	FF_GET_INT_IFDEF(optArgs, int descriptorSize, "descriptorSize", 0);
