@@ -15,7 +15,7 @@
       ff_unwrapper(cbArgs[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()) = b;                                        \
       Nan::AsyncResource resource("opencv4nodejs:Predicate::Constructor");            \
       return resource.runInAsyncScope(Nan::GetCurrentContext()->Global(),             \
-        cb, 2, cbArgs).ToLocalChecked()->BooleanValue();                              \
+        cb, 2, cbArgs).ToLocalChecked()->ToBoolean(Nan::GetCurrentContext()).ToLocalChecked()->Value();                              \
     }                                                                                 \
   }
 
