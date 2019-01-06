@@ -14,10 +14,10 @@ public:
 	cv::Mat labels;
 	cv::Mat labelContourMask;
 	int regionSize = 10;
-	float ratio = 0.075;
+	double ratio = 0.075;
 	int numCalculatedSuperpixels = 0;
 
-  static NAN_MODULE_INIT(Init); 
+  static NAN_MODULE_INIT(Init);
   static NAN_METHOD(New);
 	static NAN_METHOD(Iterate);
 

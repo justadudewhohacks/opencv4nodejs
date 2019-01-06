@@ -30,7 +30,7 @@ NAN_METHOD(BFMatcher::New) {
 
     // optional args
     bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-    FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+    FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
 
 	FF_GET_NUMBER_IFDEF(optArgs, self->normType, "normType", cv::NORM_L2);
 		FF_GET_BOOL_IFDEF(optArgs, self->crossCheck, "crossCheck", false);
