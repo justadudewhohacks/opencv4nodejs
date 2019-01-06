@@ -3,6 +3,10 @@
 #include "MatCalib3d.h"
 #include "MatBindings.h"
 
+#ifdef HAVE_XIMGPROC
+#include "MatXimgproc.h"
+#endif // HAVE_XIMGPROC
+
 Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
 
 NAN_MODULE_INIT(Mat::Init) {
@@ -112,6 +116,9 @@ NAN_MODULE_INIT(Mat::Init) {
 
   MatImgproc::Init(ctor);
   MatCalib3d::Init(ctor);
+  #ifdef HAVE_XIMGPROC
+  MatXimgproc::Init(ctor);
+  #endif // HAVE_XIMGPROC
 
   target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
 };

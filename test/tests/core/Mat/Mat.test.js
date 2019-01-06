@@ -18,6 +18,7 @@ const constructorTestsFromJsArray = require('./constructorTestsFromJsArray');
 const constructorTestsFromFillVector = require('./constructorTestsFromFillVector');
 const operatorTests = require('./operatorTests');
 const imgprocTests = require('./imgprocTests');
+const ximgprocTests = require('./ximgprocTests');
 const calib3dTests = require('./calib3dTests');
 const { doubleMin, doubleMax } = require('./typeRanges');
 
@@ -48,6 +49,7 @@ describe('Mat', () => {
   accessorTests();
 
   describe('imgproc methods', () => imgprocTests(getTestImg));
+  describe('ximgproc methods', () => ximgprocTests());
   describe('calib3d methods', () => calib3dTests());
 
   describe('constructor from channels', () => {
