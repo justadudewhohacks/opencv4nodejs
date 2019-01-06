@@ -42,11 +42,11 @@ namespace HOGDescriptorBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1) && !FF_IS_INSTANCE(Size::constructor, info[1]->ToObject());
+      return FF_ARG_IS_OBJECT(1) && !FF_IS_INSTANCE(Size::constructor, info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject();
+      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Size::Converter::optProp(&winStride, "winStride", opts) ||
         Size::Converter::optProp(&padding, "padding", opts) ||
@@ -99,7 +99,7 @@ namespace HOGDescriptorBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[1]->ToObject();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Size::Converter::optProp(&paddingTL, "paddingTL", opts) ||
         Size::Converter::optProp(&paddingBR, "paddingBR", opts)
@@ -155,7 +155,7 @@ namespace HOGDescriptorBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[1]->ToObject();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
         Size::Converter::optProp(&winStride, "winStride", opts) ||
@@ -213,7 +213,7 @@ namespace HOGDescriptorBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[2]->ToObject();
+      v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
         Size::Converter::optProp(&winStride, "winStride", opts) ||
@@ -275,7 +275,7 @@ namespace HOGDescriptorBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[1]->ToObject();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
         Size::Converter::optProp(&winStride, "winStride", opts) ||
@@ -329,7 +329,7 @@ namespace HOGDescriptorBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[2]->ToObject();
+      v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
         IntConverter::optProp(&groupThreshold, "groupThreshold", opts)

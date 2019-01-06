@@ -79,7 +79,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[getOptArgIndex(info)]->ToObject();
+      FF_OBJ opts = info[getOptArgIndex(info)]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&fx, "fx", opts) ||
         DoubleConverter::optProp(&fy, "fy", opts) ||
@@ -318,11 +318,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1) && !Size::Converter::hasInstance(info[1]->ToObject());
+      return FF_ARG_IS_OBJECT(1) && !Size::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject();
+      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Size::Converter::optProp(&size, "size", opts) ||
         IntConverter::optProp(&flags, "flags", opts) ||
@@ -393,12 +393,12 @@ namespace MatImgprocBindings {
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
       int optArgN = (withOp ? 2 : 1);
-      return FF_ARG_IS_OBJECT(optArgN) && !Point2::Converter::hasInstance(info[optArgN]->ToObject());
+      return FF_ARG_IS_OBJECT(optArgN) && !Point2::Converter::hasInstance(info[optArgN]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       int optArgN = (withOp ? 2 : 1);
-      FF_OBJ opts = info[optArgN]->ToObject();
+      FF_OBJ opts = info[optArgN]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Point2::Converter::optProp(&anchor, "anchor", opts) ||
         IntConverter::optProp(&iterations, "iterations", opts) ||
@@ -535,11 +535,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1) && !Point2::Converter::hasInstance(info[1]->ToObject());
+      return FF_ARG_IS_OBJECT(1) && !Point2::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject();
+      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Point2::Converter::optProp(&anchor, "anchor", opts) ||
         IntConverter::optProp(&borderType, "borderType", opts)
@@ -590,7 +590,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[2]->ToObject();
+      FF_OBJ opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&sigmaY, "sigmaY", opts) ||
         IntConverter::optProp(&borderType, "borderType", opts)
@@ -657,7 +657,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[0]->ToObject();
+      v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         IntConverter::optProp(&connectivity, "connectivity", opts) ||
         IntConverter::optProp(&ltype, "ltype", opts)
@@ -862,7 +862,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[getDrawParamsIndex()]->ToObject();
+      v8::Local<v8::Object> opts = info[getDrawParamsIndex()]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Vec3::Converter::optProp(&color, "color", opts) ||
         (hasThickness && IntConverter::optProp(&thickness, "thickness", opts)) ||
@@ -926,7 +926,7 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         DrawWorker::unwrapOptionalArgsFromOpts(info) ||
-        DoubleConverter::optProp(&tipLength, "tipLength", info[getDrawParamsIndex()]->ToObject())
+        DoubleConverter::optProp(&tipLength, "tipLength", info[getDrawParamsIndex()]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())
       );
     }
   
@@ -1093,7 +1093,7 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         DrawWorker::unwrapOptionalArgsFromOpts(info) ||
-        Point2::Converter::optProp(&offset, "offset", info[getDrawParamsIndex()]->ToObject())
+        Point2::Converter::optProp(&offset, "offset", info[getDrawParamsIndex()]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())
       );
     }
   
@@ -1158,7 +1158,7 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         DrawWorker::unwrapOptionalArgsFromOpts(info) ||
-        BoolConverter::optProp(&bottomLeftOrigin, "bottomLeftOrigin", info[getDrawParamsIndex()]->ToObject())
+        BoolConverter::optProp(&bottomLeftOrigin, "bottomLeftOrigin", info[getDrawParamsIndex()]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())
       );
     }
   
@@ -1245,7 +1245,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[2]->ToObject();
+      FF_OBJ opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         IntConverter::optProp(&apertureSize, "apertureSize", opts) ||
         BoolConverter::optProp(&L2gradient, "L2gradient", opts)
@@ -1300,7 +1300,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[3]->ToObject();
+      FF_OBJ opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         (hasKsize && IntConverter::optProp(&ksize, "ksize", opts)) ||
         DoubleConverter::optProp(&scale, "scale", opts) ||
@@ -1373,7 +1373,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject();
+      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         IntConverter::optProp(&ksize, "ksize", opts) ||
         DoubleConverter::optProp(&scale, "scale", opts) ||
@@ -1428,7 +1428,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[0]->ToObject();
+      FF_OBJ opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Size::Converter::optProp(&size, "size", opts) ||
         IntConverter::optProp(&borderType, "borderType", opts)
@@ -1516,7 +1516,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[3]->ToObject();
+      FF_OBJ opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&srn, "srn", opts) ||
         DoubleConverter::optProp(&stn, "stn", opts) ||
@@ -1557,7 +1557,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[3]->ToObject();
+      FF_OBJ opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&minLineLength, "minLineLength", opts) ||
         DoubleConverter::optProp(&maxLineGap, "maxLineGap", opts)
@@ -1614,7 +1614,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[3]->ToObject();
+      FF_OBJ opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&param1, "param1", opts) ||
         DoubleConverter::optProp(&param2, "param2", opts) ||
@@ -1740,7 +1740,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[2]->ToObject();
+      v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Mat::Converter::optProp(&mask, "mask", opts) ||
         (self.channels() == 1 && DoubleConverter::optProp(&loDiff1, "loDiff", opts)) ||
@@ -1834,7 +1834,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[2]->ToObject();
+      v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Point2::Converter::optProp(&anchor, "anchor", opts) ||
         BoolConverter::optProp(&normalize, "normalize", opts) ||
@@ -1898,7 +1898,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[2]->ToObject();
+      v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Point2::Converter::optProp(&anchor, "anchor", opts) ||
         DoubleConverter::optProp(&delta, "delta", opts) ||
@@ -1953,7 +1953,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[3]->ToObject();
+      v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Point2::Converter::optProp(&anchor, "anchor", opts) ||
         DoubleConverter::optProp(&delta, "delta", opts) ||
@@ -2067,7 +2067,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[1]->ToObject();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         IntConverter::optProp(&ksize, "ksize", opts) ||
         IntConverter::optProp(&borderType, "borderType", opts)
@@ -2136,7 +2136,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[0]->ToObject();
+      v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         IntConverter::optProp(&sdepth, "sdepth", opts) ||
         IntConverter::optProp(&sqdepth, "sqdepth", opts)

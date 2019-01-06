@@ -147,7 +147,7 @@ NAN_METHOD(Calib3d::FindHomography) {
 
   // optional args
   bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject() : FF_NEW_OBJ();
+  FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
 
   FF_GET_UINT_IFDEF(optArgs, uint method, "method", 0);
   FF_GET_NUMBER_IFDEF(optArgs, double ransacReprojThreshold, "ransacReprojThreshold", 3);

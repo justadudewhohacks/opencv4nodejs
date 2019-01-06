@@ -61,7 +61,7 @@ describe('calib3d', () => {
       } catch (err) {
         errMsg = err.toString();
       }
-      assert.include(errMsg, 'has no property: y');
+      assert.include(errMsg, 'expected object to have property: y');
     });
 
     it('should calculate a valid homography', () => {

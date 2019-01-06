@@ -27,7 +27,7 @@ NAN_METHOD(KAZEDetector::New) {
 
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
 
 	FF_GET_BOOL_IFDEF(optArgs, bool extended, "extended", false);
 	FF_GET_BOOL_IFDEF(optArgs, bool upright, "upright", false);

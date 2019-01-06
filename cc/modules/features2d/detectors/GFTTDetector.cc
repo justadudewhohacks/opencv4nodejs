@@ -27,7 +27,7 @@ NAN_METHOD(GFTTDetector::New) {
 
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
 
 	FF_GET_INT_IFDEF(optArgs, int maxCorners, "maxCorners", 1000);
 	FF_GET_NUMBER_IFDEF(optArgs, double qualityLevel, "qualityLevel", 0.01);

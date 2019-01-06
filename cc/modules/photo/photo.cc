@@ -14,7 +14,7 @@ NAN_METHOD(Photo::FastNlMeansDenoisingColored) {
 
   // optional args
   bool hasOptArgsObj = FF_HAS_ARG(1) && info[1]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject() : FF_NEW_OBJ();
+  FF_OBJ optArgs = hasOptArgsObj ? info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
 
   FF_GET_NUMBER_IFDEF(optArgs, double h, "h", 3.0);
   FF_GET_NUMBER_IFDEF(optArgs, double hColor, "hColor", 3.0);

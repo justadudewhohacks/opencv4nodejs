@@ -6,9 +6,9 @@
 
 #define FF_MAT_AT(mat, val, get)                                                         \
   if (mat.dims > 2)                                                                      \
-    val = get(mat, info[0]->Int32Value(), info[1]->Int32Value(), info[2]->Int32Value()); \
+    val = get(mat, info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[2]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value()); \
   else                                                                                   \
-    val = get(mat, info[0]->Int32Value(), info[1]->Int32Value());
+    val = get(mat, info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value());
 
 #define FF_MAT_AT_ARRAY(mat, val, get)  \
   {                                     \
@@ -19,9 +19,9 @@
 
 #define FF_MAT_SET(mat, val, put)                                                        \
   if (mat.dims > 2)                                                                      \
-    put(mat, val, info[0]->Int32Value(), info[1]->Int32Value(), info[2]->Int32Value());  \
+    put(mat, val, info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[2]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value());  \
   else                                                                                   \
-    put(mat, val, info[0]->Int32Value(), info[1]->Int32Value());
+    put(mat, val, info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value());
 
 #define FF_MAT_FILL(mat, vec, put)				\
 	for (int r = 0; r < mat.rows; r++) {		\
@@ -161,20 +161,20 @@
 namespace FF {
 	template<typename type>
 	static inline void matPutVal(cv::Mat mat, v8::Local<v8::Value> value, int r, int c) {
-		mat.at<type>(r, c) = (type)value->NumberValue();
+		mat.at<type>(r, c) = (type)value->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	}
 
 	template<typename type>
 	static inline void matPutVal(cv::Mat mat, v8::Local<v8::Value> value, int r, int c, int z) {
-		mat.at<type>(r, c, z) = (type)value->NumberValue();
+		mat.at<type>(r, c, z) = (type)value->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	}
 
 	template<typename type>
 	static inline void matPutVec2(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 2> >(r, c) = cv::Vec<type, 2>(
-			(type)vec->Get(0)->NumberValue(),
-			(type)vec->Get(1)->NumberValue()
+			(type)vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			(type)vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value()
 		);
 	}
 
@@ -182,8 +182,8 @@ namespace FF {
 	static inline void matPutVec2(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c, int z) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 2> >(r, c, z) = cv::Vec<type, 2>(
-			(type)vec->Get(0)->NumberValue(),
-			(type)vec->Get(1)->NumberValue()
+			(type)vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			(type)vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value()
 		);
 	}
 
@@ -191,9 +191,9 @@ namespace FF {
 	static inline void matPutVec3(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 3> >(r, c) = cv::Vec<type, 3>(
-			(type)vec->Get(0)->NumberValue(),
-			(type)vec->Get(1)->NumberValue(),
-			(type)vec->Get(2)->NumberValue()
+			(type)vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			(type)vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			(type)vec->Get(2)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value()
 		);
 	}
 
@@ -201,9 +201,9 @@ namespace FF {
 	static inline void matPutVec3(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c, int z) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 3> >(r, c, z) = cv::Vec<type, 3>(
-			(type)vec->Get(0)->NumberValue(),
-			(type)vec->Get(1)->NumberValue(),
-			(type)vec->Get(2)->NumberValue()
+			(type)vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			(type)vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			(type)vec->Get(2)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value()
 		);
 	}
 
@@ -211,10 +211,10 @@ namespace FF {
 	static inline void matPutVec4(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 4> >(r, c) = cv::Vec<type, 4>(
-			(type)vec->Get(0)->NumberValue(),
-			(type)vec->Get(1)->NumberValue(),
-			(type)vec->Get(2)->NumberValue(),
-			(type)vec->Get(3)->NumberValue()
+			(type)vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			(type)vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			(type)vec->Get(2)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			(type)vec->Get(3)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value()
 		);
 	}
 
@@ -222,10 +222,10 @@ namespace FF {
 	static inline void matPutVec4(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c, int z) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 4> >(r, c, z) = cv::Vec<type, 4>(
-			(type)vec->Get(0)->NumberValue(),
-			(type)vec->Get(1)->NumberValue(),
-			(type)vec->Get(2)->NumberValue(),
-			(type)vec->Get(3)->NumberValue()
+			(type)vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			(type)vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			(type)vec->Get(2)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			(type)vec->Get(3)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value()
 		);
 	}
 

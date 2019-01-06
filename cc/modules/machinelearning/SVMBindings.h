@@ -119,7 +119,7 @@ namespace SVMBindings {
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject();
+      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         UintConverter::optProp(&kFold, "kFold", opts) ||
         ParamGrid::Converter::optProp(&cGrid, "cGrid", opts) ||

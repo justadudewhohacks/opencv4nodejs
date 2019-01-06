@@ -229,7 +229,7 @@ namespace MatBindings {
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[1]->ToObject();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&alpha, "alpha", opts) ||
         DoubleConverter::optProp(&beta, "beta", opts)
@@ -470,7 +470,7 @@ namespace MatBindings {
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[0]->ToObject();
+      FF_OBJ opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         IntConverter::optProp(&flags, "flags", opts) ||
         IntConverter::optProp(&nonzeroRows, "nonzeroRows", opts)
@@ -519,7 +519,7 @@ namespace MatBindings {
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject();
+      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         BoolConverter::optProp(&dftRows, "dftRows", opts) ||
         BoolConverter::optProp(&conjB, "conjB", opts)
@@ -666,7 +666,7 @@ namespace MatBindings {
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[0]->ToObject();
+      v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&alpha, "alpha", opts) ||
         DoubleConverter::optProp(&beta, "beta", opts)
@@ -731,7 +731,7 @@ namespace MatBindings {
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[3]->ToObject();
+      v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Mat::Converter::optProp(&mask, "mask", opts) ||
         IntConverter::optProp(&blockSize, "blockSize", opts) ||
@@ -879,7 +879,7 @@ namespace MatBindings {
 	  }
 
 	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-		  v8::Local<v8::Object> opts = info[4]->ToObject();
+		  v8::Local<v8::Object> opts = info[4]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 		  return (
 			  IntConverter::optProp(&borderType, "borderType", opts) ||
 			  (

@@ -24,7 +24,7 @@ NAN_METHOD(BackgroundSubtractorMOG2::New) {
 
 	// optional args
 	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject() : FF_NEW_OBJ();
+	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
 
 	FF_GET_UINT_IFDEF(optArgs, uint history, "history", 500);
 	FF_GET_NUMBER_IFDEF(optArgs, double varThreshold, "varThreshold", 16);

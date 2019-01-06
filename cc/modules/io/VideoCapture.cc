@@ -27,7 +27,7 @@ NAN_METHOD(VideoCapture::New) {
     self->cap.open(self->path);
   }
   else if (info[0]->IsUint32()) {
-    self->cap.open(info[0]->Uint32Value());
+    self->cap.open(info[0]->ToUint32(Nan::GetCurrentContext()).ToLocalChecked()->Value());
   }
   else {
     FF_THROW("expected arg 0 to be path or device port");

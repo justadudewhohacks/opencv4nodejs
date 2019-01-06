@@ -38,9 +38,9 @@
   },
   "gypfile": true,
   "dependencies": {
-    "macro-inferno": "^0.2.2",
-    "nan": "^2.11.0",
-    "native-node-utils": "0.1.4",
+    "macro-inferno": "^0.2.3",
+    "nan": "^2.12.1",
+    "native-node-utils": "^0.1.5",
     "opencv-build": "0.0.15"
   },
   "optionalDependencies": {

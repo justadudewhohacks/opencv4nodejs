@@ -34,10 +34,10 @@ NAN_METHOD(Rect::New) {
     if (info.Length() < 4) {
       return Nan::ThrowError("Rect::New - expected arguments x, y, width, height");
     }
-    double x = info[0]->NumberValue();
-    double y = info[1]->NumberValue();
-    double width = info[2]->NumberValue();
-    double height = info[3]->NumberValue();
+    double x = info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+    double y = info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+    double width = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+    double height = info[3]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     self->rect = cv::Rect2d(x, y, width, height);
   }
   self->Wrap(info.Holder());

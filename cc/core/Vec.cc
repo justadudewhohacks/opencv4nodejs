@@ -58,16 +58,16 @@ NAN_METHOD(Vec::New) {
 		v8::Local<v8::Function> ct = Nan::New(Vec4::constructor)->GetFunction();
 		jsVec = Nan::NewInstance(ct).ToLocalChecked();
 		Nan::ObjectWrap::Unwrap<Vec4>(jsVec)->vec = cv::Vec4d(
-			info[0]->NumberValue(),
-			info[1]->NumberValue(),
-			info[2]->NumberValue(),
-			info[3]->NumberValue()
+			info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
+			info[3]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value()
 		);
 	} else {
-		double x = info[0]->NumberValue();
-		double y = info[1]->NumberValue();
+		double x = info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+		double y = info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 		if (info.Length() == 3) {
-			double z = info[2]->NumberValue();
+			double z = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 			jsVec = Nan::NewInstance(Nan::New(Vec3::constructor)->GetFunction()).ToLocalChecked();
 			Nan::ObjectWrap::Unwrap<Vec3>(jsVec)->vec = cv::Vec3d(x, y, z);
 		}

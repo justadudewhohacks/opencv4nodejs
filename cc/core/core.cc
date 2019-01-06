@@ -11,11 +11,11 @@
       FF_VAL cbArgs[2];                                                               \
       cbArgs[0] = FF_NEW_INSTANCE(ff_ctor);                                           \
       cbArgs[1] = FF_NEW_INSTANCE(ff_ctor);                                           \
-      ff_unwrapper(cbArgs[0]->ToObject()) = a;                                        \
-      ff_unwrapper(cbArgs[1]->ToObject()) = b;                                        \
+      ff_unwrapper(cbArgs[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()) = a;                                        \
+      ff_unwrapper(cbArgs[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()) = b;                                        \
       Nan::AsyncResource resource("opencv4nodejs:Predicate::Constructor");            \
       return resource.runInAsyncScope(Nan::GetCurrentContext()->Global(),             \
-        cb, 2, cbArgs).ToLocalChecked()->BooleanValue();                              \
+        cb, 2, cbArgs).ToLocalChecked()->ToBoolean(Nan::GetCurrentContext()).ToLocalChecked()->Value();                              \
     }                                                                                 \
   }
 
@@ -71,12 +71,20 @@ NAN_METHOD(Core::Partition) {
   std::vector<int> labels;
   if (FF_IS_INSTANCE(Point2::constructor, data0)) {
     std::vector<cv::Point2d> pts;
-    Point::unpackJSPoint2Array(pts, jsData);
+	Nan::TryCatch tryCatch;
+	Point::unpackJSPoint2Array(pts, jsData);
+	if (tryCatch.HasCaught()) {
+		return info.GetReturnValue().Set(tryCatch.ReThrow());
+	}
     numLabels = cv::partition(pts, labels, Point2Predicate(cb));
   }
   else if (FF_IS_INSTANCE(Point3::constructor, data0)) {
     std::vector<cv::Point3d> pts;
-    Point::unpackJSPoint3Array(pts, jsData);
+	Nan::TryCatch tryCatch;
+	Point::unpackJSPoint3Array(pts, jsData);
+	if (tryCatch.HasCaught()) {
+		return info.GetReturnValue().Set(tryCatch.ReThrow());
+	}
     numLabels = cv::partition(pts, labels, Point3Predicate(cb));
   }
   else if (FF_IS_INSTANCE(Vec2::constructor, data0)) {
@@ -125,12 +133,20 @@ NAN_METHOD(Core::Kmeans) {
   
   if (FF_IS_INSTANCE(Point2::constructor, data0)) {
     std::vector<cv::Point2f> data;
-    Point::unpackJSPoint2Array(data, jsData);
+	Nan::TryCatch tryCatch;
+	Point::unpackJSPoint2Array(data, jsData);
+	if (tryCatch.HasCaught()) {
+		return info.GetReturnValue().Set(tryCatch.ReThrow());
+	}
     cv::kmeans(data, k, labels, termCriteria, attempts, flags, centersMat);
   }
   else if (FF_IS_INSTANCE(Point3::constructor, data0)) {
     std::vector<cv::Point3f> data;
-    Point::unpackJSPoint3Array(data, jsData);
+	Nan::TryCatch tryCatch;
+	Point::unpackJSPoint3Array(data, jsData);
+	if (tryCatch.HasCaught()) {
+		return info.GetReturnValue().Set(tryCatch.ReThrow());
+	}
     cv::kmeans(data, k, labels, termCriteria, attempts, flags, centersMat);
   } 
   else {
