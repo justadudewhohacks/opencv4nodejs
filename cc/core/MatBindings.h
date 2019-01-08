@@ -129,8 +129,16 @@ namespace MatBindings {
     size_t size;
     char *data;
 
+    cv::Size sizeTotal;
+    cv::Point ofs;
+
     std::string executeCatchCvExceptionWorker() {
       size = mat.rows * mat.cols * mat.elemSize();
+      mat.locateROI(sizeTotal, ofs);
+      
+      if(sizeTotal.width != mat.cols || sizeTotal.height != mat.rows){
+        return "Cannot call GetData when Region of Interest is defined (i.e. after getRegion) use matrix.copyTo to copy ROI to a new matrix";
+      }
       data = static_cast<char *>(malloc(size));
       memcpy(data, mat.data, size);
       return "";

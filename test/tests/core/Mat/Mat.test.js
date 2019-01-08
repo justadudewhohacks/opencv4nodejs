@@ -325,7 +325,14 @@ describe('Mat', () => {
         expect(buf).instanceOf(Buffer).lengthOf(18);
       });
     });
-
+    
+    describe('getData after getRegion should throw an error', () => {
+      it('should return buffer of with data of single channeled Mat', () => {
+        const region = matC3.getRegion(new cv.Rect(0, 0, 2, 2));
+        assertError(() => region.getData(), "Mat::GetData - Cannot call GetData when Region of Interest is defined (i.e. after getRegion) use matrix.copyTo to copy ROI to a new matrix")
+      });
+    });
+    
     describe('async', () => {
       it('should return buffer with data of single channeled Mat', (done) => {
         matC1.getDataAsync((err, buf) => {
