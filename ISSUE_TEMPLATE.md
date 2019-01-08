@@ -52,7 +52,7 @@ IMPORTANT! Do NOT upload any npm-debug.log files here, as they do not capture th
 
 <!--
 
-If you not are using the auto build feature (you did explicitly set the OPENCV4NODEJS_DISABLE_AUTOBUILD flag) please fill in the following information.
+If you are not using the auto build feature (you did explicitly set the OPENCV4NODEJS_DISABLE_AUTOBUILD flag) please fill in the following information.
 
 If you are using the auto build feature, delete this section.
 
