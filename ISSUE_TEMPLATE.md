@@ -6,7 +6,7 @@ IMPORTANT! Please read the issue template carefully before creating a new issue.
 
 <!--
 
-If you are issue is not related to installing opencv4nodejs, go ahead deleting the following sections and describe your issue.
+If your issue is not related to installing opencv4nodejs, go ahead deleting the following sections and describe your issue.
 
 -->
 
