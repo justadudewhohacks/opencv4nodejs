@@ -113,6 +113,15 @@ If you do not want to set up OpenCV on your own you can simply let this package 
 $ npm install --save opencv4nodejs
 ```
 
+### Auto build flags
+
+You can customize the autobuild flags using *OPENCV4NODEJS_AUTOBUILD_FLAGS="<flags>"*.
+Flags must be space-separated.
+
+This is an advanced customization and you should have knowledge regarding the OpenCV compilation flags.
+
+For example `export OPENCV4NODEJS_AUTOBUILD_FLAGS="-DBUILD_LIST=dnn"` will build only modules required for `dnn` and reduced the size of the opencv package. Flags added by default are listed [here](https://github.com/justadudewhohacks/npm-opencv-build/blob/master/install/setup-opencv.js#L63)
+
 ## Manual build
 Setting up OpenCV on your own will require you to set an environment variable: *OPENCV4NODEJS_DISABLE_AUTOBUILD=1*.
 
