@@ -18,21 +18,48 @@ init:
 # what combinations to test
 environment:
   matrix:
+    # node 11
+    - nodejs_version: 11
+      PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7"
+      opencv_version: 3.4.3
+      # use self build
+      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+    # node 10
+    - nodejs_version: 10
+      PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7"
+      opencv_version: 3.4.3
+      # use self build
+      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
     # node 9
     - nodejs_version: 9
       PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7"
-      opencv_version: 3.3.0
+      opencv_version: 3.4.3
+      # use self build
+      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+    # node 8
+    - nodejs_version: 8
+      PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7"
+      opencv_version: 3.4.3
+      # use self build
+      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+    # node 7
+    - nodejs_version: 7
+      PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7"
+      opencv_version: 3.4.3
       # use self build
       OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
     # node 6
     - nodejs_version: 6
       PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7"
-      opencv_version: 3.3.0
+      opencv_version: 3.4.3
       # use self build
       OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
-
 
 install:
   - cmd: choco install OpenCV -y -version %OPENCV_VERSION%
@@ -56,3 +83,9 @@ test_script:
   - npm install
   - npm run test-appveyor
   - npm run test-externalMemTracking
+
+on_success:
+  - cmd: cd c:\projects\opencv4nodejs
+  - IF defined APPVEYOR_REPO_TAG_NAME (
+    npm run prebuild -- --tag-prefix "" -u %GITHUB_TOKEN%
+    )

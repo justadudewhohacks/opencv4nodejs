@@ -29,11 +29,12 @@
   "main": "./lib/opencv4nodejs.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "install": "node-gyp rebuild",
+    "install": "prebuild-install --tag-prefix \"\" || node-gyp rebuild",
     "configure": "node-gyp configure",
     "build": "node-gyp configure build",
     "rebuild": "node-gyp rebuild",
     "clean": "node-gyp clean",
+    "prebuild": "prebuild",
     "build-debug": "node-gyp rebuild --debug"
   },
   "gypfile": true,
@@ -41,9 +42,13 @@
     "macro-inferno": "^0.2.3",
     "nan": "^2.12.1",
     "native-node-utils": "^0.1.5",
+    "prebuild-install": "^5.2.4",
     "opencv-build": "^0.0.17"
   },
   "optionalDependencies": {
     "@types/node": ">6"
+  },
+  "devDependencies": {
+    "prebuild": "^8.2.0"
   }
 }

@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "prebuild": "bash ./prebuild.sh"
+  }
+}

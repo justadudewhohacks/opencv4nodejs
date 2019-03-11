@@ -1,17 +1,22 @@
 language: node_js
 
-node_js:
-  - '6'
-  - '8'
-  - '10'
-  - 'node'
-
 sudo: required
 
 services:
   - docker
 
+node_js:
+  - '6'
+  - '7'
+  - '8'
+  - '9'
+  - '10'
+  - 'node'
+
 env:
+  global:
+    - OPENCV4NODEJS_DISABLE_AUTOBUILD=1
+  matrix:
   - BUILD_TASK=test
     TAG=3.0.0-contrib
   - BUILD_TASK=test
@@ -20,8 +25,6 @@ env:
     TAG=3.2.0-contrib
   - BUILD_TASK=test
     TAG=3.3.0-contrib
-  - BUILD_TASK=cover
-    TAG=3.4.0-contrib
   - BUILD_TASK=test
     TAG=3.4.0-contrib-world
   - BUILD_TASK=test
@@ -32,17 +35,82 @@ env:
     TAG=3.4.3
   - BUILD_TASK=test
     TAG=3.4.3-contrib
+  - BUILD_TASK=prebuild
+    TAG=3.4.3-contrib
+  - BUILD_TASK=cover
+    TAG=3.4.3-contrib
+
+matrix:
+  include:
+    - os: osx
+      node_js: '6'
+      env:
+        - BUILD_TASK=test
+    - os: osx
+      node_js: '6'
+      env:
+        - BUILD_TASK=prebuild
+    - os: osx
+      node_js: '7'
+      env:
+        - BUILD_TASK=test
+    - os: osx
+      node_js: '7'
+      env:
+        - BUILD_TASK=prebuild
+    - os: osx
+      node_js: '8'
+      env:
+        - BUILD_TASK=test
+    - os: osx
+      node_js: '8'
+      env:
+        - BUILD_TASK=prebuild
+    - os: osx
+      node_js: '9'
+      env:
+        - BUILD_TASK=test
+    - os: osx
+      node_js: '9'
+      env:
+        - BUILD_TASK=prebuild
+    - os: osx
+      node_js: '10'
+      env:
+        - BUILD_TASK=test
+    - os: osx
+      node_js: '10'
+      env:
+        - BUILD_TASK=prebuild
+    - os: osx
+      node_js: 'node'
+      env:
+        - BUILD_TASK=test
+    - os: osx
+      node_js: 'node'
+      env:
+        - BUILD_TASK=prebuild
 
 before_install:
-  - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh
+  - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh;
 
-install: travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci:$TAG
+install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci:$TAG; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install opencv@3; brew link --force opencv@3; fi
 
 script:
-  - cd ./ci/$BUILD_TASK
-  - npm run $BUILD_TASK $TAG
+  - if [[ $BUILD_TASK != "prebuild" ]]; then
+    cd ./ci/$BUILD_TASK;
+    npm run $BUILD_TASK $TAG;
+    cd -;
+    fi
 
 after_success:
+  - if [[ $TRAVIS_TAG != "" && $BUILD_TASK == "prebuild" ]]; then
+    cd ./ci/$BUILD_TASK;
+    npm run $BUILD_TASK $TAG;
+    cd -;
+    fi
   - if [ $BUILD_TASK = 'cover' ]; then
     npm install;
     npm run codecov -- -t $CODECOV_TOKEN;
