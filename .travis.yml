@@ -104,13 +104,13 @@ script:
     npm run $BUILD_TASK $TAG;
     cd -;
     fi
-
-after_success:
-  - if [[ $TRAVIS_TAG != "" && $BUILD_TASK == "prebuild" ]]; then
+  - if [[ $BUILD_TASK == "prebuild" && $TRAVIS_TAG != "" ]]; then
     cd ./ci/$BUILD_TASK;
     npm run $BUILD_TASK $TAG;
     cd -;
     fi
+
+after_success:
   - if [ $BUILD_TASK = 'cover' ]; then
     npm install;
     npm run codecov -- -t $CODECOV_TOKEN;
