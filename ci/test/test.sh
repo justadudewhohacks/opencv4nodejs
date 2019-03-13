@@ -8,6 +8,6 @@ elif [[ "$TRAVIS_OS_NAME" == "osx" ]];
 then
     cd ../../test &&\
     npm install --unsafe-perm &&\
-    npm run test-appveyor &&\
+    npm test &&\
     npm run test-externalMemTracking
 fi
