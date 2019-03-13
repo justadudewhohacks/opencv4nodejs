@@ -46,6 +46,7 @@ environment:
       opencv_version: 3.4.3
       # use self build
       OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+      DISABLE_ASYNC_HOOKS_TEST: 1
     # node 7
     - nodejs_version: 7
       PYTHON: "C:\\Python27-x64"
