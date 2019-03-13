@@ -102,12 +102,10 @@ script:
   - if [[ $BUILD_TASK != "prebuild" ]]; then
     cd ./ci/$BUILD_TASK;
     npm run $BUILD_TASK $TAG;
-    cd -;
     fi
   - if [[ $BUILD_TASK == "prebuild" && $TRAVIS_TAG != "" ]]; then
     cd ./ci/$BUILD_TASK;
     npm run $BUILD_TASK $TAG;
-    cd -;
     fi
 
 after_success:
