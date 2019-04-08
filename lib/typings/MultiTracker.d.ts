@@ -8,5 +8,5 @@ export class MultiTracker {
   addMEDIANFLOW(frame: Mat, boundingBox: Rect): boolean;
   addMil(frame: Mat, boundingBox: Rect): boolean;
   addTLD(frame: Mat, boundingBox: Rect): boolean;
-  update(frame: Mat): Rect;
+  update(frame: Mat): Rect[];
 }
