@@ -14,7 +14,6 @@ NAN_MODULE_INIT(TrackerCSRTParams::Init) {
 	ctor->SetClassName(FF_NEW_STRING("TrackerCSRTParams"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("sigma"), sigmaGet, sigmaSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("admm_iterations"), admm_iterationsGet, admm_iterationsSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("background_ratio"), background_ratioGet, background_ratioSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("cheb_attenuation"), cheb_attenuationGet, cheb_attenuationSet);
@@ -28,7 +27,7 @@ NAN_MODULE_INIT(TrackerCSRTParams::Init) {
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("num_hog_channels_used"), num_hog_channels_usedGet, num_hog_channels_usedSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("number_of_scales"), number_of_scalesGet, number_of_scalesSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("padding"), paddingGet, paddingSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("psr_threshold "), psr_threshold Get, psr_threshold Set);
+	//Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("psr_threshold"), psr_thresholdGet, psr_thresholdSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("scale_lr"), scale_lrGet, scale_lrSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("scale_model_max_area"), scale_model_max_areaGet, scale_model_max_areaSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("scale_sigma_factor"), scale_sigma_factorGet, scale_sigma_factorSet);

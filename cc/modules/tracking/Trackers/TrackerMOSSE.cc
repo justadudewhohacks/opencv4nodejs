@@ -11,7 +11,6 @@ NAN_MODULE_INIT(TrackerMOSSE::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	Tracker::Init(ctor);
-	TrackerMOSSEParams::Init(target);
 
 	constructor.Reset(ctor);
 	ctor->SetClassName(FF_NEW_STRING("TrackerMOSSE"));
@@ -26,7 +25,7 @@ NAN_METHOD(TrackerMOSSE::New) {
 	FF_METHOD_CONTEXT("TrackerMOSSE::New");
 
 	TrackerMOSSE* self = new TrackerMOSSE();
-	self->tracker = cv::TrackerMOSSE::createTracker(params);
+	self->tracker = cv::TrackerMOSSE::create();
 	self->Wrap(info.Holder());
 	FF_RETURN(info.Holder());
 };

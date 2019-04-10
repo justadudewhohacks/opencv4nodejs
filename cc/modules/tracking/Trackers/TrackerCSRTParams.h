@@ -39,8 +39,8 @@ public:
 	static FF_SETTER_INT(TrackerCSRTParams, number_of_scales, params.number_of_scales);
 	static FF_GETTER(TrackerCSRTParams, paddingGet, params.padding);
 	static FF_SETTER_NUMBER(TrackerCSRTParams, padding, params.padding);
-	static FF_GETTER(TrackerCSRTParams, psr_threshold Get, params.psr_threshold );
-	static FF_SETTER_NUMBER(TrackerCSRTParams, psr_threshold , params.psr_threshold );
+	//static FF_GETTER(TrackerCSRTParams, psr_thresholdGet, params.psr_threshold);
+	//static FF_SETTER_NUMBER(TrackerCSRTParams, psr_threshold, params.psr_threshold);
 	static FF_GETTER(TrackerCSRTParams, scale_lrGet, params.scale_lr);
 	static FF_SETTER_NUMBER(TrackerCSRTParams, scale_lr, params.scale_lr);
 	static FF_GETTER(TrackerCSRTParams, scale_model_max_areaGet, params.scale_model_max_area);
@@ -64,10 +64,9 @@ public:
 	static FF_GETTER(TrackerCSRTParams, use_segmentationGet, params.use_segmentation);
 	static FF_SETTER_BOOL(TrackerCSRTParams, use_segmentation, params.use_segmentation);
 	static FF_GETTER(TrackerCSRTParams, weights_lrGet, params.weights_lr);
-	static FF_SETTER_NUMBER(TrackerCSRTParams, weights_lr, params.weights_lr);
-	static FF_GETTER(TrackerCSRTParams, window_functionGet, params.window_function);
+	static FF_SETTER_NUMBER(TrackerCSRTParams, weights_lr, params.weights_lr);	
+	static FF_GETTER_SIMPLE(TrackerCSRTParams, window_functionGet, params.window_function, StringConverter);
 	static FF_SETTER_STRING(TrackerCSRTParams, window_function, params.window_function);
-
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 };

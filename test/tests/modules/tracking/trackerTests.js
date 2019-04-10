@@ -13,7 +13,7 @@ const expectImplementsMethods = (tracker) => {
   expect(tracker).to.have.property('getModel').to.be.a('function');
 };
 
-const trackerName = getTestImg => (trackerName) => {
+const TrackerTestGenerator = getTestImg => (trackerName) => {
   const newTracker = () => new cv[trackerName]();
   const newTrackerParams = () => new cv[`${trackerName}Params`]();
 
@@ -151,7 +151,7 @@ module.exports = () => {
           tracker[addMethod](testImg, new cv.Rect(0, 0, 10, 10));
         });
         const rects = tracker.update(testImg);
-        expect(rects).to.be.an('array').lengthOf(5);
+        expect(rects).to.be.an('array').lengthOf(7);
         rects.forEach((rect) => {
           expect(rect).to.be.instanceOf(cv.Rect);
         });
