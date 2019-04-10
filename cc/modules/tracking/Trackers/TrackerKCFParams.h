@@ -23,6 +23,8 @@ public:
 	static FF_SETTER_NUMBER(TrackerKCFParams, output_sigma_factor, params.output_sigma_factor);
 	static FF_GETTER(TrackerKCFParams, pca_learning_rateGet, params.pca_learning_rate);
 	static FF_SETTER_NUMBER(TrackerKCFParams, pca_learning_rate, params.pca_learning_rate);
+	static FF_GETTER(TrackerKCFParams, detect_threshGet, params.detect_thresh);
+	static FF_SETTER_NUMBER(TrackerKCFParams, detect_thresh, params.detect_thresh);
 	static FF_GETTER(TrackerKCFParams, resizeGet, params.resize);
 	static FF_SETTER_BOOL(TrackerKCFParams, resize, params.resize);
 	static FF_GETTER(TrackerKCFParams, split_coeffGet, params.split_coeff);
