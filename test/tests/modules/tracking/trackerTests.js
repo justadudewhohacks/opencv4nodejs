@@ -13,7 +13,7 @@ const expectImplementsMethods = (tracker) => {
   expect(tracker).to.have.property('getModel').to.be.a('function');
 };
 
-const TrackerTestGenerator = getTestImg => (trackerName) => {
+const trackerName = getTestImg => (trackerName) => {
   const newTracker = () => new cv[trackerName]();
   const newTrackerParams = () => new cv[`${trackerName}Params`]();
 
@@ -87,7 +87,12 @@ module.exports = () => {
   if (cv.version.minor > 1) {
     // trackerNames.push('TrackerGOTURN'); TODO: sample goturn.prototxt
   }
-
+  if (cv.version.minor > 3) {
+    trackerNames.push('TrackerCSRT');
+  }
+  if (cv.version.minor > 3) {
+    trackerNames.push('TrackerMOSSE');
+  }
   trackerNames.forEach((trackerName) => {
     generateTrackerTests(trackerName);
   });
@@ -123,6 +128,18 @@ module.exports = () => {
         const ret = tracker.addKCF(testImg, new cv.Rect(0, 0, 10, 10));
         expect(ret).to.true;
       });
+      
+      it('addCSRT', () => {
+        const tracker = new cv.MultiTracker();
+        const ret = tracker.addCSRT(testImg, new cv.Rect(0, 0, 10, 10));
+        expect(ret).to.true;
+      });
+      
+      it('addMOSSE', () => {
+        const tracker = new cv.MultiTracker();
+        const ret = tracker.addMOSSE(testImg, new cv.Rect(0, 0, 10, 10));
+        expect(ret).to.true;
+      });
     });
 
     describe('update', () => {
@@ -130,7 +147,7 @@ module.exports = () => {
 
       it('returns bounding box', () => {
         const tracker = new cv.MultiTracker();
-        ['addMIL', 'addBOOSTING', 'addMEDIANFLOW', 'addTLD', 'addKCF'].forEach((addMethod) => {
+        ['addMIL', 'addBOOSTING', 'addMEDIANFLOW', 'addTLD', 'addKCF', 'addCSRT', 'addMOSSE'].forEach((addMethod) => {
           tracker[addMethod](testImg, new cv.Rect(0, 0, 10, 10));
         });
         const rects = tracker.update(testImg);

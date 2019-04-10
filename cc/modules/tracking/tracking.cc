@@ -15,6 +15,11 @@
 #include "./Trackers/TrackerGOTURN.h"
 #endif
 
+#if CV_MINOR_VERSION > 3
+#include "./Trackers/TrackerMOSSE.h"
+#include "./Trackers/TrackerCSRT.h"
+#endif
+
 NAN_MODULE_INIT(Tracking::Init) {
 	TrackerBoosting::Init(target);
 	TrackerMedianFlow::Init(target);
@@ -34,6 +39,12 @@ NAN_MODULE_INIT(Tracking::Init) {
 #if CV_MINOR_VERSION > 1
 	TrackerGOTURN::Init(target);
 #endif
+
+#if CV_MINOR_VERSION > 3
+	TrackerMOSSE::Init(target);
+	TrackerCSRT::Init(target);
+#endif
+
 };
 
 #endif
