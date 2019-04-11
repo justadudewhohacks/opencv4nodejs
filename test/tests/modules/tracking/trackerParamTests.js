@@ -32,6 +32,7 @@ module.exports = () => {
         compress_feature: false,
         max_patch_size: 64,
         compressed_size: 32,
+        detect_thresh: 0.5,
         desc_pca: cv.trackerKCFModes.GRAY,
         desc_npca: cv.trackerKCFModes.CN
 
