@@ -19,7 +19,6 @@ NAN_MODULE_INIT(TrackerKCFParams::Init) {
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("interp_factor"), interp_factorGet, interp_factorSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("output_sigma_factor"), output_sigma_factorGet, output_sigma_factorSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("pca_learning_rate"), pca_learning_rateGet, pca_learning_rateSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("detect_thresh"), detect_threshGet, detect_threshSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("resize"), resizeGet, resizeSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("split_coeff"), split_coeffGet, split_coeffSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("wrap_kernel"), wrap_kernelGet, wrap_kernelSet);
@@ -28,7 +27,9 @@ NAN_MODULE_INIT(TrackerKCFParams::Init) {
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("compressed_size"), compressed_sizeGet, compressed_sizeSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("desc_pca"), desc_pcaGet, desc_pcaSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("desc_npca"), desc_npcaGet, desc_npcaSet);
-
+#if CV_MINOR_VERSION > 2
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("detect_thresh"), detect_threshGet, detect_threshSet);
+#endif
 	target->Set(FF_NEW_STRING("TrackerKCFParams"), ctor->GetFunction());
 };
 
