@@ -12,5 +12,6 @@ export class TrackerKCFParams {
   readonly compressed_size: number;
   readonly desc_pca: number;
   readonly desc_npca: number;
+  readonly detect_thresh: number;
   constructor();
 }
