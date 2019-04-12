@@ -1,7 +1,7 @@
 #include "macros.h"
 #include <opencv2/tracking.hpp>
 
-#if CV_MINOR_VERSION > 3
+#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
 
 #ifndef __FF_TRACKERCSRTPARAMS_H__
 #define __FF_TRACKERCSRTPARAMS_H__
@@ -39,8 +39,12 @@ public:
 	static FF_SETTER_INT(TrackerCSRTParams, number_of_scales, params.number_of_scales);
 	static FF_GETTER(TrackerCSRTParams, paddingGet, params.padding);
 	static FF_SETTER_NUMBER(TrackerCSRTParams, padding, params.padding);
-	//static FF_GETTER(TrackerCSRTParams, psr_thresholdGet, params.psr_threshold);
-	//static FF_SETTER_NUMBER(TrackerCSRTParams, psr_threshold, params.psr_threshold);
+	
+#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 3)
+	static FF_GETTER(TrackerCSRTParams, psr_thresholdGet, params.psr_threshold);
+	static FF_SETTER_NUMBER(TrackerCSRTParams, psr_threshold, params.psr_threshold);
+#endif
+
 	static FF_GETTER(TrackerCSRTParams, scale_lrGet, params.scale_lr);
 	static FF_SETTER_NUMBER(TrackerCSRTParams, scale_lr, params.scale_lr);
 	static FF_GETTER(TrackerCSRTParams, scale_model_max_areaGet, params.scale_model_max_area);

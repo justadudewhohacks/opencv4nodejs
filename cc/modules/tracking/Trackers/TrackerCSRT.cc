@@ -3,7 +3,7 @@
 #include "TrackerCSRT.h"
 #include "TrackerCSRTParams.h"
 
-#if CV_MINOR_VERSION > 3
+#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
 
 Nan::Persistent<v8::FunctionTemplate> TrackerCSRT::constructor;
 

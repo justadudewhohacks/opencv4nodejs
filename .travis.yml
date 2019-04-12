@@ -32,6 +32,14 @@ env:
     TAG=3.4.3
   - BUILD_TASK=test
     TAG=3.4.3-contrib
+  - BUILD_TASK=test
+    TAG=3.4.4
+  - BUILD_TASK=test
+    TAG=3.4.4-contrib
+  - BUILD_TASK=test
+    TAG=3.4.5
+  - BUILD_TASK=test
+    TAG=3.4.5-contrib
 
 before_install:
   - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh

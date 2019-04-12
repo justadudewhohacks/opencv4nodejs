@@ -2,7 +2,7 @@
 
 #include "TrackerCSRTParams.h"
 
-#if CV_MINOR_VERSION > 3
+#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
 
 Nan::Persistent<v8::FunctionTemplate> TrackerCSRTParams::constructor;
 
@@ -27,7 +27,9 @@ NAN_MODULE_INIT(TrackerCSRTParams::Init) {
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("num_hog_channels_used"), num_hog_channels_usedGet, num_hog_channels_usedSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("number_of_scales"), number_of_scalesGet, number_of_scalesSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("padding"), paddingGet, paddingSet);
-	//Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("psr_threshold"), psr_thresholdGet, psr_thresholdSet);
+#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 3)
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("psr_threshold"), psr_thresholdGet, psr_thresholdSet);
+#endif
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("scale_lr"), scale_lrGet, scale_lrSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("scale_model_max_area"), scale_model_max_areaGet, scale_model_max_areaSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("scale_sigma_factor"), scale_sigma_factorGet, scale_sigma_factorSet);

@@ -87,7 +87,7 @@ module.exports = () => {
   if (cv.version.minor > 1) {
     // trackerNames.push('TrackerGOTURN'); TODO: sample goturn.prototxt
   }
-  if (cv.version.minor > 3) {
+  if (cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.patch > 0)) {
     trackerNames.push('TrackerCSRT');
   }
   if (cv.version.minor > 3) {
@@ -147,7 +147,22 @@ module.exports = () => {
 
       it('returns bounding box', () => {
         const tracker = new cv.MultiTracker();
-        ['addMIL', 'addBOOSTING', 'addMEDIANFLOW', 'addTLD', 'addKCF', 'addCSRT', 'addMOSSE'].forEach((addMethod) => {
+        const methods = ['addMIL', 'addBOOSTING', 'addMEDIANFLOW', 'addTLD', 'addKCF', 'addCSRT', 'addMOSSE'];
+        if (cv.version.minor > 0) {
+          methods.push('addKCF');
+        }
+
+        // if (cv.version.minor > 1) {
+        //   methods.push('addGOTURN');
+        // }
+        if (cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.patch > 0)) {
+          methods.push('addCSRT');
+        }
+        if (cv.version.minor > 3) {
+          methods.push('addMOSSE');
+        }
+        
+        methods.forEach((addMethod) => {
           tracker[addMethod](testImg, new cv.Rect(0, 0, 10, 10));
         });
         const rects = tracker.update(testImg);
