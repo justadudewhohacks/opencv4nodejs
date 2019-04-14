@@ -72,7 +72,7 @@ module.exports = () => {
         weights_lr: 0.03,
         window_function: "kaiser"
       };
-      if(cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.subminor > 3){
+      if(cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.subminor > 3)){
         params.psr_threshold = 0.4;
       }
       
