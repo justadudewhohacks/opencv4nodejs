@@ -43,7 +43,7 @@ module.exports = () => {
       const floatSafe = true;
       assertPropsWithValue(trackerParams)(params, floatSafe);
     });
-    ((cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.subminor > 0) ? it : it.skip)('TrackerCSRTParams', () => {
+    ((cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.subminor > 0)) ? it : it.skip)('TrackerCSRTParams', () => {
       const params = {
         admm_iterations: 22,
         background_ratio: 3,
