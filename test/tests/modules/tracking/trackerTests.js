@@ -173,7 +173,7 @@ module.exports = () => {
           tracker[addMethod](testImg, new cv.Rect(0, 0, 10, 10));
         });
         const rects = tracker.update(testImg);
-        expect(rects).to.be.an('array').lengthOf(methods.length));
+        expect(rects).to.be.an('array').lengthOf(methods.length);
         rects.forEach((rect) => {
           expect(rect).to.be.instanceOf(cv.Rect);
         });
