@@ -80,17 +80,21 @@ module.exports = () => {
     'TrackerTLD'
   ];
 
-  if (cv.version.minor > 0) {
+  const hasCSRT = (cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.patch > 0));
+  const hasMOSSE = (cv.version.minor > 3);
+  const hasKCF = (cv.version.minor > 0);
+
+  if (hasKCF) {
     trackerNames.push('TrackerKCF');
   }
 
   if (cv.version.minor > 1) {
     // trackerNames.push('TrackerGOTURN'); TODO: sample goturn.prototxt
   }
-  if (cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.patch > 0)) {
+  if (hasCSRT) {
     trackerNames.push('TrackerCSRT');
   }
-  if (cv.version.minor > 3) {
+  if (hasMOSSE) {
     trackerNames.push('TrackerMOSSE');
   }
   trackerNames.forEach((trackerName) => {
@@ -128,18 +132,21 @@ module.exports = () => {
         const ret = tracker.addKCF(testImg, new cv.Rect(0, 0, 10, 10));
         expect(ret).to.true;
       });
-      
-      it('addCSRT', () => {
-        const tracker = new cv.MultiTracker();
-        const ret = tracker.addCSRT(testImg, new cv.Rect(0, 0, 10, 10));
-        expect(ret).to.true;
-      });
-      
-      it('addMOSSE', () => {
-        const tracker = new cv.MultiTracker();
-        const ret = tracker.addMOSSE(testImg, new cv.Rect(0, 0, 10, 10));
-        expect(ret).to.true;
-      });
+      if(hasCSRT){
+        it('addCSRT', () => {
+          const tracker = new cv.MultiTracker();
+          const ret = tracker.addCSRT(testImg, new cv.Rect(0, 0, 10, 10));
+          expect(ret).to.true;
+        });
+      }
+
+      if(hasMOSSE){
+        it('addMOSSE', () => {
+          const tracker = new cv.MultiTracker();
+          const ret = tracker.addMOSSE(testImg, new cv.Rect(0, 0, 10, 10));
+          expect(ret).to.true;
+        });
+      }
     });
 
     describe('update', () => {
@@ -147,21 +154,21 @@ module.exports = () => {
 
       it('returns bounding box', () => {
         const tracker = new cv.MultiTracker();
-        const methods = ['addMIL', 'addBOOSTING', 'addMEDIANFLOW', 'addTLD', 'addKCF', 'addCSRT', 'addMOSSE'];
-        if (cv.version.minor > 0) {
+        const methods = ['addMIL', 'addBOOSTING', 'addMEDIANFLOW', 'addTLD', 'addKCF'];
+        if (hasKCF) {
           methods.push('addKCF');
         }
 
         // if (cv.version.minor > 1) {
         //   methods.push('addGOTURN');
         // }
-        if (cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.patch > 0)) {
+        if (hasCSRT) {
           methods.push('addCSRT');
         }
-        if (cv.version.minor > 3) {
+        if (hasMOSSE) {
           methods.push('addMOSSE');
         }
-        
+
         methods.forEach((addMethod) => {
           tracker[addMethod](testImg, new cv.Rect(0, 0, 10, 10));
         });
