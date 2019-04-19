@@ -18,7 +18,7 @@
 #if CV_MINOR_VERSION > 3
 #include "./Trackers/TrackerMOSSE.h"
 #endif
-#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 3)
+#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
 #include "./Trackers/TrackerCSRT.h"
 #endif
 
@@ -45,7 +45,7 @@ NAN_MODULE_INIT(Tracking::Init) {
 #if CV_MINOR_VERSION > 3
 	TrackerMOSSE::Init(target);
 #endif
-#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 3)
+#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
 	TrackerCSRT::Init(target);
 #endif
 

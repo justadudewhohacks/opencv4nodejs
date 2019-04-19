@@ -22,7 +22,7 @@ NAN_MODULE_INIT(MultiTracker::Init) {
 #if CV_MINOR_VERSION > 3
 	Nan::SetPrototypeMethod(ctor, "addMOSSE", MultiTracker::AddTLD);
 #endif
-#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 3)
+#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
 	Nan::SetPrototypeMethod(ctor, "addCSRT", MultiTracker::AddKCF);
 #endif
 	Nan::SetPrototypeMethod(ctor, "update", MultiTracker::Update);
@@ -132,7 +132,7 @@ NAN_METHOD(MultiTracker::AddMOSSE) {
 }
 
 #endif
-#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 3)
+#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
 
 NAN_METHOD(MultiTracker::AddCSRT) {
 	FF_METHOD_CONTEXT("MultiTracker::AddCSRT");
