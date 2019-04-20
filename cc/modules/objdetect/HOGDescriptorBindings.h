@@ -1,5 +1,5 @@
 #include "HOGDescriptor.h"
-#include <iostream>
+
 #ifndef __FF_HOGDESCRIPTORBINDINGS_H_
 #define __FF_HOGDESCRIPTORBINDINGS_H_
 
@@ -10,9 +10,7 @@ namespace HOGDescriptorBindings {
     std::shared_ptr<cv::HOGDescriptor> hog;
 
     ComputeWorker(	std::shared_ptr<cv::HOGDescriptor> hog) {
-      std::cout << "ComputeWorker" << std::endl;
       this->hog = hog;
-      std::cout << "ComputeWorker done" << std::endl;
     }
 
     cv::Mat img;
@@ -23,9 +21,7 @@ namespace HOGDescriptorBindings {
     std::vector<float> descriptors;
 
     std::string executeCatchCvExceptionWorker() {
-      std::cout << "i am here" << std::endl;
       hog->compute(img, descriptors, winStride, padding, locations);
-      std::cout << "compute done" << std::endl;
       return "";
     }
 

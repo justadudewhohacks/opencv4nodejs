@@ -140,7 +140,6 @@ NAN_METHOD(HOGDescriptor::Load) {
 }
 
 NAN_METHOD(HOGDescriptor::Compute) {
-      std::cout << "Compute" << std::endl;
   FF::SyncBinding(
     std::make_shared<HOGDescriptorBindings::ComputeWorker>(HOGDescriptor::Converter::unwrap(info.This())),
     "HOGDescriptor::Compute",
