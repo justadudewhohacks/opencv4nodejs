@@ -267,7 +267,7 @@ describe('core', () => {
     });
   });
 
-  if (asyncHooks && utils.getNodeMajorVersion() > 8) {
+  if (asyncHooks && global.utils.getNodeMajorVersion() > 8) {
     describe('async_hooks', () => {
       it('should trigger `init` callback in async_hooks', () => {
         let typeFound = false
