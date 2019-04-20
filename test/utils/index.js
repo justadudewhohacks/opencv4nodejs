@@ -9,5 +9,5 @@ module.exports = Object.assign(
   testUtils,
   matTestUtils,
   defaultTests,
-  getNodeMajorVersion
+  { getNodeMajorVersion }
 );
