@@ -1,10 +1,8 @@
 language: node_js
 
 node_js:
+  # node version does not matter here, since we run builds with docker
   - '6'
-  - '8'
-  - '10'
-  - 'node'
 
 sudo: required
 
@@ -13,25 +11,27 @@ services:
 
 env:
   - BUILD_TASK=test
-    TAG=3.0.0-contrib
+    TAG=3.0.0-contrib-node6
   - BUILD_TASK=test
-    TAG=3.1.0-contrib
+    TAG=3.1.0-contrib-node6
   - BUILD_TASK=test
-    TAG=3.2.0-contrib
+    TAG=3.2.0-contrib-node6
   - BUILD_TASK=test
-    TAG=3.3.0-contrib
+    TAG=3.3.0-contrib-node6
   - BUILD_TASK=cover
-    TAG=3.4.0-contrib
+    TAG=3.4.0-contrib-node6
   - BUILD_TASK=test
-    TAG=3.4.0-contrib-world
+    TAG=3.4.0-contrib-world-node6
   - BUILD_TASK=test
-    TAG=3.4.1-contrib
+    TAG=3.4.6-node6
   - BUILD_TASK=test
-    TAG=3.4.2-contrib
+    TAG=3.4.6-contrib-node6
   - BUILD_TASK=test
-    TAG=3.4.3
+    TAG=3.4.6-contrib-node8
   - BUILD_TASK=test
-    TAG=3.4.3-contrib
+    TAG=3.4.6-contrib-node10
+  - BUILD_TASK=test
+    TAG=3.4.6-contrib-node11
 
 before_install:
   - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh

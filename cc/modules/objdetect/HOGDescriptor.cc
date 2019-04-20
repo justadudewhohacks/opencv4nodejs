@@ -85,7 +85,7 @@ NAN_METHOD(HOGDescriptor::New) {
   }
 
   HOGDescriptor* self = new HOGDescriptor();
-  self->hog = cv::HOGDescriptor(
+  self->hog = std::make_shared<cv::HOGDescriptor>(
     winSize,
     blockSize,
     blockStride,
@@ -115,7 +115,7 @@ NAN_METHOD(HOGDescriptor::GetDefaultPeopleDetector) {
 }
 
 NAN_METHOD(HOGDescriptor::CheckDetectorSize) {
-  FF_RETURN(Nan::New(HOGDescriptor::Converter::unwrap(info.This()).checkDetectorSize()));
+  FF_RETURN(Nan::New(HOGDescriptor::Converter::unwrap(info.This())->checkDetectorSize()));
 }
 
 NAN_METHOD(HOGDescriptor::SetSVMDetector) {
@@ -124,19 +124,19 @@ NAN_METHOD(HOGDescriptor::SetSVMDetector) {
   if (!FF_HAS_ARG(0) || FloatArrayConverter::unwrap(&detector, info[0])) {
     FF_THROW("expected detector to be an Array of type Number");
   }
-  HOGDescriptor::Converter::unwrapPtr(info.This())->setSVMDetector(detector);
+  HOGDescriptor::Converter::unwrap(info.This())->setSVMDetector(detector);
 }
 
 NAN_METHOD(HOGDescriptor::Save) {
   FF_METHOD_CONTEXT("HOGDescriptor::Save");
   FF_ARG_STRING(0, std::string path);
-  FF_UNWRAP(info.This(), HOGDescriptor)->hog.save(path);
+  FF_UNWRAP(info.This(), HOGDescriptor)->hog->save(path);
 }
 
 NAN_METHOD(HOGDescriptor::Load) {
   FF_METHOD_CONTEXT("HOGDescriptor::Load");
   FF_ARG_STRING(0, std::string path);
-  FF_UNWRAP(info.This(), HOGDescriptor)->hog.load(path);
+  FF_UNWRAP(info.This(), HOGDescriptor)->hog->load(path);
 }
 
 NAN_METHOD(HOGDescriptor::Compute) {
