@@ -111,6 +111,7 @@ static FF_FUNC_TYPE ff_func = FF_FUNC_TYPE();
 #define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_uint)
 #define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_number)
 #define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_bool)
+#define FF_SETTER_STRING(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_string)
 
 #define FF_SETTER_SIMPLE(clazz, name, prop, converter)  										\
 	NAN_SETTER(name##Set) {																										\

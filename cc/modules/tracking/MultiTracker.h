@@ -20,6 +20,8 @@ public:
 	static NAN_METHOD(AddMEDIANFLOW);
 	static NAN_METHOD(AddTLD);
 	static NAN_METHOD(AddKCF);
+	static NAN_METHOD(AddMOSSE);
+	static NAN_METHOD(AddCSRT);
 	static NAN_METHOD(Update);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
