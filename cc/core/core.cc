@@ -45,6 +45,15 @@ NAN_MODULE_INIT(Core::Init) {
   Nan::SetMethod(target, "getNumThreads", GetNumThreads);
   Nan::SetMethod(target, "setNumThreads", SetNumThreads);
   Nan::SetMethod(target, "getThreadNum", GetThreadNum);
+
+  // CUDA core
+  // Nan::SetMethod(target, "deviceSupports", DeviceSupports);
+  Nan::SetMethod(target, "getCudaEnabledDeviceCount", GetCudaEnabledDeviceCount);
+  Nan::SetMethod(target, "getDevice", GetDevice);
+  Nan::SetMethod(target, "printCudaDeviceInfo", PrintCudaDeviceInfo);
+  Nan::SetMethod(target, "printShortCudaDeviceInfo", PrintShortCudaDeviceInfo);
+  Nan::SetMethod(target, "resetDevice", ResetDevice);
+  Nan::SetMethod(target, "setDevice", SetDevice);
 };
 
 NAN_METHOD(Core::GetBuildInformation) {
@@ -227,4 +236,62 @@ NAN_METHOD(Core::SetNumThreads) {
 NAN_METHOD(Core::GetThreadNum) {
   FF_METHOD_CONTEXT("Core::GetNumThreads");
   FF_RETURN(IntConverter::wrap(cv::getThreadNum()));
+}
+
+// CUDA core
+// NAN_METHOD(Core::DeviceSupports) {
+//   FF_METHOD_CONTEXT("Core::DeviceSupports");
+//   FF_ARG_INT(1, int featureSet);
+//   FF_RETURN(BoolConverter::wrap(cv::cuda::deviceSupports(featureSet)))
+// }
+
+NAN_METHOD(Core::GetCudaEnabledDeviceCount) {
+  FF_METHOD_CONTEXT("Core::GetCudaEnabledDeviceCount");
+  FF_RETURN(IntConverter::wrap(cv::cuda::getCudaEnabledDeviceCount()));
+}
+
+NAN_METHOD(Core::GetDevice) {
+  FF_METHOD_CONTEXT("Core::GetDevice");
+  FF_RETURN(IntConverter::wrap(cv::cuda::getDevice()));
+}
+
+NAN_METHOD(Core::PrintCudaDeviceInfo) {
+  FF_METHOD_CONTEXT("Core::PrintCudaDeviceInfo");
+  //FF_ARG_INT(0, int device);
+
+  if (!FF_IS_INT(info[0])) {
+    return Nan::ThrowError("Core::PrintCudaDeviceInfo expected arg0 to an int");
+  }
+
+  int32_t deviceNum = FF_CAST_INT(info[0]);
+  cv::cuda::printCudaDeviceInfo(deviceNum);
+}
+
+NAN_METHOD(Core::PrintShortCudaDeviceInfo) {
+  FF_METHOD_CONTEXT("Core::PrintShortCudaDeviceInfo");
+  //FF_ARG_INT(0, int device);
+
+  if (!FF_IS_INT(info[0])) {
+    return Nan::ThrowError("Core::PrintShortCudaDeviceInfo expected arg0 to an int");
+  }
+
+  int32_t deviceNum = FF_CAST_INT(info[0]);
+  cv::cuda::printCudaDeviceInfo(deviceNum);
+}
+
+NAN_METHOD(Core::ResetDevice) {
+    FF_METHOD_CONTEXT("Cuda::ResetDevice");
+    cv::cuda::resetDevice();
+}
+
+NAN_METHOD(Core::SetDevice) {
+  FF_METHOD_CONTEXT("Core::SetDevice");
+  //FF_ARG_INT(0, int device);
+
+  if (!FF_IS_INT(info[0])) {
+    return Nan::ThrowError("Core::SetDevice expected arg0 to an int");
+  }
+
+  int32_t deviceNum = FF_CAST_INT(info[0]);
+  cv::cuda::setDevice(deviceNum);
 }
