@@ -230,4 +230,23 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(target, DECOMP_SVD);
 	FF_SET_CV_CONSTANT(target, DECOMP_QR);
 	FF_SET_CV_CONSTANT(target, DECOMP_NORMAL);
+
+	// CUDA core
+	v8::Local<v8::Object> featureSetConstants = Nan::New<v8::Object>();
+	FF_SET_JS_PROP(featureSetConstants, FEATURE_SET_COMPUTE_10, Nan::New<v8::Integer>(cv::cuda::FeatureSet::FEATURE_SET_COMPUTE_10));
+	FF_SET_JS_PROP(featureSetConstants, FEATURE_SET_COMPUTE_11, Nan::New<v8::Integer>(cv::cuda::FeatureSet::FEATURE_SET_COMPUTE_11));
+	FF_SET_JS_PROP(featureSetConstants, FEATURE_SET_COMPUTE_12, Nan::New<v8::Integer>(cv::cuda::FeatureSet::FEATURE_SET_COMPUTE_12));
+	FF_SET_JS_PROP(featureSetConstants, FEATURE_SET_COMPUTE_13, Nan::New<v8::Integer>(cv::cuda::FeatureSet::FEATURE_SET_COMPUTE_13));
+	FF_SET_JS_PROP(featureSetConstants, FEATURE_SET_COMPUTE_20, Nan::New<v8::Integer>(cv::cuda::FeatureSet::FEATURE_SET_COMPUTE_20));
+	FF_SET_JS_PROP(featureSetConstants, FEATURE_SET_COMPUTE_21, Nan::New<v8::Integer>(cv::cuda::FeatureSet::FEATURE_SET_COMPUTE_21));
+	FF_SET_JS_PROP(featureSetConstants, FEATURE_SET_COMPUTE_30, Nan::New<v8::Integer>(cv::cuda::FeatureSet::FEATURE_SET_COMPUTE_30));
+	FF_SET_JS_PROP(featureSetConstants, FEATURE_SET_COMPUTE_32, Nan::New<v8::Integer>(cv::cuda::FeatureSet::FEATURE_SET_COMPUTE_32));
+	FF_SET_JS_PROP(featureSetConstants, FEATURE_SET_COMPUTE_35, Nan::New<v8::Integer>(cv::cuda::FeatureSet::FEATURE_SET_COMPUTE_35));
+	FF_SET_JS_PROP(featureSetConstants, FEATURE_SET_COMPUTE_50, Nan::New<v8::Integer>(cv::cuda::FeatureSet::FEATURE_SET_COMPUTE_50));
+	FF_SET_JS_PROP(featureSetConstants, GLOBAL_ATOMICS, Nan::New<v8::Integer>(cv::cuda::FeatureSet::GLOBAL_ATOMICS));
+	FF_SET_JS_PROP(featureSetConstants, SHARED_ATOMICS, Nan::New<v8::Integer>(cv::cuda::FeatureSet::SHARED_ATOMICS));
+	FF_SET_JS_PROP(featureSetConstants, NATIVE_DOUBLE, Nan::New<v8::Integer>(cv::cuda::FeatureSet::NATIVE_DOUBLE));
+	FF_SET_JS_PROP(featureSetConstants, WARP_SHUFFLE_FUNCTIONS, Nan::New<v8::Integer>(cv::cuda::FeatureSet::WARP_SHUFFLE_FUNCTIONS));
+	FF_SET_JS_PROP(featureSetConstants, DYNAMIC_PARALLELISM, Nan::New<v8::Integer>(cv::cuda::FeatureSet::DYNAMIC_PARALLELISM));
+	target->Set(FF_NEW_STRING("featureSet"), featureSetConstants);
 }

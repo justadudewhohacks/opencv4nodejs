@@ -5,6 +5,7 @@
 #include "Rect.h"
 #include "RotatedRect.h"
 #include "TermCriteria.h"
+#include "FeatureSet.h"
 #include "macros.h"
 #include <opencv2/core.hpp>
 #include <opencv2/core/cuda.hpp>
@@ -28,7 +29,7 @@ public:
 	static NAN_METHOD(GetThreadNum);
 
 	// CUDA core
-	// static NAN_METHOD(DeviceSupports);
+	static NAN_METHOD(DeviceSupports);
     static NAN_METHOD(GetCudaEnabledDeviceCount);
     static NAN_METHOD(GetDevice);
     static NAN_METHOD(PrintCudaDeviceInfo);

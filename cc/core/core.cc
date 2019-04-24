@@ -34,6 +34,7 @@ NAN_MODULE_INIT(Core::Init) {
   Rect::Init(target);
   RotatedRect::Init(target);
   TermCriteria::Init(target);
+  FeatureSet::Init(target);
 
   Nan::SetMethod(target, "getBuildInformation", GetBuildInformation);
   Nan::SetMethod(target, "partition", Partition);
@@ -47,7 +48,7 @@ NAN_MODULE_INIT(Core::Init) {
   Nan::SetMethod(target, "getThreadNum", GetThreadNum);
 
   // CUDA core
-  // Nan::SetMethod(target, "deviceSupports", DeviceSupports);
+  Nan::SetMethod(target, "deviceSupports", DeviceSupports);
   Nan::SetMethod(target, "getCudaEnabledDeviceCount", GetCudaEnabledDeviceCount);
   Nan::SetMethod(target, "getDevice", GetDevice);
   Nan::SetMethod(target, "printCudaDeviceInfo", PrintCudaDeviceInfo);
@@ -239,11 +240,12 @@ NAN_METHOD(Core::GetThreadNum) {
 }
 
 // CUDA core
-// NAN_METHOD(Core::DeviceSupports) {
-//   FF_METHOD_CONTEXT("Core::DeviceSupports");
-//   FF_ARG_INT(1, int featureSet);
-//   FF_RETURN(BoolConverter::wrap(cv::cuda::deviceSupports(featureSet)))
-// }
+NAN_METHOD(Core::DeviceSupports) {
+  FF_METHOD_CONTEXT("Core::DeviceSupports");
+  FF_ARG_INT(0, int featureSet_int);
+  cv::cuda::FeatureSet featureSet = cv::cuda::FeatureSet(featureSet_int);
+  FF_RETURN(BoolConverter::wrap(cv::cuda::deviceSupports(featureSet)));
+}
 
 NAN_METHOD(Core::GetCudaEnabledDeviceCount) {
   FF_METHOD_CONTEXT("Core::GetCudaEnabledDeviceCount");

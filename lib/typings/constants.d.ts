@@ -599,3 +599,21 @@ export const statModel: {
   RAW_OUTPUT: number;
   UPDATE_MODEL: number;
 }
+
+export const featureSet: {
+  FEATURE_SET_COMPUTE_10: number,
+  FEATURE_SET_COMPUTE_11: number,
+  FEATURE_SET_COMPUTE_12: number,
+  FEATURE_SET_COMPUTE_13: number,
+  FEATURE_SET_COMPUTE_20: number,
+  FEATURE_SET_COMPUTE_21: number,
+  FEATURE_SET_COMPUTE_30: number,
+  FEATURE_SET_COMPUTE_32: number,
+  FEATURE_SET_COMPUTE_35: number,
+  FEATURE_SET_COMPUTE_50: number,
+  GLOBAL_ATOMICS: number,
+  SHARED_ATOMICS: number,
+  NATIVE_DOUBLE: number,
+  WARP_SHUFFLE_FUNCTIONS: number,
+  DYNAMIC_PARALLELISM: number,
+};

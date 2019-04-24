@@ -292,25 +292,26 @@ describe('core', () => {
 });
 
 describe('core - cuda', () => {
-  // describe('deviceSupports', () => {
-  //   it('should have function deviceSupports', () => {
-  //     expect(cv).to.have.property('deviceSupports').to.be.a('function');
-  //   });
+  describe('deviceSupports', () => {
+    it('should have function deviceSupports', () => {
+      expect(cv).to.have.property('deviceSupports').to.be.a('function');
+    });
 
-  //   it('should have access to featureSet enum', () => {
-  //     expect(cv).to.have.property('featureSet').to.be.an('object');
-  //   });
+    it('should have access to featureSet enum', () => {
+      expect(cv).to.have.property('featureSet').to.be.an('object');
+    });
 
-  //   generateAPITests({
-  //     getDut: () => cv,
-  //     methodName: 'deviceSupports',
-  //     hasAsync: false,
-  //     getRequiredArgs: () => ([
-  //       cv.featureSet.FEATURE_SET_COMPUTE_10,
-  //     ]),
-  //     expectOutput: res => expect(res).to.be.a('boolean'),
-  //   });
-  // });
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'deviceSupports',
+      hasAsync: false,
+      getRequiredArgs: () => ([
+        cv.featureSet.FEATURE_SET_COMPUTE_10,
+      ]),
+      expectOutput: res => expect(res).to.be.a('boolean'),
+      usesMacroInferno: true,
+    });
+  });
 
   describe('getCudaEnabledDeviceCount', () => {
     it('should have function getCudaEnabledDeviceCount', () => {
