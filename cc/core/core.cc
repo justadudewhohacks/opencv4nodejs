@@ -257,26 +257,14 @@ NAN_METHOD(Core::GetDevice) {
 
 NAN_METHOD(Core::PrintCudaDeviceInfo) {
   FF_METHOD_CONTEXT("Core::PrintCudaDeviceInfo");
-  //FF_ARG_INT(0, int device);
-
-  if (!FF_IS_INT(info[0])) {
-    return Nan::ThrowError("Core::PrintCudaDeviceInfo expected arg0 to an int");
-  }
-
-  int32_t deviceNum = FF_CAST_INT(info[0]);
-  cv::cuda::printCudaDeviceInfo(deviceNum);
+  FF_ARG_INT(0, int device);
+  cv::cuda::printCudaDeviceInfo(device);
 }
 
 NAN_METHOD(Core::PrintShortCudaDeviceInfo) {
   FF_METHOD_CONTEXT("Core::PrintShortCudaDeviceInfo");
-  //FF_ARG_INT(0, int device);
-
-  if (!FF_IS_INT(info[0])) {
-    return Nan::ThrowError("Core::PrintShortCudaDeviceInfo expected arg0 to an int");
-  }
-
-  int32_t deviceNum = FF_CAST_INT(info[0]);
-  cv::cuda::printCudaDeviceInfo(deviceNum);
+  FF_ARG_INT(0, int device);
+  cv::cuda::printCudaDeviceInfo(device);
 }
 
 NAN_METHOD(Core::ResetDevice) {
@@ -286,12 +274,6 @@ NAN_METHOD(Core::ResetDevice) {
 
 NAN_METHOD(Core::SetDevice) {
   FF_METHOD_CONTEXT("Core::SetDevice");
-  //FF_ARG_INT(0, int device);
-
-  if (!FF_IS_INT(info[0])) {
-    return Nan::ThrowError("Core::SetDevice expected arg0 to an int");
-  }
-
-  int32_t deviceNum = FF_CAST_INT(info[0]);
-  cv::cuda::setDevice(deviceNum);
+  FF_ARG_INT(0, int device);
+  cv::cuda::setDevice(device);
 }

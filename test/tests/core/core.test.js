@@ -343,27 +343,13 @@ describe('core - cuda', () => {
       expect(cv).to.have.property('printCudaDeviceInfo').to.be.a('function');
     });
 
-    it('should try to print info for device number', () => {
-      const device = 1;
-      cv.printCudaDeviceInfo(device);
-    });
-
-    it('should throw when the argument is not integer', () => {
-      let err;
-      const expectError = (fn, msg) => {
-        try {
-          fn();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).to.be.equal(msg);
-      };
-
-      expectError(() => cv.printCudaDeviceInfo('hello'),
-        'Core::PrintCudaDeviceInfo expected arg0 to an int');
-      expectError(() => cv.printCudaDeviceInfo(1.1),
-        'Core::PrintCudaDeviceInfo expected arg0 to an int');
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'printCudaDeviceInfo',
+      hasAsync: false,
+      getRequiredArgs: () => [1],
+      expectOutput: () => {}, 
+      usesMacroInferno: true,
     });
   });
 
@@ -371,28 +357,14 @@ describe('core - cuda', () => {
     it('should have function printShortCudaDeviceInfo', () => {
       expect(cv).to.have.property('printShortCudaDeviceInfo').to.be.a('function');
     });
-    
-    it('should try to print short info for device number', () => {
-      const device = 1;
-      cv.printShortCudaDeviceInfo(device);
-    });
 
-    it('should throw when the argument is not integer', () => {
-      let err;
-      const expectError = (fn, msg) => {
-        try {
-          fn();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).to.be.equal(msg);
-      };
-
-      expectError(() => cv.printShortCudaDeviceInfo('hello'),
-        'Core::PrintShortCudaDeviceInfo expected arg0 to an int');
-      expectError(() => cv.printShortCudaDeviceInfo(1.1),
-        'Core::PrintShortCudaDeviceInfo expected arg0 to an int');
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'printShortCudaDeviceInfo',
+      hasAsync: false,
+      getRequiredArgs: () => [1],
+      expectOutput: () => {}, 
+      usesMacroInferno: true,
     });
   });
 
@@ -414,27 +386,13 @@ describe('core - cuda', () => {
       expect(cv).to.have.property('setDevice').to.be.a('function');
     });
 
-    it('should try to set device to device number', () => {
-      const device = 0;
-      cv.setDevice(device);
-    });
-
-    it('should throw when the argument is not integer', () => {
-      let err;
-      const expectError = (fn, msg) => {
-        try {
-          fn();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).to.be.equal(msg);
-      };
-
-      expectError(() => cv.setDevice('hello'),
-        'Core::SetDevice expected arg0 to an int');
-      expectError(() => cv.setDevice(1.1),
-        'Core::SetDevice expected arg0 to an int');
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'setDevice',
+      hasAsync: false,
+      getRequiredArgs: () => [0],
+      expectOutput: () => {}, 
+      usesMacroInferno: true,
     });
   });
 });
