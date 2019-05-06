@@ -212,5 +212,37 @@ describe('imgproc', () => {
         expectOutput: res => expect(res).to.be.instanceOf(cv.Mat)
       });
     });
+
+    describe('undistortPoints', () => {
+      const cameraMatrix = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);
+      const newCameraMatrix = new cv.Mat([[0.5, 0, 10],[0, 0.5, 10],[0, 0, 1]], cv.CV_32F);
+      const distCoeffs = new cv.Mat([[0.1, 0.1, 1, 1]], cv.CV_32F);
+      const srcPoints = [
+        [5,5] [5, 10], [5, 15], 
+        [10,5], [10,10], 10, 15,
+        [15,5], [15,10], [15, 15]
+      ].map(([x,y]) => new cv.Point(x,y))
+      const destPoints = [
+        [5,5] [5, 10], [5, 15], 
+        [10,5], [10,10], 10, 15,
+        [15,5], [15,10], [15, 15]
+      ].map(([x,y]) => new cv.Point(x,y))
+      
+      generateAPITests({
+        getDut: () => cv,
+        methodName: 'undistortPoints',
+        getRequiredArgs: () => ([
+          srcPoints,
+          cameraMatrix,
+          distCoeffs
+        ]),
+        getOptionalArgs: () => ([
+          newCameraMatrix
+        ])
+        hasAsync: false,
+        usesMacroInferno: true,
+        expectOutput: destPoints => expect(destPoints).to.deepEqual(expectedDestPoints)
+      });
+    });    
   });
 });

@@ -2144,6 +2144,54 @@ namespace MatImgprocBindings {
     }
   };
   
+  struct UndistortWorker: public CatchCvExceptionWorker {
+  public:
+    cv::Mat mat;
+    cv::Size size;
+  
+    UndistortWorker(cv::Mat mat) {
+      this->mat = mat;
+      this->size = cv::Size2d(mat.cols, mat.rows);
+    }
+  
+    cv::Mat cameraMatrix;
+    cv::Mat distCoeffs;
+    cv::Mat newCameraMatrix;
+    cv::Mat undistortedMat;
+  
+    FF_VAL getReturnValue() {
+      return Mat::Converter::wrap(undistortedMat);
+    }
+  
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        Mat::Converter::arg(0, &cameraMatrix, info) ||
+        Mat::Converter::arg(1, &distCoeffs, info)
+      );
+    }
+  
+    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        Mat::Converter::arg(2, &newCameraMatrix, info)
+      );
+    }
+  
+    bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return FF_ARG_IS_OBJECT(2);
+    }
+  
+    bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+      FF_OBJ opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      return (
+        Mat::Converter::optProp(&newCameraMatrix, "newCameraMatrix", opts)
+      );
+    }
+    std::string executeCatchCvExceptionWorker() {
+      cv::undistort(mat, undistortedMat, cameraMatrix, distCoeffs, newCameraMatrix);
+      return "";
+    }
+    
+  };
 
 }
 
