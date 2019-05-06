@@ -84,7 +84,7 @@ describe('core', () => {
     const points2 = [
       [0, 0], [1000, 900], [-1000, -900], [-1100, -1000], [1100, 1000], [10, 10]
     ].map(([x, y]) => new cv.Point(x, y));
-    
+
     const k = 3;
     const termCriteria = new cv.TermCriteria(cv.termCriteria.COUNT, 100, 0.8);
     const attempts = 10;
@@ -119,12 +119,12 @@ describe('core', () => {
       expect(ret.centers[l2].x).to.equal(-1050);
       expect(ret.centers[l2].y).to.equal(-950);
     });
-    
+
     // related to https://github.com/justadudewhohacks/opencv4nodejs/issues/379
     const points3 = [
       [255, 0, 0], [255, 0, 0], [255, 0, 255], [255, 0, 255], [255, 255, 255]
-    ].map(([x, y, z]) => new cv.Point(x, y, z));       
-    
+    ].map(([x, y, z]) => new cv.Point(x, y, z));
+
     it('should return correct centers with Point3', () => {
       const ret = cv.kmeans(points3, k, termCriteria, attempts, flags);
 
@@ -144,10 +144,10 @@ describe('core', () => {
     it('should raise error for invalid type', () => {
       const points3 = [
         [255, 0, 0], [255, 0, 0], [255, 0, 255], [255, 0, 255], [255, 255, 255]
-      ].map(([x, y, z]) => new cv.Vec(x, y, z));  
-      
+      ].map(([x, y, z]) => new cv.Vec(x, y, z));
+
       let err;
-      
+
       try {
         cv.kmeans(points3, k, termCriteria, attempts, flags);
       } catch(e){
@@ -157,7 +157,7 @@ describe('core', () => {
       expect(err.message).to.equal("Core::Kmeans - expected arg0 to be an Array of Points");
     });
   });
-  
+
   describe('cartToPolar', () => {
     const x = new cv.Mat([[0, 1, 100]], cv.CV_32F);
     const y = new cv.Mat([[0, 1, 100]], cv.CV_32F);
@@ -267,7 +267,7 @@ describe('core', () => {
     });
   });
 
-  if (asyncHooks) {
+  if (asyncHooks && global.utils.getNodeMajorVersion() > 8) {
     describe('async_hooks', () => {
       it('should trigger `init` callback in async_hooks', () => {
         let typeFound = false

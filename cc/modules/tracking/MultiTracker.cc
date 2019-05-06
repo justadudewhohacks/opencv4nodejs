@@ -19,6 +19,12 @@ NAN_MODULE_INIT(MultiTracker::Init) {
 	Nan::SetPrototypeMethod(ctor, "addMEDIANFLOW", MultiTracker::AddMEDIANFLOW);
 	Nan::SetPrototypeMethod(ctor, "addTLD", MultiTracker::AddTLD);
 	Nan::SetPrototypeMethod(ctor, "addKCF", MultiTracker::AddKCF);
+#if CV_MINOR_VERSION > 3
+	Nan::SetPrototypeMethod(ctor, "addMOSSE", MultiTracker::AddTLD);
+#endif
+#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
+	Nan::SetPrototypeMethod(ctor, "addCSRT", MultiTracker::AddKCF);
+#endif
 	Nan::SetPrototypeMethod(ctor, "update", MultiTracker::Update);
 
 	target->Set(FF_NEW_STRING("MultiTracker"), ctor->GetFunction());
@@ -114,6 +120,29 @@ NAN_METHOD(MultiTracker::Update) {
 	}
 	FF_RETURN(jsRects);
 }
+#if CV_MINOR_VERSION > 3
+
+NAN_METHOD(MultiTracker::AddMOSSE) {
+	FF_METHOD_CONTEXT("MultiTracker::AddMOSSE");
+	FF_ARG_INSTANCE(0, cv::Mat image, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INSTANCE(1, cv::Rect2d boundingBox, Rect::constructor, FF_UNWRAP_RECT_AND_GET);
+	cv::Ptr<cv::Tracker> type = cv::TrackerMOSSE::create();
+	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
+	FF_RETURN(Nan::New(ret));
+}
+
+#endif
+#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
+
+NAN_METHOD(MultiTracker::AddCSRT) {
+	FF_METHOD_CONTEXT("MultiTracker::AddCSRT");
+	FF_ARG_INSTANCE(0, cv::Mat image, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	FF_ARG_INSTANCE(1, cv::Rect2d boundingBox, Rect::constructor, FF_UNWRAP_RECT_AND_GET);
+	cv::Ptr<cv::Tracker> type = cv::TrackerCSRT::create();
+	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
+	FF_RETURN(Nan::New(ret));
+}
+#endif
 
 #endif
 

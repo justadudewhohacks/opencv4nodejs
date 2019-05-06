@@ -80,14 +80,23 @@ module.exports = () => {
     'TrackerTLD'
   ];
 
-  if (cv.version.minor > 0) {
+  const hasCSRT = (cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.patch > 0));
+  const hasMOSSE = (cv.version.minor > 3);
+  const hasKCF = (cv.version.minor > 0);
+
+  if (hasKCF) {
     trackerNames.push('TrackerKCF');
   }
 
   if (cv.version.minor > 1) {
     // trackerNames.push('TrackerGOTURN'); TODO: sample goturn.prototxt
   }
-
+  if (hasCSRT) {
+    trackerNames.push('TrackerCSRT');
+  }
+  if (hasMOSSE) {
+    trackerNames.push('TrackerMOSSE');
+  }
   trackerNames.forEach((trackerName) => {
     generateTrackerTests(trackerName);
   });
@@ -123,6 +132,21 @@ module.exports = () => {
         const ret = tracker.addKCF(testImg, new cv.Rect(0, 0, 10, 10));
         expect(ret).to.true;
       });
+      if(hasCSRT){
+        it('addCSRT', () => {
+          const tracker = new cv.MultiTracker();
+          const ret = tracker.addCSRT(testImg, new cv.Rect(0, 0, 10, 10));
+          expect(ret).to.true;
+        });
+      }
+
+      if(hasMOSSE){
+        it('addMOSSE', () => {
+          const tracker = new cv.MultiTracker();
+          const ret = tracker.addMOSSE(testImg, new cv.Rect(0, 0, 10, 10));
+          expect(ret).to.true;
+        });
+      }
     });
 
     describe('update', () => {
@@ -130,11 +154,26 @@ module.exports = () => {
 
       it('returns bounding box', () => {
         const tracker = new cv.MultiTracker();
-        ['addMIL', 'addBOOSTING', 'addMEDIANFLOW', 'addTLD', 'addKCF'].forEach((addMethod) => {
+        const methods = ['addMIL', 'addBOOSTING', 'addMEDIANFLOW', 'addTLD', 'addKCF'];
+        if (hasKCF) {
+          methods.push('addKCF');
+        }
+
+        // if (cv.version.minor > 1) {
+        //   methods.push('addGOTURN');
+        // }
+        if (hasCSRT) {
+          methods.push('addCSRT');
+        }
+        if (hasMOSSE) {
+          methods.push('addMOSSE');
+        }
+
+        methods.forEach((addMethod) => {
           tracker[addMethod](testImg, new cv.Rect(0, 0, 10, 10));
         });
         const rects = tracker.update(testImg);
-        expect(rects).to.be.an('array').lengthOf(5);
+        expect(rects).to.be.an('array').lengthOf(methods.length);
         rects.forEach((rect) => {
           expect(rect).to.be.instanceOf(cv.Rect);
         });
