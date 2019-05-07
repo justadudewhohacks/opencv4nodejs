@@ -238,7 +238,7 @@ describe('imgproc', () => {
         ]),
         getOptionalArgs: () => ([
           newCameraMatrix
-        ])
+        ]),
         hasAsync: false,
         usesMacroInferno: true,
         expectOutput: destPoints => expect(destPoints).to.deepEqual(expectedDestPoints)
