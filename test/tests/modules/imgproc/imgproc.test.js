@@ -221,12 +221,12 @@ describe('imgproc', () => {
         [5,5] [5, 10], [5, 15], 
         [10,5], [10,10], 10, 15,
         [15,5], [15,10], [15, 15]
-      ].map(([x,y]) => new cv.Point(x,y))
+      ].map(p => new cv.Point(p.x, p.y))
       const destPoints = [
         [5,5] [5, 10], [5, 15], 
         [10,5], [10,10], 10, 15,
         [15,5], [15,10], [15, 15]
-      ].map(([x,y]) => new cv.Point(x,y))
+      ].map(p => new cv.Point(p.x, p.y))
       
       generateAPITests({
         getDut: () => cv,
