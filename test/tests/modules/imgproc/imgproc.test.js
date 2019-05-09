@@ -218,15 +218,15 @@ describe('imgproc', () => {
       const newCameraMatrix = new cv.Mat([[0.5, 0, 10],[0, 0.5, 10],[0, 0, 1]], cv.CV_32F);
       const distCoeffs = new cv.Mat([[0.1, 0.1, 1, 1]], cv.CV_32F);
       const srcPoints = [
-        [5,5] [5, 10], [5, 15], 
+        [5,5], [5, 10], [5, 15], 
         [10,5], [10,10], 10, 15,
         [15,5], [15,10], [15, 15]
-      ].map(p => new cv.Point(p.x, p.y))
+      ].map(p => new cv.Point(p[0], p[1]))
       const destPoints = [
-        [5,5] [5, 10], [5, 15], 
+        [5,5], [5, 10], [5, 15], 
         [10,5], [10,10], 10, 15,
         [15,5], [15,10], [15, 15]
-      ].map(p => new cv.Point(p.x, p.y))
+      ].map(p => new cv.Point(p[0], p[1]))
       
       generateAPITests({
         getDut: () => cv,
