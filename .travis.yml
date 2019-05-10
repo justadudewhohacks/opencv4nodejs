@@ -5,15 +5,6 @@ sudo: required
 services:
   - docker
 
-node_js:
-  # node version does not matter here, since we run builds with docker
-  - '6'
-  - '7'
-  - '8'
-  - '9'
-  - '10'
-  - 'node'
-
 env:
   global:
     - OPENCV4NODEJS_DISABLE_AUTOBUILD=1
