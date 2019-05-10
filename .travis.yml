@@ -64,6 +64,10 @@ matrix:
       env:
         - BUILD_TASK=prebuild
     - os: linux
+      node_js: '11'
+      env:
+        - BUILD_TASK=prebuild
+    - os: linux
       node_js: 'node'
       env:
         - BUILD_TASK=prebuild
@@ -104,7 +108,7 @@ before_install:
   - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh;
 
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci:$TAG; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && $TAG != "" ]]; then travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci:$TAG; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install opencv@3; brew link --force opencv@3; fi
 
 script:
