@@ -11,5 +11,5 @@ then
     cd test &&\
     npm install &&\
     npm test &&\
-    npm run test-externalMemTrackingg
+    npm run test-externalMemTracking
 fi
