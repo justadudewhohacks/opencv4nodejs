@@ -27,7 +27,9 @@ NAN_MODULE_INIT(TrackerKCFParams::Init) {
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("compressed_size"), compressed_sizeGet, compressed_sizeSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("desc_pca"), desc_pcaGet, desc_pcaSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("desc_npca"), desc_npcaGet, desc_npcaSet);
-
+#if CV_MINOR_VERSION > 2
+	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("detect_thresh"), detect_threshGet, detect_threshSet);
+#endif
 	target->Set(FF_NEW_STRING("TrackerKCFParams"), ctor->GetFunction());
 };
 

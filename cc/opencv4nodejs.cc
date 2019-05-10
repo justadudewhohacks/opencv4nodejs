@@ -54,6 +54,7 @@ void init(v8::Local<v8::Object> target) {
 	v8::Local<v8::Object> version = Nan::New<v8::Object>();
 	Nan::Set(version, FF_NEW_STRING("major"), Nan::New(CV_MAJOR_VERSION));
 	Nan::Set(version, FF_NEW_STRING("minor"), Nan::New(CV_MINOR_VERSION));
+	Nan::Set(version, FF_NEW_STRING("subminor"), Nan::New(CV_SUBMINOR_VERSION));
 	Nan::Set(target, FF_NEW_STRING("version"), version);
 
 	v8::Local<v8::Object> xmodules = Nan::New<v8::Object>();
