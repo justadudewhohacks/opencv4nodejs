@@ -67,10 +67,6 @@ matrix:
       node_js: '11'
       env:
         - BUILD_TASK=prebuild
-    - os: linux
-      node_js: 'node'
-      env:
-        - BUILD_TASK=prebuild
     - os: osx
       node_js: '6'
       env:
