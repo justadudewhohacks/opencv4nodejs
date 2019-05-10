@@ -8,42 +8,65 @@ services:
 env:
   global:
     - OPENCV4NODEJS_DISABLE_AUTOBUILD=1
-  matrix:
-  - BUILD_TASK=test
-    TAG=3.0.0-contrib-node6
-  - BUILD_TASK=test
-    TAG=3.1.0-contrib-node6
-  - BUILD_TASK=test
-    TAG=3.2.0-contrib-node6
-  - BUILD_TASK=test
-    TAG=3.3.0-contrib-node6
-  - BUILD_TASK=cover
-    TAG=3.4.0-contrib-node6
-  - BUILD_TASK=test
-    TAG=3.4.0-contrib-world-node6
-  - BUILD_TASK=test
-    TAG=3.4.6-node6
-  - BUILD_TASK=test
-    TAG=3.4.6-contrib-node6
-  - BUILD_TASK=test
-    TAG=3.4.6-contrib-node8
-  - BUILD_TASK=test
-    TAG=3.4.6-contrib-node10
-  - BUILD_TASK=test
-    TAG=3.4.6-contrib-node11
-  - BUILD_TASK=prebuild
-    TAG=3.4.6-contrib-node6
-  - BUILD_TASK=prebuild
-    TAG=3.4.6-contrib-node8
-  - BUILD_TASK=prebuild
-    TAG=3.4.6-contrib-node10
-  - BUILD_TASK=prebuild
-    TAG=3.4.6-contrib-node11
-  - BUILD_TASK=cover
-    TAG=3.4.6-contrib-node10
 
 matrix:
   include:
+    - os: linux
+      env:
+        - BUILD_TASK=test
+          TAG=3.0.0-contrib-node6
+    - os: linux
+      env:
+        - BUILD_TASK=test
+          TAG=3.1.0-contrib-node6
+    - os: linux
+      env:
+        - BUILD_TASK=test
+          TAG=3.2.0-contrib-node6
+    - os: linux
+      env:
+        - BUILD_TASK=test
+          TAG=3.3.0-contrib-node6
+    - os: linux
+      env:
+        - BUILD_TASK=test
+          TAG=3.4.0-contrib-world-node6
+    - os: linux
+      env:
+        - BUILD_TASK=test
+          TAG=3.4.6-node6
+    - os: linux
+      env:
+        - BUILD_TASK=test
+          TAG=3.4.6-contrib-node6
+    - os: linux
+      env:
+        - BUILD_TASK=test
+          TAG=3.4.6-contrib-node8
+    - os: linux
+      env:
+        - BUILD_TASK=test
+          TAG=3.4.6-contrib-node10
+    - os: linux
+      env:
+        - BUILD_TASK=cover
+          TAG=3.4.6-contrib-node11
+    - os: linux
+      node_js: '6'
+      env:
+        - BUILD_TASK=prebuild
+    - os: linux
+      node_js: '8'
+      env:
+        - BUILD_TASK=prebuild
+    - os: linux
+      node_js: '10'
+      env:
+        - BUILD_TASK=prebuild
+    - os: linux
+      node_js: 'node'
+      env:
+        - BUILD_TASK=prebuild
     - os: osx
       node_js: '6'
       env:
