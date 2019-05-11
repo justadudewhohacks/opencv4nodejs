@@ -19,13 +19,17 @@ init:
 # what combinations to test
 environment:
   matrix:
+
+    # TODO node 12: fix me once available
+
     # node 12
-    - nodejs_version: 12
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7"
-      opencv_version: 3.4.6
+    #- nodejs_version: 12
+    #  PYTHON: "C:\\Python27-x64"
+    #  PYTHON_VERSION: "2.7"
+    #  opencv_version: 3.4.6
       # use self build
-      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+    #  OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+
     # node 11
     - nodejs_version: 11
       PYTHON: "C:\\Python27-x64"

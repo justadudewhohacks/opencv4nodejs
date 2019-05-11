@@ -10,28 +10,46 @@ services:
   - docker
 
 env:
-  - BUILD_TASK=test
-    TAG=3.0.0-contrib-node6
-  - BUILD_TASK=test
-    TAG=3.1.0-contrib-node6
-  - BUILD_TASK=test
-    TAG=3.2.0-contrib-node6
-  - BUILD_TASK=test
-    TAG=3.3.0-contrib-node6
-  - BUILD_TASK=cover
-    TAG=3.4.0-contrib-node6
-  - BUILD_TASK=test
-    TAG=3.4.0-contrib-world-node6
-  - BUILD_TASK=test
-    TAG=3.4.6-node6
-  - BUILD_TASK=test
-    TAG=3.4.6-contrib-node6
-  - BUILD_TASK=test
-    TAG=3.4.6-contrib-node8
-  - BUILD_TASK=test
-    TAG=3.4.6-contrib-node10
-  - BUILD_TASK=test
-    TAG=3.4.6-contrib-node11
+  global:
+    - MIN_SUPPORTED_NODEJS_VERSION=6
+    - LATEST_STABLE_NODEJS_VERSION=11
+  matrix:
+    - BUILD_TASK=test
+      TAG=3.0.0-contrib
+      NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
+    - BUILD_TASK=test
+      TAG=3.1.0-contrib
+      NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
+    - BUILD_TASK=test
+      TAG=3.2.0-contrib
+      NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
+    - BUILD_TASK=test
+      TAG=3.3.0-contrib
+      NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
+    - BUILD_TASK=cover
+      TAG=3.4.0-contrib
+      NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
+    - BUILD_TASK=test
+      TAG=3.4.0-contrib-world
+      NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
+    - BUILD_TASK=test
+      TAG=3.4.6
+      NODE_MAJOR_VERSION=$MIN_SUPPORTED_NODEJS_VERSION
+    - BUILD_TASK=test
+      TAG=3.4.6-contrib
+      NODE_MAJOR_VERSION=$MIN_SUPPORTED_NODEJS_VERSION
+    - BUILD_TASK=test
+      TAG=3.4.6-contrib
+      NODE_MAJOR_VERSION=8
+    - BUILD_TASK=test
+      TAG=3.4.6-contrib
+      NODE_MAJOR_VERSION=10
+    - BUILD_TASK=test
+      TAG=3.4.6-contrib
+      NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
+    - BUILD_TASK=test
+      TAG=3.4.6-contrib
+      NODE_MAJOR_VERSION=12
 
 before_install:
   - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh
@@ -40,7 +58,7 @@ install: travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci:$TAG
 
 script:
   - cd ./ci/$BUILD_TASK
-  - npm run $BUILD_TASK $TAG
+  - npm run $BUILD_TASK $TAG $NODE_MAJOR_VERSION
 
 after_success:
   - if [ $BUILD_TASK = 'cover' ]; then
