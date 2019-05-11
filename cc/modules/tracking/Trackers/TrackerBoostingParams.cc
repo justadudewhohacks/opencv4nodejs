@@ -18,7 +18,7 @@ NAN_MODULE_INIT(TrackerBoostingParams::Init) {
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("iterationInit"), iterationInitGet, iterationInitSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("featureSetNumFeatures"), featureSetNumFeaturesGet, featureSetNumFeaturesSet);
 
-	target->Set(FF_NEW_STRING("TrackerBoostingParams"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("TrackerBoostingParams"), FF::getFunction(ctor));
 };
 
 

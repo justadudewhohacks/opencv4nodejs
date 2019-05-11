@@ -42,10 +42,10 @@ NAN_MODULE_INIT(Vec::Init) {
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Vec::New);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("Vec").ToLocalChecked());
-  target->Set(Nan::New("Vec").ToLocalChecked(), ctor->GetFunction());
-  target->Set(Nan::New("Vec2").ToLocalChecked(), ctor->GetFunction());
-  target->Set(Nan::New("Vec3").ToLocalChecked(), ctor->GetFunction());
-  target->Set(Nan::New("Vec4").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("Vec").ToLocalChecked(), FF::getFunction(ctor));
+  target->Set(Nan::New("Vec2").ToLocalChecked(), FF::getFunction(ctor));
+  target->Set(Nan::New("Vec3").ToLocalChecked(), FF::getFunction(ctor));
+  target->Set(Nan::New("Vec4").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(Vec::New) {
@@ -55,8 +55,7 @@ NAN_METHOD(Vec::New) {
 	}
 	v8::Local<v8::Object> jsVec;
 	if (info.Length() == 4) {
-		v8::Local<v8::Function> ct = Nan::New(Vec4::constructor)->GetFunction();
-		jsVec = Nan::NewInstance(ct).ToLocalChecked();
+		jsVec = FF::newInstance(Nan::New(Vec4::constructor));
 		Nan::ObjectWrap::Unwrap<Vec4>(jsVec)->vec = cv::Vec4d(
 			info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
 			info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
@@ -68,12 +67,11 @@ NAN_METHOD(Vec::New) {
 		double y = info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 		if (info.Length() == 3) {
 			double z = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-			jsVec = Nan::NewInstance(Nan::New(Vec3::constructor)->GetFunction()).ToLocalChecked();
+			jsVec = FF::newInstance(Nan::New(Vec3::constructor));
 			Nan::ObjectWrap::Unwrap<Vec3>(jsVec)->vec = cv::Vec3d(x, y, z);
 		}
 		else {
-			v8::Local<v8::Function> ct = Nan::New(Vec2::constructor)->GetFunction();
-			jsVec = Nan::NewInstance(ct).ToLocalChecked();
+			jsVec = FF::newInstance(Nan::New(Vec2::constructor));
 			Nan::ObjectWrap::Unwrap<Vec2>(jsVec)->vec = cv::Vec2d(x, y);
 		}
 	}

@@ -17,7 +17,7 @@ NAN_MODULE_INIT(FacemarkAAM::Init) {
   ctor->SetClassName(Nan::New("FacemarkAAM").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 
-  target->Set(Nan::New("FacemarkAAM").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("FacemarkAAM").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FacemarkAAM::New) {

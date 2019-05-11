@@ -12,7 +12,7 @@ NAN_MODULE_INIT(DescriptorMatch::Init) {
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("trainIdx").ToLocalChecked(), GetTrainIdx);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("distance").ToLocalChecked(), GetDistance);
 
-  target->Set(Nan::New("DescriptorMatch").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("DescriptorMatch").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(DescriptorMatch::New) {

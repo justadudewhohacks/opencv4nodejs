@@ -20,7 +20,7 @@ NAN_MODULE_INIT(TrackerMILParams::Init) {
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("samplerTrackMaxNegNum"), samplerTrackMaxNegNumGet, samplerTrackMaxNegNumSet);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("featureSetNumFeatures"), featureSetNumFeaturesGet, featureSetNumFeaturesSet);
 
-	target->Set(FF_NEW_STRING("TrackerMILParams"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("TrackerMILParams"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(TrackerMILParams::New) {

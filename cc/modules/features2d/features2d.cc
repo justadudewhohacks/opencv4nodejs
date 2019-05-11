@@ -80,7 +80,7 @@ NAN_METHOD(Features2d::DrawKeyPoints) {
 	FF_ARG_ARRAY(1, FF_ARR jsKps);
 	FF_UNPACK_KEYPOINT_ARRAY(kps, jsKps);
 
-	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+	FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
 	cv::drawKeypoints(img, kps, FF_UNWRAP_MAT_AND_GET(jsMat));
 	FF_RETURN(jsMat);
 }
@@ -101,7 +101,7 @@ NAN_METHOD(Features2d::DrawMatches) {
 		dMatches.push_back(match->dmatch);
 	}
 
-	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+	FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
 	cv::drawMatches(img1, kps1, img2, kps2, dMatches, FF_UNWRAP_MAT_AND_GET(jsMat));
 	FF_RETURN(jsMat);
 }

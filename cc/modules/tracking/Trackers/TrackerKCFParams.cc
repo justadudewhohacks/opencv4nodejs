@@ -30,7 +30,7 @@ NAN_MODULE_INIT(TrackerKCFParams::Init) {
 #if CV_MINOR_VERSION > 2
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("detect_thresh"), detect_threshGet, detect_threshSet);
 #endif
-	target->Set(FF_NEW_STRING("TrackerKCFParams"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("TrackerKCFParams"), FF::getFunction(ctor));
 };
 
 

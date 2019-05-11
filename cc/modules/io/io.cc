@@ -131,7 +131,7 @@ NAN_METHOD(Io::Imdecode) {
   std::vector<uchar> vec(size);
   memcpy(vec.data(), data, size);
 
-  FF_OBJ jsDecodedMat = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsDecodedMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsDecodedMat) = cv::imdecode(vec, flags);
   FF_RETURN(jsDecodedMat);
 }

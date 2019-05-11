@@ -801,7 +801,7 @@ namespace MatImgprocBindings {
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Array> ret = Nan::New<v8::Array>(contours.size());
       for (uint i = 0; i < ret->Length(); i++) {
-        FF_OBJ jsContour = FF_NEW_INSTANCE(Contour::constructor);
+        FF_OBJ jsContour = FF::newInstance(Nan::New(Contour::constructor));
         FF_UNWRAP(jsContour, Contour)->contour = contours.at(i);
         FF_UNWRAP(jsContour, Contour)->hierarchy = hierarchy.at(i);
         ret->Set(i, jsContour);

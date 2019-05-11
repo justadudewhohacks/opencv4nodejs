@@ -18,7 +18,7 @@ NAN_MODULE_INIT(TrackerCSRT::Init) {
 	ctor->SetClassName(FF_NEW_STRING("TrackerCSRT"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerCSRT"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("TrackerCSRT"), FF::getFunction(ctor));
 };
 
 

@@ -16,7 +16,7 @@ NAN_MODULE_INIT(TrackerBoosting::Init) {
 	ctor->SetClassName(FF_NEW_STRING("TrackerBoosting"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerBoosting"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("TrackerBoosting"), FF::getFunction(ctor));
 };
 
 

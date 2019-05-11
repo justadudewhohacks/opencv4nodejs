@@ -4,8 +4,6 @@
 #ifndef __FF_MACROS_H__
 #define __FF_MACROS_H__
 
-#define FF_NEW_INSTANCE(ctor) Nan::NewInstance(Nan::New(ctor)->GetFunction()).ToLocalChecked()
-
 #define FF_GETTER(clazz, name, prop)	\
 	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop); }
 
@@ -21,7 +19,7 @@
 
 #define FF_GETTER_JSOBJ(clazz, name, value, unwrapper, ctor)	\
 	NAN_GETTER(name) {																					\
-		v8::Local<v8::Object> jsObj = FF_NEW_INSTANCE(ctor);			\
+		v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(ctor));			\
 		unwrapper(jsObj) = FF_UNWRAP(info.This(), clazz)->value;	\
 		info.GetReturnValue().Set(jsObj);													\
 	}

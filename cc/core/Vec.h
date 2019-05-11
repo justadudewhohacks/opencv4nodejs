@@ -42,7 +42,7 @@ public:
 	static v8::Local<v8::Array> packJSVec4Array(std::vector<cv::Vec4d> vecs) {
 		v8::Local<v8::Array> jsVecs = Nan::New<v8::Array>(vecs.size());
 		for (uint i = 0; i < jsVecs->Length(); i++) {
-			v8::Local<v8::Object> jsVec4 = FF_NEW_INSTANCE(Vec4::constructor);
+			v8::Local<v8::Object> jsVec4 = FF::newInstance(Nan::New(Vec4::constructor));
 			FF_UNWRAP_VEC4_AND_GET(jsVec4) = vecs.at(i);
 			jsVecs->Set(i, jsVec4);
 		}

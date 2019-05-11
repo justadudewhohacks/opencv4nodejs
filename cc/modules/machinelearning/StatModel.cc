@@ -9,7 +9,7 @@ NAN_MODULE_INIT(StatModel::Init) {
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("StatModel").ToLocalChecked());
 
-	target->Set(Nan::New("StatModel").ToLocalChecked(), ctor->GetFunction());
+	target->Set(Nan::New("StatModel").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(StatModel::New) {

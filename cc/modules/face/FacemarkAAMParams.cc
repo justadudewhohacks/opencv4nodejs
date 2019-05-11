@@ -26,7 +26,7 @@ NAN_MODULE_INIT(FacemarkAAMParams::Init) {
   Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("textureMaxM"), textureMaxMGet, textureMaxMSet);
   Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("verbose"), verboseGet, verboseSet);
 
-  target->Set(FF_NEW_STRING("FacemarkAAMParams"), ctor->GetFunction());
+  target->Set(FF_NEW_STRING("FacemarkAAMParams"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FacemarkAAMParams::New) {

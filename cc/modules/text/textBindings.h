@@ -11,7 +11,7 @@ namespace TextBindings {
     std::string file;
   
     FF_VAL getReturnValue() {
-      FF_OBJ jsClassifier = FF_NEW_INSTANCE(OCRHMMClassifier::constructor);
+      FF_OBJ jsClassifier = FF::newInstance(Nan::New(OCRHMMClassifier::constructor));
       FF_UNWRAP(jsClassifier, OCRHMMClassifier)->classifier = classifier;
       return jsClassifier;
     }

@@ -15,7 +15,7 @@ NAN_MODULE_INIT(AGASTDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), AGASTDetector::GetNonmaxSuppression);
 	Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), AGASTDetector::GetType);
 
-  target->Set(Nan::New("AGASTDetector").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("AGASTDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(AGASTDetector::New) {

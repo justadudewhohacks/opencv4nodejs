@@ -19,12 +19,12 @@
 #define FF_ERR_WHERE(func, clazz) std::string(#clazz) + "  " + std::string(#func) + " : "
 
 #define FF_SELF_OPERATOR_RET(func, unwrapper)					\
-	v8::Local<v8::Object> jsObj = FF_NEW_INSTANCE(constructor);	\
+	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));	\
 	unwrapper(jsObj) = func(unwrapper(info.This()));		\
 	return info.GetReturnValue().Set(jsObj);		
 
 #define FF_SELF_OPERATOR(func, unwrapper)							\
-	v8::Local<v8::Object> jsObj = FF_NEW_INSTANCE(constructor);	\
+	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));	\
 	func(unwrapper(info.This()), unwrapper(jsObj));			\
 	return info.GetReturnValue().Set(jsObj);					
 
@@ -33,7 +33,7 @@
 		return Nan::ThrowError(FF_NEW_STRING(FF_ERR_WHERE(func, clazz)	\
 			+ std::string("expected arg to be a Scalar")));							\
 	}																																\
-	v8::Local<v8::Object> jsObj = FF_NEW_INSTANCE(constructor);							\
+	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));							\
 	applyFunc(																											\
 		func,																													\
 		unwrapper(info.This()),																				\
@@ -45,7 +45,7 @@
 #define FF_OPERATOR(func, applyFunc, unwrapper, clazz)														\
 	FF_REQUIRE_INSTANCE(constructor, info[0],	FF_NEW_STRING(FF_ERR_WHERE(func, clazz) \
 		+ std::string("expected arg to be an instance of ") + std::string(#clazz)));	\
-	v8::Local<v8::Object> jsObj = FF_NEW_INSTANCE(constructor);															\
+	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));															\
 	applyFunc(																																			\
 		func,																																					\
 		unwrapper(info.This()),																												\
