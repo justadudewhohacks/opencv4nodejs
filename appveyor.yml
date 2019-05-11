@@ -6,6 +6,7 @@ platform:
 
 image:
   - Visual Studio 2015
+  - Visual Studio 2017
 
 clone_folder: c:\projects\opencv4nodejs
 
@@ -18,18 +19,39 @@ init:
 # what combinations to test
 environment:
   matrix:
-    # node 9
-    - nodejs_version: 9
+    # node 12
+    - nodejs_version: 12
       PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7"
-      opencv_version: 3.3.0
+      opencv_version: 3.4.6
+      # use self build
+      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+    # node 11
+    - nodejs_version: 11
+      PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7"
+      opencv_version: 3.4.6
+      # use self build
+      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+    # node 10
+    - nodejs_version: 10
+      PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7"
+      opencv_version: 3.4.6
+      # use self build
+      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+    # node 8
+    - nodejs_version: 8
+      PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7"
+      opencv_version: 3.4.6
       # use self build
       OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
     # node 6
     - nodejs_version: 6
       PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7"
-      opencv_version: 3.3.0
+      opencv_version: 3.4.6
       # use self build
       OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
 
