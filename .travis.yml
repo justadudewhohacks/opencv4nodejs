@@ -54,7 +54,7 @@ env:
 before_install:
   - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh
 
-install: travis_wait 30 docker pull justadudewhohacks/opencv4nodejs-ci:$TAG
+install: travis_wait 30 docker pull justadudewhohacks/opencv:$TAG
 
 script:
   - cd ./ci/$BUILD_TASK
