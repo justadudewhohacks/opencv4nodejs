@@ -18,7 +18,7 @@ NAN_MODULE_INIT(CascadeClassifier::Init) {
   Nan::SetPrototypeMethod(ctor, "detectMultiScaleWithRejectLevelsAsync", DetectMultiScaleWithRejectLevelsAsync);
   Nan::SetPrototypeMethod(ctor, "detectMultiScaleWithRejectLevelsGpu", DetectMultiScaleWithRejectLevelsGpu);
 
-  target->Set(FF_NEW_STRING("CascadeClassifier"), ctor->GetFunction());
+  target->Set(FF_NEW_STRING("CascadeClassifier"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(CascadeClassifier::New) {

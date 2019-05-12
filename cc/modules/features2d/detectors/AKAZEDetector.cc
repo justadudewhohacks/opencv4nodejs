@@ -19,7 +19,7 @@ NAN_MODULE_INIT(AKAZEDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaveLayers").ToLocalChecked(), AKAZEDetector::GetNOctaveLayers);
 	Nan::SetAccessor(instanceTemplate, Nan::New("diffusivity").ToLocalChecked(), AKAZEDetector::GetDiffusity);
 
-  target->Set(Nan::New("AKAZEDetector").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("AKAZEDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(AKAZEDetector::New) {

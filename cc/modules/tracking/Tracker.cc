@@ -28,7 +28,7 @@ NAN_METHOD(Tracker::Update) {
 
 	FF_ARG_INSTANCE(0, cv::Mat image, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
 
-	FF_OBJ jsRect = FF_NEW_INSTANCE(Rect::constructor);
+	FF_OBJ jsRect = FF::newInstance(Nan::New(Rect::constructor));
 	bool ret = FF_UNWRAP(info.This(), Tracker)->getTracker()->update(image, FF_UNWRAP_RECT_AND_GET(jsRect));
 	
 	if (ret) {

@@ -19,7 +19,7 @@ NAN_MODULE_INIT(SURFDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("extended").ToLocalChecked(), SURFDetector::GetExtended);
 	Nan::SetAccessor(instanceTemplate, Nan::New("upright").ToLocalChecked(), SURFDetector::GetUpright);
 
-  target->Set(Nan::New("SURFDetector").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("SURFDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(SURFDetector::New) {

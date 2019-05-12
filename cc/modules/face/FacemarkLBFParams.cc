@@ -32,7 +32,7 @@ NAN_MODULE_INIT(FacemarkLBFParams::Init) {
   Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("treeN"), treeNGet, treeNSet);
   Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("verbose"), verboseGet, verboseSet);
 
-  target->Set(FF_NEW_STRING("FacemarkLBFParams"), ctor->GetFunction());
+  target->Set(FF_NEW_STRING("FacemarkLBFParams"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FacemarkLBFParams::New) {

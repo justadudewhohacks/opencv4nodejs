@@ -21,7 +21,7 @@ NAN_MODULE_INIT(ORBDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("patchSize").ToLocalChecked(), ORBDetector::GetPatchSize);
 	Nan::SetAccessor(instanceTemplate, Nan::New("fastThreshold").ToLocalChecked(), ORBDetector::GetFastThreshold);
 
-  target->Set(Nan::New("ORBDetector").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("ORBDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(ORBDetector::New) {

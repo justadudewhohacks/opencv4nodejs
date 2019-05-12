@@ -14,7 +14,7 @@ NAN_MODULE_INIT(TrackerMedianFlow::Init) {
 	ctor->SetClassName(FF_NEW_STRING("TrackerMedianFlow"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerMedianFlow"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("TrackerMedianFlow"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(TrackerMedianFlow::New) {

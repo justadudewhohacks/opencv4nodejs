@@ -15,7 +15,7 @@ NAN_MODULE_INIT(BackgroundSubtractorMOG2::Init) {
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("varThreshold"), GetVarThreshold);
 	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("detectShadows"), GetDetectShadows);
 
-	target->Set(FF_NEW_STRING("BackgroundSubtractorMOG2"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("BackgroundSubtractorMOG2"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(BackgroundSubtractorMOG2::New) {

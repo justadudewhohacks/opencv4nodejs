@@ -34,7 +34,7 @@ NAN_MODULE_INIT(SVM::Init) {
   Nan::SetPrototypeMethod(ctor, "trainAsync", TrainAsync);
   Nan::SetPrototypeMethod(ctor, "trainAutoAsync", TrainAutoAsync);
 
-  target->Set(Nan::New("SVM").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("SVM").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 void SVM::setParams(v8::Local<v8::Object> params) {
@@ -125,7 +125,7 @@ NAN_METHOD(SVM::Predict) {
 }
 
 NAN_METHOD(SVM::GetSupportVectors) {
-  FF_OBJ jsSupportVectors = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsSupportVectors) = FF_UNWRAP(info.This(), SVM)->svm->getSupportVectors();
   FF_RETURN(jsSupportVectors);
 }
@@ -135,7 +135,7 @@ NAN_METHOD(SVM::GetUncompressedSupportVectors) {
 #if CV_VERSION_MINOR < 2
   FF_THROW("getUncompressedSupportVectors not implemented for v3.0, v3.1");
 #else
-  FF_OBJ jsSupportVectors = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsSupportVectors) = FF_UNWRAP(info.This(), SVM)->svm->getUncompressedSupportVectors();
   FF_RETURN(jsSupportVectors);
 #endif
@@ -148,8 +148,8 @@ NAN_METHOD(SVM::GetDecisionFunction) {
     FF_THROW("expected arg 0 to be a Int");
   }
 
-  FF_OBJ alpha = FF_NEW_INSTANCE(Mat::constructor);
-  FF_OBJ svidx = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ alpha = FF::newInstance(Nan::New(Mat::constructor));
+  FF_OBJ svidx = FF::newInstance(Nan::New(Mat::constructor));
   FF_ARG_INT(0, int i);
   double rho = FF_UNWRAP(info.This(), SVM)->svm->getDecisionFunction(i, FF_UNWRAP_MAT_AND_GET(alpha), FF_UNWRAP_MAT_AND_GET(svidx));
 
@@ -165,7 +165,7 @@ NAN_METHOD(SVM::CalcError) {
   FF_ARG_INSTANCE(0, cv::Ptr<cv::ml::TrainData> trainData, TrainData::constructor, FF_UNWRAP_TRAINDATA_AND_GET);
   FF_ARG_BOOL(1, bool test);
 
-  FF_OBJ jsResponses = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsResponses = FF::newInstance(Nan::New(Mat::constructor));
   float error = FF_UNWRAP(info.This(), SVM)->svm->calcError(trainData, test, FF_UNWRAP_MAT_AND_GET(jsResponses));
 
   FF_OBJ ret = FF_NEW_OBJ();

@@ -27,7 +27,7 @@ NAN_MODULE_INIT(MultiTracker::Init) {
 #endif
 	Nan::SetPrototypeMethod(ctor, "update", MultiTracker::Update);
 
-	target->Set(FF_NEW_STRING("MultiTracker"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("MultiTracker"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(MultiTracker::New) {
@@ -114,7 +114,7 @@ NAN_METHOD(MultiTracker::Update) {
 
 	FF_ARR jsRects = FF_NEW_ARRAY(rects.size());
 	for (unsigned long i = 0; i < rects.size(); i++) {
-		FF_OBJ jsRect = FF_NEW_INSTANCE(Rect::constructor);
+		FF_OBJ jsRect = FF::newInstance(Nan::New(Rect::constructor));
 		FF_UNWRAP_RECT_AND_GET(jsRect) = rects.at(i);
 		jsRects->Set(i, jsRect);
 	}

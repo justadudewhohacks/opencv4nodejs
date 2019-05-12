@@ -9,7 +9,7 @@
 #define FF_PACK_KEYPOINT_ARRAY(var, kps)									\
 	FF_ARR var = FF_NEW_ARRAY(kps.size());									\
 	for (int i = 0; i < kps.size(); i++) {									\
-		FF_OBJ jsKp = FF_NEW_INSTANCE(KeyPoint::constructor);	\
+		FF_OBJ jsKp = FF::newInstance(Nan::New(KeyPoint::constructor));	\
 		FF_UNWRAP(jsKp, KeyPoint)->keyPoint = kps.at(i);			\
 		var->Set(i, jsKp);																		\
 	}

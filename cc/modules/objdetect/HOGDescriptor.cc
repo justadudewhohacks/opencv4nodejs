@@ -46,7 +46,7 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
   Nan::SetPrototypeMethod(ctor, "save", Save);
   Nan::SetPrototypeMethod(ctor, "load", Load);
 
-  target->Set(FF_NEW_STRING("HOGDescriptor"), ctor->GetFunction());
+  target->Set(FF_NEW_STRING("HOGDescriptor"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(HOGDescriptor::New) {

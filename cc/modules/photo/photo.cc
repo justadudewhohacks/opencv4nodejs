@@ -27,7 +27,7 @@ NAN_METHOD(Photo::FastNlMeansDenoisingColored) {
     FF_ARG_UINT_IFDEF(4, searchWindowSize, searchWindowSize);
   }
 
-  FF_OBJ jsDst = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsDst = FF::newInstance(Nan::New(Mat::constructor));
   cv::fastNlMeansDenoisingColored(src, FF_UNWRAP_MAT_AND_GET(jsDst), h, hColor, templateWindowSize, searchWindowSize);
   FF_RETURN(jsDst);
 }

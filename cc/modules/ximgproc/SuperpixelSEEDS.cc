@@ -23,7 +23,7 @@ NAN_MODULE_INIT(SuperpixelSEEDS::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelSEEDS::Iterate);
 
-  target->Set(Nan::New("SuperpixelSEEDS").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("SuperpixelSEEDS").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(SuperpixelSEEDS::New) {

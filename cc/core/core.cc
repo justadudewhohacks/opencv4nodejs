@@ -9,8 +9,8 @@
     }                                                                                 \
     bool operator()(const ff_type& a, const ff_type& b) {                             \
       FF_VAL cbArgs[2];                                                               \
-      cbArgs[0] = FF_NEW_INSTANCE(ff_ctor);                                           \
-      cbArgs[1] = FF_NEW_INSTANCE(ff_ctor);                                           \
+      cbArgs[0] = FF::newInstance(Nan::New(ff_ctor));                                           \
+      cbArgs[1] = FF::newInstance(Nan::New(ff_ctor));                                           \
       ff_unwrapper(cbArgs[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()) = a;                                        \
       ff_unwrapper(cbArgs[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()) = b;                                        \
       Nan::AsyncResource resource("opencv4nodejs:Predicate::Constructor");            \

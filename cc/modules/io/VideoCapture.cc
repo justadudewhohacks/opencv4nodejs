@@ -15,7 +15,7 @@ NAN_MODULE_INIT(VideoCapture::Init) {
   Nan::SetPrototypeMethod(ctor, "set", Set);
   Nan::SetPrototypeMethod(ctor, "setAsync", SetAsync);
   Nan::SetPrototypeMethod(ctor, "release", Release);
-  target->Set(FF_NEW_STRING("VideoCapture"), ctor->GetFunction());
+  target->Set(FF_NEW_STRING("VideoCapture"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(VideoCapture::New) {

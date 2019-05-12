@@ -14,7 +14,7 @@ NAN_MODULE_INIT(FisherFaceRecognizer::Init) {
 	ctor->SetClassName(Nan::New("FisherFaceRecognizer").ToLocalChecked());
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(Nan::New("FisherFaceRecognizer").ToLocalChecked(), ctor->GetFunction());
+	target->Set(Nan::New("FisherFaceRecognizer").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FisherFaceRecognizer::New) {

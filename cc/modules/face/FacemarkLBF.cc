@@ -17,7 +17,7 @@ NAN_MODULE_INIT(FacemarkLBF::Init) {
   ctor->SetClassName(Nan::New("FacemarkLBF").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 
-  target->Set(Nan::New("FacemarkLBF").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("FacemarkLBF").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FacemarkLBF::New) {

@@ -16,7 +16,7 @@ NAN_MODULE_INIT(TrackerMIL::Init) {
 	ctor->SetClassName(FF_NEW_STRING("TrackerMIL"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerMIL"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("TrackerMIL"), FF::getFunction(ctor));
 };
 
 

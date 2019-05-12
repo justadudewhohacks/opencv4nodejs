@@ -45,7 +45,7 @@ NAN_METHOD(Imgproc::GetStructuringElement) {
   FF_ARG_INSTANCE(1, cv::Size2d size, Size::constructor, FF_UNWRAP_SIZE_AND_GET);
   FF_ARG_INSTANCE_IFDEF(2, cv::Point2d anchor, Point2::constructor, FF_UNWRAP_PT2_AND_GET, cv::Point2d(-1, -1));
 
-  FF_OBJ jsKernel = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsKernel = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsKernel) = cv::getStructuringElement(shape, size, anchor);
   FF_RETURN(jsKernel);
 }
@@ -58,7 +58,7 @@ NAN_METHOD(Imgproc::GetRotationMatrix2D) {
 
   FF_ARG_NUMBER_IFDEF(2, double scale, 1.0);
 
-  FF_OBJ jsRotationMat = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsRotationMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsRotationMat) = cv::getRotationMatrix2D(center, angle, scale);
   FF_RETURN(jsRotationMat);
 }
@@ -78,7 +78,7 @@ NAN_METHOD(Imgproc::GetAffineTransform) {
     return info.GetReturnValue().Set(tryCatch.ReThrow());
   }
 
-  FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getAffineTransform(srcPoints, dstPoints);
   FF_RETURN(jsMat);
 }
@@ -98,7 +98,7 @@ NAN_METHOD(Imgproc::GetPerspectiveTransform) {
     return info.GetReturnValue().Set(tryCatch.ReThrow());
   }
 
-  FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getPerspectiveTransform(srcPoints, dstPoints);
   FF_RETURN(jsMat);
 }
@@ -160,7 +160,7 @@ NAN_METHOD(Imgproc::CalcHist) {
   delete[] channels;
   delete[] histSize;
 
-  FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
   int outputType = CV_MAKETYPE(CV_64F, img.channels());
   if (outputType != hist.type()) {
     hist.convertTo(hist, outputType);
@@ -216,7 +216,7 @@ NAN_METHOD(Imgproc::Plot1DHist) {
     );
   }
 
-  FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsMat) = plot;
   FF_RETURN(jsMat);
 }
@@ -298,7 +298,7 @@ NAN_METHOD(Imgproc::Canny) {
 	FF_ARG_NUMBER(3, double threshold2);
 	FF_ARG_BOOL_IFDEF(4, bool L2gradient, false);
 
-	FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
+	FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
 	cv::Canny(dx, dy, FF_UNWRAP_MAT_AND_GET(jsMat), threshold1, threshold2, L2gradient);
 
 	FF_RETURN(jsMat);

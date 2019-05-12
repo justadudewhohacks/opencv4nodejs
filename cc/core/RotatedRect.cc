@@ -13,7 +13,7 @@ NAN_MODULE_INIT(RotatedRect::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "boundingRect", RotatedRect::BoundingRect);
 
-  target->Set(Nan::New("RotatedRect").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("RotatedRect").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(RotatedRect::New) {

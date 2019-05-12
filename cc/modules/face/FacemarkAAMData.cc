@@ -17,7 +17,7 @@ NAN_MODULE_INIT(FacemarkAAMData::Init) {
 
   Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("s0"), s0Get, s0Set);
 
-  target->Set(FF_NEW_STRING("FacemarkAAMData"), ctor->GetFunction());
+  target->Set(FF_NEW_STRING("FacemarkAAMData"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FacemarkAAMData::New) {

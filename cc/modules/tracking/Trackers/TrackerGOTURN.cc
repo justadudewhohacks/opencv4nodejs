@@ -16,7 +16,7 @@ NAN_MODULE_INIT(TrackerGOTURN::Init) {
 	ctor->SetClassName(FF_NEW_STRING("TrackerGOTURN"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerGOTURN"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("TrackerGOTURN"), FF::getFunction(ctor));
 };
 
 

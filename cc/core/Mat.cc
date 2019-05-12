@@ -103,7 +103,7 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "eigenAsync", EigenAsync);
   Nan::SetPrototypeMethod(ctor, "solve", Solve);
   Nan::SetPrototypeMethod(ctor, "solveAsync", SolveAsync);
-    
+
 #if CV_VERSION_MINOR > 1
   Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
   Nan::SetPrototypeMethod(ctor, "rotateAsync", RotateAsync);
@@ -120,7 +120,7 @@ NAN_MODULE_INIT(Mat::Init) {
   MatXimgproc::Init(ctor);
   #endif // HAVE_XIMGPROC
 
-  target->Set(Nan::New("Mat").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("Mat").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 void Mat::setNativeProps(cv::Mat mat) {
@@ -223,7 +223,7 @@ NAN_METHOD(Mat::Eye) {
   FF_ARG_INT(0, int rows);
   FF_ARG_INT(1, int cols);
   FF_ARG_INT(2, int type);
-  FF_OBJ jsEyeMat = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsEyeMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsEyeMat) = cv::Mat::eye(cv::Size(cols, rows), type);
   FF_RETURN(jsEyeMat);
 }
@@ -260,15 +260,15 @@ NAN_METHOD(Mat::At) {
     FF_ARR vec = FF_ARR::Cast(val);
     FF_OBJ jsVec;
     if (vec->Length() == 2) {
-      jsVec = FF_NEW_INSTANCE(Vec2::constructor);
+      jsVec = FF::newInstance(Nan::New(Vec2::constructor));
       FF_UNWRAP_VEC2(jsVec)->vec = cv::Vec2d(vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
     }
     else if (vec->Length() == 3) {
-      jsVec = FF_NEW_INSTANCE(Vec3::constructor);
+      jsVec = FF::newInstance(Nan::New(Vec3::constructor));
       FF_UNWRAP_VEC3(jsVec)->vec = cv::Vec3d(vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(2)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
     }
     else {
-      jsVec = FF_NEW_INSTANCE(Vec4::constructor);
+      jsVec = FF::newInstance(Nan::New(Vec4::constructor));
       FF_UNWRAP_VEC4(jsVec)->vec = cv::Vec4d(vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(2)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(3)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
     }
     jsVal = jsVec;
@@ -353,7 +353,7 @@ NAN_METHOD(Mat::GetRegion) {
     return Nan::ThrowError("Mat::GetRegion expected arg0 to be an instance of Rect");
   }
   cv::Rect2d rect = FF_UNWRAP(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked(), Rect)->rect;
-  FF_OBJ jsRegion = FF_NEW_INSTANCE(constructor);
+  FF_OBJ jsRegion = FF::newInstance(Nan::New(constructor));
   FF_UNWRAP_MAT_AND_GET(jsRegion) = FF_UNWRAP_MAT_AND_GET(info.This())(rect);
   FF_RETURN(jsRegion);
 }
@@ -404,7 +404,7 @@ NAN_METHOD(Mat::Normalize) {
     FF_ARG_INSTANCE_IFDEF(4, mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
   }
 
-  FF_OBJ jsMat = FF_NEW_INSTANCE(constructor);
+  FF_OBJ jsMat = FF::newInstance(Nan::New(constructor));
   cv::normalize(FF_UNWRAP_MAT_AND_GET(info.This()), FF_UNWRAP_MAT_AND_GET(jsMat), alpha, beta, normType, dtype, mask);
   FF_RETURN(jsMat);
 }

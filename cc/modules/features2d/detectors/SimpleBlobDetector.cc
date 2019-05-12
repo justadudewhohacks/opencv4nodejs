@@ -13,7 +13,7 @@ NAN_MODULE_INIT(SimpleBlobDetector::Init) {
 	ctor->SetClassName(Nan::New("SimpleBlobDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 
-  target->Set(Nan::New("SimpleBlobDetector").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("SimpleBlobDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(SimpleBlobDetector::New) {

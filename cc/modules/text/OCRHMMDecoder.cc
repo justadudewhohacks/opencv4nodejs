@@ -18,7 +18,7 @@ NAN_MODULE_INIT(OCRHMMDecoder::Init) {
   Nan::SetPrototypeMethod(ctor, "runWithInfo", RunWithInfo);
   Nan::SetPrototypeMethod(ctor, "runWithInfoAsync", RunWithInfoAsync);
 
-  target->Set(FF_NEW_STRING("OCRHMMDecoder"), ctor->GetFunction());
+  target->Set(FF_NEW_STRING("OCRHMMDecoder"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(OCRHMMDecoder::New) {

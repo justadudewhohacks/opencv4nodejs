@@ -18,7 +18,7 @@ NAN_MODULE_INIT(TrackerKCF::Init) {
 	ctor->SetClassName(FF_NEW_STRING("TrackerKCF"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerKCF"), ctor->GetFunction());
+	target->Set(FF_NEW_STRING("TrackerKCF"), FF::getFunction(ctor));
 };
 
 

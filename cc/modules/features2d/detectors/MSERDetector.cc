@@ -26,7 +26,7 @@ NAN_MODULE_INIT(MSERDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("minMargin").ToLocalChecked(), MSERDetector::GetMinMargin);
 	Nan::SetAccessor(instanceTemplate, Nan::New("edgeBlurSize").ToLocalChecked(), MSERDetector::GetEdgeBlurSize);
 
-  target->Set(Nan::New("MSERDetector").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("MSERDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(MSERDetector::New) {

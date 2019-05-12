@@ -15,7 +15,7 @@ NAN_MODULE_INIT(BRISKDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("octaves").ToLocalChecked(), BRISKDetector::GetOctaves);
 	Nan::SetAccessor(instanceTemplate, Nan::New("patternScale").ToLocalChecked(), BRISKDetector::GetPatternScale);
 
-  target->Set(Nan::New("BRISKDetector").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("BRISKDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(BRISKDetector::New) {

@@ -22,7 +22,7 @@ NAN_MODULE_INIT(SuperpixelLSC::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelLSC::Iterate);
 
-  target->Set(Nan::New("SuperpixelLSC").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("SuperpixelLSC").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(SuperpixelLSC::New) {

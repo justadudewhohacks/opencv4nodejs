@@ -29,7 +29,7 @@ public:
 	static v8::Local<v8::Array> packJSPoint2Array(std::vector<cv::Point_<type>> pts) {
 		v8::Local<v8::Array> jsPts = Nan::New<v8::Array>(pts.size());
 		for (uint i = 0; i < jsPts->Length(); i++) {
-			v8::Local<v8::Object> jsPt2 = FF_NEW_INSTANCE(Point2::constructor);
+			v8::Local<v8::Object> jsPt2 = FF::newInstance(Nan::New(Point2::constructor));
 			FF_UNWRAP_PT2_AND_GET(jsPt2) = pts.at(i);
 			jsPts->Set(i, jsPt2);
 		}
@@ -40,7 +40,7 @@ public:
 	static v8::Local<v8::Array> packJSPoint3Array(std::vector<cv::Point3_<type>> pts) {
 		v8::Local<v8::Array> jsPts = Nan::New<v8::Array>(pts.size());
 		for (uint i = 0; i < jsPts->Length(); i++) {
-			v8::Local<v8::Object> jsPt3 = FF_NEW_INSTANCE(Point3::constructor);
+			v8::Local<v8::Object> jsPt3 = FF::newInstance(Nan::New(Point3::constructor));
 			FF_UNWRAP_PT3_AND_GET(jsPt3) = pts.at(i);
 			jsPts->Set(i, jsPt3);
 		}

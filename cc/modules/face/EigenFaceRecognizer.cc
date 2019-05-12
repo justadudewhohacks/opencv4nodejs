@@ -14,7 +14,7 @@ NAN_MODULE_INIT(EigenFaceRecognizer::Init) {
 	ctor->SetClassName(Nan::New("EigenFaceRecognizer").ToLocalChecked());
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(Nan::New("EigenFaceRecognizer").ToLocalChecked(), ctor->GetFunction());
+	target->Set(Nan::New("EigenFaceRecognizer").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(EigenFaceRecognizer::New) {

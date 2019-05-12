@@ -12,7 +12,7 @@ NAN_MODULE_INIT(KeyPointMatch::Init) {
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("kpTo").ToLocalChecked(), GetKpTo);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("distance").ToLocalChecked(), GetDistance);
 
-  target->Set(Nan::New("KeyPointMatch").ToLocalChecked(), ctor->GetFunction());
+  target->Set(Nan::New("KeyPointMatch").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(KeyPointMatch::New) {

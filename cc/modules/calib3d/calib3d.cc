@@ -160,8 +160,8 @@ NAN_METHOD(Calib3d::FindHomography) {
     FF_ARG_NUMBER_IFDEF(5, confidence, confidence);
   }
 
-  FF_OBJ jsMat = FF_NEW_INSTANCE(Mat::constructor);
-  FF_OBJ mask = FF_NEW_INSTANCE(Mat::constructor);
+  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
+  FF_OBJ mask = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsMat) = cv::findHomography(srcPoints, dstPoints, method, ransacReprojThreshold, FF_UNWRAP_MAT_AND_GET(mask), maxIters, confidence);
 
   v8::Local<v8::Object> output = Nan::New<v8::Object>();
