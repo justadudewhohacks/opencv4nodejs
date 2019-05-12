@@ -120,7 +120,7 @@ Flags must be space-separated.
 
 This is an advanced customization and you should have knowledge regarding the OpenCV compilation flags.
 
-For example `export OPENCV4NODEJS_AUTOBUILD_FLAGS="-DBUILD_LIST=dnn"` will build only modules required for `dnn` and reduced the size of the opencv package. Flags added by default are listed [here](https://github.com/justadudewhohacks/npm-opencv-build/blob/master/install/setup-opencv.js#L63)
+For example `export OPENCV4NODEJS_AUTOBUILD_FLAGS="-DBUILD_LIST=dnn"` will build only modules required for `dnn` and reduced the size of the opencv package. Flags added by default are listed [here](https://github.com/justadudewhohacks/npm-opencv-build/blob/master/src/constants.ts#L44-L82)
 
 ## Manual build
 Setting up OpenCV on your own will require you to set an environment variable: *OPENCV4NODEJS_DISABLE_AUTOBUILD=1*.
