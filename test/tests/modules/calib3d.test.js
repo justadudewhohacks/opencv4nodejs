@@ -32,41 +32,33 @@ const distCoefficients = [0, 0.5, 1.0, 1.0];
 
 describe('calib3d', () => {
   describe('findHomography', () => {
-    const srcPoints = [{ x: 100, y: 100 }, { x: 100, y: -100 }, { x: -100, y: 100 }, { x: -100, y: -100 }];
-    const dstPoints = srcPoints.map(srcPt => ({ x: srcPt.x * 2, y: srcPt.y * 2 }));
+    const srcPointsJson = [{ x: 100, y: 100 }, { x: 100, y: -100 }, { x: -100, y: 100 }, { x: -100, y: -100 }];
+    const srcPoints = srcPointsJson.map(pt => new cv.Point(pt.x, pt.y))
+    const dstPoints = srcPointsJson.map(srcPt => new cv.Point(srcPt.x * 2, srcPt.y * 2));
     const method = cv.RANSAC;
+    const ransacReprojThreshold = 2.5;
+		const maxIters = 1000;
     const confidence = 0.9;
 
-    funcShouldRequireArgs(cv.findHomography);
 
-    it('can be called if required args passed', () => {
-      expect(() => cv.findHomography(srcPoints, dstPoints)).to.not.throw();
-    });
+    const expectOutput = (res) => {
+      assertPropsWithValue(res.homography)({ type: cv.CV_64F, rows: 3, cols: 3 });
+    };
 
-    it('can be called with optional args', () => {
-      expect(() => cv.findHomography(srcPoints, dstPoints, method)).to.not.throw();
-    });
-
-    it('can be called with optional args object', () => {
-      expect(() => cv.findHomography(
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'findHomography',
+      getRequiredArgs: () => ([
         srcPoints,
-        dstPoints,
-        { method, confidence })).to.not.throw();
-    });
-
-    it('should throw if point validation fails', () => {
-      let errMsg = '';
-      try {
-        cv.findHomography([{ x: 100 }], [{ x: 100 }]);
-      } catch (err) {
-        errMsg = err.toString();
-      }
-      assert.include(errMsg, 'expected object to have property: y');
-    });
-
-    it('should calculate a valid homography', () => {
-      const output = cv.findHomography(srcPoints, dstPoints);
-      assertPropsWithValue(output.homography)({ type: cv.CV_64F, rows: 3, cols: 3 });
+        dstPoints
+      ]),
+      getOptionalParamsMap: () => ([
+        ['method', method],
+        ['ransacReprojThreshold', ransacReprojThreshold],
+        ['maxIters', maxIters],
+        ['confidence', confidence]
+      ]),
+      expectOutput
     });
   });
 
