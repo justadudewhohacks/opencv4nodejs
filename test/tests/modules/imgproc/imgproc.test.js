@@ -215,17 +215,15 @@ describe('imgproc', () => {
 
     describe('undistortPoints', () => {
       const cameraMatrix = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);
-      const newCameraMatrix = new cv.Mat([[0.5, 0, 10],[0, 0.5, 10],[0, 0, 1]], cv.CV_32F);
+      //const newCameraMatrix = new cv.Mat([[0.5, 0, 10],[0, 0.5, 10],[0, 0, 1]], cv.CV_32F);
       const distCoeffs = new cv.Mat([[0.1, 0.1, 1, 1]], cv.CV_32F);
       const srcPoints = [
-        [5,5], [5, 10], [5, 15], 
-        [10,5], [10,10], 10, 15,
-        [15,5], [15,10], [15, 15]
+        [5,5], [5, 10], [5, 15]
       ].map(p => new cv.Point(p[0], p[1]));
-      const destPoints = [
-        [5,5], [5, 10], [5, 15], 
-        [10,5], [10,10], 10, 15,
-        [15,5], [15,10], [15, 15]
+      const expectedDestPoints = [
+        [9.522233963012695, 9.522233963012695], 
+        [9.128815650939941, 9.661333084106445], 
+        [9.76507568359375, 9.841306686401367]
       ].map(p => new cv.Point(p[0], p[1]));
       
       generateAPITests({
@@ -236,12 +234,14 @@ describe('imgproc', () => {
           cameraMatrix,
           distCoeffs
         ]),
-        getOptionalArgs: () => ([
-          newCameraMatrix
-        ]),
-        hasAsync: false,
-        usesMacroInferno: true,
-        expectOutput: destPoints => expect(destPoints).to.deepEqual(expectedDestPoints)
+        hasAsync: true,
+        expectOutput: destPoints => {
+          expect(destPoints.length).to.equal(expectedDestPoints.length);
+          for(var i = 0; i < destPoints.length; i++){
+            expect(destPoints[i].x).to.be.closeTo(expectedDestPoints[i].x, 0.001)
+            expect(destPoints[i].y).to.be.closeTo(expectedDestPoints[i].y, 0.001)
+          }
+        }
       });
     });    
   });

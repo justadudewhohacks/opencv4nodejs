@@ -19,6 +19,7 @@ public:
   static NAN_METHOD(GetAffineTransform);
   static NAN_METHOD(GetPerspectiveTransform);
   static NAN_METHOD(UndistortPoints);
+  static NAN_METHOD(UndistortPointsAsync);
   static NAN_METHOD(CalcHist);
   static NAN_METHOD(Plot1DHist);
   static NAN_METHOD(FitLine);

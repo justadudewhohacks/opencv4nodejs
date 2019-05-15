@@ -28,6 +28,7 @@ NAN_MODULE_INIT(Imgproc::Init) {
   Nan::SetMethod(target, "getAffineTransform", GetAffineTransform);
   Nan::SetMethod(target, "getPerspectiveTransform", GetPerspectiveTransform);
   Nan::SetMethod(target, "undistortPoints", UndistortPoints);
+  Nan::SetMethod(target, "undistortPointsAsync", UndistortPointsAsync);
   Nan::SetMethod(target, "getTextSize", GetTextSize);
   Nan::SetMethod(target, "getTextSizeAsync", GetTextSizeAsync);
   Nan::SetMethod(target, "applyColorMap", ApplyColorMap);
@@ -104,24 +105,15 @@ NAN_METHOD(Imgproc::GetPerspectiveTransform) {
   FF_RETURN(jsMat);
 }
 NAN_METHOD(Imgproc::UndistortPoints) {
-  FF_METHOD_CONTEXT("UndistortPoints");
-
-  FF_ARG_ARRAY(0, FF_ARR jsSrcPoints);
-  FF_ARG_INSTANCE(1, cv::Mat cameraMatrix, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-  FF_ARG_INSTANCE(2, cv::Mat distCoeffs, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-  FF_ARG_INSTANCE_IFDEF(3, cv::Mat newCameraMatrix, Mat::constructor, FF_UNWRAP_MAT_AND_GET, cameraMatrix);
-
-  Nan::TryCatch tryCatch;
-  std::vector<cv::Point2f> srcPoints;
-  Point::unpackJSPoint2Array<float>(srcPoints, jsSrcPoints);
-  if (tryCatch.HasCaught()) {
-    return info.GetReturnValue().Set(tryCatch.ReThrow());
-  }
-
-  std::vector<cv::Point2f> destPoints; 
-  cv::undistortPoints(srcPoints, destPoints, cameraMatrix, distCoeffs, newCameraMatrix);
-  FF_RETURN(Point::packJSPoint2Array<float>(destPoints));
+  FF::SyncBinding(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
+                  "Imgproc::UndistortPoints", info);
 }
+
+NAN_METHOD(Imgproc::UndistortPointsAsync) {
+  FF::AsyncBinding(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
+                   "Imgproc::UndistortPointsAsync", info);
+}
+
 NAN_METHOD(Imgproc::CalcHist) {
   FF_METHOD_CONTEXT("CalcHist");
 
