@@ -4,6 +4,17 @@
 #ifndef __FF_MACROS_H__
 #define __FF_MACROS_H__
 
+namespace FF {
+	static bool hasArg(Nan::NAN_METHOD_ARGS_TYPE info, int argN) {
+		return argN < info.Length();
+	}
+
+	static bool isArgObject(Nan::NAN_METHOD_ARGS_TYPE info, int argN) {
+		return FF::hasArg(info, argN) && info[argN]->IsObject() && !info[argN]->IsArray() && !info[argN]->IsFunction();
+	}
+}
+
+
 #define FF_GETTER(clazz, name, prop)	\
 	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop); }
 
@@ -83,8 +94,6 @@
 struct FF_TYPE(FUNC, v8::Local<v8::Function>, FF_IS_FUNC, FF_CAST_FUNC);
 static FF_FUNC_TYPE ff_func = FF_FUNC_TYPE();
 #define FF_ARG_FUNC(argN, var) FF_ARG(argN, var, ff_func)
-
-#define FF_ARG_IS_OBJECT(argN) FF_HAS_ARG(argN) && info[argN]->IsObject() && !info[argN]->IsArray() && !info[argN]->IsFunction()
 
 #define FF_ASSERT_CONSTRUCT_CALL(ctor)																\
   if (!info.IsConstructCall()) {																			\

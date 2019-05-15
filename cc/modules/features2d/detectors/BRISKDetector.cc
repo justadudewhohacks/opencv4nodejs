@@ -19,24 +19,21 @@ NAN_MODULE_INIT(BRISKDetector::Init) {
 };
 
 NAN_METHOD(BRISKDetector::New) {
-  FF_ASSERT_CONSTRUCT_CALL(BRISKDetector);
-	FF_METHOD_CONTEXT("BRISKDetector::New");
-	BRISKDetector* self = new BRISKDetector();
+	FF_ASSERT_CONSTRUCT_CALL(BFMatcher);
+	FF::TryCatch tryCatch;
+	BRISKDetector::NewWorker worker;
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-	FF_GET_INT_IFDEF(optArgs, self->thresh, "thresh", 30);
-	FF_GET_INT_IFDEF(optArgs, self->octaves, "octaves", 3);
-	FF_GET_NUMBER_IFDEF(optArgs, self->patternScale, "patternScale", 1.0);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(0, self->thresh, self->thresh);
-		FF_ARG_INT_IFDEF(1, self->octaves, self->octaves);
-		FF_ARG_NUMBER_IFDEF(2, self->patternScale, self->patternScale);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("BFMatcher::New");
+		tryCatch.throwNew(err);
+		return;
 	}
 
-	self->Wrap(info.Holder());
+	BRISKDetector* self = new BRISKDetector();
+	self->thresh = worker.thresh;
+	self->octaves = worker.octaves;
+	self->patternScale = worker.patternScale;
 	self->detector = cv::BRISK::create(self->thresh, self->octaves, (float)self->patternScale);
-  FF_RETURN(info.Holder());
+	self->Wrap(info.Holder());
+	FF_RETURN(info.Holder());
 }

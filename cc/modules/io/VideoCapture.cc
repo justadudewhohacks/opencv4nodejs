@@ -12,6 +12,7 @@ NAN_MODULE_INIT(VideoCapture::Init) {
   Nan::SetPrototypeMethod(ctor, "reset", Reset);
   Nan::SetPrototypeMethod(ctor, "readAsync", ReadAsync);
   Nan::SetPrototypeMethod(ctor, "get", Get);
+  Nan::SetPrototypeMethod(ctor, "getAsync", GetAsync);
   Nan::SetPrototypeMethod(ctor, "set", Set);
   Nan::SetPrototypeMethod(ctor, "setAsync", SetAsync);
   Nan::SetPrototypeMethod(ctor, "release", Release);
@@ -41,23 +42,32 @@ NAN_METHOD(VideoCapture::New) {
 }
 
 NAN_METHOD(VideoCapture::Reset) {
-  FF_METHOD_CONTEXT("VideoCapture::Reset");
-  VideoCapture* self = FF_UNWRAP(info.This(), VideoCapture);
+  VideoCapture* self = Nan::ObjectWrap::Unwrap<VideoCapture>(info.This());
   self->cap.release();
   self->cap.open(self->path);
   if (!self->cap.isOpened()) {
-    FF_THROW("failed to reset capture");
+	return Nan::ThrowError(FF_NEW_STRING(std::string("VideoCapture::Reset") + " - " + std::string("failed to reset capture")));
   }
 }
 
-NAN_METHOD(VideoCapture::Get) {
-  FF_METHOD_CONTEXT("VideoCapture::Get");
-  FF_ARG_INT(0, int prop);
-  FF_RETURN(FF_UNWRAP(info.This(), VideoCapture)->cap.get(prop));
+NAN_METHOD(VideoCapture::Release) {
+	Nan::ObjectWrap::Unwrap<VideoCapture>(info.This())->cap.release();
 }
 
-NAN_METHOD(VideoCapture::Release) {
-  FF_UNWRAP(info.This(), VideoCapture)->cap.release();
+NAN_METHOD(VideoCapture::Get) {
+	FF::SyncBinding(
+		std::make_shared<VideoCaptureBindings::GetWorker>(VideoCapture::Converter::unwrap(info.This())),
+		"VideoCapture::Get",
+		info
+	);
+}
+
+NAN_METHOD(VideoCapture::GetAsync) {
+	FF::AsyncBinding(
+		std::make_shared<VideoCaptureBindings::GetWorker>(VideoCapture::Converter::unwrap(info.This())),
+		"VideoCapture::GetAsync",
+		info
+	);
 }
 
 NAN_METHOD(VideoCapture::Read) {

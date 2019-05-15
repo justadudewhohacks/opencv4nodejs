@@ -30,39 +30,30 @@ NAN_MODULE_INIT(MSERDetector::Init) {
 };
 
 NAN_METHOD(MSERDetector::New) {
-  FF_ASSERT_CONSTRUCT_CALL(MSERDetector);
-	FF_METHOD_CONTEXT("MSERDetector::New");
-	MSERDetector* self = new MSERDetector();
+	FF_ASSERT_CONSTRUCT_CALL(MSERDetector);
+	FF::TryCatch tryCatch;
+	MSERDetector::NewWorker worker;
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-	FF_GET_INT_IFDEF(optArgs, self->delta, "delta", 5);
-	FF_GET_INT_IFDEF(optArgs, self->minArea, "minArea", 60);
-	FF_GET_INT_IFDEF(optArgs, self->maxArea, "maxArea", 14400);
-	FF_GET_NUMBER_IFDEF(optArgs, self->maxVariation, "maxVariation", 0.25);
-	FF_GET_NUMBER_IFDEF(optArgs, self->minDiversity, "minDiversity", 0.2);
-	FF_GET_INT_IFDEF(optArgs, self->maxEvolution, "maxEvolution", 200);
-	FF_GET_NUMBER_IFDEF(optArgs, self->areaThreshold, "areaThreshold", 1.01);
-	FF_GET_NUMBER_IFDEF(optArgs, self->minMargin, "minMargin", 0.003);
-	FF_GET_INT_IFDEF(optArgs, self->edgeBlurSize, "edgeBlurSize", 5);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(0, self->delta, self->delta);
-		FF_ARG_INT_IFDEF(1, self->minArea, self->minArea);
-		FF_ARG_INT_IFDEF(2, self->maxArea, self->maxArea);
-		FF_ARG_NUMBER_IFDEF(3, self->maxVariation, self->maxVariation);
-		FF_ARG_NUMBER_IFDEF(4, self->minDiversity, self->minDiversity);
-		FF_ARG_INT_IFDEF(5, self->maxEvolution, self->maxEvolution);
-		FF_ARG_NUMBER_IFDEF(6, self->areaThreshold, self->areaThreshold);
-		FF_ARG_NUMBER_IFDEF(7, self->minMargin, self->minMargin);
-		FF_ARG_INT_IFDEF(8, self->edgeBlurSize, self->edgeBlurSize);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("MSERDetector::New");
+		tryCatch.throwNew(err);
+		return;
 	}
 
+	MSERDetector* self = new MSERDetector();
 	self->Wrap(info.Holder());
-	self->detector = cv::MSER::create(self->delta, self->minArea, self->maxArea, self->maxVariation,
-		self->minDiversity, self->maxEvolution, self->areaThreshold, self->minMargin, self->edgeBlurSize);
-  FF_RETURN(info.Holder());
+	self->delta = worker.delta;
+	self->minArea = worker.minArea;
+	self->maxArea = worker.maxArea;
+	self->maxVariation = worker.maxVariation;
+	self->minDiversity = worker.minDiversity;
+	self->maxEvolution = worker.maxEvolution;
+	self->areaThreshold = worker.areaThreshold;
+	self->minMargin = worker.minMargin;
+	self->edgeBlurSize = worker.edgeBlurSize;
+	self->detector = cv::MSER::create(worker.delta, worker.minArea, worker.maxArea, worker.maxVariation,
+		worker.minDiversity, worker.maxEvolution, worker.areaThreshold, worker.minMargin, worker.edgeBlurSize);
+	FF_RETURN(info.Holder());
 }
 
 struct DetectRegionsWorker : public CatchCvExceptionWorker {

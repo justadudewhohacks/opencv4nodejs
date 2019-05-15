@@ -24,29 +24,25 @@ NAN_MODULE_INIT(BFMatcher::Init) {
 };
 
 NAN_METHOD(BFMatcher::New) {
-  FF_ASSERT_CONSTRUCT_CALL(BFMatcher);
-	FF_METHOD_CONTEXT("BFMatcher::New");
-	BFMatcher* self = new BFMatcher();
+	FF_ASSERT_CONSTRUCT_CALL(BFMatcher);
+	FF::TryCatch tryCatch;
+	BFMatcher::NewWorker worker;
 
-    // optional args
-    bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-    FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-	FF_GET_NUMBER_IFDEF(optArgs, self->normType, "normType", cv::NORM_L2);
-		FF_GET_BOOL_IFDEF(optArgs, self->crossCheck, "crossCheck", false);
-
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(0, self->normType, self->normType);
-		FF_ARG_BOOL_IFDEF(1, self->crossCheck, self->crossCheck);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("BFMatcher::New");
+		tryCatch.throwNew(err);
+		return;
 	}
 
-	self->Wrap(info.Holder());
+	BFMatcher* self = new BFMatcher();
+	self->normType = worker.normType;
+	self->crossCheck = worker.crossCheck;
 	self->bfmatcher = cv::BFMatcher(
-		self->normType,
-		self->crossCheck
+		worker.normType,
+		worker.crossCheck
 	);
-
-  info.GetReturnValue().Set(info.Holder());
+	self->Wrap(info.Holder());
+	FF_RETURN(info.Holder());
 }
 
 NAN_METHOD(BFMatcher::match) {

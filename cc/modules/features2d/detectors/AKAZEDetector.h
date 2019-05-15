@@ -24,6 +24,50 @@ public:
 	cv::Ptr<cv::FeatureDetector> getDetector() {
 		return detector;
 	}
+
+	struct NewWorker : CatchCvExceptionWorker {
+	public:
+		int descriptorType = cv::AKAZE::DESCRIPTOR_MLDB;
+		int descriptorSize = 0;
+		int descriptorChannels = 3;
+		double threshold = 0.001f;
+		int nOctaves = 4;
+		int nOctaveLayers = 4;
+		int diffusivity = cv::KAZE::DIFF_PM_G2;
+
+		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return (
+				IntConverter::optArg(0, &descriptorType, info) ||
+				IntConverter::optArg(1, &descriptorSize, info) ||
+				IntConverter::optArg(2, &descriptorChannels, info) ||
+				DoubleConverter::optArg(3, &threshold, info) ||
+				IntConverter::optArg(4, &nOctaves, info) ||
+				IntConverter::optArg(5, &nOctaveLayers, info) ||
+				IntConverter::optArg(6, &diffusivity, info)
+				);
+		}
+
+		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return FF::isArgObject(info, 0);
+		}
+
+		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+			return (
+				IntConverter::optProp(&descriptorType, "descriptorType", opts) ||
+				IntConverter::optProp(&descriptorSize, "descriptorSize", opts) ||
+				IntConverter::optProp(&descriptorChannels, "descriptorChannels", opts) ||
+				DoubleConverter::optProp(&threshold, "threshold", opts) ||
+				IntConverter::optProp(&nOctaves, "nOctaves", opts) ||
+				IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
+				IntConverter::optProp(&diffusivity, "diffusivity", opts)
+				);
+		}
+
+		std::string executeCatchCvExceptionWorker() {
+			return "";
+		}
+	};
 };
 
 #endif

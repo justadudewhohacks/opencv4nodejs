@@ -164,7 +164,7 @@ namespace DnnBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {

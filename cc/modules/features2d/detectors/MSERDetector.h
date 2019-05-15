@@ -44,6 +44,56 @@ public:
     static NAN_METHOD(DetectRegions);
 	static NAN_METHOD(DetectRegionsAsync);
 
+
+	struct NewWorker : CatchCvExceptionWorker {
+	public:
+		int delta = 5;
+		int minArea = 60;
+		int maxArea = 14400;
+		double maxVariation = 0.25;
+		double minDiversity = 0.2;
+		int maxEvolution = 200;
+		double areaThreshold = 1.01;
+		double minMargin = 0.003;
+		int edgeBlurSize = 5;
+
+		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return (
+				IntConverter::optArg(0, &delta, info) ||
+				IntConverter::optArg(1, &minArea, info) ||
+				IntConverter::optArg(2, &maxArea, info) ||
+				DoubleConverter::optArg(3, &maxVariation, info) ||
+				DoubleConverter::optArg(4, &minDiversity, info) ||
+				IntConverter::optArg(5, &maxEvolution, info) ||
+				DoubleConverter::optArg(6, &areaThreshold, info) ||
+				DoubleConverter::optArg(7, &minMargin, info) ||
+				IntConverter::optArg(8, &edgeBlurSize, info)
+				);
+		}
+
+		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return FF::isArgObject(info, 0);
+		}
+
+		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+			return (
+				IntConverter::optProp(&delta, "delta", opts) ||
+				IntConverter::optProp(&minArea, "minArea", opts) ||
+				IntConverter::optProp(&maxArea, "maxArea", opts) ||
+				DoubleConverter::optProp(&maxVariation, "maxVariation", opts) ||
+				DoubleConverter::optProp(&minDiversity, "minDiversity", opts) ||
+				IntConverter::optProp(&maxEvolution, "maxEvolution", opts) ||
+				DoubleConverter::optProp(&areaThreshold, "areaThreshold", opts) ||
+				DoubleConverter::optProp(&minMargin, "minMargin", opts) ||
+				IntConverter::optProp(&edgeBlurSize, "edgeBlurSize", opts)
+				);
+		}
+
+		std::string executeCatchCvExceptionWorker() {
+			return "";
+		}
+	};
 };
 
 #endif

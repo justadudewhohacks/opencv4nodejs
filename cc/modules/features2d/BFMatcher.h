@@ -36,6 +36,37 @@ public:
     static const char* getClassName() {
         return "BFMatcher";
     }
+
+
+
+	struct NewWorker : CatchCvExceptionWorker {
+	public:
+		int normType = cv::NORM_L2;
+		bool crossCheck = false;
+
+		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return (
+				IntConverter::optArg(0, &normType, info) ||
+				BoolConverter::optArg(1, &crossCheck, info)
+				);
+		}
+
+		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return FF::isArgObject(info, 0);
+		}
+
+		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+			return (
+				IntConverter::optProp(&normType, "history", opts) ||
+				BoolConverter::optProp(&crossCheck, "crossCheck", opts)
+				);
+		}
+
+		std::string executeCatchCvExceptionWorker() {
+			return "";
+		}
+	};
 };
 
 #endif

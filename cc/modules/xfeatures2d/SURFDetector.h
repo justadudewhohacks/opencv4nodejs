@@ -24,6 +24,45 @@ public:
 		return detector;
 	}
 
+	struct NewWorker : CatchCvExceptionWorker {
+	public:
+
+		double hessianThreshold = 100;
+		int nOctaves = 4;
+		int nOctaveLayers = 3;
+		bool extended = false;
+		bool upright = false;
+
+		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return (
+				DoubleConverter::optArg(0, &hessianThreshold, info) ||
+				IntConverter::optArg(1, &nOctaves, info) ||
+				IntConverter::optArg(2, &nOctaveLayers, info) ||
+				BoolConverter::optArg(3, &extended, info) ||
+				BoolConverter::optArg(4, &upright, info)
+				);
+		}
+
+		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return FF::isArgObject(info, 0);
+		}
+
+		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+			return (
+				DoubleConverter::optProp(&hessianThreshold, "hessianThreshold", opts) ||
+				IntConverter::optProp(&nOctaves, "nOctaves", opts) ||
+				IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
+				BoolConverter::optProp(&extended, "extended", opts) ||
+				BoolConverter::optProp(&upright, "upright", opts)
+				);
+		}
+
+		std::string executeCatchCvExceptionWorker() {
+			return "";
+		}
+	};
+
 };
 
 #endif

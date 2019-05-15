@@ -30,6 +30,54 @@ namespace VideoWriterBindings {
       return "";
     }
   };
+
+  struct GetWorker : public CatchCvExceptionWorker {
+  public:
+	  cv::VideoWriter self;
+	  GetWorker(cv::VideoWriter self) {
+		  this->self = self;
+	  }
+	  int prop;
+	  double val;
+
+	  std::string executeCatchCvExceptionWorker() {
+		  val = self.get(prop);
+		  return "";
+	  }
+
+	  FF_VAL getReturnValue() {
+		  return DoubleConverter::wrap(val);
+	  }
+  };
+
+  struct SetWorker : public CatchCvExceptionWorker {
+  public:
+	  cv::VideoWriter self;
+	  SetWorker(cv::VideoWriter self) {
+		  this->self = self;
+	  }
+
+	  // required fn args
+	  int prop;
+	  double value;
+	  bool ret;
+
+	  std::string executeCatchCvExceptionWorker() {
+		  ret = this->self.set(prop, value);
+		  return "";
+	  }
+
+	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return (
+			  IntConverter::arg(0, &prop, info) ||
+			  DoubleConverter::arg(1, &value, info)
+			  );
+	  }
+
+	  v8::Local<v8::Value> getReturnValue() {
+		  return Nan::New(ret);
+	  }
+  };
   
   struct FourccWorker : CatchCvExceptionWorker {
   public:

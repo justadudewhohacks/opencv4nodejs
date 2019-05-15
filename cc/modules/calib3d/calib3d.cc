@@ -2,6 +2,7 @@
 
 NAN_MODULE_INIT(Calib3d::Init) {
   Nan::SetMethod(target, "findHomography", FindHomography);
+  Nan::SetMethod(target, "findHomographyAsync", FindHomographyAsync);
   Nan::SetMethod(target, "composeRT", ComposeRT);
   Nan::SetMethod(target, "composeRTAsync", ComposeRTAsync);
   Nan::SetMethod(target, "solvePnP", SolvePnP);
@@ -48,126 +49,20 @@ NAN_MODULE_INIT(Calib3d::Init) {
 #endif
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#if CV_VERSION_MINOR > 0
-
-
-
-
-
-
-
-#endif
-
-#if CV_VERSION_MINOR > 1
-
-
-
-
-
-
-
-
-
-
-
-
-#endif
-
-#if CV_VERSION_MINOR > 2
-
-
-
-
-#endif
 NAN_METHOD(Calib3d::FindHomography) {
-  FF_METHOD_CONTEXT("FindHomography");
+	FF::SyncBinding(
+		std::make_shared<Calib3dBindings::FindHomographyWorker>(),
+		"Calib3d::FindHomography",
+		info
+	);
+}
 
-  FF_ARG_ARRAY(0, FF_ARR jsSrcPoints);
-  FF_ARG_ARRAY(1, FF_ARR jsDstPoints);
-
-  // TODO FF_ARG_UNPACK_ARRAY_INSTANCE
-  Nan::TryCatch tryCatch;
-  std::vector<cv::Point2d> srcPoints, dstPoints;
-  Point::unpackJSPoint2Array(srcPoints, jsSrcPoints);
-  Point::unpackJSPoint2Array(dstPoints, jsDstPoints);
-  if (tryCatch.HasCaught()) {
-    return info.GetReturnValue().Set(tryCatch.ReThrow());
-  }
-
-  // optional args
-  bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-  FF_GET_UINT_IFDEF(optArgs, uint method, "method", 0);
-  FF_GET_NUMBER_IFDEF(optArgs, double ransacReprojThreshold, "ransacReprojThreshold", 3);
-  FF_GET_UINT_IFDEF(optArgs, uint maxIters, "maxIters", 2000);
-  FF_GET_NUMBER_IFDEF(optArgs, double confidence, "confidence", 0.995);
-  if (!hasOptArgsObj) {
-    FF_ARG_UINT_IFDEF(2, method, method);
-    FF_ARG_NUMBER_IFDEF(3, ransacReprojThreshold, ransacReprojThreshold);
-    FF_ARG_UINT_IFDEF(4, maxIters, maxIters);
-    FF_ARG_NUMBER_IFDEF(5, confidence, confidence);
-  }
-
-  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
-  FF_OBJ mask = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsMat) = cv::findHomography(srcPoints, dstPoints, method, ransacReprojThreshold, FF_UNWRAP_MAT_AND_GET(mask), maxIters, confidence);
-
-  v8::Local<v8::Object> output = Nan::New<v8::Object>();
-  Nan::Set(output, Nan::New("homography").ToLocalChecked(), jsMat);
-  Nan::Set(output, Nan::New("mask").ToLocalChecked(), mask);
-  info.GetReturnValue().Set(output);
+NAN_METHOD(Calib3d::FindHomographyAsync) {
+	FF::AsyncBinding(
+		std::make_shared<Calib3dBindings::FindHomographyWorker>(),
+		"Calib3d::FindHomographyAsync",
+		info
+	);
 }
 
 NAN_METHOD(Calib3d::ComposeRT) {

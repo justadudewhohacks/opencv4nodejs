@@ -22,41 +22,33 @@ NAN_MODULE_INIT(SIFTDetector::Init) {
   target->Set(Nan::New("SIFTDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
+
 NAN_METHOD(SIFTDetector::New) {
-	try {
-		FF_ASSERT_CONSTRUCT_CALL(SIFTDetector);
-		FF_METHOD_CONTEXT("SIFTDetector::New");
-		SIFTDetector* self = new SIFTDetector();
+	FF_ASSERT_CONSTRUCT_CALL(SIFTDetector);
+	FF::TryCatch tryCatch;
+	SIFTDetector::NewWorker worker;
 
-		// optional args
-		bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-		FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-		FF_GET_INT_IFDEF(optArgs, self->nFeatures, "nFeatures", 0);
-		FF_GET_INT_IFDEF(optArgs, self->nOctaveLayers, "nOctaveLayers", 3);
-		FF_GET_NUMBER_IFDEF(optArgs, self->contrastThreshold, "contrastThreshold", 0.04);
-		FF_GET_NUMBER_IFDEF(optArgs, self->edgeThreshold, "edgeThreshold", 10);
-		FF_GET_NUMBER_IFDEF(optArgs, self->sigma, "sigma", 1.6);
-		if (!hasOptArgsObj) {
-			FF_ARG_INT_IFDEF(0, self->nFeatures, self->nFeatures);
-			FF_ARG_INT_IFDEF(1, self->nOctaveLayers, self->nOctaveLayers);
-			FF_ARG_NUMBER_IFDEF(2, self->contrastThreshold, self->contrastThreshold);
-			FF_ARG_NUMBER_IFDEF(3, self->edgeThreshold, self->edgeThreshold);
-			FF_ARG_NUMBER_IFDEF(4, self->sigma, self->sigma);
-		}
-
-		self->Wrap(info.Holder());
-		self->detector = cv::xfeatures2d::SIFT::create(
-			self->nFeatures,
-			self->nOctaveLayers,
-			self->contrastThreshold,
-			self->edgeThreshold,
-			self->sigma
-		);
-		FF_RETURN(info.Holder());
-	} catch (std::exception &e) {
-		Nan::ThrowError(Nan::New(std::string(e.what())).ToLocalChecked());
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SIFTDetector::New");
+		tryCatch.throwNew(err);
+		return;
 	}
+
+	SIFTDetector* self = new SIFTDetector();
+	self->Wrap(info.Holder());
+	self->nFeatures = worker.nFeatures;
+	self->nOctaveLayers = worker.nOctaveLayers;
+	self->contrastThreshold = worker.contrastThreshold;
+	self->edgeThreshold = worker.edgeThreshold;
+	self->sigma = worker.sigma;
+	self->detector = cv::xfeatures2d::SIFT::create(
+		worker.nFeatures,
+		worker.nOctaveLayers,
+		worker.contrastThreshold,
+		worker.edgeThreshold,
+		worker.sigma
+	);
+	FF_RETURN(info.Holder());
 }
 
 #endif // HAVE_XFEATURES2D

@@ -27,6 +27,56 @@ public:
 		return detector;
 	}
 
+	struct NewWorker : CatchCvExceptionWorker {
+	public:
+		int nfeatures = 500;
+		double scaleFactor = 1.2f;
+		int nlevels = 8;
+		int edgeThreshold = 31;
+		int firstLevel = 0;
+		int WTA_K = 2;
+		int scoreType = cv::ORB::HARRIS_SCORE;
+		int patchSize = 31;
+		int fastThreshold = 20;
+
+		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return (
+				IntConverter::optArg(0, &nfeatures, info) ||
+				DoubleConverter::optArg(1, &scaleFactor, info) ||
+				IntConverter::optArg(2, &nlevels, info) ||
+				IntConverter::optArg(3, &edgeThreshold, info) ||
+				IntConverter::optArg(4, &firstLevel, info) ||
+				IntConverter::optArg(5, &WTA_K, info) ||
+				IntConverter::optArg(6, &scoreType, info) ||
+				IntConverter::optArg(7, &patchSize, info) ||
+				IntConverter::optArg(8, &fastThreshold, info)
+				);
+		}
+
+		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return FF::isArgObject(info, 0);
+		}
+
+		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+			return (
+				IntConverter::optProp(&nfeatures, "nfeatures", opts) ||
+				DoubleConverter::optProp(&scaleFactor, "scaleFactor", opts) ||
+				IntConverter::optProp(&nlevels, "nlevels", opts) ||
+				IntConverter::optProp(&edgeThreshold, "edgeThreshold", opts) ||
+				IntConverter::optProp(&firstLevel, "firstLevel", opts) ||
+				IntConverter::optProp(&WTA_K, "WTA_K", opts) ||
+				IntConverter::optProp(&scoreType, "scoreType", opts) ||
+				IntConverter::optProp(&patchSize, "patchSize", opts) ||
+				IntConverter::optProp(&fastThreshold, "fastThreshold", opts)
+				);
+		}
+
+		std::string executeCatchCvExceptionWorker() {
+			return "";
+		}
+	};
+
 };
 
 #endif

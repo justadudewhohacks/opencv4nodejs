@@ -12,43 +12,64 @@ NAN_MODULE_INIT(VideoWriter::Init) {
   Nan::SetPrototypeMethod(ctor, "write", Write);
   Nan::SetPrototypeMethod(ctor, "writeAsync", WriteAsync);
   Nan::SetPrototypeMethod(ctor, "get", Get);
+  Nan::SetPrototypeMethod(ctor, "getAsync", GetAsync);
   Nan::SetPrototypeMethod(ctor, "set", Set);
+  Nan::SetPrototypeMethod(ctor, "setAsync", SetAsync);
   Nan::SetPrototypeMethod(ctor, "release", Release);
   target->Set(FF_NEW_STRING("VideoWriter"), FF::getFunction(ctor));
 };
 
-NAN_METHOD(VideoWriter::Get) {
-  FF_METHOD_CONTEXT("VideoWriter::Get");
-  FF_ARG_INT(0, int prop);
-  FF_RETURN(FF_UNWRAP(info.This(), VideoWriter)->writer.get(prop));
-}
+NAN_METHOD(VideoWriter::New) {
+	FF_ASSERT_CONSTRUCT_CALL(VideoWriter);
+	FF::TryCatch tryCatch;
+	VideoWriterBindings::NewWorker worker;
 
-NAN_METHOD(VideoWriter::Set) {
-  FF_METHOD_CONTEXT("VideoWriter::Set");
-  FF_ARG_INT(0, int prop);
-  FF_ARG_NUMBER(1, double value);
-  FF_UNWRAP(info.This(), VideoWriter)->writer.set(prop, value);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("VideoWriter::New");
+		tryCatch.throwNew(err);
+		return;
+	}
+
+	VideoWriter* self = new VideoWriter();
+	self->writer.open(worker.fileName, worker.fourccCode, worker.fps, (cv::Size)worker.frameSize, worker.isColor);
+	self->Wrap(info.Holder());
+	FF_RETURN(info.Holder());
 }
 
 NAN_METHOD(VideoWriter::Release) {
-  FF_UNWRAP(info.This(), VideoWriter)->writer.release();
+	Nan::ObjectWrap::Unwrap<VideoWriter>(info.This())->writer.release();
 }
 
-NAN_METHOD(VideoWriter::New) {
-  FF_ASSERT_CONSTRUCT_CALL(VideoWriter);
-  FF::TryCatch tryCatch;
-  VideoWriterBindings::NewWorker worker;
+NAN_METHOD(VideoWriter::Get) {
+	FF::SyncBinding(
+		std::make_shared<VideoWriterBindings::GetWorker>(VideoWriter::Converter::unwrap(info.This())),
+		"VideoWriter::Get",
+		info
+	);
+}
 
-  if (worker.applyUnwrappers(info)) {
-    v8::Local<v8::Value> err = tryCatch.formatCatchedError("VideoWriter::New");
-    tryCatch.throwNew(err);
-    return;
-  }
+NAN_METHOD(VideoWriter::GetAsync) {
+	FF::AsyncBinding(
+		std::make_shared<VideoWriterBindings::GetWorker>(VideoWriter::Converter::unwrap(info.This())),
+		"VideoWriter::GetAsync",
+		info
+	);
+}
 
-  VideoWriter* self = new VideoWriter();
-  self->writer.open(worker.fileName, worker.fourccCode, worker.fps, (cv::Size)worker.frameSize, worker.isColor);
-  self->Wrap(info.Holder());
-  FF_RETURN(info.Holder());
+NAN_METHOD(VideoWriter::Set) {
+	FF::SyncBinding(
+		std::make_shared<VideoWriterBindings::SetWorker>(VideoWriter::Converter::unwrap(info.This())),
+		"VideoCaptureVideoWriter::Set",
+		info
+	);
+}
+
+NAN_METHOD(VideoWriter::SetAsync) {
+	FF::AsyncBinding(
+		std::make_shared<VideoWriterBindings::SetWorker>(VideoWriter::Converter::unwrap(info.This())),
+		"VideoWriter::SetAsync",
+		info
+	);
 }
 
 NAN_METHOD(VideoWriter::Fourcc) {

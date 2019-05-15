@@ -22,19 +22,24 @@ NAN_MODULE_INIT(CascadeClassifier::Init) {
 };
 
 NAN_METHOD(CascadeClassifier::New) {
-  FF_ASSERT_CONSTRUCT_CALL(CascadeClassifier);
-  FF_METHOD_CONTEXT("CascadeClassifier::New");
+	FF_ASSERT_CONSTRUCT_CALL(CascadeClassifier);
+	FF::TryCatch tryCatch;
+	CascadeClassifierBindings::NewWorker worker;
 
-  FF_ARG_STRING(0, std::string xmlFilePath);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("CascadeClassifier::New");
+		tryCatch.throwNew(err);
+		return;
+	}
 
-  CascadeClassifier* self = new CascadeClassifier();
-  self->classifier = cv::CascadeClassifier(xmlFilePath);
-  if (self->classifier.empty()) {
-    FF_THROW("failed to load cascade.xml file: " + xmlFilePath);
-  }
-  self->Wrap(info.Holder());
-  FF_RETURN(info.Holder());
-};
+	CascadeClassifier* self = new CascadeClassifier();
+	self->classifier = cv::CascadeClassifier(worker.xmlFilePath);
+	if (worker.applyUnwrappers(info)) {
+		return Nan::ThrowError(FF_NEW_STRING(std::string("CascadeClassifier::New") + " - " + std::string("failed to load cascade.xml file: " + worker.xmlFilePath)));
+	}
+	self->Wrap(info.Holder());
+	FF_RETURN(info.Holder());
+}
 
 NAN_METHOD(CascadeClassifier::DetectMultiScale) {
   FF::SyncBinding(

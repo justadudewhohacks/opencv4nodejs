@@ -48,61 +48,35 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
 
   target->Set(FF_NEW_STRING("HOGDescriptor"), FF::getFunction(ctor));
 };
-
 NAN_METHOD(HOGDescriptor::New) {
-  FF_ASSERT_CONSTRUCT_CALL(HOGDescriptor);
-  FF_METHOD_CONTEXT("HOGDescriptor::New");
+	FF_ASSERT_CONSTRUCT_CALL(HOGDescriptor);
+	FF::TryCatch tryCatch;
+	HOGDescriptorBindings::NewWorker worker;
 
-  // optional args
-  bool hasOptArgsObj = FF_ARG_IS_OBJECT(0) && !FF_IS_INSTANCE(Size::constructor, info[1]);
-  FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("HOGDescriptor::New");
+		tryCatch.throwNew(err);
+		return;
+	}
 
-  FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d winSize, "winSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d(64, 128));
-  FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d blockSize, "blockSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d(16, 16));
-  FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d blockStride, "blockStride", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d(8, 8));
-  FF_GET_INSTANCE_IFDEF(optArgs, cv::Size2d cellSize, "cellSize", Size::constructor, FF_UNWRAP_SIZE_AND_GET, Size, cv::Size2d(8, 8));
-  FF_GET_UINT_IFDEF(optArgs, uint nbins, "nbins", 9);
-  FF_GET_INT_IFDEF(optArgs, int derivAperture, "derivAperture", 1);
-  FF_GET_NUMBER_IFDEF(optArgs, double winSigma, "winSigma", -1);
-  FF_GET_UINT_IFDEF(optArgs, uint histogramNormType, "histogramNormType", cv::HOGDescriptor::L2Hys);
-  FF_GET_NUMBER_IFDEF(optArgs, double L2HysThreshold, "L2HysThreshold", 0.2);
-  FF_GET_BOOL_IFDEF(optArgs, bool gammaCorrection, "gammaCorrection", false);
-  FF_GET_UINT_IFDEF(optArgs, uint nlevels, "nlevels", cv::HOGDescriptor::DEFAULT_NLEVELS);
-  FF_GET_BOOL_IFDEF(optArgs, bool signedGradient, "signedGradient", false);
-  if (!hasOptArgsObj) {
-    FF_ARG_INSTANCE_IFDEF(0, winSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, winSize);
-    FF_ARG_INSTANCE_IFDEF(1, blockSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, blockSize);
-    FF_ARG_INSTANCE_IFDEF(2, blockStride, Size::constructor, FF_UNWRAP_SIZE_AND_GET, blockStride);
-    FF_ARG_INSTANCE_IFDEF(3, cellSize, Size::constructor, FF_UNWRAP_SIZE_AND_GET, cellSize);
-    FF_ARG_UINT_IFDEF(4, nbins, nbins);
-    FF_ARG_INT_IFDEF(5, derivAperture, derivAperture);
-    FF_ARG_NUMBER_IFDEF(6, winSigma, winSigma);
-    FF_ARG_UINT_IFDEF(7, histogramNormType, histogramNormType);
-    FF_ARG_NUMBER_IFDEF(8, L2HysThreshold, L2HysThreshold);
-    FF_ARG_BOOL_IFDEF(9, gammaCorrection, gammaCorrection);
-    FF_ARG_UINT_IFDEF(10, nlevels, nlevels);
-    FF_ARG_BOOL_IFDEF(11, signedGradient, signedGradient);
-  }
-
-  HOGDescriptor* self = new HOGDescriptor();
-  self->hog = std::make_shared<cv::HOGDescriptor>(
-    winSize,
-    blockSize,
-    blockStride,
-    cellSize,
-    (int)nbins,
-    derivAperture,
-    winSigma,
-    (int)histogramNormType,
-    L2HysThreshold,
-    gammaCorrection,
-    (int)nlevels,
-    signedGradient
-  );
-
-  self->Wrap(info.Holder());
-  FF_RETURN(info.Holder());
-};
+	HOGDescriptor* self = new HOGDescriptor();
+	self->hog = std::make_shared<cv::HOGDescriptor>(
+		worker.winSize,
+		worker.blockSize,
+		worker.blockStride,
+		worker.cellSize,
+		(int)worker.nbins,
+		worker.derivAperture,
+		worker.winSigma,
+		(int)worker.histogramNormType,
+		worker.L2HysThreshold,
+		worker.gammaCorrection,
+		(int)worker.nlevels,
+		worker.signedGradient
+		);
+	self->Wrap(info.Holder());
+	FF_RETURN(info.Holder());
+}
 
 NAN_METHOD(HOGDescriptor::GetDaimlerPeopleDetector) {
   std::vector<float> detector = cv::HOGDescriptor::getDaimlerPeopleDetector();

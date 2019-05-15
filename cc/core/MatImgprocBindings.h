@@ -75,7 +75,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(getOptArgIndex(info));
+      return FF::isArgObject(info, getOptArgIndex(info));
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -318,7 +318,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1) && !Size::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+      return FF::isArgObject(info, 1) && !Size::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -393,7 +393,7 @@ namespace MatImgprocBindings {
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
       int optArgN = (withOp ? 2 : 1);
-      return FF_ARG_IS_OBJECT(optArgN) && !Point2::Converter::hasInstance(info[optArgN]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+      return FF::isArgObject(info, optArgN) && !Point2::Converter::hasInstance(info[optArgN]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -535,7 +535,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1) && !Point2::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+      return FF::isArgObject(info, 1) && !Point2::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -586,7 +586,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -653,7 +653,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(0);
+      return FF::isArgObject(info, 0);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -857,7 +857,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(getDrawParamsIndex())
+      return FF::isArgObject(info, getDrawParamsIndex())
         && !Vec3::Converter::hasInstance(info[getDrawParamsIndex()]);
     }
   
@@ -1241,7 +1241,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1296,7 +1296,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1369,7 +1369,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1424,7 +1424,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(0);
+      return FF::isArgObject(info, 0);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1512,7 +1512,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1553,7 +1553,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1610,7 +1610,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1735,7 +1735,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2)
+      return FF::isArgObject(info, 2)
         && !Mat::Converter::hasInstance(info[2]);
     }
   
@@ -1830,7 +1830,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1894,7 +1894,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1949,7 +1949,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -2063,7 +2063,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -2132,7 +2132,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(0);
+      return FF::isArgObject(info, 0);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {

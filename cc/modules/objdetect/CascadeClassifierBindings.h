@@ -5,6 +5,19 @@
 
 namespace CascadeClassifierBindings {
 
+	struct NewWorker : CatchCvExceptionWorker {
+	public:
+		std::string xmlFilePath;
+
+		bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return StringConverter::arg(0, &xmlFilePath, info);
+		}
+
+		std::string executeCatchCvExceptionWorker() {
+			return "";
+		}
+	};
+
   struct DetectMultiScaleWorker : CatchCvExceptionWorker {
   public:
     cv::CascadeClassifier classifier;
@@ -63,7 +76,7 @@ namespace CascadeClassifierBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {

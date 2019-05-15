@@ -23,32 +23,18 @@ NAN_MODULE_INIT(AKAZEDetector::Init) {
 };
 
 NAN_METHOD(AKAZEDetector::New) {
-  FF_ASSERT_CONSTRUCT_CALL(AKAZEDetector);
-	FF_METHOD_CONTEXT("AKAZEDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL(AKAZEDetector);
+	FF::TryCatch tryCatch;
+	AKAZEDetector::NewWorker worker;
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-	FF_GET_INT_IFDEF(optArgs, int descriptorType, "descriptorType", cv::AKAZE::DESCRIPTOR_MLDB);
-	FF_GET_INT_IFDEF(optArgs, int descriptorSize, "descriptorSize", 0);
-	FF_GET_INT_IFDEF(optArgs, int descriptorChannels, "descriptorChannels", 3);
-	FF_GET_NUMBER_IFDEF(optArgs, double threshold, "threshold", 0.001f);
-	FF_GET_INT_IFDEF(optArgs, int nOctaves, "nOctaves", 4);
-	FF_GET_INT_IFDEF(optArgs, int nOctaveLayers, "nOctaveLayers", 4);
-	FF_GET_INT_IFDEF(optArgs, int diffusivity, "diffusivity", cv::KAZE::DIFF_PM_G2);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(0, descriptorType, descriptorType);
-		FF_ARG_INT_IFDEF(1, descriptorSize, descriptorSize);
-		FF_ARG_INT_IFDEF(2, descriptorChannels, descriptorChannels);
-		FF_ARG_NUMBER_IFDEF(3, threshold, threshold);
-		FF_ARG_INT_IFDEF(4, nOctaves, nOctaves);
-		FF_ARG_INT_IFDEF(5, nOctaveLayers, nOctaveLayers);
-		FF_ARG_INT_IFDEF(6, diffusivity, diffusivity);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("AKAZEDetector::New");
+		tryCatch.throwNew(err);
+		return;
 	}
 
 	AKAZEDetector* self = new AKAZEDetector();
+	self->detector = cv::AKAZE::create(worker.descriptorType, worker.descriptorSize, worker.descriptorChannels, worker.threshold, worker.nOctaves, worker.nOctaveLayers, worker.diffusivity);
 	self->Wrap(info.Holder());
-	self->detector = cv::AKAZE::create(descriptorType, descriptorSize, descriptorChannels, threshold, nOctaves, nOctaveLayers, diffusivity);
-  FF_RETURN(info.Holder());
+	FF_RETURN(info.Holder());
 }

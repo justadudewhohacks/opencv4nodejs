@@ -5,6 +5,25 @@
 
 namespace VideoCaptureBindings {
 
+	struct GetWorker : public CatchCvExceptionWorker {
+	public:
+		cv::VideoCapture self;
+		GetWorker(cv::VideoCapture self) {
+			this->self = self;
+		}
+		int prop;
+		double val;
+
+		std::string executeCatchCvExceptionWorker() {
+			val = self.get(prop);
+			return "";
+		}
+
+		FF_VAL getReturnValue() {
+			return DoubleConverter::wrap(val);
+		}
+	};
+
   struct ReadWorker : public CatchCvExceptionWorker {
   public:
     cv::VideoCapture self;

@@ -18,25 +18,51 @@ NAN_MODULE_INIT(AGASTDetector::Init) {
   target->Set(Nan::New("AGASTDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
+struct NewWorker : CatchCvExceptionWorker {
+public:
+	int threshold = 10;
+	bool nonmaxSuppression = true;
+	int type = cv::AgastFeatureDetector::OAST_9_16;
+
+	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return (
+			IntConverter::optArg(0, &threshold, info) ||
+			BoolConverter::optArg(1, &nonmaxSuppression, info) ||
+			IntConverter::optArg(2, &type, info)
+		);
+	}
+
+	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		return FF::isArgObject(info, 0);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+		return (
+			IntConverter::optProp(&threshold, "threshold", opts) ||
+			BoolConverter::optProp(&nonmaxSuppression, "nonmaxSuppression", opts) ||
+			IntConverter::optProp(&type, "type", opts)
+		);
+	}
+
+	std::string executeCatchCvExceptionWorker() {
+		return "";
+	}
+};
+
 NAN_METHOD(AGASTDetector::New) {
-  FF_ASSERT_CONSTRUCT_CALL(AGASTDetector);
-	FF_METHOD_CONTEXT("AGASTDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL(AGASTDetector);
+	FF::TryCatch tryCatch;
+	AGASTDetector::NewWorker worker;
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-	FF_GET_INT_IFDEF(optArgs, int threshold, "threshold", 10);
-	FF_GET_BOOL_IFDEF(optArgs, bool nonmaxSuppression, "nonmaxSuppression", true);
-	FF_GET_INT_IFDEF(optArgs, int type, "type", cv::AgastFeatureDetector::OAST_9_16);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(0, threshold, threshold);
-		FF_ARG_BOOL_IFDEF(1, nonmaxSuppression, nonmaxSuppression);
-		FF_ARG_INT_IFDEF(2, type, type);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("AGASTDetector::New");
+		tryCatch.throwNew(err);
+		return;
 	}
 
 	AGASTDetector* self = new AGASTDetector();
+	self->detector = cv::AgastFeatureDetector::create(worker.threshold, worker.nonmaxSuppression, worker.type);
 	self->Wrap(info.Holder());
-	self->detector = cv::AgastFeatureDetector::create(threshold, nonmaxSuppression, type);
-  FF_RETURN(info.Holder());
+	FF_RETURN(info.Holder());
 }

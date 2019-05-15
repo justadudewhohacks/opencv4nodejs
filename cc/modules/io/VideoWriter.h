@@ -29,7 +29,9 @@ public:
 	static NAN_METHOD(Write);
 	static NAN_METHOD(WriteAsync);
 	static NAN_METHOD(Get);
+	static NAN_METHOD(GetAsync);
 	static NAN_METHOD(Set);
+	static NAN_METHOD(SetAsync);
 	static NAN_METHOD(Release);
 };
 

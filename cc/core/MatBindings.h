@@ -233,7 +233,7 @@ namespace MatBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -474,7 +474,7 @@ namespace MatBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(0);
+      return FF::isArgObject(info, 0);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -523,7 +523,7 @@ namespace MatBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -670,7 +670,7 @@ namespace MatBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(0);
+      return FF::isArgObject(info, 0);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -735,7 +735,7 @@ namespace MatBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -883,7 +883,7 @@ namespace MatBindings {
 	  }
 
 	  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-		  return FF_ARG_IS_OBJECT(4);
+		  return FF::isArgObject(info, 4);
 	  }
 
 	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {

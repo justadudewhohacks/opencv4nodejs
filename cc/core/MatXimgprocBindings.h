@@ -43,7 +43,7 @@ namespace MatXimgprocBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {

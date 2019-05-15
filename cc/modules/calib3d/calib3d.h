@@ -8,6 +8,7 @@ public:
   static NAN_MODULE_INIT(Init);
 
   static NAN_METHOD(FindHomography);
+  static NAN_METHOD(FindHomographyAsync);
   static NAN_METHOD(ComposeRT);
   static NAN_METHOD(ComposeRTAsync);
   static NAN_METHOD(SolvePnP);
