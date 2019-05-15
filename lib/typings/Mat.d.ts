@@ -310,6 +310,8 @@ export class Mat {
   transpose(): Mat;
   triangulatePoints(projPoints1: Point2[], projPoints2: Point2[]): Mat;
   triangulatePointsAsync(projPoints1: Point2[], projPoints2: Point2[]): Promise<Mat>;
+  undistort(cameraMatrix: Mat, distCoeffs: Mat): Mat;
+  undistortAsync(cameraMatrix: Mat, distCoeffs: Mat): Promise<Mat>;
   validateDisparity(cost: Mat, minDisparity: number, numberOfDisparities: number, disp12MaxDisp?: number): void;
   validateDisparityAsync(cost: Mat, minDisparity: number, numberOfDisparities: number, disp12MaxDisp?: number): Promise<void>;
   warpAffine(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number, borderValue?: Vec3): Mat;
