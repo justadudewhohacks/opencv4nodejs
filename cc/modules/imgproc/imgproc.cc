@@ -27,6 +27,8 @@ NAN_MODULE_INIT(Imgproc::Init) {
   Nan::SetMethod(target, "fitLine", FitLine);
   Nan::SetMethod(target, "getAffineTransform", GetAffineTransform);
   Nan::SetMethod(target, "getPerspectiveTransform", GetPerspectiveTransform);
+  Nan::SetMethod(target, "undistortPoints", UndistortPoints);
+  Nan::SetMethod(target, "undistortPointsAsync", UndistortPointsAsync);
   Nan::SetMethod(target, "getTextSize", GetTextSize);
   Nan::SetMethod(target, "getTextSizeAsync", GetTextSizeAsync);
   Nan::SetMethod(target, "applyColorMap", ApplyColorMap);
@@ -99,6 +101,15 @@ NAN_METHOD(Imgproc::GetPerspectiveTransform) {
   FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getPerspectiveTransform(srcPoints, dstPoints);
   FF_RETURN(jsMat);
+}
+NAN_METHOD(Imgproc::UndistortPoints) {
+  FF::SyncBinding(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
+                  "Imgproc::UndistortPoints", info);
+}
+
+NAN_METHOD(Imgproc::UndistortPointsAsync) {
+  FF::AsyncBinding(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
+                   "Imgproc::UndistortPointsAsync", info);
 }
 
 NAN_METHOD(Imgproc::CalcHist) {

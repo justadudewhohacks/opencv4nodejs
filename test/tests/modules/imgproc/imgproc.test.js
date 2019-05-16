@@ -213,5 +213,37 @@ describe('imgproc', () => {
         expectOutput: res => expect(res).to.be.instanceOf(cv.Mat)
       });
     });
+
+    describe('undistortPoints', () => {
+      const cameraMatrix = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);
+      //const newCameraMatrix = new cv.Mat([[0.5, 0, 10],[0, 0.5, 10],[0, 0, 1]], cv.CV_32F);
+      const distCoeffs = new cv.Mat([[0.1, 0.1, 1, 1]], cv.CV_32F);
+      const srcPoints = [
+        [5,5], [5, 10], [5, 15]
+      ].map(p => new cv.Point(p[0], p[1]));
+      const expectedDestPoints = [
+        [9.522233963012695, 9.522233963012695], 
+        [9.128815650939941, 9.661333084106445], 
+        [9.76507568359375, 9.841306686401367]
+      ].map(p => new cv.Point(p[0], p[1]));
+      
+      generateAPITests({
+        getDut: () => cv,
+        methodName: 'undistortPoints',
+        getRequiredArgs: () => ([
+          srcPoints,
+          cameraMatrix,
+          distCoeffs
+        ]),
+        hasAsync: true,
+        expectOutput: destPoints => {
+          expect(destPoints.length).to.equal(expectedDestPoints.length);
+          for(var i = 0; i < destPoints.length; i++){
+            expect(destPoints[i].x).to.be.closeTo(expectedDestPoints[i].x, 0.001)
+            expect(destPoints[i].y).to.be.closeTo(expectedDestPoints[i].y, 0.001)
+          }
+        }
+      });
+    });    
   });
 });

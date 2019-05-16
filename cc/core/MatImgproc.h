@@ -118,7 +118,8 @@ public:
   static NAN_METHOD(CornerEigenValsAndVecsAsync);
   static NAN_METHOD(Integral);
   static NAN_METHOD(IntegralAsync);
-
+  static NAN_METHOD(Undistort);
+  static NAN_METHOD(UndistortAsync);
 };
 
 #endif
