@@ -2144,6 +2144,35 @@ namespace MatImgprocBindings {
     }
   };
   
+  struct UndistortWorker: public CatchCvExceptionWorker {
+  public:
+    cv::Mat mat;
+  
+    UndistortWorker(cv::Mat mat) {
+      this->mat = mat;
+    }
+  
+    cv::Mat cameraMatrix;
+    cv::Mat distCoeffs;
+    cv::Mat undistortedMat;
+    
+    FF_VAL getReturnValue() {
+      return Mat::Converter::wrap(undistortedMat);
+    }
+  
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        Mat::Converter::arg(0, &cameraMatrix, info) ||
+        Mat::Converter::arg(1, &distCoeffs, info)
+      );
+    }
+  
+    std::string executeCatchCvExceptionWorker() {
+      cv::undistort(mat, undistortedMat, cameraMatrix, distCoeffs);
+      return "";
+    }
+    
+  };
 
 }
 

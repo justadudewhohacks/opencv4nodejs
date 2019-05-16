@@ -83,6 +83,30 @@ namespace ImgprocBindings {
 
     v8::Local<v8::Value> getReturnValue() { return Mat::Converter::wrap(dst); }
   };
+  struct UndistortPointsWorker : public CatchCvExceptionWorker {
+  public:
+    cv::Mat distCoeffs;
+    cv::Mat cameraMatrix;
+    std::vector<cv::Point2f> srcPoints;
+    std::vector<cv::Point2f> destPoints; 
+
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        ObjectArrayConverter<Point2, cv::Point2f>::arg(0, &srcPoints, info) ||
+        Mat::Converter::arg(1, &cameraMatrix, info) ||
+        Mat::Converter::arg(2, &distCoeffs, info)
+      );
+    }
+
+    std::string executeCatchCvExceptionWorker() {
+      cv::undistortPoints(srcPoints, destPoints, cameraMatrix, distCoeffs, cameraMatrix);
+      return "";
+    }
+
+    v8::Local<v8::Value> getReturnValue() { 
+      return ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(destPoints);
+    }
+  };
 }
 
 #endif
