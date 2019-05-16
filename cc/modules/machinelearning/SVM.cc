@@ -195,7 +195,6 @@ NAN_METHOD(SVM::Load) {
 		tryCatch.throwNew(err);
 		return;
 	}
-	Nan::ObjectWrap::Unwrap<SVM>(info.This())->svm->load(path);
 #if CV_VERSION_MINOR < 2
 	Nan::ObjectWrap::Unwrap<SVM>(info.This())->svm = cv::ml::SVM::load<cv::ml::SVM>(path);
 #else
