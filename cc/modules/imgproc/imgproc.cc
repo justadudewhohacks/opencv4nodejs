@@ -88,7 +88,7 @@ NAN_METHOD(Imgproc::GetPerspectiveTransform) {
   FF::TryCatch tryCatch;
 
   std::vector<cv::Point2f> srcPoints, dstPoints;
-  if (ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &srcPoints, info) 
+  if (ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &srcPoints, info)
 	  || ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &dstPoints, info)
 	) {
 	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Imgproc::GetPerspectiveTransform");
@@ -192,7 +192,7 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 				IntConverter::optArg(4, &thickness, info) ||
 				IntConverter::optArg(5, &shift, info)
 			)
-		) 
+		)
 	){
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Imgproc::Plot1DHist");
 		tryCatch.throwNew(err);
@@ -299,6 +299,17 @@ NAN_METHOD(Imgproc::GetTextSizeAsync) {
   );
 }
 
+NAN_METHOD(Imgproc::ApplyColorMap) {
+  FF::SyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
+                  "Imgproc::ApplyColorMap", info);
+}
+
+NAN_METHOD(Imgproc::ApplyColorMapAsync) {
+  FF::AsyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
+                   "Imgproc::ApplyColorMapAsync", info);
+}
+
+#if CV_VERSION_MINOR > 1
 
 NAN_METHOD(Imgproc::Canny) {
 	FF::SyncBinding(std::make_shared<ImgprocBindings::CannyWorker>(),
@@ -310,12 +321,4 @@ NAN_METHOD(Imgproc::CannyAsync) {
 		"Imgproc::CannyAsync", info);
 }
 
-NAN_METHOD(Imgproc::ApplyColorMap) {
-  FF::SyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
-                  "Imgproc::ApplyColorMap", info);
-}
-
-NAN_METHOD(Imgproc::ApplyColorMapAsync) {
-  FF::AsyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
-                   "Imgproc::ApplyColorMapAsync", info);
-}
+#endif
