@@ -72,11 +72,16 @@ public:
   static FF_SETTER_BOOL(FacemarkLBFParams, verbose, params.verbose);
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
-};
 
-#define FF_UNWRAP_FACEMARKLBFPARAMS(obj) FF_UNWRAP(obj, FacemarkLBFParams)
-#define FF_UNWRAP_FACEMARKLBFPARAMS_AND_GET(obj)                               \
-  FF_UNWRAP_FACEMARKLBFPARAMS(obj)->params
+  cv::face::FacemarkLBF::Params* getNativeObjectPtr() { return &params; }
+  cv::face::FacemarkLBF::Params getNativeObject() { return params; }
+
+  typedef InstanceConverter<FacemarkLBFParams, cv::face::FacemarkLBF::Params> Converter;
+
+  static const char* getClassName() {
+	  return "FacemarkLBFParams";
+  }
+};
 
 #endif
 

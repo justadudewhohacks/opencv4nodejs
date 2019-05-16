@@ -13,15 +13,27 @@ void FaceRecognizer::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(FaceRecognizer::Save) {
-  FF_METHOD_CONTEXT("FaceRecognizer::Save");
-  FF_ARG_STRING(0, std::string path);
-  FF_UNWRAP(info.This(), FaceRecognizer)->save(path);
+	FF::TryCatch tryCatch;
+
+	std::string path;
+	if (StringConverter::arg(0, &path, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("FaceRecognizer::Save");
+		tryCatch.throwNew(err);
+		return;
+	}
+	Nan::ObjectWrap::Unwrap<FaceRecognizer>(info.This())->save(path);
 }
 
 NAN_METHOD(FaceRecognizer::Load) {
-  FF_METHOD_CONTEXT("FaceRecognizer::Load");
-  FF_ARG_STRING(0, std::string path);
-  FF_UNWRAP(info.This(), FaceRecognizer)->load(path);
+	FF::TryCatch tryCatch;
+
+	std::string path;
+	if (StringConverter::arg(0, &path, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("FaceRecognizer::Load");
+		tryCatch.throwNew(err);
+		return;
+	}
+	Nan::ObjectWrap::Unwrap<FaceRecognizer>(info.This())->load(path);
 }
 
 NAN_METHOD(FaceRecognizer::Train) {

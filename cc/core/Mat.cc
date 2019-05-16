@@ -55,6 +55,7 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "convertToAsync", ConvertToAsync);
   Nan::SetPrototypeMethod(ctor, "norm", Norm);
   Nan::SetPrototypeMethod(ctor, "normalize", Normalize);
+  Nan::SetPrototypeMethod(ctor, "normalizeAsync", NormalizeAsync);
   Nan::SetPrototypeMethod(ctor, "split", SplitChannels);
   Nan::SetPrototypeMethod(ctor, "splitAsync", SplitChannelsAsync);
   Nan::SetPrototypeMethod(ctor, "splitChannels", SplitChannels);
@@ -219,23 +220,37 @@ NAN_METHOD(Mat::New) {
 }
 
 NAN_METHOD(Mat::Eye) {
-  FF_METHOD_CONTEXT("Mat::Eye");
-  FF_ARG_INT(0, int rows);
-  FF_ARG_INT(1, int cols);
-  FF_ARG_INT(2, int type);
-  FF_OBJ jsEyeMat = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsEyeMat) = cv::Mat::eye(cv::Size(cols, rows), type);
-  FF_RETURN(jsEyeMat);
+	FF::TryCatch tryCatch;
+	int rows, cols, type;
+	if (
+		IntConverter::arg(0, &rows, info) ||
+		IntConverter::arg(1, &cols, info) ||
+		IntConverter::arg(2, &type, info)
+	) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::Eye");
+		tryCatch.throwNew(err);
+		return;
+	}
+	FF_OBJ jsEyeMat = FF::newInstance(Nan::New(Mat::constructor));
+	FF_UNWRAP_MAT_AND_GET(jsEyeMat) = cv::Mat::eye(cv::Size(cols, rows), type);
+	FF_RETURN(jsEyeMat);
 }
 
 NAN_METHOD(Mat::FlattenFloat) {
-  FF_METHOD_CONTEXT("Mat::To2DFloat");
-  FF_ARG_INT(0, int rows);
-  FF_ARG_INT(1, int cols);
+	FF::TryCatch tryCatch;
+	int rows, cols;
+	if (
+		IntConverter::arg(0, &rows, info) ||
+		IntConverter::arg(1, &cols, info)
+		) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::FlattenFloat");
+		tryCatch.throwNew(err);
+		return;
+	}
 
-  cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-  cv::Mat mat2D(rows, cols, CV_32F, matSelf.ptr<float>());
-  FF_RETURN(Mat::Converter::wrap(mat2D));
+	cv::Mat matSelf = Mat::Converter::unwrap(info.This());
+	cv::Mat mat2D(rows, cols, CV_32F, matSelf.ptr<float>());
+	FF_RETURN(Mat::Converter::wrap(mat2D));
 }
 
 NAN_METHOD(Mat::At) {
@@ -361,18 +376,30 @@ NAN_METHOD(Mat::GetRegion) {
 NAN_METHOD(Mat::Norm) {
   FF_METHOD_CONTEXT("Mat::Norm");
 
-  bool withSrc2 = FF_HAS_ARG(0) && FF_IS_INSTANCE(Mat::constructor, info[0]);
+  bool withSrc2 = FF::hasArg(info, 0) && Mat::Converter::hasInstance(info[0]);
   uint i = withSrc2 ? 1 : 0;
   double norm;
 
   // optional args
-  bool hasOptArgsObj = FF_HAS_ARG((long)i) && info[i]->IsObject();
+  bool hasOptArgsObj = FF::isArgObject(info, i);
   FF_OBJ optArgs = hasOptArgsObj ? info[i]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-  FF_GET_UINT_IFDEF(optArgs, uint normType, "normType", cv::NORM_L2);
-  FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat mask, "mask", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
-  if (!hasOptArgsObj) {
-    FF_ARG_UINT_IFDEF((long)i, normType, normType);
-    FF_ARG_INSTANCE_IFDEF((long)(i + 1), mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
+
+  uint normType = cv::NORM_L2;
+  cv::Mat mask = cv::noArray().getMat();
+
+  FF::TryCatch tryCatch;
+  if (
+	  hasOptArgsObj && (
+		UintConverter::optProp(&normType, "normType", optArgs) ||
+		Mat::Converter::optProp(&mask, "mask", optArgs)
+		) || (
+		UintConverter::optArg(i, &normType, info) ||
+		Mat::Converter::optArg(i + 1, &mask, info)
+		)
+	  ) {
+	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::Norm");
+	  tryCatch.throwNew(err);
+	  return;
   }
 
   if (withSrc2) {
@@ -386,27 +413,19 @@ NAN_METHOD(Mat::Norm) {
 }
 
 NAN_METHOD(Mat::Normalize) {
-  FF_METHOD_CONTEXT("Mat::Normalize");
+	FF::SyncBinding(
+		std::make_shared<MatBindings::NormalizeWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::Normalize",
+		info
+	);
+}
 
-  // optional args
-  bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-  FF_GET_NUMBER_IFDEF(optArgs, double alpha, "alpha", 1.0);
-  FF_GET_NUMBER_IFDEF(optArgs, double beta, "beta", 0.0);
-  FF_GET_UINT_IFDEF(optArgs, uint normType, "normType", cv::NORM_L2);
-  FF_GET_UINT_IFDEF(optArgs, int dtype, "dtype", -1);
-  FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat mask, "mask", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
-  if (!hasOptArgsObj) {
-    FF_ARG_NUMBER_IFDEF(0, alpha, 1.0);
-    FF_ARG_NUMBER_IFDEF(1, beta, 0.0);
-    FF_ARG_UINT_IFDEF(2, normType, normType);
-    FF_ARG_INT_IFDEF(3, dtype, dtype);
-    FF_ARG_INSTANCE_IFDEF(4, mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
-  }
-
-  FF_OBJ jsMat = FF::newInstance(Nan::New(constructor));
-  cv::normalize(FF_UNWRAP_MAT_AND_GET(info.This()), FF_UNWRAP_MAT_AND_GET(jsMat), alpha, beta, normType, dtype, mask);
-  FF_RETURN(jsMat);
+NAN_METHOD(Mat::NormalizeAsync) {
+	FF::AsyncBinding(
+		std::make_shared<MatBindings::NormalizeWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::NormalizeAsync",
+		info
+	);
 }
 
 NAN_METHOD(Mat::Row) {

@@ -100,31 +100,46 @@ NAN_METHOD(Io::WaitKey) {
 }
 
 NAN_METHOD(Io::MoveWindow) {
-  FF_METHOD_CONTEXT("MoveWindow");
-  FF_ARG_STRING(0, std::string winName);
-  FF_ARG_INT(1, int x);
-  FF_ARG_INT(2, int y);
-  cv::moveWindow(winName, x, y);
+	FF::TryCatch tryCatch;
+	std::string winName;
+	int x, y;
+	if (StringConverter::arg(0, &winName, info) || IntConverter::arg(1, &x, info) || IntConverter::arg(2, &y, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Io::MoveWindow");
+		tryCatch.throwNew(err);
+		return;
+	}
+	cv::moveWindow(winName, x, y);
 }
 
 NAN_METHOD(Io::DestroyWindow) {
-  FF_METHOD_CONTEXT("DestroyWindow");
-  FF_ARG_STRING(0, std::string winName);
+	FF::TryCatch tryCatch;
+	std::string winName;
+	if (StringConverter::arg(0, &winName, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Io::DestroyWindow");
+		tryCatch.throwNew(err);
+		return;
+	}
   cv::destroyWindow(winName);
 }
 
 NAN_METHOD(Io::DestroyAllWindows) {
-  FF_METHOD_CONTEXT("DestroyAllWindows");
   cv::destroyAllWindows();
 }
 
 NAN_METHOD(Io::Imdecode) {
-  FF_METHOD_CONTEXT("Imencode");
+	FF::TryCatch tryCatch;
 
   if (!info[0]->IsUint8Array()) {
-    FF_THROW("expected arg 0 to be a Buffer of Uint8 Values");
+	tryCatch.throwNew(FF_NEW_STRING("Io::Imdecode - expected arg 0 to be a Buffer of Uint8 Values"));
+	return;
   }
-  FF_ARG_INT_IFDEF(1, int flags, cv::IMREAD_ANYCOLOR);
+
+  int flags = cv::IMREAD_ANYCOLOR;
+  if (IntConverter::optArg(1, &flags, info)) {
+	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Io::Imdecode");
+	  tryCatch.throwNew(err);
+	  return;
+  }
 
   char *data = static_cast<char *>(node::Buffer::Data(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
   size_t size = node::Buffer::Length(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
@@ -139,10 +154,11 @@ NAN_METHOD(Io::Imdecode) {
 NAN_METHOD(Io::ImdecodeAsync) {
   FF_METHOD_CONTEXT("ImdecodeAsync");
 
-  std::shared_ptr<IoBindings::ImdecodeWorker> worker = std::make_shared<IoBindings::ImdecodeWorker>();
   if (!info[0]->IsUint8Array()) {
     FF_THROW("expected arg 0 to be a Buffer of Uint8 Values");
   }
+
+  std::shared_ptr<IoBindings::ImdecodeWorker> worker = std::make_shared<IoBindings::ImdecodeWorker>();
 
   v8::Local<v8::Function> cbFunc;
   if (FF_HAS_ARG(1) && FF_IS_INT(info[1])) {

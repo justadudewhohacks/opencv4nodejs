@@ -19,24 +19,22 @@ NAN_MODULE_INIT(FASTDetector::Init) {
 };
 
 NAN_METHOD(FASTDetector::New) {
-  FF_ASSERT_CONSTRUCT_CALL(FASTDetector);
-	FF_METHOD_CONTEXT("FASTDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL(FASTDetector);
+	FF::TryCatch tryCatch;
+	FASTDetector::NewWorker worker;
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-	FF_GET_INT_IFDEF(optArgs, int threshold, "threshold", 10);
-	FF_GET_BOOL_IFDEF(optArgs, bool nonmaxSuppression, "nonmaxSuppression", true);
-	FF_GET_INT_IFDEF(optArgs, int type, "type", cv::FastFeatureDetector::TYPE_9_16);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(0, threshold, threshold);
-		FF_ARG_BOOL_IFDEF(1, nonmaxSuppression, nonmaxSuppression);
-		FF_ARG_INT_IFDEF(2, type, type);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("FASTDetector::New");
+		tryCatch.throwNew(err);
+		return;
 	}
 
 	FASTDetector* self = new FASTDetector();
+	self->detector = cv::FastFeatureDetector::create(
+		worker.threshold,
+		worker.nonmaxSuppression,
+		worker.type
+	);
 	self->Wrap(info.Holder());
-	self->detector = cv::FastFeatureDetector::create(threshold, nonmaxSuppression, type);
 	FF_RETURN(info.Holder());
 }

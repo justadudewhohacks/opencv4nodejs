@@ -6,15 +6,27 @@
 #if CV_VERSION_MINOR >= 4
 
 NAN_METHOD(Facemark::Save) {
-  FF_METHOD_CONTEXT("Facemark::Save");
-  FF_ARG_STRING(0, std::string path);
-  FF_UNWRAP(info.This(), Facemark)->save(path);
+	FF::TryCatch tryCatch;
+
+	std::string path;
+	if (StringConverter::arg(0, &path, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Facemark::Save");
+		tryCatch.throwNew(err);
+		return;
+	}
+	Nan::ObjectWrap::Unwrap<Facemark>(info.This())->save(path);
 }
 
 NAN_METHOD(Facemark::Load) {
-  FF_METHOD_CONTEXT("Facemark::Load");
-  FF_ARG_STRING(0, std::string path);
-  FF_UNWRAP(info.This(), Facemark)->load(path);
+	FF::TryCatch tryCatch;
+
+	std::string path;
+	if (StringConverter::arg(0, &path, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Facemark::Load");
+		tryCatch.throwNew(err);
+		return;
+	}
+	Nan::ObjectWrap::Unwrap<Facemark>(info.This())->load(path);
 }
 
 void Facemark::Init(v8::Local<v8::FunctionTemplate> ctor) {

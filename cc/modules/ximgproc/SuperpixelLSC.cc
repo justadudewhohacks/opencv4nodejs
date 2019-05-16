@@ -26,32 +26,40 @@ NAN_MODULE_INIT(SuperpixelLSC::Init) {
 };
 
 NAN_METHOD(SuperpixelLSC::New) {
-  FF_ASSERT_CONSTRUCT_CALL(SuperpixelLSC);
-	FF_METHOD_CONTEXT("SuperpixelLSC::New");
-	if (!info.IsConstructCall()) {
-		FF_THROW("expected new key word");
+	FF_ASSERT_CONSTRUCT_CALL(SuperpixelLSC);
+	FF::TryCatch tryCatch;
+	SuperpixelLSC::NewWorker worker;
+
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelLSC::New");
+		tryCatch.throwNew(err);
+		return;
 	}
+
 	SuperpixelLSC* self = new SuperpixelLSC();
-
-	FF_ARG_INSTANCE(0, self->img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-  FF_ARG_INT_IFDEF(1, self->regionSize, 10);
-  FF_ARG_INT_IFDEF(2, self->ratio, 0.075);
-
-	self->Wrap(info.Holder());
+	self->image = worker.image;
+	self->region_size = worker.region_size;
+	self->ratio = worker.ratio;
 	self->superpixelLsc = cv::ximgproc::createSuperpixelLSC(
-		self->img,
-		self->regionSize,
-		self->ratio
+		worker.image,
+		worker.region_size,
+		worker.ratio
 	);
-  info.GetReturnValue().Set(info.Holder());
+	self->Wrap(info.Holder());
+	FF_RETURN(info.Holder());
 }
 
 NAN_METHOD(SuperpixelLSC::Iterate) {
-	FF_METHOD_CONTEXT("SuperpixelLSC::Iterate");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_UINT_IFDEF(0, uint iterations, 10);
+	uint iterations = 10;
+	if (UintConverter::optArg(0, &iterations, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelLSC::Iterate");
+		tryCatch.throwNew(err);
+		return;
+	}
 
-	SuperpixelLSC* self = FF_UNWRAP(info.This(), SuperpixelLSC);
+	SuperpixelLSC* self = Nan::ObjectWrap::Unwrap<SuperpixelLSC>(info.This());
 	self->superpixelLsc->iterate((int)iterations);
 	self->superpixelLsc->getLabels(self->labels);
 	self->numCalculatedSuperpixels = self->superpixelLsc->getNumberOfSuperpixels();

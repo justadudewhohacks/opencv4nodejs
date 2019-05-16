@@ -24,15 +24,14 @@ NAN_MODULE_INIT(TrackerCSRT::Init) {
 
 NAN_METHOD(TrackerCSRT::New) {
 	FF_ASSERT_CONSTRUCT_CALL(TrackerCSRT);
-	FF_METHOD_CONTEXT("TrackerCSRT::New");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_INSTANCE_IFDEF(
-		0,
-		cv::TrackerCSRT::Params params,
-		TrackerCSRTParams::constructor,
-		FF_UNWRAP_TRACKERCSRTPARAMS_AND_GET,
-		cv::TrackerCSRT::Params()
-	);
+	cv::TrackerCSRT::Params params;
+	if (TrackerCSRTParams::Converter::optArg(0, &params, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("TrackerCSRT::New");
+		tryCatch.throwNew(err);
+		return;
+	}
 
 	TrackerCSRT* self = new TrackerCSRT();
 	self->tracker = cv::TrackerCSRT::create(params);

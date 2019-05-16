@@ -102,15 +102,27 @@ NAN_METHOD(HOGDescriptor::SetSVMDetector) {
 }
 
 NAN_METHOD(HOGDescriptor::Save) {
-  FF_METHOD_CONTEXT("HOGDescriptor::Save");
-  FF_ARG_STRING(0, std::string path);
-  FF_UNWRAP(info.This(), HOGDescriptor)->hog->save(path);
+	FF::TryCatch tryCatch;
+
+	std::string path;
+	if (StringConverter::arg(0, &path, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("HOGDescriptor::Save");
+		tryCatch.throwNew(err);
+		return;
+	}
+	Nan::ObjectWrap::Unwrap<HOGDescriptor>(info.This())->hog->save(path);
 }
 
 NAN_METHOD(HOGDescriptor::Load) {
-  FF_METHOD_CONTEXT("HOGDescriptor::Load");
-  FF_ARG_STRING(0, std::string path);
-  FF_UNWRAP(info.This(), HOGDescriptor)->hog->load(path);
+	FF::TryCatch tryCatch;
+
+	std::string path;
+	if (StringConverter::arg(0, &path, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("HOGDescriptor::Load");
+		tryCatch.throwNew(err);
+		return;
+	}
+	Nan::ObjectWrap::Unwrap<HOGDescriptor>(info.This())->hog->load(path);
 }
 
 NAN_METHOD(HOGDescriptor::Compute) {

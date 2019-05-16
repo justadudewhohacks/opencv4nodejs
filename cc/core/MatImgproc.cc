@@ -51,6 +51,7 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "findContours", FindContours);
   Nan::SetPrototypeMethod(ctor, "findContoursAsync", FindContoursAsync);
   Nan::SetPrototypeMethod(ctor, "drawContours", DrawContours);
+  Nan::SetPrototypeMethod(ctor, "drawContoursAsync", DrawContoursAsync);
   Nan::SetPrototypeMethod(ctor, "drawLine", DrawLine);
   Nan::SetPrototypeMethod(ctor, "drawArrowedLine", DrawArrowedLine);
   Nan::SetPrototypeMethod(ctor, "drawCircle", DrawCircle);
@@ -111,47 +112,19 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(MatImgproc::DrawContours) {
-  FF_METHOD_CONTEXT("Mat::DrawContours");
+	FF::SyncBinding(
+		std::make_shared<MatImgprocBindings::DrawContoursWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::DrawContours",
+		info
+	);
+}
 
-  FF_ARG_ARRAY(0, FF_ARR jsContours);
-  FF_ARG_INSTANCE(1, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-
-  // optional args
-  bool hasOptArgsObj = FF_HAS_ARG(2) && info[2]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-  FF_GET_INT_IFDEF(optArgs, int contourIdx, "contourIdx", 0);
-  FF_GET_INT_IFDEF(optArgs, int maxLevel, "maxLevel", INT_MAX);
-  FF_GET_INSTANCE_IFDEF(optArgs, cv::Point2d offset, "offset", Point2::constructor, FF_UNWRAP_PT2_AND_GET, Point2, cv::Point2d());
-  FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
-  FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 1);
-  if (!hasOptArgsObj) {
-    FF_ARG_INT_IFDEF(2, contourIdx, contourIdx);
-    FF_ARG_UINT_IFDEF(3, maxLevel, maxLevel);
-    FF_ARG_INSTANCE_IFDEF(4, offset, Point2::constructor, FF_UNWRAP_PT2_AND_GET, offset);
-    FF_ARG_INT_IFDEF(5, lineType, lineType);
-    FF_ARG_INT_IFDEF(6, thickness, thickness);
-  }
-
-  std::vector<std::vector<cv::Point>> contours;
-  std::vector<cv::Vec4i> hierarchy;
-  for (uint i = 0; i < jsContours->Length(); i++) {
-    FF_OBJ jsContour = jsContours->Get(i)->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-    contours.push_back(FF_UNWRAP_CONTOUR_AND_GET(jsContour));
-    hierarchy.push_back(FF_UNWRAP_CONTOUR(jsContour)->hierarchy);
-  }
-
-  cv::drawContours(
-    FF_UNWRAP_MAT_AND_GET(info.This()),
-    contours,
-    contourIdx,
-    color,
-    thickness,
-    lineType,
-    hierarchy,
-    (int)maxLevel,
-    offset
-  );
-  FF_RETURN(info.This());
+NAN_METHOD(MatImgproc::DrawContoursAsync) {
+	FF::AsyncBinding(
+		std::make_shared<MatImgprocBindings::DrawContoursWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::DrawContoursAsync",
+		info
+	);
 }
 
 NAN_METHOD(MatImgproc::Rescale) {

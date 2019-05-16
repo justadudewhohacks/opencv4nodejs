@@ -175,18 +175,31 @@ NAN_METHOD(SVM::CalcError) {
 }
 
 NAN_METHOD(SVM::Save) {
-  FF_METHOD_CONTEXT("SVM::Save");
-  FF_ARG_STRING(0, std::string path);
-  FF_UNWRAP(info.This(), SVM)->svm->save(path);
+	FF::TryCatch tryCatch;
+
+	std::string path;
+	if (StringConverter::arg(0, &path, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Save");
+		tryCatch.throwNew(err);
+		return;
+	}
+	Nan::ObjectWrap::Unwrap<SVM>(info.This())->svm->save(path);
 }
 
 NAN_METHOD(SVM::Load) {
-  FF_METHOD_CONTEXT("SVM::Load");
-  FF_ARG_STRING(0, std::string path);
+	FF::TryCatch tryCatch;
+
+	std::string path;
+	if (StringConverter::arg(0, &path, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Load");
+		tryCatch.throwNew(err);
+		return;
+	}
+	Nan::ObjectWrap::Unwrap<SVM>(info.This())->svm->load(path);
 #if CV_VERSION_MINOR < 2
-  FF_UNWRAP(info.This(), SVM)->svm = cv::ml::SVM::load<cv::ml::SVM>(path);
+	Nan::ObjectWrap::Unwrap<SVM>(info.This())->svm = cv::ml::SVM::load<cv::ml::SVM>(path);
 #else
-  FF_UNWRAP(info.This(), SVM)->svm = cv::ml::SVM::load(path);
+	Nan::ObjectWrap::Unwrap<SVM>(info.This())->svm = cv::ml::SVM::load(path);
 #endif
 }
 

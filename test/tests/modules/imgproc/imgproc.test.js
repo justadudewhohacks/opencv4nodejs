@@ -168,7 +168,9 @@ describe('imgproc', () => {
       [0, 0, 0, 0]
     ], cv.CV_16S);
 
-    funcShouldRequireArgs(() => cv.canny());
+    it('should throw if no args', () => {
+      expect(() => cv.canny()).to.throw('Imgproc::Canny - Error: expected argument 0 to be of type');
+    });
 
     it('can be called with required args', () => {
       const canny = cv.canny(dx, dy, th1, th2);
@@ -208,7 +210,6 @@ describe('imgproc', () => {
           dstPoints.concat(new cv.Point(20, 0))
         ]),
         hasAsync: false,
-        usesMacroInferno: true,
         expectOutput: res => expect(res).to.be.instanceOf(cv.Mat)
       });
     });

@@ -38,6 +38,44 @@ namespace ImgprocBindings {
     }
   };
 
+#if CV_VERSION_MINOR > 1
+  struct CannyWorker : public CatchCvExceptionWorker {
+  public:
+
+	  cv::Mat dx;
+	  cv::Mat dy;
+	  double threshold1;
+	  double threshold2;
+	  bool L2gradient = false;
+
+	  cv::Mat returnValue;
+
+	  std::string executeCatchCvExceptionWorker() {
+		  cv::Canny(dx, dy, returnValue, threshold1, threshold2, L2gradient);
+		  return "";
+	  }
+
+	  v8::Local<v8::Value> getReturnValue() {
+		  return Mat::Converter::wrap(returnValue);
+	  }
+
+	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return (
+			  Mat::Converter::arg(0, &dx, info) ||
+			  Mat::Converter::arg(1, &dy, info) ||
+			  DoubleConverter::arg(2, &threshold1, info) ||
+			  DoubleConverter::arg(3, &threshold2, info)
+			  );
+	  }
+
+	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return (
+			  BoolConverter::optArg(4, &L2gradient, info)
+			  );
+	  }
+  };
+#endif
+
   struct ApplyColorMapWorker : public CatchCvExceptionWorker {
   public:
     cv::Mat src;

@@ -73,6 +73,15 @@ public:
 	static FF_SETTER_STRING(TrackerCSRTParams, window_function, params.window_function);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::TrackerCSRT::Params* getNativeObjectPtr() { return &params; }
+	cv::TrackerCSRT::Params getNativeObject() { return params; }
+
+	typedef InstanceConverter<TrackerCSRTParams, cv::TrackerCSRT::Params> Converter;
+
+	static const char* getClassName() {
+		return "TrackerCSRTParams";
+	}
 };
 
 #define FF_UNWRAP_TRACKERCSRTPARAMS(obj) FF_UNWRAP(obj, TrackerCSRTParams)

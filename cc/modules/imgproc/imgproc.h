@@ -25,6 +25,7 @@ public:
   static NAN_METHOD(GetTextSizeAsync);
 #if CV_VERSION_MINOR > 1
   static NAN_METHOD(Canny);
+  static NAN_METHOD(CannyAsync);
 #endif
   static NAN_METHOD(ApplyColorMap);
   static NAN_METHOD(ApplyColorMapAsync);

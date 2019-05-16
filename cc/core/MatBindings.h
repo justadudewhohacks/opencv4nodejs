@@ -986,6 +986,56 @@ namespace MatBindings {
       );
     }    
   };
+
+  struct NormalizeWorker : public CatchCvExceptionWorker {
+  public:
+	  cv::Mat self;
+	  NormalizeWorker(cv::Mat self) {
+		  this->self = self;
+	  }
+
+	  double alpha = 1;
+	  double beta = 0;
+	  int norm_type = cv::NORM_L2;
+	  int dtype = -1;
+	  cv::Mat mask = cv::noArray().getMat();
+
+	  cv::Mat returnValue;
+
+	  std::string executeCatchCvExceptionWorker() {
+		  cv::normalize(self, returnValue, alpha, beta, norm_type, dtype, mask);
+		  return "";
+	  }
+
+	  v8::Local<v8::Value> getReturnValue() {
+		  return Mat::Converter::wrap(returnValue);
+	  }
+
+	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return (
+			  DoubleConverter::optArg(0, &alpha, info) ||
+			  DoubleConverter::optArg(1, &beta, info) ||
+			  IntConverter::optArg(2, &norm_type, info) ||
+			  IntConverter::optArg(3, &dtype, info) ||
+			  Mat::Converter::optArg(4, &mask, info)
+			  );
+	  }
+
+	  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return FF::isArgObject(info, 0);
+	  }
+
+	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+		  return (
+			  DoubleConverter::optProp(&alpha, "alpha", opts) ||
+			  DoubleConverter::optProp(&beta, "beta", opts) ||
+			  IntConverter::optProp(&norm_type, "normType", opts) ||
+			  IntConverter::optProp(&dtype, "dtype", opts) ||
+			  Mat::Converter::optProp(&mask, "mask", opts)
+			);
+	  }
+  };
   
 #if CV_VERSION_MINOR > 1
   struct RotateWorker : public OpWithCodeWorker {

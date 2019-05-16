@@ -1,4 +1,5 @@
 #include "Contour.h"
+#include "ContourBindings.h"
 #include "Mat.h"
 #include "Point.h"
 #include "Rect.h"
@@ -20,6 +21,7 @@ NAN_MODULE_INIT(Contour::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "getPoints", GetPoints);
 	Nan::SetPrototypeMethod(ctor, "approxPolyDP", ApproxPolyDP);
+	Nan::SetPrototypeMethod(ctor, "approxPolyDPAsync", ApproxPolyDPAsync);
 	Nan::SetPrototypeMethod(ctor, "approxPolyDPContour", ApproxPolyDPContour);
 	Nan::SetPrototypeMethod(ctor, "arcLength", ArcLength);
 	Nan::SetPrototypeMethod(ctor, "boundingRect", BoundingRect);
@@ -81,14 +83,19 @@ NAN_METHOD(Contour::GetPoints) {
 }
 
 NAN_METHOD(Contour::ApproxPolyDP) {
-	FF_METHOD_CONTEXT("Contour::ApproxPolyDP");
+	FF::SyncBinding(
+		std::make_shared<ContourBindings::ApproxPolyDPWorker>(Contour::Converter::unwrap(info.This())),
+		"Contour::ApproxPolyDP",
+		info
+	);
+}
 
-	FF_ARG_NUMBER(0, double epsilon);
-	FF_ARG_BOOL(1, bool closed);
-
-	std::vector<cv::Point> curve;
-	cv::approxPolyDP(FF_UNWRAP_CONTOUR_AND_GET(info.This()), curve, epsilon, closed);
-	FF_RETURN(Point::packJSPoint2Array(curve));
+NAN_METHOD(Contour::ApproxPolyDPAsync) {
+	FF::AsyncBinding(
+		std::make_shared<ContourBindings::ApproxPolyDPWorker>(Contour::Converter::unwrap(info.This())),
+		"Contour::ApproxPolyDPAsync",
+		info
+	);
 }
 
 NAN_METHOD(Contour::ApproxPolyDPContour) {

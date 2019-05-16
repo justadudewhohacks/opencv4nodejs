@@ -13,6 +13,8 @@ public:
 	static NAN_METHOD(NewPoint2);
 	static NAN_METHOD(NewPoint3);
 
+	/* TODO remove these and use ObjectArrayConverters */
+
 	template<typename type>
 	static void unpackJSPoint2Array(std::vector<cv::Point_<type>> &pts, v8::Local<v8::Array> jsPts) {
 		for (uint i = 0; i < jsPts->Length(); i++) {

@@ -19,7 +19,9 @@ describe('ximgproc', () => {
     const numLevels = 2;
 
     describe('constructor', () => {
-      funcShouldRequireArgs(() => new cv.SuperpixelSEEDS());
+      it('should throw if no args', () => {
+        expect(() => new cv.SuperpixelSEEDS()).to.throw('SuperpixelSEEDS::New - Error: expected argument 0 to be of type');
+      });
 
       it('should be constructable with required args', () => {
         const superpixelSeeds = new cv.SuperpixelSEEDS(testImg, numSuperpixels, numLevels);
@@ -32,6 +34,7 @@ describe('ximgproc', () => {
       });
     });
 
+    // TODO: FIX ME
     describe('iterate', () => {
       it('should iterate with default values', () => {
         const superpixelSeeds = new cv.SuperpixelSEEDS(testImg, numSuperpixels, numLevels);
@@ -49,7 +52,9 @@ describe('ximgproc', () => {
       const algorithm = cv.SLICO;
 
       describe('constructor', () => {
-        funcShouldRequireArgs(() => new cv.SuperpixelSLIC());
+        it('should throw if no args', () => {
+          expect(() => new cv.SuperpixelSLIC()).to.throw('SuperpixelSLIC::New - Error: expected argument 0 to be of type');
+        });
 
         it('should be constructable with required args', () => {
           const superpixel = new cv.SuperpixelSLIC(testImg, algorithm);
@@ -76,7 +81,9 @@ describe('ximgproc', () => {
 
     describe('SuperpixelLSC', () => {
       describe('constructor', () => {
-        funcShouldRequireArgs(() => new cv.SuperpixelLSC());
+        it('should throw if no args', () => {
+          expect(() => new cv.SuperpixelLSC()).to.throw('SuperpixelLSC::New - Error: expected argument 0 to be of type');
+        });
 
         it('should be constructable with required args', () => {
           const superpixel = new cv.SuperpixelLSC(testImg);

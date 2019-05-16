@@ -22,15 +22,14 @@ NAN_MODULE_INIT(FacemarkAAM::Init) {
 
 NAN_METHOD(FacemarkAAM::New) {
   FF_ASSERT_CONSTRUCT_CALL(FacemarkAAM);
-  FF_METHOD_CONTEXT("FacemarkAAM::New");
+  FF::TryCatch tryCatch;
 
-  FF_ARG_INSTANCE_IFDEF(
-    0,
-    cv::face::FacemarkAAM::Params params,
-    FacemarkAAMParams::constructor,
-    FF_UNWRAP_FACEMARKAAMPARAMS_AND_GET,
-    cv::face::FacemarkAAM::Params()
-  );
+  cv::face::FacemarkAAM::Params params;
+  if (FacemarkAAMParams::Converter::optArg(0, &params, info)) {
+	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("FacemarkAAM::New");
+	  tryCatch.throwNew(err);
+	  return;
+  }
 
   FacemarkAAM *self = new FacemarkAAM();
   self->Wrap(info.Holder());

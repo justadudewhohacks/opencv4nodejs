@@ -27,6 +27,15 @@ public:
 	static FF_SETTER_INT(TrackerMILParams, featureSetNumFeatures, params.featureSetNumFeatures);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::TrackerMIL::Params* getNativeObjectPtr() { return &params; }
+	cv::TrackerMIL::Params getNativeObject() { return params; }
+
+	typedef InstanceConverter<TrackerMILParams, cv::TrackerMIL::Params> Converter;
+
+	static const char* getClassName() {
+		return "TrackerMILParams";
+	}
 };
 
 #define FF_UNWRAP_TRACKERMILPARAMS(obj) FF_UNWRAP(obj, TrackerMILParams)

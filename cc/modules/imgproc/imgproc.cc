@@ -33,6 +33,7 @@ NAN_MODULE_INIT(Imgproc::Init) {
   Nan::SetMethod(target, "applyColorMapAsync", ApplyColorMapAsync);
 #if CV_VERSION_MINOR > 1
   Nan::SetMethod(target, "canny", Canny);
+  Nan::SetMethod(target, "cannyAsync", CannyAsync);
 #endif
   Moments::Init(target);
   Contour::Init(target);
@@ -84,18 +85,15 @@ NAN_METHOD(Imgproc::GetAffineTransform) {
 }
 
 NAN_METHOD(Imgproc::GetPerspectiveTransform) {
-  FF_METHOD_CONTEXT("GetPerspectiveTransform");
+  FF::TryCatch tryCatch;
 
-  FF_ARG_ARRAY(0, FF_ARR jsSrcPoints);
-  FF_ARG_ARRAY(1, FF_ARR jsDstPoints);
-
-  // TODO FF_ARG_UNPACK_ARRAY_INSTANCE
-  Nan::TryCatch tryCatch;
   std::vector<cv::Point2f> srcPoints, dstPoints;
-  Point::unpackJSPoint2Array<float>(srcPoints, jsSrcPoints);
-  Point::unpackJSPoint2Array<float>(dstPoints, jsDstPoints);
-  if (tryCatch.HasCaught()) {
-    return info.GetReturnValue().Set(tryCatch.ReThrow());
+  if (ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &srcPoints, info) 
+	  || ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &dstPoints, info)
+	) {
+	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Imgproc::GetPerspectiveTransform");
+	  tryCatch.throwNew(err);
+	  return;
   }
 
   FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
@@ -171,30 +169,43 @@ NAN_METHOD(Imgproc::CalcHist) {
 }
 
 NAN_METHOD(Imgproc::Plot1DHist) {
-  FF_METHOD_CONTEXT("Plot1DHist");
+	FF::TryCatch tryCatch;
 
-  FF_ARG_INSTANCE(0, cv::Mat hist, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-  FF_ARG_INSTANCE(1, cv::Mat plot, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-  FF_ARG_INSTANCE(2, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-  if (1 != hist.cols) {
-	return Nan::ThrowError(FF_NEW_STRING("Plot1DHist - hist rows mismatch, expected "
-	  + std::to_string(1) + ", have " + std::to_string(hist.cols)));
-  }
-  if (hist.channels() != 1) {
-    FF_THROW("expected hist to be single channeled");
-  }
+	cv::Mat hist, plot;
+	cv::Vec3d color;
+	int lineType = cv::LINE_8;
+	int thickness = 2;
+	int shift = 0;
 
-  // optional args
-  bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-  FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
-  FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 2);
-  FF_GET_INT_IFDEF(optArgs, int shift, "shift", 0);
-  if (!hasOptArgsObj) {
-    FF_ARG_INT_IFDEF(3, lineType, lineType);
-    FF_ARG_INT_IFDEF(4, thickness, thickness);
-    FF_ARG_INT_IFDEF(5, shift, shift);
-  }
+	v8::Local<v8::Object> opts = FF::isArgObject(info, 3) ? info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
+
+	if (Mat::Converter::arg(0, &hist, info) ||
+		Mat::Converter::arg(1, &plot, info) ||
+		Vec3::Converter::arg(2, &color, info) ||
+		(
+			FF::isArgObject(info, 3) && (
+				IntConverter::optProp(&lineType, "lineType", opts) ||
+				IntConverter::optProp(&thickness, "thickness", opts) ||
+				IntConverter::optProp(&shift, "shift", opts)
+			) || (
+				IntConverter::optArg(3, &lineType, info) ||
+				IntConverter::optArg(4, &thickness, info) ||
+				IntConverter::optArg(5, &shift, info)
+			)
+		) 
+	){
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Imgproc::Plot1DHist");
+		tryCatch.throwNew(err);
+		return;
+	}
+
+	if (1 != hist.cols) {
+		return Nan::ThrowError(FF_NEW_STRING("Imgproc::Plot1DHist - hist rows mismatch, expected "
+			+ std::to_string(1) + ", have " + std::to_string(hist.cols)));
+	}
+	if (hist.channels() != 1) {
+		return Nan::ThrowError(FF_NEW_STRING("Imgproc::Plot1DHist - expected hist to be single channeled"));
+	}
 
   double binWidth = ((double)plot.cols / (double)hist.rows);
   int plotHeight = (cv::max)(256, plot.rows - 20);
@@ -288,23 +299,16 @@ NAN_METHOD(Imgproc::GetTextSizeAsync) {
   );
 }
 
-#if CV_VERSION_MINOR > 1
+
 NAN_METHOD(Imgproc::Canny) {
-	FF_METHOD_CONTEXT("Canny");
-
-	FF_ARG_INSTANCE(0, cv::Mat dx, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Mat dy, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_NUMBER(2, double threshold1);
-	FF_ARG_NUMBER(3, double threshold2);
-	FF_ARG_BOOL_IFDEF(4, bool L2gradient, false);
-
-	FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
-	cv::Canny(dx, dy, FF_UNWRAP_MAT_AND_GET(jsMat), threshold1, threshold2, L2gradient);
-
-	FF_RETURN(jsMat);
+	FF::SyncBinding(std::make_shared<ImgprocBindings::CannyWorker>(),
+		"Imgproc::Canny", info);
 }
-#endif
 
+NAN_METHOD(Imgproc::CannyAsync) {
+	FF::AsyncBinding(std::make_shared<ImgprocBindings::CannyWorker>(),
+		"Imgproc::CannyAsync", info);
+}
 
 NAN_METHOD(Imgproc::ApplyColorMap) {
   FF::SyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),

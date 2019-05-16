@@ -70,6 +70,7 @@ public:
   static NAN_METHOD(GetRegion);
   static NAN_METHOD(Norm);
   static NAN_METHOD(Normalize);
+  static NAN_METHOD(NormalizeAsync);
   static NAN_METHOD(Row);
   static NAN_METHOD(Release);
   static NAN_METHOD(PushBack);

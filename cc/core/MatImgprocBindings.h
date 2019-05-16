@@ -2143,6 +2143,67 @@ namespace MatImgprocBindings {
       );
     }
   };
+
+  struct DrawContoursWorker : public CatchCvExceptionWorker {
+  public:
+	  cv::Mat self;
+	  DrawContoursWorker(cv::Mat self) {
+		  this->self = self;
+	  }
+
+	  std::vector<std::vector<cv::Point2i>> contours;
+	  int contourIdx;
+	  cv::Vec3d color;
+	  int thickness = 1;
+	  int lineType = cv::LINE_8;
+	  std::vector<cv::Vec4i> hierarchy;
+	  int maxLevel = INT_MAX;
+	  cv::Point2d offset;
+
+
+	  std::string executeCatchCvExceptionWorker() {
+		  cv::drawContours(self, contours, contourIdx, color, thickness, lineType, hierarchy, maxLevel, offset);
+		  return "";
+	  }
+
+	  v8::Local<v8::Value> getReturnValue() {
+		  v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		  return ret;
+	  }
+
+	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return (
+			  ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2i>::arg(0, &contours, info) ||
+			  IntConverter::arg(1, &contourIdx, info) ||
+			  Vec3::Converter::arg(2, &color, info)
+			);
+	  }
+
+	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return (
+			  IntConverter::optArg(3, &thickness, info) ||
+			  IntConverter::optArg(4, &lineType, info) ||
+			  ObjectArrayConverter<Vec4, cv::Vec4d, cv::Vec4i>::optArg(5, &hierarchy, info) ||
+			  IntConverter::optArg(6, &maxLevel, info) ||
+			  Point2::Converter::optArg(7, &offset, info)
+			);
+	  }
+
+	  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return FF::isArgObject(info, 3);
+	  }
+
+	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+		  return (
+			  IntConverter::optProp(&thickness, "thickness", opts) ||
+			  IntConverter::optProp(&lineType, "lineType", opts) ||
+			  ObjectArrayConverter<Vec4, cv::Vec4d, cv::Vec4i>::optProp(&hierarchy, "hierarchy", opts) ||
+			  IntConverter::optProp(&maxLevel, "maxLevel", opts) ||
+			  Point2::Converter::optProp(&offset, "offset", opts)
+			);
+	  }
+  };
   
 
 }

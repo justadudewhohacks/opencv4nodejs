@@ -22,15 +22,14 @@ NAN_MODULE_INIT(TrackerMIL::Init) {
 
 NAN_METHOD(TrackerMIL::New) {
 	FF_ASSERT_CONSTRUCT_CALL(TrackerMIL);
-	FF_METHOD_CONTEXT("TrackerMIL::New");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_INSTANCE_IFDEF(
-		0,
-		cv::TrackerMIL::Params params,
-		TrackerMILParams::constructor,
-		FF_UNWRAP_TRACKERMILPARAMS_AND_GET,
-		cv::TrackerMIL::Params()
-	);
+	cv::TrackerMIL::Params params;
+	if (TrackerMILParams::Converter::optArg(0, &params, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("TrackerMIL::New");
+		tryCatch.throwNew(err);
+		return;
+	}
 
 	TrackerMIL* self = new TrackerMIL();
 #if CV_VERSION_MINOR > 2

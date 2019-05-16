@@ -22,15 +22,14 @@ NAN_MODULE_INIT(TrackerBoosting::Init) {
 
 NAN_METHOD(TrackerBoosting::New) {
 	FF_ASSERT_CONSTRUCT_CALL(TrackerBoosting);
-	FF_METHOD_CONTEXT("TrackerBoosting::New");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_INSTANCE_IFDEF(
-		0,
-		cv::TrackerBoosting::Params params,
-		TrackerBoostingParams::constructor,
-		FF_UNWRAP_TRACKERBOOSTINGPARAMS_AND_GET,
-		cv::TrackerBoosting::Params()
-	);
+	cv::TrackerBoosting::Params params;
+	if (TrackerBoostingParams::Converter::optArg(0, &params, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("TrackerBoosting::New");
+		tryCatch.throwNew(err);
+		return;
+	}
 
 	TrackerBoosting* self = new TrackerBoosting();
 #if CV_VERSION_MINOR > 2

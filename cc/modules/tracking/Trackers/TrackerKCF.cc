@@ -24,15 +24,14 @@ NAN_MODULE_INIT(TrackerKCF::Init) {
 
 NAN_METHOD(TrackerKCF::New) {
 	FF_ASSERT_CONSTRUCT_CALL(TrackerKCF);
-	FF_METHOD_CONTEXT("TrackerKCF::New");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_INSTANCE_IFDEF(
-		0,
-		cv::TrackerKCF::Params params,
-		TrackerKCFParams::constructor,
-		FF_UNWRAP_TRACKERKCFPARAMS_AND_GET,
-		cv::TrackerKCF::Params()
-	);
+	cv::TrackerKCF::Params params;
+	if (TrackerKCFParams::Converter::optArg(0, &params, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("TrackerKCF::New");
+		tryCatch.throwNew(err);
+		return;
+	}
 
 	TrackerKCF* self = new TrackerKCF();
 #if CV_VERSION_MINOR > 2
