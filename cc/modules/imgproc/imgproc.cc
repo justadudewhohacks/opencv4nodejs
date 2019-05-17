@@ -42,48 +42,60 @@ NAN_MODULE_INIT(Imgproc::Init) {
 };
 
 NAN_METHOD(Imgproc::GetStructuringElement) {
-  FF_METHOD_CONTEXT("GetStructuringElement");
+	FF::TryCatch tryCatch;
 
-  FF_ARG_UINT(0, uint shape);
-  FF_ARG_INSTANCE(1, cv::Size2d size, Size::constructor, FF_UNWRAP_SIZE_AND_GET);
-  FF_ARG_INSTANCE_IFDEF(2, cv::Point2d anchor, Point2::constructor, FF_UNWRAP_PT2_AND_GET, cv::Point2d(-1, -1));
+	uint shape;
+	cv::Size2d size;
+	cv::Point2d anchor = cv::Point2d(-1, -1);
 
-  FF_OBJ jsKernel = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsKernel) = cv::getStructuringElement(shape, size, anchor);
-  FF_RETURN(jsKernel);
+	if (
+		UintConverter::arg(0, &shape, info) ||
+		Size::Converter::arg(1, &size, info) ||
+		Point2::Converter::optArg(2, &anchor, info)
+	) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::GetStructuringElement"));
+		return;
+	}
+
+	FF_OBJ jsKernel = FF::newInstance(Nan::New(Mat::constructor));
+	FF_UNWRAP_MAT_AND_GET(jsKernel) = cv::getStructuringElement(shape, size, anchor);
+	FF_RETURN(jsKernel);
 }
 
 NAN_METHOD(Imgproc::GetRotationMatrix2D) {
-  FF_METHOD_CONTEXT("GetRotationMatrix2D");
+	FF::TryCatch tryCatch;
 
-  FF_ARG_INSTANCE(0, cv::Point2d center, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
-  FF_ARG_NUMBER(1, double angle);
+	cv::Point2d center;
+	double angle, scale = 1.0;
+	if (
+		Point2::Converter::arg(0, &center, info) ||
+		DoubleConverter::arg(1, &angle, info) ||
+		DoubleConverter::optArg(2, &scale, info)
+		) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::GetRotationMatrix2D"));
+		return;
+	}
 
-  FF_ARG_NUMBER_IFDEF(2, double scale, 1.0);
-
-  FF_OBJ jsRotationMat = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsRotationMat) = cv::getRotationMatrix2D(center, angle, scale);
-  FF_RETURN(jsRotationMat);
+	FF_OBJ jsRotationMat = FF::newInstance(Nan::New(Mat::constructor));
+	FF_UNWRAP_MAT_AND_GET(jsRotationMat) = cv::getRotationMatrix2D(center, angle, scale);
+	FF_RETURN(jsRotationMat);
 }
 
 NAN_METHOD(Imgproc::GetAffineTransform) {
-  FF_METHOD_CONTEXT("GetAffineTransform");
+	FF::TryCatch tryCatch;
 
-  FF_ARG_ARRAY(0, FF_ARR jsSrcPoints);
-  FF_ARG_ARRAY(1, FF_ARR jsDstPoints);
+	std::vector<cv::Point2f> srcPoints, dstPoints;
+	if (
+		ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &srcPoints, info) ||
+		ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &dstPoints, info)
+		) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::GetAffineTransform"));
+		return;
+	}
 
-  // TODO FF_ARG_UNPACK_ARRAY_INSTANCE
-  Nan::TryCatch tryCatch;
-  std::vector<cv::Point2f> srcPoints, dstPoints;
-  Point::unpackJSPoint2Array<float>(srcPoints, jsSrcPoints);
-  Point::unpackJSPoint2Array<float>(dstPoints, jsDstPoints);
-  if (tryCatch.HasCaught()) {
-    return info.GetReturnValue().Set(tryCatch.ReThrow());
-  }
-
-  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getAffineTransform(srcPoints, dstPoints);
-  FF_RETURN(jsMat);
+	FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
+	FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getAffineTransform(srcPoints, dstPoints);
+	FF_RETURN(jsMat);
 }
 
 NAN_METHOD(Imgproc::GetPerspectiveTransform) {
@@ -257,41 +269,39 @@ NAN_METHOD(Imgproc::FitLine) {
     FF_THROW("expected arg0 to be an Array containing instances of Point2 or Point3");
   }
 
-  FF_ARG_UINT(1, uint distType);
-  FF_ARG_NUMBER(2, double param);
-  FF_ARG_NUMBER(3, double reps);
-  FF_ARG_NUMBER(4, double aeps);
+  FF::TryCatch tryCatch;
 
-  FF_ARR jsLineParams;
+  std::vector<cv::Point2d> pts2d;
+  std::vector<cv::Point3d> pts3d;
+  uint distType;
+  double param, reps, aeps;
+  if ((
+	isPoint2 && ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &pts2d, info) ||
+	!isPoint2 && ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &pts3d, info)
+	) ||
+	UintConverter::arg(1, &distType, info) ||
+	DoubleConverter::arg(2, &param, info) ||
+	DoubleConverter::arg(3, &reps, info) ||
+	DoubleConverter::arg(4, &aeps, info)
+	) {
+	tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::FitLine"));
+	return;
+  }
+
   if (isPoint2) {
-    std::vector<cv::Point2d> pts;
-	Nan::TryCatch tryCatch;
-    Point::unpackJSPoint2Array(pts, jsPoints);
-	if (tryCatch.HasCaught()) {
-		return info.GetReturnValue().Set(tryCatch.ReThrow());
-	}
     cv::Vec4f lineParams;
-    cv::fitLine(pts, lineParams, (int)distType, param, reps, aeps);
-    jsLineParams = FF_NEW_ARRAY(4);
-    for (int i = 0; i < 4; i++) {
-      jsLineParams->Set(i, Nan::New(lineParams[i]));
-    }
+    cv::fitLine(pts2d, lineParams, (int)distType, param, reps, aeps);
+	FF_RETURN(Vec4::Converter::wrap(lineParams));
   }
   else {
-    std::vector<cv::Point3d> pts;
-	Nan::TryCatch tryCatch;
-	Point::unpackJSPoint3Array(pts, jsPoints);
-	if (tryCatch.HasCaught()) {
-		return info.GetReturnValue().Set(tryCatch.ReThrow());
-	}
     cv::Vec6f lineParams;
-    cv::fitLine(pts, lineParams, (int)distType, param, reps, aeps);
-    jsLineParams = FF_NEW_ARRAY(6);
+    cv::fitLine(pts3d, lineParams, (int)distType, param, reps, aeps);
+	FF_ARR jsLineParams = FF_NEW_ARRAY(6);
     for (int i = 0; i < 6; i++) {
       jsLineParams->Set(i, Nan::New(lineParams[i]));
     }
+	FF_RETURN(jsLineParams);
   }
-  FF_RETURN(jsLineParams);
 }
 
 NAN_METHOD(Imgproc::GetTextSize) {

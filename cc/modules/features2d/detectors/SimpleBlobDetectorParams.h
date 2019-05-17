@@ -54,6 +54,15 @@ public:
   static FF_SETTER_NUMBER(SimpleBlobDetectorParams, thresholdStep, params.thresholdStep);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::SimpleBlobDetector::Params* getNativeObjectPtr() { return &params; }
+	cv::SimpleBlobDetector::Params getNativeObject() { return params; }
+
+	typedef InstanceConverter<SimpleBlobDetectorParams, cv::SimpleBlobDetector::Params> Converter;
+
+	static const char* getClassName() {
+		return "SimpleBlobDetector";
+	}
 };
 
 #define FF_UNWRAP_SIMPLEBLOBDETECTORPARAMS(obj) FF_UNWRAP(obj, SimpleBlobDetectorParams)

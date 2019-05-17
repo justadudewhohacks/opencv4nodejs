@@ -5,7 +5,8 @@ const {
   assertMetaData,
   funcShouldRequireArgs,
   readTestImage,
-  generateAPITests
+  generateAPITests,
+  expectToBeVec4
 } = global.utils;
 const { expect } = require('chai');
 const contourTests = require('./contourTests');
@@ -28,7 +29,9 @@ describe('imgproc', () => {
     const kernelSize = new cv.Size(cols, rows);
     const anchor = new cv.Point(0, 1);
 
-    funcShouldRequireArgs(cv.getStructuringElement);
+    it('should throw if no args', () => {
+      expect(() => cv.getStructuringElement()).to.throw('Imgproc::GetStructuringElement - Error: expected argument 0 to be of type');
+    });
 
     it('should be constructable with required args', () => {
       const kernel = cv.getStructuringElement(
@@ -127,15 +130,17 @@ describe('imgproc', () => {
     it('should return lineParams for 2D points', () => {
       const points2D = [new cv.Point(0, 0), new cv.Point(10, 10)];
       const lineParams = cv.fitLine(points2D, distType, param, reps, aeps);
-      expect(lineParams).to.be.an('array').lengthOf(4);
-      expect(lineParams).to.not.have.members(Array(4).fill(0));
+      expectToBeVec4(lineParams);
+      const { x, y, z, w } = lineParams
+      expect([x, y, z, w]).to.not.have.members(Array(4).fill(0));
     });
 
     it('should return lineParams for 2D fp points', () => {
       const points2D = [new cv.Point(0, 0), new cv.Point(10.9, 10.1)];
       const lineParams = cv.fitLine(points2D, distType, param, reps, aeps);
-      expect(lineParams).to.be.an('array').lengthOf(4);
-      expect(lineParams).to.not.have.members(Array(4).fill(0));
+      expectToBeVec4(lineParams);
+      const { x, y, z, w } = lineParams
+      expect([x, y, z, w]).to.not.have.members(Array(4).fill(0));
     });
 
     it('should return lineParams for 3D points', () => {
@@ -196,7 +201,6 @@ describe('imgproc', () => {
           dstPoints
         ]),
         hasAsync: false,
-        usesMacroInferno: true,
         expectOutput: res => expect(res).to.be.instanceOf(cv.Mat)
       });
     });
@@ -222,11 +226,11 @@ describe('imgproc', () => {
         [5,5], [5, 10], [5, 15]
       ].map(p => new cv.Point(p[0], p[1]));
       const expectedDestPoints = [
-        [9.522233963012695, 9.522233963012695], 
-        [9.128815650939941, 9.661333084106445], 
+        [9.522233963012695, 9.522233963012695],
+        [9.128815650939941, 9.661333084106445],
         [9.76507568359375, 9.841306686401367]
       ].map(p => new cv.Point(p[0], p[1]));
-      
+
       generateAPITests({
         getDut: () => cv,
         methodName: 'undistortPoints',
@@ -244,6 +248,6 @@ describe('imgproc', () => {
           }
         }
       });
-    });    
+    });
   });
 });

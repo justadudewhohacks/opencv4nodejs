@@ -79,7 +79,7 @@ NAN_METHOD(Contour::New) {
 }
 
 NAN_METHOD(Contour::GetPoints) {
-	info.GetReturnValue().Set(Point::packJSPoint2Array(FF_UNWRAP_CONTOUR_AND_GET(info.This())));
+	info.GetReturnValue().Set(ObjectArrayConverter<Point2, cv::Point2d, cv::Point2i>::wrap(FF_UNWRAP_CONTOUR_AND_GET(info.This())));
 }
 
 NAN_METHOD(Contour::ApproxPolyDP) {
@@ -174,7 +174,7 @@ NAN_METHOD(Contour::ConvexityDefects) {
 		defects
 	);
 
-	FF_RETURN(Vec::packJSVec4Array(defects));
+	info.GetReturnValue().Set(ObjectArrayConverter<Vec4, cv::Vec4d>::wrap(defects));
 }
 
 NAN_METHOD(Contour::MinEnclosingCircle) {
@@ -196,7 +196,7 @@ NAN_METHOD(Contour::MinEnclosingTriangle) {
 		FF_UNWRAP_CONTOUR_AND_GET(info.This()),
 		triangle
 	);
-	FF_RETURN(Point::packJSPoint2Array(triangle));
+	info.GetReturnValue().Set(ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(triangle));
 }
 
 NAN_METHOD(Contour::PointPolygonTest) {

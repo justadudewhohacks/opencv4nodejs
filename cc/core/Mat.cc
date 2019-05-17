@@ -403,7 +403,11 @@ NAN_METHOD(Mat::Norm) {
   }
 
   if (withSrc2) {
-    FF_ARG_INSTANCE(0, cv::Mat src2, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	cv::Mat src2; 
+	if (Mat::Converter::arg(i + 1, &src2, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Mat::Norm"));
+		return;
+	}
     norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), src2, (int)normType, mask);
   }
   else {

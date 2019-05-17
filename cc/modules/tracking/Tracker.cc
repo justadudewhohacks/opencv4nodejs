@@ -14,20 +14,28 @@ NAN_METHOD(Tracker::Clear) {
 }
 
 NAN_METHOD(Tracker::Init) {
-	FF_METHOD_CONTEXT("Tracker::Init");
-
-	FF_ARG_INSTANCE(0, cv::Mat image, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Rect2d boundingBox, Rect::constructor, FF_UNWRAP_RECT_AND_GET);
+	FF::TryCatch tryCatch;
+	cv::Mat image;
+	cv::Rect2d boundingBox;
+	if (
+		Mat::Converter::arg(0, &image, info) ||
+		Rect::Converter::arg(1, &boundingBox, info)
+		) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Tracker::Init"));
+		return;
+	}
 
 	bool ret = FF_UNWRAP(info.This(), Tracker)->getTracker()->init(image, boundingBox);
 	FF_RETURN(Nan::New(ret));
 }
 
 NAN_METHOD(Tracker::Update) {
-	FF_METHOD_CONTEXT("Tracker::Update");
-
-	FF_ARG_INSTANCE(0, cv::Mat image, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-
+	FF::TryCatch tryCatch;
+	cv::Mat image;
+	if (Mat::Converter::arg(0, &image, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Tracker::Update"));
+		return;
+	}
 	FF_OBJ jsRect = FF::newInstance(Nan::New(Rect::constructor));
 	bool ret = FF_UNWRAP(info.This(), Tracker)->getTracker()->update(image, FF_UNWRAP_RECT_AND_GET(jsRect));
 	

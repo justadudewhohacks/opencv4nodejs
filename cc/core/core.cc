@@ -67,40 +67,56 @@ NAN_METHOD(Core::Partition) {
   v8::Local<v8::Function> cb = v8::Local<v8::Function>::Cast(info[1]);
   FF_VAL data0 = jsData->Get(0);
 
+  FF::TryCatch tryCatch;
   int numLabels = 0;
   std::vector<int> labels;
+
   if (FF_IS_INSTANCE(Point2::constructor, data0)) {
     std::vector<cv::Point2d> pts;
-	Nan::TryCatch tryCatch;
-	Point::unpackJSPoint2Array(pts, jsData);
-	if (tryCatch.HasCaught()) {
-		return info.GetReturnValue().Set(tryCatch.ReThrow());
+	if (ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &pts, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
+		return;
 	}
     numLabels = cv::partition(pts, labels, Point2Predicate(cb));
   }
   else if (FF_IS_INSTANCE(Point3::constructor, data0)) {
     std::vector<cv::Point3d> pts;
-	Nan::TryCatch tryCatch;
-	Point::unpackJSPoint3Array(pts, jsData);
-	if (tryCatch.HasCaught()) {
-		return info.GetReturnValue().Set(tryCatch.ReThrow());
+	if (ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &pts, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
+		return;
 	}
     numLabels = cv::partition(pts, labels, Point3Predicate(cb));
   }
   else if (FF_IS_INSTANCE(Vec2::constructor, data0)) {
-    numLabels = cv::partition(Vec::unpackJSVec2Array(jsData), labels, Vec2Predicate(cb));
+	std::vector<cv::Vec2d> pts;
+	if (ObjectArrayConverter<Vec2, cv::Vec2d>::arg(0, &pts, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
+		return;
+	}
+    numLabels = cv::partition(pts, labels, Vec2Predicate(cb));
   }
   else if (FF_IS_INSTANCE(Vec3::constructor, data0)) {
-    numLabels = cv::partition(Vec::unpackJSVec3Array(jsData), labels, Vec3Predicate(cb));
+	std::vector<cv::Vec3d> pts;
+	if (ObjectArrayConverter<Vec3, cv::Vec3d>::arg(0, &pts, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
+		return;
+	}
+	numLabels = cv::partition(pts, labels, Vec3Predicate(cb));
   }
   else if (FF_IS_INSTANCE(Vec4::constructor, data0)) {
-    numLabels = cv::partition(Vec::unpackJSVec4Array(jsData), labels, Vec4Predicate(cb));
+	std::vector<cv::Vec4d> pts;
+	if (ObjectArrayConverter<Vec4, cv::Vec4d>::arg(0, &pts, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
+		return;
+	}
+    numLabels = cv::partition(pts, labels, Vec4Predicate(cb));
   }
   else if (FF_IS_INSTANCE(Mat::constructor, data0)) {
     std::vector<cv::Mat> mats;
-    for (uint i = 0; i < jsData->Length(); i++) {
-      mats.push_back(FF_UNWRAP_MAT_AND_GET(Nan::To<v8::Object>(jsData->Get(i)).ToLocalChecked()));
-    }
+	if (ObjectArrayConverter<Mat, cv::Mat>::arg(0, &mats, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
+		return;
+	}
     numLabels = cv::partition(mats, labels, MatPredicate(cb));
   }
 
@@ -120,37 +136,35 @@ NAN_METHOD(Core::Kmeans) {
   }
   
   FF_VAL data0 = jsData->Get(0);
-  
+  bool isPoint2 = FF_IS_INSTANCE(Point2::constructor, data0);
 
+  FF::TryCatch tryCatch;
+  std::vector<cv::Point2f> pts2d;
+  std::vector<cv::Point3f> pts3d;
 
-  FF_ARG_INT(1, int k);
-  FF_ARG_INSTANCE(2, cv::TermCriteria termCriteria, TermCriteria::constructor, FF_UNWRAP_TERMCRITERA_AND_GET);
-  FF_ARG_INT(3, int attempts);
-  FF_ARG_INT(4, int flags);
+  cv::TermCriteria termCriteria;
+  int k, attempts, flags;
+  if ((
+	  isPoint2 && ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &pts2d, info) ||
+	  !isPoint2 && ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::arg(0, &pts3d, info)
+	  ) ||
+	  IntConverter::arg(1, &k, info) ||
+	  TermCriteria::Converter::arg(2, &termCriteria, info) ||
+	  IntConverter::arg(3, &attempts, info) ||
+	  IntConverter::arg(4, &flags, info)
+	  ) {
+	  tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::FitLine"));
+	  return;
+  }
 
   std::vector<int> labels;
   cv::Mat centersMat;
   
-  if (FF_IS_INSTANCE(Point2::constructor, data0)) {
-    std::vector<cv::Point2f> data;
-	Nan::TryCatch tryCatch;
-	Point::unpackJSPoint2Array(data, jsData);
-	if (tryCatch.HasCaught()) {
-		return info.GetReturnValue().Set(tryCatch.ReThrow());
-	}
-    cv::kmeans(data, k, labels, termCriteria, attempts, flags, centersMat);
+  if (isPoint2) {
+    cv::kmeans(pts2d, k, labels, termCriteria, attempts, flags, centersMat);
   }
-  else if (FF_IS_INSTANCE(Point3::constructor, data0)) {
-    std::vector<cv::Point3f> data;
-	Nan::TryCatch tryCatch;
-	Point::unpackJSPoint3Array(data, jsData);
-	if (tryCatch.HasCaught()) {
-		return info.GetReturnValue().Set(tryCatch.ReThrow());
-	}
-    cv::kmeans(data, k, labels, termCriteria, attempts, flags, centersMat);
-  } 
   else {
-    FF_THROW("expected arg0 to be an Array of Points");
+    cv::kmeans(pts3d, k, labels, termCriteria, attempts, flags, centersMat);
   }
   
   FF_OBJ ret = FF_NEW_OBJ();
@@ -162,14 +176,14 @@ NAN_METHOD(Core::Kmeans) {
     for (int i = 0; i < centersMat.rows; i++) {
       centers.push_back(cv::Point2f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1)));
     }
-    Nan::Set(ret, FF_NEW_STRING("centers"), Point::packJSPoint2Array<float>(centers));
+    Nan::Set(ret, FF_NEW_STRING("centers"), ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(centers));
   }
   else if (FF_IS_INSTANCE(Point3::constructor, data0)) {
     std::vector<cv::Point3f> centers;
     for (int i = 0; i < centersMat.rows; i++) {
       centers.push_back(cv::Point3f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1), centersMat.at<float>(i, 2)));
     }
-    Nan::Set(ret, FF_NEW_STRING("centers"), Point::packJSPoint3Array<float>(centers));
+	Nan::Set(ret, FF_NEW_STRING("centers"), ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::wrap(centers));
   } 
   
   FF_RETURN(ret);

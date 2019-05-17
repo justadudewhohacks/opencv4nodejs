@@ -6,25 +6,6 @@
 #ifndef FF_KEYPOINT_H_
 #define FF_KEYPOINT_H_
 
-#define FF_PACK_KEYPOINT_ARRAY(var, kps)									\
-	FF_ARR var = FF_NEW_ARRAY(kps.size());									\
-	for (int i = 0; i < kps.size(); i++) {									\
-		FF_OBJ jsKp = FF::newInstance(Nan::New(KeyPoint::constructor));	\
-		FF_UNWRAP(jsKp, KeyPoint)->keyPoint = kps.at(i);			\
-		var->Set(i, jsKp);																		\
-	}
-
-#define FF_UNPACK_KEYPOINT_ARRAY_TO(vec, jsKps)																									\
-	for (uint i = 0; i < jsKps->Length(); i++) {																									\
-		cv::KeyPoint kp;																																						\
-		FF_REQUIRE_INSTANCE(KeyPoint::constructor, jsKps->Get(i), "expected instance of KeyPoint"); \
-		vec.push_back(FF_UNWRAP(FF_CAST_OBJ(jsKps->Get(i)), KeyPoint)->keyPoint);										\
-	}
-
-#define FF_UNPACK_KEYPOINT_ARRAY(var, jsKps)																										\
-	std::vector<cv::KeyPoint> var;																																\
-	FF_UNPACK_KEYPOINT_ARRAY_TO(var, jsKps)
-
 class KeyPoint : public Nan::ObjectWrap {
 public:
   int localId = -1;

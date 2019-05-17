@@ -74,11 +74,17 @@ NAN_MODULE_INIT(Features2d::Init) {
 };
 
 NAN_METHOD(Features2d::DrawKeyPoints) {
-	FF_METHOD_CONTEXT("DrawKeyPoints");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_INSTANCE(0, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_ARRAY(1, FF_ARR jsKps);
-	FF_UNPACK_KEYPOINT_ARRAY(kps, jsKps);
+	cv::Mat img;
+	std::vector<cv::KeyPoint> kps;
+	if (
+		Mat::Converter::arg(0, &img, info) ||
+		ObjectArrayConverter<KeyPoint, cv::KeyPoint>::arg(1, &kps, info)
+	) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Features2d::DrawKeyPoints"));
+		return;
+	}
 
 	FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
 	cv::drawKeypoints(img, kps, FF_UNWRAP_MAT_AND_GET(jsMat));
@@ -86,19 +92,20 @@ NAN_METHOD(Features2d::DrawKeyPoints) {
 }
 
 NAN_METHOD(Features2d::DrawMatches) {
-	FF_METHOD_CONTEXT("DrawMatches");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_INSTANCE(0, cv::Mat img1, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Mat img2, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_ARRAY(2, FF_ARR jsKps1);
-	FF_ARG_ARRAY(3, FF_ARR jsKps2);
-	FF_ARG_ARRAY(4, FF_ARR jsMatches);
-	FF_UNPACK_KEYPOINT_ARRAY(kps1, jsKps1);
-	FF_UNPACK_KEYPOINT_ARRAY(kps2, jsKps2);
+	cv::Mat img1, img2;
+	std::vector<cv::KeyPoint> kps1, kps2;
 	std::vector<cv::DMatch> dMatches;
-	for (uint i = 0; i < jsMatches->Length(); i++) {
-		DescriptorMatch* match = FF_UNWRAP(FF_CAST_OBJ(jsMatches->Get(i)), DescriptorMatch);
-		dMatches.push_back(match->dmatch);
+	if (
+		Mat::Converter::arg(0, &img1, info) ||
+		Mat::Converter::arg(1, &img2, info) ||
+		ObjectArrayConverter<KeyPoint, cv::KeyPoint>::arg(2, &kps1, info) ||
+		ObjectArrayConverter<KeyPoint, cv::KeyPoint>::arg(3, &kps2, info) ||
+		ObjectArrayConverter<DescriptorMatch, cv::DMatch>::arg(4, &dMatches, info)
+		) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Features2d::DrawMatches"));
+		return;
 	}
 
 	FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
