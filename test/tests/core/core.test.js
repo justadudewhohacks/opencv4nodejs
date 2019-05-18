@@ -141,21 +141,6 @@ describe('core', () => {
       expect(ret.centers[l2].y).to.equal(255);
       expect(ret.centers[l2].y).to.equal(255);
     });
-    it('should raise error for invalid type', () => {
-      const points3 = [
-        [255, 0, 0], [255, 0, 0], [255, 0, 255], [255, 0, 255], [255, 255, 255]
-      ].map(([x, y, z]) => new cv.Vec(x, y, z));
-
-      let err;
-
-      try {
-        cv.kmeans(points3, k, termCriteria, attempts, flags);
-      } catch(e){
-        err = e;
-      }
-
-      expect(err.message).to.equal("Core::Kmeans - expected arg0 to be an Array of Points");
-    });
   });
 
   describe('cartToPolar', () => {

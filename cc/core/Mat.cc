@@ -403,8 +403,8 @@ NAN_METHOD(Mat::Norm) {
   }
 
   if (withSrc2) {
-	cv::Mat src2; 
-	if (Mat::Converter::arg(i + 1, &src2, info)) {
+	cv::Mat src2;
+	if (Mat::Converter::arg(0, &src2, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Mat::Norm"));
 		return;
 	}

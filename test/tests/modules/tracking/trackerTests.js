@@ -36,7 +36,9 @@ const TrackerTestGenerator = getTestImg => (trackerName) => {
     });
 
     describe('init', () => {
-      funcShouldRequireArgs(() => (newTracker()).init());
+      it('should throw if no args', () => {
+        expect(() => newTracker().init()).to.throw('Tracker::Init - Error: expected argument 0 to be of type');
+      });
 
       it('can be called with frame and initial box', () => {
         const ret = newTracker().init(getTestImg(), new cv.Rect(0, 0, 10, 10));
@@ -45,7 +47,9 @@ const TrackerTestGenerator = getTestImg => (trackerName) => {
     });
 
     describe('update', () => {
-      funcShouldRequireArgs(() => (newTracker()).update());
+      it('should throw if no args', () => {
+        expect(() => newTracker().update()).to.throw('Tracker::Update - Error: expected argument 0 to be of type');
+      });
 
       it('returns bounding box', () => {
         const tracker = newTracker();
@@ -150,7 +154,9 @@ module.exports = () => {
     });
 
     describe('update', () => {
-      funcShouldRequireArgs(() => (new cv.MultiTracker()).update());
+      it('should throw if no args', () => {
+        expect(() => (new cv.MultiTracker()).update()).to.throw('MultiTracker::Update - Error: expected argument 0 to be of type');
+      });
 
       it('returns bounding box', () => {
         const tracker = new cv.MultiTracker();
