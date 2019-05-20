@@ -21,30 +21,25 @@ NAN_MODULE_INIT(TrainData::Init) {
 
 NAN_METHOD(TrainData::New) {
   FF_ASSERT_CONSTRUCT_CALL(TrainData);
-	FF_METHOD_CONTEXT("TrainData::New");
 	TrainData* self = new TrainData();
 	if (info.Length() > 0) {
-		// required args
-		FF_ARG_INSTANCE(0, cv::Mat samples, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-		FF_ARG_UINT(1, unsigned int layout);
-		FF_ARG_INSTANCE(2, cv::Mat responses, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+		FF::TryCatch tryCatch;
+		TrainData::NewWorker worker;
 
-		// optional args
-		bool hasOptArgsObj = FF_HAS_ARG(3) && !info[3]->IsArray();
-		FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-		FF_GET_UNPACK_INT_ARRAY_IFDEF(optArgs, varIdx, "varIdx", varIdx);
-		FF_GET_UNPACK_INT_ARRAY_IFDEF(optArgs, sampleIdx, "sampleIdx", sampleIdx);
-		std::vector<float> sampleWeights;
-		FloatArrayConverter::optProp(&sampleWeights, "sampleWeights", optArgs);
-		FF_GET_UNPACK_UCHAR_ARRAY_IFDEF(optArgs, varType, "varType", varType);
-		if (!hasOptArgsObj) {
-			FF_ARG_UNPACK_INT_ARRAY_TO_IFDEF(3, varIdx, varIdx);
-			FF_ARG_UNPACK_INT_ARRAY_TO_IFDEF(4, sampleIdx, sampleIdx);
-			FloatArrayConverter::optArg(5, &sampleWeights, info);
-			FF_ARG_UNPACK_UCHAR_ARRAY_TO_IFDEF(6, varType, varType);
+		if (worker.applyUnwrappers(info)) {
+			v8::Local<v8::Value> err = tryCatch.formatCatchedError("TrainData::New");
+			tryCatch.throwNew(err);
+			return;
 		}
 
-		self->trainData = cv::ml::TrainData::create(samples, layout, responses, varIdx, sampleIdx, sampleWeights, varType);
+		// TODO: uchar / char converter
+		std::vector<uchar> varType;
+		for (auto val : worker.varType) {
+			varType.push_back(val);
+		}
+		self->trainData = cv::ml::TrainData::create(
+			worker.samples, worker.layout, worker.responses, worker.varIdx, worker.sampleIdx, worker.sampleWeights, varType
+		);
 	}
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());

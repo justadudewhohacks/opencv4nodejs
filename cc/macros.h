@@ -45,9 +45,6 @@ namespace FF {
 			return Nan::ThrowError(err);							\
 	}
 
-#define FF_GET_UNPACK_UCHAR_ARRAY_IFDEF(ff_obj, ff_var, ff_prop, ff_defaultValue) FF_GET_UNPACK_ARRAY_IFDEF(ff_obj, ff_var, ff_prop, uchar, ff_uint, ff_defaultValue)
-#define FF_ARG_UNPACK_UCHAR_ARRAY_TO_IFDEF(ff_argN, ff_var, ff_defaultValue) FF_ARG_UNPACK_ARRAY_TO_IFDEF(ff_argN, ff_var, ff_uint, ff_defaultValue)
-
 /* unwrappers */
 
 #define FF_UNWRAP(obj, clazz)	Nan::ObjectWrap::Unwrap<clazz>(obj)
@@ -98,7 +95,7 @@ static FF_FUNC_TYPE ff_func = FF_FUNC_TYPE();
 #define FF_ASSERT_CONSTRUCT_CALL(ctor)																\
   if (!info.IsConstructCall()) {																			\
     return Nan::ThrowError(FF_NEW_STRING(std::string(#ctor)						\
-        + "::New -  expect to be called with \"new\"")); 							\
+        + "::New - expect to be called with \"new\"")); 							\
   }
 
 /* for setters */

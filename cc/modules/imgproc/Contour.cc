@@ -99,10 +99,16 @@ NAN_METHOD(Contour::ApproxPolyDPAsync) {
 }
 
 NAN_METHOD(Contour::ApproxPolyDPContour) {
-	FF_METHOD_CONTEXT("Contour::ApproxPolyDPContour");
-
-	FF_ARG_NUMBER(0, double epsilon);
-	FF_ARG_BOOL(1, bool closed);
+	FF::TryCatch tryCatch;
+	double epsilon;
+	bool closed;
+	if (
+		DoubleConverter::arg(0, &epsilon, info) ||
+		BoolConverter::arg(1, &closed, info)
+	) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ApproxPolyDPContour"));
+		return;
+	}
 
 	std::vector<cv::Point> curve;
 	cv::approxPolyDP(FF_UNWRAP_CONTOUR_AND_GET(info.This()), curve, epsilon, closed);
@@ -114,9 +120,12 @@ NAN_METHOD(Contour::ApproxPolyDPContour) {
 }
 
 NAN_METHOD(Contour::ArcLength) {
-	FF_METHOD_CONTEXT("Contour::ArcLength");
-
-	FF_ARG_BOOL_IFDEF(0, bool closed, false);
+	FF::TryCatch tryCatch;
+	bool closed = false;
+	if (BoolConverter::optArg(0, &closed, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ArcLength"));
+		return;
+	}
 
 	double arcLength = cv::arcLength(FF_UNWRAP_CONTOUR_AND_GET(info.This()), closed);
 	FF_RETURN(Nan::New(arcLength));
@@ -129,9 +138,12 @@ NAN_METHOD(Contour::BoundingRect) {
 }
 
 NAN_METHOD(Contour::ConvexHull) {
-	FF_METHOD_CONTEXT("Contour::ConvexHull");
-
-	FF_ARG_BOOL_IFDEF(0, bool clockwise, false);
+	FF::TryCatch tryCatch;
+	bool clockwise = false;
+	if (BoolConverter::optArg(0, &clockwise, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ConvexHull"));
+		return;
+	}
 
 	std::vector<cv::Point> hullPoints;
 	cv::convexHull(
@@ -147,9 +159,12 @@ NAN_METHOD(Contour::ConvexHull) {
 }
 
 NAN_METHOD(Contour::ConvexHullIndices) {
-	FF_METHOD_CONTEXT("Contour::ConvexHullIndices");
-
-	FF_ARG_BOOL_IFDEF(0, bool clockwise, false);
+	FF::TryCatch tryCatch;
+	bool clockwise = false;
+	if (BoolConverter::optArg(0, &clockwise, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ConvexHullIndices"));
+		return;
+	}
 
 	std::vector<int> hullIndices;
 	cv::convexHull(
@@ -162,10 +177,12 @@ NAN_METHOD(Contour::ConvexHullIndices) {
 	FF_RETURN(jsHullIndices);
 }
 NAN_METHOD(Contour::ConvexityDefects) {
-	FF_METHOD_CONTEXT("Contour::ConvexityDefects");
-
-	FF_ARG_ARRAY(0, FF_ARR jsHull);
-	FF_UNPACK_INT_ARRAY(hull, jsHull);
+	FF::TryCatch tryCatch;
+	std::vector<int> hull;
+	if (IntArrayConverter::arg(0, &hull, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ConvexityDefects"));
+		return;
+	}
 
 	std::vector<cv::Vec4d> defects;
 	cv::convexityDefects(
@@ -200,9 +217,12 @@ NAN_METHOD(Contour::MinEnclosingTriangle) {
 }
 
 NAN_METHOD(Contour::PointPolygonTest) {
-	FF_METHOD_CONTEXT("Contour::PointPolygonTest");
-
-	FF_ARG_INSTANCE(0, cv::Point2d point, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
+	FF::TryCatch tryCatch;
+	cv::Point2d point;
+	if (Point2::Converter::arg(0, &point, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::PointPolygonTest"));
+		return;
+	}
 
 	double dist = cv::pointPolygonTest(
 		FF_UNWRAP_CONTOUR_AND_GET(info.This()),
@@ -213,10 +233,16 @@ NAN_METHOD(Contour::PointPolygonTest) {
 }
 
 NAN_METHOD(Contour::MatchShapes) {
-	FF_METHOD_CONTEXT("Contour::MatchShapes");
-
-	FF_ARG_INSTANCE(0, std::vector<cv::Point> contour2, Contour::constructor, FF_UNWRAP_CONTOUR_AND_GET);
-	FF_ARG_UINT(1, uint method);
+	FF::TryCatch tryCatch;
+	std::vector<cv::Point> contour2;
+	uint method;
+	if (
+		Contour::Converter::arg(0, &contour2, info) ||
+		UintConverter::arg(1, &method, info)
+	) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::MatchShapes"));
+		return;
+	}
 
 	// parameter not supported
 	double parameter = 0.0;

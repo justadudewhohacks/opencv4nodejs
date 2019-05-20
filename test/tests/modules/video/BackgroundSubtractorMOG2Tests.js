@@ -59,7 +59,9 @@ module.exports = () => {
 
       const learningRate = 2.5;
 
-      funcShouldRequireArgs(() => new cv.BackgroundSubtractorMOG2().apply());
+      it('should throw if no args', () => {
+        expect(() => (new cv.BackgroundSubtractorMOG2()).apply()).to.throw('BackgroundSubtractor::Apply - Error: expected argument 0 to be of type');
+      });
 
       it('can be called if required args passed', () => {
         const bgsubtractor = new cv.BackgroundSubtractorMOG2();

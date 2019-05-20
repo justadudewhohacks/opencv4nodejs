@@ -6,10 +6,17 @@ void BackgroundSubtractor::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(BackgroundSubtractor::Apply) {
-	FF_METHOD_CONTEXT("BackgroundSubtractorKNN::Apply");
-
-	FF_ARG_INSTANCE(0, cv::Mat frame, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_NUMBER_IFDEF(1, double learningRate, -1);
+	FF::TryCatch tryCatch;
+	cv::Mat frame;
+	double learningRate = -1;
+	if (
+		Mat::Converter::arg(0, &frame, info) ||
+		DoubleConverter::optArg(1, &learningRate, info)
+		) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("BackgroundSubtractor::Apply");
+		tryCatch.throwNew(err);
+		return;
+	}
 
 	BackgroundSubtractor* self = FF_UNWRAP(info.This(), BackgroundSubtractor);
 	self->getSubtractor()->apply(frame, self->fgMask, learningRate);
