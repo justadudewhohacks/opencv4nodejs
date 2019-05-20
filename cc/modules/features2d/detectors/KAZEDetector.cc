@@ -35,5 +35,5 @@ NAN_METHOD(KAZEDetector::New) {
 	KAZEDetector* self = new KAZEDetector();
 	self->detector = cv::KAZE::create(worker.extended, worker.upright, worker.threshold, worker.nOctaves, worker.nOctaveLayers, worker.diffusivity);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }

@@ -35,5 +35,5 @@ NAN_METHOD(GFTTDetector::New) {
 	GFTTDetector* self = new GFTTDetector();
 	self->detector = cv::GFTTDetector::create(worker.maxCorners, worker.qualityLevel, worker.minDistance, worker.blockSize, worker.useHarrisDetector, worker.k);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }

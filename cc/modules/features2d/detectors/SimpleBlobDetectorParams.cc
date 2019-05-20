@@ -40,5 +40,5 @@ NAN_METHOD(SimpleBlobDetectorParams::New) {
 	SimpleBlobDetectorParams* self = new SimpleBlobDetectorParams();
 	self->params = cv::SimpleBlobDetector::Params();
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };

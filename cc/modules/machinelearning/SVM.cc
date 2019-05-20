@@ -88,7 +88,7 @@ NAN_METHOD(SVM::New) {
     }
   }
   self->Wrap(info.Holder());
-  FF_RETURN(info.Holder());
+  info.GetReturnValue().Set(info.Holder());
 };
 
 NAN_METHOD(SVM::SetParams) {
@@ -102,7 +102,7 @@ NAN_METHOD(SVM::SetParams) {
   if (tryCatch.HasCaught()) {
     tryCatch.ReThrow();
   }
-  FF_RETURN(info.This());
+  info.GetReturnValue().Set(info.This());
 };
 
 NAN_METHOD(SVM::Predict) {
@@ -141,7 +141,7 @@ NAN_METHOD(SVM::Predict) {
 	FF_UNWRAP(info.This(), SVM)->svm->predict(samples, results, (int)flags);
   }
 
-  FF_VAL jsResult;
+  v8::Local<v8::Value> jsResult;
   if (results.cols == 1 && results.rows == 1) {
     jsResult = Nan::New((double)results.at<float>(0, 0));
   }
@@ -150,13 +150,13 @@ NAN_METHOD(SVM::Predict) {
     results.col(0).copyTo(resultsVec);
     jsResult = FloatArrayConverter::wrap(resultsVec);
   }
-  FF_RETURN(jsResult);
+  info.GetReturnValue().Set(jsResult);
 }
 
 NAN_METHOD(SVM::GetSupportVectors) {
-  FF_OBJ jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsSupportVectors) = FF_UNWRAP(info.This(), SVM)->svm->getSupportVectors();
-  FF_RETURN(jsSupportVectors);
+  info.GetReturnValue().Set(jsSupportVectors);
 }
 
 NAN_METHOD(SVM::GetUncompressedSupportVectors) {
@@ -164,9 +164,9 @@ NAN_METHOD(SVM::GetUncompressedSupportVectors) {
 #if CV_VERSION_MINOR < 2
   FF_THROW("getUncompressedSupportVectors not implemented for v3.0, v3.1");
 #else
-  FF_OBJ jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsSupportVectors) = FF_UNWRAP(info.This(), SVM)->svm->getUncompressedSupportVectors();
-  FF_RETURN(jsSupportVectors);
+  info.GetReturnValue().Set(jsSupportVectors);
 #endif
 }
 
@@ -177,8 +177,8 @@ NAN_METHOD(SVM::GetDecisionFunction) {
     FF_THROW("expected arg 0 to be a Int");
   }
 
-  FF_OBJ alpha = FF::newInstance(Nan::New(Mat::constructor));
-  FF_OBJ svidx = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> alpha = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> svidx = FF::newInstance(Nan::New(Mat::constructor));
 
   FF::TryCatch tryCatch;
   int i;
@@ -189,11 +189,11 @@ NAN_METHOD(SVM::GetDecisionFunction) {
   }
   double rho = FF_UNWRAP(info.This(), SVM)->svm->getDecisionFunction(i, FF_UNWRAP_MAT_AND_GET(alpha), FF_UNWRAP_MAT_AND_GET(svidx));
 
-  FF_OBJ ret = FF_NEW_OBJ();
+  v8::Local<v8::Object> ret = Nan::New<v8::Object>();
   Nan::Set(ret, FF_NEW_STRING("rho"), Nan::New((double)rho));
   Nan::Set(ret, FF_NEW_STRING("alpha"), alpha);
   Nan::Set(ret, FF_NEW_STRING("svidx"), svidx);
-  FF_RETURN(ret);
+  info.GetReturnValue().Set(ret);
 }
 
 NAN_METHOD(SVM::CalcError) {
@@ -209,13 +209,13 @@ NAN_METHOD(SVM::CalcError) {
 		return;
 	}
 
-	FF_OBJ jsResponses = FF::newInstance(Nan::New(Mat::constructor));
+	v8::Local<v8::Object> jsResponses = FF::newInstance(Nan::New(Mat::constructor));
 	float error = FF_UNWRAP(info.This(), SVM)->svm->calcError(trainData, test, FF_UNWRAP_MAT_AND_GET(jsResponses));
 
-	FF_OBJ ret = FF_NEW_OBJ();
+	v8::Local<v8::Object> ret = Nan::New<v8::Object>();
 	Nan::Set(ret, FF_NEW_STRING("error"), Nan::New((double)error));
 	Nan::Set(ret, FF_NEW_STRING("responses"), jsResponses);
-	FF_RETURN(ret);
+	info.GetReturnValue().Set(ret);
 }
 
 NAN_METHOD(SVM::Save) {

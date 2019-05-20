@@ -25,7 +25,7 @@ namespace VideoCaptureBindings {
 			return "";
 		}
 
-		FF_VAL getReturnValue() {
+		v8::Local<v8::Value> getReturnValue() {
 			return DoubleConverter::wrap(val);
 		}
 	};
@@ -43,7 +43,7 @@ namespace VideoCaptureBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(frame);
     }
   };

@@ -49,7 +49,7 @@ NAN_METHOD(SuperpixelSLIC::New) {
 		worker.ruler
 	);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(SuperpixelSLIC::Iterate) {

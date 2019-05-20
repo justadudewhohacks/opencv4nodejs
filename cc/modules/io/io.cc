@@ -96,7 +96,7 @@ NAN_METHOD(Io::WaitKey) {
   } else{
     key = cv::waitKey();
   }
-  FF_RETURN(Nan::New(key));
+  info.GetReturnValue().Set(Nan::New(key));
 }
 
 NAN_METHOD(Io::MoveWindow) {
@@ -146,9 +146,9 @@ NAN_METHOD(Io::Imdecode) {
   std::vector<uchar> vec(size);
   memcpy(vec.data(), data, size);
 
-  FF_OBJ jsDecodedMat = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> jsDecodedMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsDecodedMat) = cv::imdecode(vec, flags);
-  FF_RETURN(jsDecodedMat);
+  info.GetReturnValue().Set(jsDecodedMat);
 }
 
 NAN_METHOD(Io::ImdecodeAsync) {
@@ -180,7 +180,7 @@ NAN_METHOD(Io::ImdecodeAsync) {
     worker->flags = cv::IMREAD_ANYCOLOR;
   }
 
-  FF_OBJ jsBuf = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> jsBuf = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
   worker->data = static_cast<char *>(node::Buffer::Data(jsBuf));
   worker->dataSize = node::Buffer::Length(jsBuf);
 

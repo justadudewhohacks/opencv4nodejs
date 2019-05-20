@@ -36,5 +36,5 @@ NAN_METHOD(AKAZEDetector::New) {
 	AKAZEDetector* self = new AKAZEDetector();
 	self->detector = cv::AKAZE::create(worker.descriptorType, worker.descriptorSize, worker.descriptorChannels, worker.threshold, worker.nOctaves, worker.nOctaveLayers, worker.diffusivity);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }

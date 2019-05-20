@@ -53,7 +53,7 @@ NAN_METHOD(TrackerCSRTParams::New) {
 	TrackerCSRTParams* self = new TrackerCSRTParams();
 	self->params = cv::TrackerCSRT::Params();
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

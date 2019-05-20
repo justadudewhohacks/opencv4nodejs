@@ -26,7 +26,7 @@ NAN_METHOD(Tracker::Init) {
 	}
 
 	bool ret = FF_UNWRAP(info.This(), Tracker)->getTracker()->init(image, boundingBox);
-	FF_RETURN(Nan::New(ret));
+	info.GetReturnValue().Set(Nan::New(ret));
 }
 
 NAN_METHOD(Tracker::Update) {
@@ -36,13 +36,13 @@ NAN_METHOD(Tracker::Update) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Tracker::Update"));
 		return;
 	}
-	FF_OBJ jsRect = FF::newInstance(Nan::New(Rect::constructor));
+	v8::Local<v8::Object> jsRect = FF::newInstance(Nan::New(Rect::constructor));
 	bool ret = FF_UNWRAP(info.This(), Tracker)->getTracker()->update(image, FF_UNWRAP_RECT_AND_GET(jsRect));
 	
 	if (ret) {
-		FF_RETURN(jsRect);
+		info.GetReturnValue().Set(jsRect);
 	} else {
-		FF_RETURN(Nan::Null());
+		info.GetReturnValue().Set(Nan::Null());
 	}
 }
 

@@ -27,7 +27,7 @@ NAN_METHOD(TrackerMOSSE::New) {
 	TrackerMOSSE* self = new TrackerMOSSE();
 	self->tracker = cv::TrackerMOSSE::create();
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

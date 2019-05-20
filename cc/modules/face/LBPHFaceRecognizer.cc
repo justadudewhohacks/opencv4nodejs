@@ -69,7 +69,7 @@ NAN_METHOD(LBPHFaceRecognizer::New) {
 #else
 	self->faceRecognizer = cv::face::LBPHFaceRecognizer::create(worker.radius, worker.neighbors, worker.grid_x, worker.grid_y, worker.threshold);
 #endif
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif // HAVE_FACE

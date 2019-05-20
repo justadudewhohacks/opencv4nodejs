@@ -34,7 +34,7 @@ NAN_METHOD(TrackerMedianFlow::New) {
 #endif
 
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

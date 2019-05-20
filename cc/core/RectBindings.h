@@ -21,7 +21,7 @@ namespace RectBindings {
     );
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Rect::Converter::wrap(outRect);
     }
   };
@@ -68,7 +68,7 @@ namespace RectBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Rect::Converter::wrap(outRect);
     }
   };
@@ -103,7 +103,7 @@ namespace RectBindings {
       return didThrow;
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Rect::Converter::wrap(outRect);
     }
   };
@@ -129,7 +129,7 @@ namespace RectBindings {
       );
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Rect::Converter::wrap(outRect);
     }
   };

@@ -35,7 +35,7 @@ NAN_METHOD(FisherFaceRecognizer::New) {
 #else
 	self->faceRecognizer = cv::face::FisherFaceRecognizer::create(worker.num_components, worker.threshold);
 #endif
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

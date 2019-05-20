@@ -16,8 +16,8 @@ public:
 	static FF_GETTER(DetectionROI, scaleGet, detectionROI.scale);
 	static FF_SETTER_NUMBER(DetectionROI, scale, detectionROI.scale);
 	static NAN_GETTER(locationsGet) {
-		FF_VAL val = ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::wrap(Converter::unwrap(info.This()).locations);
-		FF_RETURN(val);
+		v8::Local<v8::Value> val = ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::wrap(Converter::unwrap(info.This()).locations);
+		info.GetReturnValue().Set(val);
 	}
 
 	static NAN_SETTER(locationsSet) {
@@ -29,7 +29,7 @@ public:
 	}
 
 	static NAN_GETTER(confidencesGet) {
-		FF_RETURN(DoubleArrayConverter::wrap(Converter::unwrap(info.This()).confidences));
+		info.GetReturnValue().Set(DoubleArrayConverter::wrap(Converter::unwrap(info.This()).confidences));
 	}
 
 	static NAN_SETTER(confidencesSet) {

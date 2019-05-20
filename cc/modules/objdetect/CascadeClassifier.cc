@@ -38,7 +38,7 @@ NAN_METHOD(CascadeClassifier::New) {
 		return Nan::ThrowError(FF_NEW_STRING(std::string("CascadeClassifier::New") + " - " + std::string("failed to load cascade.xml file: " + worker.xmlFilePath)));
 	}
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(CascadeClassifier::DetectMultiScale) {

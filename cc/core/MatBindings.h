@@ -40,7 +40,7 @@ namespace MatBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(returnValue);
     }
 
@@ -88,7 +88,7 @@ namespace MatBindings {
       );
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(self);
     }
   };
@@ -113,7 +113,7 @@ namespace MatBindings {
       );
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(self);
     }
   };
@@ -148,7 +148,7 @@ namespace MatBindings {
       free(data);
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Nan::NewBuffer(data, size, freeBufferCallback, 0).ToLocalChecked();
     }
   };
@@ -168,7 +168,7 @@ namespace MatBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(dst);
     }
 
@@ -326,7 +326,7 @@ namespace MatBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      FF_OBJ ret = FF_NEW_OBJ();
+      v8::Local<v8::Object> ret = Nan::New<v8::Object>();
       Nan::Set(ret, FF_NEW_STRING("minVal"), Nan::New(minVal));
       Nan::Set(ret, FF_NEW_STRING("maxVal"), Nan::New(maxVal));
       Nan::Set(ret, FF_NEW_STRING("minLoc"), Point2::Converter::wrap(minLoc));
@@ -422,7 +422,7 @@ namespace MatBindings {
 
     cv::Mat dst;
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(dst);
     }
 
@@ -478,7 +478,7 @@ namespace MatBindings {
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         IntConverter::optProp(&flags, "flags", opts) ||
         IntConverter::optProp(&nonzeroRows, "nonzeroRows", opts)
@@ -507,7 +507,7 @@ namespace MatBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(dst);
     }
 
@@ -527,7 +527,7 @@ namespace MatBindings {
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         BoolConverter::optProp(&dftRows, "dftRows", opts) ||
         BoolConverter::optProp(&conjB, "conjB", opts)
@@ -767,7 +767,7 @@ namespace MatBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return ObjectArrayConverter<Point2, cv::Point2f>::wrap(corners);
     }
   };

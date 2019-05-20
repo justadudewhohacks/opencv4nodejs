@@ -28,7 +28,7 @@ NAN_METHOD(TrackerBoostingParams::New) {
 	TrackerBoostingParams* self = new TrackerBoostingParams();
 	self->params = cv::TrackerBoosting::Params();
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

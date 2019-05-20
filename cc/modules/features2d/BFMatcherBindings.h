@@ -28,7 +28,7 @@ struct MatchWorker : public CatchCvExceptionWorker {
                 || Mat::Converter::arg(1, &descTo, info);
         }
 
-        FF_VAL getReturnValue() {
+        v8::Local<v8::Value> getReturnValue() {
             return ObjectArrayConverter<DescriptorMatch, cv::DMatch>::wrap(dmatches);
         }
     };
@@ -58,7 +58,7 @@ struct MatchKnnWorker : public CatchCvExceptionWorker {
                 || IntConverter::arg(2, &k, info);
         }
 
-        FF_VAL getReturnValue() {
+        v8::Local<v8::Value> getReturnValue() {
             return ObjectArrayOfArraysConverter<DescriptorMatch, cv::DMatch>::wrap(dmatches);
         }
 };

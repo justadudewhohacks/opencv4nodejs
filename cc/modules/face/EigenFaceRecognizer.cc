@@ -35,7 +35,7 @@ NAN_METHOD(EigenFaceRecognizer::New) {
 #else
 		self->faceRecognizer = cv::face::EigenFaceRecognizer::create(worker.num_components, worker.threshold);
 #endif
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

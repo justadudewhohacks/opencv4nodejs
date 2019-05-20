@@ -42,7 +42,7 @@ NAN_METHOD(SURFDetector::New) {
 		worker.extended,
 		worker.upright
 	);
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }
 
 

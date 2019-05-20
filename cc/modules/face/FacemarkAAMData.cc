@@ -26,7 +26,7 @@ NAN_METHOD(FacemarkAAMData::New) {
   FacemarkAAMData *self = new FacemarkAAMData();
   self->data = cv::face::FacemarkAAM::Data();
   self->Wrap(info.Holder());
-  FF_RETURN(info.Holder());
+  info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

@@ -57,9 +57,9 @@ NAN_METHOD(Imgproc::GetStructuringElement) {
 		return;
 	}
 
-	FF_OBJ jsKernel = FF::newInstance(Nan::New(Mat::constructor));
+	v8::Local<v8::Object> jsKernel = FF::newInstance(Nan::New(Mat::constructor));
 	FF_UNWRAP_MAT_AND_GET(jsKernel) = cv::getStructuringElement(shape, size, anchor);
-	FF_RETURN(jsKernel);
+	info.GetReturnValue().Set(jsKernel);
 }
 
 NAN_METHOD(Imgproc::GetRotationMatrix2D) {
@@ -76,9 +76,9 @@ NAN_METHOD(Imgproc::GetRotationMatrix2D) {
 		return;
 	}
 
-	FF_OBJ jsRotationMat = FF::newInstance(Nan::New(Mat::constructor));
+	v8::Local<v8::Object> jsRotationMat = FF::newInstance(Nan::New(Mat::constructor));
 	FF_UNWRAP_MAT_AND_GET(jsRotationMat) = cv::getRotationMatrix2D(center, angle, scale);
-	FF_RETURN(jsRotationMat);
+	info.GetReturnValue().Set(jsRotationMat);
 }
 
 NAN_METHOD(Imgproc::GetAffineTransform) {
@@ -93,9 +93,9 @@ NAN_METHOD(Imgproc::GetAffineTransform) {
 		return;
 	}
 
-	FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
+	v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
 	FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getAffineTransform(srcPoints, dstPoints);
-	FF_RETURN(jsMat);
+	info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(Imgproc::GetPerspectiveTransform) {
@@ -110,9 +110,9 @@ NAN_METHOD(Imgproc::GetPerspectiveTransform) {
 	  return;
   }
 
-  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getPerspectiveTransform(srcPoints, dstPoints);
-  FF_RETURN(jsMat);
+  info.GetReturnValue().Set(jsMat);
 }
 NAN_METHOD(Imgproc::UndistortPoints) {
   FF::SyncBinding(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
@@ -156,7 +156,7 @@ NAN_METHOD(Imgproc::CalcHist) {
   // TODO replace old macros
   for (int i = 0; i < dims; ++i) {
     ranges.push_back(new float[dims]);
-    FF_OBJ jsAxis = FF_CAST_OBJ(jsHistAxes->Get(i));
+    v8::Local<v8::Object> jsAxis = FF_CAST_OBJ(jsHistAxes->Get(i));
 	if (!jsAxis->IsArray()) {
 		FF_THROW("expected ranges to be an array");
 	}
@@ -195,14 +195,14 @@ NAN_METHOD(Imgproc::CalcHist) {
   delete[] channels;
   delete[] histSize;
 
-  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
   int outputType = CV_MAKETYPE(CV_64F, img.channels());
   if (outputType != hist.type()) {
     hist.convertTo(hist, outputType);
   }
 
   FF_UNWRAP_MAT_AND_GET(jsMat) = hist;
-  FF_RETURN(jsMat);
+  info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(Imgproc::Plot1DHist) {
@@ -214,7 +214,7 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 	int thickness = 2;
 	int shift = 0;
 
-	v8::Local<v8::Object> opts = FF::isArgObject(info, 3) ? info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
+	v8::Local<v8::Object> opts = FF::isArgObject(info, 3) ? info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : Nan::New<v8::Object>();
 
 	if (Mat::Converter::arg(0, &hist, info) ||
 		Mat::Converter::arg(1, &plot, info) ||
@@ -264,9 +264,9 @@ NAN_METHOD(Imgproc::Plot1DHist) {
     );
   }
 
-  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsMat) = plot;
-  FF_RETURN(jsMat);
+  info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(Imgproc::FitLine) {
@@ -280,7 +280,7 @@ NAN_METHOD(Imgproc::FitLine) {
   if (jsPoints->Length() < 2) {
     FF_THROW("expected arg0 to be an Array with atleast 2 Points");
   }
-  FF_VAL jsPt1 = jsPoints->Get(0);
+  v8::Local<v8::Value> jsPt1 = jsPoints->Get(0);
   bool isPoint2 = FF_IS_INSTANCE(Point2::constructor, jsPt1);
   bool isPoint3 = FF_IS_INSTANCE(Point3::constructor, jsPt1);
   if (!isPoint2 && !isPoint3) {
@@ -309,16 +309,16 @@ NAN_METHOD(Imgproc::FitLine) {
   if (isPoint2) {
     cv::Vec4f lineParams;
     cv::fitLine(pts2d, lineParams, (int)distType, param, reps, aeps);
-	FF_RETURN(Vec4::Converter::wrap(lineParams));
+	info.GetReturnValue().Set(Vec4::Converter::wrap(lineParams));
   }
   else {
     cv::Vec6f lineParams;
     cv::fitLine(pts3d, lineParams, (int)distType, param, reps, aeps);
-	FF_ARR jsLineParams = FF_NEW_ARRAY(6);
+	v8::Local<v8::Array> jsLineParams = Nan::New<v8::Array>(6);
     for (int i = 0; i < 6; i++) {
       jsLineParams->Set(i, Nan::New(lineParams[i]));
     }
-	FF_RETURN(jsLineParams);
+	info.GetReturnValue().Set(jsLineParams);
   }
 }
 

@@ -40,7 +40,7 @@ NAN_METHOD(TrackerKCFParams::New) {
 	TrackerKCFParams* self = new TrackerKCFParams();
 	self->params = cv::TrackerKCF::Params();
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

@@ -48,7 +48,7 @@ NAN_METHOD(SIFTDetector::New) {
 		worker.edgeThreshold,
 		worker.sigma
 	);
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }
 
 #endif // HAVE_XFEATURES2D

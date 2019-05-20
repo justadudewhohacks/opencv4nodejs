@@ -82,7 +82,7 @@ namespace PhotoBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(dst);
     }
   };

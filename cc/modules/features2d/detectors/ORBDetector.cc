@@ -38,5 +38,5 @@ NAN_METHOD(ORBDetector::New) {
 	ORBDetector* self = new ORBDetector();
 	self->detector = cv::ORB::create(worker.nfeatures, worker.scaleFactor, worker.nlevels, worker.edgeThreshold, worker.firstLevel, worker.WTA_K, worker.scoreType, worker.patchSize, worker.fastThreshold);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }

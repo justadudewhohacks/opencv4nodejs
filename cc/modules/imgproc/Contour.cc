@@ -50,13 +50,13 @@ NAN_METHOD(Contour::New) {
 
 	Contour* self = new Contour();
 	if (info.Length() == 1) {
-		FF_ARR jsPts = FF_ARR::Cast(info[0]);
+		v8::Local<v8::Array> jsPts = v8::Local<v8::Array>::Cast(info[0]);
 		self->contour.reserve(jsPts->Length());
 		for (uint i = 0; i < jsPts->Length(); i++) {
 			cv::Point2d cv_pt;
 			auto jsPt = jsPts->Get(i);
 			if (jsPt->IsArray()) {
-				FF_ARR jsObj = FF_ARR::Cast(jsPt);
+				v8::Local<v8::Array> jsObj = v8::Local<v8::Array>::Cast(jsPt);
 				if (jsObj->Length() != 2)
 					return Nan::ThrowError("Contour::New - expected arg0 to consist of only Point2 or array of length 2");
 				double x = jsObj->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
@@ -64,7 +64,7 @@ NAN_METHOD(Contour::New) {
 				cv_pt = cv::Point2d(x, y);
 			}
 			else if (FF_IS_INSTANCE(Point2::constructor, jsPt)) {
-				FF_OBJ jsObj = FF_CAST_OBJ(jsPt);
+				v8::Local<v8::Object> jsObj = FF_CAST_OBJ(jsPt);
 				cv_pt = FF_UNWRAP_PT2_AND_GET(jsObj);
 			}
 			else {
@@ -113,10 +113,10 @@ NAN_METHOD(Contour::ApproxPolyDPContour) {
 	std::vector<cv::Point> curve;
 	cv::approxPolyDP(FF_UNWRAP_CONTOUR_AND_GET(info.This()), curve, epsilon, closed);
 
-	FF_OBJ jsApprox = FF::newInstance(Nan::New(Contour::constructor));
+	v8::Local<v8::Object> jsApprox = FF::newInstance(Nan::New(Contour::constructor));
 	FF_UNWRAP_CONTOUR_AND_GET(jsApprox) = curve;
 	FF_UNWRAP(jsApprox, Contour)->hierarchy = cv::Vec4i(-1, -1, -1, -1);
-	FF_RETURN(jsApprox);
+	info.GetReturnValue().Set(jsApprox);
 }
 
 NAN_METHOD(Contour::ArcLength) {
@@ -128,13 +128,13 @@ NAN_METHOD(Contour::ArcLength) {
 	}
 
 	double arcLength = cv::arcLength(FF_UNWRAP_CONTOUR_AND_GET(info.This()), closed);
-	FF_RETURN(Nan::New(arcLength));
+	info.GetReturnValue().Set(Nan::New(arcLength));
 }
 
 NAN_METHOD(Contour::BoundingRect) {
-	FF_OBJ jsRect = FF::newInstance(Nan::New(Rect::constructor));
+	v8::Local<v8::Object> jsRect = FF::newInstance(Nan::New(Rect::constructor));
 	FF_UNWRAP(jsRect, Rect)->rect = cv::boundingRect(FF_UNWRAP_CONTOUR_AND_GET(info.This()));
-	FF_RETURN(jsRect);
+	info.GetReturnValue().Set(jsRect);
 }
 
 NAN_METHOD(Contour::ConvexHull) {
@@ -152,10 +152,10 @@ NAN_METHOD(Contour::ConvexHull) {
 		clockwise,
 		true
 	);
-	FF_OBJ jsHull = FF::newInstance(Nan::New(Contour::constructor));
+	v8::Local<v8::Object> jsHull = FF::newInstance(Nan::New(Contour::constructor));
 	FF_UNWRAP_CONTOUR_AND_GET(jsHull) = hullPoints;
 	FF_UNWRAP(jsHull, Contour)->hierarchy = cv::Vec4i(-1, -1, -1, -1);
-	FF_RETURN(jsHull);
+	info.GetReturnValue().Set(jsHull);
 }
 
 NAN_METHOD(Contour::ConvexHullIndices) {
@@ -198,12 +198,12 @@ NAN_METHOD(Contour::MinEnclosingCircle) {
 	float radius;
 	cv::minEnclosingCircle(FF_UNWRAP_CONTOUR_AND_GET(info.This()), center, radius);
 
-	FF_OBJ jsCircle = FF_NEW_OBJ();
-	FF_OBJ jsCenter = FF::newInstance(Nan::New(Point2::constructor));
+	v8::Local<v8::Object> jsCircle = Nan::New<v8::Object>();
+	v8::Local<v8::Object> jsCenter = FF::newInstance(Nan::New(Point2::constructor));
 	FF_UNWRAP_PT2_AND_GET(jsCenter) = center;
 	Nan::Set(jsCircle, FF_NEW_STRING("center"), jsCenter);
 	Nan::Set(jsCircle, FF_NEW_STRING("radius"), Nan::New((double)radius));
-	FF_RETURN(jsCircle);
+	info.GetReturnValue().Set(jsCircle);
 }
 
 NAN_METHOD(Contour::MinEnclosingTriangle) {
@@ -228,7 +228,7 @@ NAN_METHOD(Contour::PointPolygonTest) {
 		point,
 		true
 	);
-	FF_RETURN(Nan::New(dist));
+	info.GetReturnValue().Set(Nan::New(dist));
 }
 
 NAN_METHOD(Contour::MatchShapes) {
@@ -251,23 +251,23 @@ NAN_METHOD(Contour::MatchShapes) {
 		(int)method,
 		parameter
 	);
-	FF_RETURN(Nan::New(cmp));
+	info.GetReturnValue().Set(Nan::New(cmp));
 }
 
 NAN_METHOD(Contour::MinAreaRect) {
-	FF_OBJ jsRotatedRect = FF::newInstance(Nan::New(RotatedRect::constructor));
+	v8::Local<v8::Object> jsRotatedRect = FF::newInstance(Nan::New(RotatedRect::constructor));
 	FF_UNWRAP_ROTATEDRECT_AND_GET(jsRotatedRect) = cv::minAreaRect(FF_UNWRAP_CONTOUR_AND_GET(info.This()));
-	FF_RETURN(jsRotatedRect);
+	info.GetReturnValue().Set(jsRotatedRect);
 }
 
 NAN_METHOD(Contour::FitEllipse) {
-	FF_OBJ jsRotatedRect = FF::newInstance(Nan::New(RotatedRect::constructor));
+	v8::Local<v8::Object> jsRotatedRect = FF::newInstance(Nan::New(RotatedRect::constructor));
 	FF_UNWRAP_ROTATEDRECT_AND_GET(jsRotatedRect) = cv::fitEllipse(FF_UNWRAP_CONTOUR_AND_GET(info.This()));
-	FF_RETURN(jsRotatedRect);
+	info.GetReturnValue().Set(jsRotatedRect);
 }
 
 NAN_METHOD(Contour::_Moments) {
-	FF_OBJ jsMoments = FF::newInstance(Nan::New(Moments::constructor));
+	v8::Local<v8::Object> jsMoments = FF::newInstance(Nan::New(Moments::constructor));
 	FF_UNWRAP(jsMoments, Moments)->moments = cv::moments(FF_UNWRAP_CONTOUR_AND_GET(info.This()));
-	FF_RETURN(jsMoments);
+	info.GetReturnValue().Set(jsMoments);
 }

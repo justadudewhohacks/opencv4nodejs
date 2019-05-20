@@ -64,5 +64,5 @@ NAN_METHOD(AGASTDetector::New) {
 	AGASTDetector* self = new AGASTDetector();
 	self->detector = cv::AgastFeatureDetector::create(worker.threshold, worker.nonmaxSuppression, worker.type);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }

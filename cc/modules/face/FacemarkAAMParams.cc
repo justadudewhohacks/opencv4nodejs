@@ -35,7 +35,7 @@ NAN_METHOD(FacemarkAAMParams::New) {
   FacemarkAAMParams *self = new FacemarkAAMParams();
   self->params = cv::face::FacemarkAAM::Params();
   self->Wrap(info.Holder());
-  FF_RETURN(info.Holder());
+  info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

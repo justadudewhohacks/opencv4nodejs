@@ -32,7 +32,7 @@ NAN_METHOD(TrackerGOTURN::New) {
 #endif
 
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

@@ -85,7 +85,7 @@ namespace HOGDescriptorBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return FloatArrayConverter::wrap(descriptors);
     }
 
@@ -106,7 +106,7 @@ namespace HOGDescriptorBindings {
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Size::Converter::optProp(&winStride, "winStride", opts) ||
         Size::Converter::optProp(&padding, "padding", opts) ||

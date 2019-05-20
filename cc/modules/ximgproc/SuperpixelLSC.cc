@@ -46,7 +46,7 @@ NAN_METHOD(SuperpixelLSC::New) {
 		worker.ratio
 	);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(SuperpixelLSC::Iterate) {

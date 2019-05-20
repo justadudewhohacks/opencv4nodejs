@@ -51,7 +51,7 @@ namespace VideoWriterBindings {
 		  return "";
 	  }
 
-	  FF_VAL getReturnValue() {
+	  v8::Local<v8::Value> getReturnValue() {
 		  return DoubleConverter::wrap(val);
 	  }
   };
@@ -96,7 +96,7 @@ namespace VideoWriterBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return IntConverter::wrap(code);
     }
 
@@ -119,7 +119,7 @@ namespace VideoWriterBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return BoolConverter::wrap(true);
     }
 

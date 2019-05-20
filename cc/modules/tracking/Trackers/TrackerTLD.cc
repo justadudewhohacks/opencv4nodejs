@@ -29,7 +29,7 @@ NAN_METHOD(TrackerTLD::New) {
 	self->tracker = cv::TrackerTLD::createTracker();
 #endif
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

@@ -36,7 +36,7 @@ NAN_METHOD(FacemarkLBF::New) {
   self->facemark = cv::face::FacemarkLBF::create(params);
 
 
-  FF_RETURN(info.Holder());
+  info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

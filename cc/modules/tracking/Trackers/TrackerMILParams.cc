@@ -29,7 +29,7 @@ NAN_METHOD(TrackerMILParams::New) {
 	TrackerMILParams* self = new TrackerMILParams();
 	self->params = cv::TrackerMIL::Params();
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

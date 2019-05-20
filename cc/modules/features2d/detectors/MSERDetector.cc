@@ -53,7 +53,7 @@ NAN_METHOD(MSERDetector::New) {
 	self->edgeBlurSize = worker.edgeBlurSize;
 	self->detector = cv::MSER::create(worker.delta, worker.minArea, worker.maxArea, worker.maxVariation,
 		worker.minDiversity, worker.maxEvolution, worker.areaThreshold, worker.minMargin, worker.edgeBlurSize);
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }
 
 struct DetectRegionsWorker : public CatchCvExceptionWorker {
@@ -79,8 +79,8 @@ public:
 	}
 
 
-    FF_VAL getReturnValue() {
-        FF_OBJ ret = FF_NEW_OBJ();
+    v8::Local<v8::Value> getReturnValue() {
+        v8::Local<v8::Object> ret = Nan::New<v8::Object>();
         Nan::Set(ret, FF_NEW_STRING("msers"), ObjectArrayOfArraysConverter<Point2, cv::Point>::wrap(regions));
         Nan::Set(ret, FF_NEW_STRING("bboxes"), ObjectArrayConverter<Rect, cv::Rect>::wrap(mser_bbox));
         return ret;

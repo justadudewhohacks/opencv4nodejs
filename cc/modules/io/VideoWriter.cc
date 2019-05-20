@@ -33,7 +33,7 @@ NAN_METHOD(VideoWriter::New) {
 	VideoWriter* self = new VideoWriter();
 	self->writer.open(worker.fileName, worker.fourccCode, worker.fps, (cv::Size)worker.frameSize, worker.isColor);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(VideoWriter::Release) {

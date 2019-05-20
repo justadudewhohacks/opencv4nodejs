@@ -75,21 +75,21 @@ NAN_METHOD(HOGDescriptor::New) {
 		worker.signedGradient
 		);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(HOGDescriptor::GetDaimlerPeopleDetector) {
   std::vector<float> detector = cv::HOGDescriptor::getDaimlerPeopleDetector();
-  FF_RETURN(FloatArrayConverter::wrap(detector));
+  info.GetReturnValue().Set(FloatArrayConverter::wrap(detector));
 }
 
 NAN_METHOD(HOGDescriptor::GetDefaultPeopleDetector) {
   std::vector<float> detector = cv::HOGDescriptor::getDefaultPeopleDetector();
-  FF_RETURN(FloatArrayConverter::wrap(detector));
+  info.GetReturnValue().Set(FloatArrayConverter::wrap(detector));
 }
 
 NAN_METHOD(HOGDescriptor::CheckDetectorSize) {
-  FF_RETURN(Nan::New(HOGDescriptor::Converter::unwrap(info.This())->checkDetectorSize()));
+  info.GetReturnValue().Set(Nan::New(HOGDescriptor::Converter::unwrap(info.This())->checkDetectorSize()));
 }
 
 NAN_METHOD(HOGDescriptor::SetSVMDetector) {

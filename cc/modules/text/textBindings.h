@@ -10,8 +10,8 @@ namespace TextBindings {
     cv::Ptr <cv::text::OCRHMMDecoder::ClassifierCallback> classifier;
     std::string file;
 
-    FF_VAL getReturnValue() {
-      FF_OBJ jsClassifier = FF::newInstance(Nan::New(OCRHMMClassifier::constructor));
+    v8::Local<v8::Value> getReturnValue() {
+      v8::Local<v8::Object> jsClassifier = FF::newInstance(Nan::New(OCRHMMClassifier::constructor));
       FF_UNWRAP(jsClassifier, OCRHMMClassifier)->classifier = classifier;
       return jsClassifier;
     }
@@ -50,7 +50,7 @@ namespace TextBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(transition_probabilities_table);
     }
 

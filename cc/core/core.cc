@@ -8,7 +8,7 @@
       cb = _cb;                                                                       \
     }                                                                                 \
     bool operator()(const ff_type& a, const ff_type& b) {                             \
-      FF_VAL cbArgs[2];                                                               \
+      v8::Local<v8::Value> cbArgs[2];                                                               \
       cbArgs[0] = FF::newInstance(Nan::New(ff_ctor));                                           \
       cbArgs[1] = FF::newInstance(Nan::New(ff_ctor));                                           \
       ff_unwrapper(cbArgs[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()) = a;                                        \
@@ -51,7 +51,7 @@ NAN_METHOD(Core::GetBuildInformation) {
   FF_METHOD_CONTEXT("Core::GetBuildInformation");
 
   v8::Local<v8::Value> ret = FF_NEW_STRING(cv::getBuildInformation());
-  FF_RETURN(ret);
+  info.GetReturnValue().Set(ret);
 }
 
 NAN_METHOD(Core::Partition) {
@@ -68,7 +68,7 @@ NAN_METHOD(Core::Partition) {
   }
 
   v8::Local<v8::Function> cb = v8::Local<v8::Function>::Cast(info[1]);
-  FF_VAL data0 = jsData->Get(0);
+  v8::Local<v8::Value> data0 = jsData->Get(0);
 
   FF::TryCatch tryCatch;
   int numLabels = 0;
@@ -123,10 +123,10 @@ NAN_METHOD(Core::Partition) {
     numLabels = cv::partition(mats, labels, MatPredicate(cb));
   }
 
-  FF_OBJ ret = FF_NEW_OBJ();
+  v8::Local<v8::Object> ret = Nan::New<v8::Object>();
   Nan::Set(ret, FF_NEW_STRING("labels"), IntArrayConverter::wrap(labels));
   Nan::Set(ret, FF_NEW_STRING("numLabels"), Nan::New(numLabels));
-  FF_RETURN(ret);
+  info.GetReturnValue().Set(ret);
 }
 
 NAN_METHOD(Core::Kmeans) {
@@ -142,7 +142,7 @@ NAN_METHOD(Core::Kmeans) {
     FF_THROW("expected data to contain at least 1 element");
   }
   
-  FF_VAL data0 = jsData->Get(0);
+  v8::Local<v8::Value> data0 = jsData->Get(0);
   bool isPoint2 = FF_IS_INSTANCE(Point2::constructor, data0);
 
   FF::TryCatch tryCatch;
@@ -174,7 +174,7 @@ NAN_METHOD(Core::Kmeans) {
     cv::kmeans(pts3d, k, labels, termCriteria, attempts, flags, centersMat);
   }
   
-  FF_OBJ ret = FF_NEW_OBJ();
+  v8::Local<v8::Object> ret = Nan::New<v8::Object>();
   Nan::Set(ret, FF_NEW_STRING("labels"), IntArrayConverter::wrap(labels));
 
   if (FF_IS_INSTANCE(Point2::constructor, data0)) {
@@ -192,7 +192,7 @@ NAN_METHOD(Core::Kmeans) {
 	Nan::Set(ret, FF_NEW_STRING("centers"), ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::wrap(centers));
   } 
   
-  FF_RETURN(ret);
+  info.GetReturnValue().Set(ret);
 }
 
 NAN_METHOD(Core::CartToPolar) {
@@ -229,7 +229,7 @@ NAN_METHOD(Core::PolarToCartAsync) {
 
 NAN_METHOD(Core::GetNumThreads) {
   FF_METHOD_CONTEXT("Core::GetNumThreads");
-  FF_RETURN(IntConverter::wrap(cv::getNumThreads()));
+  info.GetReturnValue().Set(IntConverter::wrap(cv::getNumThreads()));
 }
 
 NAN_METHOD(Core::SetNumThreads) {
@@ -246,5 +246,5 @@ NAN_METHOD(Core::SetNumThreads) {
 
 NAN_METHOD(Core::GetThreadNum) {
   FF_METHOD_CONTEXT("Core::GetNumThreads");
-  FF_RETURN(IntConverter::wrap(cv::getThreadNum()));
+  info.GetReturnValue().Set(IntConverter::wrap(cv::getThreadNum()));
 }

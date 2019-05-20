@@ -42,7 +42,7 @@ NAN_METHOD(BFMatcher::New) {
 		worker.crossCheck
 	);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(BFMatcher::match) {

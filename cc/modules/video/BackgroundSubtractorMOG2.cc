@@ -32,5 +32,5 @@ NAN_METHOD(BackgroundSubtractorMOG2::New) {
 	BackgroundSubtractorMOG2* self = new BackgroundSubtractorMOG2();
 	self->subtractor = cv::createBackgroundSubtractorMOG2((int)worker.history, worker.varThreshold, worker.detectShadows);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }

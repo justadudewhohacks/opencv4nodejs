@@ -47,5 +47,5 @@ NAN_METHOD(KeyPoint::New) {
 	}
 
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }

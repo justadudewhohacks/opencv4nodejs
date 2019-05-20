@@ -35,5 +35,5 @@ NAN_METHOD(BRISKDetector::New) {
 	self->patternScale = worker.patternScale;
 	self->detector = cv::BRISK::create(self->thresh, self->octaves, (float)self->patternScale);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }
