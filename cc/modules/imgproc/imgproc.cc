@@ -134,12 +134,11 @@ NAN_METHOD(Imgproc::CalcHist) {
 	  Mat::Converter::arg(0, &img, info) ||
 	  Mat::Converter::optArg(2, &mask, info)
 	) {
-	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Imgproc::CalcHist");
-	  tryCatch.throwNew(err);
+	  tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::CalcHist"));
 	  return;
   }
   if (!info[1]->IsArray()) {
-	  FF_THROW("expected arg 1 to be an array");
+	  return tryCatch.throwNew(FF_NEW_STRING("Imgproc::CalcHist - expected arg 1 to be an array"));
   }
   v8::Local<v8::Array> jsHistAxes = v8::Local<v8::Array>::Cast(info[1]);
 
@@ -157,18 +156,23 @@ NAN_METHOD(Imgproc::CalcHist) {
   for (int i = 0; i < dims; ++i) {
     ranges.push_back(new float[dims]);
     v8::Local<v8::Object> jsAxis = FF_CAST_OBJ(jsHistAxes->Get(i));
-	if (!jsAxis->IsArray()) {
-		FF_THROW("expected ranges to be an array");
+	if (!Nan::HasOwnProperty(jsAxis, Nan::New("ranges").ToLocalChecked()).FromJust()) {
+		return tryCatch.throwNew(FF_NEW_STRING("Imgproc::CalcHist - expected axis object to have ranges property"));
 	}
-	v8::Local<v8::Array> jsRanges = v8::Local<v8::Array>::Cast(jsAxis);
+	v8::Local<v8::Value> jsRangesVal = Nan::Get(jsAxis, Nan::New("ranges").ToLocalChecked()).ToLocalChecked();
+	if (!jsRangesVal->IsArray()) {
+		return tryCatch.throwNew(FF_NEW_STRING("Imgproc::CalcHist - expected ranges to be an array"));
+	}
+	v8::Local<v8::Array> jsRanges = v8::Local<v8::Array>::Cast(jsRangesVal);
 	if (jsRanges->Length() != 2) {
-		return Nan::ThrowError(FF_NEW_STRING("expected ranges to be an array of length " + std::to_string(2)));
+		return tryCatch.throwNew(FF_NEW_STRING("Imgproc::CalcHist - expected ranges to be an array of length 2"));
 	}
     ranges.at(i)[0] = jsRanges->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     ranges.at(i)[1] = jsRanges->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     int channel, bins;
 
 	if (IntConverter::prop(&channel, "channel", jsAxis) || IntConverter::prop(&bins, "bins", jsAxis)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::CalcHist"));
 		return;
 	}
     channels[i] = channel;
