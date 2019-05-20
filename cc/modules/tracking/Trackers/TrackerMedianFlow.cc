@@ -23,7 +23,7 @@ NAN_METHOD(TrackerMedianFlow::New) {
 
 	TrackerMedianFlow* self = new TrackerMedianFlow();
 	cv::TrackerMedianFlow::Params params;
-	if (FF_HAS_ARG(0) && FF_IS_INT(info[0])) {
+	if (FF::hasArg(info, 0) && FF_IS_INT(info[0])) {
 		params.pointsInGrid = info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	}
 

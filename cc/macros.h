@@ -91,24 +91,20 @@ namespace FF {
         + "::New - expect to be called with \"new\"")); 							\
   }
 
-/* for setters */
-#define FF_REQUIRE_VALUE(ff_value, ff_type)													\
-  if (!ff_type.checkType(ff_value)) {																\
-    FF_THROW("expected value to be of type: " + ff_type.typeName);	\
-  }
-
-#define FF_SETTER(clazz, name, prop, ff_type)																\
-	NAN_SETTER(name##Set) {																										\
-		FF_METHOD_CONTEXT(#name);																								\
-		FF_REQUIRE_VALUE(value, ff_type);																				\
-		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = ff_type.cast(value);\
+#define FF_SETTER(clazz, name, prop, ff_check_type, ff_cast_type, ff_type_name)	\
+	NAN_SETTER(name##Set) {	\
+		FF_METHOD_CONTEXT(#name); \
+		if (!ff_check_type(value)) { \
+			FF_THROW("expected value to be of type: " + std::string(ff_type_name));\
+		} \
+		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = ff_cast_type(value); \
 	}
 
-#define FF_SETTER_INT(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_int)
-#define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_uint)
-#define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_number)
-#define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_bool)
-#define FF_SETTER_STRING(clazz, name, prop) FF_SETTER(clazz, name, prop, ff_string)
+#define FF_SETTER_INT(clazz, name, prop) FF_SETTER(clazz, name, prop, FF_IS_INT, FF_CAST_INT, "INT")
+#define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, FF_IS_UINT, FF_CAST_UINT, "UINT")
+#define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, FF_IS_NUMBER, FF_CAST_NUMBER, "NUMBER")
+#define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, FF_IS_BOOL, FF_CAST_BOOL, "BOOL")
+#define FF_SETTER_STRING(clazz, name, prop) FF_SETTER(clazz, name, prop, FF_IS_STRING, FF_CAST_STRING, "STRING")
 
 #define FF_SETTER_SIMPLE(clazz, name, prop, converter)  										\
 	NAN_SETTER(name##Set) {																										\

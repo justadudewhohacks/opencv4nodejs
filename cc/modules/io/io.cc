@@ -161,7 +161,7 @@ NAN_METHOD(Io::ImdecodeAsync) {
   std::shared_ptr<IoBindings::ImdecodeWorker> worker = std::make_shared<IoBindings::ImdecodeWorker>();
 
   v8::Local<v8::Function> cbFunc;
-  if (FF_HAS_ARG(1) && FF_IS_INT(info[1])) {
+  if (FF::hasArg(info, 1) && FF_IS_INT(info[1])) {
 	worker->flags = info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	if (!info[2]->IsFunction()) {
 		return Nan::ThrowError(Nan::New("Io::ImdecodeAsync - Error: "
