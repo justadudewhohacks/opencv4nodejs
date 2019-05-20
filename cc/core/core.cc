@@ -175,8 +175,7 @@ NAN_METHOD(Core::Kmeans) {
   }
   
   FF_OBJ ret = FF_NEW_OBJ();
-  FF_PACK_ARRAY(jsLabels, labels);
-  Nan::Set(ret, FF_NEW_STRING("labels"), jsLabels);
+  Nan::Set(ret, FF_NEW_STRING("labels"), IntArrayConverter::wrap(labels));
 
   if (FF_IS_INSTANCE(Point2::constructor, data0)) {
     std::vector<cv::Point2f> centers;

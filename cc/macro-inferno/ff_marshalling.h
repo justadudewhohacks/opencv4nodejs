@@ -30,26 +30,4 @@ static FF_STRING_TYPE ff_string = FF_STRING_TYPE();
 static FF_ARRAY_TYPE ff_array_type = FF_ARRAY_TYPE();
 static FF_OBJECT_TYPE ff_obj_type = FF_OBJECT_TYPE();
 
-#define FF_UNPACK_ARRAY(ff_var, ff_arr, ff_type, ffType)	\
-	std::vector<ff_type> ff_var;														\
-	FF_UNPACK_ARRAY_TO(ff_var, ff_arr, ffType);
-
-#define FF_UNPACK_ARRAY_TO(ff_vec, ff_arr, ffType)																																						\
-	for (uint i = 0; i < ff_arr->Length(); i++) {																																								\
-		FF_VAL ff_val = ff_arr->Get(i);																																														\
-		if (!ffType.checkType(ff_val)) {																																													\
-			FF_THROW("expected array element to be of type: " + std::string(ffType.typeName) + ", at index: " + std::to_string(i));	\
-		}																																																													\
-		ff_vec.push_back(ffType.cast(ff_val));																																										\
-	}
-
-#define FF_PACK_ARRAY_(ff_var, ff_vec, create)	\
-	FF_ARR ff_var = FF_NEW_ARRAY(ff_vec.size());	\
-	for (unsigned long i = 0; i < ff_vec.size(); i++) {			\
-		ff_var->Set(i, create(ff_vec.at(i)));				\
-	}
-
-#define FF_IDENTITY_FUNC(arg) arg
-#define FF_PACK_ARRAY(ff_var, ff_vec) FF_PACK_ARRAY_(ff_var, ff_vec, Nan::New)
-
 #endif

@@ -157,8 +157,10 @@ NAN_METHOD(Imgproc::CalcHist) {
   for (int i = 0; i < dims; ++i) {
     ranges.push_back(new float[dims]);
     FF_OBJ jsAxis = FF_CAST_OBJ(jsHistAxes->Get(i));
-    FF_ARR jsRanges;
-	FF_GET_ARRAY_REQUIRED(jsAxis, jsRanges, "ranges");
+	if (!jsAxis->IsArray()) {
+		FF_THROW("expected ranges to be an array");
+	}
+	v8::Local<v8::Array> jsRanges = v8::Local<v8::Array>::Cast(jsAxis);
 	if (jsRanges->Length() != 2) {
 		return Nan::ThrowError(FF_NEW_STRING("expected ranges to be an array of length " + std::to_string(2)));
 	}

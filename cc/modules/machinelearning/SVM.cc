@@ -38,25 +38,36 @@ NAN_MODULE_INIT(SVM::Init) {
 };
 
 void SVM::setParams(v8::Local<v8::Object> params) {
-  FF_METHOD_CONTEXT("SVM::SetParams");
-
-  FF_GET_NUMBER_IFDEF(params, double c, "c", this->svm->getC());
-  FF_GET_NUMBER_IFDEF(params, double coef0, "coef0", this->svm->getCoef0());
-  FF_GET_NUMBER_IFDEF(params, double degree, "degree", this->svm->getDegree());
-  FF_GET_NUMBER_IFDEF(params, double gamma, "gamma", this->svm->getGamma());
-  FF_GET_NUMBER_IFDEF(params, double nu, "nu", this->svm->getNu());
-  FF_GET_NUMBER_IFDEF(params, double p, "p", this->svm->getP());
-  FF_GET_NUMBER_IFDEF(params, unsigned int kernelType, "kernelType", this->svm->getKernelType());
-  FF_GET_INSTANCE_IFDEF(params, cv::Mat classWeights, "classWeights", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, this->svm->getClassWeights());
-
-  this->svm->setC(c);
-  this->svm->setCoef0(coef0);
-  this->svm->setDegree(degree);
-  this->svm->setGamma(gamma);
-  this->svm->setNu(nu);
-  this->svm->setP(p);
-  this->svm->setKernel(kernelType);
-  this->svm->setClassWeights(classWeights);
+	FF::TryCatch tryCatch;
+	double c = this->svm->getC();
+	double coef0 = this->svm->getCoef0();
+	double degree = this->svm->getDegree();
+	double gamma = this->svm->getGamma();
+	double nu = this->svm->getNu();
+	double p = this->svm->getP();
+	uint kernelType = this->svm->getKernelType();
+	cv::Mat classWeights = this->svm->getClassWeights();
+	if (
+		DoubleConverter::optProp(&c, "c", params) ||
+		DoubleConverter::optProp(&coef0, "coef0", params) ||
+		DoubleConverter::optProp(&degree, "degree", params) ||
+		DoubleConverter::optProp(&gamma, "gamma", params) ||
+		DoubleConverter::optProp(&nu, "nu", params) ||
+		DoubleConverter::optProp(&p, "p", params) ||
+		UintConverter::optProp(&kernelType, "kernelType", params) ||
+		Mat::Converter::optProp(&classWeights, "classWeights", params)
+		) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("SVM::setParams"));
+		return;
+	}
+	this->svm->setC(c);
+	this->svm->setCoef0(coef0);
+	this->svm->setDegree(degree);
+	this->svm->setGamma(gamma);
+	this->svm->setNu(nu);
+	this->svm->setP(p);
+	this->svm->setKernel(kernelType);
+	this->svm->setClassWeights(classWeights);
 }
 
 NAN_METHOD(SVM::New) {
@@ -137,8 +148,7 @@ NAN_METHOD(SVM::Predict) {
   else {
     std::vector<float> resultsVec;
     results.col(0).copyTo(resultsVec);
-    FF_PACK_ARRAY(resultArray, resultsVec);
-    jsResult = resultArray;
+    jsResult = FloatArrayConverter::wrap(resultsVec);
   }
   FF_RETURN(jsResult);
 }

@@ -173,8 +173,7 @@ NAN_METHOD(Contour::ConvexHullIndices) {
 		clockwise,
 		false
 	);
-	FF_PACK_ARRAY(jsHullIndices, hullIndices);
-	FF_RETURN(jsHullIndices);
+	info.GetReturnValue().Set(IntArrayConverter::wrap(hullIndices));
 }
 NAN_METHOD(Contour::ConvexityDefects) {
 	FF::TryCatch tryCatch;

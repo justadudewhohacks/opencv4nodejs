@@ -49,6 +49,5 @@ NAN_METHOD(Moments::HuMoments) {
 	FF_METHOD_CONTEXT("Moments::HuMoments");
 	std::vector<double> huMoments;
 	cv::HuMoments(FF_UNWRAP(info.This(), Moments)->moments, huMoments);
-	FF_PACK_ARRAY(jsHuMoments, huMoments);
-	FF_RETURN(jsHuMoments);
+	info.GetReturnValue().Set(DoubleArrayConverter::wrap(huMoments));
 }
