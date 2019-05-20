@@ -12,7 +12,12 @@
 
 #define FF_MAT_AT_ARRAY(mat, val, get)  \
   {                                     \
-    FF_ARG_UNPACK_INT_ARRAY(0, vec);    \
+	FF::TryCatch tryCatch; \
+	std::vector<int> vec; \
+	if (IntArrayConverter::arg(0, &vec, info)) { \
+		tryCatch.throwNew(tryCatch.formatCatchedError("Mat::At")); \
+		return; \
+	} \
     const int* idx = &vec.front();      \
     val = get(mat, idx);                \
   }

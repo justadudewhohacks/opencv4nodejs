@@ -247,8 +247,7 @@ describe('core', () => {
         err = e;
       }
 
-      expect(err.message).to.be.equal(
-        'Mat::New -  expect to be called with "new"');
+      expect(err.message).to.be.equal('Mat::New - expect to be called with "new"');
     });
   });
 

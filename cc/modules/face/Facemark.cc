@@ -140,8 +140,7 @@ NAN_METHOD(Facemark::SetFaceDetector) {
                                     "expected argument 0 to be of type")
                                .ToLocalChecked());
   }
-
-  FF_ARG_FUNC(0, v8::Local<v8::Function> cbFunc);
+  v8::Local<v8::Function> cbFunc = v8::Local<v8::Function>::Cast(info[0]);
   Nan::Callback *callback = new Nan::Callback(cbFunc);
 
   bool results = FF_UNWRAP(info.This(), Facemark)

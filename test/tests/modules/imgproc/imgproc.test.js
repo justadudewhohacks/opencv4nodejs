@@ -52,7 +52,9 @@ describe('imgproc', () => {
   });
 
   describe('calcHist', () => {
-    funcShouldRequireArgs(cv.calcHist);
+    it('should throw if no args', () => {
+      expect(() => cv.calcHist()).to.throw('Imgproc::CalcHist - Error: expected argument 0 to be of type');
+    });
 
     it('should return 1 dimensional hist', () => {
       const histAxes = [

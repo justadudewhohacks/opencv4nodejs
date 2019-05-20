@@ -65,7 +65,10 @@ NAN_METHOD(SVM::New) {
   SVM* self = new SVM();
   self->svm = cv::ml::SVM::create();
   if (info.Length() > 0) {
-    FF_ARG_OBJ(0, FF_OBJ args);
+	if (!info[0]->IsObject()) {
+		FF_THROW("expected arg 0 to be an object");
+	}
+	v8::Local<v8::Object> args = v8::Local<v8::Object>::Cast(info[0]);
 
     Nan::TryCatch tryCatch;
     self->setParams(args);

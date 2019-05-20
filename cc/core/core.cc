@@ -56,7 +56,10 @@ NAN_METHOD(Core::GetBuildInformation) {
 
 NAN_METHOD(Core::Partition) {
   FF_METHOD_CONTEXT("Core::Partition");
-  FF_ARG_ARRAY(0, FF_ARR jsData);
+  if (!info[0]->IsArray()) {
+	  FF_THROW("expected arg 0 to be an array");
+  }
+  v8::Local<v8::Array> jsData = v8::Local<v8::Array>::Cast(info[0]);
   if (!info[1]->IsFunction()) {
     FF_THROW("expected arg 1 to be a function");
   }
@@ -129,7 +132,11 @@ NAN_METHOD(Core::Partition) {
 NAN_METHOD(Core::Kmeans) {
   FF_METHOD_CONTEXT("Core::Kmeans");
 
-  FF_ARG_ARRAY(0, FF_ARR jsData);
+
+  if (!info[0]->IsArray()) {
+	  FF_THROW("expected arg 0 to be an array");
+  }
+  v8::Local<v8::Array> jsData = v8::Local<v8::Array>::Cast(info[0]);
   
   if (jsData->Length() < 1) {
     FF_THROW("expected data to contain at least 1 element");

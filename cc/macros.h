@@ -85,13 +85,6 @@ namespace FF {
 #define FF_UNWRAP_TERMCRITERA(obj) FF_UNWRAP(obj, TermCriteria)
 #define FF_UNWRAP_TERMCRITERA_AND_GET(obj) FF_UNWRAP_TERMCRITERA(obj)->termCriteria
 
-/* TODO: move this to macro-inferno */
-#define FF_IS_FUNC(val) val->IsFunction()
-#define FF_CAST_FUNC(val) val.As<v8::Function>()
-struct FF_TYPE(FUNC, v8::Local<v8::Function>, FF_IS_FUNC, FF_CAST_FUNC);
-static FF_FUNC_TYPE ff_func = FF_FUNC_TYPE();
-#define FF_ARG_FUNC(argN, var) FF_ARG(argN, var, ff_func)
-
 #define FF_ASSERT_CONSTRUCT_CALL(ctor)																\
   if (!info.IsConstructCall()) {																			\
     return Nan::ThrowError(FF_NEW_STRING(std::string(#ctor)						\

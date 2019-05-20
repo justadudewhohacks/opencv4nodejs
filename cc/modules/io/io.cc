@@ -162,11 +162,21 @@ NAN_METHOD(Io::ImdecodeAsync) {
 
   v8::Local<v8::Function> cbFunc;
   if (FF_HAS_ARG(1) && FF_IS_INT(info[1])) {
-    FF_ARG_INT(1, worker->flags);
-    FF_ARG_FUNC(2, cbFunc);
+	worker->flags = info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+	if (!info[2]->IsFunction()) {
+		return Nan::ThrowError(Nan::New("Io::ImdecodeAsync - Error: "
+			"expected argument 2 to be of type Function")
+			.ToLocalChecked());
+	}
+	cbFunc = v8::Local<v8::Function>::Cast(info[2]);
   }
   else {
-    FF_ARG_FUNC(1, cbFunc);
+	if (!info[1]->IsFunction()) {
+		return Nan::ThrowError(Nan::New("Io::ImdecodeAsync - Error: "
+			"expected argument 1 to be of type Function")
+			.ToLocalChecked());
+	}
+	cbFunc = v8::Local<v8::Function>::Cast(info[1]);
     worker->flags = cv::IMREAD_ANYCOLOR;
   }
 

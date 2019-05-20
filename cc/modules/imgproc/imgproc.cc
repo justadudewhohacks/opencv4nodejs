@@ -127,9 +127,21 @@ NAN_METHOD(Imgproc::UndistortPointsAsync) {
 NAN_METHOD(Imgproc::CalcHist) {
   FF_METHOD_CONTEXT("CalcHist");
 
-  FF_ARG_INSTANCE(0, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-  FF_ARG_ARRAY(1, FF_ARR jsHistAxes);
-  FF_ARG_INSTANCE_IFDEF(2, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, cv::noArray().getMat());
+  FF::TryCatch tryCatch;
+  cv::Mat img, mask = cv::noArray().getMat();
+  std::vector<std::vector<float>> _ranges;
+  if (
+	  Mat::Converter::arg(0, &img, info) ||
+	  Mat::Converter::optArg(2, &mask, info)
+	) {
+	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Imgproc::CalcHist");
+	  tryCatch.throwNew(err);
+	  return;
+  }
+  if (!info[1]->IsArray()) {
+	  FF_THROW("expected arg 1 to be an array");
+  }
+  v8::Local<v8::Array> jsHistAxes = v8::Local<v8::Array>::Cast(info[1]);
 
   cv::Mat inputImg = img;
   int inputType = CV_MAKETYPE(CV_32F, img.channels());
@@ -258,7 +270,11 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 NAN_METHOD(Imgproc::FitLine) {
   FF_METHOD_CONTEXT("FitLine");
 
-  FF_ARG_ARRAY(0, FF_ARR jsPoints);
+  if (!info[0]->IsArray()) {
+	  FF_THROW("expected arg 0 to be an array");
+  }
+  v8::Local<v8::Array> jsPoints = v8::Local<v8::Array>::Cast(info[0]);
+
   if (jsPoints->Length() < 2) {
     FF_THROW("expected arg0 to be an Array with atleast 2 Points");
   }
