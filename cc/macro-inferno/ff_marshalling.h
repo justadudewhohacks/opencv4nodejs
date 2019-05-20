@@ -49,22 +49,7 @@ static FF_OBJECT_TYPE ff_obj_type = FF_OBJECT_TYPE();
 		ff_var->Set(i, create(ff_vec.at(i)));				\
 	}
 
-#define FF_UNPACK_UINT_ARRAY(ff_var, ff_arr) FF_UNPACK_ARRAY(ff_var, ff_arr, uint, ff_uint)
-#define FF_UNPACK_INT_ARRAY(ff_var, ff_arr) FF_UNPACK_ARRAY(ff_var, ff_arr, int, ff_int)
-#define FF_UNPACK_BOOL_ARRAY(ff_var, ff_arr) FF_UNPACK_ARRAY(ff_var, ff_arr, bool, ff_bool)
-#define FF_UNPACK_NUMBER_ARRAY(ff_var, ff_arr) FF_UNPACK_ARRAY(ff_var, ff_arr, double, ff_number)
-#define FF_UNPACK_STRING_ARRAY(ff_var, ff_arr) FF_UNPACK_ARRAY(ff_var, ff_arr, std::string, ff_string)
-
-#define FF_UNPACK_UINT_ARRAY_TO(ff_vec, ff_arr) FF_UNPACK_ARRAY_TO(ff_vec, ff_arr, ff_uint)
-#define FF_UNPACK_INT_ARRAY_TO(ff_vec, ff_arr) FF_UNPACK_ARRAY_TO(ff_vec, ff_arr, ff_int)
-#define FF_UNPACK_BOOL_ARRAY_TO(ff_vec, ff_arr) FF_UNPACK_ARRAY_TO(ff_vec, ff_arr, ff_bool)
-#define FF_UNPACK_NUMBER_ARRAY_TO(ff_vec, ff_arr) FF_UNPACK_ARRAY_TO(ff_vec, ff_arr, ff_number)
-#define FF_UNPACK_STRING_ARRAY_TO(ff_vec, ff_arr) FF_UNPACK_ARRAY_TO(ff_vec, ff_arr, ff_string)
-
 #define FF_IDENTITY_FUNC(arg) arg
 #define FF_PACK_ARRAY(ff_var, ff_vec) FF_PACK_ARRAY_(ff_var, ff_vec, Nan::New)
-#define FF_PACK_STRING_ARRAY(ff_var, ff_vec) FF_PACK_ARRAY_(ff_var, ff_vec, FF_NEW_STRING)
-#define FF_PACK_ARRAY_ARRAY(ff_var, ff_vec) FF_PACK_ARRAY_(ff_var, ff_vec, FF_IDENTITY_FUNC)
-#define FF_PACK_OBJ_ARRAY(ff_var, ff_vec) FF_PACK_ARRAY_(ff_var, ff_vec, FF_IDENTITY_FUNC)
 
 #endif
