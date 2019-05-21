@@ -13,10 +13,10 @@ NAN_MODULE_INIT(TrackerMIL::Init) {
 	TrackerMILParams::Init(target);
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("TrackerMIL"));
+	ctor->SetClassName(FF::newString("TrackerMIL"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerMIL"), FF::getFunction(ctor));
+	target->Set(FF::newString("TrackerMIL"), FF::getFunction(ctor));
 };
 
 

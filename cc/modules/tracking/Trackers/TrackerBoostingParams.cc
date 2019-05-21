@@ -9,16 +9,16 @@ NAN_MODULE_INIT(TrackerBoostingParams::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("TrackerBoostingParams"));
+	ctor->SetClassName(FF::newString("TrackerBoostingParams"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("numClassifiers"), numClassifiersGet, numClassifiersSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("samplerOverlap"), samplerOverlapGet, samplerOverlapSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("samplerSearchFactor"), samplerSearchFactorGet, samplerSearchFactorSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("iterationInit"), iterationInitGet, iterationInitSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("featureSetNumFeatures"), featureSetNumFeaturesGet, featureSetNumFeaturesSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("numClassifiers"), numClassifiersGet, numClassifiersSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerOverlap"), samplerOverlapGet, samplerOverlapSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerSearchFactor"), samplerSearchFactorGet, samplerSearchFactorSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("iterationInit"), iterationInitGet, iterationInitSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("featureSetNumFeatures"), featureSetNumFeaturesGet, featureSetNumFeaturesSet);
 
-	target->Set(FF_NEW_STRING("TrackerBoostingParams"), FF::getFunction(ctor));
+	target->Set(FF::newString("TrackerBoostingParams"), FF::getFunction(ctor));
 };
 
 

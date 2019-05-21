@@ -8,14 +8,14 @@ NAN_MODULE_INIT(BackgroundSubtractorKNN::Init) {
 
 	BackgroundSubtractor::Init(ctor);
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("BackgroundSubtractorKNN"));
+	ctor->SetClassName(FF::newString("BackgroundSubtractorKNN"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("history"), GetHistory);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("dist2Threshold"), GetDist2Threshold);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("detectShadows"), GetDetectShadows);
+	Nan::SetAccessor(instanceTemplate, FF::newString("history"), GetHistory);
+	Nan::SetAccessor(instanceTemplate, FF::newString("dist2Threshold"), GetDist2Threshold);
+	Nan::SetAccessor(instanceTemplate, FF::newString("detectShadows"), GetDetectShadows);
 
-	target->Set(FF_NEW_STRING("BackgroundSubtractorKNN"), FF::getFunction(ctor));
+	target->Set(FF::newString("BackgroundSubtractorKNN"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(BackgroundSubtractorKNN::New) {

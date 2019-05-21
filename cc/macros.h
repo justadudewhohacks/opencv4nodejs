@@ -1,8 +1,9 @@
-#include <macro-inferno.h>
 #include "NativeNodeUtils.h"
 
 #ifndef __FF_MACROS_H__
 #define __FF_MACROS_H__
+
+typedef unsigned int uint;
 
 namespace FF {
 	static bool hasArg(Nan::NAN_METHOD_ARGS_TYPE info, int argN) {
@@ -12,8 +13,20 @@ namespace FF {
 	static bool isArgObject(Nan::NAN_METHOD_ARGS_TYPE info, int argN) {
 		return FF::hasArg(info, argN) && info[argN]->IsObject() && !info[argN]->IsArray() && !info[argN]->IsFunction();
 	}
+
+	static v8::Local<v8::String> newString(std::string str) {
+		return Nan::New(str).ToLocalChecked();
+	}
+
+	static bool hasOwnProperty(v8::Local<v8::Object> obj, char* prop) {
+		return Nan::HasOwnProperty(obj, FF::newString(prop)).FromJust();
+	}
 }
 
+#define FF_IS_INSTANCE(ctor, obj) Nan::New(ctor)->HasInstance(obj)
+
+#define FF_METHOD_CONTEXT(methodName) std::string ff_methodName = methodName;
+#define FF_THROW(msg) return Nan::ThrowError(FF::newString(std::string(ff_methodName) + " - " + std::string(msg)));
 
 #define FF_GETTER(clazz, name, prop)	\
 	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop); }
@@ -35,7 +48,7 @@ namespace FF {
 		info.GetReturnValue().Set(jsObj);													\
 	}
 
-#define FF_SET_JS_PROP(obj, prop, val) Nan::Set(obj, FF_NEW_STRING(#prop), val)
+#define FF_SET_JS_PROP(obj, prop, val) Nan::Set(obj, FF::newString(#prop), val)
 
 #define FF_SET_CV_CONSTANT(obj, cvConstant) \
 	FF_SET_JS_PROP(obj, cvConstant, Nan::New<v8::Integer>(cvConstant));
@@ -87,7 +100,7 @@ namespace FF {
 
 #define FF_ASSERT_CONSTRUCT_CALL(ctor)																\
   if (!info.IsConstructCall()) {																			\
-    return Nan::ThrowError(FF_NEW_STRING(std::string(#ctor)						\
+    return Nan::ThrowError(FF::newString(std::string(#ctor)						\
         + "::New - expect to be called with \"new\"")); 							\
   }
 
@@ -99,6 +112,21 @@ namespace FF {
 		} \
 		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = ff_cast_type(value); \
 	}
+
+#define FF_CAST_BOOL(val) val->ToBoolean(Nan::GetCurrentContext()).ToLocalChecked()->Value()
+#define FF_CAST_NUMBER(val) val->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value()
+#define FF_CAST_UINT(val) val->ToUint32(Nan::GetCurrentContext()).ToLocalChecked()->Value()
+#define FF_CAST_INT(val) val->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value()
+#define FF_CAST_STRING(s) std::string(*Nan::Utf8String(s->ToString(Nan::GetCurrentContext()).ToLocalChecked()))
+#define FF_CAST_OBJ(val) Nan::To<v8::Object>(val).ToLocalChecked()
+
+#define FF_IS_BOOL(val) val->IsBoolean()
+#define FF_IS_NUMBER(val) val->IsNumber()
+#define FF_IS_UINT(val) val->IsUint32()
+#define FF_IS_INT(val) val->IsInt32()
+#define FF_IS_STRING(val) val->IsString()
+#define FF_IS_ARRAY(val) val->IsArray()
+#define FF_IS_OBJ(val) ( val->IsObject() && !FF_IS_ARRAY(val))
 
 #define FF_SETTER_INT(clazz, name, prop) FF_SETTER(clazz, name, prop, FF_IS_INT, FF_CAST_INT, "INT")
 #define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, FF_IS_UINT, FF_CAST_UINT, "UINT")

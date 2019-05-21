@@ -7,7 +7,7 @@ NAN_MODULE_INIT(VideoCapture::Init) {
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(VideoCapture::New);
   constructor.Reset(ctor);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
-  ctor->SetClassName(FF_NEW_STRING("VideoCapture"));
+  ctor->SetClassName(FF::newString("VideoCapture"));
   Nan::SetPrototypeMethod(ctor, "read", Read);
   Nan::SetPrototypeMethod(ctor, "reset", Reset);
   Nan::SetPrototypeMethod(ctor, "readAsync", ReadAsync);
@@ -16,7 +16,7 @@ NAN_MODULE_INIT(VideoCapture::Init) {
   Nan::SetPrototypeMethod(ctor, "set", Set);
   Nan::SetPrototypeMethod(ctor, "setAsync", SetAsync);
   Nan::SetPrototypeMethod(ctor, "release", Release);
-  target->Set(FF_NEW_STRING("VideoCapture"), FF::getFunction(ctor));
+  target->Set(FF::newString("VideoCapture"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(VideoCapture::New) {
@@ -46,7 +46,7 @@ NAN_METHOD(VideoCapture::Reset) {
   self->cap.release();
   self->cap.open(self->path);
   if (!self->cap.isOpened()) {
-	return Nan::ThrowError(FF_NEW_STRING(std::string("VideoCapture::Reset") + " - " + std::string("failed to reset capture")));
+	return Nan::ThrowError(FF::newString(std::string("VideoCapture::Reset") + " - " + std::string("failed to reset capture")));
   }
 }
 

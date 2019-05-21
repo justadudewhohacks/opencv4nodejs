@@ -10,13 +10,13 @@ NAN_MODULE_INIT(OCRHMMClassifier::Init) {
   v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
   constructor.Reset(ctor);
-  ctor->SetClassName(FF_NEW_STRING("OCRHMMClassifier"));
+  ctor->SetClassName(FF::newString("OCRHMMClassifier"));
   instanceTemplate->SetInternalFieldCount(1);
 
   Nan::SetPrototypeMethod(ctor, "eval", Eval);
   Nan::SetPrototypeMethod(ctor, "evalAsync", EvalAsync);
 
-  target->Set(FF_NEW_STRING("OCRHMMClassifier"), FF::getFunction(ctor));
+  target->Set(FF::newString("OCRHMMClassifier"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(OCRHMMClassifier::Eval) {

@@ -138,17 +138,17 @@ NAN_METHOD(Mat::New) {
     for (uint i = 0; i < jsChannelMats->Length(); i++) {
       v8::Local<v8::Object> jsChannelMat = FF_CAST_OBJ(jsChannelMats->Get(i));
       FF_REQUIRE_INSTANCE(constructor, jsChannelMat,
-        FF_NEW_STRING("expected channel " + std::to_string(i) + " to be an instance of Mat"));
+        FF::newString("expected channel " + std::to_string(i) + " to be an instance of Mat"));
       cv::Mat channelMat = FF_UNWRAP_MAT_AND_GET(jsChannelMat);
       channels.push_back(channelMat);
       if (i > 0) {
 		if (channels.at(i - 1).rows != channelMat.rows) {
-			return Nan::ThrowError(FF_NEW_STRING("Mat::New - rows mismatch "
+			return Nan::ThrowError(FF::newString("Mat::New - rows mismatch "
 				+ std::to_string(channels.at(i - 1).rows) + ", have " + std::to_string(channelMat.rows)
 				+ " at channel " + std::to_string(i)));
 		}
 		if (channels.at(i - 1).cols != channelMat.cols) {
-			return Nan::ThrowError(FF_NEW_STRING("Mat::New - cols mismatch "
+			return Nan::ThrowError(FF::newString("Mat::New - cols mismatch "
 				+ std::to_string(channels.at(i - 1).cols) + ", have " + std::to_string(channelMat.rows)
 				+ " at channel " + std::to_string(i)));
 		}
@@ -188,7 +188,7 @@ NAN_METHOD(Mat::New) {
     if (info[3]->IsArray()) {
       v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[3]);
       if (mat.channels() != (long)vec->Length()) {
-        return Nan::ThrowError(FF_NEW_STRING(
+        return Nan::ThrowError(FF::newString(
           std::string("Mat::New - number of channels (") + std::to_string(mat.channels())
           + std::string(") do not match fill vector length ") + std::to_string(vec->Length()))
         );
@@ -261,7 +261,7 @@ NAN_METHOD(Mat::At) {
   v8::Local<v8::Value> jsVal;
 
   if (FF_IS_ARRAY(info[0])) {
-    if ((long)FF_CAST_ARRAY(info[0])->Length() != matSelf.dims) {
+    if ((long)v8::Local<v8::Array>::Cast(info[0])->Length() != matSelf.dims) {
       FF_THROW("expected array length to be equal to the dims");
     }
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT_ARRAY, FF::matGet);
@@ -332,7 +332,7 @@ NAN_METHOD(Mat::Set) {
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, info[2], matSelf.type(), FF_MAT_SET, FF::matPut);
   }
   else {
-    return Nan::ThrowError(FF_NEW_STRING("Mat::Set - unexpected argument 2"));
+    return Nan::ThrowError(FF::newString("Mat::Set - unexpected argument 2"));
   }
 }
 

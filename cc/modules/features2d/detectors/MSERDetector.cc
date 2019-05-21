@@ -81,8 +81,8 @@ public:
 
     v8::Local<v8::Value> getReturnValue() {
         v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-        Nan::Set(ret, FF_NEW_STRING("msers"), ObjectArrayOfArraysConverter<Point2, cv::Point>::wrap(regions));
-        Nan::Set(ret, FF_NEW_STRING("bboxes"), ObjectArrayConverter<Rect, cv::Rect>::wrap(mser_bbox));
+        Nan::Set(ret, FF::newString("msers"), ObjectArrayOfArraysConverter<Point2, cv::Point>::wrap(regions));
+        Nan::Set(ret, FF::newString("bboxes"), ObjectArrayConverter<Rect, cv::Rect>::wrap(mser_bbox));
         return ret;
     }
 };

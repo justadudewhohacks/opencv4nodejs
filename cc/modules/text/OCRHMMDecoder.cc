@@ -10,7 +10,7 @@ NAN_MODULE_INIT(OCRHMMDecoder::Init) {
   v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
   constructor.Reset(ctor);
-  ctor->SetClassName(FF_NEW_STRING("OCRHMMDecoder"));
+  ctor->SetClassName(FF::newString("OCRHMMDecoder"));
   instanceTemplate->SetInternalFieldCount(1);
 
   Nan::SetPrototypeMethod(ctor, "run", Run);
@@ -18,7 +18,7 @@ NAN_MODULE_INIT(OCRHMMDecoder::Init) {
   Nan::SetPrototypeMethod(ctor, "runWithInfo", RunWithInfo);
   Nan::SetPrototypeMethod(ctor, "runWithInfoAsync", RunWithInfoAsync);
 
-  target->Set(FF_NEW_STRING("OCRHMMDecoder"), FF::getFunction(ctor));
+  target->Set(FF::newString("OCRHMMDecoder"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(OCRHMMDecoder::New) {

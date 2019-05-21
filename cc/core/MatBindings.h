@@ -327,10 +327,10 @@ namespace MatBindings {
 
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, FF_NEW_STRING("minVal"), Nan::New(minVal));
-      Nan::Set(ret, FF_NEW_STRING("maxVal"), Nan::New(maxVal));
-      Nan::Set(ret, FF_NEW_STRING("minLoc"), Point2::Converter::wrap(minLoc));
-      Nan::Set(ret, FF_NEW_STRING("maxLoc"), Point2::Converter::wrap(maxLoc));
+      Nan::Set(ret, FF::newString("minVal"), Nan::New(minVal));
+      Nan::Set(ret, FF::newString("maxVal"), Nan::New(maxVal));
+      Nan::Set(ret, FF::newString("minLoc"), Point2::Converter::wrap(minLoc));
+      Nan::Set(ret, FF::newString("maxLoc"), Point2::Converter::wrap(maxLoc));
       return ret;
     }
   };

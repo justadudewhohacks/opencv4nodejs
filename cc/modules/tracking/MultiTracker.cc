@@ -11,7 +11,7 @@ NAN_MODULE_INIT(MultiTracker::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("MultiTracker"));
+	ctor->SetClassName(FF::newString("MultiTracker"));
 	instanceTemplate->SetInternalFieldCount(1);
 
 	Nan::SetPrototypeMethod(ctor, "addMIL", MultiTracker::AddMIL);
@@ -27,7 +27,7 @@ NAN_MODULE_INIT(MultiTracker::Init) {
 #endif
 	Nan::SetPrototypeMethod(ctor, "update", MultiTracker::Update);
 
-	target->Set(FF_NEW_STRING("MultiTracker"), FF::getFunction(ctor));
+	target->Set(FF::newString("MultiTracker"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(MultiTracker::New) {

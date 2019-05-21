@@ -13,10 +13,10 @@ NAN_MODULE_INIT(TrackerGOTURN::Init) {
 	Tracker::Init(ctor);
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("TrackerGOTURN"));
+	ctor->SetClassName(FF::newString("TrackerGOTURN"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerGOTURN"), FF::getFunction(ctor));
+	target->Set(FF::newString("TrackerGOTURN"), FF::getFunction(ctor));
 };
 
 

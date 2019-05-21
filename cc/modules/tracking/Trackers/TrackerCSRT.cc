@@ -15,10 +15,10 @@ NAN_MODULE_INIT(TrackerCSRT::Init) {
 	TrackerCSRTParams::Init(target);
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("TrackerCSRT"));
+	ctor->SetClassName(FF::newString("TrackerCSRT"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerCSRT"), FF::getFunction(ctor));
+	target->Set(FF::newString("TrackerCSRT"), FF::getFunction(ctor));
 };
 
 

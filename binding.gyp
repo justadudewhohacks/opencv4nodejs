@@ -9,7 +9,6 @@
 			"cc",
 			"cc/core",
 			"cc/modules",
-			"cc/macro-inferno",
 			"<!(node -e \"require('nan')\")",
 			"<!(node -e \"require('native-node-utils')\")"
 		],

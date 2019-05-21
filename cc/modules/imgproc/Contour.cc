@@ -14,10 +14,10 @@ NAN_MODULE_INIT(Contour::Init) {
 	ctor->InstanceTemplate()->SetInternalFieldCount(1);
 	ctor->SetClassName(Nan::New("Contour").ToLocalChecked());
 
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("isConvex"), GetIsConvex);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("area"), GetArea);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("numPoints"), GetNumPoints);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("hierarchy"), GetHierarchy);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("isConvex"), GetIsConvex);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("area"), GetArea);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("numPoints"), GetNumPoints);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("hierarchy"), GetHierarchy);
 
 	Nan::SetPrototypeMethod(ctor, "getPoints", GetPoints);
 	Nan::SetPrototypeMethod(ctor, "approxPolyDP", ApproxPolyDP);
@@ -201,8 +201,8 @@ NAN_METHOD(Contour::MinEnclosingCircle) {
 	v8::Local<v8::Object> jsCircle = Nan::New<v8::Object>();
 	v8::Local<v8::Object> jsCenter = FF::newInstance(Nan::New(Point2::constructor));
 	FF_UNWRAP_PT2_AND_GET(jsCenter) = center;
-	Nan::Set(jsCircle, FF_NEW_STRING("center"), jsCenter);
-	Nan::Set(jsCircle, FF_NEW_STRING("radius"), Nan::New((double)radius));
+	Nan::Set(jsCircle, FF::newString("center"), jsCenter);
+	Nan::Set(jsCircle, FF::newString("radius"), Nan::New((double)radius));
 	info.GetReturnValue().Set(jsCircle);
 }
 

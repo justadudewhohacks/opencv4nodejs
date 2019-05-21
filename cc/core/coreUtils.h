@@ -30,7 +30,7 @@
 
 #define FF_SCALAR_OPERATOR(func, applyFunc, unwrapper, clazz)			\
 	if (!info[0]->IsNumber()) {																			\
-		return Nan::ThrowError(FF_NEW_STRING(FF_ERR_WHERE(func, clazz)	\
+		return Nan::ThrowError(FF::newString(FF_ERR_WHERE(func, clazz)	\
 			+ std::string("expected arg to be a Scalar")));							\
 	}																																\
 	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));							\
@@ -43,7 +43,7 @@
 	return info.GetReturnValue().Set(jsObj);																																																										
 
 #define FF_OPERATOR(func, applyFunc, unwrapper, clazz)														\
-	FF_REQUIRE_INSTANCE(constructor, info[0],	FF_NEW_STRING(FF_ERR_WHERE(func, clazz) \
+	FF_REQUIRE_INSTANCE(constructor, info[0],	FF::newString(FF_ERR_WHERE(func, clazz) \
 		+ std::string("expected arg to be an instance of ") + std::string(#clazz)));	\
 	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));															\
 	applyFunc(																																			\
@@ -55,7 +55,7 @@
 	return info.GetReturnValue().Set(jsObj);
 
 #define FF_OPERATOR_RET_SCALAR(func, applyFunc, unwrapper, clazz)									\
-	FF_REQUIRE_INSTANCE(constructor, info[0],	FF_NEW_STRING(FF_ERR_WHERE(func, clazz) \
+	FF_REQUIRE_INSTANCE(constructor, info[0],	FF::newString(FF_ERR_WHERE(func, clazz) \
 		+ std::string("expected arg to be an instance of ") + std::string(#clazz)));	\
 	double ret;																																			\
 	applyFunc(																																			\

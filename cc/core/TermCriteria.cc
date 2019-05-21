@@ -6,12 +6,12 @@ NAN_MODULE_INIT(TermCriteria::Init) {
 	v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(TermCriteria::New);
 	TermCriteria::constructor.Reset(ctor);
 	ctor->InstanceTemplate()->SetInternalFieldCount(1);
-	ctor->SetClassName(FF_NEW_STRING("TermCriteria"));
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("type"), TermCriteria::GetType);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("maxCount"), TermCriteria::GetMaxCount);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("epsilon"), TermCriteria::GetEpsilon);
+	ctor->SetClassName(FF::newString("TermCriteria"));
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("type"), TermCriteria::GetType);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("maxCount"), TermCriteria::GetMaxCount);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("epsilon"), TermCriteria::GetEpsilon);
 
-  target->Set(FF_NEW_STRING("TermCriteria"), FF::getFunction(ctor));
+  target->Set(FF::newString("TermCriteria"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(TermCriteria::New) {

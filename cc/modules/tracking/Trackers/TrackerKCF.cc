@@ -15,10 +15,10 @@ NAN_MODULE_INIT(TrackerKCF::Init) {
 	TrackerKCFParams::Init(target);
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("TrackerKCF"));
+	ctor->SetClassName(FF::newString("TrackerKCF"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerKCF"), FF::getFunction(ctor));
+	target->Set(FF::newString("TrackerKCF"), FF::getFunction(ctor));
 };
 
 

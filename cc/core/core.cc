@@ -50,7 +50,7 @@ NAN_MODULE_INIT(Core::Init) {
 NAN_METHOD(Core::GetBuildInformation) {
   FF_METHOD_CONTEXT("Core::GetBuildInformation");
 
-  v8::Local<v8::Value> ret = FF_NEW_STRING(cv::getBuildInformation());
+  v8::Local<v8::Value> ret = FF::newString(cv::getBuildInformation());
   info.GetReturnValue().Set(ret);
 }
 
@@ -124,8 +124,8 @@ NAN_METHOD(Core::Partition) {
   }
 
   v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-  Nan::Set(ret, FF_NEW_STRING("labels"), IntArrayConverter::wrap(labels));
-  Nan::Set(ret, FF_NEW_STRING("numLabels"), Nan::New(numLabels));
+  Nan::Set(ret, FF::newString("labels"), IntArrayConverter::wrap(labels));
+  Nan::Set(ret, FF::newString("numLabels"), Nan::New(numLabels));
   info.GetReturnValue().Set(ret);
 }
 
@@ -175,21 +175,21 @@ NAN_METHOD(Core::Kmeans) {
   }
   
   v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-  Nan::Set(ret, FF_NEW_STRING("labels"), IntArrayConverter::wrap(labels));
+  Nan::Set(ret, FF::newString("labels"), IntArrayConverter::wrap(labels));
 
   if (FF_IS_INSTANCE(Point2::constructor, data0)) {
     std::vector<cv::Point2f> centers;
     for (int i = 0; i < centersMat.rows; i++) {
       centers.push_back(cv::Point2f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1)));
     }
-    Nan::Set(ret, FF_NEW_STRING("centers"), ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(centers));
+    Nan::Set(ret, FF::newString("centers"), ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(centers));
   }
   else if (FF_IS_INSTANCE(Point3::constructor, data0)) {
     std::vector<cv::Point3f> centers;
     for (int i = 0; i < centersMat.rows; i++) {
       centers.push_back(cv::Point3f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1), centersMat.at<float>(i, 2)));
     }
-	Nan::Set(ret, FF_NEW_STRING("centers"), ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::wrap(centers));
+	Nan::Set(ret, FF::newString("centers"), ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::wrap(centers));
   } 
   
   info.GetReturnValue().Set(ret);

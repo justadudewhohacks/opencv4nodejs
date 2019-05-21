@@ -13,10 +13,10 @@ NAN_MODULE_INIT(TrackerMOSSE::Init) {
 	Tracker::Init(ctor);
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("TrackerMOSSE"));
+	ctor->SetClassName(FF::newString("TrackerMOSSE"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerMOSSE"), FF::getFunction(ctor));
+	target->Set(FF::newString("TrackerMOSSE"), FF::getFunction(ctor));
 };
 
 

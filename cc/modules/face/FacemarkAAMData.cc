@@ -12,12 +12,12 @@ NAN_MODULE_INIT(FacemarkAAMData::Init) {
   v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
   constructor.Reset(ctor);
-  ctor->SetClassName(FF_NEW_STRING("FacemarkAAMData"));
+  ctor->SetClassName(FF::newString("FacemarkAAMData"));
   instanceTemplate->SetInternalFieldCount(1);
 
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("s0"), s0Get, s0Set);
+  Nan::SetAccessor(instanceTemplate, FF::newString("s0"), s0Get, s0Set);
 
-  target->Set(FF_NEW_STRING("FacemarkAAMData"), FF::getFunction(ctor));
+  target->Set(FF::newString("FacemarkAAMData"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FacemarkAAMData::New) {

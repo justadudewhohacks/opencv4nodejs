@@ -130,7 +130,7 @@ NAN_METHOD(Io::Imdecode) {
 	FF::TryCatch tryCatch;
 
   if (!info[0]->IsUint8Array()) {
-	tryCatch.throwNew(FF_NEW_STRING("Io::Imdecode - expected arg 0 to be a Buffer of Uint8 Values"));
+	tryCatch.throwNew(FF::newString("Io::Imdecode - expected arg 0 to be a Buffer of Uint8 Values"));
 	return;
   }
 

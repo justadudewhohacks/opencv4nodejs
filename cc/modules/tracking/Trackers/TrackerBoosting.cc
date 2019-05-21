@@ -13,10 +13,10 @@ NAN_MODULE_INIT(TrackerBoosting::Init) {
 	TrackerBoostingParams::Init(target);
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("TrackerBoosting"));
+	ctor->SetClassName(FF::newString("TrackerBoosting"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerBoosting"), FF::getFunction(ctor));
+	target->Set(FF::newString("TrackerBoosting"), FF::getFunction(ctor));
 };
 
 
