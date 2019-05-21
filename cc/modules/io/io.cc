@@ -71,10 +71,10 @@ NAN_METHOD(Io::Imshow) {
   if (!info[0]->IsString()) {
     FF_THROW("expected arg0 to be the window name");
   }
-  if (!FF_IS_INSTANCE(Mat::constructor, info[1])) {
+  if (!Mat::Converter::hasInstance(info[1])) {
     FF_THROW("expected arg1 to be an instance of Mat");
   }
-  cv::imshow(FF_CAST_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
+  cv::imshow(StringConverter::unwrap(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
 }
 
 NAN_METHOD(Io::ImshowWait) {
@@ -82,10 +82,10 @@ NAN_METHOD(Io::ImshowWait) {
   if (!info[0]->IsString()) {
     FF_THROW("expected arg0 to be the window name");
   }
-  if (!FF_IS_INSTANCE(Mat::constructor, info[1])) {
+  if (!Mat::Converter::hasInstance(info[1])) {
     FF_THROW("expected arg1 to be an instance of Mat");
   }
-  cv::imshow(FF_CAST_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
+  cv::imshow(StringConverter::unwrap(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
   cv::waitKey();
 }
 
@@ -161,7 +161,7 @@ NAN_METHOD(Io::ImdecodeAsync) {
   std::shared_ptr<IoBindings::ImdecodeWorker> worker = std::make_shared<IoBindings::ImdecodeWorker>();
 
   v8::Local<v8::Function> cbFunc;
-  if (FF::hasArg(info, 1) && FF_IS_INT(info[1])) {
+  if (FF::hasArg(info, 1) && IntTypeConverter::assertType(info[1])) {
 	worker->flags = info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	if (!info[2]->IsFunction()) {
 		return Nan::ThrowError(Nan::New("Io::ImdecodeAsync - Error: "

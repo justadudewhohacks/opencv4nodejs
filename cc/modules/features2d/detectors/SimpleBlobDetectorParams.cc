@@ -30,7 +30,7 @@ NAN_MODULE_INIT(SimpleBlobDetectorParams::Init) {
   Nan::SetAccessor(instanceTemplate, FF::newString("minThreshold"), minThresholdGet, minThresholdSet);
   Nan::SetAccessor(instanceTemplate, FF::newString("thresholdStep"), thresholdStepGet, thresholdStepSet);
 
-	target->Set(FF::newString("SimpleBlobDetectorParams"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("SimpleBlobDetectorParams"), FF::getFunction(ctor));
 };
 
 

@@ -23,42 +23,12 @@ namespace FF {
 	}
 }
 
-#define FF_IS_INSTANCE(ctor, obj) Nan::New(ctor)->HasInstance(obj)
+/* TO BE REMOVED */
+#define FF_CAST_OBJ(val) Nan::To<v8::Object>(val).ToLocalChecked()
+#define FF_IS_ARRAY(val) val->IsArray()
 
 #define FF_METHOD_CONTEXT(methodName) std::string ff_methodName = methodName;
 #define FF_THROW(msg) return Nan::ThrowError(FF::newString(std::string(ff_methodName) + " - " + std::string(msg)));
-
-#define FF_GETTER(clazz, name, prop)	\
-	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop); }
-
-#define FF_GETTER_SIMPLE(clazz, name, prop, converter)  \
-	NAN_GETTER(name) { 																		\
-		v8::Local<v8::Value> jsValue = converter::wrap(			\
-			Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop	\
-		);																									\
-		info.GetReturnValue().Set(jsValue);									\
-	}
-
-#define FF_GETTER_COMPLEX(clazz, name, prop, converter) FF_GETTER_SIMPLE(clazz, name, prop, converter)
-
-#define FF_GETTER_JSOBJ(clazz, name, value, unwrapper, ctor)	\
-	NAN_GETTER(name) {																					\
-		v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(ctor));			\
-		unwrapper(jsObj) = FF_UNWRAP(info.This(), clazz)->value;	\
-		info.GetReturnValue().Set(jsObj);													\
-	}
-
-#define FF_SET_JS_PROP(obj, prop, val) Nan::Set(obj, FF::newString(#prop), val)
-
-#define FF_SET_CV_CONSTANT(obj, cvConstant) \
-	FF_SET_JS_PROP(obj, cvConstant, Nan::New<v8::Integer>(cvConstant));
-
-#define FF_REQUIRE_INSTANCE(objCtor, obj, err)	\
-	if (!FF_IS_INSTANCE(objCtor, obj)) {					\
-			return Nan::ThrowError(err);							\
-	}
-
-/* unwrappers */
 
 #define FF_UNWRAP(obj, clazz)	Nan::ObjectWrap::Unwrap<clazz>(obj)
 
@@ -98,6 +68,33 @@ namespace FF {
 #define FF_UNWRAP_TERMCRITERA(obj) FF_UNWRAP(obj, TermCriteria)
 #define FF_UNWRAP_TERMCRITERA_AND_GET(obj) FF_UNWRAP_TERMCRITERA(obj)->termCriteria
 
+/* ------------- */
+
+#define FF_GETTER(clazz, name, prop)	\
+	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop); }
+
+#define FF_GETTER_SIMPLE(clazz, name, prop, converter)  \
+	NAN_GETTER(name) { 																		\
+		v8::Local<v8::Value> jsValue = converter::wrap(			\
+			Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop	\
+		);																									\
+		info.GetReturnValue().Set(jsValue);									\
+	}
+
+#define FF_GETTER_COMPLEX(clazz, name, prop, converter) FF_GETTER_SIMPLE(clazz, name, prop, converter)
+
+#define FF_GETTER_JSOBJ(clazz, name, value, unwrapper, ctor)	\
+	NAN_GETTER(name) {																					\
+		v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(ctor));			\
+		unwrapper(jsObj) = FF_UNWRAP(info.This(), clazz)->value;	\
+		info.GetReturnValue().Set(jsObj);													\
+	}
+
+#define FF_SET_JS_PROP(obj, prop, val) Nan::Set(obj, FF::newString(#prop), val)
+
+#define FF_SET_CV_CONSTANT(obj, cvConstant) \
+	FF_SET_JS_PROP(obj, cvConstant, Nan::New<v8::Integer>(cvConstant));
+
 #define FF_ASSERT_CONSTRUCT_CALL(ctor)																\
   if (!info.IsConstructCall()) {																			\
     return Nan::ThrowError(FF::newString(std::string(#ctor)						\
@@ -113,26 +110,11 @@ namespace FF {
 		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = ff_cast_type(value); \
 	}
 
-#define FF_CAST_BOOL(val) val->ToBoolean(Nan::GetCurrentContext()).ToLocalChecked()->Value()
-#define FF_CAST_NUMBER(val) val->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value()
-#define FF_CAST_UINT(val) val->ToUint32(Nan::GetCurrentContext()).ToLocalChecked()->Value()
-#define FF_CAST_INT(val) val->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value()
-#define FF_CAST_STRING(s) std::string(*Nan::Utf8String(s->ToString(Nan::GetCurrentContext()).ToLocalChecked()))
-#define FF_CAST_OBJ(val) Nan::To<v8::Object>(val).ToLocalChecked()
-
-#define FF_IS_BOOL(val) val->IsBoolean()
-#define FF_IS_NUMBER(val) val->IsNumber()
-#define FF_IS_UINT(val) val->IsUint32()
-#define FF_IS_INT(val) val->IsInt32()
-#define FF_IS_STRING(val) val->IsString()
-#define FF_IS_ARRAY(val) val->IsArray()
-#define FF_IS_OBJ(val) ( val->IsObject() && !FF_IS_ARRAY(val))
-
-#define FF_SETTER_INT(clazz, name, prop) FF_SETTER(clazz, name, prop, FF_IS_INT, FF_CAST_INT, "INT")
-#define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, FF_IS_UINT, FF_CAST_UINT, "UINT")
-#define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, FF_IS_NUMBER, FF_CAST_NUMBER, "NUMBER")
-#define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, FF_IS_BOOL, FF_CAST_BOOL, "BOOL")
-#define FF_SETTER_STRING(clazz, name, prop) FF_SETTER(clazz, name, prop, FF_IS_STRING, FF_CAST_STRING, "STRING")
+#define FF_SETTER_INT(clazz, name, prop) FF_SETTER(clazz, name, prop, IntTypeConverter::assertType, IntConverter::unwrap, "INT")
+#define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, UintTypeConverter::assertType, UintConverter::unwrap, "UINT")
+#define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, NumberTypeConverter::assertType, DoubleConverter::unwrap, "NUMBER")
+#define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, BoolTypeConverter::assertType, BoolConverter::unwrap, "BOOL")
+#define FF_SETTER_STRING(clazz, name, prop) FF_SETTER(clazz, name, prop, StringTypeConverter::assertType, StringConverter::unwrap, "STRING")
 
 #define FF_SETTER_SIMPLE(clazz, name, prop, converter)  										\
 	NAN_SETTER(name##Set) {																										\

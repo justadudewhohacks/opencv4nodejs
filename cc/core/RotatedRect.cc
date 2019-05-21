@@ -13,7 +13,7 @@ NAN_MODULE_INIT(RotatedRect::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "boundingRect", RotatedRect::BoundingRect);
 
-  target->Set(Nan::New("RotatedRect").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("RotatedRect").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(RotatedRect::New) {
@@ -25,10 +25,10 @@ NAN_METHOD(RotatedRect::New) {
 		if (info.Length() < 3) {
 			return Nan::ThrowError("RotatedRect::New - expected arguments center, size, angle");
 		}
-		if (!FF_IS_INSTANCE(Point2::constructor, info[0])) {
+		if (!Point2::Converter::hasInstance(info[0])) {
 			return Nan::ThrowError("RotatedRect::New - expected arg0 to be an instance of Point2");
 		}
-		if (!FF_IS_INSTANCE(Size::constructor, info[1])) {
+		if (!Size::Converter::hasInstance(info[1])) {
 			return Nan::ThrowError("RotatedRect::New - expected arg1 to be an instance of Size");
 		}
 		double angle = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();

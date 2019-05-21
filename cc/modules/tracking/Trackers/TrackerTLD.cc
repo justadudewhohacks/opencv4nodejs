@@ -14,7 +14,7 @@ NAN_MODULE_INIT(TrackerTLD::Init) {
 	ctor->SetClassName(FF::newString("TrackerTLD"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF::newString("TrackerTLD"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("TrackerTLD"), FF::getFunction(ctor));
 };
 
 

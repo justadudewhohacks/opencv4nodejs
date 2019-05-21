@@ -16,7 +16,7 @@ NAN_MODULE_INIT(TrainData::Init) {
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("sampleWeights"), sampleWeights);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("varType"), varType);
 
-	target->Set(FF::newString("TrainData"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("TrainData"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(TrainData::New) {

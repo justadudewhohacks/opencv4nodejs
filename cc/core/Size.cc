@@ -10,7 +10,7 @@ NAN_MODULE_INIT(Size::Init) {
 	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("width").ToLocalChecked(), Size::GetWidth);
 	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("height").ToLocalChecked(), Size::GetHeight);
 
-  target->Set(Nan::New("Size").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("Size").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(Size::New) {

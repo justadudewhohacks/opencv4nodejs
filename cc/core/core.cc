@@ -14,8 +14,8 @@
       ff_unwrapper(cbArgs[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()) = a;                                        \
       ff_unwrapper(cbArgs[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()) = b;                                        \
       Nan::AsyncResource resource("opencv4nodejs:Predicate::Constructor");            \
-      return resource.runInAsyncScope(Nan::GetCurrentContext()->Global(),             \
-        cb, 2, cbArgs).ToLocalChecked()->ToBoolean(Nan::GetCurrentContext()).ToLocalChecked()->Value();                              \
+      return BoolConverter::unwrap(resource.runInAsyncScope(Nan::GetCurrentContext()->Global(),             \
+        cb, 2, cbArgs).ToLocalChecked());\
     }                                                                                 \
   }
 
@@ -74,7 +74,7 @@ NAN_METHOD(Core::Partition) {
   int numLabels = 0;
   std::vector<int> labels;
 
-  if (FF_IS_INSTANCE(Point2::constructor, data0)) {
+  if (Point2::Converter::hasInstance(data0)) {
     std::vector<cv::Point2d> pts;
 	if (ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
@@ -82,7 +82,7 @@ NAN_METHOD(Core::Partition) {
 	}
     numLabels = cv::partition(pts, labels, Point2Predicate(cb));
   }
-  else if (FF_IS_INSTANCE(Point3::constructor, data0)) {
+  else if (Point3::Converter::hasInstance(data0)) {
     std::vector<cv::Point3d> pts;
 	if (ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
@@ -90,7 +90,7 @@ NAN_METHOD(Core::Partition) {
 	}
     numLabels = cv::partition(pts, labels, Point3Predicate(cb));
   }
-  else if (FF_IS_INSTANCE(Vec2::constructor, data0)) {
+  else if (Vec2::Converter::hasInstance(data0)) {
 	std::vector<cv::Vec2d> pts;
 	if (ObjectArrayConverter<Vec2, cv::Vec2d>::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
@@ -98,7 +98,7 @@ NAN_METHOD(Core::Partition) {
 	}
     numLabels = cv::partition(pts, labels, Vec2Predicate(cb));
   }
-  else if (FF_IS_INSTANCE(Vec3::constructor, data0)) {
+  else if (Vec3::Converter::hasInstance(data0)) {
 	std::vector<cv::Vec3d> pts;
 	if (ObjectArrayConverter<Vec3, cv::Vec3d>::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
@@ -106,7 +106,7 @@ NAN_METHOD(Core::Partition) {
 	}
 	numLabels = cv::partition(pts, labels, Vec3Predicate(cb));
   }
-  else if (FF_IS_INSTANCE(Vec4::constructor, data0)) {
+  else if (Vec4::Converter::hasInstance(data0)) {
 	std::vector<cv::Vec4d> pts;
 	if (ObjectArrayConverter<Vec4, cv::Vec4d>::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
@@ -114,7 +114,7 @@ NAN_METHOD(Core::Partition) {
 	}
     numLabels = cv::partition(pts, labels, Vec4Predicate(cb));
   }
-  else if (FF_IS_INSTANCE(Mat::constructor, data0)) {
+  else if (Mat::Converter::hasInstance(data0)) {
     std::vector<cv::Mat> mats;
 	if (ObjectArrayConverter<Mat, cv::Mat>::arg(0, &mats, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
@@ -143,7 +143,7 @@ NAN_METHOD(Core::Kmeans) {
   }
   
   v8::Local<v8::Value> data0 = jsData->Get(0);
-  bool isPoint2 = FF_IS_INSTANCE(Point2::constructor, data0);
+  bool isPoint2 = Point2::Converter::hasInstance(data0);
 
   FF::TryCatch tryCatch;
   std::vector<cv::Point2f> pts2d;
@@ -177,14 +177,14 @@ NAN_METHOD(Core::Kmeans) {
   v8::Local<v8::Object> ret = Nan::New<v8::Object>();
   Nan::Set(ret, FF::newString("labels"), IntArrayConverter::wrap(labels));
 
-  if (FF_IS_INSTANCE(Point2::constructor, data0)) {
+  if (Point2::Converter::hasInstance(data0)) {
     std::vector<cv::Point2f> centers;
     for (int i = 0; i < centersMat.rows; i++) {
       centers.push_back(cv::Point2f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1)));
     }
     Nan::Set(ret, FF::newString("centers"), ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(centers));
   }
-  else if (FF_IS_INSTANCE(Point3::constructor, data0)) {
+  else if (Point3::Converter::hasInstance(data0)) {
     std::vector<cv::Point3f> centers;
     for (int i = 0; i < centersMat.rows; i++) {
       centers.push_back(cv::Point3f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1), centersMat.at<float>(i, 2)));
@@ -235,11 +235,11 @@ NAN_METHOD(Core::GetNumThreads) {
 NAN_METHOD(Core::SetNumThreads) {
   FF_METHOD_CONTEXT("Core::SetNumThreads");
 
-  if(!FF_IS_INT(info[0])) {
+  if(!IntTypeConverter::assertType(info[0])) {
     return Nan::ThrowError("Core::SetNumThreads expected arg0 to an int");
   }
 
-  int32_t num = FF_CAST_INT(info[0]);
+  int32_t num = (int32_t)IntConverter::unwrap(info[0]);
 
   cv::setNumThreads(num);
 }

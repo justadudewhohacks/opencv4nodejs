@@ -25,7 +25,7 @@ NAN_MODULE_INIT(Net::Init) {
   Nan::SetPrototypeMethod(ctor, "getUnconnectedOutLayers", GetUnconnectedOutLayers);
   Nan::SetPrototypeMethod(ctor, "getUnconnectedOutLayersAsync", GetUnconnectedOutLayersAsync);
 
-  target->Set(Nan::New("Net").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("Net").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(Net::New) {

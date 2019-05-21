@@ -16,7 +16,7 @@ NAN_MODULE_INIT(VideoCapture::Init) {
   Nan::SetPrototypeMethod(ctor, "set", Set);
   Nan::SetPrototypeMethod(ctor, "setAsync", SetAsync);
   Nan::SetPrototypeMethod(ctor, "release", Release);
-  target->Set(FF::newString("VideoCapture"), FF::getFunction(ctor));
+  Nan::Set(target,FF::newString("VideoCapture"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(VideoCapture::New) {
@@ -24,7 +24,7 @@ NAN_METHOD(VideoCapture::New) {
   FF_METHOD_CONTEXT("VideoCapture::New");
   VideoCapture* self = new VideoCapture();
   if (info[0]->IsString()) {
-    self->path = FF_CAST_STRING(info[0]);
+    self->path = StringConverter::unwrap(info[0]);
     self->cap.open(self->path);
   }
   else if (info[0]->IsUint32()) {

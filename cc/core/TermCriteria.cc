@@ -11,7 +11,7 @@ NAN_MODULE_INIT(TermCriteria::Init) {
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("maxCount"), TermCriteria::GetMaxCount);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("epsilon"), TermCriteria::GetEpsilon);
 
-  target->Set(FF::newString("TermCriteria"), FF::getFunction(ctor));
+  Nan::Set(target,FF::newString("TermCriteria"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(TermCriteria::New) {

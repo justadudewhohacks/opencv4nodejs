@@ -20,7 +20,7 @@ NAN_MODULE_INIT(BFMatcher::Init) {
     Nan::SetPrototypeMethod(ctor, "knnMatch", knnMatch);
     Nan::SetPrototypeMethod(ctor, "knnMatchAsync", knnMatchAsync);
 
-    target->Set(Nan::New("BFMatcher").ToLocalChecked(), FF::getFunction(ctor));
+    Nan::Set(target,Nan::New("BFMatcher").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(BFMatcher::New) {

@@ -35,7 +35,7 @@ NAN_MODULE_INIT(Tracking::Init) {
 	FF_SET_JS_PROP(trackerKCFModes, GRAY, Nan::New<v8::Integer>(cv::TrackerKCF::MODE::GRAY));
 	FF_SET_JS_PROP(trackerKCFModes, CN, Nan::New<v8::Integer>(cv::TrackerKCF::MODE::CN));
 	FF_SET_JS_PROP(trackerKCFModes, CUSTOM, Nan::New<v8::Integer>(cv::TrackerKCF::MODE::CUSTOM));
-	target->Set(FF::newString("trackerKCFModes"), trackerKCFModes);
+	Nan::Set(target,FF::newString("trackerKCFModes"), trackerKCFModes);
 #endif
 
 #if CV_MINOR_VERSION > 1

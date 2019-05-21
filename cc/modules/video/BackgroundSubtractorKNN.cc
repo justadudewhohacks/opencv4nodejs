@@ -15,7 +15,7 @@ NAN_MODULE_INIT(BackgroundSubtractorKNN::Init) {
 	Nan::SetAccessor(instanceTemplate, FF::newString("dist2Threshold"), GetDist2Threshold);
 	Nan::SetAccessor(instanceTemplate, FF::newString("detectShadows"), GetDetectShadows);
 
-	target->Set(FF::newString("BackgroundSubtractorKNN"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("BackgroundSubtractorKNN"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(BackgroundSubtractorKNN::New) {

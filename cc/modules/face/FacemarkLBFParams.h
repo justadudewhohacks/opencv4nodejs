@@ -34,7 +34,7 @@ public:
 	static NAN_GETTER(pupilsGet) {
 		v8::Local<v8::Array> jsArr = Nan::New<v8::Array>(2);
 		for (uint i = 0; i < jsArr->Length(); i++) {
-			jsArr->Set(i, ArrayConverterType<IntTypeConverter, int>::wrap(
+			Nan::Set(jsArr, i, ArrayConverterType<IntTypeConverter, int>::wrap(
 				Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->params.pupils[i])
 			);
 		}

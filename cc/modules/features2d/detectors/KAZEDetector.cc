@@ -18,7 +18,7 @@ NAN_MODULE_INIT(KAZEDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaveLayers").ToLocalChecked(), KAZEDetector::GetNOctaveLayers);
 	Nan::SetAccessor(instanceTemplate, Nan::New("diffusivity").ToLocalChecked(), KAZEDetector::GetDiffusivity);
 
-  target->Set(Nan::New("KAZEDetector").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("KAZEDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(KAZEDetector::New) {

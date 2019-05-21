@@ -23,7 +23,7 @@ NAN_MODULE_INIT(SuperpixelSLIC::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelSLIC::Iterate);
 
-  target->Set(Nan::New("SuperpixelSLIC").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("SuperpixelSLIC").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(SuperpixelSLIC::New) {

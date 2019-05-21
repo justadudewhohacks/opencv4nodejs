@@ -34,7 +34,7 @@ NAN_MODULE_INIT(SVM::Init) {
   Nan::SetPrototypeMethod(ctor, "trainAsync", TrainAsync);
   Nan::SetPrototypeMethod(ctor, "trainAutoAsync", TrainAutoAsync);
 
-  target->Set(Nan::New("SVM").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("SVM").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 void SVM::setParams(v8::Local<v8::Object> params) {
@@ -108,7 +108,7 @@ NAN_METHOD(SVM::SetParams) {
 NAN_METHOD(SVM::Predict) {
   FF_METHOD_CONTEXT("SVM::Predict");
 
-  if (!info[0]->IsArray() && !FF_IS_INSTANCE(Mat::constructor, info[0])) {
+  if (!info[0]->IsArray() && !Mat::Converter::hasInstance(info[0])) {
     FF_THROW("expected arg 0 to be an ARRAY or an instance of Mat");
   }
 
@@ -247,7 +247,7 @@ NAN_METHOD(SVM::Load) {
 }
 
 NAN_METHOD(SVM::Train) {
-  bool isTrainFromTrainData = FF_IS_INSTANCE(TrainData::constructor, info[0]);
+  bool isTrainFromTrainData = TrainData::Converter::hasInstance(info[0]);
   if (isTrainFromTrainData) {
 	FF::SyncBinding(
 		std::make_shared<SVMBindings::TrainFromTrainDataWorker>(SVM::Converter::unwrap(info.This())),
@@ -265,7 +265,7 @@ NAN_METHOD(SVM::Train) {
 }
 
 NAN_METHOD(SVM::TrainAsync) {
-  bool isTrainFromTrainData = FF_IS_INSTANCE(TrainData::constructor, info[0]);
+  bool isTrainFromTrainData = TrainData::Converter::hasInstance(info[0]);
   if (isTrainFromTrainData) {
 	FF::AsyncBinding(
 	  std::make_shared<SVMBindings::TrainFromTrainDataWorker>(SVM::Converter::unwrap(info.This())),

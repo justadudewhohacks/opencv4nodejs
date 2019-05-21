@@ -19,7 +19,7 @@ NAN_MODULE_INIT(SIFTDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("edgeThreshold").ToLocalChecked(), SIFTDetector::GetEdgeThreshold);
 	Nan::SetAccessor(instanceTemplate, Nan::New("sigma").ToLocalChecked(), SIFTDetector::GetSigma);
 
-  target->Set(Nan::New("SIFTDetector").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("SIFTDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 

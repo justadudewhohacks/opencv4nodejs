@@ -14,7 +14,7 @@ NAN_MODULE_INIT(DetectionROI::Init) {
 	Nan::SetAccessor(instanceTemplate, FF::newString("locations"), locationsGet, locationsSet);
 	Nan::SetAccessor(instanceTemplate, FF::newString("confidences"), confidencesGet, confidencesSet);
 
-	target->Set(FF::newString("DetectionROI"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("DetectionROI"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(DetectionROI::New) {

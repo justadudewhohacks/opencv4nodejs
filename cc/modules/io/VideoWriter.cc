@@ -16,7 +16,7 @@ NAN_MODULE_INIT(VideoWriter::Init) {
   Nan::SetPrototypeMethod(ctor, "set", Set);
   Nan::SetPrototypeMethod(ctor, "setAsync", SetAsync);
   Nan::SetPrototypeMethod(ctor, "release", Release);
-  target->Set(FF::newString("VideoWriter"), FF::getFunction(ctor));
+  Nan::Set(target,FF::newString("VideoWriter"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(VideoWriter::New) {

@@ -35,7 +35,7 @@ NAN_MODULE_INIT(Moments::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "huMoments", HuMoments);
 
-  target->Set(Nan::New("Moments").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("Moments").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(Moments::New) {

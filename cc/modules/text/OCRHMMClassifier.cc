@@ -16,7 +16,7 @@ NAN_MODULE_INIT(OCRHMMClassifier::Init) {
   Nan::SetPrototypeMethod(ctor, "eval", Eval);
   Nan::SetPrototypeMethod(ctor, "evalAsync", EvalAsync);
 
-  target->Set(FF::newString("OCRHMMClassifier"), FF::getFunction(ctor));
+  Nan::Set(target,FF::newString("OCRHMMClassifier"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(OCRHMMClassifier::Eval) {

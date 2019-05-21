@@ -12,7 +12,7 @@ NAN_MODULE_INIT(ParamGrid::Init) {
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("maxVal"), maxVal);
 	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("logStep"), logStep);
 
-	target->Set(FF::newString("ParamGrid"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("ParamGrid"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(ParamGrid::New) {

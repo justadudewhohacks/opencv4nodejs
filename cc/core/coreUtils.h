@@ -42,9 +42,10 @@
 	);																															\
 	return info.GetReturnValue().Set(jsObj);																																																										
 
-#define FF_OPERATOR(func, applyFunc, unwrapper, clazz)														\
-	FF_REQUIRE_INSTANCE(constructor, info[0],	FF::newString(FF_ERR_WHERE(func, clazz) \
-		+ std::string("expected arg to be an instance of ") + std::string(#clazz)));	\
+#define FF_OPERATOR(func, applyFunc, unwrapper, clazz) \
+	if (!Nan::New(constructor)->HasInstance(info[0])) { \
+			return Nan::ThrowError(FF::newString(FF_ERR_WHERE(func, clazz) + std::string("expected arg to be an instance of ") + std::string(#clazz))); \
+	} \
 	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));															\
 	applyFunc(																																			\
 		func,																																					\
@@ -55,8 +56,9 @@
 	return info.GetReturnValue().Set(jsObj);
 
 #define FF_OPERATOR_RET_SCALAR(func, applyFunc, unwrapper, clazz)									\
-	FF_REQUIRE_INSTANCE(constructor, info[0],	FF::newString(FF_ERR_WHERE(func, clazz) \
-		+ std::string("expected arg to be an instance of ") + std::string(#clazz)));	\
+	if (!Nan::New(constructor)->HasInstance(info[0])) { \
+			return Nan::ThrowError(FF::newString(FF_ERR_WHERE(func, clazz) + std::string("expected arg to be an instance of ") + std::string(#clazz))); \
+	} \
 	double ret;																																			\
 	applyFunc(																																			\
 		func,																																					\

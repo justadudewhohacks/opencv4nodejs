@@ -18,7 +18,7 @@ NAN_MODULE_INIT(KeyPoint::Init) {
   Nan::SetAccessor(instanceTemplate, Nan::New("size").ToLocalChecked(), GetSize);
   Nan::SetAccessor(instanceTemplate, Nan::New("octave").ToLocalChecked(), GetOctave);
 
-  target->Set(Nan::New("KeyPoint").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("KeyPoint").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(KeyPoint::New) {

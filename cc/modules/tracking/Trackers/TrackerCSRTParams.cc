@@ -44,7 +44,7 @@ NAN_MODULE_INIT(TrackerCSRTParams::Init) {
 	Nan::SetAccessor(instanceTemplate, FF::newString("weights_lr"), weights_lrGet, weights_lrSet);
 	Nan::SetAccessor(instanceTemplate, FF::newString("window_function"), window_functionGet, window_functionSet);
 
-	target->Set(FF::newString("TrackerCSRTParams"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("TrackerCSRTParams"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(TrackerCSRTParams::New) {

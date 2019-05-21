@@ -285,8 +285,8 @@ NAN_METHOD(Imgproc::FitLine) {
     FF_THROW("expected arg0 to be an Array with atleast 2 Points");
   }
   v8::Local<v8::Value> jsPt1 = jsPoints->Get(0);
-  bool isPoint2 = FF_IS_INSTANCE(Point2::constructor, jsPt1);
-  bool isPoint3 = FF_IS_INSTANCE(Point3::constructor, jsPt1);
+  bool isPoint2 = Point2::Converter::hasInstance(jsPt1);
+  bool isPoint3 = Point3::Converter::hasInstance(jsPt1);
   if (!isPoint2 && !isPoint3) {
     FF_THROW("expected arg0 to be an Array containing instances of Point2 or Point3");
   }
@@ -320,7 +320,7 @@ NAN_METHOD(Imgproc::FitLine) {
     cv::fitLine(pts3d, lineParams, (int)distType, param, reps, aeps);
 	v8::Local<v8::Array> jsLineParams = Nan::New<v8::Array>(6);
     for (int i = 0; i < 6; i++) {
-      jsLineParams->Set(i, Nan::New(lineParams[i]));
+		Nan::Set(jsLineParams, i, Nan::New(lineParams[i]));
     }
 	info.GetReturnValue().Set(jsLineParams);
   }

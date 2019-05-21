@@ -18,7 +18,7 @@ NAN_MODULE_INIT(GFTTDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("useHarrisDetector").ToLocalChecked(), GFTTDetector::GetUseHarrisDetector);
 	Nan::SetAccessor(instanceTemplate, Nan::New("k").ToLocalChecked(), GFTTDetector::GetK);
 
-  target->Set(Nan::New("GFTTDetector").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("GFTTDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(GFTTDetector::New) {

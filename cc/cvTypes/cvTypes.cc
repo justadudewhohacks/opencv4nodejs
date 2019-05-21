@@ -83,7 +83,7 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_JS_PROP(termCriteriaTypes, COUNT, Nan::New<v8::Integer>(cv::TermCriteria::COUNT));
 	FF_SET_JS_PROP(termCriteriaTypes, MAX_ITER, Nan::New<v8::Integer>(cv::TermCriteria::MAX_ITER));
 	FF_SET_JS_PROP(termCriteriaTypes, EPS, Nan::New<v8::Integer>(cv::TermCriteria::EPS));
-	target->Set(FF::newString("termCriteria"), termCriteriaTypes);
+	Nan::Set(target,FF::newString("termCriteria"), termCriteriaTypes);
 
 	v8::Local<v8::Object> svmConstants = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(svmConstants, CUSTOM, Nan::New<v8::Integer>(ml::SVM::KernelTypes:: CUSTOM));
@@ -108,15 +108,15 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_JS_PROP(mlConstants, VAR_CATEGORICAL, Nan::New<v8::Integer>(ml::VariableTypes::VAR_CATEGORICAL));
 	FF_SET_JS_PROP(mlConstants, VAR_NUMERICAL, Nan::New<v8::Integer>(ml::VariableTypes::VAR_NUMERICAL));
 	FF_SET_JS_PROP(mlConstants, VAR_ORDERED, Nan::New<v8::Integer>(ml::VariableTypes::VAR_ORDERED));
-	mlConstants->Set(FF::newString("SVM"), svmConstants);
-	target->Set(FF::newString("ml"), mlConstants);
+	Nan::Set(mlConstants, FF::newString("SVM"), svmConstants);
+	Nan::Set(target,FF::newString("ml"), mlConstants);
 
 	v8::Local<v8::Object> statModelCostants = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(statModelCostants, COMPRESSED_INPUT, Nan::New<v8::Integer>(ml::StatModel::Flags::COMPRESSED_INPUT));
 	FF_SET_JS_PROP(statModelCostants, PREPROCESSED_INPUT, Nan::New<v8::Integer>(ml::StatModel::Flags::PREPROCESSED_INPUT));
 	FF_SET_JS_PROP(statModelCostants, RAW_OUTPUT, Nan::New<v8::Integer>(ml::StatModel::Flags::RAW_OUTPUT));
 	FF_SET_JS_PROP(statModelCostants, UPDATE_MODEL, Nan::New<v8::Integer>(ml::StatModel::Flags::UPDATE_MODEL));
-	target->Set(FF::newString("statModel"), statModelCostants);
+	Nan::Set(target,FF::newString("statModel"), statModelCostants);
 
 	v8::Local<v8::Object> haarCascades = Nan::New<v8::Object>();
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_EYE, FF::newString("./haarcascade_eye.xml"));
@@ -136,7 +136,7 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_RUSSIAN_PLATE_NUMBER, FF::newString("./haarcascade_russian_plate_number.xml"));
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_SMILE, FF::newString("./haarcascade_smile.xml"));
 	FF_SET_CONST_WITH_VALUE(haarCascades, HAAR_UPPERBODY, FF::newString("./haarcascade_upperbody.xml"));
-	target->Set(FF::newString("haarCascades"), haarCascades);
+	Nan::Set(target,FF::newString("haarCascades"), haarCascades);
 
 	v8::Local<v8::Object> lbpCascades = Nan::New<v8::Object>();
 	FF_SET_CONST_WITH_VALUE(lbpCascades, LBP_FRONTALCATFACE, FF::newString("./lbpcascade_frontalcatface.xml"));
@@ -144,7 +144,7 @@ void CvTypes::Init(v8::Local<v8::Object> target) {
 	FF_SET_CONST_WITH_VALUE(lbpCascades, LBP_FRONTALFACE_IMPROVED, FF::newString("./lbpcascade_frontalface_improved.xml"));
 	FF_SET_CONST_WITH_VALUE(lbpCascades, LBP_PROFILEFACE, FF::newString("./lbpcascade_profileface.xml"));
 	FF_SET_CONST_WITH_VALUE(lbpCascades, LBP_SILVERWARE, FF::newString("./lbpcascade_silverware.xml"));
-	target->Set(FF::newString("lbpCascades"), lbpCascades);
+	Nan::Set(target,FF::newString("lbpCascades"), lbpCascades);
 
 	FF_SET_JS_PROP(target, REGULAR, Nan::New<v8::Integer>(0));
 	FF_SET_CV_CONSTANT(target, LMEDS);

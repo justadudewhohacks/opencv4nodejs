@@ -14,7 +14,7 @@ NAN_MODULE_INIT(TrackerMedianFlow::Init) {
 	ctor->SetClassName(FF::newString("TrackerMedianFlow"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF::newString("TrackerMedianFlow"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("TrackerMedianFlow"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(TrackerMedianFlow::New) {
@@ -23,7 +23,7 @@ NAN_METHOD(TrackerMedianFlow::New) {
 
 	TrackerMedianFlow* self = new TrackerMedianFlow();
 	cv::TrackerMedianFlow::Params params;
-	if (FF::hasArg(info, 0) && FF_IS_INT(info[0])) {
+	if (FF::hasArg(info, 0) && IntTypeConverter::assertType(info[0])) {
 		params.pointsInGrid = info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	}
 

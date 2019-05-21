@@ -15,7 +15,7 @@ NAN_MODULE_INIT(FASTDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), FASTDetector::GetNonmaxSuppression);
 	Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), FASTDetector::GetType);
 
-  target->Set(Nan::New("FASTDetector").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("FASTDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FASTDetector::New) {

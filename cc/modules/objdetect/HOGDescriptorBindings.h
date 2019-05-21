@@ -102,7 +102,7 @@ namespace HOGDescriptorBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF::isArgObject(info, 1) && !FF_IS_INSTANCE(Size::constructor, info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+      return FF::isArgObject(info, 1) && !Size::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {

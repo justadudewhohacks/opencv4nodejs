@@ -15,7 +15,7 @@ NAN_MODULE_INIT(AGASTDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), AGASTDetector::GetNonmaxSuppression);
 	Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), AGASTDetector::GetType);
 
-  target->Set(Nan::New("AGASTDetector").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("AGASTDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 struct NewWorker : CatchCvExceptionWorker {

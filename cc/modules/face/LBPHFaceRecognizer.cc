@@ -14,7 +14,7 @@ NAN_MODULE_INIT(LBPHFaceRecognizer::Init) {
 	ctor->SetClassName(Nan::New("LBPHFaceRecognizer").ToLocalChecked());
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(Nan::New("LBPHFaceRecognizer").ToLocalChecked(), FF::getFunction(ctor));
+	Nan::Set(target,Nan::New("LBPHFaceRecognizer").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 struct LBPHFaceRecognizer::NewWorker : public FF::SimpleWorker {

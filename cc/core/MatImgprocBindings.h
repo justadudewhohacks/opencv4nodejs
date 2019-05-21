@@ -804,7 +804,7 @@ namespace MatImgprocBindings {
         v8::Local<v8::Object> jsContour = FF::newInstance(Nan::New(Contour::constructor));
         FF_UNWRAP(jsContour, Contour)->contour = contours.at(i);
         FF_UNWRAP(jsContour, Contour)->hierarchy = hierarchy.at(i);
-        ret->Set(i, jsContour);
+		Nan::Set(ret, i, jsContour);
       }
       return ret;
     }

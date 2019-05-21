@@ -16,7 +16,7 @@ NAN_MODULE_INIT(TrackerMOSSE::Init) {
 	ctor->SetClassName(FF::newString("TrackerMOSSE"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF::newString("TrackerMOSSE"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("TrackerMOSSE"), FF::getFunction(ctor));
 };
 
 

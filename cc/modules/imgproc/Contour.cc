@@ -36,7 +36,7 @@ NAN_MODULE_INIT(Contour::Init) {
 	Nan::SetPrototypeMethod(ctor, "fitEllipse", FitEllipse);
 	Nan::SetPrototypeMethod(ctor, "moments", _Moments);
 
-	target->Set(Nan::New("Contour").ToLocalChecked(), FF::getFunction(ctor));
+	Nan::Set(target,Nan::New("Contour").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(Contour::New) {
@@ -63,7 +63,7 @@ NAN_METHOD(Contour::New) {
 				double y = jsObj->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 				cv_pt = cv::Point2d(x, y);
 			}
-			else if (FF_IS_INSTANCE(Point2::constructor, jsPt)) {
+			else if (Point2::Converter::hasInstance(jsPt)) {
 				v8::Local<v8::Object> jsObj = FF_CAST_OBJ(jsPt);
 				cv_pt = FF_UNWRAP_PT2_AND_GET(jsObj);
 			}

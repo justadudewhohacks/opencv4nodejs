@@ -22,7 +22,7 @@ NAN_MODULE_INIT(Rect::Init) {
   Nan::SetPrototypeMethod(ctor, "rescale", Rescale);
   Nan::SetPrototypeMethod(ctor, "rescaleAsync", RescaleAsync);
 
-  target->Set(Nan::New("Rect").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("Rect").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(Rect::New) {
