@@ -155,7 +155,7 @@ NAN_METHOD(Imgproc::CalcHist) {
   // TODO replace old macros
   for (int i = 0; i < dims; ++i) {
     ranges.push_back(new float[dims]);
-    v8::Local<v8::Object> jsAxis = FF_CAST_OBJ(jsHistAxes->Get(i));
+    v8::Local<v8::Object> jsAxis = FF_CAST_OBJ(Nan::Get(jsHistAxes, i).ToLocalChecked());
 	if (!FF::hasOwnProperty(jsAxis, "ranges")) {
 		return tryCatch.throwNew(FF::newString("Imgproc::CalcHist - expected axis object to have ranges property"));
 	}
@@ -167,8 +167,8 @@ NAN_METHOD(Imgproc::CalcHist) {
 	if (jsRanges->Length() != 2) {
 		return tryCatch.throwNew(FF::newString("Imgproc::CalcHist - expected ranges to be an array of length 2"));
 	}
-    ranges.at(i)[0] = jsRanges->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-    ranges.at(i)[1] = jsRanges->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+    ranges.at(i)[0] = DoubleConverter::unwrap(Nan::Get(jsRanges, 0).ToLocalChecked());
+    ranges.at(i)[1] = DoubleConverter::unwrap(Nan::Get(jsRanges, 1).ToLocalChecked());
     int channel, bins;
 
 	if (IntConverter::prop(&channel, "channel", jsAxis) || IntConverter::prop(&bins, "bins", jsAxis)) {
@@ -284,7 +284,7 @@ NAN_METHOD(Imgproc::FitLine) {
   if (jsPoints->Length() < 2) {
     FF_THROW("expected arg0 to be an Array with atleast 2 Points");
   }
-  v8::Local<v8::Value> jsPt1 = jsPoints->Get(0);
+  v8::Local<v8::Value> jsPt1 = Nan::Get(jsPoints, 0).ToLocalChecked();
   bool isPoint2 = Point2::Converter::hasInstance(jsPt1);
   bool isPoint3 = Point3::Converter::hasInstance(jsPt1);
   if (!isPoint2 && !isPoint3) {

@@ -136,7 +136,7 @@ NAN_METHOD(Mat::New) {
     v8::Local<v8::Array> jsChannelMats = v8::Local<v8::Array>::Cast(info[0]);
     std::vector<cv::Mat> channels;
     for (uint i = 0; i < jsChannelMats->Length(); i++) {
-      v8::Local<v8::Object> jsChannelMat = FF_CAST_OBJ(jsChannelMats->Get(i));
+      v8::Local<v8::Object> jsChannelMat = FF_CAST_OBJ(Nan::Get(jsChannelMats, i).ToLocalChecked());
 	  if (!Nan::New(Mat::constructor)->HasInstance(jsChannelMat)) {
 		return Nan::ThrowError(FF::newString("expected channel " + std::to_string(i) + " to be an instance of Mat"));
 	  }
@@ -166,10 +166,10 @@ NAN_METHOD(Mat::New) {
 
     long numCols = -1;
     for (uint i = 0; i < rowArray->Length(); i++) {
-      if (!rowArray->Get(i)->IsArray()) {
+      if (!Nan::Get(rowArray, i).ToLocalChecked()->IsArray()) {
         return Nan::ThrowError(Nan::New("Mat::New - Column should be an array, at column: " + std::to_string(i)).ToLocalChecked());
       }
-      v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(rowArray->Get(i));
+      v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, i).ToLocalChecked());
       if (numCols != -1 && numCols != colArray->Length()) {
         return Nan::ThrowError(Nan::New("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i)).ToLocalChecked());
       }

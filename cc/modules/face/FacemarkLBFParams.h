@@ -47,7 +47,7 @@ public:
 		for (uint i = 0; i < jsArr->Length(); i++) {
 			std::vector<int> vec;
 			Nan::TryCatch tryCatch;
-			if (ArrayConverterType<IntTypeConverter, int>::unwrap(&vec, jsArr->Get(i))) {
+			if (IntArrayConverter::unwrap(&vec, Nan::Get(jsArr, i).ToLocalChecked())) {
 				tryCatch.ReThrow();
 			}
 			Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->params.pupils[i] = vec;

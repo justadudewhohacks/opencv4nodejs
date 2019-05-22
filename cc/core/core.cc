@@ -68,7 +68,7 @@ NAN_METHOD(Core::Partition) {
   }
 
   v8::Local<v8::Function> cb = v8::Local<v8::Function>::Cast(info[1]);
-  v8::Local<v8::Value> data0 = jsData->Get(0);
+  v8::Local<v8::Value> data0 = Nan::Get(jsData, 0).ToLocalChecked();
 
   FF::TryCatch tryCatch;
   int numLabels = 0;
@@ -142,7 +142,7 @@ NAN_METHOD(Core::Kmeans) {
     FF_THROW("expected data to contain at least 1 element");
   }
   
-  v8::Local<v8::Value> data0 = jsData->Get(0);
+  v8::Local<v8::Value> data0 = Nan::Get(jsData, 0).ToLocalChecked();
   bool isPoint2 = Point2::Converter::hasInstance(data0);
 
   FF::TryCatch tryCatch;

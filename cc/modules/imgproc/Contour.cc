@@ -54,13 +54,13 @@ NAN_METHOD(Contour::New) {
 		self->contour.reserve(jsPts->Length());
 		for (uint i = 0; i < jsPts->Length(); i++) {
 			cv::Point2d cv_pt;
-			auto jsPt = jsPts->Get(i);
+			auto jsPt = Nan::Get(jsPts, i).ToLocalChecked();
 			if (jsPt->IsArray()) {
 				v8::Local<v8::Array> jsObj = v8::Local<v8::Array>::Cast(jsPt);
 				if (jsObj->Length() != 2)
 					return Nan::ThrowError("Contour::New - expected arg0 to consist of only Point2 or array of length 2");
-				double x = jsObj->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-				double y = jsObj->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+				double x = DoubleConverter::unwrap(Nan::Get(jsObj, 0).ToLocalChecked());
+				double y = DoubleConverter::unwrap(Nan::Get(jsObj, 1).ToLocalChecked());
 				cv_pt = cv::Point2d(x, y);
 			}
 			else if (Point2::Converter::hasInstance(jsPt)) {

@@ -174,7 +174,7 @@ namespace FF {
 	template<int cn>
 	static v8::Local<v8::Array> vecToJsArr(cv::Vec<double, cn> vec) {
 		v8::Local<v8::Array> jsVec = Nan::New<v8::Array>(cn);
-		for (int i = 0; i < cn; i++) jsVec->Set(i, Nan::New(vec[i]));
+		for (int i = 0; i < cn; i++) Nan::Set(jsVec, i, Nan::New(vec[i]));
 		return jsVec;
 	}
 }

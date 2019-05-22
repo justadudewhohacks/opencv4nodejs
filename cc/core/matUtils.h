@@ -37,9 +37,9 @@
 
 #define FF_MAT_FROM_JS_ARRAY(mat, rowArray, put)																	\
 	for (int r = 0; r < mat.rows; r++) {																						\
-		v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(rowArray->Get(r));	\
+		v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, r).ToLocalChecked());	\
 		for (int c = 0; c < mat.cols; c++) {																					\
-			put(mat, colArray->Get(c), r, c);																						\
+			put(mat, Nan::Get(colArray, c).ToLocalChecked(), r, c);																						\
 		}																																							\
 	}
 
