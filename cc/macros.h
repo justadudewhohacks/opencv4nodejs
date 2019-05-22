@@ -6,19 +6,19 @@
 typedef unsigned int uint;
 
 namespace FF {
-	static bool hasArg(Nan::NAN_METHOD_ARGS_TYPE info, int argN) {
+	static inline bool hasArg(Nan::NAN_METHOD_ARGS_TYPE info, int argN) {
 		return argN < info.Length();
 	}
 
-	static bool isArgObject(Nan::NAN_METHOD_ARGS_TYPE info, int argN) {
+	static inline bool isArgObject(Nan::NAN_METHOD_ARGS_TYPE info, int argN) {
 		return FF::hasArg(info, argN) && info[argN]->IsObject() && !info[argN]->IsArray() && !info[argN]->IsFunction();
 	}
 
-	static v8::Local<v8::String> newString(std::string str) {
+	static inline v8::Local<v8::String> newString(std::string str) {
 		return Nan::New(str).ToLocalChecked();
 	}
 
-	static bool hasOwnProperty(v8::Local<v8::Object> obj, char* prop) {
+	static inline bool hasOwnProperty(v8::Local<v8::Object> obj, char* prop) {
 		return Nan::HasOwnProperty(obj, FF::newString(prop)).FromJust();
 	}
 }
