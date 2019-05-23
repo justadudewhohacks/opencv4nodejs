@@ -21,40 +21,22 @@ NAN_MODULE_INIT(ORBDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("patchSize").ToLocalChecked(), ORBDetector::GetPatchSize);
 	Nan::SetAccessor(instanceTemplate, Nan::New("fastThreshold").ToLocalChecked(), ORBDetector::GetFastThreshold);
 
-  target->Set(Nan::New("ORBDetector").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("ORBDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(ORBDetector::New) {
-  FF_ASSERT_CONSTRUCT_CALL(ORBDetector);
-	FF_METHOD_CONTEXT("ORBDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL(ORBDetector);
+	FF::TryCatch tryCatch;
+	ORBDetector::NewWorker worker;
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-	FF_GET_INT_IFDEF(optArgs, int nfeatures, "nfeatures", 500);
-	FF_GET_NUMBER_IFDEF(optArgs, double scaleFactor, "scaleFactor", 1.2f);
-	FF_GET_INT_IFDEF(optArgs, int nlevels, "nlevels", 8);
-	FF_GET_INT_IFDEF(optArgs, int edgeThreshold, "edgeThreshold", 31);
-	FF_GET_INT_IFDEF(optArgs, int firstLevel, "firstLevel", 0);
-	FF_GET_INT_IFDEF(optArgs, int WTA_K, "WTA_K", 2);
-	FF_GET_INT_IFDEF(optArgs, int scoreType, "scoreType", cv::ORB::HARRIS_SCORE);
-	FF_GET_INT_IFDEF(optArgs, int patchSize, "patchSize", 31);
-	FF_GET_INT_IFDEF(optArgs, int fastThreshold, "fastThreshold", 20);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(0, nfeatures, nfeatures);
-		FF_ARG_NUMBER_IFDEF(1, scaleFactor, scaleFactor);
-		FF_ARG_INT_IFDEF(2, nlevels, nlevels);
-		FF_ARG_INT_IFDEF(3, edgeThreshold, edgeThreshold);
-		FF_ARG_INT_IFDEF(4, firstLevel, firstLevel);
-		FF_ARG_INT_IFDEF(5, WTA_K, WTA_K);
-		FF_ARG_INT_IFDEF(6, scoreType, scoreType);
-		FF_ARG_INT_IFDEF(7, patchSize, patchSize);
-		FF_ARG_INT_IFDEF(8, fastThreshold, fastThreshold);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("ORBDetector::New");
+		tryCatch.throwNew(err);
+		return;
 	}
 
 	ORBDetector* self = new ORBDetector();
+	self->detector = cv::ORB::create(worker.nfeatures, worker.scaleFactor, worker.nlevels, worker.edgeThreshold, worker.firstLevel, worker.WTA_K, worker.scoreType, worker.patchSize, worker.fastThreshold);
 	self->Wrap(info.Holder());
-	self->detector = cv::ORB::create(nfeatures, scaleFactor, nlevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize, fastThreshold);
-  FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }

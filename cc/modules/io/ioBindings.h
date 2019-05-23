@@ -27,7 +27,7 @@ namespace IoBindings {
       return IntConverter::optArg(1, &flags, info);
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(img);
     }
   };
@@ -83,7 +83,7 @@ namespace IoBindings {
       free(data);
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Nan::NewBuffer(data, dataSize, freeBufferCallback, 0).ToLocalChecked();
     }
   };
@@ -102,7 +102,7 @@ namespace IoBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(img);
     }
   };

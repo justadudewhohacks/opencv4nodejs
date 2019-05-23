@@ -47,6 +47,15 @@ public:
 #endif
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::TrackerKCF::Params* getNativeObjectPtr() { return &params; }
+	cv::TrackerKCF::Params getNativeObject() { return params; }
+
+	typedef InstanceConverter<TrackerKCFParams, cv::TrackerKCF::Params> Converter;
+
+	static const char* getClassName() {
+		return "TrackerKCFParams";
+	}
 };
 
 #define FF_UNWRAP_TRACKERKCFPARAMS(obj) FF_UNWRAP(obj, TrackerKCFParams)

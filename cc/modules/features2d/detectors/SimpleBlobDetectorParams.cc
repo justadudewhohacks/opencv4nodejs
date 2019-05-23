@@ -7,30 +7,30 @@ NAN_MODULE_INIT(SimpleBlobDetectorParams::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("SimpleBlobDetectorParams"));
+	ctor->SetClassName(FF::newString("SimpleBlobDetectorParams"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("blobColor"), blobColorGet, blobColorSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("filterByArea"), filterByAreaGet, filterByAreaSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("filterByCircularity"), filterByCircularityGet, filterByCircularitySet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("filterByColor"), filterByColorGet, filterByColorSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("filterByConvexity"), filterByConvexityGet, filterByConvexitySet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("filterByInertia"), filterByInertiaGet, filterByInertiaSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("maxArea"), maxAreaGet, maxAreaSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("maxCircularity"), maxCircularityGet, maxCircularitySet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("maxConvexity"), maxConvexityGet, maxConvexitySet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("maxInertiaRatio"), maxInertiaRatioGet, maxInertiaRatioSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("maxThreshold"), maxThresholdGet, maxThresholdSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("minArea"), minAreaGet, minAreaSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("minCircularity"), minCircularityGet, minCircularitySet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("minConvexity"), minConvexityGet, minConvexitySet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("minDistBetweenBlobs"), minDistBetweenBlobsGet, minDistBetweenBlobsSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("minInertiaRatio"), minInertiaRatioGet, minInertiaRatioSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("minRepeatability"), minRepeatabilityGet, minRepeatabilitySet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("minThreshold"), minThresholdGet, minThresholdSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("thresholdStep"), thresholdStepGet, thresholdStepSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("blobColor"), blobColorGet, blobColorSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("filterByArea"), filterByAreaGet, filterByAreaSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("filterByCircularity"), filterByCircularityGet, filterByCircularitySet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("filterByColor"), filterByColorGet, filterByColorSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("filterByConvexity"), filterByConvexityGet, filterByConvexitySet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("filterByInertia"), filterByInertiaGet, filterByInertiaSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("maxArea"), maxAreaGet, maxAreaSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("maxCircularity"), maxCircularityGet, maxCircularitySet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("maxConvexity"), maxConvexityGet, maxConvexitySet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("maxInertiaRatio"), maxInertiaRatioGet, maxInertiaRatioSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("maxThreshold"), maxThresholdGet, maxThresholdSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("minArea"), minAreaGet, minAreaSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("minCircularity"), minCircularityGet, minCircularitySet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("minConvexity"), minConvexityGet, minConvexitySet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("minDistBetweenBlobs"), minDistBetweenBlobsGet, minDistBetweenBlobsSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("minInertiaRatio"), minInertiaRatioGet, minInertiaRatioSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("minRepeatability"), minRepeatabilityGet, minRepeatabilitySet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("minThreshold"), minThresholdGet, minThresholdSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("thresholdStep"), thresholdStepGet, thresholdStepSet);
 
-	target->Set(FF_NEW_STRING("SimpleBlobDetectorParams"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("SimpleBlobDetectorParams"), FF::getFunction(ctor));
 };
 
 
@@ -40,5 +40,5 @@ NAN_METHOD(SimpleBlobDetectorParams::New) {
 	SimpleBlobDetectorParams* self = new SimpleBlobDetectorParams();
 	self->params = cv::SimpleBlobDetector::Params();
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };

@@ -20,6 +20,39 @@ public:
 	cv::Ptr<cv::FeatureDetector> getDetector() {
 		return detector;
 	}
+
+	struct NewWorker : public CatchCvExceptionWorker {
+	public:
+
+		int threshold = 10;
+		bool nonmaxSuppression = true;
+		int type = cv::FastFeatureDetector::TYPE_9_16;
+
+		std::string executeCatchCvExceptionWorker() {
+			return "";
+		}
+
+		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return (
+				IntConverter::optArg(0, &threshold, info) ||
+				BoolConverter::optArg(1, &nonmaxSuppression, info) ||
+				IntConverter::optArg(2, &type, info)
+				);
+		}
+
+		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return FF::isArgObject(info, 0);
+		}
+
+		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+			return (
+				IntConverter::optProp(&threshold, "threshold", opts) ||
+				BoolConverter::optProp(&nonmaxSuppression, "nonmaxSuppression", opts) ||
+				IntConverter::optProp(&type, "type", opts)
+				);
+		}
+	};
 };
 
 #endif

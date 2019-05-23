@@ -18,22 +18,34 @@ NAN_MODULE_INIT(KeyPoint::Init) {
   Nan::SetAccessor(instanceTemplate, Nan::New("size").ToLocalChecked(), GetSize);
   Nan::SetAccessor(instanceTemplate, Nan::New("octave").ToLocalChecked(), GetOctave);
 
-  target->Set(Nan::New("KeyPoint").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("KeyPoint").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(KeyPoint::New) {
-  FF_ASSERT_CONSTRUCT_CALL(KeyPoint);
-	FF_METHOD_CONTEXT("KeyPoint::New");
+	FF_ASSERT_CONSTRUCT_CALL(KeyPoint);
 	KeyPoint* self = new KeyPoint();
-  if (info.Length() > 0) {
-		FF_ARG_INSTANCE(0, cv::Point2d pt, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
-		FF_ARG_NUMBER(1, double size);
-		FF_ARG_NUMBER(2, double angle);
-		FF_ARG_NUMBER(3, double response);
-		FF_ARG_INT(4, int octave);
-		FF_ARG_INT(5, int classId);
+
+	if (info.Length() > 0) {
+		FF::TryCatch tryCatch;
+
+		cv::Point2d pt;
+		double size, angle, response; 
+		int octave, classId;
+		if (
+			Point2::Converter::arg(0, &pt, info) ||
+			DoubleConverter::arg(1, &size, info) ||
+			DoubleConverter::arg(2, &angle, info) ||
+			DoubleConverter::arg(3, &response, info) ||
+			IntConverter::arg(4, &octave, info) ||
+			IntConverter::arg(5, &classId, info)
+		) {
+			v8::Local<v8::Value> err = tryCatch.formatCatchedError("KeyPoint::New");
+			tryCatch.throwNew(err);
+			return;
+		}
 		self->keyPoint = cv::KeyPoint(pt, size, angle, response, octave, classId);
-  }
+	}
+
 	self->Wrap(info.Holder());
-  FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }

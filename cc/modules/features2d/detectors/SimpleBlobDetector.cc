@@ -13,22 +13,21 @@ NAN_MODULE_INIT(SimpleBlobDetector::Init) {
 	ctor->SetClassName(Nan::New("SimpleBlobDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 
-  target->Set(Nan::New("SimpleBlobDetector").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("SimpleBlobDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(SimpleBlobDetector::New) {
-  FF_ASSERT_CONSTRUCT_CALL(SimpleBlobDetector);
-	FF_METHOD_CONTEXT("SimpleBlobDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL(SimpleBlobDetector);
+	FF::TryCatch tryCatch;
 
-	FF_ARG_INSTANCE(
-		0,
-		cv::SimpleBlobDetector::Params params,
-		SimpleBlobDetectorParams::constructor,
-		FF_UNWRAP_SIMPLEBLOBDETECTORPARAMS_AND_GET
-	);
+	cv::SimpleBlobDetector::Params params;
+	if (SimpleBlobDetectorParams::Converter::arg(0, &params, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("SimpleBlobDetector::New"));
+		return;
+	}
 
 	SimpleBlobDetector* self = new SimpleBlobDetector();
 	self->Wrap(info.Holder());
 	self->detector = cv::SimpleBlobDetector::create(params);
-  FF_RETURN(info.Holder());
+  info.GetReturnValue().Set(info.Holder());
 }

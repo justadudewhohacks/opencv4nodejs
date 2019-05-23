@@ -5,6 +5,19 @@
 
 namespace CascadeClassifierBindings {
 
+	struct NewWorker : CatchCvExceptionWorker {
+	public:
+		std::string xmlFilePath;
+
+		bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return StringConverter::arg(0, &xmlFilePath, info);
+		}
+
+		std::string executeCatchCvExceptionWorker() {
+			return "";
+		}
+	};
+
   struct DetectMultiScaleWorker : CatchCvExceptionWorker {
   public:
     cv::CascadeClassifier classifier;
@@ -36,14 +49,14 @@ namespace CascadeClassifierBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       if (isGpu) {
         return ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects);
       }
       else {
-        FF_OBJ ret = FF_NEW_OBJ();
-        Nan::Set(ret, FF_NEW_STRING("objects"), ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects));
-        Nan::Set(ret, FF_NEW_STRING("numDetections"), IntArrayConverter::wrap(numDetections));
+        v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+        Nan::Set(ret, FF::newString("objects"), ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects));
+        Nan::Set(ret, FF::newString("numDetections"), IntArrayConverter::wrap(numDetections));
         return ret;
       }
     }
@@ -63,11 +76,11 @@ namespace CascadeClassifierBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&scaleFactor, "scaleFactor", opts) ||
         UintConverter::optProp(&minNeighbors, "minNeighbors", opts) ||
@@ -96,11 +109,11 @@ namespace CascadeClassifierBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
-      FF_OBJ ret = FF_NEW_OBJ();
-      Nan::Set(ret, FF_NEW_STRING("objects"), ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects));
-      Nan::Set(ret, FF_NEW_STRING("rejectLevels"), IntArrayConverter::wrap(rejectLevels));
-      Nan::Set(ret, FF_NEW_STRING("levelWeights"), DoubleArrayConverter::wrap(levelWeights));
+    v8::Local<v8::Value> getReturnValue() {
+      v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+      Nan::Set(ret, FF::newString("objects"), ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects));
+      Nan::Set(ret, FF::newString("rejectLevels"), IntArrayConverter::wrap(rejectLevels));
+      Nan::Set(ret, FF::newString("levelWeights"), DoubleArrayConverter::wrap(levelWeights));
       return ret;
     }
   };

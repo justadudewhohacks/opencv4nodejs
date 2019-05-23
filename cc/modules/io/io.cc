@@ -71,10 +71,10 @@ NAN_METHOD(Io::Imshow) {
   if (!info[0]->IsString()) {
     FF_THROW("expected arg0 to be the window name");
   }
-  if (!FF_IS_INSTANCE(Mat::constructor, info[1])) {
+  if (!Mat::Converter::hasInstance(info[1])) {
     FF_THROW("expected arg1 to be an instance of Mat");
   }
-  cv::imshow(FF_CAST_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
+  cv::imshow(StringConverter::unwrap(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
 }
 
 NAN_METHOD(Io::ImshowWait) {
@@ -82,10 +82,10 @@ NAN_METHOD(Io::ImshowWait) {
   if (!info[0]->IsString()) {
     FF_THROW("expected arg0 to be the window name");
   }
-  if (!FF_IS_INSTANCE(Mat::constructor, info[1])) {
+  if (!Mat::Converter::hasInstance(info[1])) {
     FF_THROW("expected arg1 to be an instance of Mat");
   }
-  cv::imshow(FF_CAST_STRING(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
+  cv::imshow(StringConverter::unwrap(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
   cv::waitKey();
 }
 
@@ -96,65 +96,91 @@ NAN_METHOD(Io::WaitKey) {
   } else{
     key = cv::waitKey();
   }
-  FF_RETURN(Nan::New(key));
+  info.GetReturnValue().Set(Nan::New(key));
 }
 
 NAN_METHOD(Io::MoveWindow) {
-  FF_METHOD_CONTEXT("MoveWindow");
-  FF_ARG_STRING(0, std::string winName);
-  FF_ARG_INT(1, int x);
-  FF_ARG_INT(2, int y);
-  cv::moveWindow(winName, x, y);
+	FF::TryCatch tryCatch;
+	std::string winName;
+	int x, y;
+	if (StringConverter::arg(0, &winName, info) || IntConverter::arg(1, &x, info) || IntConverter::arg(2, &y, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Io::MoveWindow");
+		tryCatch.throwNew(err);
+		return;
+	}
+	cv::moveWindow(winName, x, y);
 }
 
 NAN_METHOD(Io::DestroyWindow) {
-  FF_METHOD_CONTEXT("DestroyWindow");
-  FF_ARG_STRING(0, std::string winName);
+	FF::TryCatch tryCatch;
+	std::string winName;
+	if (StringConverter::arg(0, &winName, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Io::DestroyWindow");
+		tryCatch.throwNew(err);
+		return;
+	}
   cv::destroyWindow(winName);
 }
 
 NAN_METHOD(Io::DestroyAllWindows) {
-  FF_METHOD_CONTEXT("DestroyAllWindows");
   cv::destroyAllWindows();
 }
 
 NAN_METHOD(Io::Imdecode) {
-  FF_METHOD_CONTEXT("Imencode");
+	FF::TryCatch tryCatch;
 
   if (!info[0]->IsUint8Array()) {
-    FF_THROW("expected arg 0 to be a Buffer of Uint8 Values");
+	tryCatch.throwNew(FF::newString("Io::Imdecode - expected arg 0 to be a Buffer of Uint8 Values"));
+	return;
   }
-  FF_ARG_INT_IFDEF(1, int flags, cv::IMREAD_ANYCOLOR);
+
+  int flags = cv::IMREAD_ANYCOLOR;
+  if (IntConverter::optArg(1, &flags, info)) {
+	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Io::Imdecode");
+	  tryCatch.throwNew(err);
+	  return;
+  }
 
   char *data = static_cast<char *>(node::Buffer::Data(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
   size_t size = node::Buffer::Length(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   std::vector<uchar> vec(size);
   memcpy(vec.data(), data, size);
 
-  FF_OBJ jsDecodedMat = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> jsDecodedMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsDecodedMat) = cv::imdecode(vec, flags);
-  FF_RETURN(jsDecodedMat);
+  info.GetReturnValue().Set(jsDecodedMat);
 }
 
 NAN_METHOD(Io::ImdecodeAsync) {
   FF_METHOD_CONTEXT("ImdecodeAsync");
 
-  std::shared_ptr<IoBindings::ImdecodeWorker> worker = std::make_shared<IoBindings::ImdecodeWorker>();
   if (!info[0]->IsUint8Array()) {
     FF_THROW("expected arg 0 to be a Buffer of Uint8 Values");
   }
 
+  std::shared_ptr<IoBindings::ImdecodeWorker> worker = std::make_shared<IoBindings::ImdecodeWorker>();
+
   v8::Local<v8::Function> cbFunc;
-  if (FF_HAS_ARG(1) && FF_IS_INT(info[1])) {
-    FF_ARG_INT(1, worker->flags);
-    FF_ARG_FUNC(2, cbFunc);
+  if (FF::hasArg(info, 1) && IntTypeConverter::assertType(info[1])) {
+	worker->flags = info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+	if (!info[2]->IsFunction()) {
+		return Nan::ThrowError(Nan::New("Io::ImdecodeAsync - Error: "
+			"expected argument 2 to be of type Function")
+			.ToLocalChecked());
+	}
+	cbFunc = v8::Local<v8::Function>::Cast(info[2]);
   }
   else {
-    FF_ARG_FUNC(1, cbFunc);
+	if (!info[1]->IsFunction()) {
+		return Nan::ThrowError(Nan::New("Io::ImdecodeAsync - Error: "
+			"expected argument 1 to be of type Function")
+			.ToLocalChecked());
+	}
+	cbFunc = v8::Local<v8::Function>::Cast(info[1]);
     worker->flags = cv::IMREAD_ANYCOLOR;
   }
 
-  FF_OBJ jsBuf = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+  v8::Local<v8::Object> jsBuf = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
   worker->data = static_cast<char *>(node::Buffer::Data(jsBuf));
   worker->dataSize = node::Buffer::Length(jsBuf);
 

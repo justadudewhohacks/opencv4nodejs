@@ -32,6 +32,52 @@ public:
 	static const char* getClassName() {
 		return "TrainData";
 	}
+
+	struct NewWorker : public CatchCvExceptionWorker {
+	public:
+		cv::Mat samples;
+		int layout;
+		cv::Mat responses;
+		std::vector<int> varIdx;
+		std::vector<int> sampleIdx;
+		std::vector<float> sampleWeights;
+		std::vector<uint> varType;
+
+		std::string executeCatchCvExceptionWorker() {
+			return "";
+		}
+
+		bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return (
+				Mat::Converter::arg(0, &samples, info) ||
+				IntConverter::arg(1, &layout, info) ||
+				Mat::Converter::arg(2, &responses, info)
+			);
+		}
+
+		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return (
+				IntArrayConverter::optArg(3, &varIdx, info) ||
+				IntArrayConverter::optArg(4, &sampleIdx, info) ||
+				FloatArrayConverter::optArg(5, &sampleWeights, info) ||
+				UintArrayConverter::optArg(6, &varType, info)
+			);
+		}
+
+		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return FF::isArgObject(info, 3);
+		}
+
+		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+			v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+			return (
+				IntArrayConverter::optProp(&varIdx, "varIdx", opts) ||
+				IntArrayConverter::optProp(&sampleIdx, "sampleIdx", opts) ||
+				FloatArrayConverter::optProp(&sampleWeights, "sampleWeights", opts) ||
+				UintArrayConverter::optProp(&varType, "varType", opts)
+			);
+		}
+	};
 };
 
 #endif

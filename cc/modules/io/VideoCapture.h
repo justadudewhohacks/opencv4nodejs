@@ -30,6 +30,7 @@ public:
 	static NAN_METHOD(Reset);
 	static NAN_METHOD(ReadAsync);
 	static NAN_METHOD(Get);
+	static NAN_METHOD(GetAsync);
 	static NAN_METHOD(Set);
 	static NAN_METHOD(SetAsync);
 	static NAN_METHOD(Release);

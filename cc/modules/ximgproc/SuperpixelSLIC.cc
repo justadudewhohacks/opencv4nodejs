@@ -23,38 +23,46 @@ NAN_MODULE_INIT(SuperpixelSLIC::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelSLIC::Iterate);
 
-  target->Set(Nan::New("SuperpixelSLIC").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("SuperpixelSLIC").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(SuperpixelSLIC::New) {
-  FF_ASSERT_CONSTRUCT_CALL(SuperpixelSLIC);
-	FF_METHOD_CONTEXT("SuperpixelSLIC::New");
-	if (!info.IsConstructCall()) {
-		FF_THROW("expected new key word");
+	FF_ASSERT_CONSTRUCT_CALL(SuperpixelSLIC);
+	FF::TryCatch tryCatch;
+	SuperpixelSLIC::NewWorker worker;
+
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSLIC::New");
+		tryCatch.throwNew(err);
+		return;
 	}
+
 	SuperpixelSLIC* self = new SuperpixelSLIC();
-
-	FF_ARG_INSTANCE(0, self->img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INT_IFDEF(1, self->algorithm, cv::ximgproc::SLICO);
-  FF_ARG_INT_IFDEF(2, self->regionSize, 10);
-  FF_ARG_INT_IFDEF(3, self->ruler, 10.0);
-
-	self->Wrap(info.Holder());
+	self->image = worker.image;
+	self->algorithm = worker.algorithm;
+	self->region_size = worker.region_size;
+	self->ruler = worker.ruler;
 	self->superpixelSlic = cv::ximgproc::createSuperpixelSLIC(
-		self->img,
-		self->algorithm,
-		self->regionSize,
-		self->ruler
+		worker.image,
+		worker.algorithm,
+		worker.region_size,
+		worker.ruler
 	);
-  info.GetReturnValue().Set(info.Holder());
+	self->Wrap(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(SuperpixelSLIC::Iterate) {
-	FF_METHOD_CONTEXT("SuperpixelSLIC::Iterate");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_UINT_IFDEF(0, uint iterations, 10);
+	uint iterations = 10;
+	if (UintConverter::optArg(0, &iterations, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSLIC::Iterate");
+		tryCatch.throwNew(err);
+		return;
+	}
 
-	SuperpixelSLIC* self = FF_UNWRAP(info.This(), SuperpixelSLIC);
+	SuperpixelSLIC* self = Nan::ObjectWrap::Unwrap<SuperpixelSLIC>(info.This());
 	self->superpixelSlic->iterate((int)iterations);
 	self->superpixelSlic->getLabels(self->labels);
 	self->numCalculatedSuperpixels = self->superpixelSlic->getNumberOfSuperpixels();

@@ -55,6 +55,7 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "convertToAsync", ConvertToAsync);
   Nan::SetPrototypeMethod(ctor, "norm", Norm);
   Nan::SetPrototypeMethod(ctor, "normalize", Normalize);
+  Nan::SetPrototypeMethod(ctor, "normalizeAsync", NormalizeAsync);
   Nan::SetPrototypeMethod(ctor, "split", SplitChannels);
   Nan::SetPrototypeMethod(ctor, "splitAsync", SplitChannelsAsync);
   Nan::SetPrototypeMethod(ctor, "splitChannels", SplitChannels);
@@ -120,7 +121,7 @@ NAN_MODULE_INIT(Mat::Init) {
   MatXimgproc::Init(ctor);
   #endif // HAVE_XIMGPROC
 
-  target->Set(Nan::New("Mat").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("Mat").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 void Mat::setNativeProps(cv::Mat mat) {
@@ -132,22 +133,23 @@ NAN_METHOD(Mat::New) {
   Mat* self = new Mat();
   /* from channels */
   if (info.Length() == 1 && info[0]->IsArray()) {
-    FF_ARR jsChannelMats = FF_ARR::Cast(info[0]);
+    v8::Local<v8::Array> jsChannelMats = v8::Local<v8::Array>::Cast(info[0]);
     std::vector<cv::Mat> channels;
     for (uint i = 0; i < jsChannelMats->Length(); i++) {
-      FF_OBJ jsChannelMat = FF_CAST_OBJ(jsChannelMats->Get(i));
-      FF_REQUIRE_INSTANCE(constructor, jsChannelMat,
-        FF_NEW_STRING("expected channel " + std::to_string(i) + " to be an instance of Mat"));
+      v8::Local<v8::Object> jsChannelMat = FF_CAST_OBJ(Nan::Get(jsChannelMats, i).ToLocalChecked());
+	  if (!Nan::New(Mat::constructor)->HasInstance(jsChannelMat)) {
+		return Nan::ThrowError(FF::newString("expected channel " + std::to_string(i) + " to be an instance of Mat"));
+	  }
       cv::Mat channelMat = FF_UNWRAP_MAT_AND_GET(jsChannelMat);
       channels.push_back(channelMat);
       if (i > 0) {
 		if (channels.at(i - 1).rows != channelMat.rows) {
-			return Nan::ThrowError(FF_NEW_STRING("Mat::New - rows mismatch "
+			return Nan::ThrowError(FF::newString("Mat::New - rows mismatch "
 				+ std::to_string(channels.at(i - 1).rows) + ", have " + std::to_string(channelMat.rows)
 				+ " at channel " + std::to_string(i)));
 		}
 		if (channels.at(i - 1).cols != channelMat.cols) {
-			return Nan::ThrowError(FF_NEW_STRING("Mat::New - cols mismatch "
+			return Nan::ThrowError(FF::newString("Mat::New - cols mismatch "
 				+ std::to_string(channels.at(i - 1).cols) + ", have " + std::to_string(channelMat.rows)
 				+ " at channel " + std::to_string(i)));
 		}
@@ -159,15 +161,15 @@ NAN_METHOD(Mat::New) {
   }
   /* data array, type */
   else if (info.Length() == 2 && info[0]->IsArray() && info[1]->IsInt32()) {
-    FF_ARR rowArray = FF_ARR::Cast(info[0]);
+    v8::Local<v8::Array> rowArray = v8::Local<v8::Array>::Cast(info[0]);
     int type = info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 
     long numCols = -1;
     for (uint i = 0; i < rowArray->Length(); i++) {
-      if (!rowArray->Get(i)->IsArray()) {
+      if (!Nan::Get(rowArray, i).ToLocalChecked()->IsArray()) {
         return Nan::ThrowError(Nan::New("Mat::New - Column should be an array, at column: " + std::to_string(i)).ToLocalChecked());
       }
-      FF_ARR colArray = FF_ARR::Cast(rowArray->Get(i));
+      v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, i).ToLocalChecked());
       if (numCols != -1 && numCols != colArray->Length()) {
         return Nan::ThrowError(Nan::New("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i)).ToLocalChecked());
       }
@@ -185,9 +187,9 @@ NAN_METHOD(Mat::New) {
     /* fill vector */
     // TODO by Vec
     if (info[3]->IsArray()) {
-      FF_ARR vec = FF_ARR::Cast(info[3]);
+      v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[3]);
       if (mat.channels() != (long)vec->Length()) {
-        return Nan::ThrowError(FF_NEW_STRING(
+        return Nan::ThrowError(FF::newString(
           std::string("Mat::New - number of channels (") + std::to_string(mat.channels())
           + std::string(") do not match fill vector length ") + std::to_string(vec->Length()))
         );
@@ -215,27 +217,41 @@ NAN_METHOD(Mat::New) {
     // so a good place to rationalise memory
   ExternalMemTracking::onMatAllocated();
 
-  FF_RETURN(info.Holder());
+  info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(Mat::Eye) {
-  FF_METHOD_CONTEXT("Mat::Eye");
-  FF_ARG_INT(0, int rows);
-  FF_ARG_INT(1, int cols);
-  FF_ARG_INT(2, int type);
-  FF_OBJ jsEyeMat = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsEyeMat) = cv::Mat::eye(cv::Size(cols, rows), type);
-  FF_RETURN(jsEyeMat);
+	FF::TryCatch tryCatch;
+	int rows, cols, type;
+	if (
+		IntConverter::arg(0, &rows, info) ||
+		IntConverter::arg(1, &cols, info) ||
+		IntConverter::arg(2, &type, info)
+	) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::Eye");
+		tryCatch.throwNew(err);
+		return;
+	}
+	v8::Local<v8::Object> jsEyeMat = FF::newInstance(Nan::New(Mat::constructor));
+	FF_UNWRAP_MAT_AND_GET(jsEyeMat) = cv::Mat::eye(cv::Size(cols, rows), type);
+	info.GetReturnValue().Set(jsEyeMat);
 }
 
 NAN_METHOD(Mat::FlattenFloat) {
-  FF_METHOD_CONTEXT("Mat::To2DFloat");
-  FF_ARG_INT(0, int rows);
-  FF_ARG_INT(1, int cols);
+	FF::TryCatch tryCatch;
+	int rows, cols;
+	if (
+		IntConverter::arg(0, &rows, info) ||
+		IntConverter::arg(1, &cols, info)
+		) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::FlattenFloat");
+		tryCatch.throwNew(err);
+		return;
+	}
 
-  cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
-  cv::Mat mat2D(rows, cols, CV_32F, matSelf.ptr<float>());
-  FF_RETURN(Mat::Converter::wrap(mat2D));
+	cv::Mat matSelf = Mat::Converter::unwrap(info.This());
+	cv::Mat mat2D(rows, cols, CV_32F, matSelf.ptr<float>());
+	info.GetReturnValue().Set(Mat::Converter::wrap(mat2D));
 }
 
 NAN_METHOD(Mat::At) {
@@ -246,7 +262,7 @@ NAN_METHOD(Mat::At) {
   v8::Local<v8::Value> jsVal;
 
   if (FF_IS_ARRAY(info[0])) {
-    if ((long)FF_CAST_ARRAY(info[0])->Length() != matSelf.dims) {
+    if ((long)v8::Local<v8::Array>::Cast(info[0])->Length() != matSelf.dims) {
       FF_THROW("expected array length to be equal to the dims");
     }
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT_ARRAY, FF::matGet);
@@ -257,26 +273,26 @@ NAN_METHOD(Mat::At) {
   }
 
   if (val->IsArray()) {
-    FF_ARR vec = FF_ARR::Cast(val);
-    FF_OBJ jsVec;
+    v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(val);
+    v8::Local<v8::Object> jsVec;
     if (vec->Length() == 2) {
       jsVec = FF::newInstance(Nan::New(Vec2::constructor));
-      FF_UNWRAP_VEC2(jsVec)->vec = cv::Vec2d(vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
+      FF_UNWRAP_VEC2(jsVec)->vec = cv::Vec2d(DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()));
     }
     else if (vec->Length() == 3) {
       jsVec = FF::newInstance(Nan::New(Vec3::constructor));
-      FF_UNWRAP_VEC3(jsVec)->vec = cv::Vec3d(vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(2)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
+      FF_UNWRAP_VEC3(jsVec)->vec = cv::Vec3d(DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 2).ToLocalChecked()));
     }
     else {
       jsVec = FF::newInstance(Nan::New(Vec4::constructor));
-      FF_UNWRAP_VEC4(jsVec)->vec = cv::Vec4d(vec->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(2)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(), vec->Get(3)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
+      FF_UNWRAP_VEC4(jsVec)->vec = cv::Vec4d(DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 2).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 3).ToLocalChecked()));
     }
     jsVal = jsVec;
   }
   else {
     jsVal = v8::Local<v8::Value>::Cast(val);
   }
-  FF_RETURN(jsVal);
+  info.GetReturnValue().Set(jsVal);
 }
 
 NAN_METHOD(Mat::AtRaw) {
@@ -286,7 +302,7 @@ NAN_METHOD(Mat::AtRaw) {
   FF_ASSERT_INDEX_RANGE(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[1] - 1, "Mat::At col");
   v8::Local<v8::Value> val;
   FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT, FF::matGet);
-  FF_RETURN(val);
+  info.GetReturnValue().Set(val);
 }
 
 NAN_METHOD(Mat::Set) {
@@ -297,19 +313,19 @@ NAN_METHOD(Mat::Set) {
 
   int cn = matSelf.channels();
   if (info[2]->IsArray()) {
-    FF_ARR vec = FF_ARR::Cast(info[2]);
+    v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[2]);
     FF_ASSERT_CHANNELS(cn, (long)vec->Length(), "Mat::Set");
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, vec, matSelf.type(), FF_MAT_SET, FF::matPut);
   }
-  else if (FF_IS_INSTANCE(Vec2::constructor, info[2])) {
+  else if (Vec2::Converter::hasInstance(info[2])) {
     FF_ASSERT_CHANNELS(cn, 2, "Mat::Set");
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<2>(FF_UNWRAP_VEC2_AND_GET(info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())), matSelf.type(), FF_MAT_SET, FF::matPut);
   }
-  else if (FF_IS_INSTANCE(Vec3::constructor, info[2])) {
+  else if (Vec3::Converter::hasInstance(info[2])) {
     FF_ASSERT_CHANNELS(cn, 3, "Mat::Set");
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<3>(FF_UNWRAP_VEC3_AND_GET(info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())), matSelf.type(), FF_MAT_SET, FF::matPut);
   }
-  else if (FF_IS_INSTANCE(Vec4::constructor, info[2])) {
+  else if (Vec4::Converter::hasInstance(info[2])) {
     FF_ASSERT_CHANNELS(cn, 4, "Mat::Set");
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<4>(FF_UNWRAP_VEC4_AND_GET(info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())), matSelf.type(), FF_MAT_SET, FF::matPut);
   }
@@ -317,7 +333,7 @@ NAN_METHOD(Mat::Set) {
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, info[2], matSelf.type(), FF_MAT_SET, FF::matPut);
   }
   else {
-    return Nan::ThrowError(FF_NEW_STRING("Mat::Set - unexpected argument 2"));
+    return Nan::ThrowError(FF::newString("Mat::Set - unexpected argument 2"));
   }
 }
 
@@ -339,74 +355,82 @@ NAN_METHOD(Mat::SetToAsync) {
 
 NAN_METHOD(Mat::GetDataAsArray) {
   cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info.This());
-  FF_ARR rowArray = FF_NEW_ARRAY(mat.size[0]);
+  v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(mat.size[0]);
   if (mat.dims > 2) { // 3D
     FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT_3D, FF::matGet);
   } else { // 2D
     FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT, FF::matGet);
   }
-  FF_RETURN(rowArray);
+  info.GetReturnValue().Set(rowArray);
 }
 
 NAN_METHOD(Mat::GetRegion) {
-  if (!FF_IS_INSTANCE(Rect::constructor, info[0])) {
+  if (!Rect::Converter::hasInstance(info[0])) {
     return Nan::ThrowError("Mat::GetRegion expected arg0 to be an instance of Rect");
   }
   cv::Rect2d rect = FF_UNWRAP(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked(), Rect)->rect;
-  FF_OBJ jsRegion = FF::newInstance(Nan::New(constructor));
+  v8::Local<v8::Object> jsRegion = FF::newInstance(Nan::New(constructor));
   FF_UNWRAP_MAT_AND_GET(jsRegion) = FF_UNWRAP_MAT_AND_GET(info.This())(rect);
-  FF_RETURN(jsRegion);
+  info.GetReturnValue().Set(jsRegion);
 }
 
 NAN_METHOD(Mat::Norm) {
   FF_METHOD_CONTEXT("Mat::Norm");
 
-  bool withSrc2 = FF_HAS_ARG(0) && FF_IS_INSTANCE(Mat::constructor, info[0]);
+  bool withSrc2 = FF::hasArg(info, 0) && Mat::Converter::hasInstance(info[0]);
   uint i = withSrc2 ? 1 : 0;
   double norm;
 
   // optional args
-  bool hasOptArgsObj = FF_HAS_ARG((long)i) && info[i]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[i]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-  FF_GET_UINT_IFDEF(optArgs, uint normType, "normType", cv::NORM_L2);
-  FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat mask, "mask", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
-  if (!hasOptArgsObj) {
-    FF_ARG_UINT_IFDEF((long)i, normType, normType);
-    FF_ARG_INSTANCE_IFDEF((long)(i + 1), mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
+  bool hasOptArgsObj = FF::isArgObject(info, i);
+  v8::Local<v8::Object> optArgs = hasOptArgsObj ? info[i]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : Nan::New<v8::Object>();
+
+  uint normType = cv::NORM_L2;
+  cv::Mat mask = cv::noArray().getMat();
+
+  FF::TryCatch tryCatch;
+  if (
+	  hasOptArgsObj && (
+		UintConverter::optProp(&normType, "normType", optArgs) ||
+		Mat::Converter::optProp(&mask, "mask", optArgs)
+		) || (
+		UintConverter::optArg(i, &normType, info) ||
+		Mat::Converter::optArg(i + 1, &mask, info)
+		)
+	  ) {
+	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::Norm");
+	  tryCatch.throwNew(err);
+	  return;
   }
 
   if (withSrc2) {
-    FF_ARG_INSTANCE(0, cv::Mat src2, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
+	cv::Mat src2;
+	if (Mat::Converter::arg(0, &src2, info)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Mat::Norm"));
+		return;
+	}
     norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), src2, (int)normType, mask);
   }
   else {
     norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), (int)normType, mask);
   }
-  FF_RETURN(norm);
+  info.GetReturnValue().Set(norm);
 }
 
 NAN_METHOD(Mat::Normalize) {
-  FF_METHOD_CONTEXT("Mat::Normalize");
+	FF::SyncBinding(
+		std::make_shared<MatBindings::NormalizeWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::Normalize",
+		info
+	);
+}
 
-  // optional args
-  bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-  FF_GET_NUMBER_IFDEF(optArgs, double alpha, "alpha", 1.0);
-  FF_GET_NUMBER_IFDEF(optArgs, double beta, "beta", 0.0);
-  FF_GET_UINT_IFDEF(optArgs, uint normType, "normType", cv::NORM_L2);
-  FF_GET_UINT_IFDEF(optArgs, int dtype, "dtype", -1);
-  FF_GET_INSTANCE_IFDEF(optArgs, cv::Mat mask, "mask", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, cv::noArray().getMat());
-  if (!hasOptArgsObj) {
-    FF_ARG_NUMBER_IFDEF(0, alpha, 1.0);
-    FF_ARG_NUMBER_IFDEF(1, beta, 0.0);
-    FF_ARG_UINT_IFDEF(2, normType, normType);
-    FF_ARG_INT_IFDEF(3, dtype, dtype);
-    FF_ARG_INSTANCE_IFDEF(4, mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, mask);
-  }
-
-  FF_OBJ jsMat = FF::newInstance(Nan::New(constructor));
-  cv::normalize(FF_UNWRAP_MAT_AND_GET(info.This()), FF_UNWRAP_MAT_AND_GET(jsMat), alpha, beta, normType, dtype, mask);
-  FF_RETURN(jsMat);
+NAN_METHOD(Mat::NormalizeAsync) {
+	FF::AsyncBinding(
+		std::make_shared<MatBindings::NormalizeWorker>(Mat::Converter::unwrap(info.This())),
+		"Mat::NormalizeAsync",
+		info
+	);
 }
 
 NAN_METHOD(Mat::Row) {
@@ -415,24 +439,24 @@ NAN_METHOD(Mat::Row) {
   }
   int r = (int)info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
   cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;
-  FF_ARR row = FF_NEW_ARRAY(mat.cols);
+  v8::Local<v8::Array> row = Nan::New<v8::Array>(mat.cols);
   try {
     if (mat.type() == CV_32FC1) {
       for (int c = 0;  c < mat.cols; c++) {
-        row->Set(c, Nan::New(mat.at<float>(r, c)));
+		Nan::Set(row, c, Nan::New(mat.at<float>(r, c)));
       }
     } else if (mat.type() == CV_8UC1) {
       for (int c = 0;  c < mat.cols; c++) {
-        row->Set(c, Nan::New((uint)mat.at<uchar>(r, c)));
+        Nan::Set(row, c, Nan::New((uint)mat.at<uchar>(r, c)));
       }
     } else if (mat.type() == CV_8UC3) {
       for (int c = 0;  c < mat.cols; c++) {
         cv::Vec3b vec = mat.at<cv::Vec3b>(r, c);
-        FF_ARR jsVec = FF_NEW_ARRAY(3);
+        v8::Local<v8::Array> jsVec = Nan::New<v8::Array>(3);
         for (int i = 0; i < 3; i++) {
-          jsVec->Set(i, Nan::New(vec[i]));
+			Nan::Set(jsVec, i, Nan::New(vec[i]));
         }
-        row->Set(c, jsVec);
+        Nan::Set(row, c, jsVec);
       }
     } else {
       return Nan::ThrowError(Nan::New("not implemented yet - mat type:" + std::to_string(mat.type())).ToLocalChecked());
@@ -442,7 +466,7 @@ NAN_METHOD(Mat::Row) {
   } catch(...) {
     return Nan::ThrowError("... Exception");
   }
-  FF_RETURN(row);
+  info.GetReturnValue().Set(row);
 }
 
 NAN_METHOD(Mat::Release) {

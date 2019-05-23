@@ -32,7 +32,7 @@ NAN_MODULE_INIT(Features2d::Init) {
 	ORBDetector::Init(target);
 	SimpleBlobDetector::Init(target);
 
-	FF_OBJ agastTypes = FF_NEW_OBJ();
+	v8::Local<v8::Object> agastTypes = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(agastTypes, AGAST_5_8, Nan::New<v8::Integer>(cv::AgastFeatureDetector::AGAST_5_8));
 	FF_SET_JS_PROP(agastTypes, AGAST_7_12d, Nan::New<v8::Integer>(cv::AgastFeatureDetector::AGAST_7_12d));
 	FF_SET_JS_PROP(agastTypes, AGAST_7_12s, Nan::New<v8::Integer>(cv::AgastFeatureDetector::AGAST_7_12s));
@@ -41,21 +41,21 @@ NAN_MODULE_INIT(Features2d::Init) {
 	FF_SET_JS_PROP(agastTypes, NONMAX_SUPPRESSION, Nan::New<v8::Integer>(cv::AgastFeatureDetector::NONMAX_SUPPRESSION));
 	FF_SET_JS_PROP(target, "AGAST", agastTypes);
 
-	FF_OBJ akazeTypes = FF_NEW_OBJ();
+	v8::Local<v8::Object> akazeTypes = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(akazeTypes, DESCRIPTOR_KAZE, Nan::New<v8::Integer>(cv::AKAZE::DESCRIPTOR_KAZE));
 	FF_SET_JS_PROP(akazeTypes, DESCRIPTOR_KAZE, Nan::New<v8::Integer>(cv::AKAZE::DESCRIPTOR_KAZE));
 	FF_SET_JS_PROP(akazeTypes, DESCRIPTOR_MLDB_UPRIGHT, Nan::New<v8::Integer>(cv::AKAZE::DESCRIPTOR_MLDB_UPRIGHT));
 	FF_SET_JS_PROP(akazeTypes, DESCRIPTOR_MLDB, Nan::New<v8::Integer>(cv::AKAZE::DESCRIPTOR_MLDB));
 	FF_SET_JS_PROP(target, "AKAZE", akazeTypes);
 
-	FF_OBJ kazeTypes = FF_NEW_OBJ();
+	v8::Local<v8::Object> kazeTypes = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(kazeTypes, DIFF_PM_G1, Nan::New<v8::Integer>(cv::KAZE::DIFF_PM_G1));
 	FF_SET_JS_PROP(kazeTypes, DIFF_PM_G2, Nan::New<v8::Integer>(cv::KAZE::DIFF_PM_G2));
 	FF_SET_JS_PROP(kazeTypes, DIFF_WEICKERT, Nan::New<v8::Integer>(cv::KAZE::DIFF_WEICKERT));
 	FF_SET_JS_PROP(kazeTypes, DIFF_CHARBONNIER, Nan::New<v8::Integer>(cv::KAZE::DIFF_CHARBONNIER));
 	FF_SET_JS_PROP(target, "KAZE", kazeTypes);
 
-	FF_OBJ fastTypes = FF_NEW_OBJ();
+	v8::Local<v8::Object> fastTypes = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(fastTypes, TYPE_5_8, Nan::New<v8::Integer>(cv::FastFeatureDetector::TYPE_5_8));
 	FF_SET_JS_PROP(fastTypes, TYPE_7_12, Nan::New<v8::Integer>(cv::FastFeatureDetector::TYPE_7_12));
 	FF_SET_JS_PROP(fastTypes, TYPE_9_16, Nan::New<v8::Integer>(cv::FastFeatureDetector::TYPE_9_16));
@@ -63,7 +63,7 @@ NAN_MODULE_INIT(Features2d::Init) {
 	FF_SET_JS_PROP(fastTypes, NONMAX_SUPPRESSION, Nan::New<v8::Integer>(cv::FastFeatureDetector::NONMAX_SUPPRESSION));
 	FF_SET_JS_PROP(target, "FAST", fastTypes);
 
-	FF_OBJ orbTypes = FF_NEW_OBJ();
+	v8::Local<v8::Object> orbTypes = Nan::New<v8::Object>();
 	FF_SET_JS_PROP(orbTypes, HARRIS_SCORE, Nan::New<v8::Integer>(cv::ORB::HARRIS_SCORE));
 	FF_SET_JS_PROP(orbTypes, FAST_SCORE, Nan::New<v8::Integer>(cv::ORB::FAST_SCORE));
 	FF_SET_JS_PROP(orbTypes, kBytes, Nan::New<v8::Integer>(cv::ORB::kBytes));
@@ -74,34 +74,41 @@ NAN_MODULE_INIT(Features2d::Init) {
 };
 
 NAN_METHOD(Features2d::DrawKeyPoints) {
-	FF_METHOD_CONTEXT("DrawKeyPoints");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_INSTANCE(0, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_ARRAY(1, FF_ARR jsKps);
-	FF_UNPACK_KEYPOINT_ARRAY(kps, jsKps);
+	cv::Mat img;
+	std::vector<cv::KeyPoint> kps;
+	if (
+		Mat::Converter::arg(0, &img, info) ||
+		ObjectArrayConverter<KeyPoint, cv::KeyPoint>::arg(1, &kps, info)
+	) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Features2d::DrawKeyPoints"));
+		return;
+	}
 
-	FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
+	v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
 	cv::drawKeypoints(img, kps, FF_UNWRAP_MAT_AND_GET(jsMat));
-	FF_RETURN(jsMat);
+	info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(Features2d::DrawMatches) {
-	FF_METHOD_CONTEXT("DrawMatches");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_INSTANCE(0, cv::Mat img1, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Mat img2, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_ARRAY(2, FF_ARR jsKps1);
-	FF_ARG_ARRAY(3, FF_ARR jsKps2);
-	FF_ARG_ARRAY(4, FF_ARR jsMatches);
-	FF_UNPACK_KEYPOINT_ARRAY(kps1, jsKps1);
-	FF_UNPACK_KEYPOINT_ARRAY(kps2, jsKps2);
+	cv::Mat img1, img2;
+	std::vector<cv::KeyPoint> kps1, kps2;
 	std::vector<cv::DMatch> dMatches;
-	for (uint i = 0; i < jsMatches->Length(); i++) {
-		DescriptorMatch* match = FF_UNWRAP(FF_CAST_OBJ(jsMatches->Get(i)), DescriptorMatch);
-		dMatches.push_back(match->dmatch);
+	if (
+		Mat::Converter::arg(0, &img1, info) ||
+		Mat::Converter::arg(1, &img2, info) ||
+		ObjectArrayConverter<KeyPoint, cv::KeyPoint>::arg(2, &kps1, info) ||
+		ObjectArrayConverter<KeyPoint, cv::KeyPoint>::arg(3, &kps2, info) ||
+		ObjectArrayConverter<DescriptorMatch, cv::DMatch>::arg(4, &dMatches, info)
+		) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Features2d::DrawMatches"));
+		return;
 	}
 
-	FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
+	v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
 	cv::drawMatches(img1, kps1, img2, kps2, dMatches, FF_UNWRAP_MAT_AND_GET(jsMat));
-	FF_RETURN(jsMat);
+	info.GetReturnValue().Set(jsMat);
 }

@@ -35,74 +35,84 @@ NAN_MODULE_INIT(Imgproc::Init) {
   Nan::SetMethod(target, "applyColorMapAsync", ApplyColorMapAsync);
 #if CV_VERSION_MINOR > 1
   Nan::SetMethod(target, "canny", Canny);
+  Nan::SetMethod(target, "cannyAsync", CannyAsync);
 #endif
   Moments::Init(target);
   Contour::Init(target);
 };
 
 NAN_METHOD(Imgproc::GetStructuringElement) {
-  FF_METHOD_CONTEXT("GetStructuringElement");
+	FF::TryCatch tryCatch;
 
-  FF_ARG_UINT(0, uint shape);
-  FF_ARG_INSTANCE(1, cv::Size2d size, Size::constructor, FF_UNWRAP_SIZE_AND_GET);
-  FF_ARG_INSTANCE_IFDEF(2, cv::Point2d anchor, Point2::constructor, FF_UNWRAP_PT2_AND_GET, cv::Point2d(-1, -1));
+	uint shape;
+	cv::Size2d size;
+	cv::Point2d anchor = cv::Point2d(-1, -1);
 
-  FF_OBJ jsKernel = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsKernel) = cv::getStructuringElement(shape, size, anchor);
-  FF_RETURN(jsKernel);
+	if (
+		UintConverter::arg(0, &shape, info) ||
+		Size::Converter::arg(1, &size, info) ||
+		Point2::Converter::optArg(2, &anchor, info)
+	) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::GetStructuringElement"));
+		return;
+	}
+
+	v8::Local<v8::Object> jsKernel = FF::newInstance(Nan::New(Mat::constructor));
+	FF_UNWRAP_MAT_AND_GET(jsKernel) = cv::getStructuringElement(shape, size, anchor);
+	info.GetReturnValue().Set(jsKernel);
 }
 
 NAN_METHOD(Imgproc::GetRotationMatrix2D) {
-  FF_METHOD_CONTEXT("GetRotationMatrix2D");
+	FF::TryCatch tryCatch;
 
-  FF_ARG_INSTANCE(0, cv::Point2d center, Point2::constructor, FF_UNWRAP_PT2_AND_GET);
-  FF_ARG_NUMBER(1, double angle);
+	cv::Point2d center;
+	double angle, scale = 1.0;
+	if (
+		Point2::Converter::arg(0, &center, info) ||
+		DoubleConverter::arg(1, &angle, info) ||
+		DoubleConverter::optArg(2, &scale, info)
+		) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::GetRotationMatrix2D"));
+		return;
+	}
 
-  FF_ARG_NUMBER_IFDEF(2, double scale, 1.0);
-
-  FF_OBJ jsRotationMat = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsRotationMat) = cv::getRotationMatrix2D(center, angle, scale);
-  FF_RETURN(jsRotationMat);
+	v8::Local<v8::Object> jsRotationMat = FF::newInstance(Nan::New(Mat::constructor));
+	FF_UNWRAP_MAT_AND_GET(jsRotationMat) = cv::getRotationMatrix2D(center, angle, scale);
+	info.GetReturnValue().Set(jsRotationMat);
 }
 
 NAN_METHOD(Imgproc::GetAffineTransform) {
-  FF_METHOD_CONTEXT("GetAffineTransform");
+	FF::TryCatch tryCatch;
 
-  FF_ARG_ARRAY(0, FF_ARR jsSrcPoints);
-  FF_ARG_ARRAY(1, FF_ARR jsDstPoints);
+	std::vector<cv::Point2f> srcPoints, dstPoints;
+	if (
+		ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &srcPoints, info) ||
+		ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &dstPoints, info)
+		) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::GetAffineTransform"));
+		return;
+	}
 
-  // TODO FF_ARG_UNPACK_ARRAY_INSTANCE
-  Nan::TryCatch tryCatch;
-  std::vector<cv::Point2f> srcPoints, dstPoints;
-  Point::unpackJSPoint2Array<float>(srcPoints, jsSrcPoints);
-  Point::unpackJSPoint2Array<float>(dstPoints, jsDstPoints);
-  if (tryCatch.HasCaught()) {
-    return info.GetReturnValue().Set(tryCatch.ReThrow());
-  }
-
-  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getAffineTransform(srcPoints, dstPoints);
-  FF_RETURN(jsMat);
+	v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
+	FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getAffineTransform(srcPoints, dstPoints);
+	info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(Imgproc::GetPerspectiveTransform) {
-  FF_METHOD_CONTEXT("GetPerspectiveTransform");
+  FF::TryCatch tryCatch;
 
-  FF_ARG_ARRAY(0, FF_ARR jsSrcPoints);
-  FF_ARG_ARRAY(1, FF_ARR jsDstPoints);
-
-  // TODO FF_ARG_UNPACK_ARRAY_INSTANCE
-  Nan::TryCatch tryCatch;
   std::vector<cv::Point2f> srcPoints, dstPoints;
-  Point::unpackJSPoint2Array<float>(srcPoints, jsSrcPoints);
-  Point::unpackJSPoint2Array<float>(dstPoints, jsDstPoints);
-  if (tryCatch.HasCaught()) {
-    return info.GetReturnValue().Set(tryCatch.ReThrow());
+  if (ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &srcPoints, info)
+	  || ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &dstPoints, info)
+	) {
+	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Imgproc::GetPerspectiveTransform");
+	  tryCatch.throwNew(err);
+	  return;
   }
 
-  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getPerspectiveTransform(srcPoints, dstPoints);
-  FF_RETURN(jsMat);
+  info.GetReturnValue().Set(jsMat);
 }
 NAN_METHOD(Imgproc::UndistortPoints) {
   FF::SyncBinding(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
@@ -117,9 +127,20 @@ NAN_METHOD(Imgproc::UndistortPointsAsync) {
 NAN_METHOD(Imgproc::CalcHist) {
   FF_METHOD_CONTEXT("CalcHist");
 
-  FF_ARG_INSTANCE(0, cv::Mat img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-  FF_ARG_ARRAY(1, FF_ARR jsHistAxes);
-  FF_ARG_INSTANCE_IFDEF(2, cv::Mat mask, Mat::constructor, FF_UNWRAP_MAT_AND_GET, cv::noArray().getMat());
+  FF::TryCatch tryCatch;
+  cv::Mat img, mask = cv::noArray().getMat();
+  std::vector<std::vector<float>> _ranges;
+  if (
+	  Mat::Converter::arg(0, &img, info) ||
+	  Mat::Converter::optArg(2, &mask, info)
+	) {
+	  tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::CalcHist"));
+	  return;
+  }
+  if (!info[1]->IsArray()) {
+	  return tryCatch.throwNew(FF::newString("Imgproc::CalcHist - expected arg 1 to be an array"));
+  }
+  v8::Local<v8::Array> jsHistAxes = v8::Local<v8::Array>::Cast(info[1]);
 
   cv::Mat inputImg = img;
   int inputType = CV_MAKETYPE(CV_32F, img.channels());
@@ -134,17 +155,24 @@ NAN_METHOD(Imgproc::CalcHist) {
   // TODO replace old macros
   for (int i = 0; i < dims; ++i) {
     ranges.push_back(new float[dims]);
-    FF_OBJ jsAxis = FF_CAST_OBJ(jsHistAxes->Get(i));
-    FF_ARR jsRanges;
-	FF_GET_ARRAY_REQUIRED(jsAxis, jsRanges, "ranges");
-	if (jsRanges->Length() != 2) {
-		return Nan::ThrowError(FF_NEW_STRING("expected ranges to be an array of length " + std::to_string(2)));
+    v8::Local<v8::Object> jsAxis = FF_CAST_OBJ(Nan::Get(jsHistAxes, i).ToLocalChecked());
+	if (!FF::hasOwnProperty(jsAxis, "ranges")) {
+		return tryCatch.throwNew(FF::newString("Imgproc::CalcHist - expected axis object to have ranges property"));
 	}
-    ranges.at(i)[0] = jsRanges->Get(0)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-    ranges.at(i)[1] = jsRanges->Get(1)->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+	v8::Local<v8::Value> jsRangesVal = Nan::Get(jsAxis, Nan::New("ranges").ToLocalChecked()).ToLocalChecked();
+	if (!jsRangesVal->IsArray()) {
+		return tryCatch.throwNew(FF::newString("Imgproc::CalcHist - expected ranges to be an array"));
+	}
+	v8::Local<v8::Array> jsRanges = v8::Local<v8::Array>::Cast(jsRangesVal);
+	if (jsRanges->Length() != 2) {
+		return tryCatch.throwNew(FF::newString("Imgproc::CalcHist - expected ranges to be an array of length 2"));
+	}
+    ranges.at(i)[0] = DoubleConverter::unwrap(Nan::Get(jsRanges, 0).ToLocalChecked());
+    ranges.at(i)[1] = DoubleConverter::unwrap(Nan::Get(jsRanges, 1).ToLocalChecked());
     int channel, bins;
 
 	if (IntConverter::prop(&channel, "channel", jsAxis) || IntConverter::prop(&bins, "bins", jsAxis)) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::CalcHist"));
 		return;
 	}
     channels[i] = channel;
@@ -171,41 +199,54 @@ NAN_METHOD(Imgproc::CalcHist) {
   delete[] channels;
   delete[] histSize;
 
-  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
   int outputType = CV_MAKETYPE(CV_64F, img.channels());
   if (outputType != hist.type()) {
     hist.convertTo(hist, outputType);
   }
 
   FF_UNWRAP_MAT_AND_GET(jsMat) = hist;
-  FF_RETURN(jsMat);
+  info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(Imgproc::Plot1DHist) {
-  FF_METHOD_CONTEXT("Plot1DHist");
+	FF::TryCatch tryCatch;
 
-  FF_ARG_INSTANCE(0, cv::Mat hist, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-  FF_ARG_INSTANCE(1, cv::Mat plot, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-  FF_ARG_INSTANCE(2, cv::Vec3d color, Vec3::constructor, FF_UNWRAP_VEC3_AND_GET);
-  if (1 != hist.cols) {
-	return Nan::ThrowError(FF_NEW_STRING("Plot1DHist - hist rows mismatch, expected "
-	  + std::to_string(1) + ", have " + std::to_string(hist.cols)));
-  }
-  if (hist.channels() != 1) {
-    FF_THROW("expected hist to be single channeled");
-  }
+	cv::Mat hist, plot;
+	cv::Vec3d color;
+	int lineType = cv::LINE_8;
+	int thickness = 2;
+	int shift = 0;
 
-  // optional args
-  bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
-  FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-  FF_GET_INT_IFDEF(optArgs, int lineType, "lineType", cv::LINE_8);
-  FF_GET_INT_IFDEF(optArgs, int thickness, "thickness", 2);
-  FF_GET_INT_IFDEF(optArgs, int shift, "shift", 0);
-  if (!hasOptArgsObj) {
-    FF_ARG_INT_IFDEF(3, lineType, lineType);
-    FF_ARG_INT_IFDEF(4, thickness, thickness);
-    FF_ARG_INT_IFDEF(5, shift, shift);
-  }
+	v8::Local<v8::Object> opts = FF::isArgObject(info, 3) ? info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : Nan::New<v8::Object>();
+
+	if (Mat::Converter::arg(0, &hist, info) ||
+		Mat::Converter::arg(1, &plot, info) ||
+		Vec3::Converter::arg(2, &color, info) ||
+		(
+			FF::isArgObject(info, 3) && (
+				IntConverter::optProp(&lineType, "lineType", opts) ||
+				IntConverter::optProp(&thickness, "thickness", opts) ||
+				IntConverter::optProp(&shift, "shift", opts)
+			) || (
+				IntConverter::optArg(3, &lineType, info) ||
+				IntConverter::optArg(4, &thickness, info) ||
+				IntConverter::optArg(5, &shift, info)
+			)
+		)
+	){
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Imgproc::Plot1DHist");
+		tryCatch.throwNew(err);
+		return;
+	}
+
+	if (1 != hist.cols) {
+		return Nan::ThrowError(FF::newString("Imgproc::Plot1DHist - hist rows mismatch, expected "
+			+ std::to_string(1) + ", have " + std::to_string(hist.cols)));
+	}
+	if (hist.channels() != 1) {
+		return Nan::ThrowError(FF::newString("Imgproc::Plot1DHist - expected hist to be single channeled"));
+	}
 
   double binWidth = ((double)plot.cols / (double)hist.rows);
   int plotHeight = (cv::max)(256, plot.rows - 20);
@@ -227,60 +268,62 @@ NAN_METHOD(Imgproc::Plot1DHist) {
     );
   }
 
-  FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsMat) = plot;
-  FF_RETURN(jsMat);
+  info.GetReturnValue().Set(jsMat);
 }
 
 NAN_METHOD(Imgproc::FitLine) {
   FF_METHOD_CONTEXT("FitLine");
 
-  FF_ARG_ARRAY(0, FF_ARR jsPoints);
+  if (!info[0]->IsArray()) {
+	  FF_THROW("expected arg 0 to be an array");
+  }
+  v8::Local<v8::Array> jsPoints = v8::Local<v8::Array>::Cast(info[0]);
+
   if (jsPoints->Length() < 2) {
     FF_THROW("expected arg0 to be an Array with atleast 2 Points");
   }
-  FF_VAL jsPt1 = jsPoints->Get(0);
-  bool isPoint2 = FF_IS_INSTANCE(Point2::constructor, jsPt1);
-  bool isPoint3 = FF_IS_INSTANCE(Point3::constructor, jsPt1);
+  v8::Local<v8::Value> jsPt1 = Nan::Get(jsPoints, 0).ToLocalChecked();
+  bool isPoint2 = Point2::Converter::hasInstance(jsPt1);
+  bool isPoint3 = Point3::Converter::hasInstance(jsPt1);
   if (!isPoint2 && !isPoint3) {
     FF_THROW("expected arg0 to be an Array containing instances of Point2 or Point3");
   }
 
-  FF_ARG_UINT(1, uint distType);
-  FF_ARG_NUMBER(2, double param);
-  FF_ARG_NUMBER(3, double reps);
-  FF_ARG_NUMBER(4, double aeps);
+  FF::TryCatch tryCatch;
 
-  FF_ARR jsLineParams;
+  std::vector<cv::Point2d> pts2d;
+  std::vector<cv::Point3d> pts3d;
+  uint distType;
+  double param, reps, aeps;
+  if ((
+	isPoint2 && ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &pts2d, info) ||
+	!isPoint2 && ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &pts3d, info)
+	) ||
+	UintConverter::arg(1, &distType, info) ||
+	DoubleConverter::arg(2, &param, info) ||
+	DoubleConverter::arg(3, &reps, info) ||
+	DoubleConverter::arg(4, &aeps, info)
+	) {
+	tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::FitLine"));
+	return;
+  }
+
   if (isPoint2) {
-    std::vector<cv::Point2d> pts;
-	Nan::TryCatch tryCatch;
-    Point::unpackJSPoint2Array(pts, jsPoints);
-	if (tryCatch.HasCaught()) {
-		return info.GetReturnValue().Set(tryCatch.ReThrow());
-	}
     cv::Vec4f lineParams;
-    cv::fitLine(pts, lineParams, (int)distType, param, reps, aeps);
-    jsLineParams = FF_NEW_ARRAY(4);
-    for (int i = 0; i < 4; i++) {
-      jsLineParams->Set(i, Nan::New(lineParams[i]));
-    }
+    cv::fitLine(pts2d, lineParams, (int)distType, param, reps, aeps);
+	info.GetReturnValue().Set(Vec4::Converter::wrap(lineParams));
   }
   else {
-    std::vector<cv::Point3d> pts;
-	Nan::TryCatch tryCatch;
-	Point::unpackJSPoint3Array(pts, jsPoints);
-	if (tryCatch.HasCaught()) {
-		return info.GetReturnValue().Set(tryCatch.ReThrow());
-	}
     cv::Vec6f lineParams;
-    cv::fitLine(pts, lineParams, (int)distType, param, reps, aeps);
-    jsLineParams = FF_NEW_ARRAY(6);
+    cv::fitLine(pts3d, lineParams, (int)distType, param, reps, aeps);
+	v8::Local<v8::Array> jsLineParams = Nan::New<v8::Array>(6);
     for (int i = 0; i < 6; i++) {
-      jsLineParams->Set(i, Nan::New(lineParams[i]));
+		Nan::Set(jsLineParams, i, Nan::New(lineParams[i]));
     }
+	info.GetReturnValue().Set(jsLineParams);
   }
-  FF_RETURN(jsLineParams);
 }
 
 NAN_METHOD(Imgproc::GetTextSize) {
@@ -299,24 +342,6 @@ NAN_METHOD(Imgproc::GetTextSizeAsync) {
   );
 }
 
-#if CV_VERSION_MINOR > 1
-NAN_METHOD(Imgproc::Canny) {
-	FF_METHOD_CONTEXT("Canny");
-
-	FF_ARG_INSTANCE(0, cv::Mat dx, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INSTANCE(1, cv::Mat dy, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_NUMBER(2, double threshold1);
-	FF_ARG_NUMBER(3, double threshold2);
-	FF_ARG_BOOL_IFDEF(4, bool L2gradient, false);
-
-	FF_OBJ jsMat = FF::newInstance(Nan::New(Mat::constructor));
-	cv::Canny(dx, dy, FF_UNWRAP_MAT_AND_GET(jsMat), threshold1, threshold2, L2gradient);
-
-	FF_RETURN(jsMat);
-}
-#endif
-
-
 NAN_METHOD(Imgproc::ApplyColorMap) {
   FF::SyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
                   "Imgproc::ApplyColorMap", info);
@@ -326,3 +351,17 @@ NAN_METHOD(Imgproc::ApplyColorMapAsync) {
   FF::AsyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
                    "Imgproc::ApplyColorMapAsync", info);
 }
+
+#if CV_VERSION_MINOR > 1
+
+NAN_METHOD(Imgproc::Canny) {
+	FF::SyncBinding(std::make_shared<ImgprocBindings::CannyWorker>(),
+		"Imgproc::Canny", info);
+}
+
+NAN_METHOD(Imgproc::CannyAsync) {
+	FF::AsyncBinding(std::make_shared<ImgprocBindings::CannyWorker>(),
+		"Imgproc::CannyAsync", info);
+}
+
+#endif

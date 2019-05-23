@@ -15,24 +15,23 @@ NAN_MODULE_INIT(TrackerKCF::Init) {
 	TrackerKCFParams::Init(target);
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("TrackerKCF"));
+	ctor->SetClassName(FF::newString("TrackerKCF"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerKCF"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("TrackerKCF"), FF::getFunction(ctor));
 };
 
 
 NAN_METHOD(TrackerKCF::New) {
 	FF_ASSERT_CONSTRUCT_CALL(TrackerKCF);
-	FF_METHOD_CONTEXT("TrackerKCF::New");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_INSTANCE_IFDEF(
-		0,
-		cv::TrackerKCF::Params params,
-		TrackerKCFParams::constructor,
-		FF_UNWRAP_TRACKERKCFPARAMS_AND_GET,
-		cv::TrackerKCF::Params()
-	);
+	cv::TrackerKCF::Params params;
+	if (TrackerKCFParams::Converter::optArg(0, &params, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("TrackerKCF::New");
+		tryCatch.throwNew(err);
+		return;
+	}
 
 	TrackerKCF* self = new TrackerKCF();
 #if CV_VERSION_MINOR > 2
@@ -41,7 +40,7 @@ NAN_METHOD(TrackerKCF::New) {
 	self->tracker = cv::TrackerKCF::createTracker(params);
 #endif
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

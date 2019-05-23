@@ -18,34 +18,22 @@ NAN_MODULE_INIT(GFTTDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("useHarrisDetector").ToLocalChecked(), GFTTDetector::GetUseHarrisDetector);
 	Nan::SetAccessor(instanceTemplate, Nan::New("k").ToLocalChecked(), GFTTDetector::GetK);
 
-  target->Set(Nan::New("GFTTDetector").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("GFTTDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(GFTTDetector::New) {
-  FF_ASSERT_CONSTRUCT_CALL(GFTTDetector);
-	FF_METHOD_CONTEXT("GFTTDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL(GFTTDetector);
+	FF::TryCatch tryCatch;
+	GFTTDetector::NewWorker worker;
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-	FF_GET_INT_IFDEF(optArgs, int maxCorners, "maxCorners", 1000);
-	FF_GET_NUMBER_IFDEF(optArgs, double qualityLevel, "qualityLevel", 0.01);
-	FF_GET_NUMBER_IFDEF(optArgs, double minDistance, "minDistance", 1);
-	FF_GET_INT_IFDEF(optArgs, int blockSize, "blockSize", 3);
-	FF_GET_BOOL_IFDEF(optArgs, bool useHarrisDetector, "useHarrisDetector", false);
-	FF_GET_NUMBER_IFDEF(optArgs, double k, "k", 0.04);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(0, maxCorners, maxCorners);
-		FF_ARG_NUMBER_IFDEF(1, qualityLevel, qualityLevel);
-		FF_ARG_NUMBER_IFDEF(2, minDistance, minDistance);
-		FF_ARG_INT_IFDEF(3, blockSize, blockSize);
-		FF_ARG_BOOL_IFDEF(4, useHarrisDetector, useHarrisDetector);
-		FF_ARG_NUMBER_IFDEF(5, k, k);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("GFTTDetector::New");
+		tryCatch.throwNew(err);
+		return;
 	}
 
 	GFTTDetector* self = new GFTTDetector();
+	self->detector = cv::GFTTDetector::create(worker.maxCorners, worker.qualityLevel, worker.minDistance, worker.blockSize, worker.useHarrisDetector, worker.k);
 	self->Wrap(info.Holder());
-	self->detector = cv::GFTTDetector::create(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k);
-  FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }

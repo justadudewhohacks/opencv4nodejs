@@ -15,29 +15,28 @@ NAN_MODULE_INIT(TrackerCSRT::Init) {
 	TrackerCSRTParams::Init(target);
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("TrackerCSRT"));
+	ctor->SetClassName(FF::newString("TrackerCSRT"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerCSRT"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("TrackerCSRT"), FF::getFunction(ctor));
 };
 
 
 NAN_METHOD(TrackerCSRT::New) {
 	FF_ASSERT_CONSTRUCT_CALL(TrackerCSRT);
-	FF_METHOD_CONTEXT("TrackerCSRT::New");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_INSTANCE_IFDEF(
-		0,
-		cv::TrackerCSRT::Params params,
-		TrackerCSRTParams::constructor,
-		FF_UNWRAP_TRACKERCSRTPARAMS_AND_GET,
-		cv::TrackerCSRT::Params()
-	);
+	cv::TrackerCSRT::Params params;
+	if (TrackerCSRTParams::Converter::optArg(0, &params, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("TrackerCSRT::New");
+		tryCatch.throwNew(err);
+		return;
+	}
 
 	TrackerCSRT* self = new TrackerCSRT();
 	self->tracker = cv::TrackerCSRT::create(params);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

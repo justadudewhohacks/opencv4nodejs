@@ -7,19 +7,19 @@ NAN_MODULE_INIT(DetectionROI::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("DetectionROI"));
+	ctor->SetClassName(FF::newString("DetectionROI"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("scale"), scaleGet, scaleSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("locations"), locationsGet, locationsSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("confidences"), confidencesGet, confidencesSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("scale"), scaleGet, scaleSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("locations"), locationsGet, locationsSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("confidences"), confidencesGet, confidencesSet);
 
-	target->Set(FF_NEW_STRING("DetectionROI"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("DetectionROI"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(DetectionROI::New) {
 	FF_ASSERT_CONSTRUCT_CALL(DetectionROI);
 	DetectionROI* self = new DetectionROI();
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };

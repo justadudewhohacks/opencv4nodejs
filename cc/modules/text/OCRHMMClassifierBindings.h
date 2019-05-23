@@ -23,10 +23,10 @@ namespace OCRHMMClassifierBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
-      FF_OBJ ret = FF_NEW_OBJ();
-      Nan::Set(ret, FF_NEW_STRING("classes"), IntArrayConverter::wrap(clazz));
-      Nan::Set(ret, FF_NEW_STRING("confidences"), DoubleArrayConverter::wrap(confidence));
+    v8::Local<v8::Value> getReturnValue() {
+      v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+      Nan::Set(ret, FF::newString("classes"), IntArrayConverter::wrap(clazz));
+      Nan::Set(ret, FF::newString("confidences"), DoubleArrayConverter::wrap(confidence));
       return ret;
     }
   

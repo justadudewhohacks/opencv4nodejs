@@ -5,7 +5,7 @@
 #define __FF_MATTYPES_H__
 
 #define FF_MAT_TYPE(CONST) \
-  module->Set(Nan::New<v8::String>(#CONST).ToLocalChecked(), Nan::New<v8::Integer>(CONST));
+	Nan::Set(module, Nan::New<v8::String>(#CONST).ToLocalChecked(), Nan::New<v8::Integer>(CONST));
 
 static void initMatTypes(v8::Local<v8::Object> module) {
 	FF_MAT_TYPE(CV_8U);

@@ -36,11 +36,16 @@ public:
   static FF_SETTER_BOOL(FacemarkAAMParams, verbose, params.verbose);
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
-};
 
-#define FF_UNWRAP_FACEMARKAAMPARAMS(obj) FF_UNWRAP(obj, FacemarkAAMParams)
-#define FF_UNWRAP_FACEMARKAAMPARAMS_AND_GET(obj)                               \
-  FF_UNWRAP_FACEMARKAAMPARAMS(obj)->params
+  cv::face::FacemarkAAM::Params* getNativeObjectPtr() { return &params; }
+  cv::face::FacemarkAAM::Params getNativeObject() { return params; }
+
+  typedef InstanceConverter<FacemarkAAMParams, cv::face::FacemarkAAM::Params> Converter;
+
+  static const char* getClassName() {
+	  return "FacemarkAAMParams";
+  }
+};
 
 #endif
 

@@ -11,7 +11,9 @@ module.exports = () => {
     const xmlHaarFile = cv.HAAR_FRONTALFACE_DEFAULT;
 
     describe('constructor', () => {
-      funcShouldRequireArgs(() => new cv.CascadeClassifier());
+      it('should throw if no args', () => {
+        expect(() => new cv.CascadeClassifier()).to.throw('CascadeClassifier::New - Error: expected argument 0 to be of type string');
+      });
 
       it('should be constructable with xmlFilePath', () => {
         expect(() => new cv.CascadeClassifier(xmlHaarFile)).to.not.throw();

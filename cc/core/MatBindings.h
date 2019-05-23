@@ -40,7 +40,7 @@ namespace MatBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(returnValue);
     }
 
@@ -88,7 +88,7 @@ namespace MatBindings {
       );
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(self);
     }
   };
@@ -113,7 +113,7 @@ namespace MatBindings {
       );
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(self);
     }
   };
@@ -148,7 +148,7 @@ namespace MatBindings {
       free(data);
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Nan::NewBuffer(data, size, freeBufferCallback, 0).ToLocalChecked();
     }
   };
@@ -168,7 +168,7 @@ namespace MatBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(dst);
     }
 
@@ -233,7 +233,7 @@ namespace MatBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -326,11 +326,11 @@ namespace MatBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      FF_OBJ ret = FF_NEW_OBJ();
-      Nan::Set(ret, FF_NEW_STRING("minVal"), Nan::New(minVal));
-      Nan::Set(ret, FF_NEW_STRING("maxVal"), Nan::New(maxVal));
-      Nan::Set(ret, FF_NEW_STRING("minLoc"), Point2::Converter::wrap(minLoc));
-      Nan::Set(ret, FF_NEW_STRING("maxLoc"), Point2::Converter::wrap(maxLoc));
+      v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+      Nan::Set(ret, FF::newString("minVal"), Nan::New(minVal));
+      Nan::Set(ret, FF::newString("maxVal"), Nan::New(maxVal));
+      Nan::Set(ret, FF::newString("minLoc"), Point2::Converter::wrap(minLoc));
+      Nan::Set(ret, FF::newString("maxLoc"), Point2::Converter::wrap(maxLoc));
       return ret;
     }
   };
@@ -422,7 +422,7 @@ namespace MatBindings {
 
     cv::Mat dst;
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(dst);
     }
 
@@ -474,11 +474,11 @@ namespace MatBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(0);
+      return FF::isArgObject(info, 0);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         IntConverter::optProp(&flags, "flags", opts) ||
         IntConverter::optProp(&nonzeroRows, "nonzeroRows", opts)
@@ -507,7 +507,7 @@ namespace MatBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(dst);
     }
 
@@ -523,11 +523,11 @@ namespace MatBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         BoolConverter::optProp(&dftRows, "dftRows", opts) ||
         BoolConverter::optProp(&conjB, "conjB", opts)
@@ -670,7 +670,7 @@ namespace MatBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(0);
+      return FF::isArgObject(info, 0);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -735,7 +735,7 @@ namespace MatBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -767,7 +767,7 @@ namespace MatBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return ObjectArrayConverter<Point2, cv::Point2f>::wrap(corners);
     }
   };
@@ -883,7 +883,7 @@ namespace MatBindings {
 	  }
 
 	  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-		  return FF_ARG_IS_OBJECT(4);
+		  return FF::isArgObject(info, 4);
 	  }
 
 	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -985,6 +985,56 @@ namespace MatBindings {
         IntConverter::optArg(1, &flags, info)
       );
     }    
+  };
+
+  struct NormalizeWorker : public CatchCvExceptionWorker {
+  public:
+	  cv::Mat self;
+	  NormalizeWorker(cv::Mat self) {
+		  this->self = self;
+	  }
+
+	  double alpha = 1;
+	  double beta = 0;
+	  int norm_type = cv::NORM_L2;
+	  int dtype = -1;
+	  cv::Mat mask = cv::noArray().getMat();
+
+	  cv::Mat returnValue;
+
+	  std::string executeCatchCvExceptionWorker() {
+		  cv::normalize(self, returnValue, alpha, beta, norm_type, dtype, mask);
+		  return "";
+	  }
+
+	  v8::Local<v8::Value> getReturnValue() {
+		  return Mat::Converter::wrap(returnValue);
+	  }
+
+	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return (
+			  DoubleConverter::optArg(0, &alpha, info) ||
+			  DoubleConverter::optArg(1, &beta, info) ||
+			  IntConverter::optArg(2, &norm_type, info) ||
+			  IntConverter::optArg(3, &dtype, info) ||
+			  Mat::Converter::optArg(4, &mask, info)
+			  );
+	  }
+
+	  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return FF::isArgObject(info, 0);
+	  }
+
+	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+		  return (
+			  DoubleConverter::optProp(&alpha, "alpha", opts) ||
+			  DoubleConverter::optProp(&beta, "beta", opts) ||
+			  IntConverter::optProp(&norm_type, "normType", opts) ||
+			  IntConverter::optProp(&dtype, "dtype", opts) ||
+			  Mat::Converter::optProp(&mask, "mask", opts)
+			);
+	  }
   };
   
 #if CV_VERSION_MINOR > 1

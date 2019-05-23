@@ -5,6 +5,66 @@
 
 namespace HOGDescriptorBindings {
 
+
+	struct NewWorker : CatchCvExceptionWorker {
+	public:
+		cv::Size2d winSize = cv::Size2d(64, 128);
+		cv::Size2d blockSize = cv::Size2d(16, 16);
+		cv::Size2d blockStride = cv::Size2d(8, 8);
+		cv::Size2d cellSize = cv::Size2d(8, 8);
+		uint nbins = 9;
+		int derivAperture = 1;
+		double winSigma = -1;
+		uint histogramNormType = cv::HOGDescriptor::L2Hys;
+		double L2HysThreshold = 0.2;
+		bool gammaCorrection = false;
+		uint nlevels = cv::HOGDescriptor::DEFAULT_NLEVELS;
+		bool signedGradient = false;
+
+		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return (
+				Size::Converter::optArg(0, &winSize, info) ||
+				Size::Converter::optArg(1, &blockSize, info) ||
+				Size::Converter::optArg(2, &blockStride, info) ||
+				Size::Converter::optArg(3, &cellSize, info) ||
+				UintConverter::optArg(4, &nbins, info) ||
+				IntConverter::optArg(5, &derivAperture, info) ||
+				DoubleConverter::optArg(6, &winSigma, info) ||
+				UintConverter::optArg(7, &histogramNormType, info) ||
+				DoubleConverter::optArg(8, &L2HysThreshold, info) ||
+				BoolConverter::optArg(9, &gammaCorrection, info) ||
+				UintConverter::optArg(10, &nlevels, info) ||
+				BoolConverter::optArg(11, &signedGradient, info)
+				);
+		}
+
+		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return FF::isArgObject(info, 0) && !Size::Converter::hasInstance(info[0]);
+		}
+
+		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+			return (
+				Size::Converter::optProp(&winSize, "winSize", opts) ||
+				Size::Converter::optProp(&blockSize, "blockSize", opts) ||
+				Size::Converter::optProp(&blockStride, "blockStride", opts) ||
+				Size::Converter::optProp(&cellSize, "cellSize", opts) ||
+				UintConverter::optProp(&nbins, "nbins", opts) ||
+				IntConverter::optProp(&derivAperture, "derivAperture", opts) ||
+				DoubleConverter::optProp(&winSigma, "winSigma", opts) ||
+				UintConverter::optProp(&histogramNormType, "histogramNormType", opts) ||
+				DoubleConverter::optProp(&L2HysThreshold, "L2HysThreshold", opts) ||
+				BoolConverter::optProp(&gammaCorrection, "gammaCorrection", opts) ||
+				UintConverter::optProp(&nlevels, "nlevels", opts) ||
+				BoolConverter::optProp(&signedGradient, "signedGradient", opts)
+				);
+		}
+
+		std::string executeCatchCvExceptionWorker() {
+			return "";
+		}
+	};
+
   struct ComputeWorker : CatchCvExceptionWorker  {
   public:
     std::shared_ptr<cv::HOGDescriptor> hog;
@@ -25,7 +85,7 @@ namespace HOGDescriptorBindings {
       return "";
     }
 
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return FloatArrayConverter::wrap(descriptors);
     }
 
@@ -42,11 +102,11 @@ namespace HOGDescriptorBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1) && !FF_IS_INSTANCE(Size::constructor, info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+      return FF::isArgObject(info, 1) && !Size::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Size::Converter::optProp(&winStride, "winStride", opts) ||
         Size::Converter::optProp(&padding, "padding", opts) ||
@@ -96,7 +156,7 @@ namespace HOGDescriptorBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -152,7 +212,7 @@ namespace HOGDescriptorBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -210,7 +270,7 @@ namespace HOGDescriptorBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -272,7 +332,7 @@ namespace HOGDescriptorBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -326,7 +386,7 @@ namespace HOGDescriptorBindings {
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {

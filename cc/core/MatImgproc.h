@@ -12,6 +12,7 @@ public:
   static void Init(v8::Local<v8::FunctionTemplate> ctor);
 
   static NAN_METHOD(DrawContours);
+  static NAN_METHOD(DrawContoursAsync);
   static NAN_METHOD(Rescale);
   static NAN_METHOD(RescaleAsync);
   static NAN_METHOD(Resize);

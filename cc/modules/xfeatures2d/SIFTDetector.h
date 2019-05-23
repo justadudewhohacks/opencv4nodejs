@@ -28,6 +28,45 @@ public:
 	cv::Ptr<cv::FeatureDetector> getDetector() {
 		return detector;
 	}
+
+	struct NewWorker : CatchCvExceptionWorker {
+	public:
+
+		int nFeatures = 0;
+		int nOctaveLayers = 3;
+		double contrastThreshold = 0.04;
+		double edgeThreshold = 10;
+		double sigma = 1.6;
+
+		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return (
+				IntConverter::optArg(0, &nFeatures, info) ||
+				IntConverter::optArg(1, &nOctaveLayers, info) ||
+				DoubleConverter::optArg(2, &contrastThreshold, info) ||
+				DoubleConverter::optArg(3, &edgeThreshold, info) ||
+				DoubleConverter::optArg(4, &sigma, info)
+				);
+		}
+
+		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return FF::isArgObject(info, 0);
+		}
+
+		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+			return (
+				IntConverter::optProp(&nFeatures, "nFeatures", opts) ||
+				IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
+				DoubleConverter::optProp(&contrastThreshold, "contrastThreshold", opts) ||
+				DoubleConverter::optProp(&edgeThreshold, "edgeThreshold", opts) ||
+				DoubleConverter::optProp(&sigma, "sigma", opts)
+				);
+		}
+
+		std::string executeCatchCvExceptionWorker() {
+			return "";
+		}
+	};
 };
 
 #endif

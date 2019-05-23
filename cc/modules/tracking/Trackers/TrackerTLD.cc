@@ -11,10 +11,10 @@ NAN_MODULE_INIT(TrackerTLD::Init) {
 	Tracker::Init(ctor);
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("TrackerTLD"));
+	ctor->SetClassName(FF::newString("TrackerTLD"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(FF_NEW_STRING("TrackerTLD"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("TrackerTLD"), FF::getFunction(ctor));
 };
 
 
@@ -29,7 +29,7 @@ NAN_METHOD(TrackerTLD::New) {
 	self->tracker = cv::TrackerTLD::createTracker();
 #endif
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

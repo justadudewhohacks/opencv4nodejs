@@ -12,6 +12,59 @@
 
 namespace Calib3dBindings {
 
+	struct FindHomographyWorker : public CatchCvExceptionWorker {
+	public:
+		std::vector<cv::Point2d> srcPoints, dstPoints;
+		uint method = 0;
+		double ransacReprojThreshold = 3;
+		uint maxIters = 2000;
+		double confidence = 0.995;
+		cv::Mat mask;
+		cv::Mat homography;
+
+		std::string executeCatchCvExceptionWorker() {
+			homography = cv::findHomography(srcPoints, dstPoints, method, ransacReprojThreshold, mask, maxIters, confidence);
+			return "";
+		}
+
+		v8::Local<v8::Value> getReturnValue() {
+			v8::Local<v8::Object> output = Nan::New<v8::Object>();
+			Nan::Set(output, Nan::New("homography").ToLocalChecked(), Mat::Converter::wrap(homography));
+			Nan::Set(output, Nan::New("mask").ToLocalChecked(), Mat::Converter::wrap(mask));
+			return output;
+		}
+
+		bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return (
+				ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &srcPoints, info) ||
+				ObjectArrayConverter<Point2, cv::Point2d>::arg(1, &dstPoints, info)
+			);
+		}
+
+		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return (
+				UintConverter::optArg(2, &method, info) ||
+				DoubleConverter::optArg(3, &ransacReprojThreshold, info) ||
+				UintConverter::optArg(4, &maxIters, info) ||
+				DoubleConverter::optArg(5, &confidence, info)
+			);
+		}
+
+		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+			return FF::isArgObject(info, 2);
+		}
+
+		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+			v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+			return (
+				UintConverter::optProp(&method, "method", opts) ||
+				DoubleConverter::optProp(&ransacReprojThreshold, "ransacReprojThreshold", opts) ||
+				UintConverter::optProp(&maxIters, "maxIters", opts) ||
+				DoubleConverter::optProp(&confidence, "confidence", opts)
+			);
+		}
+	};
+
   struct ComposeRTWorker : public CatchCvExceptionWorker {
   public:
     cv::Vec3d rvec1;
@@ -107,7 +160,7 @@ namespace Calib3dBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(4);
+      return FF::isArgObject(info, 4);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -151,7 +204,7 @@ namespace Calib3dBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(4);
+      return FF::isArgObject(info, 4);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -297,7 +350,7 @@ namespace Calib3dBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(8);
+      return FF::isArgObject(info, 8);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -389,7 +442,7 @@ namespace Calib3dBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -445,7 +498,7 @@ namespace Calib3dBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -503,7 +556,7 @@ namespace Calib3dBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -611,7 +664,7 @@ namespace Calib3dBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -699,7 +752,7 @@ namespace Calib3dBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(5);
+      return FF::isArgObject(info, 5);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -776,7 +829,7 @@ namespace Calib3dBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {

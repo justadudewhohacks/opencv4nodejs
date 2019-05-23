@@ -42,10 +42,10 @@ NAN_MODULE_INIT(Vec::Init) {
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Vec::New);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("Vec").ToLocalChecked());
-  target->Set(Nan::New("Vec").ToLocalChecked(), FF::getFunction(ctor));
-  target->Set(Nan::New("Vec2").ToLocalChecked(), FF::getFunction(ctor));
-  target->Set(Nan::New("Vec3").ToLocalChecked(), FF::getFunction(ctor));
-  target->Set(Nan::New("Vec4").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("Vec").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("Vec2").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("Vec3").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("Vec4").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(Vec::New) {

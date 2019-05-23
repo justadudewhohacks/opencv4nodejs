@@ -23,52 +23,53 @@ NAN_MODULE_INIT(SuperpixelSEEDS::Init) {
 
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelSEEDS::Iterate);
 
-  target->Set(Nan::New("SuperpixelSEEDS").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("SuperpixelSEEDS").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(SuperpixelSEEDS::New) {
-  FF_ASSERT_CONSTRUCT_CALL(SuperpixelSEEDS);
-	FF_METHOD_CONTEXT("SuperpixelSEEDS::New");
-	if (!info.IsConstructCall()) {
-		FF_THROW("expected new key word");
+	FF_ASSERT_CONSTRUCT_CALL(SuperpixelSEEDS);
+	FF::TryCatch tryCatch;
+	SuperpixelSEEDS::NewWorker worker;
+
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSEEDS::New");
+		tryCatch.throwNew(err);
+		return;
 	}
+
 	SuperpixelSEEDS* self = new SuperpixelSEEDS();
+	self->img = worker.img;
+	self->num_superpixels = worker.num_superpixels;
+	self->num_levels = worker.num_levels;
+	self->prior = worker.prior;
+	self->histogram_bins = worker.histogram_bins;
+	self->double_step = worker.double_step;
 
-	FF_ARG_INSTANCE(0, self->img, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-	FF_ARG_INT(1, self->numSuperpixels);
-	FF_ARG_INT(2, self->numLevels);
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(3) && info[3]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-	FF_GET_INT_IFDEF(optArgs, self->prior, "prior", 2);
-	FF_GET_INT_IFDEF(optArgs, self->histogramBins, "histogramBins", 5);
-	FF_GET_BOOL_IFDEF(optArgs, self->doubleStep, "doubleStep", false);
-	if (!hasOptArgsObj) {
-		FF_ARG_INT_IFDEF(3, self->prior, self->prior);
-		FF_ARG_INT_IFDEF(4, self->histogramBins, self->histogramBins);
-		FF_ARG_BOOL_IFDEF(5, self->doubleStep, self->doubleStep);
-	}
-	self->Wrap(info.Holder());
 	self->superpixelSeeds = cv::ximgproc::createSuperpixelSEEDS(
-		self->img.cols,
-		self->img.rows,
-		self->img.channels(),
-		self->numSuperpixels,
-		self->numLevels,
-		self->prior,
-		self->histogramBins,
-		self->doubleStep
+		worker.img.cols,
+		worker.img.rows,
+		worker.img.channels(),
+		worker.num_superpixels,
+		worker.num_levels,
+		worker.prior,
+		worker.histogram_bins,
+		worker.double_step
 	);
+	self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(SuperpixelSEEDS::Iterate) {
-	FF_METHOD_CONTEXT("SuperpixelSEEDS::Iterate");
+	FF::TryCatch tryCatch;
 
-	FF_ARG_UINT_IFDEF(0, uint iterations, 4);
+	uint iterations = 4;
+	if (UintConverter::optArg(0, &iterations, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSEEDS::Iterate");
+		tryCatch.throwNew(err);
+		return;
+	}
 
-	SuperpixelSEEDS* self = FF_UNWRAP(info.This(), SuperpixelSEEDS);
+	SuperpixelSEEDS* self = Nan::ObjectWrap::Unwrap<SuperpixelSEEDS>(info.This());
 	self->superpixelSeeds->iterate(self->img, (int)iterations);
 	self->superpixelSeeds->getLabels(self->labels);
 	self->numCalculatedSuperpixels = self->superpixelSeeds->getNumberOfSuperpixels();

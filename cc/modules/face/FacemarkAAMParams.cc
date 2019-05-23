@@ -12,21 +12,21 @@ NAN_MODULE_INIT(FacemarkAAMParams::Init) {
   v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
   constructor.Reset(ctor);
-  ctor->SetClassName(FF_NEW_STRING("FacemarkAAMParams"));
+  ctor->SetClassName(FF::newString("FacemarkAAMParams"));
   instanceTemplate->SetInternalFieldCount(1);
 
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("m"), mGet, mSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("maxM"), maxMGet, maxMSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("maxN"), maxNGet, maxNSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("modelFilename"), modelFilenameGet, modelFilenameSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("n"), nGet, nSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("nIter"), nIterGet, nIterSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("saveModel"), saveModelGet, saveModelSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("scales"), scalesGet, scalesSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("textureMaxM"), textureMaxMGet, textureMaxMSet);
-  Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("verbose"), verboseGet, verboseSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("m"), mGet, mSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("maxM"), maxMGet, maxMSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("maxN"), maxNGet, maxNSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("modelFilename"), modelFilenameGet, modelFilenameSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("n"), nGet, nSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("nIter"), nIterGet, nIterSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("saveModel"), saveModelGet, saveModelSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("scales"), scalesGet, scalesSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("textureMaxM"), textureMaxMGet, textureMaxMSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("verbose"), verboseGet, verboseSet);
 
-  target->Set(FF_NEW_STRING("FacemarkAAMParams"), FF::getFunction(ctor));
+  Nan::Set(target,FF::newString("FacemarkAAMParams"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FacemarkAAMParams::New) {
@@ -35,7 +35,7 @@ NAN_METHOD(FacemarkAAMParams::New) {
   FacemarkAAMParams *self = new FacemarkAAMParams();
   self->params = cv::face::FacemarkAAM::Params();
   self->Wrap(info.Holder());
-  FF_RETURN(info.Holder());
+  info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

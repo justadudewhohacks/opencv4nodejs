@@ -19,45 +19,31 @@ NAN_MODULE_INIT(SURFDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("extended").ToLocalChecked(), SURFDetector::GetExtended);
 	Nan::SetAccessor(instanceTemplate, Nan::New("upright").ToLocalChecked(), SURFDetector::GetUpright);
 
-  target->Set(Nan::New("SURFDetector").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("SURFDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(SURFDetector::New) {
+	FF_ASSERT_CONSTRUCT_CALL(SURFDetector);
+	FF::TryCatch tryCatch;
+	SURFDetector::NewWorker worker;
 
-	try {
-		FF_ASSERT_CONSTRUCT_CALL(SURFDetector);
-		FF_METHOD_CONTEXT("SURFDetector::New");
-		SURFDetector* self = new SURFDetector();
-
-		// optional args
-		bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-		FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-		FF_GET_NUMBER_IFDEF(optArgs, double hessianThreshold, "hessianThreshold", 100);
-		FF_GET_INT_IFDEF(optArgs, int nOctaves, "nOctaves", 4);
-		FF_GET_INT_IFDEF(optArgs, int nOctaveLayers, "nOctaveLayers", 3);
-		FF_GET_BOOL_IFDEF(optArgs, bool extended, "extended", false);
-		FF_GET_BOOL_IFDEF(optArgs, bool upright, "upright", false);
-		if (!hasOptArgsObj) {
-			FF_ARG_NUMBER_IFDEF(0, hessianThreshold, hessianThreshold);
-			FF_ARG_INT_IFDEF(1, nOctaves, nOctaves);
-			FF_ARG_INT_IFDEF(2, nOctaveLayers, nOctaveLayers);
-			FF_ARG_BOOL_IFDEF(3, extended, extended);
-			FF_ARG_BOOL_IFDEF(4, upright, upright);
-		}
-
-		self->Wrap(info.Holder());
-		self->detector = cv::xfeatures2d::SURF::create(
-			hessianThreshold,
-			nOctaves,
-			nOctaveLayers,
-			extended,
-			upright
-		);
-		FF_RETURN(info.Holder());
-	} catch (std::exception &e) {
-		Nan::ThrowError(Nan::New(std::string(e.what())).ToLocalChecked());
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SURFDetector::New");
+		tryCatch.throwNew(err);
+		return;
 	}
+
+	SURFDetector* self = new SURFDetector();
+	self->Wrap(info.Holder());
+	self->detector = cv::xfeatures2d::SURF::create(
+		worker.hessianThreshold,
+		worker.nOctaves,
+		worker.nOctaveLayers,
+		worker.extended,
+		worker.upright
+	);
+	info.GetReturnValue().Set(info.Holder());
 }
+
 
 #endif // HAVE_XFEATURES2D

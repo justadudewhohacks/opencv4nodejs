@@ -14,7 +14,7 @@ namespace MatImgprocBindings {
   
     cv::Mat dst;
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(dst);
     }
   };
@@ -75,11 +75,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(getOptArgIndex(info));
+      return FF::isArgObject(info, getOptArgIndex(info));
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[getOptArgIndex(info)]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[getOptArgIndex(info)]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&fx, "fx", opts) ||
         DoubleConverter::optProp(&fy, "fy", opts) ||
@@ -137,7 +137,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(thresholdMat);
     }
   
@@ -171,7 +171,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(thresholdMat);
     }
   
@@ -210,7 +210,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(inRangeMat);
     }
   
@@ -300,7 +300,7 @@ namespace MatImgprocBindings {
   
     cv::Mat warpedMat;
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(warpedMat);
     }
   
@@ -318,11 +318,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1) && !Size::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+      return FF::isArgObject(info, 1) && !Size::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Size::Converter::optProp(&size, "size", opts) ||
         IntConverter::optProp(&flags, "flags", opts) ||
@@ -371,7 +371,7 @@ namespace MatImgprocBindings {
   
     cv::Mat resultMat;
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(resultMat);
     }
   
@@ -393,12 +393,12 @@ namespace MatImgprocBindings {
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
       int optArgN = (withOp ? 2 : 1);
-      return FF_ARG_IS_OBJECT(optArgN) && !Point2::Converter::hasInstance(info[optArgN]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+      return FF::isArgObject(info, optArgN) && !Point2::Converter::hasInstance(info[optArgN]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       int optArgN = (withOp ? 2 : 1);
-      FF_OBJ opts = info[optArgN]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[optArgN]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Point2::Converter::optProp(&anchor, "anchor", opts) ||
         IntConverter::optProp(&iterations, "iterations", opts) ||
@@ -519,7 +519,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(blurMat);
     }
   
@@ -535,11 +535,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1) && !Point2::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+      return FF::isArgObject(info, 1) && !Point2::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Point2::Converter::optProp(&anchor, "anchor", opts) ||
         IntConverter::optProp(&borderType, "borderType", opts)
@@ -567,7 +567,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(blurMat);
     }
   
@@ -586,11 +586,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&sigmaY, "sigmaY", opts) ||
         IntConverter::optProp(&borderType, "borderType", opts)
@@ -615,7 +615,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(blurMat);
     }
   
@@ -653,7 +653,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(0);
+      return FF::isArgObject(info, 0);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -801,10 +801,10 @@ namespace MatImgprocBindings {
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Array> ret = Nan::New<v8::Array>(contours.size());
       for (uint i = 0; i < ret->Length(); i++) {
-        FF_OBJ jsContour = FF::newInstance(Nan::New(Contour::constructor));
+        v8::Local<v8::Object> jsContour = FF::newInstance(Nan::New(Contour::constructor));
         FF_UNWRAP(jsContour, Contour)->contour = contours.at(i);
         FF_UNWRAP(jsContour, Contour)->hierarchy = hierarchy.at(i);
-        ret->Set(i, jsContour);
+		Nan::Set(ret, i, jsContour);
       }
       return ret;
     }
@@ -857,7 +857,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(getDrawParamsIndex())
+      return FF::isArgObject(info, getDrawParamsIndex())
         && !Vec3::Converter::hasInstance(info[getDrawParamsIndex()]);
     }
   
@@ -1186,7 +1186,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(resultsMat);
     }
   
@@ -1222,7 +1222,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(cannyMat);
     }
   
@@ -1241,11 +1241,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         IntConverter::optProp(&apertureSize, "apertureSize", opts) ||
         BoolConverter::optProp(&L2gradient, "L2gradient", opts)
@@ -1273,7 +1273,7 @@ namespace MatImgprocBindings {
   
     cv::Mat resultMat;
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(resultMat);
     }
   
@@ -1296,11 +1296,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         (hasKsize && IntConverter::optProp(&ksize, "ksize", opts)) ||
         DoubleConverter::optProp(&scale, "scale", opts) ||
@@ -1351,7 +1351,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(resultMat);
     }
   
@@ -1369,11 +1369,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         IntConverter::optProp(&ksize, "ksize", opts) ||
         DoubleConverter::optProp(&scale, "scale", opts) ||
@@ -1408,7 +1408,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(dst);
     }
   
@@ -1424,11 +1424,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(0);
+      return FF::isArgObject(info, 0);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Size::Converter::optProp(&size, "size", opts) ||
         IntConverter::optProp(&borderType, "borderType", opts)
@@ -1454,7 +1454,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return ObjectArrayConverter<Mat, cv::Mat>::wrap(dst);
     }
   
@@ -1490,7 +1490,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return ObjectArrayConverter<Vec2, cv::Vec2d, cv::Vec2f>::wrap(lines);
     }
   
@@ -1512,11 +1512,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&srn, "srn", opts) ||
         DoubleConverter::optProp(&stn, "stn", opts) ||
@@ -1541,7 +1541,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return ObjectArrayConverter<Vec4, cv::Vec4d, cv::Vec4f>::wrap(linesP);
     }
   
@@ -1553,11 +1553,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&minLineLength, "minLineLength", opts) ||
         DoubleConverter::optProp(&maxLineGap, "maxLineGap", opts)
@@ -1588,7 +1588,7 @@ namespace MatImgprocBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return ObjectArrayConverter<Vec3, cv::Vec3d, cv::Vec3f>::wrap(circles);
     }
   
@@ -1610,11 +1610,11 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         DoubleConverter::optProp(&param1, "param1", opts) ||
         DoubleConverter::optProp(&param2, "param2", opts) ||
@@ -1735,7 +1735,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2)
+      return FF::isArgObject(info, 2)
         && !Mat::Converter::hasInstance(info[2]);
     }
   
@@ -1830,7 +1830,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1894,7 +1894,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(2);
+      return FF::isArgObject(info, 2);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1949,7 +1949,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(3);
+      return FF::isArgObject(info, 3);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -2063,7 +2063,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -2132,7 +2132,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(0);
+      return FF::isArgObject(info, 0);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -2142,6 +2142,67 @@ namespace MatImgprocBindings {
         IntConverter::optProp(&sqdepth, "sqdepth", opts)
       );
     }
+  };
+
+  struct DrawContoursWorker : public CatchCvExceptionWorker {
+  public:
+	  cv::Mat self;
+	  DrawContoursWorker(cv::Mat self) {
+		  this->self = self;
+	  }
+
+	  std::vector<std::vector<cv::Point2i>> contours;
+	  int contourIdx;
+	  cv::Vec3d color;
+	  int thickness = 1;
+	  int lineType = cv::LINE_8;
+	  std::vector<cv::Vec4i> hierarchy;
+	  int maxLevel = INT_MAX;
+	  cv::Point2d offset;
+
+
+	  std::string executeCatchCvExceptionWorker() {
+		  cv::drawContours(self, contours, contourIdx, color, thickness, lineType, hierarchy, maxLevel, offset);
+		  return "";
+	  }
+
+	  v8::Local<v8::Value> getReturnValue() {
+		  v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+		  return ret;
+	  }
+
+	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return (
+			  ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2i>::arg(0, &contours, info) ||
+			  IntConverter::arg(1, &contourIdx, info) ||
+			  Vec3::Converter::arg(2, &color, info)
+			);
+	  }
+
+	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return (
+			  IntConverter::optArg(3, &thickness, info) ||
+			  IntConverter::optArg(4, &lineType, info) ||
+			  ObjectArrayConverter<Vec4, cv::Vec4d, cv::Vec4i>::optArg(5, &hierarchy, info) ||
+			  IntConverter::optArg(6, &maxLevel, info) ||
+			  Point2::Converter::optArg(7, &offset, info)
+			);
+	  }
+
+	  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return FF::isArgObject(info, 3);
+	  }
+
+	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+		  return (
+			  IntConverter::optProp(&thickness, "thickness", opts) ||
+			  IntConverter::optProp(&lineType, "lineType", opts) ||
+			  ObjectArrayConverter<Vec4, cv::Vec4d, cv::Vec4i>::optProp(&hierarchy, "hierarchy", opts) ||
+			  IntConverter::optProp(&maxLevel, "maxLevel", opts) ||
+			  Point2::Converter::optProp(&offset, "offset", opts)
+			);
+	  }
   };
   
   struct UndistortWorker: public CatchCvExceptionWorker {
@@ -2156,7 +2217,7 @@ namespace MatImgprocBindings {
     cv::Mat distCoeffs;
     cv::Mat undistortedMat;
     
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(undistortedMat);
     }
   

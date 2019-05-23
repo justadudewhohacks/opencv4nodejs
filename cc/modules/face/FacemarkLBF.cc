@@ -17,26 +17,26 @@ NAN_MODULE_INIT(FacemarkLBF::Init) {
   ctor->SetClassName(Nan::New("FacemarkLBF").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 
-  target->Set(Nan::New("FacemarkLBF").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("FacemarkLBF").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FacemarkLBF::New) {
   FF_ASSERT_CONSTRUCT_CALL(FacemarkLBF);
-	FF_METHOD_CONTEXT("FacemarkLBF::New");
+  FF::TryCatch tryCatch;
 
-  FF_ARG_INSTANCE_IFDEF(
-    0,
-    cv::face::FacemarkLBF::Params params,
-    FacemarkLBFParams::constructor,
-    FF_UNWRAP_FACEMARKLBFPARAMS_AND_GET,
-    cv::face::FacemarkLBF::Params()
-  );
+  cv::face::FacemarkLBF::Params params;
+  if (FacemarkLBFParams::Converter::optArg(0, &params, info)) {
+	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("FacemarkLBF::New");
+	  tryCatch.throwNew(err);
+	  return;
+  }
 
   FacemarkLBF *self = new FacemarkLBF();
   self->Wrap(info.Holder());
   self->facemark = cv::face::FacemarkLBF::create(params);
 
-  FF_RETURN(info.Holder());
+
+  info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

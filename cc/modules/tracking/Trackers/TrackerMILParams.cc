@@ -9,18 +9,18 @@ NAN_MODULE_INIT(TrackerMILParams::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("TrackerMILParams"));
+	ctor->SetClassName(FF::newString("TrackerMILParams"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("samplerInitInRadius"), samplerInitInRadiusGet, samplerInitInRadiusSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("samplerSearchWinSize"), samplerSearchWinSizeGet, samplerSearchWinSizeSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("samplerTrackInRadius"), samplerTrackInRadiusGet, samplerTrackInRadiusSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("samplerInitMaxNegNum"), samplerInitMaxNegNumGet, samplerInitMaxNegNumSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("samplerTrackMaxPosNum"), samplerTrackMaxPosNumGet, samplerTrackMaxPosNumSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("samplerTrackMaxNegNum"), samplerTrackMaxNegNumGet, samplerTrackMaxNegNumSet);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("featureSetNumFeatures"), featureSetNumFeaturesGet, featureSetNumFeaturesSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerInitInRadius"), samplerInitInRadiusGet, samplerInitInRadiusSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerSearchWinSize"), samplerSearchWinSizeGet, samplerSearchWinSizeSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerTrackInRadius"), samplerTrackInRadiusGet, samplerTrackInRadiusSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerInitMaxNegNum"), samplerInitMaxNegNumGet, samplerInitMaxNegNumSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerTrackMaxPosNum"), samplerTrackMaxPosNumGet, samplerTrackMaxPosNumSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerTrackMaxNegNum"), samplerTrackMaxNegNumGet, samplerTrackMaxNegNumSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("featureSetNumFeatures"), featureSetNumFeaturesGet, featureSetNumFeaturesSet);
 
-	target->Set(FF_NEW_STRING("TrackerMILParams"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("TrackerMILParams"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(TrackerMILParams::New) {
@@ -29,7 +29,7 @@ NAN_METHOD(TrackerMILParams::New) {
 	TrackerMILParams* self = new TrackerMILParams();
 	self->params = cv::TrackerMIL::Params();
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

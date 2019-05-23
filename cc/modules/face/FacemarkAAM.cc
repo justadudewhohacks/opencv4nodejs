@@ -17,26 +17,25 @@ NAN_MODULE_INIT(FacemarkAAM::Init) {
   ctor->SetClassName(Nan::New("FacemarkAAM").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 
-  target->Set(Nan::New("FacemarkAAM").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("FacemarkAAM").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FacemarkAAM::New) {
   FF_ASSERT_CONSTRUCT_CALL(FacemarkAAM);
-  FF_METHOD_CONTEXT("FacemarkAAM::New");
+  FF::TryCatch tryCatch;
 
-  FF_ARG_INSTANCE_IFDEF(
-    0,
-    cv::face::FacemarkAAM::Params params,
-    FacemarkAAMParams::constructor,
-    FF_UNWRAP_FACEMARKAAMPARAMS_AND_GET,
-    cv::face::FacemarkAAM::Params()
-  );
+  cv::face::FacemarkAAM::Params params;
+  if (FacemarkAAMParams::Converter::optArg(0, &params, info)) {
+	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("FacemarkAAM::New");
+	  tryCatch.throwNew(err);
+	  return;
+  }
 
   FacemarkAAM *self = new FacemarkAAM();
   self->Wrap(info.Holder());
   self->facemark = cv::face::FacemarkAAM::create(params);
 
-  FF_RETURN(info.Holder());
+  info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

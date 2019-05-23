@@ -64,7 +64,7 @@ namespace OCRHMMDecoderBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return StringConverter::wrap(output_text);
     }
   
@@ -109,12 +109,12 @@ namespace OCRHMMDecoderBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
-      FF_OBJ ret = FF_NEW_OBJ();
-      Nan::Set(ret, FF_NEW_STRING("outputText"), StringConverter::wrap(output_text));
-      Nan::Set(ret, FF_NEW_STRING("rects"), ObjectArrayConverter<Rect, cv::Rect2d, cv::Rect>::wrap(component_rects));
-      Nan::Set(ret, FF_NEW_STRING("words"), StringArrayConverter::wrap(component_texts));
-      Nan::Set(ret, FF_NEW_STRING("confidences"), FloatArrayConverter::wrap(component_confidences));
+    v8::Local<v8::Value> getReturnValue() {
+      v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+      Nan::Set(ret, FF::newString("outputText"), StringConverter::wrap(output_text));
+      Nan::Set(ret, FF::newString("rects"), ObjectArrayConverter<Rect, cv::Rect2d, cv::Rect>::wrap(component_rects));
+      Nan::Set(ret, FF::newString("words"), StringArrayConverter::wrap(component_texts));
+      Nan::Set(ret, FF::newString("confidences"), FloatArrayConverter::wrap(component_confidences));
       return ret;
     }
   

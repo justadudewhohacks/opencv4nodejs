@@ -24,6 +24,15 @@ public:
 
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::TrackerBoosting::Params* getNativeObjectPtr() { return &params; }
+	cv::TrackerBoosting::Params getNativeObject() { return params; }
+
+	typedef InstanceConverter<TrackerBoostingParams, cv::TrackerBoosting::Params> Converter;
+
+	static const char* getClassName() {
+		return "TrackerBoostingParams";
+	}
 };
 
 #define FF_UNWRAP_TRACKERBOOSTINGPARAMS(obj) FF_UNWRAP(obj, TrackerBoostingParams)

@@ -23,7 +23,7 @@ namespace SVMBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Nan::New(ret);
     }
   
@@ -55,7 +55,7 @@ namespace SVMBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Nan::New(ret);
     }
   
@@ -93,7 +93,7 @@ namespace SVMBindings {
       return "";
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Nan::New(ret);
     }
   
@@ -115,11 +115,11 @@ namespace SVMBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF_ARG_IS_OBJECT(1);
+      return FF::isArgObject(info, 1);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      FF_OBJ opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         UintConverter::optProp(&kFold, "kFold", opts) ||
         ParamGrid::Converter::optProp(&cGrid, "cGrid", opts) ||

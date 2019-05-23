@@ -25,7 +25,7 @@ namespace FeatureDetectorBindings {
     }
   
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return ObjectArrayConverter<KeyPoint, cv::KeyPoint>::wrap(kps);
     }
   };
@@ -53,7 +53,7 @@ namespace FeatureDetectorBindings {
       );
     }
   
-    FF_VAL getReturnValue() {
+    v8::Local<v8::Value> getReturnValue() {
       return Mat::Converter::wrap(desc);
     }
   };

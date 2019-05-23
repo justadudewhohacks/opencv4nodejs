@@ -8,35 +8,29 @@ NAN_MODULE_INIT(BackgroundSubtractorMOG2::Init) {
 
 	BackgroundSubtractor::Init(ctor);
 	constructor.Reset(ctor);
-	ctor->SetClassName(FF_NEW_STRING("BackgroundSubtractorMOG2"));
+	ctor->SetClassName(FF::newString("BackgroundSubtractorMOG2"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("history"), GetHistory);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("varThreshold"), GetVarThreshold);
-	Nan::SetAccessor(instanceTemplate, FF_NEW_STRING("detectShadows"), GetDetectShadows);
+	Nan::SetAccessor(instanceTemplate, FF::newString("history"), GetHistory);
+	Nan::SetAccessor(instanceTemplate, FF::newString("varThreshold"), GetVarThreshold);
+	Nan::SetAccessor(instanceTemplate, FF::newString("detectShadows"), GetDetectShadows);
 
-	target->Set(FF_NEW_STRING("BackgroundSubtractorMOG2"), FF::getFunction(ctor));
+	Nan::Set(target,FF::newString("BackgroundSubtractorMOG2"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(BackgroundSubtractorMOG2::New) {
-	FF_ASSERT_CONSTRUCT_CALL(BackgroundSubtractorMOG2);
-	FF_METHOD_CONTEXT("BackgroundSubtractorMOG2::New");
+	FF_ASSERT_CONSTRUCT_CALL(BackgroundSubtractorKNN);
+	FF::TryCatch tryCatch;
+	BackgroundSubtractorMOG2::NewWorker worker;
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-	FF_GET_UINT_IFDEF(optArgs, uint history, "history", 500);
-	FF_GET_NUMBER_IFDEF(optArgs, double varThreshold, "varThreshold", 16);
-	FF_GET_BOOL_IFDEF(optArgs, bool detectShadows, "detectShadows", true);
-	if (!hasOptArgsObj) {
-		FF_ARG_UINT_IFDEF(0, history, history);
-		FF_ARG_NUMBER_IFDEF(1, varThreshold, varThreshold);
-		FF_ARG_BOOL_IFDEF(2, detectShadows, detectShadows);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("BackgroundSubtractorMOG2::New");
+		tryCatch.throwNew(err);
+		return;
 	}
 
 	BackgroundSubtractorMOG2* self = new BackgroundSubtractorMOG2();
-	self->subtractor = cv::createBackgroundSubtractorMOG2((int)history, varThreshold, detectShadows);
+	self->subtractor = cv::createBackgroundSubtractorMOG2((int)worker.history, worker.varThreshold, worker.detectShadows);
 	self->Wrap(info.Holder());
-	FF_RETURN(info.Holder());
-};
+	info.GetReturnValue().Set(info.Holder());
+}

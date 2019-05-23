@@ -17,7 +17,7 @@ namespace FaceRecognizerBindings {
 		}
 
 		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return FF_ARG_IS_OBJECT(0);
+			return FF::isArgObject(info, 0);
 		}
 
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {

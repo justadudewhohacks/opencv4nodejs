@@ -18,34 +18,22 @@ NAN_MODULE_INIT(KAZEDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaveLayers").ToLocalChecked(), KAZEDetector::GetNOctaveLayers);
 	Nan::SetAccessor(instanceTemplate, Nan::New("diffusivity").ToLocalChecked(), KAZEDetector::GetDiffusivity);
 
-  target->Set(Nan::New("KAZEDetector").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("KAZEDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(KAZEDetector::New) {
-  FF_ASSERT_CONSTRUCT_CALL(KAZEDetector);
-	FF_METHOD_CONTEXT("KAZEDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL(KAZEDetector);
+	FF::TryCatch tryCatch;
+	KAZEDetector::NewWorker worker;
 
-	// optional args
-	bool hasOptArgsObj = FF_HAS_ARG(0) && info[0]->IsObject();
-	FF_OBJ optArgs = hasOptArgsObj ? info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked() : FF_NEW_OBJ();
-
-	FF_GET_BOOL_IFDEF(optArgs, bool extended, "extended", false);
-	FF_GET_BOOL_IFDEF(optArgs, bool upright, "upright", false);
-	FF_GET_NUMBER_IFDEF(optArgs, double threshold, "threshold", 0.001f);
-	FF_GET_INT_IFDEF(optArgs, int nOctaves, "nOctaves", 4);
-	FF_GET_INT_IFDEF(optArgs, int nOctaveLayers, "nOctaveLayers", 4);
-	FF_GET_INT_IFDEF(optArgs, int diffusivity, "diffusivity", cv::KAZE::DIFF_PM_G2);
-	if (!hasOptArgsObj) {
-		FF_ARG_BOOL_IFDEF(0, extended, extended);
-		FF_ARG_BOOL_IFDEF(1, upright, upright);
-		FF_ARG_NUMBER_IFDEF(2, threshold, threshold);
-		FF_ARG_INT_IFDEF(3, nOctaves, nOctaves);
-		FF_ARG_INT_IFDEF(4, nOctaveLayers, nOctaveLayers);
-		FF_ARG_INT_IFDEF(5, diffusivity, diffusivity);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("KAZEDetector::New");
+		tryCatch.throwNew(err);
+		return;
 	}
 
 	KAZEDetector* self = new KAZEDetector();
+	self->detector = cv::KAZE::create(worker.extended, worker.upright, worker.threshold, worker.nOctaves, worker.nOctaveLayers, worker.diffusivity);
 	self->Wrap(info.Holder());
-	self->detector = cv::KAZE::create(extended, upright, threshold, nOctaves, nOctaveLayers, diffusivity);
-  FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 }

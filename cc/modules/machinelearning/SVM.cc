@@ -9,16 +9,16 @@ NAN_MODULE_INIT(SVM::Init) {
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("SVM").ToLocalChecked());
 
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("c"), c);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("coef0"), coef0);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("degree"), degree);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("gamma"), gamma);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("nu"), nu);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("p"), p);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("kernelType"), kernelType);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("classWeights"), classWeights);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("varCount"), varCount);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF_NEW_STRING("isTrained"), isTrained);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("c"), c);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("coef0"), coef0);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("degree"), degree);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("gamma"), gamma);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("nu"), nu);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("p"), p);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("kernelType"), kernelType);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("classWeights"), classWeights);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("varCount"), varCount);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("isTrained"), isTrained);
 
   Nan::SetPrototypeMethod(ctor, "setParams", SetParams);
   Nan::SetPrototypeMethod(ctor, "train", Train);
@@ -34,29 +34,40 @@ NAN_MODULE_INIT(SVM::Init) {
   Nan::SetPrototypeMethod(ctor, "trainAsync", TrainAsync);
   Nan::SetPrototypeMethod(ctor, "trainAutoAsync", TrainAutoAsync);
 
-  target->Set(Nan::New("SVM").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("SVM").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 void SVM::setParams(v8::Local<v8::Object> params) {
-  FF_METHOD_CONTEXT("SVM::SetParams");
-
-  FF_GET_NUMBER_IFDEF(params, double c, "c", this->svm->getC());
-  FF_GET_NUMBER_IFDEF(params, double coef0, "coef0", this->svm->getCoef0());
-  FF_GET_NUMBER_IFDEF(params, double degree, "degree", this->svm->getDegree());
-  FF_GET_NUMBER_IFDEF(params, double gamma, "gamma", this->svm->getGamma());
-  FF_GET_NUMBER_IFDEF(params, double nu, "nu", this->svm->getNu());
-  FF_GET_NUMBER_IFDEF(params, double p, "p", this->svm->getP());
-  FF_GET_NUMBER_IFDEF(params, unsigned int kernelType, "kernelType", this->svm->getKernelType());
-  FF_GET_INSTANCE_IFDEF(params, cv::Mat classWeights, "classWeights", Mat::constructor, FF_UNWRAP_MAT_AND_GET, Mat, this->svm->getClassWeights());
-
-  this->svm->setC(c);
-  this->svm->setCoef0(coef0);
-  this->svm->setDegree(degree);
-  this->svm->setGamma(gamma);
-  this->svm->setNu(nu);
-  this->svm->setP(p);
-  this->svm->setKernel(kernelType);
-  this->svm->setClassWeights(classWeights);
+	FF::TryCatch tryCatch;
+	double c = this->svm->getC();
+	double coef0 = this->svm->getCoef0();
+	double degree = this->svm->getDegree();
+	double gamma = this->svm->getGamma();
+	double nu = this->svm->getNu();
+	double p = this->svm->getP();
+	uint kernelType = this->svm->getKernelType();
+	cv::Mat classWeights = this->svm->getClassWeights();
+	if (
+		DoubleConverter::optProp(&c, "c", params) ||
+		DoubleConverter::optProp(&coef0, "coef0", params) ||
+		DoubleConverter::optProp(&degree, "degree", params) ||
+		DoubleConverter::optProp(&gamma, "gamma", params) ||
+		DoubleConverter::optProp(&nu, "nu", params) ||
+		DoubleConverter::optProp(&p, "p", params) ||
+		UintConverter::optProp(&kernelType, "kernelType", params) ||
+		Mat::Converter::optProp(&classWeights, "classWeights", params)
+		) {
+		tryCatch.throwNew(tryCatch.formatCatchedError("SVM::setParams"));
+		return;
+	}
+	this->svm->setC(c);
+	this->svm->setCoef0(coef0);
+	this->svm->setDegree(degree);
+	this->svm->setGamma(gamma);
+	this->svm->setNu(nu);
+	this->svm->setP(p);
+	this->svm->setKernel(kernelType);
+	this->svm->setClassWeights(classWeights);
 }
 
 NAN_METHOD(SVM::New) {
@@ -65,7 +76,10 @@ NAN_METHOD(SVM::New) {
   SVM* self = new SVM();
   self->svm = cv::ml::SVM::create();
   if (info.Length() > 0) {
-    FF_ARG_OBJ(0, FF_OBJ args);
+	if (!info[0]->IsObject()) {
+		FF_THROW("expected arg 0 to be an object");
+	}
+	v8::Local<v8::Object> args = v8::Local<v8::Object>::Cast(info[0]);
 
     Nan::TryCatch tryCatch;
     self->setParams(args);
@@ -74,7 +88,7 @@ NAN_METHOD(SVM::New) {
     }
   }
   self->Wrap(info.Holder());
-  FF_RETURN(info.Holder());
+  info.GetReturnValue().Set(info.Holder());
 };
 
 NAN_METHOD(SVM::SetParams) {
@@ -88,46 +102,61 @@ NAN_METHOD(SVM::SetParams) {
   if (tryCatch.HasCaught()) {
     tryCatch.ReThrow();
   }
-  FF_RETURN(info.This());
+  info.GetReturnValue().Set(info.This());
 };
 
 NAN_METHOD(SVM::Predict) {
   FF_METHOD_CONTEXT("SVM::Predict");
 
-  if (!info[0]->IsArray() && !FF_IS_INSTANCE(Mat::constructor, info[0])) {
+  if (!info[0]->IsArray() && !Mat::Converter::hasInstance(info[0])) {
     FF_THROW("expected arg 0 to be an ARRAY or an instance of Mat");
   }
 
+  FF::TryCatch tryCatch;
   cv::Mat results;
   if (info[0]->IsArray()) {
 	std::vector<float> samples;
-	FloatArrayConverter::arg(0, &samples, info);
-    FF_ARG_UINT_IFDEF(1, unsigned int flags, 0);
+	unsigned int flags = 0;
+	if (
+		FloatArrayConverter::arg(0, &samples, info) ||
+		UintConverter::optArg(1, &flags, info)
+	) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Predict");
+		tryCatch.throwNew(err);
+		return;
+	}
     FF_UNWRAP(info.This(), SVM)->svm->predict(samples, results, (int)flags);
   }
   else {
-    FF_ARG_INSTANCE(0, cv::Mat samples, Mat::constructor, FF_UNWRAP_MAT_AND_GET);
-    FF_ARG_UINT_IFDEF(1, unsigned int flags, 0);
-    FF_UNWRAP(info.This(), SVM)->svm->predict(samples, results, (int)flags);
+	cv::Mat samples;
+	unsigned int flags = 0;
+	if (
+		Mat::Converter::arg(0, &samples, info) ||
+		UintConverter::optArg(1, &flags, info)
+		) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Predict");
+		tryCatch.throwNew(err);
+		return;
+	}
+	FF_UNWRAP(info.This(), SVM)->svm->predict(samples, results, (int)flags);
   }
 
-  FF_VAL jsResult;
+  v8::Local<v8::Value> jsResult;
   if (results.cols == 1 && results.rows == 1) {
     jsResult = Nan::New((double)results.at<float>(0, 0));
   }
   else {
     std::vector<float> resultsVec;
     results.col(0).copyTo(resultsVec);
-    FF_PACK_ARRAY(resultArray, resultsVec);
-    jsResult = resultArray;
+    jsResult = FloatArrayConverter::wrap(resultsVec);
   }
-  FF_RETURN(jsResult);
+  info.GetReturnValue().Set(jsResult);
 }
 
 NAN_METHOD(SVM::GetSupportVectors) {
-  FF_OBJ jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsSupportVectors) = FF_UNWRAP(info.This(), SVM)->svm->getSupportVectors();
-  FF_RETURN(jsSupportVectors);
+  info.GetReturnValue().Set(jsSupportVectors);
 }
 
 NAN_METHOD(SVM::GetUncompressedSupportVectors) {
@@ -135,9 +164,9 @@ NAN_METHOD(SVM::GetUncompressedSupportVectors) {
 #if CV_VERSION_MINOR < 2
   FF_THROW("getUncompressedSupportVectors not implemented for v3.0, v3.1");
 #else
-  FF_OBJ jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
   FF_UNWRAP_MAT_AND_GET(jsSupportVectors) = FF_UNWRAP(info.This(), SVM)->svm->getUncompressedSupportVectors();
-  FF_RETURN(jsSupportVectors);
+  info.GetReturnValue().Set(jsSupportVectors);
 #endif
 }
 
@@ -148,50 +177,77 @@ NAN_METHOD(SVM::GetDecisionFunction) {
     FF_THROW("expected arg 0 to be a Int");
   }
 
-  FF_OBJ alpha = FF::newInstance(Nan::New(Mat::constructor));
-  FF_OBJ svidx = FF::newInstance(Nan::New(Mat::constructor));
-  FF_ARG_INT(0, int i);
+  v8::Local<v8::Object> alpha = FF::newInstance(Nan::New(Mat::constructor));
+  v8::Local<v8::Object> svidx = FF::newInstance(Nan::New(Mat::constructor));
+
+  FF::TryCatch tryCatch;
+  int i;
+  if (IntConverter::arg(0, &i, info)) {
+	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::GetDecisionFunction");
+	  tryCatch.throwNew(err);
+	  return;
+  }
   double rho = FF_UNWRAP(info.This(), SVM)->svm->getDecisionFunction(i, FF_UNWRAP_MAT_AND_GET(alpha), FF_UNWRAP_MAT_AND_GET(svidx));
 
-  FF_OBJ ret = FF_NEW_OBJ();
-  Nan::Set(ret, FF_NEW_STRING("rho"), Nan::New((double)rho));
-  Nan::Set(ret, FF_NEW_STRING("alpha"), alpha);
-  Nan::Set(ret, FF_NEW_STRING("svidx"), svidx);
-  FF_RETURN(ret);
+  v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+  Nan::Set(ret, FF::newString("rho"), Nan::New((double)rho));
+  Nan::Set(ret, FF::newString("alpha"), alpha);
+  Nan::Set(ret, FF::newString("svidx"), svidx);
+  info.GetReturnValue().Set(ret);
 }
 
 NAN_METHOD(SVM::CalcError) {
-  FF_METHOD_CONTEXT("SVM::CalcError");
-  FF_ARG_INSTANCE(0, cv::Ptr<cv::ml::TrainData> trainData, TrainData::constructor, FF_UNWRAP_TRAINDATA_AND_GET);
-  FF_ARG_BOOL(1, bool test);
+	FF::TryCatch tryCatch;
+	cv::Ptr<cv::ml::TrainData> trainData;
+	bool test;
+	if (
+		TrainData::Converter::arg(0, &trainData, info) ||
+		BoolConverter::arg(1, &test, info)
+		) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::CalcError");
+		tryCatch.throwNew(err);
+		return;
+	}
 
-  FF_OBJ jsResponses = FF::newInstance(Nan::New(Mat::constructor));
-  float error = FF_UNWRAP(info.This(), SVM)->svm->calcError(trainData, test, FF_UNWRAP_MAT_AND_GET(jsResponses));
+	v8::Local<v8::Object> jsResponses = FF::newInstance(Nan::New(Mat::constructor));
+	float error = FF_UNWRAP(info.This(), SVM)->svm->calcError(trainData, test, FF_UNWRAP_MAT_AND_GET(jsResponses));
 
-  FF_OBJ ret = FF_NEW_OBJ();
-  Nan::Set(ret, FF_NEW_STRING("error"), Nan::New((double)error));
-  Nan::Set(ret, FF_NEW_STRING("responses"), jsResponses);
-  FF_RETURN(ret);
+	v8::Local<v8::Object> ret = Nan::New<v8::Object>();
+	Nan::Set(ret, FF::newString("error"), Nan::New((double)error));
+	Nan::Set(ret, FF::newString("responses"), jsResponses);
+	info.GetReturnValue().Set(ret);
 }
 
 NAN_METHOD(SVM::Save) {
-  FF_METHOD_CONTEXT("SVM::Save");
-  FF_ARG_STRING(0, std::string path);
-  FF_UNWRAP(info.This(), SVM)->svm->save(path);
+	FF::TryCatch tryCatch;
+
+	std::string path;
+	if (StringConverter::arg(0, &path, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Save");
+		tryCatch.throwNew(err);
+		return;
+	}
+	Nan::ObjectWrap::Unwrap<SVM>(info.This())->svm->save(path);
 }
 
 NAN_METHOD(SVM::Load) {
-  FF_METHOD_CONTEXT("SVM::Load");
-  FF_ARG_STRING(0, std::string path);
+	FF::TryCatch tryCatch;
+
+	std::string path;
+	if (StringConverter::arg(0, &path, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Load");
+		tryCatch.throwNew(err);
+		return;
+	}
 #if CV_VERSION_MINOR < 2
-  FF_UNWRAP(info.This(), SVM)->svm = cv::ml::SVM::load<cv::ml::SVM>(path);
+	Nan::ObjectWrap::Unwrap<SVM>(info.This())->svm = cv::ml::SVM::load<cv::ml::SVM>(path);
 #else
-  FF_UNWRAP(info.This(), SVM)->svm = cv::ml::SVM::load(path);
+	Nan::ObjectWrap::Unwrap<SVM>(info.This())->svm = cv::ml::SVM::load(path);
 #endif
 }
 
 NAN_METHOD(SVM::Train) {
-  bool isTrainFromTrainData = FF_IS_INSTANCE(TrainData::constructor, info[0]);
+  bool isTrainFromTrainData = TrainData::Converter::hasInstance(info[0]);
   if (isTrainFromTrainData) {
 	FF::SyncBinding(
 		std::make_shared<SVMBindings::TrainFromTrainDataWorker>(SVM::Converter::unwrap(info.This())),
@@ -209,7 +265,7 @@ NAN_METHOD(SVM::Train) {
 }
 
 NAN_METHOD(SVM::TrainAsync) {
-  bool isTrainFromTrainData = FF_IS_INSTANCE(TrainData::constructor, info[0]);
+  bool isTrainFromTrainData = TrainData::Converter::hasInstance(info[0]);
   if (isTrainFromTrainData) {
 	FF::AsyncBinding(
 	  std::make_shared<SVMBindings::TrainFromTrainDataWorker>(SVM::Converter::unwrap(info.This())),

@@ -34,7 +34,7 @@ public:
 	static NAN_GETTER(pupilsGet) {
 		v8::Local<v8::Array> jsArr = Nan::New<v8::Array>(2);
 		for (uint i = 0; i < jsArr->Length(); i++) {
-			jsArr->Set(i, ArrayConverterType<IntTypeConverter, int>::wrap(
+			Nan::Set(jsArr, i, ArrayConverterType<IntTypeConverter, int>::wrap(
 				Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->params.pupils[i])
 			);
 		}
@@ -47,7 +47,7 @@ public:
 		for (uint i = 0; i < jsArr->Length(); i++) {
 			std::vector<int> vec;
 			Nan::TryCatch tryCatch;
-			if (ArrayConverterType<IntTypeConverter, int>::unwrap(&vec, jsArr->Get(i))) {
+			if (IntArrayConverter::unwrap(&vec, Nan::Get(jsArr, i).ToLocalChecked())) {
 				tryCatch.ReThrow();
 			}
 			Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->params.pupils[i] = vec;
@@ -72,11 +72,16 @@ public:
   static FF_SETTER_BOOL(FacemarkLBFParams, verbose, params.verbose);
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
-};
 
-#define FF_UNWRAP_FACEMARKLBFPARAMS(obj) FF_UNWRAP(obj, FacemarkLBFParams)
-#define FF_UNWRAP_FACEMARKLBFPARAMS_AND_GET(obj)                               \
-  FF_UNWRAP_FACEMARKLBFPARAMS(obj)->params
+  cv::face::FacemarkLBF::Params* getNativeObjectPtr() { return &params; }
+  cv::face::FacemarkLBF::Params getNativeObject() { return params; }
+
+  typedef InstanceConverter<FacemarkLBFParams, cv::face::FacemarkLBF::Params> Converter;
+
+  static const char* getClassName() {
+	  return "FacemarkLBFParams";
+  }
+};
 
 #endif
 

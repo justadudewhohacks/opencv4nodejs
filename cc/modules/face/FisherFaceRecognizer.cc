@@ -14,7 +14,7 @@ NAN_MODULE_INIT(FisherFaceRecognizer::Init) {
 	ctor->SetClassName(Nan::New("FisherFaceRecognizer").ToLocalChecked());
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(Nan::New("FisherFaceRecognizer").ToLocalChecked(), FF::getFunction(ctor));
+	Nan::Set(target,Nan::New("FisherFaceRecognizer").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FisherFaceRecognizer::New) {
@@ -35,7 +35,7 @@ NAN_METHOD(FisherFaceRecognizer::New) {
 #else
 	self->faceRecognizer = cv::face::FisherFaceRecognizer::create(worker.num_components, worker.threshold);
 #endif
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif

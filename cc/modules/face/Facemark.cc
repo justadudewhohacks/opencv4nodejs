@@ -6,15 +6,27 @@
 #if CV_VERSION_MINOR >= 4
 
 NAN_METHOD(Facemark::Save) {
-  FF_METHOD_CONTEXT("Facemark::Save");
-  FF_ARG_STRING(0, std::string path);
-  FF_UNWRAP(info.This(), Facemark)->save(path);
+	FF::TryCatch tryCatch;
+
+	std::string path;
+	if (StringConverter::arg(0, &path, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Facemark::Save");
+		tryCatch.throwNew(err);
+		return;
+	}
+	Nan::ObjectWrap::Unwrap<Facemark>(info.This())->save(path);
 }
 
 NAN_METHOD(Facemark::Load) {
-  FF_METHOD_CONTEXT("Facemark::Load");
-  FF_ARG_STRING(0, std::string path);
-  FF_UNWRAP(info.This(), Facemark)->load(path);
+	FF::TryCatch tryCatch;
+
+	std::string path;
+	if (StringConverter::arg(0, &path, info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Facemark::Load");
+		tryCatch.throwNew(err);
+		return;
+	}
+	Nan::ObjectWrap::Unwrap<Facemark>(info.This())->load(path);
 }
 
 void Facemark::Init(v8::Local<v8::FunctionTemplate> ctor) {
@@ -128,8 +140,7 @@ NAN_METHOD(Facemark::SetFaceDetector) {
                                     "expected argument 0 to be of type")
                                .ToLocalChecked());
   }
-
-  FF_ARG_FUNC(0, v8::Local<v8::Function> cbFunc);
+  v8::Local<v8::Function> cbFunc = v8::Local<v8::Function>::Cast(info[0]);
   Nan::Callback *callback = new Nan::Callback(cbFunc);
 
   bool results = FF_UNWRAP(info.This(), Facemark)
@@ -167,7 +178,7 @@ bool Facemark::detector(cv::InputArray image, cv::OutputArray faces,
   v8::Local<v8::Value> argv[] = {jsMat};
 
   Nan::AsyncResource resource("opencv4nodejs:Facemark::Detector");
-  FF_OBJ jsObject = resource.runInAsyncScope(Nan::GetCurrentContext()->Global(), **callback, 1, argv)
+  v8::Local<v8::Object> jsObject = resource.runInAsyncScope(Nan::GetCurrentContext()->Global(), **callback, 1, argv)
     .ToLocalChecked()->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 
   std::vector<cv::Rect> _faces;

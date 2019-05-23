@@ -8,7 +8,7 @@ NAN_MODULE_INIT(CascadeClassifier::Init) {
   v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
   constructor.Reset(ctor);
-  ctor->SetClassName(FF_NEW_STRING("CascadeClassifier"));
+  ctor->SetClassName(FF::newString("CascadeClassifier"));
   instanceTemplate->SetInternalFieldCount(1);
 
   Nan::SetPrototypeMethod(ctor, "detectMultiScale", DetectMultiScale);
@@ -18,23 +18,28 @@ NAN_MODULE_INIT(CascadeClassifier::Init) {
   Nan::SetPrototypeMethod(ctor, "detectMultiScaleWithRejectLevelsAsync", DetectMultiScaleWithRejectLevelsAsync);
   Nan::SetPrototypeMethod(ctor, "detectMultiScaleWithRejectLevelsGpu", DetectMultiScaleWithRejectLevelsGpu);
 
-  target->Set(FF_NEW_STRING("CascadeClassifier"), FF::getFunction(ctor));
+  Nan::Set(target,FF::newString("CascadeClassifier"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(CascadeClassifier::New) {
-  FF_ASSERT_CONSTRUCT_CALL(CascadeClassifier);
-  FF_METHOD_CONTEXT("CascadeClassifier::New");
+	FF_ASSERT_CONSTRUCT_CALL(CascadeClassifier);
+	FF::TryCatch tryCatch;
+	CascadeClassifierBindings::NewWorker worker;
 
-  FF_ARG_STRING(0, std::string xmlFilePath);
+	if (worker.applyUnwrappers(info)) {
+		v8::Local<v8::Value> err = tryCatch.formatCatchedError("CascadeClassifier::New");
+		tryCatch.throwNew(err);
+		return;
+	}
 
-  CascadeClassifier* self = new CascadeClassifier();
-  self->classifier = cv::CascadeClassifier(xmlFilePath);
-  if (self->classifier.empty()) {
-    FF_THROW("failed to load cascade.xml file: " + xmlFilePath);
-  }
-  self->Wrap(info.Holder());
-  FF_RETURN(info.Holder());
-};
+	CascadeClassifier* self = new CascadeClassifier();
+	self->classifier = cv::CascadeClassifier(worker.xmlFilePath);
+	if (worker.applyUnwrappers(info)) {
+		return Nan::ThrowError(FF::newString(std::string("CascadeClassifier::New") + " - " + std::string("failed to load cascade.xml file: " + worker.xmlFilePath)));
+	}
+	self->Wrap(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
+}
 
 NAN_METHOD(CascadeClassifier::DetectMultiScale) {
   FF::SyncBinding(

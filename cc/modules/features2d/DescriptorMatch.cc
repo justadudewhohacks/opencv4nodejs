@@ -12,19 +12,27 @@ NAN_MODULE_INIT(DescriptorMatch::Init) {
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("trainIdx").ToLocalChecked(), GetTrainIdx);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("distance").ToLocalChecked(), GetDistance);
 
-  target->Set(Nan::New("DescriptorMatch").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::Set(target,Nan::New("DescriptorMatch").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(DescriptorMatch::New) {
   FF_ASSERT_CONSTRUCT_CALL(DescriptorMatch);
 	FF_METHOD_CONTEXT("DescriptorMatch::New");
 	DescriptorMatch* self = new DescriptorMatch();
-  if (info.Length() > 0) {
-		FF_ARG_INT(0, int queryIdx);
-		FF_ARG_INT(1, int trainIdx);
-		FF_ARG_NUMBER(2, double distance);
+	if (info.Length() > 0) {
+		FF::TryCatch tryCatch;
+		int queryIdx, trainIdx;
+		double distance;
+		if (
+			IntConverter::arg(0, &queryIdx, info) ||
+			IntConverter::arg(1, &trainIdx, info) ||
+			DoubleConverter::arg(2, &distance, info)
+			) {
+			tryCatch.throwNew(tryCatch.formatCatchedError("TermCriteria::New"));
+			return;
+		}
 		self->dmatch = cv::DMatch(queryIdx, trainIdx, distance);
-  }
+	}
 	self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());
 }

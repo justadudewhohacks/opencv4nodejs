@@ -10,10 +10,9 @@
 
 class Photo {
 public:
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(FastNlMeansDenoisingColored);
-
-	struct InpaintWorker;
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(FastNlMeansDenoisingColored);
+	static NAN_METHOD(FastNlMeansDenoisingColoredAsync);
 	static NAN_METHOD(Inpaint);
 	static NAN_METHOD(InpaintAsync);
 };

@@ -14,7 +14,7 @@ NAN_MODULE_INIT(LBPHFaceRecognizer::Init) {
 	ctor->SetClassName(Nan::New("LBPHFaceRecognizer").ToLocalChecked());
 	instanceTemplate->SetInternalFieldCount(1);
 
-	target->Set(Nan::New("LBPHFaceRecognizer").ToLocalChecked(), FF::getFunction(ctor));
+	Nan::Set(target,Nan::New("LBPHFaceRecognizer").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 struct LBPHFaceRecognizer::NewWorker : public FF::SimpleWorker {
@@ -36,7 +36,7 @@ public:
 	}
 
 	bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-		return FF_ARG_IS_OBJECT(0);
+		return FF::isArgObject(info, 0);
 	}
 
 	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -69,7 +69,7 @@ NAN_METHOD(LBPHFaceRecognizer::New) {
 #else
 	self->faceRecognizer = cv::face::LBPHFaceRecognizer::create(worker.radius, worker.neighbors, worker.grid_x, worker.grid_y, worker.threshold);
 #endif
-	FF_RETURN(info.Holder());
+	info.GetReturnValue().Set(info.Holder());
 };
 
 #endif // HAVE_FACE

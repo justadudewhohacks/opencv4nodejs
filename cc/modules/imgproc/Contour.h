@@ -30,11 +30,14 @@ public:
 
 	static NAN_METHOD(GetPoints);
 	static NAN_METHOD(ApproxPolyDP);
+	static NAN_METHOD(ApproxPolyDPAsync);
 	static NAN_METHOD(ApproxPolyDPContour);
 	static NAN_METHOD(ArcLength);
 	static NAN_METHOD(BoundingRect);
 	static NAN_METHOD(ConvexHull);
+	static NAN_METHOD(ConvexHullAsync);
 	static NAN_METHOD(ConvexHullIndices);
+	static NAN_METHOD(ConvexHullIndicesAsync);
 	static NAN_METHOD(ConvexityDefects);
 	static NAN_METHOD(MinEnclosingCircle);
 	static NAN_METHOD(MinEnclosingTriangle);
@@ -45,6 +48,15 @@ public:
 	static NAN_METHOD(_Moments);
 
   static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+  std::vector<cv::Point2i>* getNativeObjectPtr() { return &contour; }
+  std::vector<cv::Point2i> getNativeObject() { return contour; }
+
+  typedef InstanceConverter<Contour, std::vector<cv::Point2i>> Converter;
+
+  static const char* getClassName() {
+	  return "Contour";
+  }
 };
 
 #endif
