@@ -829,7 +829,7 @@ NAN_METHOD(Mat::ConvertScaleAbsAsync) {
 
 NAN_METHOD(Mat::GoodFeaturesToTrack) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::GoodFeaturesToTrackWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::GoodFeaturesToTrackBinding>(Mat::Converter::unwrap(info.This())),
     "Mat::GoodFeaturesToTrack",
     info
   );
@@ -837,7 +837,7 @@ NAN_METHOD(Mat::GoodFeaturesToTrack) {
 
 NAN_METHOD(Mat::GoodFeaturesToTrackAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::GoodFeaturesToTrackWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::GoodFeaturesToTrackBinding>(Mat::Converter::unwrap(info.This())),
     "Mat::GoodFeaturesToTrackAsync",
     info
   );
