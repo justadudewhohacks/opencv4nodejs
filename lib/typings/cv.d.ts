@@ -170,3 +170,13 @@ export function isCustomMatAllocatorEnabled(): boolean;
 export function dangerousEnableCustomMatAllocator(): boolean;
 export function dangerousDisableCustomMatAllocator(): boolean;
 export function getMemMetrics(): { TotalAlloc: number, TotalKnownByJS: number, NumAllocations: number, NumDeAllocations: number };
+
+// CUDA core
+// export const featureSet = FeatureSet;
+// export function deviceSupports(featureSet: number) : boolean;
+export function getCudaEnabledDeviceCount() : number;
+export function getDevice() : number;
+export function printCudaDeviceInfo(device: number) : void;
+export function printShortCudaDeviceInfo(device: number) : void;
+export function resetDevice() : void;
+export function setDevice(device: number) : void;

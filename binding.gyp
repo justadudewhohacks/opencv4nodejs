@@ -34,6 +34,7 @@
 			"cc/core/Rect.cc",
 			"cc/core/RotatedRect.cc",
 			"cc/core/TermCriteria.cc",
+			"cc/core/FeatureSet.cc",
 			"cc/modules/io/io.cc",
 			"cc/modules/io/VideoCapture.cc",
 			"cc/modules/io/VideoWriter.cc",

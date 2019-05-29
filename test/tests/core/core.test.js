@@ -274,3 +274,110 @@ describe('core', () => {
     })
   }
 });
+
+describe('core - cuda', () => {
+  describe('deviceSupports', () => {
+    it('should have function deviceSupports', () => {
+      expect(cv).to.have.property('deviceSupports').to.be.a('function');
+    });
+
+    it('should have access to featureSet enum', () => {
+      expect(cv).to.have.property('featureSet').to.be.an('object');
+    });
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'deviceSupports',
+      hasAsync: false,
+      getRequiredArgs: () => ([
+        cv.featureSet.FEATURE_SET_COMPUTE_10,
+      ]),
+      expectOutput: res => expect(res).to.be.a('boolean'),
+      usesMacroInferno: true,
+    });
+  });
+
+  describe('getCudaEnabledDeviceCount', () => {
+    it('should have function getCudaEnabledDeviceCount', () => {
+      expect(cv).to.have.property('getCudaEnabledDeviceCount').to.be.a('function');
+    });
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'getCudaEnabledDeviceCount',
+      hasAsync: false,
+      expectOutput: res => expect(res).to.be.a('number'), 
+    });
+  });
+
+  describe('getDevice', () => {
+    it('should have function getDevice', () => {
+      expect(cv).to.have.property('getDevice').to.be.a('function');
+    });
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'getDevice',
+      hasAsync: false,
+      expectOutput: res => expect(res).to.be.a('number'), 
+    });
+  });
+
+  describe('printCudaDeviceInfo', () => {
+    it('should have function printCudaDeviceInfo', () => {
+      expect(cv).to.have.property('printCudaDeviceInfo').to.be.a('function');
+    });
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'printCudaDeviceInfo',
+      hasAsync: false,
+      getRequiredArgs: () => [1],
+      expectOutput: () => {}, 
+      usesMacroInferno: true,
+    });
+  });
+
+  describe('printShortCudaDeviceInfo', () => {
+    it('should have function printShortCudaDeviceInfo', () => {
+      expect(cv).to.have.property('printShortCudaDeviceInfo').to.be.a('function');
+    });
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'printShortCudaDeviceInfo',
+      hasAsync: false,
+      getRequiredArgs: () => [1],
+      expectOutput: () => {}, 
+      usesMacroInferno: true,
+    });
+  });
+
+  describe('resetDevice', () => {
+    it('should have function resetDevice', () => {
+      expect(cv).to.have.property('resetDevice').to.be.a('function');
+    });
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'resetDevice',
+      hasAsync: false,
+      expectOutput: () => {}, 
+    });
+  });
+
+  describe('setDevice', () => {
+    it('should have function setDevice', () => {
+      expect(cv).to.have.property('setDevice').to.be.a('function');
+    });
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'setDevice',
+      hasAsync: false,
+      getRequiredArgs: () => [0],
+      expectOutput: () => {}, 
+      usesMacroInferno: true,
+    });
+  });
+});
