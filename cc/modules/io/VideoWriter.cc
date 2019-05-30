@@ -42,7 +42,7 @@ NAN_METHOD(VideoWriter::Release) {
 
 NAN_METHOD(VideoWriter::Get) {
 	FF::SyncBinding(
-		std::make_shared<VideoWriterBindings::GetWorker>(VideoWriter::Converter::unwrap(info.This())),
+		std::make_shared<VideoWriterBindings::GetWorker>(VideoWriter::unwrapSelf(info)),
 		"VideoWriter::Get",
 		info
 	);
@@ -50,7 +50,7 @@ NAN_METHOD(VideoWriter::Get) {
 
 NAN_METHOD(VideoWriter::GetAsync) {
 	FF::AsyncBinding(
-		std::make_shared<VideoWriterBindings::GetWorker>(VideoWriter::Converter::unwrap(info.This())),
+		std::make_shared<VideoWriterBindings::GetWorker>(VideoWriter::unwrapSelf(info)),
 		"VideoWriter::GetAsync",
 		info
 	);
@@ -58,7 +58,7 @@ NAN_METHOD(VideoWriter::GetAsync) {
 
 NAN_METHOD(VideoWriter::Set) {
 	FF::SyncBinding(
-		std::make_shared<VideoWriterBindings::SetWorker>(VideoWriter::Converter::unwrap(info.This())),
+		std::make_shared<VideoWriterBindings::SetWorker>(VideoWriter::unwrapSelf(info)),
 		"VideoCaptureVideoWriter::Set",
 		info
 	);
@@ -66,7 +66,7 @@ NAN_METHOD(VideoWriter::Set) {
 
 NAN_METHOD(VideoWriter::SetAsync) {
 	FF::AsyncBinding(
-		std::make_shared<VideoWriterBindings::SetWorker>(VideoWriter::Converter::unwrap(info.This())),
+		std::make_shared<VideoWriterBindings::SetWorker>(VideoWriter::unwrapSelf(info)),
 		"VideoWriter::SetAsync",
 		info
 	);
@@ -82,7 +82,7 @@ NAN_METHOD(VideoWriter::Fourcc) {
 
 NAN_METHOD(VideoWriter::Write) {
   FF::SyncBinding(
-    std::make_shared<VideoWriterBindings::WriteWorker>(VideoWriter::Converter::unwrap(info.This())),
+    std::make_shared<VideoWriterBindings::WriteWorker>(VideoWriter::unwrapSelf(info)),
     "VideoWriter::Write",
     info
   );
@@ -90,7 +90,7 @@ NAN_METHOD(VideoWriter::Write) {
 
 NAN_METHOD(VideoWriter::WriteAsync) {
   FF::AsyncBinding(
-    std::make_shared<VideoWriterBindings::WriteWorker>(VideoWriter::Converter::unwrap(info.This())),
+    std::make_shared<VideoWriterBindings::WriteWorker>(VideoWriter::unwrapSelf(info)),
     "VideoWriter::WriteAsync",
     info
   );

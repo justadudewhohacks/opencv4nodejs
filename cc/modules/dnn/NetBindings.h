@@ -70,7 +70,7 @@ namespace NetBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 #if CV_VERSION_MINOR > 2
       if (FF_IS_ARRAY(info[0])) {
-        return StringArrayConverter::optArg(0, &outBlobNames, info);
+        return FF::StringArrayConverter::optArg(0, &outBlobNames, info);
       }
 #endif
       return (
@@ -98,7 +98,7 @@ namespace NetBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return StringArrayConverter::wrap(returnValue);
+      return FF::StringArrayConverter::wrap(returnValue);
     }
   };
 

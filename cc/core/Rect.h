@@ -7,16 +7,11 @@
 #ifndef __FF_RECT_H__
 #define __FF_RECT_H__
 
-class Rect : public Nan::ObjectWrap {
+class Rect : public FF::ObjectWrap<Rect> {
 public:
-	cv::Rect2d rect;
+	typedef cv::Rect2d Type;
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Rect2d* getNativeObjectPtr() { return &rect; }
-	cv::Rect2d getNativeObject() { return rect; }
-
-	typedef InstanceConverter<Rect, cv::Rect2d> Converter;
 
 	static const char* getClassName() {
 		return "Rect";
@@ -24,10 +19,10 @@ public:
 
 	static NAN_MODULE_INIT(Init);
 
-	static FF_GETTER(Rect, GetX, rect.x);
-	static FF_GETTER(Rect, GetY, rect.y);
-	static FF_GETTER(Rect, GetWidth, rect.width);
-	static FF_GETTER(Rect, GetHeight, rect.height);
+	static FF_GETTER(Rect, GetX, self.x);
+	static FF_GETTER(Rect, GetY, self.y);
+	static FF_GETTER(Rect, GetWidth, self.width);
+	static FF_GETTER(Rect, GetHeight, self.height);
 
 	static NAN_METHOD(New);
 	static NAN_METHOD(And);

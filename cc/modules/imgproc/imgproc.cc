@@ -49,7 +49,7 @@ NAN_METHOD(Imgproc::GetStructuringElement) {
 	cv::Point2d anchor = cv::Point2d(-1, -1);
 
 	if (
-		FF::IntConverter::arg(0, &shape, info) ||
+		FF::UintConverter::arg(0, &shape, info) ||
 		Size::Converter::arg(1, &size, info) ||
 		Point2::Converter::optArg(2, &anchor, info)
 	) {

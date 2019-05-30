@@ -38,13 +38,13 @@ public:
 		FF_OPERATOR(&cv::Vec3d::cross, FF_APPLY_CLASS_FUNC, Vec3);
 	}
 	static NAN_METHOD(Norm) {
-		info.GetReturnValue().Set(Nan::New(cv::norm(Vec3::Converter::unwrap(info.This()))));
+		info.GetReturnValue().Set(Nan::New(cv::norm(Vec3::unwrapSelf(info))));
 	}
 
 	static NAN_METHOD(At) {
 		FF_METHOD_CONTEXT("Vec3::At");
 		FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 2, "Vec3");
-		cv::Vec3d vecSelf = Vec3::Converter::unwrap(info.This());
+		cv::Vec3d vecSelf = Vec3::unwrapSelf(info);
 		info.GetReturnValue().Set(vecSelf[info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value()]);
 	}
 };

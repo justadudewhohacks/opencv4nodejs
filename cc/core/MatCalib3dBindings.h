@@ -513,8 +513,8 @@ namespace MatCalib3dBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::arg(0, &projMatr2, info) ||
-        ObjectArrayConverter<Point2, cv::Point2d>::arg(1, &projPoints1, info) ||
-        ObjectArrayConverter<Point2, cv::Point2d>::arg(2, &projPoints2, info)
+        Point2::ArrayConverter::arg(1, &projPoints1, info) ||
+        Point2::ArrayConverter::arg(2, &projPoints2, info)
       );
     }
   };

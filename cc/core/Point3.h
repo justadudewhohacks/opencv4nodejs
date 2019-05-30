@@ -33,13 +33,13 @@ public:
 	FF_INIT_ARITHMETIC_OPERATIONS(Point3);
 
 	static NAN_METHOD(Norm) {
-		info.GetReturnValue().Set(Nan::New(cv::norm(Point3::Converter::unwrap(info.This()))));
+		info.GetReturnValue().Set(Nan::New(cv::norm(Point3::unwrapSelf(info))));
 	}
 
 	static NAN_METHOD(At) {
 		FF_METHOD_CONTEXT("Point3::At");
 		FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 2, "Point3");
-		cv::Point3d ptSelf = Point3::Converter::unwrap(info.This());
+		cv::Point3d ptSelf = Point3::unwrapSelf(info);
 		const double coords[] = { ptSelf.x, ptSelf.y, ptSelf.z };
 		info.GetReturnValue().Set(coords[info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value()]);
 	}

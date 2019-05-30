@@ -5,17 +5,11 @@
 
 #ifndef __FF_NET_H__
 #define __FF_NET_H__
-
-class Net : public Nan::ObjectWrap {
+class Net : public FF::ObjectWrap<Net> {
 public:
-	cv::dnn::Net net;
+	typedef cv::dnn::Net Type;
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::dnn::Net* getNativeObjectPtr() { return &net; }
-	cv::dnn::Net getNativeObject() { return net; }
-
-	typedef InstanceConverter<Net, cv::dnn::Net> Converter;
 
 	static const char* getClassName() {
 		return "Net";

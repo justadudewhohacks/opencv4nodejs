@@ -36,13 +36,13 @@ public:
 		FF_OPERATOR_RET_SCALAR(&cv::Vec4d::dot, FF_APPLY_CLASS_FUNC, Vec4);
 	}
 	static NAN_METHOD(Norm) {
-		info.GetReturnValue().Set(Nan::New(cv::norm(Vec4::Converter::unwrap(info.This()))));
+		info.GetReturnValue().Set(Nan::New(cv::norm(Vec4::unwrapSelf(info))));
 	}
 
 	static NAN_METHOD(At) {
 		FF_METHOD_CONTEXT("Vec4::At");
 		FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 3, "Vec4");
-		cv::Vec4d vecSelf = Vec4::Converter::unwrap(info.This());
+		cv::Vec4d vecSelf = Vec4::unwrapSelf(info);
 		info.GetReturnValue().Set(vecSelf[info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value()]);
 	}
 };

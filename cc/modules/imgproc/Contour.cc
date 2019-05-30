@@ -83,7 +83,7 @@ NAN_METHOD(Contour::GetPoints) {
 
 NAN_METHOD(Contour::ApproxPolyDP) {
 	FF::SyncBinding(
-		std::make_shared<ContourBindings::ApproxPolyDPWorker>(Contour::Converter::unwrap(info.This())),
+		std::make_shared<ContourBindings::ApproxPolyDPWorker>(Contour::unwrapSelf(info)),
 		"Contour::ApproxPolyDP",
 		info
 	);
@@ -91,7 +91,7 @@ NAN_METHOD(Contour::ApproxPolyDP) {
 
 NAN_METHOD(Contour::ApproxPolyDPAsync) {
 	FF::AsyncBinding(
-		std::make_shared<ContourBindings::ApproxPolyDPWorker>(Contour::Converter::unwrap(info.This())),
+		std::make_shared<ContourBindings::ApproxPolyDPWorker>(Contour::unwrapSelf(info)),
 		"Contour::ApproxPolyDPAsync",
 		info
 	);

@@ -155,7 +155,7 @@ NAN_METHOD(SVM::Predict) {
 
 NAN_METHOD(SVM::GetSupportVectors) {
   v8::Local<v8::Object> jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
-  Mat::unwrap(jsSupportVectors)->setNativeObject(SVM::Converter::unwrap(info.This())->getSupportVectors());
+  Mat::unwrap(jsSupportVectors)->setNativeObject(SVM::unwrapSelf(info)->getSupportVectors());
   info.GetReturnValue().Set(jsSupportVectors);
 }
 
@@ -165,7 +165,7 @@ NAN_METHOD(SVM::GetUncompressedSupportVectors) {
   FF_THROW("getUncompressedSupportVectors not implemented for v3.0, v3.1");
 #else
   v8::Local<v8::Object> jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
-  Mat::unwrap(jsSupportVectors)->setNativeObject(SVM::Converter::unwrap(info.This())->getUncompressedSupportVectors());
+  Mat::unwrap(jsSupportVectors)->setNativeObject(SVM::unwrapSelf(info)->getUncompressedSupportVectors());
   info.GetReturnValue().Set(jsSupportVectors);
 #endif
 }
@@ -187,7 +187,7 @@ NAN_METHOD(SVM::GetDecisionFunction) {
 	  tryCatch.throwNew(err);
 	  return;
   }
-  double rho = SVM::Converter::unwrap(info.This())->getDecisionFunction(i, Mat::unwrap(alpha)->self, Mat::unwrap(svidx)->self);
+  double rho = SVM::unwrapSelf(info)->getDecisionFunction(i, Mat::unwrap(alpha)->self, Mat::unwrap(svidx)->self);
 
   v8::Local<v8::Object> ret = Nan::New<v8::Object>();
   Nan::Set(ret, FF::newString("rho"), Nan::New((double)rho));
@@ -250,14 +250,14 @@ NAN_METHOD(SVM::Train) {
   bool isTrainFromTrainData = TrainData::hasInstance(info[0]);
   if (isTrainFromTrainData) {
 	FF::SyncBinding(
-		std::make_shared<SVMBindings::TrainFromTrainDataWorker>(SVM::Converter::unwrap(info.This())),
+		std::make_shared<SVMBindings::TrainFromTrainDataWorker>(SVM::unwrapSelf(info)),
 		"SVM::Train",
 		info
 	);
   }
   else {
 	FF::SyncBinding(
-	  std::make_shared<SVMBindings::TrainFromMatWorker>(SVM::Converter::unwrap(info.This())),
+	  std::make_shared<SVMBindings::TrainFromMatWorker>(SVM::unwrapSelf(info)),
 	  "SVM::Train",
       info
     );
@@ -268,14 +268,14 @@ NAN_METHOD(SVM::TrainAsync) {
   bool isTrainFromTrainData = TrainData::hasInstance(info[0]);
   if (isTrainFromTrainData) {
 	FF::AsyncBinding(
-	  std::make_shared<SVMBindings::TrainFromTrainDataWorker>(SVM::Converter::unwrap(info.This())),
+	  std::make_shared<SVMBindings::TrainFromTrainDataWorker>(SVM::unwrapSelf(info)),
 	  "SVM::TrainAsync",
 	  info
 	);
   }
   else {
 	FF::AsyncBinding(
-	  std::make_shared<SVMBindings::TrainFromMatWorker>(SVM::Converter::unwrap(info.This())),
+	  std::make_shared<SVMBindings::TrainFromMatWorker>(SVM::unwrapSelf(info)),
 	  "SVM::TrainAsync",
 	  info
 	);
@@ -284,7 +284,7 @@ NAN_METHOD(SVM::TrainAsync) {
 
 NAN_METHOD(SVM::TrainAuto) {
   FF::SyncBinding(
-    std::make_shared<SVMBindings::TrainAutoWorker>(SVM::Converter::unwrap(info.This())),
+    std::make_shared<SVMBindings::TrainAutoWorker>(SVM::unwrapSelf(info)),
     "SVM::TrainAuto",
     info
   );
@@ -292,7 +292,7 @@ NAN_METHOD(SVM::TrainAuto) {
 
 NAN_METHOD(SVM::TrainAutoAsync) {
   FF::AsyncBinding(
-    std::make_shared<SVMBindings::TrainAutoWorker>(SVM::Converter::unwrap(info.This())),
+    std::make_shared<SVMBindings::TrainAutoWorker>(SVM::unwrapSelf(info)),
     "SVM::TrainAutoAsync",
     info
   );

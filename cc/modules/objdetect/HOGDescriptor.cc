@@ -89,7 +89,7 @@ NAN_METHOD(HOGDescriptor::GetDefaultPeopleDetector) {
 }
 
 NAN_METHOD(HOGDescriptor::CheckDetectorSize) {
-  info.GetReturnValue().Set(Nan::New(HOGDescriptor::Converter::unwrap(info.This())->checkDetectorSize()));
+  info.GetReturnValue().Set(Nan::New(HOGDescriptor::unwrapSelf(info)->checkDetectorSize()));
 }
 
 NAN_METHOD(HOGDescriptor::SetSVMDetector) {
@@ -98,7 +98,7 @@ NAN_METHOD(HOGDescriptor::SetSVMDetector) {
   if (!FF::hasArg(info, 0) || FF::FloatArrayConverter::unwrapTo(&detector, info[0])) {
     FF_THROW("expected detector to be an Array of type Number");
   }
-  HOGDescriptor::Converter::unwrap(info.This())->setSVMDetector(detector);
+  HOGDescriptor::unwrapSelf(info)->setSVMDetector(detector);
 }
 
 NAN_METHOD(HOGDescriptor::Save) {
@@ -127,7 +127,7 @@ NAN_METHOD(HOGDescriptor::Load) {
 
 NAN_METHOD(HOGDescriptor::Compute) {
   FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::ComputeWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::ComputeWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::Compute",
     info
   );
@@ -135,7 +135,7 @@ NAN_METHOD(HOGDescriptor::Compute) {
 
 NAN_METHOD(HOGDescriptor::ComputeAsync) {
   FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::ComputeWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::ComputeWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::ComputeAsync",
     info
   );
@@ -143,7 +143,7 @@ NAN_METHOD(HOGDescriptor::ComputeAsync) {
 
 NAN_METHOD(HOGDescriptor::ComputeGradient) {
   FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::ComputeGradientWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::ComputeGradientWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::ComputeGradient",
     info
   );
@@ -151,7 +151,7 @@ NAN_METHOD(HOGDescriptor::ComputeGradient) {
 
 NAN_METHOD(HOGDescriptor::ComputeGradientAsync) {
   FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::ComputeGradientWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::ComputeGradientWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::ComputeGradientAsync",
     info
   );
@@ -159,7 +159,7 @@ NAN_METHOD(HOGDescriptor::ComputeGradientAsync) {
 
 NAN_METHOD(HOGDescriptor::Detect) {
   FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::DetectWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::Detect",
     info
   );
@@ -167,7 +167,7 @@ NAN_METHOD(HOGDescriptor::Detect) {
 
 NAN_METHOD(HOGDescriptor::DetectAsync) {
   FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::DetectWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectAsync",
     info
   );
@@ -175,7 +175,7 @@ NAN_METHOD(HOGDescriptor::DetectAsync) {
 
 NAN_METHOD(HOGDescriptor::DetectROI) {
   FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectROIWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::DetectROIWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectROI",
     info
   );
@@ -183,7 +183,7 @@ NAN_METHOD(HOGDescriptor::DetectROI) {
 
 NAN_METHOD(HOGDescriptor::DetectROIAsync) {
   FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectROIWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::DetectROIWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectROIAsync",
     info
   );
@@ -191,7 +191,7 @@ NAN_METHOD(HOGDescriptor::DetectROIAsync) {
 
 NAN_METHOD(HOGDescriptor::DetectMultiScale) {
   FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectMultiScaleWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::DetectMultiScaleWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectMultiScale",
     info
   );
@@ -199,7 +199,7 @@ NAN_METHOD(HOGDescriptor::DetectMultiScale) {
 
 NAN_METHOD(HOGDescriptor::DetectMultiScaleAsync) {
   FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectMultiScaleWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::DetectMultiScaleWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectMultiScaleAsync",
     info
   );
@@ -207,7 +207,7 @@ NAN_METHOD(HOGDescriptor::DetectMultiScaleAsync) {
 
 NAN_METHOD(HOGDescriptor::DetectMultiScaleROI) {
   FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectMultiScaleROIWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::DetectMultiScaleROIWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectMultiScaleROI",
     info
   );
@@ -215,7 +215,7 @@ NAN_METHOD(HOGDescriptor::DetectMultiScaleROI) {
 
 NAN_METHOD(HOGDescriptor::DetectMultiScaleROIAsync) {
   FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectMultiScaleROIWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::DetectMultiScaleROIWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectMultiScaleROIAsync",
     info
   );
@@ -223,7 +223,7 @@ NAN_METHOD(HOGDescriptor::DetectMultiScaleROIAsync) {
 
 NAN_METHOD(HOGDescriptor::GroupRectangles) {
   FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::GroupRectanglesWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::GroupRectanglesWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::GroupRectangles",
     info
   );
@@ -231,7 +231,7 @@ NAN_METHOD(HOGDescriptor::GroupRectangles) {
 
 NAN_METHOD(HOGDescriptor::GroupRectanglesAsync) {
   FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::GroupRectanglesWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+    std::make_shared<HOGDescriptorBindings::GroupRectanglesWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::GroupRectanglesAsync",
     info
   );

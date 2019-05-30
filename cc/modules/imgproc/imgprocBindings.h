@@ -130,7 +130,7 @@ namespace ImgprocBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        ObjectArrayConverter<Point2, cv::Point2f>::arg(0, &srcPoints, info) ||
+        Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &srcPoints, info) ||
         Mat::Converter::arg(1, &cameraMatrix, info) ||
         Mat::Converter::arg(2, &distCoeffs, info)
       );

@@ -6,21 +6,17 @@
 #ifndef __FF_VIDEOWRITER_H__
 #define __FF_VIDEOWRITER_H__
 
-class VideoWriter : public Nan::ObjectWrap {
+class VideoWriter : public FF::ObjectWrap<VideoWriter>{
 public:
-	cv::VideoWriter writer;
-	std::string path;
+	typedef cv::VideoWriter Type;
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::VideoWriter* getNativeObjectPtr() { return &writer; }
-	cv::VideoWriter getNativeObject() { return writer; }
-
-	typedef InstanceConverter<VideoWriter, cv::VideoWriter> Converter;
 
 	static const char* getClassName() {
 		return "VideoWriter";
 	}
+
+	std::string path;
 
 	static NAN_MODULE_INIT(Init);
 
