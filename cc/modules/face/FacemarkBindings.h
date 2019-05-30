@@ -76,7 +76,7 @@ namespace FacemarkBindings {
 
 	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (Mat::Converter::arg(0, &image, info) ||
-			  ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(
+			  Point2::ArrayWithCastConverter<cv::Point2f>::arg(
 				  1, &landmarks, info));
 	  }
   };

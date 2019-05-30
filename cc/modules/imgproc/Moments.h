@@ -5,12 +5,18 @@
 #ifndef __FF_MOMENTS_H__
 #define __FF_MOMENTS_H__
 
-class Moments : public Nan::ObjectWrap {
+class Moments : public FF::ObjectWrap<Moments> {
 public:
-	cv::Moments moments;
+	typedef cv::Moments Type;
 
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "Moments";
+	}
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 
 	// spatial moments
 	static FF_GETTER(Moments, m00, moments.m00);
@@ -43,17 +49,6 @@ public:
 	static FF_GETTER(Moments, nu03, moments.nu03);
 
 	static NAN_METHOD(HuMoments);
-
-	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Moments* getNativeObjectPtr() { return &moments; }
-	cv::Moments getNativeObject() { return moments; }
-
-	typedef InstanceConverter<Moments, cv::Moments> Converter;
-
-	static const char* getClassName() {
-		return "Moments";
-	}
 };
 
 #endif

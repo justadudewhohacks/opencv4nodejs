@@ -32,7 +32,7 @@ namespace SVMBindings {
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return UFF::IntConverter::optArg(1, &flags, info);
+      return FF::IntConverter::optArg(1, &flags, info);
     }
   };
   
@@ -62,7 +62,7 @@ namespace SVMBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::arg(0, &samples, info) ||
-        UFF::IntConverter::arg(1, &layout, info) ||
+        FF::IntConverter::arg(1, &layout, info) ||
         Mat::Converter::arg(2, &responses, info)
       );
     }
@@ -103,7 +103,7 @@ namespace SVMBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        UFF::IntConverter::optArg(1, &kFold, info) ||
+        FF::IntConverter::optArg(1, &kFold, info) ||
         ParamGrid::Converter::optArg(2, &cGrid, info) ||
         ParamGrid::Converter::optArg(3, &gammaGrid, info) ||
         ParamGrid::Converter::optArg(4, &pGrid, info) ||
@@ -121,7 +121,7 @@ namespace SVMBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        UFF::IntConverter::optProp(&kFold, "kFold", opts) ||
+        FF::IntConverter::optProp(&kFold, "kFold", opts) ||
         ParamGrid::Converter::optProp(&cGrid, "cGrid", opts) ||
         ParamGrid::Converter::optProp(&gammaGrid, "gammaGrid", opts) ||
         ParamGrid::Converter::optProp(&pGrid, "pGrid", opts) ||

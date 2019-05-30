@@ -16,25 +16,25 @@ public:
 	static FF_GETTER(DetectionROI, scaleGet, detectionROI.scale);
 	static FF_SETTER_NUMBER(DetectionROI, scale, detectionROI.scale);
 	static NAN_GETTER(locationsGet) {
-		v8::Local<v8::Value> val = ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::wrap(Converter::unwrap(info.This()).locations);
+		v8::Local<v8::Value> val = Point2::ArrayWithCastConverter<cv::Point2i>::wrap(Converter::unwrap(info.This()).locations);
 		info.GetReturnValue().Set(val);
 	}
 
 	static NAN_SETTER(locationsSet) {
 		std::vector<cv::Point> locations;
-		if (ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::unwrapTo(&locations, value)) {
+		if (Point2::ArrayWithCastConverter<cv::Point2i>::unwrapTo(&locations, value)) {
 			return Nan::ThrowError("expected locations to be an Array of type Point2");
 		}
 		Converter::unwrapPtr(info.This())->locations = locations;
 	}
 
 	static NAN_GETTER(confidencesGet) {
-		info.GetReturnValue().Set(DoubleArrayConverter::wrap(Converter::unwrap(info.This()).confidences));
+		info.GetReturnValue().Set(FF::DoubleArrayConverter::wrap(Converter::unwrap(info.This()).confidences));
 	}
 
 	static NAN_SETTER(confidencesSet) {
 		std::vector<double> confidences;
-		if (DoubleArrayConverter::unwrapTo(&confidences, value)) {
+		if (FF::DoubleArrayConverter::unwrapTo(&confidences, value)) {
 			return Nan::ThrowError("expected confidences to be an Array of type Number");
 		}
 		Converter::unwrapPtr(info.This())->confidences = confidences;

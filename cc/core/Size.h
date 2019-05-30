@@ -7,7 +7,7 @@
 
 class Size : public FF::ObjectWrap<Size> {
 public:
-	typedef cv::Size Type;
+	typedef cv::Size2d Type;
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 

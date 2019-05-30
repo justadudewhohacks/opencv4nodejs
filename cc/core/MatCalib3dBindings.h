@@ -180,7 +180,7 @@ namespace MatCalib3dBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Size::Converter::arg(0, &patternSize, info) ||
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &corners, info) ||
+        Point2::ArrayWithCastConverter<cv::Point2f>::arg(1, &corners, info) ||
         FF::BoolConverter::arg(2, &patternWasFound, info)
       );
     }
@@ -209,7 +209,7 @@ namespace MatCalib3dBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &corners, info) ||
+        Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &corners, info) ||
         Size::Converter::arg(1, &region_size, info)
       );
     }
@@ -300,9 +300,9 @@ namespace MatCalib3dBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleArrayConverter::arg(0, &distCoeffs1, info) ||
+        FF::DoubleArrayConverter::arg(0, &distCoeffs1, info) ||
         Mat::Converter::arg(1, &cameraMatrix2, info) ||
-        DoubleArrayConverter::arg(2, &distCoeffs2, info) ||
+        FF::DoubleArrayConverter::arg(2, &distCoeffs2, info) ||
         Size::Converter::arg(3, &imageSize, info) ||
         Mat::Converter::arg(4, &R, info) ||
         Vec3::Converter::arg(5, &T, info)
@@ -388,13 +388,13 @@ namespace MatCalib3dBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleArrayConverter::arg(0, &distCoeffs1, info) ||
+        FF::DoubleArrayConverter::arg(0, &distCoeffs1, info) ||
         Mat::Converter::arg(1, &cameraMatrix2, info) ||
-        DoubleArrayConverter::arg(2, &distCoeffs2, info) ||
+        FF::DoubleArrayConverter::arg(2, &distCoeffs2, info) ||
         Mat::Converter::arg(3, &cameraMatrix3, info) ||
-        DoubleArrayConverter::arg(4, &distCoeffs3, info) ||
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(5, &imgpt1, info) ||
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(6, &imgpt3, info) ||
+        FF::DoubleArrayConverter::arg(4, &distCoeffs3, info) ||
+        Point2::ArrayWithCastConverter<cv::Point2f>::arg(5, &imgpt1, info) ||
+        Point2::ArrayWithCastConverter<cv::Point2f>::arg(6, &imgpt3, info) ||
         Size::Converter::arg(7, &imageSize, info) ||
         Mat::Converter::arg(8, &R12, info) ||
         Vec3::Converter::arg(9, &T12, info) ||
@@ -437,7 +437,7 @@ namespace MatCalib3dBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleArrayConverter::arg(0, &distCoeffs, info) ||
+        FF::DoubleArrayConverter::arg(0, &distCoeffs, info) ||
         Size::Converter::arg(1, &imageSize, info) ||
         FF::DoubleConverter::arg(2, &alpha, info)
       );
@@ -539,15 +539,15 @@ namespace MatCalib3dBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("newPoints1").ToLocalChecked(), ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(newPoints1));
-      Nan::Set(ret, Nan::New("newPoints2").ToLocalChecked(), ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(newPoints2));
+      Nan::Set(ret, Nan::New("newPoints1").ToLocalChecked(), Point2::ArrayWithCastConverter<cv::Point2f>::wrap(newPoints1));
+      Nan::Set(ret, Nan::New("newPoints2").ToLocalChecked(), Point2::ArrayWithCastConverter<cv::Point2f>::wrap(newPoints2));
       return ret;
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &points1, info) ||
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &points2, info)
+        Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &points1, info) ||
+        Point2::ArrayWithCastConverter<cv::Point2f>::arg(1, &points2, info)
       );
     }
   };
@@ -690,9 +690,9 @@ namespace MatCalib3dBindings {
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
       Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), FF::IntConverter::wrap(returnValue));
-      Nan::Set(ret, Nan::New("rotations").ToLocalChecked(), ObjectArrayConverter<Mat, cv::Mat>::wrap(rotations));
-      Nan::Set(ret, Nan::New("translations").ToLocalChecked(), ObjectArrayConverter<Mat, cv::Mat>::wrap(translations));
-      Nan::Set(ret, Nan::New("normals").ToLocalChecked(), ObjectArrayConverter<Mat, cv::Mat>::wrap(normals));
+      Nan::Set(ret, Nan::New("rotations").ToLocalChecked(), Mat::ArrayConverter::wrap(rotations));
+      Nan::Set(ret, Nan::New("translations").ToLocalChecked(), Mat::ArrayConverter::wrap(translations));
+      Nan::Set(ret, Nan::New("normals").ToLocalChecked(), Mat::ArrayConverter::wrap(normals));
       return ret;
     }
   
@@ -734,8 +734,8 @@ namespace MatCalib3dBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &points1, info) ||
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &points2, info)
+        Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &points1, info) ||
+        Point2::ArrayWithCastConverter<cv::Point2f>::arg(1, &points2, info)
         );
     }
   
@@ -793,8 +793,8 @@ namespace MatCalib3dBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::arg(0, &E, info) ||
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &points1, info) ||
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(2, &points2, info)
+        Point2::ArrayWithCastConverter<cv::Point2f>::arg(1, &points1, info) ||
+        Point2::ArrayWithCastConverter<cv::Point2f>::arg(2, &points2, info)
       );
     }
   

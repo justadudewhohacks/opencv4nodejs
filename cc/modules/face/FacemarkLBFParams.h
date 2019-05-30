@@ -22,8 +22,8 @@ public:
   static FF_SETTER_SIMPLE(FacemarkLBFParams, cascadeFace, params.cascade_face, FF::StringConverter);
   static FF_GETTER_SIMPLE(FacemarkLBFParams, detectROIGet, params.detectROI, Rect::Converter);
   static FF_SETTER_SIMPLE(FacemarkLBFParams, detectROI, params.detectROI, Rect::Converter);
-  static FF_GETTER_COMPLEX(FacemarkLBFParams, featsMGet, params.feats_m, IntArrayConverter);
-  static FF_SETTER_COMPLEX(FacemarkLBFParams, featsM, params.feats_m, std::vector<int>, IntArrayConverter);
+  static FF_GETTER_COMPLEX(FacemarkLBFParams, featsMGet, params.feats_m, FF::IntArrayConverter);
+  static FF_SETTER_COMPLEX(FacemarkLBFParams, featsM, params.feats_m, std::vector<int>, FF::IntArrayConverter);
   static FF_GETTER(FacemarkLBFParams, initShapeNGet, params.initShape_n);
   static FF_SETTER_INT(FacemarkLBFParams, initShapeN, params.initShape_n);
   static FF_GETTER_SIMPLE(FacemarkLBFParams, modelFilenameGet, params.model_filename, FF::StringConverter);
@@ -34,7 +34,7 @@ public:
 	static NAN_GETTER(pupilsGet) {
 		v8::Local<v8::Array> jsArr = Nan::New<v8::Array>(2);
 		for (uint i = 0; i < jsArr->Length(); i++) {
-			Nan::Set(jsArr, i, IntArrayConverter::wrap(
+			Nan::Set(jsArr, i, FF::IntArrayConverter::wrap(
 				Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->params.pupils[i])
 			);
 		}
@@ -47,15 +47,15 @@ public:
 		for (uint i = 0; i < jsArr->Length(); i++) {
 			std::vector<int> vec;
 			Nan::TryCatch tryCatch;
-			if (IntArrayConverter::unwrapTo(&vec, Nan::Get(jsArr, i).ToLocalChecked())) {
+			if (FF::IntArrayConverter::unwrapTo(&vec, Nan::Get(jsArr, i).ToLocalChecked())) {
 				tryCatch.ReThrow();
 			}
 			Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->params.pupils[i] = vec;
 		}
 	}
 
-  static FF_GETTER_COMPLEX(FacemarkLBFParams, radiusMGet, params.radius_m, DoubleArrayConverter);
-  static FF_SETTER_COMPLEX(FacemarkLBFParams, radiusM, params.radius_m, std::vector<double>, DoubleArrayConverter);
+  static FF_GETTER_COMPLEX(FacemarkLBFParams, radiusMGet, params.radius_m, FF::DoubleArrayConverter);
+  static FF_SETTER_COMPLEX(FacemarkLBFParams, radiusM, params.radius_m, std::vector<double>, FF::DoubleArrayConverter);
   static FF_GETTER(FacemarkLBFParams, saveModelGet, params.save_model);
   static FF_SETTER_BOOL(FacemarkLBFParams, saveModel, params.save_model);
   static FF_GETTER(FacemarkLBFParams, seedGet, params.seed);

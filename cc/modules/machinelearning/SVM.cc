@@ -54,7 +54,7 @@ void SVM::setParams(v8::Local<v8::Object> params) {
 		FF::DoubleConverter::optProp(&gamma, "gamma", params) ||
 		FF::DoubleConverter::optProp(&nu, "nu", params) ||
 		FF::DoubleConverter::optProp(&p, "p", params) ||
-		UFF::IntConverter::optProp(&kernelType, "kernelType", params) ||
+		FF::IntConverter::optProp(&kernelType, "kernelType", params) ||
 		Mat::Converter::optProp(&classWeights, "classWeights", params)
 		) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("SVM::setParams"));
@@ -108,7 +108,7 @@ NAN_METHOD(SVM::SetParams) {
 NAN_METHOD(SVM::Predict) {
   FF_METHOD_CONTEXT("SVM::Predict");
 
-  if (!info[0]->IsArray() && !Mat::Converter::hasInstance(info[0])) {
+  if (!info[0]->IsArray() && !Mat::hasInstance(info[0])) {
     FF_THROW("expected arg 0 to be an ARRAY or an instance of Mat");
   }
 
@@ -118,8 +118,8 @@ NAN_METHOD(SVM::Predict) {
 	std::vector<float> samples;
 	unsigned int flags = 0;
 	if (
-		FloatArrayConverter::arg(0, &samples, info) ||
-		UFF::IntConverter::optArg(1, &flags, info)
+		FF::FloatArrayConverter::arg(0, &samples, info) ||
+		FF::IntConverter::optArg(1, &flags, info)
 	) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Predict");
 		tryCatch.throwNew(err);
@@ -132,7 +132,7 @@ NAN_METHOD(SVM::Predict) {
 	unsigned int flags = 0;
 	if (
 		Mat::Converter::arg(0, &samples, info) ||
-		UFF::IntConverter::optArg(1, &flags, info)
+		FF::IntConverter::optArg(1, &flags, info)
 		) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Predict");
 		tryCatch.throwNew(err);
@@ -148,7 +148,7 @@ NAN_METHOD(SVM::Predict) {
   else {
     std::vector<float> resultsVec;
     results.col(0).copyTo(resultsVec);
-    jsResult = FloatArrayConverter::wrap(resultsVec);
+    jsResult = FF::FloatArrayConverter::wrap(resultsVec);
   }
   info.GetReturnValue().Set(jsResult);
 }
@@ -247,7 +247,7 @@ NAN_METHOD(SVM::Load) {
 }
 
 NAN_METHOD(SVM::Train) {
-  bool isTrainFromTrainData = TrainData::Converter::hasInstance(info[0]);
+  bool isTrainFromTrainData = TrainData::hasInstance(info[0]);
   if (isTrainFromTrainData) {
 	FF::SyncBinding(
 		std::make_shared<SVMBindings::TrainFromTrainDataWorker>(SVM::Converter::unwrap(info.This())),
@@ -265,7 +265,7 @@ NAN_METHOD(SVM::Train) {
 }
 
 NAN_METHOD(SVM::TrainAsync) {
-  bool isTrainFromTrainData = TrainData::Converter::hasInstance(info[0]);
+  bool isTrainFromTrainData = TrainData::hasInstance(info[0]);
   if (isTrainFromTrainData) {
 	FF::AsyncBinding(
 	  std::make_shared<SVMBindings::TrainFromTrainDataWorker>(SVM::Converter::unwrap(info.This())),

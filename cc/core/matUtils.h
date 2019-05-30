@@ -14,7 +14,7 @@
   {                                     \
 	FF::TryCatch tryCatch; \
 	std::vector<int> vec; \
-	if (IntArrayConverter::arg(0, &vec, info)) { \
+	if (FF::IntArrayConverter::arg(0, &vec, info)) { \
 		tryCatch.throwNew(tryCatch.formatCatchedError("Mat::At")); \
 		return; \
 	} \

@@ -27,19 +27,19 @@ namespace HOGDescriptorBindings {
 				Size::Converter::optArg(1, &blockSize, info) ||
 				Size::Converter::optArg(2, &blockStride, info) ||
 				Size::Converter::optArg(3, &cellSize, info) ||
-				UFF::IntConverter::optArg(4, &nbins, info) ||
+				FF::UintConverter::optArg(4, &nbins, info) ||
 				FF::IntConverter::optArg(5, &derivAperture, info) ||
 				FF::DoubleConverter::optArg(6, &winSigma, info) ||
-				UFF::IntConverter::optArg(7, &histogramNormType, info) ||
+				FF::IntConverter::optArg(7, &histogramNormType, info) ||
 				FF::DoubleConverter::optArg(8, &L2HysThreshold, info) ||
 				FF::BoolConverter::optArg(9, &gammaCorrection, info) ||
-				UFF::IntConverter::optArg(10, &nlevels, info) ||
+				FF::UintConverter::optArg(10, &nlevels, info) ||
 				FF::BoolConverter::optArg(11, &signedGradient, info)
 				);
 		}
 
 		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return FF::isArgObject(info, 0) && !Size::Converter::hasInstance(info[0]);
+			return FF::isArgObject(info, 0) && !Size::hasInstance(info[0]);
 		}
 
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -49,13 +49,13 @@ namespace HOGDescriptorBindings {
 				Size::Converter::optProp(&blockSize, "blockSize", opts) ||
 				Size::Converter::optProp(&blockStride, "blockStride", opts) ||
 				Size::Converter::optProp(&cellSize, "cellSize", opts) ||
-				UFF::IntConverter::optProp(&nbins, "nbins", opts) ||
+				FF::UintConverter::optProp(&nbins, "nbins", opts) ||
 				FF::IntConverter::optProp(&derivAperture, "derivAperture", opts) ||
 				FF::DoubleConverter::optProp(&winSigma, "winSigma", opts) ||
-				UFF::IntConverter::optProp(&histogramNormType, "histogramNormType", opts) ||
+				FF::UintConverter::optProp(&histogramNormType, "histogramNormType", opts) ||
 				FF::DoubleConverter::optProp(&L2HysThreshold, "L2HysThreshold", opts) ||
 				FF::BoolConverter::optProp(&gammaCorrection, "gammaCorrection", opts) ||
-				UFF::IntConverter::optProp(&nlevels, "nlevels", opts) ||
+				FF::UintConverter::optProp(&nlevels, "nlevels", opts) ||
 				FF::BoolConverter::optProp(&signedGradient, "signedGradient", opts)
 				);
 		}
@@ -86,7 +86,7 @@ namespace HOGDescriptorBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return FloatArrayConverter::wrap(descriptors);
+      return FF::FloatArrayConverter::wrap(descriptors);
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -97,12 +97,12 @@ namespace HOGDescriptorBindings {
       return (
         Size::Converter::optArg(1, &winStride, info) ||
         Size::Converter::optArg(2, &padding, info) ||
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2i>::optArg(3, &locations, info)
+        Point2::ArrayWithCastConverter<cv::Point2i>::optArg(3, &locations, info)
       );
     }
 
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF::isArgObject(info, 1) && !Size::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+      return FF::isArgObject(info, 1) && !Size::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
 
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -110,7 +110,7 @@ namespace HOGDescriptorBindings {
       return (
         Size::Converter::optProp(&winStride, "winStride", opts) ||
         Size::Converter::optProp(&padding, "padding", opts) ||
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2i>::optProp(&locations, "locations", opts)
+        Point2::ArrayWithCastConverter<cv::Point2i>::optProp(&locations, "locations", opts)
       );
     }
   };
@@ -191,8 +191,8 @@ namespace HOGDescriptorBindings {
 
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("foundLocations").ToLocalChecked(), ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::wrap(foundLocations));
-      Nan::Set(ret, Nan::New("weights").ToLocalChecked(), DoubleArrayConverter::wrap(weights));
+      Nan::Set(ret, Nan::New("foundLocations").ToLocalChecked(), Point2::ArrayWithCastConverter<cv::Point2i>::wrap(foundLocations));
+      Nan::Set(ret, Nan::New("weights").ToLocalChecked(), FF::DoubleArrayConverter::wrap(weights));
       return ret;
     }
 
@@ -207,7 +207,7 @@ namespace HOGDescriptorBindings {
         FF::DoubleConverter::optArg(1, &hitThreshold, info) ||
         Size::Converter::optArg(2, &winStride, info) ||
         Size::Converter::optArg(3, &padding, info) ||
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::optArg(4, &searchLocations, info)
+        Point2::ArrayWithCastConverter<cv::Point2i>::optArg(4, &searchLocations, info)
       );
     }
 
@@ -221,7 +221,7 @@ namespace HOGDescriptorBindings {
         FF::DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
         Size::Converter::optProp(&winStride, "winStride", opts) ||
         Size::Converter::optProp(&padding, "padding", opts) ||
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::optProp(&searchLocations, "searchLocations", opts)
+        Point2::ArrayWithCastConverter<cv::Point2i>::optProp(&searchLocations, "searchLocations", opts)
       );
     }
   };
@@ -249,15 +249,15 @@ namespace HOGDescriptorBindings {
 
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("foundLocations").ToLocalChecked(), ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::wrap(foundLocations));
-      Nan::Set(ret, Nan::New("confidences").ToLocalChecked(), DoubleArrayConverter::wrap(confidences));
+      Nan::Set(ret, Nan::New("foundLocations").ToLocalChecked(), Point2::ArrayWithCastConverter<cv::Point2i>::wrap(foundLocations));
+      Nan::Set(ret, Nan::New("confidences").ToLocalChecked(), FF::DoubleArrayConverter::wrap(confidences));
       return ret;
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::arg(0, &img, info) ||
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::arg(1, &locations, info)
+        Point2::ArrayWithCastConverter<cv::Point2i>::arg(1, &locations, info)
       );
     }
 
@@ -310,7 +310,7 @@ namespace HOGDescriptorBindings {
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
       Nan::Set(ret, Nan::New("foundLocations").ToLocalChecked(), ObjectArrayConverter<Rect, cv::Rect2d, cv::Rect>::wrap(foundLocations));
-      Nan::Set(ret, Nan::New("foundWeights").ToLocalChecked(), DoubleArrayConverter::wrap(foundWeights));
+      Nan::Set(ret, Nan::New("foundWeights").ToLocalChecked(), FF::DoubleArrayConverter::wrap(foundWeights));
       return ret;
     }
 
@@ -423,7 +423,7 @@ namespace HOGDescriptorBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         ObjectArrayConverter<Rect, cv::Rect2d, cv::Rect>::arg(0, &rectList, info) ||
-        DoubleArrayConverter::arg(1, &weights, info) ||
+        FF::DoubleArrayConverter::arg(1, &weights, info) ||
         FF::IntConverter::arg(2, &groupThreshold, info) ||
         FF::DoubleConverter::arg(3, &eps, info)
       );

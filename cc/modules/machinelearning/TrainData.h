@@ -57,10 +57,10 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntArrayConverter::optArg(3, &varIdx, info) ||
-				IntArrayConverter::optArg(4, &sampleIdx, info) ||
-				FloatArrayConverter::optArg(5, &sampleWeights, info) ||
-				UintArrayConverter::optArg(6, &varType, info)
+				FF::IntArrayConverter::optArg(3, &varIdx, info) ||
+				FF::IntArrayConverter::optArg(4, &sampleIdx, info) ||
+				FF::FloatArrayConverter::optArg(5, &sampleWeights, info) ||
+				UFF::IntArrayConverter::optArg(6, &varType, info)
 			);
 		}
 
@@ -71,10 +71,10 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntArrayConverter::optProp(&varIdx, "varIdx", opts) ||
-				IntArrayConverter::optProp(&sampleIdx, "sampleIdx", opts) ||
-				FloatArrayConverter::optProp(&sampleWeights, "sampleWeights", opts) ||
-				UintArrayConverter::optProp(&varType, "varType", opts)
+				FF::IntArrayConverter::optProp(&varIdx, "varIdx", opts) ||
+				FF::IntArrayConverter::optProp(&sampleIdx, "sampleIdx", opts) ||
+				FF::FloatArrayConverter::optProp(&sampleWeights, "sampleWeights", opts) ||
+				UFF::IntArrayConverter::optProp(&varType, "varType", opts)
 			);
 		}
 	};

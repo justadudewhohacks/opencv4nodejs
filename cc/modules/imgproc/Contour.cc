@@ -63,7 +63,7 @@ NAN_METHOD(Contour::New) {
 				double y = FF::DoubleConverter::unwrap(Nan::Get(jsObj, 1).ToLocalChecked());
 				cv_pt = cv::Point2d(x, y);
 			}
-			else if (Point2::Converter::hasInstance(jsPt)) {
+			else if (Point2::hasInstance(jsPt)) {
 				cv_pt = Point2::Converter::unwrap(jsPt);
 			}
 			else {
@@ -78,7 +78,7 @@ NAN_METHOD(Contour::New) {
 }
 
 NAN_METHOD(Contour::GetPoints) {
-	info.GetReturnValue().Set(ObjectArrayConverter<Point2, cv::Point2d, cv::Point2i>::wrap(FF_UNWRAP_CONTOUR_AND_GET(info.This())));
+	info.GetReturnValue().Set(Point2::ArrayWithCastConverter<cv::Point2i>::wrap(FF_UNWRAP_CONTOUR_AND_GET(info.This())));
 }
 
 NAN_METHOD(Contour::ApproxPolyDP) {
@@ -172,12 +172,12 @@ NAN_METHOD(Contour::ConvexHullIndices) {
 		clockwise,
 		false
 	);
-	info.GetReturnValue().Set(IntArrayConverter::wrap(hullIndices));
+	info.GetReturnValue().Set(FF::IntArrayConverter::wrap(hullIndices));
 }
 NAN_METHOD(Contour::ConvexityDefects) {
 	FF::TryCatch tryCatch;
 	std::vector<int> hull;
-	if (IntArrayConverter::arg(0, &hull, info)) {
+	if (FF::IntArrayConverter::arg(0, &hull, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ConvexityDefects"));
 		return;
 	}
@@ -211,7 +211,7 @@ NAN_METHOD(Contour::MinEnclosingTriangle) {
 		FF_UNWRAP_CONTOUR_AND_GET(info.This()),
 		triangle
 	);
-	info.GetReturnValue().Set(ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(triangle));
+	info.GetReturnValue().Set(Point2::ArrayWithCastConverter<cv::Point2f>::wrap(triangle));
 }
 
 NAN_METHOD(Contour::PointPolygonTest) {
@@ -236,7 +236,7 @@ NAN_METHOD(Contour::MatchShapes) {
 	uint method;
 	if (
 		Contour::Converter::arg(0, &contour2, info) ||
-		UFF::IntConverter::arg(1, &method, info)
+		FF::IntConverter::arg(1, &method, info)
 	) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::MatchShapes"));
 		return;

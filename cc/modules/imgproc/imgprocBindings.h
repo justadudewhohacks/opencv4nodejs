@@ -142,7 +142,7 @@ namespace ImgprocBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() { 
-      return ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(destPoints);
+      return Point2::ArrayWithCastConverter<cv::Point2f>::wrap(destPoints);
     }
   };
 }

@@ -313,15 +313,15 @@ NAN_METHOD(Mat::Set) {
     FF_ASSERT_CHANNELS(cn, (long)vec->Length(), "Mat::Set");
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, vec, matSelf.type(), FF_MAT_SET, FF::matPut);
   }
-  else if (Vec2::Converter::hasInstance(info[2])) {
+  else if (Vec2::hasInstance(info[2])) {
     FF_ASSERT_CHANNELS(cn, 2, "Mat::Set");
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<2>(Vec2::Converter::unwrap(info[2])), matSelf.type(), FF_MAT_SET, FF::matPut);
   }
-  else if (Vec3::Converter::hasInstance(info[2])) {
+  else if (Vec3::hasInstance(info[2])) {
     FF_ASSERT_CHANNELS(cn, 3, "Mat::Set");
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<3>(Vec3::Converter::unwrap(info[2])), matSelf.type(), FF_MAT_SET, FF::matPut);
   }
-  else if (Vec4::Converter::hasInstance(info[2])) {
+  else if (Vec4::hasInstance(info[2])) {
     FF_ASSERT_CHANNELS(cn, 4, "Mat::Set");
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<4>(Vec4::Converter::unwrap(info[2])), matSelf.type(), FF_MAT_SET, FF::matPut);
   }
@@ -361,7 +361,7 @@ NAN_METHOD(Mat::GetDataAsArray) {
 }
 
 NAN_METHOD(Mat::GetRegion) {
-  if (!Rect::Converter::hasInstance(info[0])) {
+  if (!Rect::hasInstance(info[0])) {
     return Nan::ThrowError("Mat::GetRegion expected arg0 to be an instance of Rect");
   }
   cv::Rect2d rect = FF_UNWRAP(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked(), Rect)->rect;
@@ -373,7 +373,7 @@ NAN_METHOD(Mat::GetRegion) {
 NAN_METHOD(Mat::Norm) {
   FF_METHOD_CONTEXT("Mat::Norm");
 
-  bool withSrc2 = FF::hasArg(info, 0) && Mat::Converter::hasInstance(info[0]);
+  bool withSrc2 = FF::hasArg(info, 0) && Mat::hasInstance(info[0]);
   uint i = withSrc2 ? 1 : 0;
   double norm;
 
@@ -387,10 +387,10 @@ NAN_METHOD(Mat::Norm) {
   FF::TryCatch tryCatch;
   if (
 	  hasOptArgsObj && (
-		UFF::IntConverter::optProp(&normType, "normType", optArgs) ||
+		FF::UintConverter::optProp(&normType, "normType", optArgs) ||
 		Mat::Converter::optProp(&mask, "mask", optArgs)
 		) || (
-		UFF::IntConverter::optArg(i, &normType, info) ||
+		FF::UintConverter::optArg(i, &normType, info) ||
 		Mat::Converter::optArg(i + 1, &mask, info)
 		)
 	  ) {

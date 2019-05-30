@@ -114,7 +114,7 @@ namespace OCRHMMDecoderBindings {
       Nan::Set(ret, FF::newString("outputText"), FF::StringConverter::wrap(output_text));
       Nan::Set(ret, FF::newString("rects"), ObjectArrayConverter<Rect, cv::Rect2d, cv::Rect>::wrap(component_rects));
       Nan::Set(ret, FF::newString("words"), StringArrayConverter::wrap(component_texts));
-      Nan::Set(ret, FF::newString("confidences"), FloatArrayConverter::wrap(component_confidences));
+      Nan::Set(ret, FF::newString("confidences"), FF::FloatArrayConverter::wrap(component_confidences));
       return ret;
     }
   

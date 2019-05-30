@@ -25,8 +25,8 @@ namespace OCRHMMClassifierBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, FF::newString("classes"), IntArrayConverter::wrap(clazz));
-      Nan::Set(ret, FF::newString("confidences"), DoubleArrayConverter::wrap(confidence));
+      Nan::Set(ret, FF::newString("classes"), FF::IntArrayConverter::wrap(clazz));
+      Nan::Set(ret, FF::newString("confidences"), FF::DoubleArrayConverter::wrap(confidence));
       return ret;
     }
   

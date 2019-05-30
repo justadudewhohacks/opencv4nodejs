@@ -31,7 +31,7 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				UFF::IntConverter::optArg(0, &history, info) ||
+				FF::IntConverter::optArg(0, &history, info) ||
 				FF::DoubleConverter::optArg(1, &varThreshold, info) ||
 				FF::BoolConverter::optArg(2, &detectShadows, info)
 				);
@@ -44,7 +44,7 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				UFF::IntConverter::optProp(&history, "history", opts) ||
+				FF::IntConverter::optProp(&history, "history", opts) ||
 				FF::DoubleConverter::optProp(&varThreshold, "varThreshold", opts) ||
 				FF::BoolConverter::optProp(&detectShadows, "detectShadows", opts)
 				);

@@ -28,8 +28,8 @@ public:
   static FF_SETTER_INT(FacemarkAAMParams, nIter, params.n_iter);
   static FF_GETTER(FacemarkAAMParams, saveModelGet, params.save_model);
   static FF_SETTER_BOOL(FacemarkAAMParams, saveModel, params.save_model);
-  static FF_GETTER_COMPLEX(FacemarkAAMParams, scalesGet, params.scales, FloatArrayConverter);
-  static FF_SETTER_COMPLEX(FacemarkAAMParams, scales, params.scales, std::vector<float>, FloatArrayConverter);
+  static FF_GETTER_COMPLEX(FacemarkAAMParams, scalesGet, params.scales, FF::FloatArrayConverter);
+  static FF_SETTER_COMPLEX(FacemarkAAMParams, scales, params.scales, std::vector<float>, FF::FloatArrayConverter);
   static FF_GETTER(FacemarkAAMParams, textureMaxMGet, params.texture_max_m);
   static FF_SETTER_INT(FacemarkAAMParams, textureMaxM, params.texture_max_m);
   static FF_GETTER(FacemarkAAMParams, verboseGet, params.verbose);

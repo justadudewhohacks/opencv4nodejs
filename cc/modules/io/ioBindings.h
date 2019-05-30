@@ -49,7 +49,7 @@ namespace IoBindings {
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return IntArrayConverter::optArg(2, &flags, info);
+      return FF::IntArrayConverter::optArg(2, &flags, info);
     }
   };
 
@@ -76,7 +76,7 @@ namespace IoBindings {
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return IntArrayConverter::optArg(2, &flags, info);
+      return FF::IntArrayConverter::optArg(2, &flags, info);
     }
 
     static void freeBufferCallback(char* data, void* hint) {

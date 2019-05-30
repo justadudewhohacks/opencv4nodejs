@@ -261,7 +261,7 @@ namespace MatBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return ObjectArrayConverter<Mat, cv::Mat>::wrap(mv);
+      return Mat::ArrayConverter::wrap(mv);
     }
   };
 
@@ -350,7 +350,7 @@ namespace MatBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::wrap(idx);
+      return Point2::ArrayWithCastConverter<cv::Point2i>::wrap(idx);
     }
   };
 
@@ -768,7 +768,7 @@ namespace MatBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return ObjectArrayConverter<Point2, cv::Point2f>::wrap(corners);
+      return Point2::ArrayWithCastConverter<cv::Point2f>::wrap(corners);
     }
   };
 

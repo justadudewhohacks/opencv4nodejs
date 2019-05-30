@@ -71,7 +71,7 @@ NAN_METHOD(Io::Imshow) {
   if (!info[0]->IsString()) {
     FF_THROW("expected arg0 to be the window name");
   }
-  if (!Mat::Converter::hasInstance(info[1])) {
+  if (!Mat::hasInstance(info[1])) {
     FF_THROW("expected arg1 to be an instance of Mat");
   }
   cv::imshow(FF::StringConverter::unwrap(info[0]), Mat::Converter::unwrap(info[1]));
@@ -82,7 +82,7 @@ NAN_METHOD(Io::ImshowWait) {
   if (!info[0]->IsString()) {
     FF_THROW("expected arg0 to be the window name");
   }
-  if (!Mat::Converter::hasInstance(info[1])) {
+  if (!Mat::hasInstance(info[1])) {
     FF_THROW("expected arg1 to be an instance of Mat");
   }
   cv::imshow(FF::StringConverter::unwrap(info[0]), Mat::Converter::unwrap(info[1]));

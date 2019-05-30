@@ -148,7 +148,7 @@ namespace DnnBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         (isSingleImage && Mat::Converter::arg(0, &image, info)) ||
-        (!isSingleImage && ObjectArrayConverter<Mat, cv::Mat>::arg(0, &images, info))
+        (!isSingleImage && Mat::ArrayConverter::arg(0, &images, info))
       );
     }
 
@@ -196,13 +196,13 @@ namespace DnnBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return IntArrayConverter::wrap(indices);
+      return FF::IntArrayConverter::wrap(indices);
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         ObjectArrayConverter<Rect, cv::Rect>::arg(0, &bboxes, info) ||
-        FloatArrayConverter::arg(1, &scores, info) ||
+        FF::FloatArrayConverter::arg(1, &scores, info) ||
         FF::FloatConverter::arg(2, &score_threshold, info) ||
         FF::FloatConverter::arg(3, &nms_threshold, info)
       );

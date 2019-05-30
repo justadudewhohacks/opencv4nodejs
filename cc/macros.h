@@ -13,7 +13,7 @@
 #define FF_UNWRAP(obj, clazz)	Nan::ObjectWrap::Unwrap<clazz>(obj)
 
 #define FF_UNWRAP_CONTOUR(obj) FF_UNWRAP(obj, Contour)
-#define FF_UNWRAP_CONTOUR_AND_GET(obj) FF_UNWRAP_CONTOUR(obj)->contour
+#define FF_UNWRAP_CONTOUR_AND_GET(obj) FF_UNWRAP_CONTOUR(obj)->self
 
 #define FF_UNWRAP_RECT(obj) FF_UNWRAP(obj, Rect)
 #define FF_UNWRAP_RECT_AND_GET(obj)	FF_UNWRAP_RECT(obj)->rect
@@ -70,7 +70,7 @@
 	}
 
 #define FF_SETTER_INT(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::IntConverter::assertType, FF::IntConverter::unwrap, "INT")
-#define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, UFF::IntConverter::assertType, UFF::IntConverter::unwrap, "UINT")
+#define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::IntConverter::assertType, FF::IntConverter::unwrap, "UINT")
 #define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::DoubleConverter::assertType, FF::DoubleConverter::unwrap, "NUMBER")
 #define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::BoolConverter::assertType, FF::BoolConverter::unwrap, "BOOL")
 #define FF_SETTER_STRING(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::StringConverter::assertType, FF::StringConverter::unwrap, "STRING")

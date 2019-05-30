@@ -122,40 +122,40 @@ namespace FF {
 		}
 
 		IntArray intArrayRequired() {
-			return addRequiredArg<Arg<IntArrayConverter, std::vector<int>>>();
+			return addRequiredArg<Arg<FF::IntArrayConverter, std::vector<int>>>();
 		}
 
 		IntArray intArrayOptional(std::string name) {
-			return addOptionalArg<OptArg<IntArrayConverter, std::vector<int>>>(name);
+			return addOptionalArg<OptArg<FF::IntArrayConverter, std::vector<int>>>(name);
 		}
 
 		IntArray intArrayReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<IntArrayConverter, std::vector<int>>>(name);
+			return addReturnValue<ReturnValue<FF::IntArrayConverter, std::vector<int>>>(name);
 		}
 
 
 		Uint uintRequired() {
-			return addRequiredArg<Arg<UFF::IntConverter, uint>>();
+			return addRequiredArg<Arg<FF::IntConverter, uint>>();
 		}
 
 		Uint uintOptional(uint defaultValue, std::string name) {
-			return addOptionalArg<OptArg<UFF::IntConverter, uint>, uint>(defaultValue, name);
+			return addOptionalArg<OptArg<FF::IntConverter, uint>, uint>(defaultValue, name);
 		}
 
 		Uint uintReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<UFF::IntConverter, uint>>(name);
+			return addReturnValue<ReturnValue<FF::IntConverter, uint>>(name);
 		}
 
 		UintArray uintArrayRequired() {
-			return addRequiredArg<Arg<UintArrayConverter, std::vector<uint>>>();
+			return addRequiredArg<Arg<UFF::IntArrayConverter, std::vector<uint>>>();
 		}
 
 		UintArray uintArrayOptional(std::string name) {
-			return addOptionalArg<OptArg<UintArrayConverter, std::vector<uint>>>(name);
+			return addOptionalArg<OptArg<UFF::IntArrayConverter, std::vector<uint>>>(name);
 		}
 
 		UintArray uintArrayReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<UintArrayConverter, std::vector<uint>>>(name);
+			return addReturnValue<ReturnValue<UFF::IntArrayConverter, std::vector<uint>>>(name);
 		}
 
 		Double doubleRequired() {
@@ -171,15 +171,15 @@ namespace FF {
 		}
 
 		DoubleArray doubleArrayRequired() {
-			return addRequiredArg<Arg<DoubleArrayConverter, std::vector<double>>>();
+			return addRequiredArg<Arg<FF::DoubleArrayConverter, std::vector<double>>>();
 		}
 
 		DoubleArray doubleArrayOptional(std::string name) {
-			return addOptionalArg<OptArg<DoubleArrayConverter, std::vector<double>>>(name);
+			return addOptionalArg<OptArg<FF::DoubleArrayConverter, std::vector<double>>>(name);
 		}
 
 		DoubleArray doubleArrayReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<DoubleArrayConverter, std::vector<double>>>(name);
+			return addReturnValue<ReturnValue<FF::DoubleArrayConverter, std::vector<double>>>(name);
 		}
 
 		Float floatRequired() {
@@ -195,15 +195,15 @@ namespace FF {
 		}
 
 		FloatArray floatArrayRequired() {
-			return addRequiredArg<Arg<FloatArrayConverter, std::vector<float>>>();
+			return addRequiredArg<Arg<FF::FloatArrayConverter, std::vector<float>>>();
 		}
 
 		FloatArray floatArrayOptional(std::string name) {
-			return addOptionalArg<OptArg<FloatArrayConverter, std::vector<float>>>(name);
+			return addOptionalArg<OptArg<FF::FloatArrayConverter, std::vector<float>>>(name);
 		}
 
 		FloatArray floatArrayReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<FloatArrayConverter, std::vector<float>>>(name);
+			return addReturnValue<ReturnValue<FF::FloatArrayConverter, std::vector<float>>>(name);
 		}
 
 		Bool boolRequired() {
@@ -219,15 +219,15 @@ namespace FF {
 		}
 
 		BoolArray boolArrayRequired() {
-			return addRequiredArg<Arg<BoolArrayConverter, std::vector<bool>>>();
+			return addRequiredArg<Arg<FF::BoolArrayConverter, std::vector<bool>>>();
 		}
 
 		BoolArray boolArrayOptional(std::string name) {
-			return addOptionalArg<OptArg<BoolArrayConverter, std::vector<bool>>>(name);
+			return addOptionalArg<OptArg<FF::BoolArrayConverter, std::vector<bool>>>(name);
 		}
 
 		BoolArray boolArrayReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<BoolArrayConverter, std::vector<bool>>>(name);
+			return addReturnValue<ReturnValue<FF::BoolArrayConverter, std::vector<bool>>>(name);
 		}
 		String stringRequired() {
 			return addRequiredArg<Arg<FF::StringConverter, std::string>>();

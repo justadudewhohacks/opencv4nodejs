@@ -43,9 +43,9 @@ namespace Calib3dBindings {
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				UFF::IntConverter::optArg(2, &method, info) ||
+				FF::IntConverter::optArg(2, &method, info) ||
 				FF::DoubleConverter::optArg(3, &ransacReprojThreshold, info) ||
-				UFF::IntConverter::optArg(4, &maxIters, info) ||
+				FF::IntConverter::optArg(4, &maxIters, info) ||
 				FF::DoubleConverter::optArg(5, &confidence, info)
 			);
 		}
@@ -57,9 +57,9 @@ namespace Calib3dBindings {
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				UFF::IntConverter::optProp(&method, "method", opts) ||
+				FF::IntConverter::optProp(&method, "method", opts) ||
 				FF::DoubleConverter::optProp(&ransacReprojThreshold, "ransacReprojThreshold", opts) ||
-				UFF::IntConverter::optProp(&maxIters, "maxIters", opts) ||
+				FF::IntConverter::optProp(&maxIters, "maxIters", opts) ||
 				FF::DoubleConverter::optProp(&confidence, "confidence", opts)
 			);
 		}
@@ -137,7 +137,7 @@ namespace Calib3dBindings {
         ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &objectPoints, info) ||
         ObjectArrayConverter<Point2, cv::Point2d>::arg(1, &imagePoints, info) ||
         Mat::Converter::arg(2, &cameraMatrix, info) ||
-        DoubleArrayConverter::arg(3, &distCoeffs, info)
+        FF::DoubleArrayConverter::arg(3, &distCoeffs, info)
       );
     }
   };
@@ -189,7 +189,7 @@ namespace Calib3dBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = SolvePxPWorker::getReturnValue()->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-      Nan::Set(ret, Nan::New("inliers").ToLocalChecked(), IntArrayConverter::wrap(inliers));
+      Nan::Set(ret, Nan::New("inliers").ToLocalChecked(), FF::IntArrayConverter::wrap(inliers));
       return ret;
     }
   
@@ -249,7 +249,7 @@ namespace Calib3dBindings {
         Vec3::Converter::arg(1, &rvec, info) ||
         Vec3::Converter::arg(2, &tvec, info) ||
         Mat::Converter::arg(3, &cameraMatrix, info) ||
-        DoubleArrayConverter::arg(4, &distCoeffs, info)
+        FF::DoubleArrayConverter::arg(4, &distCoeffs, info)
       );
     }
   
@@ -324,8 +324,8 @@ namespace Calib3dBindings {
       Nan::Set(ret, Nan::New("T").ToLocalChecked(), Vec3::Converter::wrap(T));
       Nan::Set(ret, Nan::New("E").ToLocalChecked(), Mat::Converter::wrap(E));
       Nan::Set(ret, Nan::New("F").ToLocalChecked(), Mat::Converter::wrap(F));
-      Nan::Set(ret, Nan::New("distCoeffs1").ToLocalChecked(), DoubleArrayConverter::wrap(distCoeffs1));
-      Nan::Set(ret, Nan::New("distCoeffs2").ToLocalChecked(), DoubleArrayConverter::wrap(distCoeffs2));
+      Nan::Set(ret, Nan::New("distCoeffs1").ToLocalChecked(), FF::DoubleArrayConverter::wrap(distCoeffs1));
+      Nan::Set(ret, Nan::New("distCoeffs2").ToLocalChecked(), FF::DoubleArrayConverter::wrap(distCoeffs2));
       return ret;
     }
   
@@ -335,9 +335,9 @@ namespace Calib3dBindings {
         ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &imagePoints1, info) ||
         ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2f>::arg(2, &imagePoints2, info) ||
         Mat::Converter::arg(3, &cameraMatrix1, info) ||
-        DoubleArrayConverter::arg(4, &distCoeffs1, info) ||
+        FF::DoubleArrayConverter::arg(4, &distCoeffs1, info) ||
         Mat::Converter::arg(5, &cameraMatrix2, info) ||
-        DoubleArrayConverter::arg(6, &distCoeffs2, info) ||
+        FF::DoubleArrayConverter::arg(6, &distCoeffs2, info) ||
         Size::Converter::arg(7, &imageSize, info)
       );
     }
@@ -730,7 +730,7 @@ namespace Calib3dBindings {
       Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), FF::DoubleConverter::wrap(returnValue));
       Nan::Set(ret, Nan::New("rvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d>::wrap(rvecs));
       Nan::Set(ret, Nan::New("tvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d>::wrap(tvecs));
-      Nan::Set(ret, Nan::New("distCoeffs").ToLocalChecked(), DoubleArrayConverter::wrap(distCoeffs));
+      Nan::Set(ret, Nan::New("distCoeffs").ToLocalChecked(), FF::DoubleArrayConverter::wrap(distCoeffs));
       return ret;
     }
   
@@ -740,7 +740,7 @@ namespace Calib3dBindings {
         ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &imagePoints, info) ||
         Size::Converter::arg(2, &imageSize, info) ||
         Mat::Converter::arg(3, &cameraMatrix, info) ||
-        DoubleArrayConverter::arg(4, &distCoeffs, info)
+        FF::DoubleArrayConverter::arg(4, &distCoeffs, info)
         );
     }
   
@@ -781,7 +781,7 @@ namespace Calib3dBindings {
       v8::Local<v8::Object> ret = CalibrateCameraWorker::getReturnValue()->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       Nan::Set(ret, Nan::New("stdDeviationsIntrinsics").ToLocalChecked(), Mat::Converter::wrap(stdDeviationsIntrinsics));
       Nan::Set(ret, Nan::New("stdDeviationsExtrinsics").ToLocalChecked(), Mat::Converter::wrap(stdDeviationsExtrinsics));
-      Nan::Set(ret, Nan::New("perViewErrors").ToLocalChecked(), DoubleArrayConverter::wrap(perViewErrors));
+      Nan::Set(ret, Nan::New("perViewErrors").ToLocalChecked(), FF::DoubleArrayConverter::wrap(perViewErrors));
       return ret;
     }
   };
@@ -869,8 +869,8 @@ namespace Calib3dBindings {
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
       Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), FF::BoolConverter::wrap(returnValue));
-      Nan::Set(ret, Nan::New("rvecs").ToLocalChecked(), ObjectArrayConverter<Mat, cv::Mat>::wrap(rvecs));
-      Nan::Set(ret, Nan::New("tvecs").ToLocalChecked(), ObjectArrayConverter<Mat, cv::Mat>::wrap(tvecs));
+      Nan::Set(ret, Nan::New("rvecs").ToLocalChecked(), Mat::ArrayConverter::wrap(rvecs));
+      Nan::Set(ret, Nan::New("tvecs").ToLocalChecked(), Mat::ArrayConverter::wrap(tvecs));
       return ret;
     }
   

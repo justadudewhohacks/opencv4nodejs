@@ -88,7 +88,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasDsize(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (Size::Converter::hasInstance(info[0]));
+      return (Size::hasInstance(info[0]));
     }
   
     int getOptArgIndex(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -145,7 +145,7 @@ namespace MatImgprocBindings {
       return (
         FF::DoubleConverter::arg(0, &thresh, info) ||
         FF::DoubleConverter::arg(1, &maxVal, info) ||
-        UFF::IntConverter::arg(2, &type, info)
+        FF::UintConverter::arg(2, &type, info)
       );
     }
   };
@@ -318,7 +318,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF::isArgObject(info, 1) && !Size::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+      return FF::isArgObject(info, 1) && !Size::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -393,7 +393,7 @@ namespace MatImgprocBindings {
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
       int optArgN = (withOp ? 2 : 1);
-      return FF::isArgObject(info, optArgN) && !Point2::Converter::hasInstance(info[optArgN]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+      return FF::isArgObject(info, optArgN) && !Point2::hasInstance(info[optArgN]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -535,7 +535,7 @@ namespace MatImgprocBindings {
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF::isArgObject(info, 1) && !Point2::Converter::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
+      return FF::isArgObject(info, 1) && !Point2::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -858,7 +858,7 @@ namespace MatImgprocBindings {
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
       return FF::isArgObject(info, getDrawParamsIndex())
-        && !Vec3::Converter::hasInstance(info[getDrawParamsIndex()]);
+        && !Vec3::hasInstance(info[getDrawParamsIndex()]);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -956,7 +956,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      isArgRect = Rect::Converter::hasInstance(info[0]);
+      isArgRect = Rect::hasInstance(info[0]);
       return (
         (
           !isArgRect && (
@@ -1022,7 +1022,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      isArgBox = RotatedRect::Converter::hasInstance(info[0]);
+      isArgBox = RotatedRect::hasInstance(info[0]);
       return (
         (
           !isArgBox && (
@@ -1115,7 +1115,7 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2i>::arg(0, &pts, info)
+        Point2::ArrayWithCastConverter<cv::Point2i>::arg(0, &pts, info)
       );
     }
   
@@ -1455,7 +1455,7 @@ namespace MatImgprocBindings {
     }
   
     v8::Local<v8::Value> getReturnValue() {
-      return ObjectArrayConverter<Mat, cv::Mat>::wrap(dst);
+      return Mat::ArrayConverter::wrap(dst);
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1736,7 +1736,7 @@ namespace MatImgprocBindings {
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
       return FF::isArgObject(info, 2)
-        && !Mat::Converter::hasInstance(info[2]);
+        && !Mat::hasInstance(info[2]);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -2019,12 +2019,12 @@ namespace MatImgprocBindings {
     }
   
     v8::Local<v8::Value> getReturnValue() {
-      return ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(corners);
+      return Point2::ArrayWithCastConverter<cv::Point2f>::wrap(corners);
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &corners, info) ||
+        Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &corners, info) ||
         Size::Converter::arg(1, &winSize, info) ||
         Size::Converter::arg(2, &zeroZone, info) ||
         TermCriteria::Converter::arg(3, &criteria, info)

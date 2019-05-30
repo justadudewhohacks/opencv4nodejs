@@ -9,7 +9,7 @@
 #ifndef __FF_FACEMARKAAMDATA_H__
 #define __FF_FACEMARKAAMDATA_H__
 
-typedef ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f> s0_converter;
+typedef Point2::ArrayWithCastConverter<cv::Point2f> s0_converter;
 
 class FacemarkAAMData : public Nan::ObjectWrap {
 public:

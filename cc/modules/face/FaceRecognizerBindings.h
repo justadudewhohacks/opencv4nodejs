@@ -46,8 +46,8 @@ namespace FaceRecognizerBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        ObjectArrayConverter<Mat, cv::Mat>::arg(0, &images, info) ||
-        IntArrayConverter::arg(1, &labels, info)
+        Mat::ArrayConverter::arg(0, &images, info) ||
+        FF::IntArrayConverter::arg(1, &labels, info)
       );
     }
   };

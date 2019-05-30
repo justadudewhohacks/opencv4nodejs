@@ -91,7 +91,7 @@ namespace RectBindings {
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      bool isSizeArg = Size::Converter::hasInstance(info[0]);
+      bool isSizeArg = Size::hasInstance(info[0]);
       double f = 1;
       bool didThrow = 
         (!isSizeArg && FF::DoubleConverter::arg(0, &f, info))

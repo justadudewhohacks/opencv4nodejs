@@ -23,7 +23,7 @@ NAN_METHOD(ParamGrid::New) {
 		FF::TryCatch tryCatch;
 		if (info.Length() == 1) {
 			unsigned int paramId;
-			if (UFF::IntConverter::arg(0, &paramId, info)) {
+			if (FF::IntConverter::arg(0, &paramId, info)) {
 				v8::Local<v8::Value> err = tryCatch.formatCatchedError("ParamGrid::New");
 				tryCatch.throwNew(err);
 				return;

@@ -63,7 +63,7 @@ NAN_METHOD(SuperpixelSEEDS::Iterate) {
 	FF::TryCatch tryCatch;
 
 	uint iterations = 4;
-	if (UFF::IntConverter::optArg(0, &iterations, info)) {
+	if (FF::IntConverter::optArg(0, &iterations, info)) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSEEDS::Iterate");
 		tryCatch.throwNew(err);
 		return;

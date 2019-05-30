@@ -80,12 +80,12 @@ NAN_METHOD(HOGDescriptor::New) {
 
 NAN_METHOD(HOGDescriptor::GetDaimlerPeopleDetector) {
   std::vector<float> detector = cv::HOGDescriptor::getDaimlerPeopleDetector();
-  info.GetReturnValue().Set(FloatArrayConverter::wrap(detector));
+  info.GetReturnValue().Set(FF::FloatArrayConverter::wrap(detector));
 }
 
 NAN_METHOD(HOGDescriptor::GetDefaultPeopleDetector) {
   std::vector<float> detector = cv::HOGDescriptor::getDefaultPeopleDetector();
-  info.GetReturnValue().Set(FloatArrayConverter::wrap(detector));
+  info.GetReturnValue().Set(FF::FloatArrayConverter::wrap(detector));
 }
 
 NAN_METHOD(HOGDescriptor::CheckDetectorSize) {
@@ -95,7 +95,7 @@ NAN_METHOD(HOGDescriptor::CheckDetectorSize) {
 NAN_METHOD(HOGDescriptor::SetSVMDetector) {
   FF_METHOD_CONTEXT("SetSVMDetector");
   std::vector<float> detector;
-  if (!FF::hasArg(info, 0) || FloatArrayConverter::unwrapTo(&detector, info[0])) {
+  if (!FF::hasArg(info, 0) || FF::FloatArrayConverter::unwrapTo(&detector, info[0])) {
     FF_THROW("expected detector to be an Array of type Number");
   }
   HOGDescriptor::Converter::unwrap(info.This())->setSVMDetector(detector);

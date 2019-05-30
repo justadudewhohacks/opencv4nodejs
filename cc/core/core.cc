@@ -62,7 +62,7 @@ NAN_METHOD(Core::Partition) {
   int numLabels = 0;
   std::vector<int> labels;
 
-  if (Point2::Converter::hasInstance(data0)) {
+  if (Point2::hasInstance(data0)) {
     std::vector<cv::Point2d> pts;
 	if (ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
@@ -71,7 +71,7 @@ NAN_METHOD(Core::Partition) {
 
     numLabels = cv::partition(pts, labels, predicateFactory<Point2, cv::Point2d>(cb));
   }
-  else if (Point3::Converter::hasInstance(data0)) {
+  else if (Point3::hasInstance(data0)) {
     std::vector<cv::Point3d> pts;
 	if (ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
@@ -79,7 +79,7 @@ NAN_METHOD(Core::Partition) {
 	}
 	numLabels = cv::partition(pts, labels, predicateFactory<Point3, cv::Point3d>(cb));
   }
-  else if (Vec2::Converter::hasInstance(data0)) {
+  else if (Vec2::hasInstance(data0)) {
 	std::vector<cv::Vec2d> pts;
 	if (ObjectArrayConverter<Vec2, cv::Vec2d>::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
@@ -87,7 +87,7 @@ NAN_METHOD(Core::Partition) {
 	}
     numLabels = cv::partition(pts, labels, predicateFactory<Vec2, cv::Vec2d>(cb));
   }
-  else if (Vec3::Converter::hasInstance(data0)) {
+  else if (Vec3::hasInstance(data0)) {
 	std::vector<cv::Vec3d> pts;
 	if (ObjectArrayConverter<Vec3, cv::Vec3d>::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
@@ -95,7 +95,7 @@ NAN_METHOD(Core::Partition) {
 	}
 	numLabels = cv::partition(pts, labels, predicateFactory<Vec3, cv::Vec3d>(cb));
   }
-  else if (Vec4::Converter::hasInstance(data0)) {
+  else if (Vec4::hasInstance(data0)) {
 	std::vector<cv::Vec4d> pts;
 	if (ObjectArrayConverter<Vec4, cv::Vec4d>::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
@@ -103,9 +103,9 @@ NAN_METHOD(Core::Partition) {
 	}
     numLabels = cv::partition(pts, labels, predicateFactory<Vec4, cv::Vec4d>(cb));
   }
-  else if (Mat::Converter::hasInstance(data0)) {
+  else if (Mat::hasInstance(data0)) {
     std::vector<cv::Mat> mats;
-	if (ObjectArrayConverter<Mat, cv::Mat>::arg(0, &mats, info)) {
+	if (Mat::ArrayConverter::arg(0, &mats, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
 		return;
 	}
@@ -113,7 +113,7 @@ NAN_METHOD(Core::Partition) {
   }
 
   v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-  Nan::Set(ret, FF::newString("labels"), IntArrayConverter::wrap(labels));
+  Nan::Set(ret, FF::newString("labels"), FF::IntArrayConverter::wrap(labels));
   Nan::Set(ret, FF::newString("numLabels"), Nan::New(numLabels));
   info.GetReturnValue().Set(ret);
 }
@@ -132,7 +132,7 @@ NAN_METHOD(Core::Kmeans) {
   }
   
   v8::Local<v8::Value> data0 = Nan::Get(jsData, 0).ToLocalChecked();
-  bool isPoint2 = Point2::Converter::hasInstance(data0);
+  bool isPoint2 = Point2::hasInstance(data0);
 
   FF::TryCatch tryCatch;
   std::vector<cv::Point2f> pts2d;
@@ -141,7 +141,7 @@ NAN_METHOD(Core::Kmeans) {
   cv::TermCriteria termCriteria;
   int k, attempts, flags;
   if ((
-	  isPoint2 && ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &pts2d, info) ||
+	  isPoint2 && Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &pts2d, info) ||
 	  !isPoint2 && ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::arg(0, &pts3d, info)
 	  ) ||
 	  FF::IntConverter::arg(1, &k, info) ||
@@ -164,16 +164,16 @@ NAN_METHOD(Core::Kmeans) {
   }
   
   v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-  Nan::Set(ret, FF::newString("labels"), IntArrayConverter::wrap(labels));
+  Nan::Set(ret, FF::newString("labels"), FF::IntArrayConverter::wrap(labels));
 
-  if (Point2::Converter::hasInstance(data0)) {
+  if (Point2::hasInstance(data0)) {
     std::vector<cv::Point2f> centers;
     for (int i = 0; i < centersMat.rows; i++) {
       centers.push_back(cv::Point2f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1)));
     }
-    Nan::Set(ret, FF::newString("centers"), ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(centers));
+    Nan::Set(ret, FF::newString("centers"), Point2::ArrayWithCastConverter<cv::Point2f>::wrap(centers));
   }
-  else if (Point3::Converter::hasInstance(data0)) {
+  else if (Point3::hasInstance(data0)) {
     std::vector<cv::Point3f> centers;
     for (int i = 0; i < centersMat.rows; i++) {
       centers.push_back(cv::Point3f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1), centersMat.at<float>(i, 2)));

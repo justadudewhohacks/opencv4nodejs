@@ -43,7 +43,7 @@ public:
 		for (int s = 0; s < m.dims; s++) {
 			sizes.push_back(m.size[s]);
 		}
-		info.GetReturnValue().Set(IntArrayConverter::wrap(sizes));
+		info.GetReturnValue().Set(FF::IntArrayConverter::wrap(sizes));
 	};
 
 	FF_INIT_MAT_OPERATIONS();

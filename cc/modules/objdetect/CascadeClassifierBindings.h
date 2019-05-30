@@ -56,7 +56,7 @@ namespace CascadeClassifierBindings {
       else {
         v8::Local<v8::Object> ret = Nan::New<v8::Object>();
         Nan::Set(ret, FF::newString("objects"), ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects));
-        Nan::Set(ret, FF::newString("numDetections"), IntArrayConverter::wrap(numDetections));
+        Nan::Set(ret, FF::newString("numDetections"), FF::IntArrayConverter::wrap(numDetections));
         return ret;
       }
     }
@@ -68,8 +68,8 @@ namespace CascadeClassifierBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         FF::DoubleConverter::optArg(1, &scaleFactor, info) ||
-        UFF::IntConverter::optArg(2, &minNeighbors, info) ||
-        UFF::IntConverter::optArg(3, &flags, info) ||
+        FF::IntConverter::optArg(2, &minNeighbors, info) ||
+        FF::IntConverter::optArg(3, &flags, info) ||
         Size::Converter::optArg(4, &minSize, info) ||
         Size::Converter::optArg(5, &maxSize, info)
       );
@@ -83,8 +83,8 @@ namespace CascadeClassifierBindings {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         FF::DoubleConverter::optProp(&scaleFactor, "scaleFactor", opts) ||
-        UFF::IntConverter::optProp(&minNeighbors, "minNeighbors", opts) ||
-        UFF::IntConverter::optProp(&flags, "flags", opts) ||
+        FF::IntConverter::optProp(&minNeighbors, "minNeighbors", opts) ||
+        FF::IntConverter::optProp(&flags, "flags", opts) ||
         Size::Converter::optProp(&minSize, "minSize", opts) ||
         Size::Converter::optProp(&maxSize, "maxSize", opts)
       );
@@ -112,8 +112,8 @@ namespace CascadeClassifierBindings {
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
       Nan::Set(ret, FF::newString("objects"), ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects));
-      Nan::Set(ret, FF::newString("rejectLevels"), IntArrayConverter::wrap(rejectLevels));
-      Nan::Set(ret, FF::newString("levelWeights"), DoubleArrayConverter::wrap(levelWeights));
+      Nan::Set(ret, FF::newString("rejectLevels"), FF::IntArrayConverter::wrap(rejectLevels));
+      Nan::Set(ret, FF::newString("levelWeights"), FF::DoubleArrayConverter::wrap(levelWeights));
       return ret;
     }
   };

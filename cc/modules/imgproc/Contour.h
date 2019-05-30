@@ -6,10 +6,17 @@
 #ifndef __FF_CONTOUR_H__
 #define __FF_CONTOUR_H__
 
-class Contour: public Nan::ObjectWrap {
+class Contour: public FF::ObjectWrap<Contour> {
 public:
-  std::vector<cv::Point2i> contour;
-  cv::Vec4i hierarchy;
+	typedef  std::vector<cv::Point2i> Type;
+
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "Contour";
+	}
+
+	cv::Vec4i hierarchy;
 
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
@@ -46,17 +53,6 @@ public:
 	static NAN_METHOD(FitEllipse);
 	static NAN_METHOD(MinAreaRect);
 	static NAN_METHOD(_Moments);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-  std::vector<cv::Point2i>* getNativeObjectPtr() { return &contour; }
-  std::vector<cv::Point2i> getNativeObject() { return contour; }
-
-  typedef InstanceConverter<Contour, std::vector<cv::Point2i>> Converter;
-
-  static const char* getClassName() {
-	  return "Contour";
-  }
 };
 
 #endif

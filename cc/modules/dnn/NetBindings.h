@@ -61,7 +61,7 @@ namespace NetBindings {
 
     v8::Local<v8::Value> getReturnValue() {
       if (outBlobNames.size() > 0) {
-        return ObjectArrayConverter<Mat, cv::Mat>::wrap(outputBlobs);
+        return Mat::ArrayConverter::wrap(outputBlobs);
       }
 
       return Mat::Converter::wrap(returnValue);
@@ -117,7 +117,7 @@ namespace NetBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return IntArrayConverter::wrap(layerIndexes);
+      return FF::IntArrayConverter::wrap(layerIndexes);
     }
   };
 

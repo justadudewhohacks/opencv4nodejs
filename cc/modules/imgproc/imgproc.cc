@@ -49,7 +49,7 @@ NAN_METHOD(Imgproc::GetStructuringElement) {
 	cv::Point2d anchor = cv::Point2d(-1, -1);
 
 	if (
-		UFF::IntConverter::arg(0, &shape, info) ||
+		FF::IntConverter::arg(0, &shape, info) ||
 		Size::Converter::arg(1, &size, info) ||
 		Point2::Converter::optArg(2, &anchor, info)
 	) {
@@ -86,8 +86,8 @@ NAN_METHOD(Imgproc::GetAffineTransform) {
 
 	std::vector<cv::Point2f> srcPoints, dstPoints;
 	if (
-		ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &srcPoints, info) ||
-		ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &dstPoints, info)
+		Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &srcPoints, info) ||
+		Point2::ArrayWithCastConverter<cv::Point2f>::arg(1, &dstPoints, info)
 		) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::GetAffineTransform"));
 		return;
@@ -102,8 +102,8 @@ NAN_METHOD(Imgproc::GetPerspectiveTransform) {
   FF::TryCatch tryCatch;
 
   std::vector<cv::Point2f> srcPoints, dstPoints;
-  if (ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &srcPoints, info)
-	  || ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(1, &dstPoints, info)
+  if (Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &srcPoints, info)
+	  || Point2::ArrayWithCastConverter<cv::Point2f>::arg(1, &dstPoints, info)
 	) {
 	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Imgproc::GetPerspectiveTransform");
 	  tryCatch.throwNew(err);
@@ -285,8 +285,8 @@ NAN_METHOD(Imgproc::FitLine) {
     FF_THROW("expected arg0 to be an Array with atleast 2 Points");
   }
   v8::Local<v8::Value> jsPt1 = Nan::Get(jsPoints, 0).ToLocalChecked();
-  bool isPoint2 = Point2::Converter::hasInstance(jsPt1);
-  bool isPoint3 = Point3::Converter::hasInstance(jsPt1);
+  bool isPoint2 = Point2::hasInstance(jsPt1);
+  bool isPoint3 = Point3::hasInstance(jsPt1);
   if (!isPoint2 && !isPoint3) {
     FF_THROW("expected arg0 to be an Array containing instances of Point2 or Point3");
   }
@@ -301,7 +301,7 @@ NAN_METHOD(Imgproc::FitLine) {
 	isPoint2 && ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &pts2d, info) ||
 	!isPoint2 && ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &pts3d, info)
 	) ||
-	UFF::IntConverter::arg(1, &distType, info) ||
+	FF::IntConverter::arg(1, &distType, info) ||
 	FF::DoubleConverter::arg(2, &param, info) ||
 	FF::DoubleConverter::arg(3, &reps, info) ||
 	FF::DoubleConverter::arg(4, &aeps, info)
