@@ -6,8 +6,13 @@
 #ifndef __FF_POINT2_H__
 #define __FF_POINT2_H__
 
-class Point2 : public FF::ObjectWrap<Point2, cv::Point2d> {
+class Point2 : public FF::ObjectWrap<Point2> {
 public:
+	typedef cv::Point2d Type;
+
+	//typedef ArrayWithCastConverter<cv::Point2d> ArrayConverter;
+	//typedef ArrayOfArraysWithCastConverter<TClass::Type> ArrayOfArraysConverter;
+
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {

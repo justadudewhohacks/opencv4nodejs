@@ -143,7 +143,7 @@ namespace MatCalib3dBindings {
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
       Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), BoolConverter::wrap(returnValue));
-      Nan::Set(ret, Nan::New("corners").ToLocalChecked(), ObjectArrayConverter<Point2, cv::Point2d>::wrap(corners));
+      Nan::Set(ret, Nan::New("corners").ToLocalChecked(), Point2::ArrayConverter::wrap(corners));
       return ret;
     }
   
