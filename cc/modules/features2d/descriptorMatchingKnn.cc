@@ -123,7 +123,7 @@ public:
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return Mat::Converter::arg(0, &descFrom, info)
 			|| Mat::Converter::arg(1, &descTo, info)
-			|| IntConverter::arg(2, &k, info);
+			|| FF::IntConverter::arg(2, &k, info);
 	}
 
 	v8::Local<v8::Value> getReturnValue() {

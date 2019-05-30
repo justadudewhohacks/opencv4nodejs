@@ -16,7 +16,7 @@ NAN_METHOD(FaceRecognizer::Save) {
 	FF::TryCatch tryCatch;
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
+	if (FF::StringConverter::arg(0, &path, info)) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("FaceRecognizer::Save");
 		tryCatch.throwNew(err);
 		return;
@@ -28,7 +28,7 @@ NAN_METHOD(FaceRecognizer::Load) {
 	FF::TryCatch tryCatch;
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
+	if (FF::StringConverter::arg(0, &path, info)) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("FaceRecognizer::Load");
 		tryCatch.throwNew(err);
 		return;

@@ -51,16 +51,16 @@ public:
 	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
 			  Mat::Converter::arg(0, &img, info) ||
-			  IntConverter::arg(1, &num_superpixels, info) ||
-			  IntConverter::arg(2, &num_levels, info)
+			  FF::IntConverter::arg(1, &num_superpixels, info) ||
+			  FF::IntConverter::arg(2, &num_levels, info)
 			);
 	  }
 
 	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  IntConverter::optArg(3, &histogram_bins, info) ||
-			  IntConverter::optArg(4, &prior, info) ||
-			  BoolConverter::optArg(5, &double_step, info)
+			  FF::IntConverter::optArg(3, &histogram_bins, info) ||
+			  FF::IntConverter::optArg(4, &prior, info) ||
+			  FF::BoolConverter::optArg(5, &double_step, info)
 			  );
 	  }
 
@@ -71,9 +71,9 @@ public:
 	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 		  return (
-			  IntConverter::optProp(&histogram_bins, "histogram_bins", opts) ||
-			  IntConverter::optProp(&prior, "prior", opts) ||
-			  BoolConverter::optProp(&double_step, "double_step", opts)
+			  FF::IntConverter::optProp(&histogram_bins, "histogram_bins", opts) ||
+			  FF::IntConverter::optProp(&prior, "prior", opts) ||
+			  FF::BoolConverter::optProp(&double_step, "double_step", opts)
 			);
 	  }
   };

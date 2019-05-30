@@ -33,11 +33,11 @@ NAN_METHOD(KeyPoint::New) {
 		int octave, classId;
 		if (
 			Point2::Converter::arg(0, &pt, info) ||
-			DoubleConverter::arg(1, &size, info) ||
-			DoubleConverter::arg(2, &angle, info) ||
-			DoubleConverter::arg(3, &response, info) ||
-			IntConverter::arg(4, &octave, info) ||
-			IntConverter::arg(5, &classId, info)
+			FF::DoubleConverter::arg(1, &size, info) ||
+			FF::DoubleConverter::arg(2, &angle, info) ||
+			FF::DoubleConverter::arg(3, &response, info) ||
+			FF::IntConverter::arg(4, &octave, info) ||
+			FF::IntConverter::arg(5, &classId, info)
 		) {
 			v8::Local<v8::Value> err = tryCatch.formatCatchedError("KeyPoint::New");
 			tryCatch.throwNew(err);

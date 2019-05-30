@@ -20,8 +20,8 @@ public:
   static FF_SETTER_INT(FacemarkAAMParams, maxM, params.max_m);
   static FF_GETTER(FacemarkAAMParams, maxNGet, params.max_n);
   static FF_SETTER_INT(FacemarkAAMParams, maxN, params.max_n);
-  static FF_GETTER_SIMPLE(FacemarkAAMParams, modelFilenameGet, params.model_filename, StringConverter);
-  static FF_SETTER_SIMPLE(FacemarkAAMParams, modelFilename, params.model_filename, StringConverter);
+  static FF_GETTER_SIMPLE(FacemarkAAMParams, modelFilenameGet, params.model_filename, FF::StringConverter);
+  static FF_SETTER_SIMPLE(FacemarkAAMParams, modelFilename, params.model_filename, FF::StringConverter);
   static FF_GETTER(FacemarkAAMParams, nGet, params.n);
   static FF_SETTER_INT(FacemarkAAMParams, n, params.n);
   static FF_GETTER(FacemarkAAMParams, nIterGet, params.n_iter);

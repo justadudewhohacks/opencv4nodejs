@@ -16,7 +16,7 @@ namespace VideoCaptureBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-          IntConverter::arg(0, &prop, info)
+          FF::IntConverter::arg(0, &prop, info)
       );
     }
 
@@ -26,7 +26,7 @@ namespace VideoCaptureBindings {
 		}
 
 		v8::Local<v8::Value> getReturnValue() {
-			return DoubleConverter::wrap(val);
+			return FF::DoubleConverter::wrap(val);
 		}
 	};
 
@@ -67,8 +67,8 @@ namespace VideoCaptureBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-          IntConverter::arg(0, &prop, info) ||
-          DoubleConverter::arg(1, &value, info)
+          FF::IntConverter::arg(0, &prop, info) ||
+          FF::DoubleConverter::arg(1, &value, info)
       );
     }
 

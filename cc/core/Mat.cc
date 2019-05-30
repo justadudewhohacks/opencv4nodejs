@@ -220,9 +220,9 @@ NAN_METHOD(Mat::Eye) {
 	FF::TryCatch tryCatch;
 	int rows, cols, type;
 	if (
-		IntConverter::arg(0, &rows, info) ||
-		IntConverter::arg(1, &cols, info) ||
-		IntConverter::arg(2, &type, info)
+		FF::IntConverter::arg(0, &rows, info) ||
+		FF::IntConverter::arg(1, &cols, info) ||
+		FF::IntConverter::arg(2, &type, info)
 	) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::Eye");
 		tryCatch.throwNew(err);
@@ -237,15 +237,15 @@ NAN_METHOD(Mat::FlattenFloat) {
 	FF::TryCatch tryCatch;
 	int rows, cols;
 	if (
-		IntConverter::arg(0, &rows, info) ||
-		IntConverter::arg(1, &cols, info)
+		FF::IntConverter::arg(0, &rows, info) ||
+		FF::IntConverter::arg(1, &cols, info)
 		) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::FlattenFloat");
 		tryCatch.throwNew(err);
 		return;
 	}
 
-	cv::Mat matSelf = Mat::Converter::unwrap(info.This());
+	cv::Mat matSelf = Mat::unwrapSelf(info);
 	cv::Mat mat2D(rows, cols, CV_32F, matSelf.ptr<float>());
 	info.GetReturnValue().Set(Mat::Converter::wrap(mat2D));
 }
@@ -253,7 +253,7 @@ NAN_METHOD(Mat::FlattenFloat) {
 NAN_METHOD(Mat::At) {
   FF_METHOD_CONTEXT("Mat::At");
 
-  cv::Mat matSelf = Mat::Converter::unwrap(info.This());
+  cv::Mat matSelf = Mat::unwrapSelf(info);
   v8::Local<v8::Value> val;
   v8::Local<v8::Value> jsVal;
 
@@ -273,15 +273,15 @@ NAN_METHOD(Mat::At) {
     v8::Local<v8::Object> jsVec;
     if (vec->Length() == 2) {
       jsVec = FF::newInstance(Nan::New(Vec2::constructor));
-      Vec2::unwrap(jsVec)->setNativeObject(cv::Vec2d(DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked())));
+      Vec2::unwrap(jsVec)->setNativeObject(cv::Vec2d(FF::DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()), FF::DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked())));
     }
     else if (vec->Length() == 3) {
       jsVec = FF::newInstance(Nan::New(Vec3::constructor));
-	  Vec3::unwrap(jsVec)->setNativeObject(cv::Vec3d(DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 2).ToLocalChecked())));
+	  Vec3::unwrap(jsVec)->setNativeObject(cv::Vec3d(FF::DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()), FF::DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()), FF::DoubleConverter::unwrap(Nan::Get(vec, 2).ToLocalChecked())));
     }
     else {
       jsVec = FF::newInstance(Nan::New(Vec4::constructor));
-	  Vec4::unwrap(jsVec)->setNativeObject(cv::Vec4d(DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 2).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 3).ToLocalChecked())));
+	  Vec4::unwrap(jsVec)->setNativeObject(cv::Vec4d(FF::DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()), FF::DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()), FF::DoubleConverter::unwrap(Nan::Get(vec, 2).ToLocalChecked()), FF::DoubleConverter::unwrap(Nan::Get(vec, 3).ToLocalChecked())));
     }
     jsVal = jsVec;
   }
@@ -293,7 +293,7 @@ NAN_METHOD(Mat::At) {
 
 NAN_METHOD(Mat::AtRaw) {
   FF_METHOD_CONTEXT("Mat::AtRaw");
-  cv::Mat matSelf = Mat::Converter::unwrap(info.This());
+  cv::Mat matSelf = Mat::unwrapSelf(info);
   FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[0] - 1, "Mat::At row");
   FF_ASSERT_INDEX_RANGE(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[1] - 1, "Mat::At col");
   v8::Local<v8::Value> val;
@@ -303,7 +303,7 @@ NAN_METHOD(Mat::AtRaw) {
 
 NAN_METHOD(Mat::Set) {
   FF_METHOD_CONTEXT("Mat::Set");
-  cv::Mat matSelf = Mat::Converter::unwrap(info.This());
+  cv::Mat matSelf = Mat::unwrapSelf(info);
   FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[0] - 1, "Mat::At row");
   FF_ASSERT_INDEX_RANGE(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[1] - 1, "Mat::At col");
 
@@ -335,7 +335,7 @@ NAN_METHOD(Mat::Set) {
 
 NAN_METHOD(Mat::SetTo) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::SetToWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::SetToWorker>(Mat::unwrapSelf(info)),
     "Mat::SetTo",
     info
   );
@@ -343,14 +343,14 @@ NAN_METHOD(Mat::SetTo) {
 
 NAN_METHOD(Mat::SetToAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::SetToWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::SetToWorker>(Mat::unwrapSelf(info)),
     "Mat::SetToAsync",
     info
   );
 }
 
 NAN_METHOD(Mat::GetDataAsArray) {
-  cv::Mat mat = Mat::Converter::unwrap(info.This());
+  cv::Mat mat = Mat::unwrapSelf(info);
   v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(mat.size[0]);
   if (mat.dims > 2) { // 3D
     FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT_3D, FF::matGet);
@@ -366,7 +366,7 @@ NAN_METHOD(Mat::GetRegion) {
   }
   cv::Rect2d rect = FF_UNWRAP(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked(), Rect)->rect;
   v8::Local<v8::Object> jsRegion = FF::newInstance(Nan::New(constructor));
-  Mat::unwrap(jsRegion)->setNativeObject(Mat::Converter::unwrap(info.This())(rect));
+  Mat::unwrap(jsRegion)->setNativeObject(Mat::unwrapSelf(info)(rect));
   info.GetReturnValue().Set(jsRegion);
 }
 
@@ -387,10 +387,10 @@ NAN_METHOD(Mat::Norm) {
   FF::TryCatch tryCatch;
   if (
 	  hasOptArgsObj && (
-		UintConverter::optProp(&normType, "normType", optArgs) ||
+		UFF::IntConverter::optProp(&normType, "normType", optArgs) ||
 		Mat::Converter::optProp(&mask, "mask", optArgs)
 		) || (
-		UintConverter::optArg(i, &normType, info) ||
+		UFF::IntConverter::optArg(i, &normType, info) ||
 		Mat::Converter::optArg(i + 1, &mask, info)
 		)
 	  ) {
@@ -405,17 +405,17 @@ NAN_METHOD(Mat::Norm) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Mat::Norm"));
 		return;
 	}
-    norm = cv::norm(Mat::Converter::unwrap(info.This()), src2, (int)normType, mask);
+    norm = cv::norm(Mat::unwrapSelf(info), src2, (int)normType, mask);
   }
   else {
-    norm = cv::norm(Mat::Converter::unwrap(info.This()), (int)normType, mask);
+    norm = cv::norm(Mat::unwrapSelf(info), (int)normType, mask);
   }
   info.GetReturnValue().Set(norm);
 }
 
 NAN_METHOD(Mat::Normalize) {
 	FF::SyncBinding(
-		std::make_shared<MatBindings::NormalizeWorker>(Mat::Converter::unwrap(info.This())),
+		std::make_shared<MatBindings::NormalizeWorker>(Mat::unwrapSelf(info)),
 		"Mat::Normalize",
 		info
 	);
@@ -423,7 +423,7 @@ NAN_METHOD(Mat::Normalize) {
 
 NAN_METHOD(Mat::NormalizeAsync) {
 	FF::AsyncBinding(
-		std::make_shared<MatBindings::NormalizeWorker>(Mat::Converter::unwrap(info.This())),
+		std::make_shared<MatBindings::NormalizeWorker>(Mat::unwrapSelf(info)),
 		"Mat::NormalizeAsync",
 		info
 	);
@@ -434,7 +434,7 @@ NAN_METHOD(Mat::Row) {
     return Nan::ThrowError("usage: row(int r)");
   }
   int r = (int)info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-  cv::Mat mat = Mat::Converter::unwrap(info.This());
+  cv::Mat mat = Mat::unwrapSelf(info);
   v8::Local<v8::Array> row = Nan::New<v8::Array>(mat.cols);
   try {
     if (mat.type() == CV_32FC1) {
@@ -467,13 +467,13 @@ NAN_METHOD(Mat::Row) {
 
 NAN_METHOD(Mat::Release) {
     // must get pointer to the original; else we are just getting a COPY and then releasing that!
-    cv::Mat *mat = &(Mat::Converter::unwrap(info.This()));
+    cv::Mat *mat = &(Mat::unwrapSelf(info));
     mat->release();
 }
 
 NAN_METHOD(Mat::PushBack) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::PushBackWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::PushBackWorker>(Mat::unwrapSelf(info)),
     "Mat::PushBack",
     info
   );
@@ -481,7 +481,7 @@ NAN_METHOD(Mat::PushBack) {
 
 NAN_METHOD(Mat::PushBackAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::PushBackWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::PushBackWorker>(Mat::unwrapSelf(info)),
     "Mat::PushBackAsync",
     info
   );
@@ -489,7 +489,7 @@ NAN_METHOD(Mat::PushBackAsync) {
 
 NAN_METHOD(Mat::PopBack) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::PopBackWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::PopBackWorker>(Mat::unwrapSelf(info)),
     "Mat::PopBack",
     info
   );
@@ -497,7 +497,7 @@ NAN_METHOD(Mat::PopBack) {
 
 NAN_METHOD(Mat::PopBackAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::PopBackWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::PopBackWorker>(Mat::unwrapSelf(info)),
     "Mat::PopBackAsync",
     info
   );
@@ -505,7 +505,7 @@ NAN_METHOD(Mat::PopBackAsync) {
 
 NAN_METHOD(Mat::GetData) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::GetDataWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::GetDataWorker>(Mat::unwrapSelf(info)),
     "Mat::GetData",
     info
   );
@@ -513,7 +513,7 @@ NAN_METHOD(Mat::GetData) {
 
 NAN_METHOD(Mat::GetDataAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::GetDataWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::GetDataWorker>(Mat::unwrapSelf(info)),
     "Mat::GetDataAsync",
     info
   );
@@ -521,7 +521,7 @@ NAN_METHOD(Mat::GetDataAsync) {
 
 NAN_METHOD(Mat::Copy) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::CopyWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::CopyWorker>(Mat::unwrapSelf(info)),
     "Mat::Copy",
     info
   );
@@ -529,7 +529,7 @@ NAN_METHOD(Mat::Copy) {
 
 NAN_METHOD(Mat::CopyAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::CopyWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::CopyWorker>(Mat::unwrapSelf(info)),
     "Mat::CopyAsync",
     info
   );
@@ -537,7 +537,7 @@ NAN_METHOD(Mat::CopyAsync) {
 
 NAN_METHOD(Mat::CopyTo) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::CopyToWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::CopyToWorker>(Mat::unwrapSelf(info)),
     "Mat::CopyTo",
     info
   );
@@ -545,7 +545,7 @@ NAN_METHOD(Mat::CopyTo) {
 
 NAN_METHOD(Mat::CopyToAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::CopyToWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::CopyToWorker>(Mat::unwrapSelf(info)),
     "Mat::CopyToAsync",
     info
   );
@@ -553,7 +553,7 @@ NAN_METHOD(Mat::CopyToAsync) {
 
 NAN_METHOD(Mat::ConvertTo) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::ConvertToWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::ConvertToWorker>(Mat::unwrapSelf(info)),
     "Mat::ConvertTo",
     info
   );
@@ -561,7 +561,7 @@ NAN_METHOD(Mat::ConvertTo) {
 
 NAN_METHOD(Mat::ConvertToAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::ConvertToWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::ConvertToWorker>(Mat::unwrapSelf(info)),
     "Mat::ConvertToAsync",
     info
   );
@@ -569,7 +569,7 @@ NAN_METHOD(Mat::ConvertToAsync) {
 
 NAN_METHOD(Mat::SplitChannels) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::SplitChannelsWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::SplitChannelsWorker>(Mat::unwrapSelf(info)),
     "Mat::SplitChannels",
     info
   );
@@ -577,7 +577,7 @@ NAN_METHOD(Mat::SplitChannels) {
 
 NAN_METHOD(Mat::SplitChannelsAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::SplitChannelsWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::SplitChannelsWorker>(Mat::unwrapSelf(info)),
     "Mat::SplitChannelsAsync",
     info
   );
@@ -585,7 +585,7 @@ NAN_METHOD(Mat::SplitChannelsAsync) {
 
 NAN_METHOD(Mat::AddWeighted) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::AddWeightedWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::AddWeightedWorker>(Mat::unwrapSelf(info)),
     "Mat::AddWeighted",
     info
   );
@@ -593,7 +593,7 @@ NAN_METHOD(Mat::AddWeighted) {
 
 NAN_METHOD(Mat::AddWeightedAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::AddWeightedWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::AddWeightedWorker>(Mat::unwrapSelf(info)),
     "Mat::AddWeightedAsync",
     info
   );
@@ -601,7 +601,7 @@ NAN_METHOD(Mat::AddWeightedAsync) {
 
 NAN_METHOD(Mat::MinMaxLoc) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::MinMaxLocWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::MinMaxLocWorker>(Mat::unwrapSelf(info)),
     "Mat::MinMaxLoc",
     info
   );
@@ -609,7 +609,7 @@ NAN_METHOD(Mat::MinMaxLoc) {
 
 NAN_METHOD(Mat::MinMaxLocAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::MinMaxLocWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::MinMaxLocWorker>(Mat::unwrapSelf(info)),
     "Mat::MinMaxLocAsync",
     info
   );
@@ -617,7 +617,7 @@ NAN_METHOD(Mat::MinMaxLocAsync) {
 
 NAN_METHOD(Mat::FindNonZero) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::FindNonZeroWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::FindNonZeroWorker>(Mat::unwrapSelf(info)),
     "Mat::FindNonZero",
     info
   );
@@ -625,7 +625,7 @@ NAN_METHOD(Mat::FindNonZero) {
 
 NAN_METHOD(Mat::FindNonZeroAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::FindNonZeroWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::FindNonZeroWorker>(Mat::unwrapSelf(info)),
     "Mat::FindNonZeroAsync",
     info
   );
@@ -633,7 +633,7 @@ NAN_METHOD(Mat::FindNonZeroAsync) {
 
 NAN_METHOD(Mat::CountNonZero) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::CountNonZeroWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::CountNonZeroWorker>(Mat::unwrapSelf(info)),
     "Mat::CountNonZero",
     info
   );
@@ -641,7 +641,7 @@ NAN_METHOD(Mat::CountNonZero) {
 
 NAN_METHOD(Mat::CountNonZeroAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::CountNonZeroWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::CountNonZeroWorker>(Mat::unwrapSelf(info)),
     "Mat::CountNonZeroAsync",
     info
   );
@@ -649,7 +649,7 @@ NAN_METHOD(Mat::CountNonZeroAsync) {
 
 NAN_METHOD(Mat::PadToSquare) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::PadToSquareWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::PadToSquareWorker>(Mat::unwrapSelf(info)),
     "Mat::PadToSquare",
     info
   );
@@ -657,7 +657,7 @@ NAN_METHOD(Mat::PadToSquare) {
 
 NAN_METHOD(Mat::PadToSquareAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::PadToSquareWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::PadToSquareWorker>(Mat::unwrapSelf(info)),
     "Mat::PadToSquareAsync",
     info
   );
@@ -665,7 +665,7 @@ NAN_METHOD(Mat::PadToSquareAsync) {
 
 NAN_METHOD(Mat::Dct) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::DCTWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::DCTWorker>(Mat::unwrapSelf(info)),
     "Mat::Dct",
     info
   );
@@ -673,7 +673,7 @@ NAN_METHOD(Mat::Dct) {
 
 NAN_METHOD(Mat::DctAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::DCTWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::DCTWorker>(Mat::unwrapSelf(info)),
     "Mat::DctAsync",
     info
   );
@@ -681,7 +681,7 @@ NAN_METHOD(Mat::DctAsync) {
 
 NAN_METHOD(Mat::Idct) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::DCTWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::DCTWorker>(Mat::unwrapSelf(info)),
     "Mat::Idct",
     info
   );
@@ -689,7 +689,7 @@ NAN_METHOD(Mat::Idct) {
 
 NAN_METHOD(Mat::IdctAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::DCTWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::DCTWorker>(Mat::unwrapSelf(info)),
     "Mat::IdctAsync",
     info
   );
@@ -697,7 +697,7 @@ NAN_METHOD(Mat::IdctAsync) {
 
 NAN_METHOD(Mat::Dft) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::DFTWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::DFTWorker>(Mat::unwrapSelf(info)),
     "Mat::Dft",
     info
   );
@@ -705,7 +705,7 @@ NAN_METHOD(Mat::Dft) {
 
 NAN_METHOD(Mat::DftAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::DFTWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::DFTWorker>(Mat::unwrapSelf(info)),
     "Mat::DftAsync",
     info
   );
@@ -713,7 +713,7 @@ NAN_METHOD(Mat::DftAsync) {
 
 NAN_METHOD(Mat::Idft) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::DFTWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::DFTWorker>(Mat::unwrapSelf(info)),
     "Mat::Idft",
     info
   );
@@ -721,7 +721,7 @@ NAN_METHOD(Mat::Idft) {
 
 NAN_METHOD(Mat::IdftAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::DFTWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::DFTWorker>(Mat::unwrapSelf(info)),
     "Mat::IdftAsync",
     info
   );
@@ -729,7 +729,7 @@ NAN_METHOD(Mat::IdftAsync) {
 
 NAN_METHOD(Mat::MulSpectrums) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::MulSpectrumsWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::MulSpectrumsWorker>(Mat::unwrapSelf(info)),
     "Mat::MulSpectrums",
     info
   );
@@ -737,7 +737,7 @@ NAN_METHOD(Mat::MulSpectrums) {
 
 NAN_METHOD(Mat::MulSpectrumsAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::MulSpectrumsWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::MulSpectrumsWorker>(Mat::unwrapSelf(info)),
     "Mat::MulSpectrumsAsync",
     info
   );
@@ -745,7 +745,7 @@ NAN_METHOD(Mat::MulSpectrumsAsync) {
 
 NAN_METHOD(Mat::Transform) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::TransformWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::TransformWorker>(Mat::unwrapSelf(info)),
     "Mat::Transform",
     info
   );
@@ -753,7 +753,7 @@ NAN_METHOD(Mat::Transform) {
 
 NAN_METHOD(Mat::TransformAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::TransformWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::TransformWorker>(Mat::unwrapSelf(info)),
     "Mat::TransformAsync",
     info
   );
@@ -761,7 +761,7 @@ NAN_METHOD(Mat::TransformAsync) {
 
 NAN_METHOD(Mat::PerspectiveTransform) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::PerspectiveTransformWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::PerspectiveTransformWorker>(Mat::unwrapSelf(info)),
     "Mat::PerspectiveTransform",
     info
   );
@@ -769,7 +769,7 @@ NAN_METHOD(Mat::PerspectiveTransform) {
 
 NAN_METHOD(Mat::PerspectiveTransformAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::PerspectiveTransformWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::PerspectiveTransformWorker>(Mat::unwrapSelf(info)),
     "Mat::PerspectiveTransformAsync",
     info
   );
@@ -777,7 +777,7 @@ NAN_METHOD(Mat::PerspectiveTransformAsync) {
 
 NAN_METHOD(Mat::Flip) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::FlipWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::FlipWorker>(Mat::unwrapSelf(info)),
     "Mat::Flip",
     info
   );
@@ -785,7 +785,7 @@ NAN_METHOD(Mat::Flip) {
 
 NAN_METHOD(Mat::FlipAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::FlipWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::FlipWorker>(Mat::unwrapSelf(info)),
     "Mat::FlipAsync",
     info
   );
@@ -793,7 +793,7 @@ NAN_METHOD(Mat::FlipAsync) {
 
 NAN_METHOD(Mat::Sum) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::SumWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::SumWorker>(Mat::unwrapSelf(info)),
     "Mat::Sum",
     info
   );
@@ -801,7 +801,7 @@ NAN_METHOD(Mat::Sum) {
 
 NAN_METHOD(Mat::SumAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::SumWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::SumWorker>(Mat::unwrapSelf(info)),
     "Mat::SumAsync",
     info
   );
@@ -809,7 +809,7 @@ NAN_METHOD(Mat::SumAsync) {
 
 NAN_METHOD(Mat::ConvertScaleAbs) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::ConvertScaleAbsWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::ConvertScaleAbsWorker>(Mat::unwrapSelf(info)),
     "Mat::ConvertScaleAbs",
     info
   );
@@ -817,7 +817,7 @@ NAN_METHOD(Mat::ConvertScaleAbs) {
 
 NAN_METHOD(Mat::ConvertScaleAbsAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::ConvertScaleAbsWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::ConvertScaleAbsWorker>(Mat::unwrapSelf(info)),
     "Mat::ConvertScaleAbsAsync",
     info
   );
@@ -825,7 +825,7 @@ NAN_METHOD(Mat::ConvertScaleAbsAsync) {
 
 NAN_METHOD(Mat::GoodFeaturesToTrack) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::GoodFeaturesToTrackWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::GoodFeaturesToTrackWorker>(Mat::unwrapSelf(info)),
     "Mat::GoodFeaturesToTrack",
     info
   );
@@ -833,7 +833,7 @@ NAN_METHOD(Mat::GoodFeaturesToTrack) {
 
 NAN_METHOD(Mat::GoodFeaturesToTrackAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::GoodFeaturesToTrackWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::GoodFeaturesToTrackWorker>(Mat::unwrapSelf(info)),
     "Mat::GoodFeaturesToTrackAsync",
     info
   );
@@ -841,7 +841,7 @@ NAN_METHOD(Mat::GoodFeaturesToTrackAsync) {
 
 NAN_METHOD(Mat::Mean) {
 	FF::SyncBinding(
-		std::make_shared<MatBindings::MeanWorker>(Mat::Converter::unwrap(info.This())),
+		std::make_shared<MatBindings::MeanWorker>(Mat::unwrapSelf(info)),
 		"Mat::Mean",
 		info
 	);
@@ -849,7 +849,7 @@ NAN_METHOD(Mat::Mean) {
 
 NAN_METHOD(Mat::MeanAsync) {
 	FF::AsyncBinding(
-		std::make_shared<MatBindings::MeanWorker>(Mat::Converter::unwrap(info.This())),
+		std::make_shared<MatBindings::MeanWorker>(Mat::unwrapSelf(info)),
 		"Mat::MeanAsync",
 		info
 	);
@@ -857,7 +857,7 @@ NAN_METHOD(Mat::MeanAsync) {
 
 NAN_METHOD(Mat::MeanStdDev) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::MeanStdDevWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::MeanStdDevWorker>(Mat::unwrapSelf(info)),
     "Mat::MeanStdDev",
     info
   );
@@ -865,7 +865,7 @@ NAN_METHOD(Mat::MeanStdDev) {
 
 NAN_METHOD(Mat::MeanStdDevAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::MeanStdDevWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::MeanStdDevWorker>(Mat::unwrapSelf(info)),
     "Mat::MeanStdDevAsync",
     info
   );
@@ -873,7 +873,7 @@ NAN_METHOD(Mat::MeanStdDevAsync) {
 
 NAN_METHOD(Mat::CopyMakeBorder) {
 	FF::SyncBinding(
-		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::Converter::unwrap(info.This())),
+		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::unwrapSelf(info)),
 		"Mat::CopyMakeBorder",
 		info
 	);
@@ -881,7 +881,7 @@ NAN_METHOD(Mat::CopyMakeBorder) {
 
 NAN_METHOD(Mat::CopyMakeBorderAsync) {
 	FF::AsyncBinding(
-		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::Converter::unwrap(info.This())),
+		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::unwrapSelf(info)),
 		"Mat::CopyMakeBorderAsync",
 		info
 	);
@@ -889,7 +889,7 @@ NAN_METHOD(Mat::CopyMakeBorderAsync) {
 
 NAN_METHOD(Mat::Reduce) {
 	FF::SyncBinding(
-		std::make_shared<MatBindings::ReduceWorker>(Mat::Converter::unwrap(info.This())),
+		std::make_shared<MatBindings::ReduceWorker>(Mat::unwrapSelf(info)),
 		"Mat::Reduce",
 		info
 	);
@@ -897,7 +897,7 @@ NAN_METHOD(Mat::Reduce) {
 
 NAN_METHOD(Mat::ReduceAsync) {
 	FF::AsyncBinding(
-		std::make_shared<MatBindings::ReduceWorker>(Mat::Converter::unwrap(info.This())),
+		std::make_shared<MatBindings::ReduceWorker>(Mat::unwrapSelf(info)),
 		"Mat::ReduceAsync",
 		info
 	);
@@ -905,7 +905,7 @@ NAN_METHOD(Mat::ReduceAsync) {
 
 NAN_METHOD(Mat::Eigen) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::EigenWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::EigenWorker>(Mat::unwrapSelf(info)),
     "Mat::Eigen",
     info
   );
@@ -913,7 +913,7 @@ NAN_METHOD(Mat::Eigen) {
 
 NAN_METHOD(Mat::EigenAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::EigenWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::EigenWorker>(Mat::unwrapSelf(info)),
     "Mat::EigenAsync",
     info
   );
@@ -921,7 +921,7 @@ NAN_METHOD(Mat::EigenAsync) {
 
 NAN_METHOD(Mat::Solve) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::SolveWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::SolveWorker>(Mat::unwrapSelf(info)),
     "Mat::Solve",
     info
   );
@@ -929,7 +929,7 @@ NAN_METHOD(Mat::Solve) {
 
 NAN_METHOD(Mat::SolveAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::SolveWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::SolveWorker>(Mat::unwrapSelf(info)),
     "Mat::SolveAsync",
     info
   );
@@ -938,7 +938,7 @@ NAN_METHOD(Mat::SolveAsync) {
 #if CV_VERSION_MINOR > 1
 NAN_METHOD(Mat::Rotate) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::RotateWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::RotateWorker>(Mat::unwrapSelf(info)),
     "Mat::Rotate",
     info
   );
@@ -946,7 +946,7 @@ NAN_METHOD(Mat::Rotate) {
 
 NAN_METHOD(Mat::RotateAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::RotateWorker>(Mat::Converter::unwrap(info.This())),
+    std::make_shared<MatBindings::RotateWorker>(Mat::unwrapSelf(info)),
     "Mat::RotateAsync",
     info
   );

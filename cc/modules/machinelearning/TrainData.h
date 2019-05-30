@@ -50,7 +50,7 @@ public:
 		bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
 				Mat::Converter::arg(0, &samples, info) ||
-				IntConverter::arg(1, &layout, info) ||
+				FF::IntConverter::arg(1, &layout, info) ||
 				Mat::Converter::arg(2, &responses, info)
 			);
 		}

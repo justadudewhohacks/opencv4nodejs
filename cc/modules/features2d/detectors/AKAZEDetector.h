@@ -37,13 +37,13 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntConverter::optArg(0, &descriptorType, info) ||
-				IntConverter::optArg(1, &descriptorSize, info) ||
-				IntConverter::optArg(2, &descriptorChannels, info) ||
-				DoubleConverter::optArg(3, &threshold, info) ||
-				IntConverter::optArg(4, &nOctaves, info) ||
-				IntConverter::optArg(5, &nOctaveLayers, info) ||
-				IntConverter::optArg(6, &diffusivity, info)
+				FF::IntConverter::optArg(0, &descriptorType, info) ||
+				FF::IntConverter::optArg(1, &descriptorSize, info) ||
+				FF::IntConverter::optArg(2, &descriptorChannels, info) ||
+				FF::DoubleConverter::optArg(3, &threshold, info) ||
+				FF::IntConverter::optArg(4, &nOctaves, info) ||
+				FF::IntConverter::optArg(5, &nOctaveLayers, info) ||
+				FF::IntConverter::optArg(6, &diffusivity, info)
 				);
 		}
 
@@ -54,13 +54,13 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntConverter::optProp(&descriptorType, "descriptorType", opts) ||
-				IntConverter::optProp(&descriptorSize, "descriptorSize", opts) ||
-				IntConverter::optProp(&descriptorChannels, "descriptorChannels", opts) ||
-				DoubleConverter::optProp(&threshold, "threshold", opts) ||
-				IntConverter::optProp(&nOctaves, "nOctaves", opts) ||
-				IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
-				IntConverter::optProp(&diffusivity, "diffusivity", opts)
+				FF::IntConverter::optProp(&descriptorType, "descriptorType", opts) ||
+				FF::IntConverter::optProp(&descriptorSize, "descriptorSize", opts) ||
+				FF::IntConverter::optProp(&descriptorChannels, "descriptorChannels", opts) ||
+				FF::DoubleConverter::optProp(&threshold, "threshold", opts) ||
+				FF::IntConverter::optProp(&nOctaves, "nOctaves", opts) ||
+				FF::IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
+				FF::IntConverter::optProp(&diffusivity, "diffusivity", opts)
 				);
 		}
 

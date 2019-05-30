@@ -29,9 +29,9 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntConverter::optArg(0, &threshold, info) ||
-				BoolConverter::optArg(1, &nonmaxSuppression, info) ||
-				IntConverter::optArg(2, &type, info)
+				FF::IntConverter::optArg(0, &threshold, info) ||
+				FF::BoolConverter::optArg(1, &nonmaxSuppression, info) ||
+				FF::IntConverter::optArg(2, &type, info)
 				);
 		}
 
@@ -42,9 +42,9 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntConverter::optProp(&threshold, "threshold", opts) ||
-				BoolConverter::optProp(&nonmaxSuppression, "nonmaxSuppression", opts) ||
-				IntConverter::optProp(&type, "type", opts)
+				FF::IntConverter::optProp(&threshold, "threshold", opts) ||
+				FF::BoolConverter::optProp(&nonmaxSuppression, "nonmaxSuppression", opts) ||
+				FF::IntConverter::optProp(&type, "type", opts)
 				);
 		}
 

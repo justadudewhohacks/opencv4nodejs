@@ -10,7 +10,7 @@ namespace CascadeClassifierBindings {
 		std::string xmlFilePath;
 
 		bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return StringConverter::arg(0, &xmlFilePath, info);
+			return FF::StringConverter::arg(0, &xmlFilePath, info);
 		}
 
 		std::string executeCatchCvExceptionWorker() {
@@ -67,9 +67,9 @@ namespace CascadeClassifierBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(1, &scaleFactor, info) ||
-        UintConverter::optArg(2, &minNeighbors, info) ||
-        UintConverter::optArg(3, &flags, info) ||
+        FF::DoubleConverter::optArg(1, &scaleFactor, info) ||
+        UFF::IntConverter::optArg(2, &minNeighbors, info) ||
+        UFF::IntConverter::optArg(3, &flags, info) ||
         Size::Converter::optArg(4, &minSize, info) ||
         Size::Converter::optArg(5, &maxSize, info)
       );
@@ -82,9 +82,9 @@ namespace CascadeClassifierBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&scaleFactor, "scaleFactor", opts) ||
-        UintConverter::optProp(&minNeighbors, "minNeighbors", opts) ||
-        UintConverter::optProp(&flags, "flags", opts) ||
+        FF::DoubleConverter::optProp(&scaleFactor, "scaleFactor", opts) ||
+        UFF::IntConverter::optProp(&minNeighbors, "minNeighbors", opts) ||
+        UFF::IntConverter::optProp(&flags, "flags", opts) ||
         Size::Converter::optProp(&minSize, "minSize", opts) ||
         Size::Converter::optProp(&maxSize, "maxSize", opts)
       );

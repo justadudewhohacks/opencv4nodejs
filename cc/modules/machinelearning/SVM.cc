@@ -48,13 +48,13 @@ void SVM::setParams(v8::Local<v8::Object> params) {
 	uint kernelType = this->svm->getKernelType();
 	cv::Mat classWeights = this->svm->getClassWeights();
 	if (
-		DoubleConverter::optProp(&c, "c", params) ||
-		DoubleConverter::optProp(&coef0, "coef0", params) ||
-		DoubleConverter::optProp(&degree, "degree", params) ||
-		DoubleConverter::optProp(&gamma, "gamma", params) ||
-		DoubleConverter::optProp(&nu, "nu", params) ||
-		DoubleConverter::optProp(&p, "p", params) ||
-		UintConverter::optProp(&kernelType, "kernelType", params) ||
+		FF::DoubleConverter::optProp(&c, "c", params) ||
+		FF::DoubleConverter::optProp(&coef0, "coef0", params) ||
+		FF::DoubleConverter::optProp(&degree, "degree", params) ||
+		FF::DoubleConverter::optProp(&gamma, "gamma", params) ||
+		FF::DoubleConverter::optProp(&nu, "nu", params) ||
+		FF::DoubleConverter::optProp(&p, "p", params) ||
+		UFF::IntConverter::optProp(&kernelType, "kernelType", params) ||
 		Mat::Converter::optProp(&classWeights, "classWeights", params)
 		) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("SVM::setParams"));
@@ -119,7 +119,7 @@ NAN_METHOD(SVM::Predict) {
 	unsigned int flags = 0;
 	if (
 		FloatArrayConverter::arg(0, &samples, info) ||
-		UintConverter::optArg(1, &flags, info)
+		UFF::IntConverter::optArg(1, &flags, info)
 	) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Predict");
 		tryCatch.throwNew(err);
@@ -132,7 +132,7 @@ NAN_METHOD(SVM::Predict) {
 	unsigned int flags = 0;
 	if (
 		Mat::Converter::arg(0, &samples, info) ||
-		UintConverter::optArg(1, &flags, info)
+		UFF::IntConverter::optArg(1, &flags, info)
 		) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Predict");
 		tryCatch.throwNew(err);
@@ -182,7 +182,7 @@ NAN_METHOD(SVM::GetDecisionFunction) {
 
   FF::TryCatch tryCatch;
   int i;
-  if (IntConverter::arg(0, &i, info)) {
+  if (FF::IntConverter::arg(0, &i, info)) {
 	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::GetDecisionFunction");
 	  tryCatch.throwNew(err);
 	  return;
@@ -202,7 +202,7 @@ NAN_METHOD(SVM::CalcError) {
 	bool test;
 	if (
 		TrainData::Converter::arg(0, &trainData, info) ||
-		BoolConverter::arg(1, &test, info)
+		FF::BoolConverter::arg(1, &test, info)
 		) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::CalcError");
 		tryCatch.throwNew(err);
@@ -222,7 +222,7 @@ NAN_METHOD(SVM::Save) {
 	FF::TryCatch tryCatch;
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
+	if (FF::StringConverter::arg(0, &path, info)) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Save");
 		tryCatch.throwNew(err);
 		return;
@@ -234,7 +234,7 @@ NAN_METHOD(SVM::Load) {
 	FF::TryCatch tryCatch;
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
+	if (FF::StringConverter::arg(0, &path, info)) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Load");
 		tryCatch.throwNew(err);
 		return;

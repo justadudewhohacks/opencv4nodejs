@@ -110,15 +110,15 @@ namespace FF {
 	class BindingBase {
 	public:
 		Int intRequired() {
-			return addRequiredArg<Arg<IntConverter, int>>();
+			return addRequiredArg<Arg<FF::IntConverter, int>>();
 		}
 
 		Int intOptional(int defaultValue, std::string name) {
-			return addOptionalArg<OptArg<IntConverter, int>, int>(defaultValue, name);
+			return addOptionalArg<OptArg<FF::IntConverter, int>, int>(defaultValue, name);
 		}
 
 		Int intReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<IntConverter, int>>(name);
+			return addReturnValue<ReturnValue<FF::IntConverter, int>>(name);
 		}
 
 		IntArray intArrayRequired() {
@@ -135,15 +135,15 @@ namespace FF {
 
 
 		Uint uintRequired() {
-			return addRequiredArg<Arg<UintConverter, uint>>();
+			return addRequiredArg<Arg<UFF::IntConverter, uint>>();
 		}
 
 		Uint uintOptional(uint defaultValue, std::string name) {
-			return addOptionalArg<OptArg<UintConverter, uint>, uint>(defaultValue, name);
+			return addOptionalArg<OptArg<UFF::IntConverter, uint>, uint>(defaultValue, name);
 		}
 
 		Uint uintReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<UintConverter, uint>>(name);
+			return addReturnValue<ReturnValue<UFF::IntConverter, uint>>(name);
 		}
 
 		UintArray uintArrayRequired() {
@@ -159,15 +159,15 @@ namespace FF {
 		}
 
 		Double doubleRequired() {
-			return addRequiredArg<Arg<DoubleConverter, double>>();
+			return addRequiredArg<Arg<FF::DoubleConverter, double>>();
 		}
 
 		Double doubleOptional(double defaultValue, std::string name) {
-			return addOptionalArg<OptArg<DoubleConverter, double>, double>(defaultValue, name);
+			return addOptionalArg<OptArg<FF::DoubleConverter, double>, double>(defaultValue, name);
 		}
 
 		Double doubleReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<DoubleConverter, double>>(name);
+			return addReturnValue<ReturnValue<FF::DoubleConverter, double>>(name);
 		}
 
 		DoubleArray doubleArrayRequired() {
@@ -183,15 +183,15 @@ namespace FF {
 		}
 
 		Float floatRequired() {
-			return addRequiredArg<Arg<FloatConverter, float>>();
+			return addRequiredArg<Arg<FF::FloatConverter, float>>();
 		}
 
 		Float floatOptional(float defaultValue, std::string name) {
-			return addOptionalArg<OptArg<FloatConverter, float>, float>(defaultValue, name);
+			return addOptionalArg<OptArg<FF::FloatConverter, float>, float>(defaultValue, name);
 		}
 
 		Float floatReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<FloatConverter, float>>(name);
+			return addReturnValue<ReturnValue<FF::FloatConverter, float>>(name);
 		}
 
 		FloatArray floatArrayRequired() {
@@ -207,15 +207,15 @@ namespace FF {
 		}
 
 		Bool boolRequired() {
-			return addRequiredArg<Arg<BoolConverter, bool>>();
+			return addRequiredArg<Arg<FF::BoolConverter, bool>>();
 		}
 
 		Bool boolOptional(bool defaultValue, std::string name) {
-			return addOptionalArg<OptArg<BoolConverter, bool>, bool>(defaultValue, name);
+			return addOptionalArg<OptArg<FF::BoolConverter, bool>, bool>(defaultValue, name);
 		}
 
 		Bool boolReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<BoolConverter, bool>>(name);
+			return addReturnValue<ReturnValue<FF::BoolConverter, bool>>(name);
 		}
 
 		BoolArray boolArrayRequired() {
@@ -230,15 +230,15 @@ namespace FF {
 			return addReturnValue<ReturnValue<BoolArrayConverter, std::vector<bool>>>(name);
 		}
 		String stringRequired() {
-			return addRequiredArg<Arg<StringConverter, std::string>>();
+			return addRequiredArg<Arg<FF::StringConverter, std::string>>();
 		}
 
 		String stringOptional(std::string defaultValue, std::string name) {
-			return addOptionalArg<OptArg<StringConverter, std::string>, std::string>(defaultValue, name);
+			return addOptionalArg<OptArg<FF::StringConverter, std::string>, std::string>(defaultValue, name);
 		}
 
 		String stringReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<StringConverter, std::string>>(name);
+			return addReturnValue<ReturnValue<FF::StringConverter, std::string>>(name);
 		}
 
 		StringArray stringArrayRequired() {

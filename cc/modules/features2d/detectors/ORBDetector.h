@@ -41,15 +41,15 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntConverter::optArg(0, &nfeatures, info) ||
-				DoubleConverter::optArg(1, &scaleFactor, info) ||
-				IntConverter::optArg(2, &nlevels, info) ||
-				IntConverter::optArg(3, &edgeThreshold, info) ||
-				IntConverter::optArg(4, &firstLevel, info) ||
-				IntConverter::optArg(5, &WTA_K, info) ||
-				IntConverter::optArg(6, &scoreType, info) ||
-				IntConverter::optArg(7, &patchSize, info) ||
-				IntConverter::optArg(8, &fastThreshold, info)
+				FF::IntConverter::optArg(0, &nfeatures, info) ||
+				FF::DoubleConverter::optArg(1, &scaleFactor, info) ||
+				FF::IntConverter::optArg(2, &nlevels, info) ||
+				FF::IntConverter::optArg(3, &edgeThreshold, info) ||
+				FF::IntConverter::optArg(4, &firstLevel, info) ||
+				FF::IntConverter::optArg(5, &WTA_K, info) ||
+				FF::IntConverter::optArg(6, &scoreType, info) ||
+				FF::IntConverter::optArg(7, &patchSize, info) ||
+				FF::IntConverter::optArg(8, &fastThreshold, info)
 				);
 		}
 
@@ -60,15 +60,15 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntConverter::optProp(&nfeatures, "nfeatures", opts) ||
-				DoubleConverter::optProp(&scaleFactor, "scaleFactor", opts) ||
-				IntConverter::optProp(&nlevels, "nlevels", opts) ||
-				IntConverter::optProp(&edgeThreshold, "edgeThreshold", opts) ||
-				IntConverter::optProp(&firstLevel, "firstLevel", opts) ||
-				IntConverter::optProp(&WTA_K, "WTA_K", opts) ||
-				IntConverter::optProp(&scoreType, "scoreType", opts) ||
-				IntConverter::optProp(&patchSize, "patchSize", opts) ||
-				IntConverter::optProp(&fastThreshold, "fastThreshold", opts)
+				FF::IntConverter::optProp(&nfeatures, "nfeatures", opts) ||
+				FF::DoubleConverter::optProp(&scaleFactor, "scaleFactor", opts) ||
+				FF::IntConverter::optProp(&nlevels, "nlevels", opts) ||
+				FF::IntConverter::optProp(&edgeThreshold, "edgeThreshold", opts) ||
+				FF::IntConverter::optProp(&firstLevel, "firstLevel", opts) ||
+				FF::IntConverter::optProp(&WTA_K, "WTA_K", opts) ||
+				FF::IntConverter::optProp(&scoreType, "scoreType", opts) ||
+				FF::IntConverter::optProp(&patchSize, "patchSize", opts) ||
+				FF::IntConverter::optProp(&fastThreshold, "fastThreshold", opts)
 				);
 		}
 

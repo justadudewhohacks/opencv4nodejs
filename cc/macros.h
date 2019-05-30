@@ -69,11 +69,11 @@
 		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = ff_cast_type(value); \
 	}
 
-#define FF_SETTER_INT(clazz, name, prop) FF_SETTER(clazz, name, prop, IntConverter::assertType, IntConverter::unwrap, "INT")
-#define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, UintConverter::assertType, UintConverter::unwrap, "UINT")
-#define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, DoubleConverter::assertType, DoubleConverter::unwrap, "NUMBER")
-#define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, BoolConverter::assertType, BoolConverter::unwrap, "BOOL")
-#define FF_SETTER_STRING(clazz, name, prop) FF_SETTER(clazz, name, prop, StringConverter::assertType, StringConverter::unwrap, "STRING")
+#define FF_SETTER_INT(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::IntConverter::assertType, FF::IntConverter::unwrap, "INT")
+#define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, UFF::IntConverter::assertType, UFF::IntConverter::unwrap, "UINT")
+#define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::DoubleConverter::assertType, FF::DoubleConverter::unwrap, "NUMBER")
+#define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::BoolConverter::assertType, FF::BoolConverter::unwrap, "BOOL")
+#define FF_SETTER_STRING(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::StringConverter::assertType, FF::StringConverter::unwrap, "STRING")
 
 #define FF_SETTER_SIMPLE(clazz, name, prop, converter)  										\
 	NAN_SETTER(name##Set) {																										\

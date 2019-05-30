@@ -56,7 +56,7 @@ namespace MatBindings {
           return (Vec4::Converter::arg(0, &newVal4, info));
           break;
         default:
-          return (DoubleConverter::arg(0, &newVal1, info));
+          return (FF::DoubleConverter::arg(0, &newVal1, info));
           break;
       }
     }
@@ -109,7 +109,7 @@ namespace MatBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(0, &num, info)
+        FF::IntConverter::optArg(0, &num, info)
       );
     }
 
@@ -221,14 +221,14 @@ namespace MatBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &rtype, info)
+        FF::IntConverter::arg(0, &rtype, info)
       );
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(1, &alpha, info) ||
-        DoubleConverter::optArg(2, &beta, info)
+        FF::DoubleConverter::optArg(1, &alpha, info) ||
+        FF::DoubleConverter::optArg(2, &beta, info)
       );
     }
 
@@ -239,8 +239,8 @@ namespace MatBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&alpha, "alpha", opts) ||
-        DoubleConverter::optProp(&beta, "beta", opts)
+        FF::DoubleConverter::optProp(&alpha, "alpha", opts) ||
+        FF::DoubleConverter::optProp(&beta, "beta", opts)
       );
     }
   };
@@ -261,7 +261,7 @@ namespace MatBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return ObjectArrayConverter<Mat, cv::Mat> ::wrap(mv);
+      return ObjectArrayConverter<Mat, cv::Mat>::wrap(mv);
     }
   };
 
@@ -291,16 +291,16 @@ namespace MatBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::arg(0, &alpha, info) ||
+        FF::DoubleConverter::arg(0, &alpha, info) ||
         Mat::Converter::arg(1, &src2, info) ||
-        DoubleConverter::arg(2, &beta, info) ||
-        DoubleConverter::arg(3, &gamma, info)
+        FF::DoubleConverter::arg(2, &beta, info) ||
+        FF::DoubleConverter::arg(3, &gamma, info)
         );
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(4, &dtype, info)
+        FF::IntConverter::optArg(4, &dtype, info)
       );
     }
   };
@@ -369,7 +369,7 @@ namespace MatBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return IntConverter::wrap(num);
+      return FF::IntConverter::wrap(num);
     }
   };
 
@@ -446,7 +446,7 @@ namespace MatBindings {
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return IntConverter::optArg(0, &flags, info);
+      return FF::IntConverter::optArg(0, &flags, info);
     }
   };
 
@@ -468,8 +468,8 @@ namespace MatBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(0, &flags, info) ||
-        IntConverter::optArg(1, &nonzeroRows, info)
+        FF::IntConverter::optArg(0, &flags, info) ||
+        FF::IntConverter::optArg(1, &nonzeroRows, info)
       );
     }
 
@@ -480,8 +480,8 @@ namespace MatBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        IntConverter::optProp(&flags, "flags", opts) ||
-        IntConverter::optProp(&nonzeroRows, "nonzeroRows", opts)
+        FF::IntConverter::optProp(&flags, "flags", opts) ||
+        FF::IntConverter::optProp(&nonzeroRows, "nonzeroRows", opts)
       );
     }
   };
@@ -517,8 +517,8 @@ namespace MatBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        BoolConverter::optArg(1, &dftRows, info) ||
-        BoolConverter::optArg(2, &conjB, info)
+        FF::BoolConverter::optArg(1, &dftRows, info) ||
+        FF::BoolConverter::optArg(2, &conjB, info)
       );
     }
 
@@ -529,8 +529,8 @@ namespace MatBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        BoolConverter::optProp(&dftRows, "dftRows", opts) ||
-        BoolConverter::optProp(&conjB, "conjB", opts)
+        FF::BoolConverter::optProp(&dftRows, "dftRows", opts) ||
+        FF::BoolConverter::optProp(&conjB, "conjB", opts)
       );
     }
   };
@@ -595,7 +595,7 @@ namespace MatBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &code, info)
+        FF::IntConverter::arg(0, &code, info)
       );
     }
   };
@@ -628,7 +628,7 @@ namespace MatBindings {
     v8::Local<v8::Value> getReturnValue() {
       switch (self.channels()) {
       case 1:
-        return DoubleConverter::wrap(sum[0]);
+        return FF::DoubleConverter::wrap(sum[0]);
       case 2:
         return Vec2::Converter::wrap(cv::Vec2f(sum[0], sum[1]));
       case 3:
@@ -664,8 +664,8 @@ namespace MatBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(0, &alpha, info) ||
-        DoubleConverter::optArg(1, &beta, info)
+        FF::DoubleConverter::optArg(0, &alpha, info) ||
+        FF::DoubleConverter::optArg(1, &beta, info)
         );
     }
 
@@ -676,8 +676,8 @@ namespace MatBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&alpha, "alpha", opts) ||
-        DoubleConverter::optProp(&beta, "beta", opts)
+        FF::DoubleConverter::optProp(&alpha, "alpha", opts) ||
+        FF::DoubleConverter::optProp(&beta, "beta", opts)
         );
     }
   };
@@ -707,9 +707,9 @@ namespace MatBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &maxCorners, info) ||
-        DoubleConverter::arg(1, &qualityLevel, info) ||
-        DoubleConverter::arg(2, &minDistance, info)
+        FF::IntConverter::arg(0, &maxCorners, info) ||
+        FF::DoubleConverter::arg(1, &qualityLevel, info) ||
+        FF::DoubleConverter::arg(2, &minDistance, info)
       );
     }
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -717,19 +717,19 @@ namespace MatBindings {
       if (info[5]->IsBoolean()){
         return (
           Mat::Converter::optArg(3, &mask, info) ||
-          IntConverter::optArg(4, &blockSize, info) ||
-          BoolConverter::optArg(5, &useHarrisDetector, info) ||
-          DoubleConverter::optArg(6, &harrisK, info)
+          FF::IntConverter::optArg(4, &blockSize, info) ||
+          FF::BoolConverter::optArg(5, &useHarrisDetector, info) ||
+          FF::DoubleConverter::optArg(6, &harrisK, info)
         );
 
       } // else we check for the 8 param signature
       else {
         return (
           Mat::Converter::optArg(3, &mask, info) ||
-          IntConverter::optArg(4, &blockSize, info) ||
-          IntConverter::optArg(5, &gradientSize, info) ||
-          BoolConverter::optArg(6, &useHarrisDetector, info) ||
-          DoubleConverter::optArg(7, &harrisK, info)
+          FF::IntConverter::optArg(4, &blockSize, info) ||
+          FF::IntConverter::optArg(5, &gradientSize, info) ||
+          FF::BoolConverter::optArg(6, &useHarrisDetector, info) ||
+          FF::DoubleConverter::optArg(7, &harrisK, info)
         );
       }
     }
@@ -742,10 +742,10 @@ namespace MatBindings {
       v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Mat::Converter::optProp(&mask, "mask", opts) ||
-        IntConverter::optProp(&blockSize, "blockSize", opts) ||
-        IntConverter::optProp(&gradientSize, "gradientSize", opts) ||
-        BoolConverter::optProp(&useHarrisDetector, "useHarrisDetector", opts) ||
-        DoubleConverter::optProp(&harrisK, "harrisK", opts)
+        FF::IntConverter::optProp(&blockSize, "blockSize", opts) ||
+        FF::IntConverter::optProp(&gradientSize, "gradientSize", opts) ||
+        FF::BoolConverter::optProp(&useHarrisDetector, "useHarrisDetector", opts) ||
+        FF::DoubleConverter::optProp(&harrisK, "harrisK", opts)
       );
     }
 
@@ -863,18 +863,18 @@ namespace MatBindings {
 
 	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  IntConverter::arg(0, &top, info) ||
-			  IntConverter::arg(1, &bottom, info) ||
-			  IntConverter::arg(2, &left, info) ||
-			  IntConverter::arg(3, &right, info)
+			  FF::IntConverter::arg(0, &top, info) ||
+			  FF::IntConverter::arg(1, &bottom, info) ||
+			  FF::IntConverter::arg(2, &left, info) ||
+			  FF::IntConverter::arg(3, &right, info)
 			);
 	  }
 
 	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  IntConverter::optArg(4, &borderType, info) ||
+			  FF::IntConverter::optArg(4, &borderType, info) ||
 			  (
-				  (self.channels() == 1 && DoubleConverter::optArg(5, &v1, info)) ||
+				  (self.channels() == 1 && FF::DoubleConverter::optArg(5, &v1, info)) ||
 				  (self.channels() == 2 && Vec2::Converter::optArg(5, &v2, info)) ||
 				  (self.channels() == 3 && Vec3::Converter::optArg(5, &v3, info)) ||
 				  (self.channels() == 4 && Vec4::Converter::optArg(5, &v4, info))
@@ -889,9 +889,9 @@ namespace MatBindings {
 	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  v8::Local<v8::Object> opts = info[4]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 		  return (
-			  IntConverter::optProp(&borderType, "borderType", opts) ||
+			  FF::IntConverter::optProp(&borderType, "borderType", opts) ||
 			  (
-				(self.channels() == 1 && DoubleConverter::optProp(&v1, "value", opts)) ||
+				(self.channels() == 1 && FF::DoubleConverter::optProp(&v1, "value", opts)) ||
 				(self.channels() == 2 && Vec2::Converter::optProp(&v2, "value", opts)) ||
 				(self.channels() == 3 && Vec3::Converter::optProp(&v3, "value", opts)) ||
 				(self.channels() == 4 && Vec4::Converter::optProp(&v4, "value", opts))
@@ -923,14 +923,14 @@ namespace MatBindings {
 
 	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  IntConverter::arg(0, &dim, info) ||
-			  IntConverter::arg(1, &rtype, info)
+			  FF::IntConverter::arg(0, &dim, info) ||
+			  FF::IntConverter::arg(1, &rtype, info)
 			);
 	  }
 
 	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  IntConverter::optArg(2, &dtype, info)
+			  FF::IntConverter::optArg(2, &dtype, info)
 			);
 	  }
   };
@@ -982,7 +982,7 @@ namespace MatBindings {
     
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(1, &flags, info)
+        FF::IntConverter::optArg(1, &flags, info)
       );
     }    
   };
@@ -1013,10 +1013,10 @@ namespace MatBindings {
 
 	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  DoubleConverter::optArg(0, &alpha, info) ||
-			  DoubleConverter::optArg(1, &beta, info) ||
-			  IntConverter::optArg(2, &norm_type, info) ||
-			  IntConverter::optArg(3, &dtype, info) ||
+			  FF::DoubleConverter::optArg(0, &alpha, info) ||
+			  FF::DoubleConverter::optArg(1, &beta, info) ||
+			  FF::IntConverter::optArg(2, &norm_type, info) ||
+			  FF::IntConverter::optArg(3, &dtype, info) ||
 			  Mat::Converter::optArg(4, &mask, info)
 			  );
 	  }
@@ -1028,10 +1028,10 @@ namespace MatBindings {
 	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 		  return (
-			  DoubleConverter::optProp(&alpha, "alpha", opts) ||
-			  DoubleConverter::optProp(&beta, "beta", opts) ||
-			  IntConverter::optProp(&norm_type, "normType", opts) ||
-			  IntConverter::optProp(&dtype, "dtype", opts) ||
+			  FF::DoubleConverter::optProp(&alpha, "alpha", opts) ||
+			  FF::DoubleConverter::optProp(&beta, "beta", opts) ||
+			  FF::IntConverter::optProp(&norm_type, "normType", opts) ||
+			  FF::IntConverter::optProp(&dtype, "dtype", opts) ||
 			  Mat::Converter::optProp(&mask, "mask", opts)
 			);
 	  }

@@ -46,8 +46,8 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntConverter::optArg(0, &normType, info) ||
-				BoolConverter::optArg(1, &crossCheck, info)
+				FF::IntConverter::optArg(0, &normType, info) ||
+				FF::BoolConverter::optArg(1, &crossCheck, info)
 				);
 		}
 
@@ -58,8 +58,8 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntConverter::optProp(&normType, "history", opts) ||
-				BoolConverter::optProp(&crossCheck, "crossCheck", opts)
+				FF::IntConverter::optProp(&normType, "history", opts) ||
+				FF::BoolConverter::optProp(&crossCheck, "crossCheck", opts)
 				);
 		}
 

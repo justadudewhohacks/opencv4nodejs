@@ -38,7 +38,7 @@ static std::function<bool(TNativeObject, TNativeObject)> predicateFactory(v8::Lo
 		TClass::unwrap(cbArgs[0])->setNativeObject(pt1);
 		TClass::unwrap(cbArgs[1])->setNativeObject(pt2);
 		Nan::AsyncResource resource("opencv4nodejs:Predicate::Constructor");
-		return BoolConverter::unwrap(resource.runInAsyncScope(Nan::GetCurrentContext()->Global(), cb, 2, cbArgs).ToLocalChecked());
+		return FF::BoolConverter::unwrap(resource.runInAsyncScope(Nan::GetCurrentContext()->Global(), cb, 2, cbArgs).ToLocalChecked());
 	};
 }
 
@@ -144,10 +144,10 @@ NAN_METHOD(Core::Kmeans) {
 	  isPoint2 && ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::arg(0, &pts2d, info) ||
 	  !isPoint2 && ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::arg(0, &pts3d, info)
 	  ) ||
-	  IntConverter::arg(1, &k, info) ||
+	  FF::IntConverter::arg(1, &k, info) ||
 	  TermCriteria::Converter::arg(2, &termCriteria, info) ||
-	  IntConverter::arg(3, &attempts, info) ||
-	  IntConverter::arg(4, &flags, info)
+	  FF::IntConverter::arg(3, &attempts, info) ||
+	  FF::IntConverter::arg(4, &flags, info)
 	  ) {
 	  tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::FitLine"));
 	  return;
@@ -218,22 +218,22 @@ NAN_METHOD(Core::PolarToCartAsync) {
 
 NAN_METHOD(Core::GetNumThreads) {
   FF_METHOD_CONTEXT("Core::GetNumThreads");
-  info.GetReturnValue().Set(IntConverter::wrap(cv::getNumThreads()));
+  info.GetReturnValue().Set(FF::IntConverter::wrap(cv::getNumThreads()));
 }
 
 NAN_METHOD(Core::SetNumThreads) {
   FF_METHOD_CONTEXT("Core::SetNumThreads");
 
-  if(!IntConverter::assertType(info[0])) {
+  if(!FF::IntConverter::assertType(info[0])) {
     return Nan::ThrowError("Core::SetNumThreads expected arg0 to an int");
   }
 
-  int32_t num = (int32_t)IntConverter::unwrap(info[0]);
+  int32_t num = (int32_t)FF::IntConverter::unwrap(info[0]);
 
   cv::setNumThreads(num);
 }
 
 NAN_METHOD(Core::GetThreadNum) {
   FF_METHOD_CONTEXT("Core::GetNumThreads");
-  info.GetReturnValue().Set(IntConverter::wrap(cv::getThreadNum()));
+  info.GetReturnValue().Set(FF::IntConverter::wrap(cv::getThreadNum()));
 }

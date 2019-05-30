@@ -34,9 +34,9 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntConverter::optArg(0, &thresh, info) ||
-				IntConverter::optArg(1, &octaves, info) ||
-				DoubleConverter::optArg(2, &patternScale, info)
+				FF::IntConverter::optArg(0, &thresh, info) ||
+				FF::IntConverter::optArg(1, &octaves, info) ||
+				FF::DoubleConverter::optArg(2, &patternScale, info)
 				);
 		}
 
@@ -47,9 +47,9 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntConverter::optProp(&thresh, "thresh", opts) ||
-				IntConverter::optProp(&octaves, "octaves", opts) ||
-				DoubleConverter::optProp(&patternScale, "patternScale", opts)
+				FF::IntConverter::optProp(&thresh, "thresh", opts) ||
+				FF::IntConverter::optProp(&octaves, "octaves", opts) ||
+				FF::DoubleConverter::optProp(&patternScale, "patternScale", opts)
 				);
 		}
 

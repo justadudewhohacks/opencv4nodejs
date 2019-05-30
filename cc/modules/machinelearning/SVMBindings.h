@@ -32,7 +32,7 @@ namespace SVMBindings {
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return UintConverter::optArg(1, &flags, info);
+      return UFF::IntConverter::optArg(1, &flags, info);
     }
   };
   
@@ -62,7 +62,7 @@ namespace SVMBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::arg(0, &samples, info) ||
-        UintConverter::arg(1, &layout, info) ||
+        UFF::IntConverter::arg(1, &layout, info) ||
         Mat::Converter::arg(2, &responses, info)
       );
     }
@@ -103,14 +103,14 @@ namespace SVMBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        UintConverter::optArg(1, &kFold, info) ||
+        UFF::IntConverter::optArg(1, &kFold, info) ||
         ParamGrid::Converter::optArg(2, &cGrid, info) ||
         ParamGrid::Converter::optArg(3, &gammaGrid, info) ||
         ParamGrid::Converter::optArg(4, &pGrid, info) ||
         ParamGrid::Converter::optArg(5, &nuGrid, info) ||
         ParamGrid::Converter::optArg(6, &coeffGrid, info) ||
         ParamGrid::Converter::optArg(7, &degreeGrid, info) ||
-        BoolConverter::optArg(8, &balanced, info)
+        FF::BoolConverter::optArg(8, &balanced, info)
       );
     }
   
@@ -121,14 +121,14 @@ namespace SVMBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        UintConverter::optProp(&kFold, "kFold", opts) ||
+        UFF::IntConverter::optProp(&kFold, "kFold", opts) ||
         ParamGrid::Converter::optProp(&cGrid, "cGrid", opts) ||
         ParamGrid::Converter::optProp(&gammaGrid, "gammaGrid", opts) ||
         ParamGrid::Converter::optProp(&pGrid, "pGrid", opts) ||
         ParamGrid::Converter::optProp(&nuGrid, "nuGrid", opts) ||
         ParamGrid::Converter::optProp(&coeffGrid, "coeffGrid", opts) ||
         ParamGrid::Converter::optProp(&degreeGrid, "degreeGrid", opts) ||
-        BoolConverter::optProp(&balanced, "balanced", opts)
+        FF::BoolConverter::optProp(&balanced, "balanced", opts)
       );
     }
   };

@@ -24,9 +24,9 @@ NAN_METHOD(DescriptorMatch::New) {
 		int queryIdx, trainIdx;
 		double distance;
 		if (
-			IntConverter::arg(0, &queryIdx, info) ||
-			IntConverter::arg(1, &trainIdx, info) ||
-			DoubleConverter::arg(2, &distance, info)
+			FF::IntConverter::arg(0, &queryIdx, info) ||
+			FF::IntConverter::arg(1, &trainIdx, info) ||
+			FF::DoubleConverter::arg(2, &distance, info)
 			) {
 			tryCatch.throwNew(tryCatch.formatCatchedError("TermCriteria::New"));
 			return;

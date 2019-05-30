@@ -51,9 +51,9 @@ public:
 
 	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  IntConverter::optArg(1, &algorithm, info) ||
-			  IntConverter::optArg(2, &region_size, info) ||
-			  FloatConverter::optArg(3, &ruler, info)
+			  FF::IntConverter::optArg(1, &algorithm, info) ||
+			  FF::IntConverter::optArg(2, &region_size, info) ||
+			  FF::FloatConverter::optArg(3, &ruler, info)
 			  );
 	  }
 
@@ -64,9 +64,9 @@ public:
 	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 		  return (
-			  IntConverter::optProp(&algorithm, "algorithm", opts) ||
-			  IntConverter::optProp(&region_size, "region_size", opts) ||
-			  FloatConverter::optProp(&ruler, "ruler", opts)
+			  FF::IntConverter::optProp(&algorithm, "algorithm", opts) ||
+			  FF::IntConverter::optProp(&region_size, "region_size", opts) ||
+			  FF::FloatConverter::optProp(&ruler, "ruler", opts)
 			  );
 	  }
   };

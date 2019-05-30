@@ -29,7 +29,7 @@ namespace NetBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        StringConverter::optArg(1, &name, info)
+        FF::StringConverter::optArg(1, &name, info)
       );
     }
   };
@@ -74,7 +74,7 @@ namespace NetBindings {
       }
 #endif
       return (
-        StringConverter::optArg(0, &outputName, info)
+        FF::StringConverter::optArg(0, &outputName, info)
       );
     }
   };

@@ -15,15 +15,15 @@ namespace VideoWriterBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        StringConverter::arg(0, &fileName, info) ||
-        IntConverter::arg(1, &fourccCode, info) ||
-        DoubleConverter::arg(2, &fps, info) ||
+        FF::StringConverter::arg(0, &fileName, info) ||
+        FF::IntConverter::arg(1, &fourccCode, info) ||
+        FF::DoubleConverter::arg(2, &fps, info) ||
         Size::Converter::arg(3, &frameSize, info)
       );
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return BoolConverter::optArg(4, &isColor, info);
+      return FF::BoolConverter::optArg(4, &isColor, info);
     }
 
     std::string executeCatchCvExceptionWorker() {
@@ -42,7 +42,7 @@ namespace VideoWriterBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-          IntConverter::arg(0, &prop, info)
+          FF::IntConverter::arg(0, &prop, info)
       );
     }
 
@@ -52,7 +52,7 @@ namespace VideoWriterBindings {
 	  }
 
 	  v8::Local<v8::Value> getReturnValue() {
-		  return DoubleConverter::wrap(val);
+		  return FF::DoubleConverter::wrap(val);
 	  }
   };
 
@@ -75,8 +75,8 @@ namespace VideoWriterBindings {
 
 	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  IntConverter::arg(0, &prop, info) ||
-			  DoubleConverter::arg(1, &value, info)
+			  FF::IntConverter::arg(0, &prop, info) ||
+			  FF::DoubleConverter::arg(1, &value, info)
 			  );
 	  }
 
@@ -97,11 +97,11 @@ namespace VideoWriterBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return IntConverter::wrap(code);
+      return FF::IntConverter::wrap(code);
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return StringConverter::arg(0, &fourcc, info);
+      return FF::StringConverter::arg(0, &fourcc, info);
     }
   };
 
@@ -120,7 +120,7 @@ namespace VideoWriterBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return BoolConverter::wrap(true);
+      return FF::BoolConverter::wrap(true);
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {

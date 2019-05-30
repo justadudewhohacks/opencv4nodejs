@@ -18,16 +18,16 @@ public:
 
   static FF_GETTER(FacemarkLBFParams, baggingOverlapGet, params.bagging_overlap);
   static FF_SETTER_NUMBER(FacemarkLBFParams, baggingOverlap, params.bagging_overlap);
-  static FF_GETTER_SIMPLE(FacemarkLBFParams, cascadeFaceGet, params.cascade_face, StringConverter);
-  static FF_SETTER_SIMPLE(FacemarkLBFParams, cascadeFace, params.cascade_face, StringConverter);
+  static FF_GETTER_SIMPLE(FacemarkLBFParams, cascadeFaceGet, params.cascade_face, FF::StringConverter);
+  static FF_SETTER_SIMPLE(FacemarkLBFParams, cascadeFace, params.cascade_face, FF::StringConverter);
   static FF_GETTER_SIMPLE(FacemarkLBFParams, detectROIGet, params.detectROI, Rect::Converter);
   static FF_SETTER_SIMPLE(FacemarkLBFParams, detectROI, params.detectROI, Rect::Converter);
   static FF_GETTER_COMPLEX(FacemarkLBFParams, featsMGet, params.feats_m, IntArrayConverter);
   static FF_SETTER_COMPLEX(FacemarkLBFParams, featsM, params.feats_m, std::vector<int>, IntArrayConverter);
   static FF_GETTER(FacemarkLBFParams, initShapeNGet, params.initShape_n);
   static FF_SETTER_INT(FacemarkLBFParams, initShapeN, params.initShape_n);
-  static FF_GETTER_SIMPLE(FacemarkLBFParams, modelFilenameGet, params.model_filename, StringConverter);
-  static FF_SETTER_SIMPLE(FacemarkLBFParams, modelFilename, params.model_filename, StringConverter);
+  static FF_GETTER_SIMPLE(FacemarkLBFParams, modelFilenameGet, params.model_filename, FF::StringConverter);
+  static FF_SETTER_SIMPLE(FacemarkLBFParams, modelFilename, params.model_filename, FF::StringConverter);
   static FF_GETTER(FacemarkLBFParams, nLandmarksGet, params.n_landmarks);
   static FF_SETTER_INT(FacemarkLBFParams, nLandmarks, params.n_landmarks);
 

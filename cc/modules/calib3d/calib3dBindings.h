@@ -43,10 +43,10 @@ namespace Calib3dBindings {
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				UintConverter::optArg(2, &method, info) ||
-				DoubleConverter::optArg(3, &ransacReprojThreshold, info) ||
-				UintConverter::optArg(4, &maxIters, info) ||
-				DoubleConverter::optArg(5, &confidence, info)
+				UFF::IntConverter::optArg(2, &method, info) ||
+				FF::DoubleConverter::optArg(3, &ransacReprojThreshold, info) ||
+				UFF::IntConverter::optArg(4, &maxIters, info) ||
+				FF::DoubleConverter::optArg(5, &confidence, info)
 			);
 		}
 
@@ -57,10 +57,10 @@ namespace Calib3dBindings {
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				UintConverter::optProp(&method, "method", opts) ||
-				DoubleConverter::optProp(&ransacReprojThreshold, "ransacReprojThreshold", opts) ||
-				UintConverter::optProp(&maxIters, "maxIters", opts) ||
-				DoubleConverter::optProp(&confidence, "confidence", opts)
+				UFF::IntConverter::optProp(&method, "method", opts) ||
+				FF::DoubleConverter::optProp(&ransacReprojThreshold, "ransacReprojThreshold", opts) ||
+				UFF::IntConverter::optProp(&maxIters, "maxIters", opts) ||
+				FF::DoubleConverter::optProp(&confidence, "confidence", opts)
 			);
 		}
 	};
@@ -126,7 +126,7 @@ namespace Calib3dBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), BoolConverter::wrap(returnValue));
+      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), FF::BoolConverter::wrap(returnValue));
       Nan::Set(ret, Nan::New("rvec").ToLocalChecked(), Vec3::Converter::wrap(rvec));
       Nan::Set(ret, Nan::New("tvec").ToLocalChecked(), Vec3::Converter::wrap(tvec));
       return ret;
@@ -154,8 +154,8 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        BoolConverter::optArg(4, &useExtrinsicGuess, info) ||
-        IntConverter::optArg(5, &flags, info)
+        FF::BoolConverter::optArg(4, &useExtrinsicGuess, info) ||
+        FF::IntConverter::optArg(5, &flags, info)
       );
     }
   
@@ -166,8 +166,8 @@ namespace Calib3dBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[4]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        BoolConverter::optProp(&useExtrinsicGuess, "useExtrinsicGuess", opts) ||
-        IntConverter::optProp(&flags, "flags", opts)
+        FF::BoolConverter::optProp(&useExtrinsicGuess, "useExtrinsicGuess", opts) ||
+        FF::IntConverter::optProp(&flags, "flags", opts)
       );
     }
   };
@@ -195,11 +195,11 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        BoolConverter::optArg(4, &useExtrinsicGuess, info) ||
-        IntConverter::optArg(5, &iterationsCount, info) ||
-        FloatConverter::optArg(6, &reprojectionError, info) ||
-        DoubleConverter::optArg(7, &confidence, info) ||
-        IntConverter::optArg(8, &flags, info)
+        FF::BoolConverter::optArg(4, &useExtrinsicGuess, info) ||
+        FF::IntConverter::optArg(5, &iterationsCount, info) ||
+        FF::FloatConverter::optArg(6, &reprojectionError, info) ||
+        FF::DoubleConverter::optArg(7, &confidence, info) ||
+        FF::IntConverter::optArg(8, &flags, info)
       );
     }
   
@@ -210,11 +210,11 @@ namespace Calib3dBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[4]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        BoolConverter::optProp(&useExtrinsicGuess, "useExtrinsicGuess", opts) ||
-        IntConverter::optProp(&iterationsCount, "iterationsCount", opts) ||
-        FloatConverter::optProp(&reprojectionError, "reprojectionError", opts) ||
-        DoubleConverter::optProp(&confidence, "confidence", opts) ||
-        IntConverter::optProp(&flags, "flags", opts)
+        FF::BoolConverter::optProp(&useExtrinsicGuess, "useExtrinsicGuess", opts) ||
+        FF::IntConverter::optProp(&iterationsCount, "iterationsCount", opts) ||
+        FF::FloatConverter::optProp(&reprojectionError, "reprojectionError", opts) ||
+        FF::DoubleConverter::optProp(&confidence, "confidence", opts) ||
+        FF::IntConverter::optProp(&flags, "flags", opts)
       );
     }
   };
@@ -255,7 +255,7 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(5, &aspectRatio, info)
+        FF::DoubleConverter::optArg(5, &aspectRatio, info)
       );
     }
   };
@@ -288,7 +288,7 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(3, &aspectRatio, info)
+        FF::DoubleConverter::optArg(3, &aspectRatio, info)
       );
     }
   };
@@ -319,7 +319,7 @@ namespace Calib3dBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), DoubleConverter::wrap(returnValue));
+      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), FF::DoubleConverter::wrap(returnValue));
       Nan::Set(ret, Nan::New("R").ToLocalChecked(), Mat::Converter::wrap(R));
       Nan::Set(ret, Nan::New("T").ToLocalChecked(), Vec3::Converter::wrap(T));
       Nan::Set(ret, Nan::New("E").ToLocalChecked(), Mat::Converter::wrap(E));
@@ -344,7 +344,7 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(8, &flags, info) ||
+        FF::IntConverter::optArg(8, &flags, info) ||
         TermCriteria::Converter::optArg(9, &criteria, info)
       );
     }
@@ -356,7 +356,7 @@ namespace Calib3dBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[8]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        IntConverter::optProp(&flags, "flags", opts) ||
+        FF::IntConverter::optProp(&flags, "flags", opts) ||
         TermCriteria::Converter::optProp(&criteria, "criteria", opts)
         );
     }
@@ -381,7 +381,7 @@ namespace Calib3dBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), BoolConverter::wrap(returnValue));
+      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), FF::BoolConverter::wrap(returnValue));
       Nan::Set(ret, Nan::New("H1").ToLocalChecked(), Mat::Converter::wrap(H1));
       Nan::Set(ret, Nan::New("H2").ToLocalChecked(), Mat::Converter::wrap(H2));
       return ret;
@@ -398,7 +398,7 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(4, &threshold, info)
+        FF::DoubleConverter::optArg(4, &threshold, info)
       );
     }
   };
@@ -435,9 +435,9 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(2, &method, info) ||
-        DoubleConverter::optArg(3, &param1, info) ||
-        DoubleConverter::optArg(4, &param2, info)
+        FF::IntConverter::optArg(2, &method, info) ||
+        FF::DoubleConverter::optArg(3, &param1, info) ||
+        FF::DoubleConverter::optArg(4, &param2, info)
       );
     }
   
@@ -448,9 +448,9 @@ namespace Calib3dBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        IntConverter::optProp(&method, "method", opts) ||
-        DoubleConverter::optProp(&param1, "param1", opts) ||
-        DoubleConverter::optProp(&param2, "param2", opts)
+        FF::IntConverter::optProp(&method, "method", opts) ||
+        FF::DoubleConverter::optProp(&param1, "param1", opts) ||
+        FF::DoubleConverter::optProp(&param2, "param2", opts)
       );
     }
   };
@@ -489,11 +489,11 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(2, &focal, info) ||
+        FF::DoubleConverter::optArg(2, &focal, info) ||
         Point2::Converter::optArg(3, &pp, info) ||
-        IntConverter::optArg(4, &method, info) ||
-        DoubleConverter::optArg(5, &prob, info) ||
-        DoubleConverter::optArg(6, &threshold, info)
+        FF::IntConverter::optArg(4, &method, info) ||
+        FF::DoubleConverter::optArg(5, &prob, info) ||
+        FF::DoubleConverter::optArg(6, &threshold, info)
         );
     }
   
@@ -504,11 +504,11 @@ namespace Calib3dBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&focal, "focal", opts) ||
+        FF::DoubleConverter::optProp(&focal, "focal", opts) ||
         Point2::Converter::optProp(&pp, "pp", opts) ||
-        IntConverter::optProp(&method, "method", opts) ||
-        DoubleConverter::optProp(&prob, "prob", opts) ||
-        DoubleConverter::optProp(&threshold, "threshold", opts)
+        FF::IntConverter::optProp(&method, "method", opts) ||
+        FF::DoubleConverter::optProp(&prob, "prob", opts) ||
+        FF::DoubleConverter::optProp(&threshold, "threshold", opts)
       );
     }
   };
@@ -533,7 +533,7 @@ namespace Calib3dBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), IntConverter::wrap(returnValue));
+      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), FF::IntConverter::wrap(returnValue));
       Nan::Set(ret, Nan::New("R").ToLocalChecked(), Mat::Converter::wrap(R));
       Nan::Set(ret, Nan::New("T").ToLocalChecked(), Vec3::Converter::wrap(T));
       return ret;
@@ -549,7 +549,7 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(3, &focal, info) ||
+        FF::DoubleConverter::optArg(3, &focal, info) ||
         Point2::Converter::optArg(4, &pp, info) ||
         Mat::Converter::optArg(5, &mask, info)
       );
@@ -562,7 +562,7 @@ namespace Calib3dBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&focal, "focal", opts) ||
+        FF::DoubleConverter::optProp(&focal, "focal", opts) ||
         Point2::Converter::optProp(&pp, "pp", opts) ||
         Mat::Converter::optProp(&mask, "mask", opts)
       );
@@ -589,7 +589,7 @@ namespace Calib3dBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &points, info) ||
-        IntConverter::arg(1, &whichImage, info) ||
+        FF::IntConverter::arg(1, &whichImage, info) ||
         Mat::Converter::arg(2, &F, info)
       );
     }
@@ -618,9 +618,9 @@ namespace Calib3dBindings {
       return (
         Rect::Converter::arg(0, &roi1, info) ||
         Rect::Converter::arg(1, &roi2, info) ||
-        IntConverter::arg(2, &minDisparity, info) ||
-        IntConverter::arg(3, &numberOfDisparities, info) ||
-        IntConverter::arg(4, &SADWindowSize, info)
+        FF::IntConverter::arg(2, &minDisparity, info) ||
+        FF::IntConverter::arg(3, &numberOfDisparities, info) ||
+        FF::IntConverter::arg(4, &SADWindowSize, info)
       );
     }
   };
@@ -643,7 +643,7 @@ namespace Calib3dBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), IntConverter::wrap(returnValue));
+      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), FF::IntConverter::wrap(returnValue));
       Nan::Set(ret, Nan::New("out").ToLocalChecked(), Mat::Converter::wrap(out));
       Nan::Set(ret, Nan::New("inliers").ToLocalChecked(), Mat::Converter::wrap(inliers));
       return ret;
@@ -658,8 +658,8 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(2, &ransacThreshold, info) ||
-        DoubleConverter::optArg(3, &confidence, info)
+        FF::DoubleConverter::optArg(2, &ransacThreshold, info) ||
+        FF::DoubleConverter::optArg(3, &confidence, info)
       );
     }
   
@@ -670,8 +670,8 @@ namespace Calib3dBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&ransacThreshold, "ransacThreshold", opts) ||
-        DoubleConverter::optProp(&confidence, "confidence", opts)
+        FF::DoubleConverter::optProp(&ransacThreshold, "ransacThreshold", opts) ||
+        FF::DoubleConverter::optProp(&confidence, "confidence", opts)
       );
     }
   };
@@ -691,7 +691,7 @@ namespace Calib3dBindings {
     }
   
     v8::Local<v8::Value> getReturnValue() {
-      return DoubleConverter::wrap(returnValue);
+      return FF::DoubleConverter::wrap(returnValue);
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -727,7 +727,7 @@ namespace Calib3dBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), DoubleConverter::wrap(returnValue));
+      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), FF::DoubleConverter::wrap(returnValue));
       Nan::Set(ret, Nan::New("rvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d>::wrap(rvecs));
       Nan::Set(ret, Nan::New("tvecs").ToLocalChecked(), ObjectArrayConverter<Vec3, cv::Vec3d>::wrap(tvecs));
       Nan::Set(ret, Nan::New("distCoeffs").ToLocalChecked(), DoubleArrayConverter::wrap(distCoeffs));
@@ -746,7 +746,7 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(5, &flags, info) ||
+        FF::IntConverter::optArg(5, &flags, info) ||
         TermCriteria::Converter::optArg(6, &criteria, info)
         );
     }
@@ -758,7 +758,7 @@ namespace Calib3dBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[5]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        IntConverter::optProp(&flags, "flags", opts) ||
+        FF::IntConverter::optProp(&flags, "flags", opts) ||
         TermCriteria::Converter::optProp(&criteria, "criteria", opts)
         );
     }
@@ -820,11 +820,11 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(2, &method, info) ||
-        DoubleConverter::optArg(3, &ransacReprojThreshold, info) ||
-        IntConverter::optArg(4, &maxIters, info) ||
-        DoubleConverter::optArg(5, &confidence, info) ||
-        IntConverter::optArg(6, &refineIters, info)
+        FF::IntConverter::optArg(2, &method, info) ||
+        FF::DoubleConverter::optArg(3, &ransacReprojThreshold, info) ||
+        FF::IntConverter::optArg(4, &maxIters, info) ||
+        FF::DoubleConverter::optArg(5, &confidence, info) ||
+        FF::IntConverter::optArg(6, &refineIters, info)
       );
     }
   
@@ -835,11 +835,11 @@ namespace Calib3dBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        IntConverter::optProp(&method, "method", opts) ||
-        DoubleConverter::optProp(&ransacReprojThreshold, "ransacReprojThreshold", opts) ||
-        IntConverter::optProp(&maxIters, "maxIters", opts) ||
-        DoubleConverter::optProp(&confidence, "confidence", opts) ||
-        IntConverter::optProp(&refineIters, "refineIters", opts)
+        FF::IntConverter::optProp(&method, "method", opts) ||
+        FF::DoubleConverter::optProp(&ransacReprojThreshold, "ransacReprojThreshold", opts) ||
+        FF::IntConverter::optProp(&maxIters, "maxIters", opts) ||
+        FF::DoubleConverter::optProp(&confidence, "confidence", opts) ||
+        FF::IntConverter::optProp(&refineIters, "refineIters", opts)
       );
     }
   };
@@ -868,7 +868,7 @@ namespace Calib3dBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), BoolConverter::wrap(returnValue));
+      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), FF::BoolConverter::wrap(returnValue));
       Nan::Set(ret, Nan::New("rvecs").ToLocalChecked(), ObjectArrayConverter<Mat, cv::Mat>::wrap(rvecs));
       Nan::Set(ret, Nan::New("tvecs").ToLocalChecked(), ObjectArrayConverter<Mat, cv::Mat>::wrap(tvecs));
       return ret;
@@ -876,7 +876,7 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(4, &flags, info)
+        FF::IntConverter::optArg(4, &flags, info)
       );
     }
   };

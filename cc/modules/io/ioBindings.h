@@ -20,11 +20,11 @@ namespace IoBindings {
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return StringConverter::arg(0, &path, info);
+      return FF::StringConverter::arg(0, &path, info);
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return IntConverter::optArg(1, &flags, info);
+      return FF::IntConverter::optArg(1, &flags, info);
     }
 
     v8::Local<v8::Value> getReturnValue() {
@@ -44,7 +44,7 @@ namespace IoBindings {
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return StringConverter::arg(0, &path, info)
+      return FF::StringConverter::arg(0, &path, info)
         || Mat::Converter::arg(1, &img, info);
     }
 
@@ -71,7 +71,7 @@ namespace IoBindings {
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return StringConverter::arg(0, &ext, info)
+      return FF::StringConverter::arg(0, &ext, info)
         || Mat::Converter::arg(1, &img, info);
     }
 

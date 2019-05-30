@@ -49,8 +49,8 @@ public:
 
 	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  IntConverter::optArg(1, &region_size, info) ||
-			  FloatConverter::optArg(2, &ratio, info)
+			  FF::IntConverter::optArg(1, &region_size, info) ||
+			  FF::FloatConverter::optArg(2, &ratio, info)
 			  );
 	  }
 
@@ -61,8 +61,8 @@ public:
 	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 		  return (
-			  IntConverter::optProp(&region_size, "region_size", opts) ||
-			  FloatConverter::optProp(&ratio, "ratio", opts)
+			  FF::IntConverter::optProp(&region_size, "region_size", opts) ||
+			  FF::FloatConverter::optProp(&ratio, "ratio", opts)
 			  );
 	  }
   };

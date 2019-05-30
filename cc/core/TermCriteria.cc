@@ -23,9 +23,9 @@ NAN_METHOD(TermCriteria::New) {
 		int type, maxCount;
 		double epsilon;
 		if (
-			IntConverter::arg(0, &type, info) ||
-			IntConverter::arg(1, &maxCount, info) ||
-			DoubleConverter::arg(2, &epsilon, info)
+			FF::IntConverter::arg(0, &type, info) ||
+			FF::IntConverter::arg(1, &maxCount, info) ||
+			FF::DoubleConverter::arg(2, &epsilon, info)
 		) {
 			tryCatch.throwNew(tryCatch.formatCatchedError("TermCriteria::New"));
 			return;

@@ -105,7 +105,7 @@ NAN_METHOD(HOGDescriptor::Save) {
 	FF::TryCatch tryCatch;
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
+	if (FF::StringConverter::arg(0, &path, info)) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("HOGDescriptor::Save");
 		tryCatch.throwNew(err);
 		return;
@@ -117,7 +117,7 @@ NAN_METHOD(HOGDescriptor::Load) {
 	FF::TryCatch tryCatch;
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
+	if (FF::StringConverter::arg(0, &path, info)) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("HOGDescriptor::Load");
 		tryCatch.throwNew(err);
 		return;

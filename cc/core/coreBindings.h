@@ -35,7 +35,7 @@ namespace CoreBindings {
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				BoolConverter::optArg(2, &angleInDegrees, info)
+				FF::BoolConverter::optArg(2, &angleInDegrees, info)
 				);
 		}
 	};
@@ -70,7 +70,7 @@ namespace CoreBindings {
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				BoolConverter::optArg(2, &angleInDegrees, info)
+				FF::BoolConverter::optArg(2, &angleInDegrees, info)
 				);
 		}
 	};

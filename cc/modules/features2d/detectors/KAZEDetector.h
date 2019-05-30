@@ -36,12 +36,12 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				BoolConverter::optArg(0, &extended, info) ||
-				BoolConverter::optArg(1, &upright, info) ||
-				DoubleConverter::optArg(2, &threshold, info) ||
-				IntConverter::optArg(3, &nOctaves, info) ||
-				IntConverter::optArg(4, &nOctaveLayers, info) ||
-				IntConverter::optArg(5, &diffusivity, info)
+				FF::BoolConverter::optArg(0, &extended, info) ||
+				FF::BoolConverter::optArg(1, &upright, info) ||
+				FF::DoubleConverter::optArg(2, &threshold, info) ||
+				FF::IntConverter::optArg(3, &nOctaves, info) ||
+				FF::IntConverter::optArg(4, &nOctaveLayers, info) ||
+				FF::IntConverter::optArg(5, &diffusivity, info)
 				);
 		}
 
@@ -52,12 +52,12 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				BoolConverter::optProp(&extended, "extended", opts) ||
-				BoolConverter::optProp(&upright, "upright", opts) ||
-				DoubleConverter::optProp(&threshold, "threshold", opts) ||
-				IntConverter::optProp(&nOctaves, "nOctaves", opts) ||
-				IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
-				IntConverter::optProp(&diffusivity, "diffusivity", opts)
+				FF::BoolConverter::optProp(&extended, "extended", opts) ||
+				FF::BoolConverter::optProp(&upright, "upright", opts) ||
+				FF::DoubleConverter::optProp(&threshold, "threshold", opts) ||
+				FF::IntConverter::optProp(&nOctaves, "nOctaves", opts) ||
+				FF::IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
+				FF::IntConverter::optProp(&diffusivity, "diffusivity", opts)
 				);
 		}
 

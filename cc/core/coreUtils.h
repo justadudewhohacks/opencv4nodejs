@@ -157,7 +157,7 @@
 	}																																					\
 	static NAN_METHOD(Determinant) {																					\
 		return info.GetReturnValue().Set(																				\
-			cv::determinant(Mat::Converter::unwrap(info.This())));									\
+			cv::determinant(Mat::unwrapSelf(info)));									\
 	}																																					\
 	static NAN_METHOD(Transpose) {																						\
 		FF_SELF_OPERATOR(cv::transpose);									\

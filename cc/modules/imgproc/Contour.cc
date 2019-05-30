@@ -59,8 +59,8 @@ NAN_METHOD(Contour::New) {
 				v8::Local<v8::Array> jsObj = v8::Local<v8::Array>::Cast(jsPt);
 				if (jsObj->Length() != 2)
 					return Nan::ThrowError("Contour::New - expected arg0 to consist of only Point2 or array of length 2");
-				double x = DoubleConverter::unwrap(Nan::Get(jsObj, 0).ToLocalChecked());
-				double y = DoubleConverter::unwrap(Nan::Get(jsObj, 1).ToLocalChecked());
+				double x = FF::DoubleConverter::unwrap(Nan::Get(jsObj, 0).ToLocalChecked());
+				double y = FF::DoubleConverter::unwrap(Nan::Get(jsObj, 1).ToLocalChecked());
 				cv_pt = cv::Point2d(x, y);
 			}
 			else if (Point2::Converter::hasInstance(jsPt)) {
@@ -102,8 +102,8 @@ NAN_METHOD(Contour::ApproxPolyDPContour) {
 	double epsilon;
 	bool closed;
 	if (
-		DoubleConverter::arg(0, &epsilon, info) ||
-		BoolConverter::arg(1, &closed, info)
+		FF::DoubleConverter::arg(0, &epsilon, info) ||
+		FF::BoolConverter::arg(1, &closed, info)
 	) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ApproxPolyDPContour"));
 		return;
@@ -121,7 +121,7 @@ NAN_METHOD(Contour::ApproxPolyDPContour) {
 NAN_METHOD(Contour::ArcLength) {
 	FF::TryCatch tryCatch;
 	bool closed = false;
-	if (BoolConverter::optArg(0, &closed, info)) {
+	if (FF::BoolConverter::optArg(0, &closed, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ArcLength"));
 		return;
 	}
@@ -139,7 +139,7 @@ NAN_METHOD(Contour::BoundingRect) {
 NAN_METHOD(Contour::ConvexHull) {
 	FF::TryCatch tryCatch;
 	bool clockwise = false;
-	if (BoolConverter::optArg(0, &clockwise, info)) {
+	if (FF::BoolConverter::optArg(0, &clockwise, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ConvexHull"));
 		return;
 	}
@@ -160,7 +160,7 @@ NAN_METHOD(Contour::ConvexHull) {
 NAN_METHOD(Contour::ConvexHullIndices) {
 	FF::TryCatch tryCatch;
 	bool clockwise = false;
-	if (BoolConverter::optArg(0, &clockwise, info)) {
+	if (FF::BoolConverter::optArg(0, &clockwise, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ConvexHullIndices"));
 		return;
 	}
@@ -236,7 +236,7 @@ NAN_METHOD(Contour::MatchShapes) {
 	uint method;
 	if (
 		Contour::Converter::arg(0, &contour2, info) ||
-		UintConverter::arg(1, &method, info)
+		UFF::IntConverter::arg(1, &method, info)
 	) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::MatchShapes"));
 		return;

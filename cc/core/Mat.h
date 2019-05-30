@@ -32,13 +32,13 @@ public:
 	static FF_GETTER(Mat, GetDepth, self.depth());
 	static FF_GETTER(Mat, GetIsEmpty, self.empty());
 	static NAN_GETTER(GetElemSize) {
-		info.GetReturnValue().Set((int)Mat::Converter::unwrap(info.This()).elemSize());
+		info.GetReturnValue().Set((int)Mat::unwrapSelf(info).elemSize());
 	};
 	static NAN_GETTER(GetStep) {
-		info.GetReturnValue().Set((int)Mat::Converter::unwrap(info.This()).step.operator size_t());
+		info.GetReturnValue().Set((int)Mat::unwrapSelf(info).step.operator size_t());
 	};
 	static NAN_GETTER(GetSizes) {
-		cv::Mat m = Mat::Converter::unwrap(info.This());
+		cv::Mat m = Mat::unwrapSelf(info);
 		std::vector<int> sizes;
 		for (int s = 0; s < m.dims; s++) {
 			sizes.push_back(m.size[s]);

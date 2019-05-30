@@ -49,7 +49,7 @@ NAN_METHOD(Imgproc::GetStructuringElement) {
 	cv::Point2d anchor = cv::Point2d(-1, -1);
 
 	if (
-		UintConverter::arg(0, &shape, info) ||
+		UFF::IntConverter::arg(0, &shape, info) ||
 		Size::Converter::arg(1, &size, info) ||
 		Point2::Converter::optArg(2, &anchor, info)
 	) {
@@ -69,8 +69,8 @@ NAN_METHOD(Imgproc::GetRotationMatrix2D) {
 	double angle, scale = 1.0;
 	if (
 		Point2::Converter::arg(0, &center, info) ||
-		DoubleConverter::arg(1, &angle, info) ||
-		DoubleConverter::optArg(2, &scale, info)
+		FF::DoubleConverter::arg(1, &angle, info) ||
+		FF::DoubleConverter::optArg(2, &scale, info)
 		) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::GetRotationMatrix2D"));
 		return;
@@ -167,11 +167,11 @@ NAN_METHOD(Imgproc::CalcHist) {
 	if (jsRanges->Length() != 2) {
 		return tryCatch.throwNew(FF::newString("Imgproc::CalcHist - expected ranges to be an array of length 2"));
 	}
-    ranges.at(i)[0] = DoubleConverter::unwrap(Nan::Get(jsRanges, 0).ToLocalChecked());
-    ranges.at(i)[1] = DoubleConverter::unwrap(Nan::Get(jsRanges, 1).ToLocalChecked());
+    ranges.at(i)[0] = FF::DoubleConverter::unwrap(Nan::Get(jsRanges, 0).ToLocalChecked());
+    ranges.at(i)[1] = FF::DoubleConverter::unwrap(Nan::Get(jsRanges, 1).ToLocalChecked());
     int channel, bins;
 
-	if (IntConverter::prop(&channel, "channel", jsAxis) || IntConverter::prop(&bins, "bins", jsAxis)) {
+	if (FF::IntConverter::prop(&channel, "channel", jsAxis) || FF::IntConverter::prop(&bins, "bins", jsAxis)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::CalcHist"));
 		return;
 	}
@@ -225,13 +225,13 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 		Vec3::Converter::arg(2, &color, info) ||
 		(
 			FF::isArgObject(info, 3) && (
-				IntConverter::optProp(&lineType, "lineType", opts) ||
-				IntConverter::optProp(&thickness, "thickness", opts) ||
-				IntConverter::optProp(&shift, "shift", opts)
+				FF::IntConverter::optProp(&lineType, "lineType", opts) ||
+				FF::IntConverter::optProp(&thickness, "thickness", opts) ||
+				FF::IntConverter::optProp(&shift, "shift", opts)
 			) || (
-				IntConverter::optArg(3, &lineType, info) ||
-				IntConverter::optArg(4, &thickness, info) ||
-				IntConverter::optArg(5, &shift, info)
+				FF::IntConverter::optArg(3, &lineType, info) ||
+				FF::IntConverter::optArg(4, &thickness, info) ||
+				FF::IntConverter::optArg(5, &shift, info)
 			)
 		)
 	){
@@ -301,10 +301,10 @@ NAN_METHOD(Imgproc::FitLine) {
 	isPoint2 && ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &pts2d, info) ||
 	!isPoint2 && ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &pts3d, info)
 	) ||
-	UintConverter::arg(1, &distType, info) ||
-	DoubleConverter::arg(2, &param, info) ||
-	DoubleConverter::arg(3, &reps, info) ||
-	DoubleConverter::arg(4, &aeps, info)
+	UFF::IntConverter::arg(1, &distType, info) ||
+	FF::DoubleConverter::arg(2, &param, info) ||
+	FF::DoubleConverter::arg(3, &reps, info) ||
+	FF::DoubleConverter::arg(4, &aeps, info)
 	) {
 	tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::FitLine"));
 	return;

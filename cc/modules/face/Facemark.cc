@@ -9,7 +9,7 @@ NAN_METHOD(Facemark::Save) {
 	FF::TryCatch tryCatch;
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
+	if (FF::StringConverter::arg(0, &path, info)) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Facemark::Save");
 		tryCatch.throwNew(err);
 		return;
@@ -21,7 +21,7 @@ NAN_METHOD(Facemark::Load) {
 	FF::TryCatch tryCatch;
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
+	if (FF::StringConverter::arg(0, &path, info)) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Facemark::Load");
 		tryCatch.throwNew(err);
 		return;

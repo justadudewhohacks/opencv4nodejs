@@ -36,12 +36,12 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntConverter::optArg(0, &maxCorners, info) ||
-				DoubleConverter::optArg(1, &qualityLevel, info) ||
-				DoubleConverter::optArg(2, &minDistance, info) ||
-				IntConverter::optArg(3, &blockSize, info) ||
-				BoolConverter::optArg(4, &useHarrisDetector, info) ||
-				DoubleConverter::optArg(5, &k, info)
+				FF::IntConverter::optArg(0, &maxCorners, info) ||
+				FF::DoubleConverter::optArg(1, &qualityLevel, info) ||
+				FF::DoubleConverter::optArg(2, &minDistance, info) ||
+				FF::IntConverter::optArg(3, &blockSize, info) ||
+				FF::BoolConverter::optArg(4, &useHarrisDetector, info) ||
+				FF::DoubleConverter::optArg(5, &k, info)
 				);
 		}
 
@@ -52,12 +52,12 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntConverter::optProp(&maxCorners, "maxCorners", opts) ||
-				DoubleConverter::optProp(&qualityLevel, "qualityLevel", opts) ||
-				DoubleConverter::optProp(&minDistance, "minDistance", opts) ||
-				IntConverter::optProp(&blockSize, "blockSize", opts) ||
-				BoolConverter::optProp(&useHarrisDetector, "useHarrisDetector", opts) ||
-				DoubleConverter::optProp(&k, "k", opts)
+				FF::IntConverter::optProp(&maxCorners, "maxCorners", opts) ||
+				FF::DoubleConverter::optProp(&qualityLevel, "qualityLevel", opts) ||
+				FF::DoubleConverter::optProp(&minDistance, "minDistance", opts) ||
+				FF::IntConverter::optProp(&blockSize, "blockSize", opts) ||
+				FF::BoolConverter::optProp(&useHarrisDetector, "useHarrisDetector", opts) ||
+				FF::DoubleConverter::optProp(&k, "k", opts)
 				);
 		}
 

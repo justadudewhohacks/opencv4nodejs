@@ -40,11 +40,11 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntConverter::optArg(0, &nFeatures, info) ||
-				IntConverter::optArg(1, &nOctaveLayers, info) ||
-				DoubleConverter::optArg(2, &contrastThreshold, info) ||
-				DoubleConverter::optArg(3, &edgeThreshold, info) ||
-				DoubleConverter::optArg(4, &sigma, info)
+				FF::IntConverter::optArg(0, &nFeatures, info) ||
+				FF::IntConverter::optArg(1, &nOctaveLayers, info) ||
+				FF::DoubleConverter::optArg(2, &contrastThreshold, info) ||
+				FF::DoubleConverter::optArg(3, &edgeThreshold, info) ||
+				FF::DoubleConverter::optArg(4, &sigma, info)
 				);
 		}
 
@@ -55,11 +55,11 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntConverter::optProp(&nFeatures, "nFeatures", opts) ||
-				IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
-				DoubleConverter::optProp(&contrastThreshold, "contrastThreshold", opts) ||
-				DoubleConverter::optProp(&edgeThreshold, "edgeThreshold", opts) ||
-				DoubleConverter::optProp(&sigma, "sigma", opts)
+				FF::IntConverter::optProp(&nFeatures, "nFeatures", opts) ||
+				FF::IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
+				FF::DoubleConverter::optProp(&contrastThreshold, "contrastThreshold", opts) ||
+				FF::DoubleConverter::optProp(&edgeThreshold, "edgeThreshold", opts) ||
+				FF::DoubleConverter::optProp(&sigma, "sigma", opts)
 				);
 		}
 

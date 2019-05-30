@@ -21,7 +21,7 @@ namespace FacemarkBindings {
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (StringConverter::arg(0, &model, info));
+      return (FF::StringConverter::arg(0, &model, info));
     }
   };
 

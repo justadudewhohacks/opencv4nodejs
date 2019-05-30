@@ -27,12 +27,12 @@ namespace DnnBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-          StringConverter::arg(0, &cfgFile, info));
+          FF::StringConverter::arg(0, &cfgFile, info));
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-          StringConverter::optArg(1, &darknetModelFile, info));
+          FF::StringConverter::optArg(1, &darknetModelFile, info));
     }
   };
 #endif
@@ -62,13 +62,13 @@ namespace DnnBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-          StringConverter::arg(0, &modelFile, info)
+          FF::StringConverter::arg(0, &modelFile, info)
       );
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-          StringConverter::optArg(1, &configFile, info)
+          FF::StringConverter::optArg(1, &configFile, info)
       );
     }
   };
@@ -94,13 +94,13 @@ namespace DnnBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        StringConverter::arg(0, &prototxt, info)
+        FF::StringConverter::arg(0, &prototxt, info)
       );
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        StringConverter::optArg(1, &modelFile, info)
+        FF::StringConverter::optArg(1, &modelFile, info)
       );
     }
   };
@@ -154,12 +154,12 @@ namespace DnnBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(1, &scalefactor, info) ||
+        FF::DoubleConverter::optArg(1, &scalefactor, info) ||
         Size::Converter::optArg(2, &size, info) ||
         Vec3::Converter::optArg(3, &mean, info) ||
-        BoolConverter::optArg(4, &swapRB, info) ||
-        BoolConverter::optArg(5, &crop, info) ||
-        IntConverter::optArg(6, &ddepth, info)
+        FF::BoolConverter::optArg(4, &swapRB, info) ||
+        FF::BoolConverter::optArg(5, &crop, info) ||
+        FF::IntConverter::optArg(6, &ddepth, info)
       );
     }
 
@@ -170,12 +170,12 @@ namespace DnnBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&scalefactor, "scalefactor", opts) ||
-        BoolConverter::optProp(&swapRB, "swapRB", opts) ||
+        FF::DoubleConverter::optProp(&scalefactor, "scalefactor", opts) ||
+        FF::BoolConverter::optProp(&swapRB, "swapRB", opts) ||
         Size::Converter::optProp(&size, "size", opts) ||
         Vec3::Converter::optProp(&mean, "mean", opts) ||
-        BoolConverter::optProp(&crop, "crop", opts) ||
-        IntConverter::optProp(&ddepth, "ddepth", opts)
+        FF::BoolConverter::optProp(&crop, "crop", opts) ||
+        FF::IntConverter::optProp(&ddepth, "ddepth", opts)
       );
     }
   };
@@ -203,8 +203,8 @@ namespace DnnBindings {
       return (
         ObjectArrayConverter<Rect, cv::Rect>::arg(0, &bboxes, info) ||
         FloatArrayConverter::arg(1, &scores, info) ||
-        FloatConverter::arg(2, &score_threshold, info) ||
-        FloatConverter::arg(3, &nms_threshold, info)
+        FF::FloatConverter::arg(2, &score_threshold, info) ||
+        FF::FloatConverter::arg(3, &nms_threshold, info)
       );
     }
   };

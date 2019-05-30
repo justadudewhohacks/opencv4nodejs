@@ -24,7 +24,7 @@ NAN_METHOD(VideoCapture::New) {
   FF_METHOD_CONTEXT("VideoCapture::New");
   VideoCapture* self = new VideoCapture();
   if (info[0]->IsString()) {
-    self->path = StringConverter::unwrap(info[0]);
+    self->path = FF::StringConverter::unwrap(info[0]);
     self->cap.open(self->path);
   }
   else if (info[0]->IsUint32()) {

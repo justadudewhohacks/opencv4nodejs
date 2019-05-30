@@ -27,14 +27,14 @@ namespace HOGDescriptorBindings {
 				Size::Converter::optArg(1, &blockSize, info) ||
 				Size::Converter::optArg(2, &blockStride, info) ||
 				Size::Converter::optArg(3, &cellSize, info) ||
-				UintConverter::optArg(4, &nbins, info) ||
-				IntConverter::optArg(5, &derivAperture, info) ||
-				DoubleConverter::optArg(6, &winSigma, info) ||
-				UintConverter::optArg(7, &histogramNormType, info) ||
-				DoubleConverter::optArg(8, &L2HysThreshold, info) ||
-				BoolConverter::optArg(9, &gammaCorrection, info) ||
-				UintConverter::optArg(10, &nlevels, info) ||
-				BoolConverter::optArg(11, &signedGradient, info)
+				UFF::IntConverter::optArg(4, &nbins, info) ||
+				FF::IntConverter::optArg(5, &derivAperture, info) ||
+				FF::DoubleConverter::optArg(6, &winSigma, info) ||
+				UFF::IntConverter::optArg(7, &histogramNormType, info) ||
+				FF::DoubleConverter::optArg(8, &L2HysThreshold, info) ||
+				FF::BoolConverter::optArg(9, &gammaCorrection, info) ||
+				UFF::IntConverter::optArg(10, &nlevels, info) ||
+				FF::BoolConverter::optArg(11, &signedGradient, info)
 				);
 		}
 
@@ -49,14 +49,14 @@ namespace HOGDescriptorBindings {
 				Size::Converter::optProp(&blockSize, "blockSize", opts) ||
 				Size::Converter::optProp(&blockStride, "blockStride", opts) ||
 				Size::Converter::optProp(&cellSize, "cellSize", opts) ||
-				UintConverter::optProp(&nbins, "nbins", opts) ||
-				IntConverter::optProp(&derivAperture, "derivAperture", opts) ||
-				DoubleConverter::optProp(&winSigma, "winSigma", opts) ||
-				UintConverter::optProp(&histogramNormType, "histogramNormType", opts) ||
-				DoubleConverter::optProp(&L2HysThreshold, "L2HysThreshold", opts) ||
-				BoolConverter::optProp(&gammaCorrection, "gammaCorrection", opts) ||
-				UintConverter::optProp(&nlevels, "nlevels", opts) ||
-				BoolConverter::optProp(&signedGradient, "signedGradient", opts)
+				UFF::IntConverter::optProp(&nbins, "nbins", opts) ||
+				FF::IntConverter::optProp(&derivAperture, "derivAperture", opts) ||
+				FF::DoubleConverter::optProp(&winSigma, "winSigma", opts) ||
+				UFF::IntConverter::optProp(&histogramNormType, "histogramNormType", opts) ||
+				FF::DoubleConverter::optProp(&L2HysThreshold, "L2HysThreshold", opts) ||
+				FF::BoolConverter::optProp(&gammaCorrection, "gammaCorrection", opts) ||
+				UFF::IntConverter::optProp(&nlevels, "nlevels", opts) ||
+				FF::BoolConverter::optProp(&signedGradient, "signedGradient", opts)
 				);
 		}
 
@@ -204,7 +204,7 @@ namespace HOGDescriptorBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(1, &hitThreshold, info) ||
+        FF::DoubleConverter::optArg(1, &hitThreshold, info) ||
         Size::Converter::optArg(2, &winStride, info) ||
         Size::Converter::optArg(3, &padding, info) ||
         ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::optArg(4, &searchLocations, info)
@@ -218,7 +218,7 @@ namespace HOGDescriptorBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
+        FF::DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
         Size::Converter::optProp(&winStride, "winStride", opts) ||
         Size::Converter::optProp(&padding, "padding", opts) ||
         ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::optProp(&searchLocations, "searchLocations", opts)
@@ -263,7 +263,7 @@ namespace HOGDescriptorBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(2, &hitThreshold, info) ||
+        FF::DoubleConverter::optArg(2, &hitThreshold, info) ||
         Size::Converter::optArg(3, &winStride, info) ||
         Size::Converter::optArg(4, &padding, info)
         );
@@ -276,7 +276,7 @@ namespace HOGDescriptorBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
+        FF::DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
         Size::Converter::optProp(&winStride, "winStride", opts) ||
         Size::Converter::optProp(&padding, "padding", opts)
       );
@@ -322,12 +322,12 @@ namespace HOGDescriptorBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(1, &hitThreshold, info) ||
+        FF::DoubleConverter::optArg(1, &hitThreshold, info) ||
         Size::Converter::optArg(2, &winStride, info) ||
         Size::Converter::optArg(3, &padding, info) ||
-        DoubleConverter::optArg(4, &scale, info) ||
-        DoubleConverter::optArg(5, &finalThreshold, info) ||
-        BoolConverter::optArg(6, &useMeanshiftGrouping, info)
+        FF::DoubleConverter::optArg(4, &scale, info) ||
+        FF::DoubleConverter::optArg(5, &finalThreshold, info) ||
+        FF::BoolConverter::optArg(6, &useMeanshiftGrouping, info)
       );
     }
 
@@ -338,12 +338,12 @@ namespace HOGDescriptorBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
+        FF::DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
         Size::Converter::optProp(&winStride, "winStride", opts) ||
         Size::Converter::optProp(&padding, "padding", opts) ||
-        DoubleConverter::optProp(&scale, "scale", opts) ||
-        DoubleConverter::optProp(&finalThreshold, "finalThreshold", opts) ||
-        BoolConverter::optProp(&useMeanshiftGrouping, "useMeanshiftGrouping", opts)
+        FF::DoubleConverter::optProp(&scale, "scale", opts) ||
+        FF::DoubleConverter::optProp(&finalThreshold, "finalThreshold", opts) ||
+        FF::BoolConverter::optProp(&useMeanshiftGrouping, "useMeanshiftGrouping", opts)
       );
     }
   };
@@ -380,8 +380,8 @@ namespace HOGDescriptorBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(2, &hitThreshold, info) ||
-        IntConverter::optArg(3, &groupThreshold, info)
+        FF::DoubleConverter::optArg(2, &hitThreshold, info) ||
+        FF::IntConverter::optArg(3, &groupThreshold, info)
       );
     }
 
@@ -392,8 +392,8 @@ namespace HOGDescriptorBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
-        IntConverter::optProp(&groupThreshold, "groupThreshold", opts)
+        FF::DoubleConverter::optProp(&hitThreshold, "hitThreshold", opts) ||
+        FF::IntConverter::optProp(&groupThreshold, "groupThreshold", opts)
       );
     }
   };
@@ -424,8 +424,8 @@ namespace HOGDescriptorBindings {
       return (
         ObjectArrayConverter<Rect, cv::Rect2d, cv::Rect>::arg(0, &rectList, info) ||
         DoubleArrayConverter::arg(1, &weights, info) ||
-        IntConverter::arg(2, &groupThreshold, info) ||
-        DoubleConverter::arg(3, &eps, info)
+        FF::IntConverter::arg(2, &groupThreshold, info) ||
+        FF::DoubleConverter::arg(3, &eps, info)
       );
     }
   };

@@ -11,7 +11,7 @@ NAN_METHOD(BackgroundSubtractor::Apply) {
 	double learningRate = -1;
 	if (
 		Mat::Converter::arg(0, &frame, info) ||
-		DoubleConverter::optArg(1, &learningRate, info)
+		FF::DoubleConverter::optArg(1, &learningRate, info)
 		) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("BackgroundSubtractor::Apply");
 		tryCatch.throwNew(err);

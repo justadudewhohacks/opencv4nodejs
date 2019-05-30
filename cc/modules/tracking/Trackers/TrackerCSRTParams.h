@@ -69,7 +69,7 @@ public:
 	static FF_SETTER_BOOL(TrackerCSRTParams, use_segmentation, params.use_segmentation);
 	static FF_GETTER(TrackerCSRTParams, weights_lrGet, params.weights_lr);
 	static FF_SETTER_NUMBER(TrackerCSRTParams, weights_lr, params.weights_lr);	
-	static FF_GETTER_SIMPLE(TrackerCSRTParams, window_functionGet, params.window_function, StringConverter);
+	static FF_GETTER_SIMPLE(TrackerCSRTParams, window_functionGet, params.window_function, FF::StringConverter);
 	static FF_SETTER_STRING(TrackerCSRTParams, window_function, params.window_function);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;

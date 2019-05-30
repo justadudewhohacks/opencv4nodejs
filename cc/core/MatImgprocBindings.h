@@ -33,7 +33,7 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::arg(0, &factor, info)
+        FF::DoubleConverter::arg(0, &factor, info)
       );
     }
   };
@@ -59,8 +59,8 @@ namespace MatImgprocBindings {
       if (hasDsize(info)) {
         return Size::Converter::arg(0, &dsize, info);
       }
-      bool didThrow = IntConverter::arg(0, &rows, info)
-        || IntConverter::arg(1, &cols, info);
+      bool didThrow = FF::IntConverter::arg(0, &rows, info)
+        || FF::IntConverter::arg(1, &cols, info);
       dsize = cv::Size2d(cols, rows);
       return didThrow;
     }
@@ -68,9 +68,9 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       int o = hasDsize(info) ? 0 : 1;
       return (
-        DoubleConverter::optArg(1 + o, &fx, info) ||
-        DoubleConverter::optArg(2 + o, &fy, info) ||
-        IntConverter::optArg(3 + o, &interpolation, info)
+        FF::DoubleConverter::optArg(1 + o, &fx, info) ||
+        FF::DoubleConverter::optArg(2 + o, &fy, info) ||
+        FF::IntConverter::optArg(3 + o, &interpolation, info)
       );
     }
   
@@ -81,9 +81,9 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[getOptArgIndex(info)]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&fx, "fx", opts) ||
-        DoubleConverter::optProp(&fy, "fy", opts) ||
-        IntConverter::optProp(&interpolation, "interpolation", opts)
+        FF::DoubleConverter::optProp(&fx, "fx", opts) ||
+        FF::DoubleConverter::optProp(&fy, "fy", opts) ||
+        FF::IntConverter::optProp(&interpolation, "interpolation", opts)
       );
     }
   
@@ -113,7 +113,7 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &maxRowsOrCols, info)
+        FF::IntConverter::arg(0, &maxRowsOrCols, info)
       );
     }
   };
@@ -143,9 +143,9 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::arg(0, &thresh, info) ||
-        DoubleConverter::arg(1, &maxVal, info) ||
-        UintConverter::arg(2, &type, info)
+        FF::DoubleConverter::arg(0, &thresh, info) ||
+        FF::DoubleConverter::arg(1, &maxVal, info) ||
+        UFF::IntConverter::arg(2, &type, info)
       );
     }
   };
@@ -177,11 +177,11 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::arg(0, &maxVal, info) ||
-        IntConverter::arg(1, &adaptiveMethod, info) ||
-        IntConverter::arg(2, &thresholdType, info) ||
-        IntConverter::arg(3, &blockSize, info) ||
-        DoubleConverter::arg(4, &C, info)
+        FF::DoubleConverter::arg(0, &maxVal, info) ||
+        FF::IntConverter::arg(1, &adaptiveMethod, info) ||
+        FF::IntConverter::arg(2, &thresholdType, info) ||
+        FF::IntConverter::arg(3, &blockSize, info) ||
+        FF::DoubleConverter::arg(4, &C, info)
       );
     }
   };
@@ -222,8 +222,8 @@ namespace MatImgprocBindings {
         );
       }
       return (
-        DoubleConverter::arg(0, &lower, info)
-        || DoubleConverter::arg(1, &upper, info)
+        FF::DoubleConverter::arg(0, &lower, info)
+        || FF::DoubleConverter::arg(1, &upper, info)
       );
     }
   };
@@ -251,13 +251,13 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &code, info)
+        FF::IntConverter::arg(0, &code, info)
       );
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(1, &dstCn, info)
+        FF::IntConverter::optArg(1, &dstCn, info)
       );
     }
   };
@@ -311,8 +311,8 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Size::Converter::optArg(1, &size, info) ||
-        IntConverter::optArg(2, &flags, info) ||
-        IntConverter::optArg(3, &borderMode, info) ||
+        FF::IntConverter::optArg(2, &flags, info) ||
+        FF::IntConverter::optArg(3, &borderMode, info) ||
 		Vec3::Converter::optArg(4, &borderValue, info)
       );
     }
@@ -325,8 +325,8 @@ namespace MatImgprocBindings {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Size::Converter::optProp(&size, "size", opts) ||
-        IntConverter::optProp(&flags, "flags", opts) ||
-        IntConverter::optProp(&borderMode, "borderMode", opts) ||
+        FF::IntConverter::optProp(&flags, "flags", opts) ||
+        FF::IntConverter::optProp(&borderMode, "borderMode", opts) ||
 		Vec3::Converter::optProp(&borderValue, "borderValue", opts)
       );
     }
@@ -378,7 +378,7 @@ namespace MatImgprocBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::arg(0, &kernel, info) ||
-        (withOp && IntConverter::optArg(1, &op, info))
+        (withOp && FF::IntConverter::optArg(1, &op, info))
         );
     }
   
@@ -386,8 +386,8 @@ namespace MatImgprocBindings {
       int off = (withOp ? 1 : 0);
       return (
         Point2::Converter::optArg(1 + off, &anchor, info) ||
-        IntConverter::optArg(2 + off, &iterations, info) ||
-        IntConverter::optArg(3 + off, &borderType, info)
+        FF::IntConverter::optArg(2 + off, &iterations, info) ||
+        FF::IntConverter::optArg(3 + off, &borderType, info)
       );
     }
   
@@ -401,8 +401,8 @@ namespace MatImgprocBindings {
       v8::Local<v8::Object> opts = info[optArgN]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Point2::Converter::optProp(&anchor, "anchor", opts) ||
-        IntConverter::optProp(&iterations, "iterations", opts) ||
-        IntConverter::optProp(&borderType, "borderType", opts)
+        FF::IntConverter::optProp(&iterations, "iterations", opts) ||
+        FF::IntConverter::optProp(&borderType, "borderType", opts)
       );
     }
   };
@@ -462,14 +462,14 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &distanceType, info) ||
-        IntConverter::arg(1, &maskSize, info)
+        FF::IntConverter::arg(0, &distanceType, info) ||
+        FF::IntConverter::arg(1, &maskSize, info)
       );
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(2, &dstType, info)
+        FF::IntConverter::optArg(2, &dstType, info)
       );
     }
   };
@@ -495,7 +495,7 @@ namespace MatImgprocBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(2, &labelType, info)
+        FF::IntConverter::optArg(2, &labelType, info)
       );
     }
   };
@@ -530,7 +530,7 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Point2::Converter::optArg(1, &anchor, info) ||
-        IntConverter::optArg(2, &borderType, info)
+        FF::IntConverter::optArg(2, &borderType, info)
       );
     }
   
@@ -542,7 +542,7 @@ namespace MatImgprocBindings {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Point2::Converter::optProp(&anchor, "anchor", opts) ||
-        IntConverter::optProp(&borderType, "borderType", opts)
+        FF::IntConverter::optProp(&borderType, "borderType", opts)
       );
     }
   };
@@ -574,14 +574,14 @@ namespace MatImgprocBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Size::Converter::arg(0, &kSize, info) ||
-        DoubleConverter::arg(1, &sigmaX, info)
+        FF::DoubleConverter::arg(1, &sigmaX, info)
       );
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(2, &sigmaY, info) ||
-        IntConverter::optArg(3, &borderType, info)
+        FF::DoubleConverter::optArg(2, &sigmaY, info) ||
+        FF::IntConverter::optArg(3, &borderType, info)
       );
     }
   
@@ -592,8 +592,8 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&sigmaY, "sigmaY", opts) ||
-        IntConverter::optProp(&borderType, "borderType", opts)
+        FF::DoubleConverter::optProp(&sigmaY, "sigmaY", opts) ||
+        FF::IntConverter::optProp(&borderType, "borderType", opts)
       );
     }
   };
@@ -620,7 +620,7 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return IntConverter::arg(0, &kSize, info);
+      return FF::IntConverter::arg(0, &kSize, info);
     }
   };
   
@@ -647,8 +647,8 @@ namespace MatImgprocBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(0, &connectivity, info) ||
-        IntConverter::optArg(1, &ltype, info)
+        FF::IntConverter::optArg(0, &connectivity, info) ||
+        FF::IntConverter::optArg(1, &ltype, info)
       );
     }
   
@@ -659,8 +659,8 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        IntConverter::optProp(&connectivity, "connectivity", opts) ||
-        IntConverter::optProp(&ltype, "ltype", opts)
+        FF::IntConverter::optProp(&connectivity, "connectivity", opts) ||
+        FF::IntConverter::optProp(&ltype, "ltype", opts)
       );
     }
   };
@@ -716,13 +716,13 @@ namespace MatImgprocBindings {
         Rect::Converter::arg(1, &rect, info) ||
         Mat::Converter::arg(2, &bgdModel, info) ||
         Mat::Converter::arg(3, &fgdModel, info) ||
-        IntConverter::arg(4, &iterCount, info)
+        FF::IntConverter::arg(4, &iterCount, info)
       );
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(5, &mode, info)
+        FF::IntConverter::optArg(5, &mode, info)
       );
     }
   };
@@ -774,7 +774,7 @@ namespace MatImgprocBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        BoolConverter::optArg(0, &binaryImage, info)
+        FF::BoolConverter::optArg(0, &binaryImage, info)
       );
     }
   };
@@ -811,8 +811,8 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &mode, info) ||
-        IntConverter::arg(1, &method, info)
+        FF::IntConverter::arg(0, &mode, info) ||
+        FF::IntConverter::arg(1, &method, info)
       );
     }
   
@@ -850,9 +850,9 @@ namespace MatImgprocBindings {
       int off = hasThickness ? 1 : 0;
       return (
         Vec3::Converter::optArg(idx, &color, info) ||
-        (hasThickness && IntConverter::optArg(idx + 1, &thickness, info)) ||
-        IntConverter::optArg(idx + off + 1, &lineType, info) ||
-        IntConverter::optArg(idx + off + 2, &shift, info)
+        (hasThickness && FF::IntConverter::optArg(idx + 1, &thickness, info)) ||
+        FF::IntConverter::optArg(idx + off + 1, &lineType, info) ||
+        FF::IntConverter::optArg(idx + off + 2, &shift, info)
       );
     }
   
@@ -865,9 +865,9 @@ namespace MatImgprocBindings {
       v8::Local<v8::Object> opts = info[getDrawParamsIndex()]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Vec3::Converter::optProp(&color, "color", opts) ||
-        (hasThickness && IntConverter::optProp(&thickness, "thickness", opts)) ||
-        IntConverter::optProp(&lineType, "lineType", opts) ||
-        IntConverter::optProp(&shift, "shift", opts)
+        (hasThickness && FF::IntConverter::optProp(&thickness, "thickness", opts)) ||
+        FF::IntConverter::optProp(&lineType, "lineType", opts) ||
+        FF::IntConverter::optProp(&shift, "shift", opts)
       );
     }
   };
@@ -919,14 +919,14 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         DrawWorker::unwrapOptionalArgs(info) ||
-        DoubleConverter::optArg(6, &tipLength, info)
+        FF::DoubleConverter::optArg(6, &tipLength, info)
       );
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         DrawWorker::unwrapOptionalArgsFromOpts(info) ||
-        DoubleConverter::optProp(&tipLength, "tipLength", info[getDrawParamsIndex()]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())
+        FF::DoubleConverter::optProp(&tipLength, "tipLength", info[getDrawParamsIndex()]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())
       );
     }
   
@@ -988,7 +988,7 @@ namespace MatImgprocBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Point2::Converter::arg(0, &center, info) ||
-        DoubleConverter::arg(1, &radius, info)
+        FF::DoubleConverter::arg(1, &radius, info)
       );
     }
   
@@ -1028,9 +1028,9 @@ namespace MatImgprocBindings {
           !isArgBox && (
             Point2::Converter::arg(0, &center, info) ||
             Size::Converter::arg(1, &axes, info) ||
-            DoubleConverter::arg(2, &angle, info) ||
-            DoubleConverter::arg(3, &startAngle, info) ||
-            DoubleConverter::arg(4, &endAngle, info)
+            FF::DoubleConverter::arg(2, &angle, info) ||
+            FF::DoubleConverter::arg(3, &startAngle, info) ||
+            FF::DoubleConverter::arg(4, &endAngle, info)
           )
         ) || (isArgBox && RotatedRect::Converter::arg(0, &box, info))
       );
@@ -1056,7 +1056,7 @@ namespace MatImgprocBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2i>::arg(0, &pts, info) ||
-        BoolConverter::arg(1, &isClosed, info)
+        FF::BoolConverter::arg(1, &isClosed, info)
       );
     }
   
@@ -1141,24 +1141,24 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        StringConverter::arg(0, &text, info) ||
+        FF::StringConverter::arg(0, &text, info) ||
         Point2::Converter::arg(1, &org, info) ||
-        IntConverter::arg(2, &fontFace, info) ||
-        DoubleConverter::arg(3, &fontScale, info)
+        FF::IntConverter::arg(2, &fontFace, info) ||
+        FF::DoubleConverter::arg(3, &fontScale, info)
       );
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         DrawWorker::unwrapOptionalArgs(info) ||
-        BoolConverter::optArg(8, &bottomLeftOrigin, info)
+        FF::BoolConverter::optArg(8, &bottomLeftOrigin, info)
       );
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         DrawWorker::unwrapOptionalArgsFromOpts(info) ||
-        BoolConverter::optProp(&bottomLeftOrigin, "bottomLeftOrigin", info[getDrawParamsIndex()]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())
+        FF::BoolConverter::optProp(&bottomLeftOrigin, "bottomLeftOrigin", info[getDrawParamsIndex()]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())
       );
     }
   
@@ -1193,7 +1193,7 @@ namespace MatImgprocBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::arg(0, &templ, info) ||
-        IntConverter::arg(1, &method, info)
+        FF::IntConverter::arg(1, &method, info)
       );
     }
   
@@ -1228,15 +1228,15 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::arg(0, &threshold1, info) ||
-        DoubleConverter::arg(1, &threshold2, info)
+        FF::DoubleConverter::arg(0, &threshold1, info) ||
+        FF::DoubleConverter::arg(1, &threshold2, info)
         );
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(2, &apertureSize, info) ||
-        BoolConverter::optArg(3, &L2gradient, info)
+        FF::IntConverter::optArg(2, &apertureSize, info) ||
+        FF::BoolConverter::optArg(3, &L2gradient, info)
         );
     }
   
@@ -1247,8 +1247,8 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        IntConverter::optProp(&apertureSize, "apertureSize", opts) ||
-        BoolConverter::optProp(&L2gradient, "L2gradient", opts)
+        FF::IntConverter::optProp(&apertureSize, "apertureSize", opts) ||
+        FF::BoolConverter::optProp(&L2gradient, "L2gradient", opts)
       );
     }
   };
@@ -1279,19 +1279,19 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &ddepth, info) ||
-        IntConverter::arg(1, &dx, info) ||
-        IntConverter::arg(2, &dy, info)
+        FF::IntConverter::arg(0, &ddepth, info) ||
+        FF::IntConverter::arg(1, &dx, info) ||
+        FF::IntConverter::arg(2, &dy, info)
       );
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       int optArgIdx = hasKsize ? 3 : 2;
       return (
-        (hasKsize && IntConverter::optArg(optArgIdx, &ksize, info)) ||
-        DoubleConverter::optArg(optArgIdx + 1, &scale, info) ||
-        DoubleConverter::optArg(optArgIdx + 2, &delta, info) ||
-        IntConverter::optArg(optArgIdx + 3, &borderType, info)
+        (hasKsize && FF::IntConverter::optArg(optArgIdx, &ksize, info)) ||
+        FF::DoubleConverter::optArg(optArgIdx + 1, &scale, info) ||
+        FF::DoubleConverter::optArg(optArgIdx + 2, &delta, info) ||
+        FF::IntConverter::optArg(optArgIdx + 3, &borderType, info)
         );
     }
   
@@ -1302,10 +1302,10 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        (hasKsize && IntConverter::optProp(&ksize, "ksize", opts)) ||
-        DoubleConverter::optProp(&scale, "scale", opts) ||
-        DoubleConverter::optProp(&delta, "delta", opts) ||
-        IntConverter::optProp(&borderType, "borderType", opts)
+        (hasKsize && FF::IntConverter::optProp(&ksize, "ksize", opts)) ||
+        FF::DoubleConverter::optProp(&scale, "scale", opts) ||
+        FF::DoubleConverter::optProp(&delta, "delta", opts) ||
+        FF::IntConverter::optProp(&borderType, "borderType", opts)
         );
     }
   };
@@ -1356,15 +1356,15 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return IntConverter::arg(0, &ddepth, info);
+      return FF::IntConverter::arg(0, &ddepth, info);
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(1, &ksize, info) ||
-        DoubleConverter::optArg(2, &scale, info) ||
-        DoubleConverter::optArg(3, &delta, info) ||
-        IntConverter::optArg(4, &borderType, info)
+        FF::IntConverter::optArg(1, &ksize, info) ||
+        FF::DoubleConverter::optArg(2, &scale, info) ||
+        FF::DoubleConverter::optArg(3, &delta, info) ||
+        FF::IntConverter::optArg(4, &borderType, info)
       );
     }
   
@@ -1375,10 +1375,10 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        IntConverter::optProp(&ksize, "ksize", opts) ||
-        DoubleConverter::optProp(&scale, "scale", opts) ||
-        DoubleConverter::optProp(&delta, "delta", opts) ||
-        IntConverter::optProp(&borderType, "borderType", opts)
+        FF::IntConverter::optProp(&ksize, "ksize", opts) ||
+        FF::DoubleConverter::optProp(&scale, "scale", opts) ||
+        FF::DoubleConverter::optProp(&delta, "delta", opts) ||
+        FF::IntConverter::optProp(&borderType, "borderType", opts)
         );
     }
   };
@@ -1419,7 +1419,7 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Size::Converter::optArg(0, &size, info) ||
-        IntConverter::optArg(1, &borderType, info)
+        FF::IntConverter::optArg(1, &borderType, info)
       );
     }
   
@@ -1431,7 +1431,7 @@ namespace MatImgprocBindings {
       v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Size::Converter::optProp(&size, "size", opts) ||
-        IntConverter::optProp(&borderType, "borderType", opts)
+        FF::IntConverter::optProp(&borderType, "borderType", opts)
       );
     }
   };
@@ -1459,11 +1459,11 @@ namespace MatImgprocBindings {
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return IntConverter::arg(0, &maxlevel, info);
+      return FF::IntConverter::arg(0, &maxlevel, info);
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return IntConverter::optArg(1, &borderType, info);
+      return FF::IntConverter::optArg(1, &borderType, info);
     }
   };
   
@@ -1496,18 +1496,18 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::arg(0, &rho, info) ||
-        DoubleConverter::arg(1, &theta, info) ||
-        IntConverter::arg(2, &threshold, info)
+        FF::DoubleConverter::arg(0, &rho, info) ||
+        FF::DoubleConverter::arg(1, &theta, info) ||
+        FF::IntConverter::arg(2, &threshold, info)
       );
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(3, &srn, info) ||
-        DoubleConverter::optArg(4, &stn, info) ||
-        DoubleConverter::optArg(5, &min_theta, info) ||
-        DoubleConverter::optArg(6, &max_theta, info)
+        FF::DoubleConverter::optArg(3, &srn, info) ||
+        FF::DoubleConverter::optArg(4, &stn, info) ||
+        FF::DoubleConverter::optArg(5, &min_theta, info) ||
+        FF::DoubleConverter::optArg(6, &max_theta, info)
         );
     }
   
@@ -1518,10 +1518,10 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&srn, "srn", opts) ||
-        DoubleConverter::optProp(&stn, "stn", opts) ||
-        DoubleConverter::optProp(&min_theta, "min_theta", opts) ||
-        DoubleConverter::optProp(&max_theta, "max_theta", opts)
+        FF::DoubleConverter::optProp(&srn, "srn", opts) ||
+        FF::DoubleConverter::optProp(&stn, "stn", opts) ||
+        FF::DoubleConverter::optProp(&min_theta, "min_theta", opts) ||
+        FF::DoubleConverter::optProp(&max_theta, "max_theta", opts)
       );
     }
   };
@@ -1547,8 +1547,8 @@ namespace MatImgprocBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(3, &minLineLength, info) ||
-        DoubleConverter::optArg(4, &maxLineGap, info)
+        FF::DoubleConverter::optArg(3, &minLineLength, info) ||
+        FF::DoubleConverter::optArg(4, &maxLineGap, info)
       );
     }
   
@@ -1559,8 +1559,8 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&minLineLength, "minLineLength", opts) ||
-        DoubleConverter::optProp(&maxLineGap, "maxLineGap", opts)
+        FF::DoubleConverter::optProp(&minLineLength, "minLineLength", opts) ||
+        FF::DoubleConverter::optProp(&maxLineGap, "maxLineGap", opts)
       );
     }
   };
@@ -1594,18 +1594,18 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &method, info) ||
-        DoubleConverter::arg(1, &dp, info) ||
-        DoubleConverter::arg(2, &minDist, info)
+        FF::IntConverter::arg(0, &method, info) ||
+        FF::DoubleConverter::arg(1, &dp, info) ||
+        FF::DoubleConverter::arg(2, &minDist, info)
         );
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        DoubleConverter::optArg(3, &param1, info) ||
-        DoubleConverter::optArg(4, &param2, info) ||
-        IntConverter::optArg(5, &minRadius, info) ||
-        IntConverter::optArg(6, &maxRadius, info)
+        FF::DoubleConverter::optArg(3, &param1, info) ||
+        FF::DoubleConverter::optArg(4, &param2, info) ||
+        FF::IntConverter::optArg(5, &minRadius, info) ||
+        FF::IntConverter::optArg(6, &maxRadius, info)
         );
     }
   
@@ -1616,10 +1616,10 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        DoubleConverter::optProp(&param1, "param1", opts) ||
-        DoubleConverter::optProp(&param2, "param2", opts) ||
-        IntConverter::optProp(&minRadius, "minRadius", opts) ||
-        IntConverter::optProp(&maxRadius, "maxRadius", opts)
+        FF::DoubleConverter::optProp(&param1, "param1", opts) ||
+        FF::DoubleConverter::optProp(&param2, "param2", opts) ||
+        FF::IntConverter::optProp(&minRadius, "minRadius", opts) ||
+        FF::IntConverter::optProp(&maxRadius, "maxRadius", opts)
         );
     }
   };
@@ -1661,13 +1661,13 @@ namespace MatImgprocBindings {
     }
   
     v8::Local<v8::Value> getReturnValue() {
-      return DoubleConverter::wrap(returnValue);
+      return FF::DoubleConverter::wrap(returnValue);
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::arg(0, &H2, info) ||
-        IntConverter::arg(1, &method, info)
+        FF::IntConverter::arg(1, &method, info)
       );
     }
   };
@@ -1710,7 +1710,7 @@ namespace MatImgprocBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), IntConverter::wrap(returnValue));
+      Nan::Set(ret, Nan::New("returnValue").ToLocalChecked(), FF::IntConverter::wrap(returnValue));
       Nan::Set(ret, Nan::New("rect").ToLocalChecked(), Rect::Converter::wrap(rect));
       return ret;
     }
@@ -1718,7 +1718,7 @@ namespace MatImgprocBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Point2::Converter::arg(0, &seedPoint, info) ||
-        (self.channels() == 1 && DoubleConverter::optArg(1, &newVal1, info)) ||
+        (self.channels() == 1 && FF::DoubleConverter::optArg(1, &newVal1, info)) ||
         (self.channels() == 3 && Vec3::Converter::optArg(1, &newVal3, info))
       );
     }
@@ -1726,11 +1726,11 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::optArg(2, &mask, info) ||
-        (self.channels() == 1 && DoubleConverter::optArg(3, &loDiff1, info)) ||
+        (self.channels() == 1 && FF::DoubleConverter::optArg(3, &loDiff1, info)) ||
         (self.channels() == 3 && Vec3::Converter::optArg(3, &loDiff3, info)) ||
-        (self.channels() == 1 && DoubleConverter::optArg(4, &upDiff1, info)) ||
+        (self.channels() == 1 && FF::DoubleConverter::optArg(4, &upDiff1, info)) ||
         (self.channels() == 3 && Vec3::Converter::optArg(4, &upDiff3, info)) ||
-        IntConverter::optArg(5, &flags, info)
+        FF::IntConverter::optArg(5, &flags, info)
       );
     }
   
@@ -1743,11 +1743,11 @@ namespace MatImgprocBindings {
       v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Mat::Converter::optProp(&mask, "mask", opts) ||
-        (self.channels() == 1 && DoubleConverter::optProp(&loDiff1, "loDiff", opts)) ||
+        (self.channels() == 1 && FF::DoubleConverter::optProp(&loDiff1, "loDiff", opts)) ||
         (self.channels() == 3 && Vec3::Converter::optProp(&loDiff3, "loDiff", opts)) ||
-        (self.channels() == 1 && DoubleConverter::optProp(&upDiff1, "upDiff", opts)) ||
+        (self.channels() == 1 && FF::DoubleConverter::optProp(&upDiff1, "upDiff", opts)) ||
         (self.channels() == 3 && Vec3::Converter::optProp(&upDiff3, "upDiff", opts)) ||
-        IntConverter::optProp(&flags, "flags", opts)
+        FF::IntConverter::optProp(&flags, "flags", opts)
       );
     }
   };
@@ -1777,15 +1777,15 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &d, info) ||
-        DoubleConverter::arg(1, &sigmaColor, info) ||
-        DoubleConverter::arg(2, &sigmaSpace, info)
+        FF::IntConverter::arg(0, &d, info) ||
+        FF::DoubleConverter::arg(1, &sigmaColor, info) ||
+        FF::DoubleConverter::arg(2, &sigmaSpace, info)
       );
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(3, &borderType, info)
+        FF::IntConverter::optArg(3, &borderType, info)
       );
     }
   };
@@ -1816,7 +1816,7 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &ddepth, info) ||
+        FF::IntConverter::arg(0, &ddepth, info) ||
         Size::Converter::arg(1, &ksize, info)
         );
     }
@@ -1824,8 +1824,8 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Point2::Converter::optArg(2, &anchor, info) ||
-        BoolConverter::optArg(3, &normalize, info) ||
-        IntConverter::optArg(4, &borderType, info)
+        FF::BoolConverter::optArg(3, &normalize, info) ||
+        FF::IntConverter::optArg(4, &borderType, info)
         );
     }
   
@@ -1837,8 +1837,8 @@ namespace MatImgprocBindings {
       v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Point2::Converter::optProp(&anchor, "anchor", opts) ||
-        BoolConverter::optProp(&normalize, "normalize", opts) ||
-        IntConverter::optProp(&borderType, "borderType", opts)
+        FF::BoolConverter::optProp(&normalize, "normalize", opts) ||
+        FF::IntConverter::optProp(&borderType, "borderType", opts)
       );
     }
   };
@@ -1880,7 +1880,7 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &ddepth, info) ||
+        FF::IntConverter::arg(0, &ddepth, info) ||
         Mat::Converter::arg(1, &kernel, info)
       );
     }
@@ -1888,8 +1888,8 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Point2::Converter::optArg(2, &anchor, info) ||
-        DoubleConverter::optArg(3, &delta, info) ||
-        IntConverter::optArg(4, &borderType, info)
+        FF::DoubleConverter::optArg(3, &delta, info) ||
+        FF::IntConverter::optArg(4, &borderType, info)
       );
     }
   
@@ -1901,8 +1901,8 @@ namespace MatImgprocBindings {
       v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Point2::Converter::optProp(&anchor, "anchor", opts) ||
-        DoubleConverter::optProp(&delta, "delta", opts) ||
-        IntConverter::optProp(&borderType, "borderType", opts)
+        FF::DoubleConverter::optProp(&delta, "delta", opts) ||
+        FF::IntConverter::optProp(&borderType, "borderType", opts)
       );
     }
   };
@@ -1934,7 +1934,7 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &ddepth, info) ||
+        FF::IntConverter::arg(0, &ddepth, info) ||
         Mat::Converter::arg(1, &kernelX, info) ||
         Mat::Converter::arg(2, &kernelY, info)
       );
@@ -1943,8 +1943,8 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Point2::Converter::optArg(3, &anchor, info) ||
-        DoubleConverter::optArg(4, &delta, info) ||
-        IntConverter::optArg(5, &borderType, info)
+        FF::DoubleConverter::optArg(4, &delta, info) ||
+        FF::IntConverter::optArg(5, &borderType, info)
       );
     }
   
@@ -1956,8 +1956,8 @@ namespace MatImgprocBindings {
       v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         Point2::Converter::optProp(&anchor, "anchor", opts) ||
-        DoubleConverter::optProp(&delta, "delta", opts) ||
-        IntConverter::optProp(&borderType, "borderType", opts)
+        FF::DoubleConverter::optProp(&delta, "delta", opts) ||
+        FF::IntConverter::optProp(&borderType, "borderType", opts)
       );
     }
   };
@@ -1987,15 +1987,15 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &blockSize, info) ||
-        IntConverter::arg(1, &ksize, info) ||
-        DoubleConverter::arg(2, &k, info)
+        FF::IntConverter::arg(0, &blockSize, info) ||
+        FF::IntConverter::arg(1, &ksize, info) ||
+        FF::DoubleConverter::arg(2, &k, info)
       );
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(3, &borderType, info)
+        FF::IntConverter::optArg(3, &borderType, info)
       );
     }
   };
@@ -2051,14 +2051,14 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::arg(0, &blockSize, info)
+        FF::IntConverter::arg(0, &blockSize, info)
       );
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(1, &ksize, info) ||
-        IntConverter::optArg(2, &borderType, info)
+        FF::IntConverter::optArg(1, &ksize, info) ||
+        FF::IntConverter::optArg(2, &borderType, info)
         );
     }
   
@@ -2069,8 +2069,8 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        IntConverter::optProp(&ksize, "ksize", opts) ||
-        IntConverter::optProp(&borderType, "borderType", opts)
+        FF::IntConverter::optProp(&ksize, "ksize", opts) ||
+        FF::IntConverter::optProp(&borderType, "borderType", opts)
       );
     }
   };
@@ -2126,8 +2126,8 @@ namespace MatImgprocBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(0, &sdepth, info) ||
-        IntConverter::optArg(1, &sqdepth, info)
+        FF::IntConverter::optArg(0, &sdepth, info) ||
+        FF::IntConverter::optArg(1, &sqdepth, info)
       );
     }
   
@@ -2138,8 +2138,8 @@ namespace MatImgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        IntConverter::optProp(&sdepth, "sdepth", opts) ||
-        IntConverter::optProp(&sqdepth, "sqdepth", opts)
+        FF::IntConverter::optProp(&sdepth, "sdepth", opts) ||
+        FF::IntConverter::optProp(&sqdepth, "sqdepth", opts)
       );
     }
   };
@@ -2174,17 +2174,17 @@ namespace MatImgprocBindings {
 	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
 			  ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2i>::arg(0, &contours, info) ||
-			  IntConverter::arg(1, &contourIdx, info) ||
+			  FF::IntConverter::arg(1, &contourIdx, info) ||
 			  Vec3::Converter::arg(2, &color, info)
 			);
 	  }
 
 	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  IntConverter::optArg(3, &thickness, info) ||
-			  IntConverter::optArg(4, &lineType, info) ||
+			  FF::IntConverter::optArg(3, &thickness, info) ||
+			  FF::IntConverter::optArg(4, &lineType, info) ||
 			  ObjectArrayConverter<Vec4, cv::Vec4d, cv::Vec4i>::optArg(5, &hierarchy, info) ||
-			  IntConverter::optArg(6, &maxLevel, info) ||
+			  FF::IntConverter::optArg(6, &maxLevel, info) ||
 			  Point2::Converter::optArg(7, &offset, info)
 			);
 	  }
@@ -2196,10 +2196,10 @@ namespace MatImgprocBindings {
 	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 		  return (
-			  IntConverter::optProp(&thickness, "thickness", opts) ||
-			  IntConverter::optProp(&lineType, "lineType", opts) ||
+			  FF::IntConverter::optProp(&thickness, "thickness", opts) ||
+			  FF::IntConverter::optProp(&lineType, "lineType", opts) ||
 			  ObjectArrayConverter<Vec4, cv::Vec4d, cv::Vec4i>::optProp(&hierarchy, "hierarchy", opts) ||
-			  IntConverter::optProp(&maxLevel, "maxLevel", opts) ||
+			  FF::IntConverter::optProp(&maxLevel, "maxLevel", opts) ||
 			  Point2::Converter::optProp(&offset, "offset", opts)
 			);
 	  }
