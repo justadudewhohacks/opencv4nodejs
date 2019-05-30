@@ -298,8 +298,8 @@ NAN_METHOD(Imgproc::FitLine) {
   uint distType;
   double param, reps, aeps;
   if ((
-	isPoint2 && ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &pts2d, info) ||
-	!isPoint2 && ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &pts3d, info)
+	isPoint2 && Point2::ArrayConverter::arg(0, &pts2d, info) ||
+	!isPoint2 && Point3::ArrayConverter::arg(0, &pts3d, info)
 	) ||
 	FF::IntConverter::arg(1, &distType, info) ||
 	FF::DoubleConverter::arg(2, &param, info) ||

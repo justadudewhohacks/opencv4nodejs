@@ -64,7 +64,7 @@ NAN_METHOD(Core::Partition) {
 
   if (Point2::hasInstance(data0)) {
     std::vector<cv::Point2d> pts;
-	if (ObjectArrayConverter<Point2, cv::Point2d>::arg(0, &pts, info)) {
+	if (Point2::ArrayConverter::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
 		return;
 	}
@@ -73,7 +73,7 @@ NAN_METHOD(Core::Partition) {
   }
   else if (Point3::hasInstance(data0)) {
     std::vector<cv::Point3d> pts;
-	if (ObjectArrayConverter<Point3, cv::Point3d>::arg(0, &pts, info)) {
+	if (Point3::ArrayConverter::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
 		return;
 	}
