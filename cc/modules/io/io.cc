@@ -74,7 +74,7 @@ NAN_METHOD(Io::Imshow) {
   if (!Mat::Converter::hasInstance(info[1])) {
     FF_THROW("expected arg1 to be an instance of Mat");
   }
-  cv::imshow(StringConverter::unwrap(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
+  cv::imshow(StringConverter::unwrap(info[0]), Mat::Converter::unwrap(info[1]));
 }
 
 NAN_METHOD(Io::ImshowWait) {
@@ -85,7 +85,7 @@ NAN_METHOD(Io::ImshowWait) {
   if (!Mat::Converter::hasInstance(info[1])) {
     FF_THROW("expected arg1 to be an instance of Mat");
   }
-  cv::imshow(StringConverter::unwrap(info[0]), FF_UNWRAP_MAT_AND_GET(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
+  cv::imshow(StringConverter::unwrap(info[0]), Mat::Converter::unwrap(info[1]));
   cv::waitKey();
 }
 
@@ -147,7 +147,7 @@ NAN_METHOD(Io::Imdecode) {
   memcpy(vec.data(), data, size);
 
   v8::Local<v8::Object> jsDecodedMat = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsDecodedMat) = cv::imdecode(vec, flags);
+  Mat::unwrap(jsDecodedMat)->setNativeObject(cv::imdecode(vec, flags));
   info.GetReturnValue().Set(jsDecodedMat);
 }
 
@@ -161,7 +161,7 @@ NAN_METHOD(Io::ImdecodeAsync) {
   std::shared_ptr<IoBindings::ImdecodeWorker> worker = std::make_shared<IoBindings::ImdecodeWorker>();
 
   v8::Local<v8::Function> cbFunc;
-  if (FF::hasArg(info, 1) && IntTypeConverter::assertType(info[1])) {
+  if (FF::hasArg(info, 1) && IntConverter::assertType(info[1])) {
 	worker->flags = info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	if (!info[2]->IsFunction()) {
 		return Nan::ThrowError(Nan::New("Io::ImdecodeAsync - Error: "

@@ -36,7 +36,7 @@ public:
 	static FF_GETTER(SVM, kernelType, svm->getKernelType());
 	static FF_GETTER(SVM, varCount, svm->getVarCount());
 	static FF_GETTER(SVM, isTrained, svm->isTrained());
-	static FF_GETTER_JSOBJ(SVM, classWeights, svm->getClassWeights(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
+	static FF_GETTER_JSOBJ(SVM, classWeights, svm->getClassWeights(), Mat);
 	// TODO custom kernel
 
 	static NAN_METHOD(New);

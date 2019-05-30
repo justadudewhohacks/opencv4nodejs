@@ -56,7 +56,7 @@ NAN_METHOD(Vec::New) {
 	v8::Local<v8::Object> jsVec;
 	if (info.Length() == 4) {
 		jsVec = FF::newInstance(Nan::New(Vec4::constructor));
-		Nan::ObjectWrap::Unwrap<Vec4>(jsVec)->vec = cv::Vec4d(
+		Nan::ObjectWrap::Unwrap<Vec4>(jsVec)->self = cv::Vec4d(
 			info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
 			info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
 			info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),
@@ -68,11 +68,11 @@ NAN_METHOD(Vec::New) {
 		if (info.Length() == 3) {
 			double z = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 			jsVec = FF::newInstance(Nan::New(Vec3::constructor));
-			Nan::ObjectWrap::Unwrap<Vec3>(jsVec)->vec = cv::Vec3d(x, y, z);
+			Nan::ObjectWrap::Unwrap<Vec3>(jsVec)->self = cv::Vec3d(x, y, z);
 		}
 		else {
 			jsVec = FF::newInstance(Nan::New(Vec2::constructor));
-			Nan::ObjectWrap::Unwrap<Vec2>(jsVec)->vec = cv::Vec2d(x, y);
+			Nan::ObjectWrap::Unwrap<Vec2>(jsVec)->self = cv::Vec2d(x, y);
 		}
 	}
   info.GetReturnValue().Set(jsVec);

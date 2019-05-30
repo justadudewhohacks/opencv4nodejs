@@ -6,9 +6,13 @@
 #ifndef __FF_POINT3_H__
 #define __FF_POINT3_H__
 
-class Point3 : public Nan::ObjectWrap {
+class Point3 : public FF::ObjectWrap<Point3, cv::Point3d> {
 public:
-	cv::Point3d pt;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "Point3";
+	}
 
 	static void Init(v8::Local<v8::FunctionTemplate> ctor) {
 		FF_PROTO_SET_ARITHMETIC_OPERATIONS(ctor);
@@ -20,33 +24,22 @@ public:
 		info.GetReturnValue().Set(info.Holder());
 	};
 
-	static FF_GETTER(Point3, GetX, pt.x);
-	static FF_GETTER(Point3, GetY, pt.y);
-	static FF_GETTER(Point3, GetZ, pt.z);
+	static FF_GETTER(Point3, GetX, self.x);
+	static FF_GETTER(Point3, GetY, self.y);
+	static FF_GETTER(Point3, GetZ, self.z);
 
-	FF_INIT_ARITHMETIC_OPERATIONS(Point3, FF_UNWRAP_PT3_AND_GET);
+	FF_INIT_ARITHMETIC_OPERATIONS(Point3);
 
 	static NAN_METHOD(Norm) {
-		info.GetReturnValue().Set(Nan::New(cv::norm(FF_UNWRAP_PT3_AND_GET(info.This()))));
+		info.GetReturnValue().Set(Nan::New(cv::norm(Point3::Converter::unwrap(info.This()))));
 	}
 
 	static NAN_METHOD(At) {
 		FF_METHOD_CONTEXT("Point3::At");
 		FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 2, "Point3");
-		cv::Point3d ptSelf = FF_UNWRAP_PT3_AND_GET(info.This());
+		cv::Point3d ptSelf = Point3::Converter::unwrap(info.This());
 		const double coords[] = { ptSelf.x, ptSelf.y, ptSelf.z };
 		info.GetReturnValue().Set(coords[info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value()]);
-	}
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Point3d* getNativeObjectPtr() { return &pt; }
-	cv::Point3d getNativeObject() { return pt; }
-
-	typedef InstanceConverter<Point3, cv::Point3d> Converter;
-
-	static const char* getClassName() {
-		return "Point3";
 	}
 };
 

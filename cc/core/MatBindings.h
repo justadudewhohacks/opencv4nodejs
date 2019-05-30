@@ -682,47 +682,10 @@ namespace MatBindings {
     }
   };
 
-
-
-  class GoodFeaturesToTrackBinding : public OpencvBinding {
-  public:
-	  cv::Mat self;
-	  GoodFeaturesToTrackBinding(cv::Mat self) {
-		  this->self = self;
-
-		  FF::Int maxCorners = intRequired();
-		  FF::Double qualityLevel = doubleRequired();
-		  FF::Double minDistance = doubleRequired();
-		  FF::Int blockSize = intOptional(3, "blockSize");
-		  FF::Int gradientSize = intOptional(3, "gradientSize");
-		  auto mask = addOptionalArg<FF::OptArg<Mat::Converter, cv::Mat>>(cv::noArray().getMat(), "mask");
-		  FF::Bool useHarrisDetector = boolOptional(false, "useHarrisDetector");
-		  FF::Double harrisK = doubleOptional(0.04, "harrisK");
-		  FF::FloatArray corners = floatArrayReturnValue("corners");
-
-		  executeBinding = [self, maxCorners, qualityLevel, minDistance, blockSize, gradientSize, mask, useHarrisDetector, harrisK, corners]() {
-#if CV_VERSION_MINOR >= 4
-			  cv::goodFeaturesToTrack(
-				  self, corners->get(),
-				  maxCorners->get(), qualityLevel->get(), minDistance->get(),
-				  mask->get(), blockSize->get(), gradientSize->get(),
-				  useHarrisDetector->get(), harrisK->get());
-#else
-			  cv::goodFeaturesToTrack(
-				  self, corners->get(),
-				  maxCorners->get(), qualityLevel->get(), minDistance->get(),
-				  mask->get(), blockSize->get(),
-				  useHarrisDetector->get(), harrisK->get());
-#endif
-			  return "";
-		  };
-	  }
-  };
-
-  struct _GoodFeaturesToTrackWorker : public CatchCvExceptionWorker {
+  struct GoodFeaturesToTrackWorker : public CatchCvExceptionWorker {
   public:
     cv::Mat self;
-	_GoodFeaturesToTrackWorker(cv::Mat self) {
+    GoodFeaturesToTrackWorker(cv::Mat self) {
       this->self = self;
     }
 

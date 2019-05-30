@@ -22,9 +22,9 @@ public:
   static NAN_METHOD(New);
 	static NAN_METHOD(Iterate);
 
-	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetImg, img, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetLabels, labels, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetLabelContourMask, labelContourMask, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
+	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetImg, img, Mat);
+	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetLabels, labels, Mat);
+	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetLabelContourMask, labelContourMask, Mat);
 	static FF_GETTER(SuperpixelSEEDS, GetNumSuperpixels, num_superpixels);
 	static FF_GETTER(SuperpixelSEEDS, GeNumLevels, num_levels);
 	static FF_GETTER(SuperpixelSEEDS, GetPrior, prior);

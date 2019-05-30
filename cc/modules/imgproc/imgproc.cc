@@ -58,7 +58,7 @@ NAN_METHOD(Imgproc::GetStructuringElement) {
 	}
 
 	v8::Local<v8::Object> jsKernel = FF::newInstance(Nan::New(Mat::constructor));
-	FF_UNWRAP_MAT_AND_GET(jsKernel) = cv::getStructuringElement(shape, size, anchor);
+	Mat::unwrap(jsKernel)->setNativeObject(cv::getStructuringElement(shape, size, anchor));
 	info.GetReturnValue().Set(jsKernel);
 }
 
@@ -77,7 +77,7 @@ NAN_METHOD(Imgproc::GetRotationMatrix2D) {
 	}
 
 	v8::Local<v8::Object> jsRotationMat = FF::newInstance(Nan::New(Mat::constructor));
-	FF_UNWRAP_MAT_AND_GET(jsRotationMat) = cv::getRotationMatrix2D(center, angle, scale);
+	Mat::unwrap(jsRotationMat)->setNativeObject(cv::getRotationMatrix2D(center, angle, scale));
 	info.GetReturnValue().Set(jsRotationMat);
 }
 
@@ -94,7 +94,7 @@ NAN_METHOD(Imgproc::GetAffineTransform) {
 	}
 
 	v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
-	FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getAffineTransform(srcPoints, dstPoints);
+	Mat::unwrap(jsMat)->setNativeObject(cv::getAffineTransform(srcPoints, dstPoints));
 	info.GetReturnValue().Set(jsMat);
 }
 
@@ -111,7 +111,7 @@ NAN_METHOD(Imgproc::GetPerspectiveTransform) {
   }
 
   v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsMat) = cv::getPerspectiveTransform(srcPoints, dstPoints);
+  Mat::unwrap(jsMat)->setNativeObject(cv::getPerspectiveTransform(srcPoints, dstPoints));
   info.GetReturnValue().Set(jsMat);
 }
 NAN_METHOD(Imgproc::UndistortPoints) {
@@ -205,7 +205,7 @@ NAN_METHOD(Imgproc::CalcHist) {
     hist.convertTo(hist, outputType);
   }
 
-  FF_UNWRAP_MAT_AND_GET(jsMat) = hist;
+  Mat::unwrap(jsMat)->setNativeObject(hist);
   info.GetReturnValue().Set(jsMat);
 }
 
@@ -269,7 +269,7 @@ NAN_METHOD(Imgproc::Plot1DHist) {
   }
 
   v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsMat) = plot;
+  Mat::unwrap(jsMat)->setNativeObject(plot);
   info.GetReturnValue().Set(jsMat);
 }
 

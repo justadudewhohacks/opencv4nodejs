@@ -64,8 +64,7 @@ NAN_METHOD(Contour::New) {
 				cv_pt = cv::Point2d(x, y);
 			}
 			else if (Point2::Converter::hasInstance(jsPt)) {
-				v8::Local<v8::Object> jsObj = FF_CAST_OBJ(jsPt);
-				cv_pt = FF_UNWRAP_PT2_AND_GET(jsObj);
+				cv_pt = Point2::Converter::unwrap(jsPt);
 			}
 			else {
 				return Nan::ThrowError("Contour::New - expected arg0 to consist of only Point2 or array of length 2");
@@ -200,7 +199,7 @@ NAN_METHOD(Contour::MinEnclosingCircle) {
 
 	v8::Local<v8::Object> jsCircle = Nan::New<v8::Object>();
 	v8::Local<v8::Object> jsCenter = FF::newInstance(Nan::New(Point2::constructor));
-	FF_UNWRAP_PT2_AND_GET(jsCenter) = center;
+	Point2::unwrap(jsCenter)->setNativeObject(center);
 	Nan::Set(jsCircle, FF::newString("center"), jsCenter);
 	Nan::Set(jsCircle, FF::newString("radius"), Nan::New((double)radius));
 	info.GetReturnValue().Set(jsCircle);

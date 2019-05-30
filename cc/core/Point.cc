@@ -44,11 +44,11 @@ NAN_METHOD(Point::New) {
 	if (info.Length() == 3) {
 		double z = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 		jsPoint = FF::newInstance(Nan::New(Point3::constructor));
-		Nan::ObjectWrap::Unwrap<Point3>(jsPoint)->pt = cv::Point3d(x, y, z);
+		Nan::ObjectWrap::Unwrap<Point3>(jsPoint)->self = cv::Point3d(x, y, z);
 	}
 	else {
 		jsPoint = FF::newInstance(Nan::New(Point2::constructor));
-		Nan::ObjectWrap::Unwrap<Point2>(jsPoint)->pt = cv::Point2d(x, y);
+		Point2::unwrap(jsPoint)->setNativeObject(cv::Point2d(x, y));
 	}
   info.GetReturnValue().Set(jsPoint);
 }

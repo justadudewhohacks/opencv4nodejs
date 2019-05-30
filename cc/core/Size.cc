@@ -22,7 +22,7 @@ NAN_METHOD(Size::New) {
 		}
 		double width = info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 		double height = info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-		self->size = cv::Size2d(width, height);
+		self->setNativeObject(cv::Size2d(width, height));
 	}
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());

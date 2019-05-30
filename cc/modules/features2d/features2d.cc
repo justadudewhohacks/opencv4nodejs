@@ -87,7 +87,7 @@ NAN_METHOD(Features2d::DrawKeyPoints) {
 	}
 
 	v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
-	cv::drawKeypoints(img, kps, FF_UNWRAP_MAT_AND_GET(jsMat));
+	cv::drawKeypoints(img, kps, Mat::unwrap(jsMat)->self);
 	info.GetReturnValue().Set(jsMat);
 }
 
@@ -109,6 +109,6 @@ NAN_METHOD(Features2d::DrawMatches) {
 	}
 
 	v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
-	cv::drawMatches(img1, kps1, img2, kps2, dMatches, FF_UNWRAP_MAT_AND_GET(jsMat));
+	cv::drawMatches(img1, kps1, img2, kps2, dMatches, Mat::unwrap(jsMat)->self);
 	info.GetReturnValue().Set(jsMat);
 }

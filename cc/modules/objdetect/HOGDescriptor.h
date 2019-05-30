@@ -26,10 +26,10 @@ public:
 		return "HOGDescriptor";
 	}
 
-	static FF_GETTER_JSOBJ(HOGDescriptor, winSize, hog->winSize, FF_UNWRAP_SIZE_AND_GET, Size::constructor);
-	static FF_GETTER_JSOBJ(HOGDescriptor, blockSize, hog->blockSize, FF_UNWRAP_SIZE_AND_GET, Size::constructor);
-	static FF_GETTER_JSOBJ(HOGDescriptor, blockStride, hog->blockStride, FF_UNWRAP_SIZE_AND_GET, Size::constructor);
-	static FF_GETTER_JSOBJ(HOGDescriptor, cellSize, hog->cellSize, FF_UNWRAP_SIZE_AND_GET, Size::constructor);
+	static FF_GETTER_JSOBJ(HOGDescriptor, winSize, hog->winSize, Size);
+	static FF_GETTER_JSOBJ(HOGDescriptor, blockSize, hog->blockSize, Size);
+	static FF_GETTER_JSOBJ(HOGDescriptor, blockStride, hog->blockStride, Size);
+	static FF_GETTER_JSOBJ(HOGDescriptor, cellSize, hog->cellSize, Size);
 	static FF_GETTER(HOGDescriptor, nbins, hog->nbins);
 	static FF_GETTER(HOGDescriptor, derivAperture, hog->derivAperture);
 	static FF_GETTER(HOGDescriptor, histogramNormType, hog->histogramNormType);

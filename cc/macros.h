@@ -3,26 +3,6 @@
 #ifndef __FF_MACROS_H__
 #define __FF_MACROS_H__
 
-typedef unsigned int uint;
-
-namespace FF {
-	static inline bool hasArg(Nan::NAN_METHOD_ARGS_TYPE info, int argN) {
-		return argN < info.Length();
-	}
-
-	static inline bool isArgObject(Nan::NAN_METHOD_ARGS_TYPE info, int argN) {
-		return FF::hasArg(info, argN) && info[argN]->IsObject() && !info[argN]->IsArray() && !info[argN]->IsFunction();
-	}
-
-	static inline v8::Local<v8::String> newString(std::string str) {
-		return Nan::New(str).ToLocalChecked();
-	}
-
-	static inline bool hasOwnProperty(v8::Local<v8::Object> obj, char* prop) {
-		return Nan::HasOwnProperty(obj, FF::newString(prop)).FromJust();
-	}
-}
-
 /* TO BE REMOVED */
 #define FF_CAST_OBJ(val) Nan::To<v8::Object>(val).ToLocalChecked()
 #define FF_IS_ARRAY(val) val->IsArray()
@@ -31,27 +11,6 @@ namespace FF {
 #define FF_THROW(msg) return Nan::ThrowError(FF::newString(std::string(ff_methodName) + " - " + std::string(msg)));
 
 #define FF_UNWRAP(obj, clazz)	Nan::ObjectWrap::Unwrap<clazz>(obj)
-
-#define FF_UNWRAP_MAT(obj) FF_UNWRAP(obj, Mat)
-#define FF_UNWRAP_MAT_AND_GET(obj) FF_UNWRAP_MAT(obj)->mat
-
-#define FF_UNWRAP_VEC2(obj) FF_UNWRAP(obj, Vec2)
-#define FF_UNWRAP_VEC2_AND_GET(obj) FF_UNWRAP_VEC2(obj)->vec
-
-#define FF_UNWRAP_VEC3(obj) FF_UNWRAP(obj, Vec3)
-#define FF_UNWRAP_VEC3_AND_GET(obj) FF_UNWRAP_VEC3(obj)->vec
-
-#define FF_UNWRAP_VEC4(obj) FF_UNWRAP(obj, Vec4)
-#define FF_UNWRAP_VEC4_AND_GET(obj) FF_UNWRAP_VEC4(obj)->vec
-
-#define FF_UNWRAP_PT2(obj) FF_UNWRAP(obj, Point2)
-#define FF_UNWRAP_PT2_AND_GET(obj) FF_UNWRAP_PT2(obj)->pt
-
-#define FF_UNWRAP_PT3(obj) FF_UNWRAP(obj, Point3)
-#define FF_UNWRAP_PT3_AND_GET(obj) FF_UNWRAP_PT3(obj)->pt
-
-#define FF_UNWRAP_SIZE(obj)	FF_UNWRAP(obj, Size)
-#define FF_UNWRAP_SIZE_AND_GET(obj)	FF_UNWRAP_SIZE(obj)->size
 
 #define FF_UNWRAP_CONTOUR(obj) FF_UNWRAP(obj, Contour)
 #define FF_UNWRAP_CONTOUR_AND_GET(obj) FF_UNWRAP_CONTOUR(obj)->contour
@@ -83,10 +42,10 @@ namespace FF {
 
 #define FF_GETTER_COMPLEX(clazz, name, prop, converter) FF_GETTER_SIMPLE(clazz, name, prop, converter)
 
-#define FF_GETTER_JSOBJ(clazz, name, value, unwrapper, ctor)	\
+#define FF_GETTER_JSOBJ(clazz, name, value, wrapClazz)	\
 	NAN_GETTER(name) {																					\
-		v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(ctor));			\
-		unwrapper(jsObj) = FF_UNWRAP(info.This(), clazz)->value;	\
+		v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(wrapClazz::constructor));			\
+		wrapClazz::unwrap(jsObj)->setNativeObject(FF_UNWRAP(info.This(), clazz)->value);	\
 		info.GetReturnValue().Set(jsObj);													\
 	}
 
@@ -110,11 +69,11 @@ namespace FF {
 		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = ff_cast_type(value); \
 	}
 
-#define FF_SETTER_INT(clazz, name, prop) FF_SETTER(clazz, name, prop, IntTypeConverter::assertType, IntConverter::unwrap, "INT")
-#define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, UintTypeConverter::assertType, UintConverter::unwrap, "UINT")
-#define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, NumberTypeConverter::assertType, DoubleConverter::unwrap, "NUMBER")
-#define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, BoolTypeConverter::assertType, BoolConverter::unwrap, "BOOL")
-#define FF_SETTER_STRING(clazz, name, prop) FF_SETTER(clazz, name, prop, StringTypeConverter::assertType, StringConverter::unwrap, "STRING")
+#define FF_SETTER_INT(clazz, name, prop) FF_SETTER(clazz, name, prop, IntConverter::assertType, IntConverter::unwrap, "INT")
+#define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, UintConverter::assertType, UintConverter::unwrap, "UINT")
+#define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, DoubleConverter::assertType, DoubleConverter::unwrap, "NUMBER")
+#define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, BoolConverter::assertType, BoolConverter::unwrap, "BOOL")
+#define FF_SETTER_STRING(clazz, name, prop) FF_SETTER(clazz, name, prop, StringConverter::assertType, StringConverter::unwrap, "STRING")
 
 #define FF_SETTER_SIMPLE(clazz, name, prop, converter)  										\
 	NAN_SETTER(name##Set) {																										\
@@ -128,7 +87,7 @@ namespace FF {
 	NAN_SETTER(name##Set) {																				\
 		FF_METHOD_CONTEXT(#name);												    				\
 		type target;																								\
-		converter::unwrap(&target, value);													\
+		converter::unwrapTo(&target, value);													\
 		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = target;	\
 	}
 

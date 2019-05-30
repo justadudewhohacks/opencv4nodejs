@@ -155,7 +155,7 @@ NAN_METHOD(SVM::Predict) {
 
 NAN_METHOD(SVM::GetSupportVectors) {
   v8::Local<v8::Object> jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsSupportVectors) = FF_UNWRAP(info.This(), SVM)->svm->getSupportVectors();
+  Mat::unwrap(jsSupportVectors)->setNativeObject(SVM::Converter::unwrap(info.This())->getSupportVectors());
   info.GetReturnValue().Set(jsSupportVectors);
 }
 
@@ -165,7 +165,7 @@ NAN_METHOD(SVM::GetUncompressedSupportVectors) {
   FF_THROW("getUncompressedSupportVectors not implemented for v3.0, v3.1");
 #else
   v8::Local<v8::Object> jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
-  FF_UNWRAP_MAT_AND_GET(jsSupportVectors) = FF_UNWRAP(info.This(), SVM)->svm->getUncompressedSupportVectors();
+  Mat::unwrap(jsSupportVectors)->setNativeObject(SVM::Converter::unwrap(info.This())->getUncompressedSupportVectors());
   info.GetReturnValue().Set(jsSupportVectors);
 #endif
 }
@@ -187,7 +187,7 @@ NAN_METHOD(SVM::GetDecisionFunction) {
 	  tryCatch.throwNew(err);
 	  return;
   }
-  double rho = FF_UNWRAP(info.This(), SVM)->svm->getDecisionFunction(i, FF_UNWRAP_MAT_AND_GET(alpha), FF_UNWRAP_MAT_AND_GET(svidx));
+  double rho = SVM::Converter::unwrap(info.This())->getDecisionFunction(i, Mat::unwrap(alpha)->self, Mat::unwrap(svidx)->self);
 
   v8::Local<v8::Object> ret = Nan::New<v8::Object>();
   Nan::Set(ret, FF::newString("rho"), Nan::New((double)rho));
@@ -210,7 +210,7 @@ NAN_METHOD(SVM::CalcError) {
 	}
 
 	v8::Local<v8::Object> jsResponses = FF::newInstance(Nan::New(Mat::constructor));
-	float error = FF_UNWRAP(info.This(), SVM)->svm->calcError(trainData, test, FF_UNWRAP_MAT_AND_GET(jsResponses));
+	float error = FF_UNWRAP(info.This(), SVM)->svm->calcError(trainData, test, Mat::Converter::unwrap(jsResponses));
 
 	v8::Local<v8::Object> ret = Nan::New<v8::Object>();
 	Nan::Set(ret, FF::newString("error"), Nan::New((double)error));

@@ -14,7 +14,7 @@ public:
   static NAN_MODULE_INIT(Init);
   static NAN_METHOD(New);
 
-	static FF_GETTER_JSOBJ(KeyPoint, GetPoint, keyPoint.pt, FF_UNWRAP_PT2_AND_GET, Point2::constructor);
+	static FF_GETTER_JSOBJ(KeyPoint, GetPoint, keyPoint.pt, Point2);
   static FF_GETTER(KeyPoint, GetLocalId, localId);
 	static FF_GETTER(KeyPoint, GetAngle, keyPoint.angle);
 	static FF_GETTER(KeyPoint, GetClassId, keyPoint.class_id);

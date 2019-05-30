@@ -18,7 +18,7 @@ public:
 		info.GetReturnValue().Set(Nan::New((uint)FF_UNWRAP_CONTOUR_AND_GET(info.This()).size()));
 	}
 
-	static FF_GETTER_JSOBJ(Contour, GetHierarchy, hierarchy, FF_UNWRAP_VEC4_AND_GET, Vec4::constructor);
+	static FF_GETTER_JSOBJ(Contour, GetHierarchy, hierarchy, Vec4);
 
 	static NAN_GETTER(GetArea) {
 		info.GetReturnValue().Set(Nan::New(cv::contourArea(FF_UNWRAP_CONTOUR_AND_GET(info.This()), false)));

@@ -34,7 +34,7 @@ public:
 	static NAN_GETTER(pupilsGet) {
 		v8::Local<v8::Array> jsArr = Nan::New<v8::Array>(2);
 		for (uint i = 0; i < jsArr->Length(); i++) {
-			Nan::Set(jsArr, i, ArrayConverterType<IntTypeConverter, int>::wrap(
+			Nan::Set(jsArr, i, IntArrayConverter::wrap(
 				Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->params.pupils[i])
 			);
 		}
@@ -47,7 +47,7 @@ public:
 		for (uint i = 0; i < jsArr->Length(); i++) {
 			std::vector<int> vec;
 			Nan::TryCatch tryCatch;
-			if (IntArrayConverter::unwrap(&vec, Nan::Get(jsArr, i).ToLocalChecked())) {
+			if (IntArrayConverter::unwrapTo(&vec, Nan::Get(jsArr, i).ToLocalChecked())) {
 				tryCatch.ReThrow();
 			}
 			Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->params.pupils[i] = vec;

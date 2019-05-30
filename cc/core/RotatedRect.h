@@ -18,13 +18,13 @@ public:
 
 	static NAN_GETTER(GetCenter) {
 		v8::Local<v8::Object> jsCenter = FF::newInstance(Nan::New(Point2::constructor));
-		FF_UNWRAP_PT2_AND_GET(jsCenter) = FF_UNWRAP(info.This(), RotatedRect)->rect.center;
+		Point2::unwrap(jsCenter)->setNativeObject(FF_UNWRAP(info.This(), RotatedRect)->rect.center);
 		info.GetReturnValue().Set(jsCenter);
 	}
 
 	static NAN_GETTER(GetSize) {
 		v8::Local<v8::Object> jsSize = FF::newInstance(Nan::New(Size::constructor));
-		FF_UNWRAP_SIZE_AND_GET(jsSize) = FF_UNWRAP(info.This(), RotatedRect)->rect.size;
+		Size::unwrap(jsSize)->setNativeObject(FF_UNWRAP(info.This(), RotatedRect)->rect.size);
 		info.GetReturnValue().Set(jsSize);
 	}
 

@@ -14,11 +14,11 @@ public:
 	static NAN_METHOD(New);
 
 	static FF_GETTER(TrainData, layout, trainData->getLayout());
-	static FF_GETTER_JSOBJ(TrainData, samples, trainData->getSamples(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(TrainData, responses, trainData->getResponses(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(TrainData, varIdx, trainData->getVarIdx(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(TrainData, sampleWeights, trainData->getSampleWeights(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(TrainData, varType, trainData->getVarType(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
+	static FF_GETTER_JSOBJ(TrainData, samples, trainData->getSamples(), Mat);
+	static FF_GETTER_JSOBJ(TrainData, responses, trainData->getResponses(), Mat);
+	static FF_GETTER_JSOBJ(TrainData, varIdx, trainData->getVarIdx(), Mat);
+	static FF_GETTER_JSOBJ(TrainData, sampleWeights, trainData->getSampleWeights(), Mat);
+	static FF_GETTER_JSOBJ(TrainData, varType, trainData->getVarType(), Mat);
 
 	// TODO Getters
 

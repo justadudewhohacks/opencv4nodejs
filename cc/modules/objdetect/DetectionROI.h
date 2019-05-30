@@ -22,7 +22,7 @@ public:
 
 	static NAN_SETTER(locationsSet) {
 		std::vector<cv::Point> locations;
-		if (ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::unwrap(&locations, value)) {
+		if (ObjectArrayConverter<Point2, cv::Point2d, cv::Point>::unwrapTo(&locations, value)) {
 			return Nan::ThrowError("expected locations to be an Array of type Point2");
 		}
 		Converter::unwrapPtr(info.This())->locations = locations;
@@ -34,7 +34,7 @@ public:
 
 	static NAN_SETTER(confidencesSet) {
 		std::vector<double> confidences;
-		if (DoubleArrayConverter::unwrap(&confidences, value)) {
+		if (DoubleArrayConverter::unwrapTo(&confidences, value)) {
 			return Nan::ThrowError("expected confidences to be an Array of type Number");
 		}
 		Converter::unwrapPtr(info.This())->confidences = confidences;
