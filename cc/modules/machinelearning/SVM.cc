@@ -235,9 +235,9 @@ NAN_METHOD(SVM::Load) {
 		return;
 	}
 #if CV_VERSION_MINOR < 2
-	SVM::unwrapSelf(info) = cv::ml::SVM::load<cv::ml::SVM>(path);
+	SVM::unwrapThis(info)->setNativeObject(cv::ml::SVM::load<cv::ml::SVM>(path));
 #else
-	SVM::unwrapSelf(info) = cv::ml::SVM::load(path);
+	SVM::unwrapThis(info)->setNativeObject(cv::ml::SVM::load(path));
 #endif
 }
 

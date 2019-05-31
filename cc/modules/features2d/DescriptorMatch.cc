@@ -31,7 +31,7 @@ NAN_METHOD(DescriptorMatch::New) {
 			tryCatch.throwNew(tryCatch.formatCatchedError("TermCriteria::New"));
 			return;
 		}
-		self->dmatch = cv::DMatch(queryIdx, trainIdx, distance);
+		self->self = cv::DMatch(queryIdx, trainIdx, distance);
 	}
 	self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());

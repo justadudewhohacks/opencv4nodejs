@@ -60,8 +60,8 @@ struct DetectRegionsWorker : public CatchCvExceptionWorker {
 public:
     cv::Ptr<cv::MSER> det;
 
-    DetectRegionsWorker(MSERDetector *mser){
-        this->det = mser->getMSERDetector();
+    DetectRegionsWorker(cv::Ptr<cv::MSER> det){
+        this->det = det;
     }
 
     cv::Mat img;
@@ -90,7 +90,7 @@ public:
 
 NAN_METHOD(MSERDetector::DetectRegions) {
 	FF::SyncBinding(
-		std::make_shared<DetectRegionsWorker>(MSERDetector::unwrapThis(info)),
+		std::make_shared<DetectRegionsWorker>(MSERDetector::unwrapSelf(info)),
 		"MSERDetector::DetectRegions",
 		info
 	);
@@ -98,7 +98,7 @@ NAN_METHOD(MSERDetector::DetectRegions) {
 
 NAN_METHOD(MSERDetector::DetectRegionsAsync) {
 	FF::AsyncBinding(
-		std::make_shared<DetectRegionsWorker>(MSERDetector::unwrapThis(info)),
+		std::make_shared<DetectRegionsWorker>(MSERDetector::unwrapSelf(info)),
 		"MSERDetector::DetectRegionsAsync",
 		info
 	);

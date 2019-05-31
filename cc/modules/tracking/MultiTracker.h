@@ -8,7 +8,7 @@
 #ifndef __FF_MULTITRACKER_H__
 #define __FF_MULTITRACKER_H__
 
-class MultiTracker : public FF::ObjectWrap<MultiTracker, cv::MultiTracker> {
+class MultiTracker : public FF::ObjectWrap<MultiTracker, cv::Ptr<cv::MultiTracker>> {
 public:
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 

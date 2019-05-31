@@ -102,7 +102,7 @@ NAN_METHOD(Features2d::DrawMatches) {
 		Mat::Converter::arg(1, &img2, info) ||
 		KeyPoint::ArrayConverter::arg(2, &kps1, info) ||
 		KeyPoint::ArrayConverter::arg(3, &kps2, info) ||
-		ObjectArrayConverter<DescriptorMatch, cv::DMatch>::arg(4, &dMatches, info)
+		DescriptorMatch::ArrayConverter::arg(4, &dMatches, info)
 		) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Features2d::DrawMatches"));
 		return;

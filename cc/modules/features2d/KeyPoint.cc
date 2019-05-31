@@ -43,7 +43,7 @@ NAN_METHOD(KeyPoint::New) {
 			tryCatch.throwNew(err);
 			return;
 		}
-		self->keyPoint = cv::KeyPoint(pt, size, angle, response, octave, classId);
+		self->self = cv::KeyPoint(pt, size, angle, response, octave, classId);
 	}
 
 	self->Wrap(info.Holder());

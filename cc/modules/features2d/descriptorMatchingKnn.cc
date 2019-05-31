@@ -127,7 +127,7 @@ public:
 	}
 
 	v8::Local<v8::Value> getReturnValue() {
-		return ObjectArrayOfArraysConverter<DescriptorMatch, cv::DMatch>::wrap(dmatches);
+		return DescriptorMatch::ArrayOfArraysConverter::wrap(dmatches);
 	}
 };
 

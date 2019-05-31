@@ -4,7 +4,7 @@
 #ifndef __FF_MSERDETECTOR_H__
 #define __FF_MSERDETECTOR_H__
 
-class MSERDetector : public FF::ObjectWrapTemplate<FeatureDetector, MSERDetector, cv::Ptr<cv::MSER>> {
+class MSERDetector : public FeatureDetector, public FF::ObjectWrapTemplate<MSERDetector, cv::Ptr<cv::MSER>> {
 public:
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 

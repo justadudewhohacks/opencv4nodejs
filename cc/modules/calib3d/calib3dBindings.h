@@ -281,7 +281,7 @@ namespace Calib3dBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
 		Point3::ArrayOfArraysWithCastConverter<cv::Point3f>::arg(0, &objectPoints, info) ||
-		Point3::ArrayOfArraysWithCastConverter<cv::Point2f>::arg(1, &imagePoints, info) ||
+		Point2::ArrayOfArraysWithCastConverter<cv::Point2f>::arg(1, &imagePoints, info) ||
         Size::Converter::arg(2, &imageSize, info)
       );
     }

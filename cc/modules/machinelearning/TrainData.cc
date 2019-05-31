@@ -37,7 +37,7 @@ NAN_METHOD(TrainData::New) {
 		for (auto val : worker.varType) {
 			varType.push_back(val);
 		}
-		self->trainData = cv::ml::TrainData::create(
+		self->self = cv::ml::TrainData::create(
 			worker.samples, worker.layout, worker.responses, worker.varIdx, worker.sampleIdx, worker.sampleWeights, varType
 		);
 	}

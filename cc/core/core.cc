@@ -223,7 +223,7 @@ NAN_METHOD(Core::SetNumThreads) {
   FF_METHOD_CONTEXT("Core::SetNumThreads");
 
   int num;
-  if(!FF::IntConverter::arg(0, &num, info)) {
+  if(FF::IntConverter::arg(0, &num, info)) {
     return Nan::ThrowError("Core::SetNumThreads expected arg0 to an int");
   }
   cv::setNumThreads(num);

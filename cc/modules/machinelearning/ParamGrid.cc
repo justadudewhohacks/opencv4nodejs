@@ -28,7 +28,7 @@ NAN_METHOD(ParamGrid::New) {
 				tryCatch.throwNew(err);
 				return;
 			}
-			self->paramGrid = cv::ml::SVM::getDefaultGrid(paramId);
+			self->self = cv::ml::SVM::getDefaultGrid(paramId);
 		}
 		else {
 			double minVal, maxVal, logStep;
@@ -41,7 +41,7 @@ NAN_METHOD(ParamGrid::New) {
 				tryCatch.throwNew(err);
 				return;
 			}
-			self->paramGrid = cv::ml::ParamGrid(minVal, maxVal, logStep);
+			self->self = cv::ml::ParamGrid(minVal, maxVal, logStep);
 		}
 	}
 	self->Wrap(info.Holder());

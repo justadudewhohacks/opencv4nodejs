@@ -34,7 +34,7 @@ NAN_METHOD(MultiTracker::New) {
 	FF_ASSERT_CONSTRUCT_CALL(MultiTracker);
 	FF_METHOD_CONTEXT("MultiTracker::New");
 	MultiTracker* self = new MultiTracker();
-	self->setNativeObject(cv::MultiTracker());
+	self->setNativeObject(cv::MultiTracker::create());
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };
@@ -55,7 +55,7 @@ NAN_METHOD(MultiTracker::AddMIL) {
 #else
 	const std::string type("MIL");
 #endif
-	bool ret = MultiTracker::unwrapSelf(info).add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
@@ -75,7 +75,7 @@ NAN_METHOD(MultiTracker::AddBOOSTING) {
 #else
 	const std::string type("BOOSTING");
 #endif
-	bool ret = MultiTracker::unwrapSelf(info).add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
@@ -95,7 +95,7 @@ NAN_METHOD(MultiTracker::AddMEDIANFLOW) {
 #else
 	const std::string type("MEDIANFLOW");
 #endif
-	bool ret = MultiTracker::unwrapSelf(info).add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
@@ -115,7 +115,7 @@ NAN_METHOD(MultiTracker::AddTLD) {
 #else
 	const std::string type("TLD");
 #endif
-	bool ret = MultiTracker::unwrapSelf(info).add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
@@ -135,7 +135,7 @@ NAN_METHOD(MultiTracker::AddKCF) {
 #else
 	const std::string type("KCF");
 #endif
-	bool ret = MultiTracker::unwrapSelf(info).add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
@@ -143,18 +143,12 @@ NAN_METHOD(MultiTracker::Update) {
 	FF::TryCatch tryCatch;
 	cv::Mat image;
 	if (Mat::Converter::arg(0, &image, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::Update"));
-		return;
+		return tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::Update"));
 	}
 
 	std::vector<cv::Rect2d> rects;
-	MultiTracker::unwrapSelf(info).update(image, rects);
-
-	v8::Local<v8::Array> jsRects = Nan::New<v8::Array>(rects.size());
-	for (unsigned long i = 0; i < rects.size(); i++) {
-		Nan::Set(jsRects, i, Rect::Converter::wrap(rects.at(i)));
-	}
-	info.GetReturnValue().Set(jsRects);
+	MultiTracker::unwrapSelf(info)->update(image, rects);
+	info.GetReturnValue().Set(Rect::ArrayConverter::wrap(rects));
 }
 #if CV_MINOR_VERSION > 3
 
@@ -170,7 +164,7 @@ NAN_METHOD(MultiTracker::AddMOSSE) {
 		return;
 	}
 	cv::Ptr<cv::Tracker> type = cv::TrackerMOSSE::create();
-	bool ret = MultiTracker::unwrapSelf(info).add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
@@ -189,7 +183,7 @@ NAN_METHOD(MultiTracker::AddCSRT) {
 		return;
 	}
 	cv::Ptr<cv::Tracker> type = cv::TrackerCSRT::create();
-	bool ret = MultiTracker::unwrapSelf(info).add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 #endif

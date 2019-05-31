@@ -19,10 +19,10 @@ public:
 
 	static FF_GETTER(TrainData, layout, self->getLayout());
 	static NAN_GETTER(samples) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->samples));
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapSelf(info)->getSamples()));
 	}
 	static NAN_GETTER(responses) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->responses));
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapSelf(info)->getResponses()));
 	}
 	static NAN_GETTER(varIdx) {
 		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapSelf(info)->getVarIdx()));

@@ -30,7 +30,7 @@ public:
 		if (Point2::ArrayWithCastConverter<cv::Point2i>::unwrapTo(&locations, value)) {
 			return Nan::ThrowError("expected locations to be an Array of type Point2");
 		}
-		DetectionROI::unwrapSelf(info).locations = locations;
+		DetectionROI::unwrapThis(info)->self.locations = locations;
 	}
 
 	static NAN_GETTER(confidencesGet) {
@@ -42,7 +42,7 @@ public:
 		if (FF::DoubleArrayConverter::unwrapTo(&confidences, value)) {
 			return Nan::ThrowError("expected confidences to be an Array of type Number");
 		}
-		DetectionROI::unwrapSelf(info).confidences = confidences;
+		DetectionROI::unwrapThis(info)->self.confidences = confidences;
 	}
 };
 

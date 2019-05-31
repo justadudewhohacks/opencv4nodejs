@@ -20,16 +20,16 @@ public:
 	}
 
 	static NAN_GETTER(winSize) {
-		info.GetReturnValue().Set(Size::Converter::wrap(unwrapThis(info)->winSize));
+		info.GetReturnValue().Set(Size::Converter::wrap(unwrapSelf(info)->winSize));
 	}
 	static NAN_GETTER(blockSize) {
-		info.GetReturnValue().Set(Size::Converter::wrap(unwrapThis(info)->blockSize));
+		info.GetReturnValue().Set(Size::Converter::wrap(unwrapSelf(info)->blockSize));
 	}
 	static NAN_GETTER(blockStride) {
-		info.GetReturnValue().Set(Size::Converter::wrap(unwrapThis(info)->blockStride));
+		info.GetReturnValue().Set(Size::Converter::wrap(unwrapSelf(info)->blockStride));
 	}
 	static NAN_GETTER(cellSize) {
-		info.GetReturnValue().Set(Size::Converter::wrap(unwrapThis(info)->cellSize));
+		info.GetReturnValue().Set(Size::Converter::wrap(unwrapSelf(info)->cellSize));
 	}
 
 	static FF_GETTER(HOGDescriptor, nbins, self->nbins);

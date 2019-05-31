@@ -181,8 +181,8 @@ bool Facemark::detector(cv::InputArray image, cv::OutputArray faces,
   v8::Local<v8::Object> jsObject = resource.runInAsyncScope(Nan::GetCurrentContext()->Global(), **callback, 1, argv)
     .ToLocalChecked()->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 
-  std::vector<cv::Rect> _faces;
-  Rect::ArrayConverter::unwrapUncheckedTo(&_faces, jsObject);
+  std::vector<cv::Rect2d> _faces;
+  Rect::ArrayConverter::unwrapTo(&_faces, jsObject);
 
   cv::Mat(_faces).copyTo(faces);
 

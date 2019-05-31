@@ -55,7 +55,7 @@ namespace TextBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         FF::StringConverter::arg(0, &vocabulary, info) ||
-        StringArrayConverter::arg(1, &lexicon, info)
+        FF::StringArrayConverter::arg(1, &lexicon, info)
       );
     }
   };
