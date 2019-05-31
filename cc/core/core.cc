@@ -33,12 +33,10 @@ template<class TClass, class TNativeObject>
 static std::function<bool(TNativeObject, TNativeObject)> predicateFactory(v8::Local<v8::Function> cb) {
 	 return [cb](TNativeObject pt1, TNativeObject pt2) {
 		v8::Local<v8::Value> cbArgs[2];
-		cbArgs[0] = FF::newInstance(Nan::New(TClass::constructor));
-		cbArgs[1] = FF::newInstance(Nan::New(TClass::constructor));
-		TClass::unwrap(cbArgs[0])->setNativeObject(pt1);
-		TClass::unwrap(cbArgs[1])->setNativeObject(pt2);
+		cbArgs[0] = TClass::Converter::wrap(pt1);
+		cbArgs[1] = TClass::Converter::wrap(pt2);
 		Nan::AsyncResource resource("opencv4nodejs:Predicate::Constructor");
-		return FF::BoolConverter::unwrap(resource.runInAsyncScope(Nan::GetCurrentContext()->Global(), cb, 2, cbArgs).ToLocalChecked());
+		return FF::BoolConverter::unwrapUnchecked(resource.runInAsyncScope(Nan::GetCurrentContext()->Global(), cb, 2, cbArgs).ToLocalChecked());
 	};
 }
 

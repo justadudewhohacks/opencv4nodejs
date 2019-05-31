@@ -51,7 +51,7 @@ NAN_METHOD(MSERDetector::New) {
 	self->areaThreshold = worker.areaThreshold;
 	self->minMargin = worker.minMargin;
 	self->edgeBlurSize = worker.edgeBlurSize;
-	self->detector = cv::MSER::create(worker.delta, worker.minArea, worker.maxArea, worker.maxVariation,
+	self->self = cv::MSER::create(worker.delta, worker.minArea, worker.maxArea, worker.maxVariation,
 		worker.minDiversity, worker.maxEvolution, worker.areaThreshold, worker.minMargin, worker.edgeBlurSize);
 	info.GetReturnValue().Set(info.Holder());
 }
@@ -60,12 +60,12 @@ struct DetectRegionsWorker : public CatchCvExceptionWorker {
 public:
     cv::Ptr<cv::MSER> det;
 
-    DetectRegionsWorker( MSERDetector *mser){
+    DetectRegionsWorker(MSERDetector *mser){
         this->det = mser->getMSERDetector();
     }
 
     cv::Mat img;
-    std::vector<std::vector<cv::Point> > regions;
+    std::vector<std::vector<cv::Point>> regions;
     std::vector<cv::Rect> mser_bbox;
 
     std::string executeCatchCvExceptionWorker() {
@@ -81,8 +81,8 @@ public:
 
     v8::Local<v8::Value> getReturnValue() {
         v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-        Nan::Set(ret, FF::newString("msers"), ObjectArrayOfArraysConverter<Point2, cv::Point>::wrap(regions));
-        Nan::Set(ret, FF::newString("bboxes"), Rect::ArrayConverter::wrap(mser_bbox));
+        Nan::Set(ret, FF::newString("msers"), Point2::ArrayOfArraysWithCastConverter<cv::Point2i>::wrap(regions));
+        Nan::Set(ret, FF::newString("bboxes"), Rect::ArrayWithCastConverter<cv::Rect>::wrap(mser_bbox));
         return ret;
     }
 };
@@ -90,7 +90,7 @@ public:
 
 NAN_METHOD(MSERDetector::DetectRegions) {
 	FF::SyncBinding(
-		std::make_shared<DetectRegionsWorker>(FF_UNWRAP(info.This(), MSERDetector)),
+		std::make_shared<DetectRegionsWorker>(MSERDetector::unwrapThis(info)),
 		"MSERDetector::DetectRegions",
 		info
 	);
@@ -98,7 +98,7 @@ NAN_METHOD(MSERDetector::DetectRegions) {
 
 NAN_METHOD(MSERDetector::DetectRegionsAsync) {
 	FF::AsyncBinding(
-		std::make_shared<DetectRegionsWorker>(FF_UNWRAP(info.This(), MSERDetector)),
+		std::make_shared<DetectRegionsWorker>(MSERDetector::unwrapThis(info)),
 		"MSERDetector::DetectRegionsAsync",
 		info
 	);

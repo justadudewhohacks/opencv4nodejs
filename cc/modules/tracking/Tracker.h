@@ -6,7 +6,7 @@
 #ifndef __FF_TRACKER_H__
 #define __FF_TRACKER_H__
 
-class Tracker : public Nan::ObjectWrap {
+class Tracker : public FF::ObjectWrapBase<Tracker> {
 public:
 	virtual cv::Ptr<cv::Tracker> getTracker() = 0;
 

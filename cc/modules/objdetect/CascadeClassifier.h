@@ -9,16 +9,9 @@
 #ifndef __FF_CASCADECLASSIFIER_H__
 #define __FF_CASCADECLASSIFIER_H__
 
-class CascadeClassifier : public Nan::ObjectWrap {
+class CascadeClassifier : public FF::ObjectWrap<CascadeClassifier, cv::CascadeClassifier> {
 public:
-	cv::CascadeClassifier classifier;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::CascadeClassifier* getNativeObjectPtr() { return &classifier; }
-	cv::CascadeClassifier getNativeObject() { return classifier; }
-
-	typedef InstanceConverter<CascadeClassifier, cv::CascadeClassifier> Converter;
 
 	static const char* getClassName() {
 		return "CascadeClassifier";

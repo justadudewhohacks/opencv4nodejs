@@ -39,7 +39,7 @@ NAN_METHOD(FacemarkLBFParams::New) {
   FF_ASSERT_CONSTRUCT_CALL(FacemarkLBFParams);
   FF_METHOD_CONTEXT("FacemarkLBFParams::New");
   FacemarkLBFParams *self = new FacemarkLBFParams();
-  self->params = cv::face::FacemarkLBF::Params();
+  self->self = cv::face::FacemarkLBF::Params();
   self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());
 };

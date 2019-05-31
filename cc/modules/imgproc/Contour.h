@@ -20,17 +20,19 @@ public:
 	static NAN_METHOD(New);
 
 	static NAN_GETTER(GetNumPoints) {
-		info.GetReturnValue().Set(Nan::New((uint)FF_UNWRAP_CONTOUR_AND_GET(info.This()).size()));
+		info.GetReturnValue().Set(Nan::New((uint)Contour::unwrapSelf(info).size()));
 	}
 
-	static FF_GETTER_JSOBJ(Contour, GetHierarchy, hierarchy, Vec4);
+	static NAN_GETTER(GetHierarchy) {
+		info.GetReturnValue().Set(Vec4::Converter::wrap(unwrapThis(info)->hierarchy));
+	}
 
 	static NAN_GETTER(GetArea) {
-		info.GetReturnValue().Set(Nan::New(cv::contourArea(FF_UNWRAP_CONTOUR_AND_GET(info.This()), false)));
+		info.GetReturnValue().Set(Nan::New(cv::contourArea(Contour::unwrapSelf(info), false)));
 	}
 
 	static NAN_GETTER(GetIsConvex) {
-		info.GetReturnValue().Set(Nan::New(cv::isContourConvex(FF_UNWRAP_CONTOUR_AND_GET(info.This()))));
+		info.GetReturnValue().Set(Nan::New(cv::isContourConvex(Contour::unwrapSelf(info))));
 	}
 
 	static NAN_METHOD(GetPoints);

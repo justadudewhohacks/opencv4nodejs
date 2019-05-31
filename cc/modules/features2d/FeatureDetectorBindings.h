@@ -26,7 +26,7 @@ namespace FeatureDetectorBindings {
   
   
     v8::Local<v8::Value> getReturnValue() {
-      return ObjectArrayConverter<KeyPoint, cv::KeyPoint>::wrap(kps);
+      return KeyPoint::ArrayConverter::wrap(kps);
     }
   };
   
@@ -49,7 +49,7 @@ namespace FeatureDetectorBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::arg(0, &img, info)
-        || ObjectArrayConverter<KeyPoint, cv::KeyPoint>::arg(1, &kps, info)
+        || KeyPoint::ArrayConverter::arg(1, &kps, info)
       );
     }
   

@@ -18,14 +18,9 @@
 
 #define FF_ERR_WHERE(func, clazz) std::string(#clazz) + "  " + std::string(#func) + " : "
 
-#define FF_SELF_OPERATOR_RET(func)					\
-	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));	\
-	unwrap(jsObj)->self = func(unwrap(info.This())->self);		\
-	return info.GetReturnValue().Set(jsObj);		
-
 #define FF_SELF_OPERATOR(func)							\
 	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));	\
-	func(unwrap(info.This())->self, unwrap(jsObj)->self);			\
+	func(unwrapSelf(info), unwrapClassPtrUnchecked(jsObj)->self);			\
 	return info.GetReturnValue().Set(jsObj);					
 
 #define FF_SCALAR_OPERATOR(func, applyFunc, clazz)			\
@@ -36,9 +31,9 @@
 	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));							\
 	applyFunc(																											\
 		func,																													\
-		unwrap(info.This())->self,																				\
+		unwrapSelf(info),																				\
 		info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value(),																				\
-		unwrap(jsObj)->self																							\
+		unwrapClassPtrUnchecked(jsObj)->self																							\
 	);																															\
 	return info.GetReturnValue().Set(jsObj);																																																										
 
@@ -49,9 +44,9 @@
 	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));															\
 	applyFunc(																																			\
 		func,																																					\
-		unwrap(info.This())->self,																												\
-		unwrap(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())->self,																								\
-		unwrap(jsObj)->self																																\
+		unwrapSelf(info),																												\
+		unwrapClassPtrUnchecked(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())->self,																								\
+		unwrapClassPtrUnchecked(jsObj)->self																																\
 	);																																							\
 	return info.GetReturnValue().Set(jsObj);
 
@@ -62,8 +57,8 @@
 	double ret;																																			\
 	applyFunc(																																			\
 		func,																																					\
-		unwrap(info.This())->self,																												\
-		unwrap(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())->self,																								\
+		unwrapSelf(info),																												\
+		unwrapClassPtrUnchecked(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())->self,																								\
 		ret																																						\
 	);																																							\
 	return info.GetReturnValue().Set(ret);
@@ -153,7 +148,7 @@
 		FF_OPERATOR(cv::bitwise_xor, FF_APPLY_FUNC, Mat);\
 	}																																					\
 	static NAN_METHOD(Abs) {																									\
-		FF_SELF_OPERATOR_RET(cv::abs);										\
+		return info.GetReturnValue().Set(Converter::wrap(cv::abs(unwrapSelf(info))));\
 	}																																					\
 	static NAN_METHOD(Determinant) {																					\
 		return info.GetReturnValue().Set(																				\

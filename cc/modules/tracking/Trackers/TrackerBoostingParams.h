@@ -35,7 +35,4 @@ public:
 	}
 };
 
-#define FF_UNWRAP_TRACKERBOOSTINGPARAMS(obj) FF_UNWRAP(obj, TrackerBoostingParams)
-#define FF_UNWRAP_TRACKERBOOSTINGPARAMS_AND_GET(obj) FF_UNWRAP_TRACKERBOOSTINGPARAMS(obj)->params
-
 #endif

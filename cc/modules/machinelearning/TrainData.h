@@ -6,32 +6,35 @@
 #ifndef __FF_TRAINDATA_H__
 #define __FF_TRAINDATA_H__
 
-class TrainData: public Nan::ObjectWrap {
+class TrainData: public FF::ObjectWrap<TrainData, cv::Ptr<cv::ml::TrainData>> {
 public:
-	cv::Ptr<cv::ml::TrainData> trainData;
-
-	static NAN_MODULE_INIT(Init);
-	static NAN_METHOD(New);
-
-	static FF_GETTER(TrainData, layout, trainData->getLayout());
-	static FF_GETTER_JSOBJ(TrainData, samples, trainData->getSamples(), Mat);
-	static FF_GETTER_JSOBJ(TrainData, responses, trainData->getResponses(), Mat);
-	static FF_GETTER_JSOBJ(TrainData, varIdx, trainData->getVarIdx(), Mat);
-	static FF_GETTER_JSOBJ(TrainData, sampleWeights, trainData->getSampleWeights(), Mat);
-	static FF_GETTER_JSOBJ(TrainData, varType, trainData->getVarType(), Mat);
-
-	// TODO Getters
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Ptr<cv::ml::TrainData>* getNativeObjectPtr() { return &trainData; }
-	cv::Ptr<cv::ml::TrainData> getNativeObject() { return trainData; }
-
-	typedef InstanceConverter<TrainData, cv::Ptr<cv::ml::TrainData> > Converter;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {
 		return "TrainData";
 	}
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
+
+	static FF_GETTER(TrainData, layout, self->getLayout());
+	static NAN_GETTER(samples) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->samples));
+	}
+	static NAN_GETTER(responses) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->responses));
+	}
+	static NAN_GETTER(varIdx) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapSelf(info)->getVarIdx()));
+	}
+	static NAN_GETTER(sampleWeights) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapSelf(info)->getSampleWeights()));
+	}
+	static NAN_GETTER(varType) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapSelf(info)->getVarType()));
+	}
+
+	// TODO Getters
 
 	struct NewWorker : public CatchCvExceptionWorker {
 	public:
@@ -60,7 +63,7 @@ public:
 				FF::IntArrayConverter::optArg(3, &varIdx, info) ||
 				FF::IntArrayConverter::optArg(4, &sampleIdx, info) ||
 				FF::FloatArrayConverter::optArg(5, &sampleWeights, info) ||
-				UFF::IntArrayConverter::optArg(6, &varType, info)
+				FF::UintArrayConverter::optArg(6, &varType, info)
 			);
 		}
 
@@ -74,7 +77,7 @@ public:
 				FF::IntArrayConverter::optProp(&varIdx, "varIdx", opts) ||
 				FF::IntArrayConverter::optProp(&sampleIdx, "sampleIdx", opts) ||
 				FF::FloatArrayConverter::optProp(&sampleWeights, "sampleWeights", opts) ||
-				UFF::IntArrayConverter::optProp(&varType, "varType", opts)
+				FF::UintArrayConverter::optProp(&varType, "varType", opts)
 			);
 		}
 	};

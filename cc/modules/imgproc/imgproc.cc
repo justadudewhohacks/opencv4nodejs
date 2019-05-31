@@ -57,9 +57,7 @@ NAN_METHOD(Imgproc::GetStructuringElement) {
 		return;
 	}
 
-	v8::Local<v8::Object> jsKernel = FF::newInstance(Nan::New(Mat::constructor));
-	Mat::unwrap(jsKernel)->setNativeObject(cv::getStructuringElement(shape, size, anchor));
-	info.GetReturnValue().Set(jsKernel);
+	info.GetReturnValue().Set(Mat::Converter::wrap(cv::getStructuringElement(shape, size, anchor)));
 }
 
 NAN_METHOD(Imgproc::GetRotationMatrix2D) {
@@ -76,9 +74,7 @@ NAN_METHOD(Imgproc::GetRotationMatrix2D) {
 		return;
 	}
 
-	v8::Local<v8::Object> jsRotationMat = FF::newInstance(Nan::New(Mat::constructor));
-	Mat::unwrap(jsRotationMat)->setNativeObject(cv::getRotationMatrix2D(center, angle, scale));
-	info.GetReturnValue().Set(jsRotationMat);
+	info.GetReturnValue().Set(Mat::Converter::wrap(cv::getRotationMatrix2D(center, angle, scale)));
 }
 
 NAN_METHOD(Imgproc::GetAffineTransform) {
@@ -93,9 +89,7 @@ NAN_METHOD(Imgproc::GetAffineTransform) {
 		return;
 	}
 
-	v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
-	Mat::unwrap(jsMat)->setNativeObject(cv::getAffineTransform(srcPoints, dstPoints));
-	info.GetReturnValue().Set(jsMat);
+	info.GetReturnValue().Set(Mat::Converter::wrap(cv::getAffineTransform(srcPoints, dstPoints)));
 }
 
 NAN_METHOD(Imgproc::GetPerspectiveTransform) {
@@ -110,9 +104,7 @@ NAN_METHOD(Imgproc::GetPerspectiveTransform) {
 	  return;
   }
 
-  v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
-  Mat::unwrap(jsMat)->setNativeObject(cv::getPerspectiveTransform(srcPoints, dstPoints));
-  info.GetReturnValue().Set(jsMat);
+  info.GetReturnValue().Set(Mat::Converter::wrap(cv::getPerspectiveTransform(srcPoints, dstPoints)));
 }
 NAN_METHOD(Imgproc::UndistortPoints) {
   FF::SyncBinding(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
@@ -167,8 +159,8 @@ NAN_METHOD(Imgproc::CalcHist) {
 	if (jsRanges->Length() != 2) {
 		return tryCatch.throwNew(FF::newString("Imgproc::CalcHist - expected ranges to be an array of length 2"));
 	}
-    ranges.at(i)[0] = FF::DoubleConverter::unwrap(Nan::Get(jsRanges, 0).ToLocalChecked());
-    ranges.at(i)[1] = FF::DoubleConverter::unwrap(Nan::Get(jsRanges, 1).ToLocalChecked());
+    ranges.at(i)[0] = FF::DoubleConverter::unwrapUnchecked(Nan::Get(jsRanges, 0).ToLocalChecked());
+    ranges.at(i)[1] = FF::DoubleConverter::unwrapUnchecked(Nan::Get(jsRanges, 1).ToLocalChecked());
     int channel, bins;
 
 	if (FF::IntConverter::prop(&channel, "channel", jsAxis) || FF::IntConverter::prop(&bins, "bins", jsAxis)) {
@@ -199,14 +191,12 @@ NAN_METHOD(Imgproc::CalcHist) {
   delete[] channels;
   delete[] histSize;
 
-  v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
   int outputType = CV_MAKETYPE(CV_64F, img.channels());
   if (outputType != hist.type()) {
     hist.convertTo(hist, outputType);
   }
 
-  Mat::unwrap(jsMat)->setNativeObject(hist);
-  info.GetReturnValue().Set(jsMat);
+  info.GetReturnValue().Set(Mat::Converter::wrap(hist));
 }
 
 NAN_METHOD(Imgproc::Plot1DHist) {
@@ -268,9 +258,7 @@ NAN_METHOD(Imgproc::Plot1DHist) {
     );
   }
 
-  v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
-  Mat::unwrap(jsMat)->setNativeObject(plot);
-  info.GetReturnValue().Set(jsMat);
+  info.GetReturnValue().Set(Mat::Converter::wrap(plot));
 }
 
 NAN_METHOD(Imgproc::FitLine) {

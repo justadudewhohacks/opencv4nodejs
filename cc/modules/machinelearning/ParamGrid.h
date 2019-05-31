@@ -5,27 +5,20 @@
 #ifndef __FF_PARAMGRID_H__
 #define __FF_PARAMGRID_H__
 
-class ParamGrid: public Nan::ObjectWrap {
+class ParamGrid: public FF::ObjectWrap<ParamGrid, cv::ml::ParamGrid>{
 public:
-	cv::ml::ParamGrid paramGrid;
-
-	static NAN_MODULE_INIT(Init);
-	static NAN_METHOD(New);
-
-	static FF_GETTER(ParamGrid, minVal, paramGrid.minVal);
-	static FF_GETTER(ParamGrid, maxVal, paramGrid.maxVal);
-	static FF_GETTER(ParamGrid, logStep, paramGrid.logStep);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::ml::ParamGrid* getNativeObjectPtr() { return &paramGrid; }
-	cv::ml::ParamGrid getNativeObject() { return paramGrid; }
-
-	typedef InstanceConverter<ParamGrid, cv::ml::ParamGrid> Converter;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {
 		return "ParamGrid";
 	}
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
+
+	static FF_GETTER(ParamGrid, minVal, self.minVal);
+	static FF_GETTER(ParamGrid, maxVal, self.maxVal);
+	static FF_GETTER(ParamGrid, logStep, self.logStep);
 };
 
 #endif

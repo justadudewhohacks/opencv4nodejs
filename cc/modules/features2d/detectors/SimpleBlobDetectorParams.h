@@ -65,7 +65,4 @@ public:
 	}
 };
 
-#define FF_UNWRAP_SIMPLEBLOBDETECTORPARAMS(obj) FF_UNWRAP(obj, SimpleBlobDetectorParams)
-#define FF_UNWRAP_SIMPLEBLOBDETECTORPARAMS_AND_GET(obj) FF_UNWRAP_SIMPLEBLOBDETECTORPARAMS(obj)->params
-
 #endif

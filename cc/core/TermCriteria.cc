@@ -30,7 +30,7 @@ NAN_METHOD(TermCriteria::New) {
 			tryCatch.throwNew(tryCatch.formatCatchedError("TermCriteria::New"));
 			return;
 		}
-		self->termCriteria = cv::TermCriteria(type, maxCount, epsilon);
+		self->self = cv::TermCriteria(type, maxCount, epsilon);
 	}
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());

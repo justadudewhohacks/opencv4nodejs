@@ -20,7 +20,7 @@ NAN_METHOD(RotatedRect::New) {
 	FF_ASSERT_CONSTRUCT_CALL(RotatedRect);
 	RotatedRect* self = new RotatedRect();
 	if (info.Length() == 0) {
-		self->rect = cv::RotatedRect();
+		self->self = cv::RotatedRect();
 	} else {
 		if (info.Length() < 3) {
 			return Nan::ThrowError("RotatedRect::New - expected arguments center, size, angle");
@@ -33,9 +33,9 @@ NAN_METHOD(RotatedRect::New) {
 		}
 		double angle = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 
-		self->rect = cv::RotatedRect(
-			Point2::Converter::unwrap(info[0]),
-			Size::Converter::unwrap(info[1]),
+		self->self = cv::RotatedRect(
+			Point2::Converter::unwrapUnchecked(info[0]),
+			Size::Converter::unwrapUnchecked(info[1]),
 			angle
 		);
 	}

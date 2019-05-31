@@ -4,11 +4,12 @@
 #include "KeyPoint.h"
 #include "Mat.h"
 #include "CatchCvExceptionWorker.h"
+#include "NativeNodeUtils.h"
 
 #ifndef FF_FEATUREDETECTOR_H_
 #define FF_FEATUREDETECTOR_H_
 
-class FeatureDetector : public Nan::ObjectWrap {
+class FeatureDetector : public FF::ObjectWrapBase<FeatureDetector> {
 public:
 	virtual cv::Ptr<cv::FeatureDetector> getDetector() = 0;
 

@@ -31,13 +31,13 @@ NAN_METHOD(VideoWriter::New) {
 	}
 
 	VideoWriter* self = new VideoWriter();
-	self->writer.open(worker.fileName, worker.fourccCode, worker.fps, (cv::Size)worker.frameSize, worker.isColor);
+	self->self.open(worker.fileName, worker.fourccCode, worker.fps, (cv::Size)worker.frameSize, worker.isColor);
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(VideoWriter::Release) {
-	Nan::ObjectWrap::Unwrap<VideoWriter>(info.This())->writer.release();
+	Nan::ObjectWrap::Unwrap<VideoWriter>(info.This())->self.release();
 }
 
 NAN_METHOD(VideoWriter::Get) {

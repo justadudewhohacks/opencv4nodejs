@@ -33,7 +33,7 @@ NAN_METHOD(CascadeClassifier::New) {
 	}
 
 	CascadeClassifier* self = new CascadeClassifier();
-	self->classifier = cv::CascadeClassifier(worker.xmlFilePath);
+	self->setNativeObject(cv::CascadeClassifier(worker.xmlFilePath));
 	if (worker.applyUnwrappers(info)) {
 		return Nan::ThrowError(FF::newString(std::string("CascadeClassifier::New") + " - " + std::string("failed to load cascade.xml file: " + worker.xmlFilePath)));
 	}

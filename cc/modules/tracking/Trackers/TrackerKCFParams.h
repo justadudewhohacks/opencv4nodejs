@@ -58,9 +58,6 @@ public:
 	}
 };
 
-#define FF_UNWRAP_TRACKERKCFPARAMS(obj) FF_UNWRAP(obj, TrackerKCFParams)
-#define FF_UNWRAP_TRACKERKCFPARAMS_AND_GET(obj) FF_UNWRAP_TRACKERKCFPARAMS(obj)->params
-
 #endif
 
 #endif

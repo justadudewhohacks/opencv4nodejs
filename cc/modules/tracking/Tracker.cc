@@ -10,7 +10,7 @@ void Tracker::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(Tracker::Clear) {
-	FF_UNWRAP(info.This(), Tracker)->getTracker()->clear();
+	Tracker::unwrapThis(info)->getTracker()->clear();
 }
 
 NAN_METHOD(Tracker::Init) {
@@ -25,7 +25,7 @@ NAN_METHOD(Tracker::Init) {
 		return;
 	}
 
-	bool ret = FF_UNWRAP(info.This(), Tracker)->getTracker()->init(image, boundingBox);
+	bool ret = Tracker::unwrapThis(info)->getTracker()->init(image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
@@ -37,7 +37,7 @@ NAN_METHOD(Tracker::Update) {
 		return;
 	}
 	v8::Local<v8::Object> jsRect = FF::newInstance(Nan::New(Rect::constructor));
-	bool ret = FF_UNWRAP(info.This(), Tracker)->getTracker()->update(image, FF_UNWRAP_RECT_AND_GET(jsRect));
+	bool ret = Tracker::unwrapThis(info)->getTracker()->update(image, Rect::Converter::unwrapUnchecked(jsRect));
 	
 	if (ret) {
 		info.GetReturnValue().Set(jsRect);

@@ -33,7 +33,7 @@ NAN_METHOD(OCRHMMDecoder::New) {
 	}
 
 	OCRHMMDecoder* self = new OCRHMMDecoder();
-	self->decoder = cv::text::OCRHMMDecoder::create(
+	self->setNativeObject(cv::text::OCRHMMDecoder::create(
 		worker.classifier,
 		worker.vocabulary,
 		worker.transition_probabilities_table,
@@ -41,7 +41,7 @@ NAN_METHOD(OCRHMMDecoder::New) {
 #if CV_MINOR_VERSION > 0
 		, worker.mode
 #endif
-	);
+	));
 
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());

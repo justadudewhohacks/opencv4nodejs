@@ -40,15 +40,13 @@ namespace FacemarkBindings {
 	  }
 
 	  v8::Local<v8::Value> getReturnValue() {
-		  v8::Local<v8::Value> ret =
-			  ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2f>::wrap(
-				  landmarks);
+		  v8::Local<v8::Value> ret = Point2::ArrayOfArraysWithCastConverter<cv::Point2f>::wrap(landmarks);
 		  return ret;
 	  }
 
 	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (Mat::Converter::arg(0, &image, info) ||
-			  Rect::ArrayConverter::arg(1, &faces, info));
+			  Rect::ArrayWithCastConverter<cv::Rect>::arg(1, &faces, info));
 	  }
   };
 

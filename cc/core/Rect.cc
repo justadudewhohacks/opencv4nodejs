@@ -29,7 +29,7 @@ NAN_METHOD(Rect::New) {
   FF_ASSERT_CONSTRUCT_CALL(Rect);
   Rect* self = new Rect();
   if (info.Length() == 0) {
-    self->rect = cv::Rect2d();
+    self->self = cv::Rect2d();
   } else {
     if (info.Length() < 4) {
       return Nan::ThrowError("Rect::New - expected arguments x, y, width, height");
@@ -38,7 +38,7 @@ NAN_METHOD(Rect::New) {
     double y = info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     double width = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     double height = info[3]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-    self->rect = cv::Rect2d(x, y, width, height);
+    self->self = cv::Rect2d(x, y, width, height);
   }
   self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());

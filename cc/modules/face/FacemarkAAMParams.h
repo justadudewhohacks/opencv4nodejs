@@ -1,5 +1,5 @@
 #include "macros.h"
-#include "TypeConverters.h"
+#include "NativeNodeUtils.h"
 #include <opencv2/face.hpp>
 
 #if CV_VERSION_MINOR >= 4
@@ -7,44 +7,37 @@
 #ifndef __FF_FACEMARKAAMPARAMS_H__
 #define __FF_FACEMARKAAMPARAMS_H__
 
-class FacemarkAAMParams : public Nan::ObjectWrap {
+class FacemarkAAMParams : public FF::ObjectWrap<FacemarkAAMParams, cv::face::FacemarkAAM::Params> {
 public:
-  cv::face::FacemarkAAM::Params params;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "FacemarkAAMParams";
+	}
 
   static NAN_MODULE_INIT(Init);
   static NAN_METHOD(New);
 
-  static FF_GETTER(FacemarkAAMParams, mGet, params.m);
-  static FF_SETTER_INT(FacemarkAAMParams, m, params.m);
-  static FF_GETTER(FacemarkAAMParams, maxMGet, params.max_m);
-  static FF_SETTER_INT(FacemarkAAMParams, maxM, params.max_m);
-  static FF_GETTER(FacemarkAAMParams, maxNGet, params.max_n);
-  static FF_SETTER_INT(FacemarkAAMParams, maxN, params.max_n);
-  static FF_GETTER_SIMPLE(FacemarkAAMParams, modelFilenameGet, params.model_filename, FF::StringConverter);
-  static FF_SETTER_SIMPLE(FacemarkAAMParams, modelFilename, params.model_filename, FF::StringConverter);
-  static FF_GETTER(FacemarkAAMParams, nGet, params.n);
-  static FF_SETTER_INT(FacemarkAAMParams, n, params.n);
-  static FF_GETTER(FacemarkAAMParams, nIterGet, params.n_iter);
-  static FF_SETTER_INT(FacemarkAAMParams, nIter, params.n_iter);
-  static FF_GETTER(FacemarkAAMParams, saveModelGet, params.save_model);
-  static FF_SETTER_BOOL(FacemarkAAMParams, saveModel, params.save_model);
-  static FF_GETTER_COMPLEX(FacemarkAAMParams, scalesGet, params.scales, FF::FloatArrayConverter);
-  static FF_SETTER_COMPLEX(FacemarkAAMParams, scales, params.scales, std::vector<float>, FF::FloatArrayConverter);
-  static FF_GETTER(FacemarkAAMParams, textureMaxMGet, params.texture_max_m);
-  static FF_SETTER_INT(FacemarkAAMParams, textureMaxM, params.texture_max_m);
-  static FF_GETTER(FacemarkAAMParams, verboseGet, params.verbose);
-  static FF_SETTER_BOOL(FacemarkAAMParams, verbose, params.verbose);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-  cv::face::FacemarkAAM::Params* getNativeObjectPtr() { return &params; }
-  cv::face::FacemarkAAM::Params getNativeObject() { return params; }
-
-  typedef InstanceConverter<FacemarkAAMParams, cv::face::FacemarkAAM::Params> Converter;
-
-  static const char* getClassName() {
-	  return "FacemarkAAMParams";
-  }
+  static FF_GETTER(FacemarkAAMParams, mGet, self.m);
+  static FF_SETTER_INT(FacemarkAAMParams, m, self.m);
+  static FF_GETTER(FacemarkAAMParams, maxMGet, self.max_m);
+  static FF_SETTER_INT(FacemarkAAMParams, maxM, self.max_m);
+  static FF_GETTER(FacemarkAAMParams, maxNGet, self.max_n);
+  static FF_SETTER_INT(FacemarkAAMParams, maxN, self.max_n);
+  static FF_GETTER_SIMPLE(FacemarkAAMParams, modelFilenameGet, self.model_filename, FF::StringConverter);
+  static FF_SETTER_SIMPLE(FacemarkAAMParams, modelFilename, self.model_filename, FF::StringConverter);
+  static FF_GETTER(FacemarkAAMParams, nGet, self.n);
+  static FF_SETTER_INT(FacemarkAAMParams, n, self.n);
+  static FF_GETTER(FacemarkAAMParams, nIterGet, self.n_iter);
+  static FF_SETTER_INT(FacemarkAAMParams, nIter, self.n_iter);
+  static FF_GETTER(FacemarkAAMParams, saveModelGet, self.save_model);
+  static FF_SETTER_BOOL(FacemarkAAMParams, saveModel, self.save_model);
+  static FF_GETTER_COMPLEX(FacemarkAAMParams, scalesGet, self.scales, FF::FloatArrayConverter);
+  static FF_SETTER_COMPLEX(FacemarkAAMParams, scales, self.scales, std::vector<float>, FF::FloatArrayConverter);
+  static FF_GETTER(FacemarkAAMParams, textureMaxMGet, self.texture_max_m);
+  static FF_SETTER_INT(FacemarkAAMParams, textureMaxM, self.texture_max_m);
+  static FF_GETTER(FacemarkAAMParams, verboseGet, self.verbose);
+  static FF_SETTER_BOOL(FacemarkAAMParams, verbose, self.verbose);
 };
 
 #endif

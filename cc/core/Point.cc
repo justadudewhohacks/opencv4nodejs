@@ -40,15 +40,13 @@ NAN_METHOD(Point::New) {
 	}
 	double x = info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	double y = info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-	v8::Local<v8::Object> jsPoint;
+	v8::Local<v8::Value> jsPoint;
 	if (info.Length() == 3) {
 		double z = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-		jsPoint = FF::newInstance(Nan::New(Point3::constructor));
-		Nan::ObjectWrap::Unwrap<Point3>(jsPoint)->self = cv::Point3d(x, y, z);
+		jsPoint = Point3::Converter::wrap(cv::Point3d(x, y, z));
 	}
 	else {
-		jsPoint = FF::newInstance(Nan::New(Point2::constructor));
-		Point2::unwrap(jsPoint)->setNativeObject(cv::Point2d(x, y));
+		jsPoint = Point2::Converter::wrap(cv::Point2d(x, y));
 	}
   info.GetReturnValue().Set(jsPoint);
 }

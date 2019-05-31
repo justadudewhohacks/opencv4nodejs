@@ -60,7 +60,7 @@ NAN_METHOD(HOGDescriptor::New) {
 	}
 
 	HOGDescriptor* self = new HOGDescriptor();
-	self->hog = std::make_shared<cv::HOGDescriptor>(
+	self->setNativeObject(std::make_shared<cv::HOGDescriptor>(
 		worker.winSize,
 		worker.blockSize,
 		worker.blockStride,
@@ -73,7 +73,7 @@ NAN_METHOD(HOGDescriptor::New) {
 		worker.gammaCorrection,
 		(int)worker.nlevels,
 		worker.signedGradient
-		);
+	));
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }
@@ -95,7 +95,7 @@ NAN_METHOD(HOGDescriptor::CheckDetectorSize) {
 NAN_METHOD(HOGDescriptor::SetSVMDetector) {
   FF_METHOD_CONTEXT("SetSVMDetector");
   std::vector<float> detector;
-  if (!FF::hasArg(info, 0) || FF::FloatArrayConverter::unwrapTo(&detector, info[0])) {
+  if (!FF::hasArg(info, 0) || FF::FloatArrayConverter::unwrapUncheckedTo(&detector, info[0])) {
     FF_THROW("expected detector to be an Array of type Number");
   }
   HOGDescriptor::unwrapSelf(info)->setSVMDetector(detector);
@@ -110,7 +110,7 @@ NAN_METHOD(HOGDescriptor::Save) {
 		tryCatch.throwNew(err);
 		return;
 	}
-	Nan::ObjectWrap::Unwrap<HOGDescriptor>(info.This())->hog->save(path);
+	HOGDescriptor::unwrapSelf(info)->save(path);
 }
 
 NAN_METHOD(HOGDescriptor::Load) {
@@ -122,7 +122,7 @@ NAN_METHOD(HOGDescriptor::Load) {
 		tryCatch.throwNew(err);
 		return;
 	}
-	Nan::ObjectWrap::Unwrap<HOGDescriptor>(info.This())->hog->load(path);
+	HOGDescriptor::unwrapSelf(info)->load(path);
 }
 
 NAN_METHOD(HOGDescriptor::Compute) {

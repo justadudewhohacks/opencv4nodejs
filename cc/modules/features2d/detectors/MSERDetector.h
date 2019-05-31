@@ -4,9 +4,18 @@
 #ifndef __FF_MSERDETECTOR_H__
 #define __FF_MSERDETECTOR_H__
 
-class MSERDetector : public FeatureDetector {
+class MSERDetector : public FF::ObjectWrapTemplate<FeatureDetector, MSERDetector, cv::Ptr<cv::MSER>> {
 public:
-	cv::Ptr<cv::MSER> detector;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	cv::Ptr<cv::FeatureDetector> getDetector(void) {
+		return self;
+	}
+
+	cv::Ptr<cv::MSER> getMSERDetector() {
+		return self;
+	}
+
 	int delta ;
 	int minArea;
 	int maxArea;
@@ -29,17 +38,6 @@ public:
 	static FF_GETTER(MSERDetector, GetAreaThreshold, areaThreshold);
 	static FF_GETTER(MSERDetector, GetMinMargin, minMargin);
 	static FF_GETTER(MSERDetector, GetEdgeBlurSize, edgeBlurSize);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-  
-    cv::Ptr<cv::FeatureDetector> getDetector(void){
-		return detector;
-    }
-  
-	cv::Ptr<cv::MSER> getMSERDetector() {
-		return detector;
-	}
     
     static NAN_METHOD(DetectRegions);
 	static NAN_METHOD(DetectRegionsAsync);

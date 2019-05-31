@@ -7,16 +7,9 @@
 #ifndef __FF_OCRHMMCLASSIFIER_H__
 #define __FF_OCRHMMCLASSIFIER_H__
 
-class OCRHMMClassifier : public Nan::ObjectWrap {
+class OCRHMMClassifier : public FF::ObjectWrap<OCRHMMClassifier, cv::Ptr<cv::text::OCRHMMDecoder::ClassifierCallback>> {
 public:
-	cv::Ptr <cv::text::OCRHMMDecoder::ClassifierCallback> classifier;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Ptr <cv::text::OCRHMMDecoder::ClassifierCallback>* getNativeObjectPtr() { return &classifier; }
-	cv::Ptr <cv::text::OCRHMMDecoder::ClassifierCallback> getNativeObject() { return classifier; }
-
-	typedef InstanceConverter<OCRHMMClassifier, cv::Ptr <cv::text::OCRHMMDecoder::ClassifierCallback>> Converter;
 
 	static const char* getClassName() {
 		return "OCRHMMClassifier";

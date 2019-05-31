@@ -6,15 +6,20 @@
 #ifndef __FF_DETECTIONROI_H__
 #define __FF_DETECTIONROI_H__
 
-class DetectionROI : public Nan::ObjectWrap {
+class DetectionROI : public FF::ObjectWrap<DetectionROI, cv::DetectionROI> {
 public:
-	cv::DetectionROI detectionROI;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
+	static const char* getClassName() {
+		return "DetectionROI";
+	}
 
-	static FF_GETTER(DetectionROI, scaleGet, detectionROI.scale);
-	static FF_SETTER_NUMBER(DetectionROI, scale, detectionROI.scale);
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
+
+	static FF_GETTER(DetectionROI, scaleGet, self.scale);
+	static FF_SETTER_NUMBER(DetectionROI, scale, self.scale);
+
 	static NAN_GETTER(locationsGet) {
 		v8::Local<v8::Value> val = Point2::ArrayWithCastConverter<cv::Point2i>::wrap(unwrapSelf(info).locations);
 		info.GetReturnValue().Set(val);
@@ -25,7 +30,7 @@ public:
 		if (Point2::ArrayWithCastConverter<cv::Point2i>::unwrapTo(&locations, value)) {
 			return Nan::ThrowError("expected locations to be an Array of type Point2");
 		}
-		Converter::unwrapPtr(info.This())->locations = locations;
+		DetectionROI::unwrapSelf(info).locations = locations;
 	}
 
 	static NAN_GETTER(confidencesGet) {
@@ -37,18 +42,7 @@ public:
 		if (FF::DoubleArrayConverter::unwrapTo(&confidences, value)) {
 			return Nan::ThrowError("expected confidences to be an Array of type Number");
 		}
-		Converter::unwrapPtr(info.This())->confidences = confidences;
-	}
-
-	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::DetectionROI* getNativeObjectPtr() { return &detectionROI; }
-	cv::DetectionROI getNativeObject() { return detectionROI; }
-
-	typedef InstanceConverter<DetectionROI, cv::DetectionROI> Converter;
-
-	static const char* getClassName() {
-		return "DetectionROI";
+		DetectionROI::unwrapSelf(info).confidences = confidences;
 	}
 };
 

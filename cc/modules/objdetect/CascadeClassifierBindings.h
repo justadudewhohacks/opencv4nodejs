@@ -51,11 +51,11 @@ namespace CascadeClassifierBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       if (isGpu) {
-        return Rect::ArrayConverter::wrap(objectRects);
+        return Rect::ArrayWithCastConverter<cv::Rect>::wrap(objectRects);
       }
       else {
         v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-        Nan::Set(ret, FF::newString("objects"), Rect::ArrayConverter::wrap(objectRects));
+        Nan::Set(ret, FF::newString("objects"), Rect::ArrayWithCastConverter<cv::Rect>::wrap(objectRects));
         Nan::Set(ret, FF::newString("numDetections"), FF::IntArrayConverter::wrap(numDetections));
         return ret;
       }
@@ -68,8 +68,8 @@ namespace CascadeClassifierBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         FF::DoubleConverter::optArg(1, &scaleFactor, info) ||
-        FF::IntConverter::optArg(2, &minNeighbors, info) ||
-        FF::IntConverter::optArg(3, &flags, info) ||
+        FF::UintConverter::optArg(2, &minNeighbors, info) ||
+        FF::UintConverter::optArg(3, &flags, info) ||
         Size::Converter::optArg(4, &minSize, info) ||
         Size::Converter::optArg(5, &maxSize, info)
       );
@@ -83,8 +83,8 @@ namespace CascadeClassifierBindings {
       v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         FF::DoubleConverter::optProp(&scaleFactor, "scaleFactor", opts) ||
-        FF::IntConverter::optProp(&minNeighbors, "minNeighbors", opts) ||
-        FF::IntConverter::optProp(&flags, "flags", opts) ||
+        FF::UintConverter::optProp(&minNeighbors, "minNeighbors", opts) ||
+        FF::UintConverter::optProp(&flags, "flags", opts) ||
         Size::Converter::optProp(&minSize, "minSize", opts) ||
         Size::Converter::optProp(&maxSize, "maxSize", opts)
       );
@@ -111,7 +111,7 @@ namespace CascadeClassifierBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, FF::newString("objects"), Rect::ArrayConverter::wrap(objectRects));
+      Nan::Set(ret, FF::newString("objects"), Rect::ArrayWithCastConverter<cv::Rect>::wrap(objectRects));
       Nan::Set(ret, FF::newString("rejectLevels"), FF::IntArrayConverter::wrap(rejectLevels));
       Nan::Set(ret, FF::newString("levelWeights"), FF::DoubleArrayConverter::wrap(levelWeights));
       return ret;

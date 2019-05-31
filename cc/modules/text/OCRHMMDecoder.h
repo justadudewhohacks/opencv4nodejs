@@ -9,16 +9,9 @@
 #ifndef __FF_OCRHMMDECODER_H__
 #define __FF_OCRHMMDECODER_H__
 
-class OCRHMMDecoder : public Nan::ObjectWrap {
+class OCRHMMDecoder : public FF::ObjectWrap<OCRHMMDecoder, cv::Ptr<cv::text::OCRHMMDecoder>> {
 public:
-	cv::Ptr <cv::text::OCRHMMDecoder> decoder;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Ptr <cv::text::OCRHMMDecoder>* getNativeObjectPtr() { return &decoder; }
-	cv::Ptr <cv::text::OCRHMMDecoder> getNativeObject() { return decoder; }
-
-	typedef InstanceConverter<OCRHMMDecoder, cv::Ptr <cv::text::OCRHMMDecoder>> Converter;
 
 	static const char* getClassName() {
 		return "OCRHMMDecoder";

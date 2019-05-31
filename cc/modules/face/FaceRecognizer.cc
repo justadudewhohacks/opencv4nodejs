@@ -38,7 +38,7 @@ NAN_METHOD(FaceRecognizer::Load) {
 
 NAN_METHOD(FaceRecognizer::Train) {
   FF::SyncBinding(
-    std::make_shared<FaceRecognizerBindings::TrainWorker>(FF_UNWRAP(info.This(), FaceRecognizer)->getFaceRecognizer()),
+    std::make_shared<FaceRecognizerBindings::TrainWorker>(FaceRecognizer::unwrapThis(info)->getFaceRecognizer()),
     "FaceRecognizer::Train",
     info
   );
@@ -46,7 +46,7 @@ NAN_METHOD(FaceRecognizer::Train) {
 
 NAN_METHOD(FaceRecognizer::TrainAsync) {
   FF::AsyncBinding(
-    std::make_shared<FaceRecognizerBindings::TrainWorker>(FF_UNWRAP(info.This(), FaceRecognizer)->getFaceRecognizer()),
+    std::make_shared<FaceRecognizerBindings::TrainWorker>(FaceRecognizer::unwrapThis(info)->getFaceRecognizer()),
     "FaceRecognizer::TrainAsync",
     info
   );
@@ -54,7 +54,7 @@ NAN_METHOD(FaceRecognizer::TrainAsync) {
 
 NAN_METHOD(FaceRecognizer::Predict) {
   FF::SyncBinding(
-    std::make_shared<FaceRecognizerBindings::PredictWorker>(FF_UNWRAP(info.This(), FaceRecognizer)->getFaceRecognizer()),
+    std::make_shared<FaceRecognizerBindings::PredictWorker>(FaceRecognizer::unwrapThis(info)->getFaceRecognizer()),
     "FaceRecognizer::Predict",
     info
   );
@@ -62,7 +62,7 @@ NAN_METHOD(FaceRecognizer::Predict) {
 
 NAN_METHOD(FaceRecognizer::PredictAsync) {
   FF::AsyncBinding(
-    std::make_shared<FaceRecognizerBindings::PredictWorker>(FF_UNWRAP(info.This(), FaceRecognizer)->getFaceRecognizer()),
+    std::make_shared<FaceRecognizerBindings::PredictWorker>(FaceRecognizer::unwrapThis(info)->getFaceRecognizer()),
     "FaceRecognizer::PredictAsync",
     info
   );

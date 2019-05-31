@@ -56,7 +56,7 @@ NAN_METHOD(SuperpixelSLIC::Iterate) {
 	FF::TryCatch tryCatch;
 
 	uint iterations = 10;
-	if (FF::IntConverter::optArg(0, &iterations, info)) {
+	if (FF::UintConverter::optArg(0, &iterations, info)) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSLIC::Iterate");
 		tryCatch.throwNew(err);
 		return;

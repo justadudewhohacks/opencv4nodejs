@@ -21,21 +21,13 @@ public:
 	static FF_GETTER(RotatedRect, GetAngle, self.angle);
 
 	static NAN_GETTER(GetCenter) {
-		v8::Local<v8::Object> jsCenter = FF::newInstance(Nan::New(Point2::constructor));
-		Point2::unwrap(jsCenter)->setNativeObject(FF_UNWRAP(info.This(), RotatedRect)->self.center);
-		info.GetReturnValue().Set(jsCenter);
+		info.GetReturnValue().Set(Point2::Converter::wrap(unwrapSelf(info).center));
 	}
-
 	static NAN_GETTER(GetSize) {
-		v8::Local<v8::Object> jsSize = FF::newInstance(Nan::New(Size::constructor));
-		Size::unwrap(jsSize)->setNativeObject(FF_UNWRAP(info.This(), RotatedRect)->self.size);
-		info.GetReturnValue().Set(jsSize);
+		info.GetReturnValue().Set(Size::Converter::wrap(unwrapSelf(info).size));
 	}
-
 	static NAN_METHOD(BoundingRect) {
-		v8::Local<v8::Object> jsRect = FF::newInstance(Nan::New(Rect::constructor));
-		FF_UNWRAP(jsRect, Rect)->self = FF_UNWRAP(info.This(), RotatedRect)->self.boundingRect();
-		info.GetReturnValue().Set(jsRect);
+		info.GetReturnValue().Set(Size::Converter::wrap(unwrapSelf(info).size));
 	}
 };
 

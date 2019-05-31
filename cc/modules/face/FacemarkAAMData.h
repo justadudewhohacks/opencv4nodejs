@@ -1,5 +1,5 @@
 #include "macros.h"
-#include "ArrayConverters.h"
+#include "NativeNodeUtils.h"
 #include "Point2.h"
 #include <opencv2/core.hpp>
 #include <opencv2/face.hpp>
@@ -26,10 +26,6 @@ public:
 	cv::face::FacemarkAAM::Data* getNativeObjectPtr() { return &data; }
 	cv::face::FacemarkAAM::Data getNativeObject() { return data; }
 };
-
-#define FF_UNWRAP_FACEMARKAAMDATA(obj) FF_UNWRAP(obj, FacemarkAAMData)
-#define FF_UNWRAP_FACEMARKAAMDATA_AND_GET(obj)                               \
-  FF_UNWRAP_FACEMARKAAMDATA(obj)->data
 
 #endif
 

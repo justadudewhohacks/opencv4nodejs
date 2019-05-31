@@ -38,7 +38,4 @@ public:
 	}
 };
 
-#define FF_UNWRAP_TRACKERMILPARAMS(obj) FF_UNWRAP(obj, TrackerMILParams)
-#define FF_UNWRAP_TRACKERMILPARAMS_AND_GET(obj) FF_UNWRAP_TRACKERMILPARAMS(obj)->params
-
 #endif

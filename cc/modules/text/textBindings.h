@@ -11,9 +11,7 @@ namespace TextBindings {
     std::string file;
 
     v8::Local<v8::Value> getReturnValue() {
-      v8::Local<v8::Object> jsClassifier = FF::newInstance(Nan::New(OCRHMMClassifier::constructor));
-      FF_UNWRAP(jsClassifier, OCRHMMClassifier)->classifier = classifier;
-      return jsClassifier;
+      return OCRHMMClassifier::Converter::wrap(classifier);
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {

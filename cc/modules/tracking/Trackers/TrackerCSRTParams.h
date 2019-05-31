@@ -84,9 +84,6 @@ public:
 	}
 };
 
-#define FF_UNWRAP_TRACKERCSRTPARAMS(obj) FF_UNWRAP(obj, TrackerCSRTParams)
-#define FF_UNWRAP_TRACKERCSRTPARAMS_AND_GET(obj) FF_UNWRAP_TRACKERCSRTPARAMS(obj)->params
-
 #endif
 
 #endif

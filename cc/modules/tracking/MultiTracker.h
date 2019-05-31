@@ -8,9 +8,13 @@
 #ifndef __FF_MULTITRACKER_H__
 #define __FF_MULTITRACKER_H__
 
-class MultiTracker : public Nan::ObjectWrap {
+class MultiTracker : public FF::ObjectWrap<MultiTracker, cv::MultiTracker> {
 public:
-	cv::MultiTracker tracker;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "MultiTracker";
+	}
 
 	static NAN_MODULE_INIT(Init);
 
@@ -23,8 +27,6 @@ public:
 	static NAN_METHOD(AddMOSSE);
 	static NAN_METHOD(AddCSRT);
 	static NAN_METHOD(Update);
-
-	static Nan::Persistent<v8::FunctionTemplate> constructor;
 };
 
 #endif

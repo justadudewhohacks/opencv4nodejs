@@ -39,14 +39,14 @@ NAN_MODULE_INIT(SVM::Init) {
 
 void SVM::setParams(v8::Local<v8::Object> params) {
 	FF::TryCatch tryCatch;
-	double c = this->svm->getC();
-	double coef0 = this->svm->getCoef0();
-	double degree = this->svm->getDegree();
-	double gamma = this->svm->getGamma();
-	double nu = this->svm->getNu();
-	double p = this->svm->getP();
-	uint kernelType = this->svm->getKernelType();
-	cv::Mat classWeights = this->svm->getClassWeights();
+	double c = this->self->getC();
+	double coef0 = this->self->getCoef0();
+	double degree = this->self->getDegree();
+	double gamma = this->self->getGamma();
+	double nu = this->self->getNu();
+	double p = this->self->getP();
+	uint kernelType = this->self->getKernelType();
+	cv::Mat classWeights = this->self->getClassWeights();
 	if (
 		FF::DoubleConverter::optProp(&c, "c", params) ||
 		FF::DoubleConverter::optProp(&coef0, "coef0", params) ||
@@ -54,27 +54,27 @@ void SVM::setParams(v8::Local<v8::Object> params) {
 		FF::DoubleConverter::optProp(&gamma, "gamma", params) ||
 		FF::DoubleConverter::optProp(&nu, "nu", params) ||
 		FF::DoubleConverter::optProp(&p, "p", params) ||
-		FF::IntConverter::optProp(&kernelType, "kernelType", params) ||
+		FF::UintConverter::optProp(&kernelType, "kernelType", params) ||
 		Mat::Converter::optProp(&classWeights, "classWeights", params)
 		) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("SVM::setParams"));
 		return;
 	}
-	this->svm->setC(c);
-	this->svm->setCoef0(coef0);
-	this->svm->setDegree(degree);
-	this->svm->setGamma(gamma);
-	this->svm->setNu(nu);
-	this->svm->setP(p);
-	this->svm->setKernel(kernelType);
-	this->svm->setClassWeights(classWeights);
+	this->self->setC(c);
+	this->self->setCoef0(coef0);
+	this->self->setDegree(degree);
+	this->self->setGamma(gamma);
+	this->self->setNu(nu);
+	this->self->setP(p);
+	this->self->setKernel(kernelType);
+	this->self->setClassWeights(classWeights);
 }
 
 NAN_METHOD(SVM::New) {
   FF_ASSERT_CONSTRUCT_CALL(SVM);
   FF_METHOD_CONTEXT("SVM::New");
   SVM* self = new SVM();
-  self->svm = cv::ml::SVM::create();
+  self->setNativeObject(cv::ml::SVM::create());
   if (info.Length() > 0) {
 	if (!info[0]->IsObject()) {
 		FF_THROW("expected arg 0 to be an object");
@@ -98,7 +98,7 @@ NAN_METHOD(SVM::SetParams) {
   v8::Local<v8::Object> args = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 
   Nan::TryCatch tryCatch;
-  FF_UNWRAP(info.This(), SVM)->setParams(args);
+  SVM::unwrapThis(info)->setParams(args);
   if (tryCatch.HasCaught()) {
     tryCatch.ReThrow();
   }
@@ -119,26 +119,26 @@ NAN_METHOD(SVM::Predict) {
 	unsigned int flags = 0;
 	if (
 		FF::FloatArrayConverter::arg(0, &samples, info) ||
-		FF::IntConverter::optArg(1, &flags, info)
+		FF::UintConverter::optArg(1, &flags, info)
 	) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Predict");
 		tryCatch.throwNew(err);
 		return;
 	}
-    FF_UNWRAP(info.This(), SVM)->svm->predict(samples, results, (int)flags);
+    SVM::unwrapSelf(info)->predict(samples, results, (int)flags);
   }
   else {
 	cv::Mat samples;
 	unsigned int flags = 0;
 	if (
 		Mat::Converter::arg(0, &samples, info) ||
-		FF::IntConverter::optArg(1, &flags, info)
+		FF::UintConverter::optArg(1, &flags, info)
 		) {
 		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Predict");
 		tryCatch.throwNew(err);
 		return;
 	}
-	FF_UNWRAP(info.This(), SVM)->svm->predict(samples, results, (int)flags);
+	SVM::unwrapSelf(info)->predict(samples, results, (int)flags);
   }
 
   v8::Local<v8::Value> jsResult;
@@ -154,9 +154,7 @@ NAN_METHOD(SVM::Predict) {
 }
 
 NAN_METHOD(SVM::GetSupportVectors) {
-  v8::Local<v8::Object> jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
-  Mat::unwrap(jsSupportVectors)->setNativeObject(SVM::unwrapSelf(info)->getSupportVectors());
-  info.GetReturnValue().Set(jsSupportVectors);
+  info.GetReturnValue().Set(Mat::Converter::wrap(SVM::unwrapSelf(info)->getSupportVectors()));
 }
 
 NAN_METHOD(SVM::GetUncompressedSupportVectors) {
@@ -164,9 +162,7 @@ NAN_METHOD(SVM::GetUncompressedSupportVectors) {
 #if CV_VERSION_MINOR < 2
   FF_THROW("getUncompressedSupportVectors not implemented for v3.0, v3.1");
 #else
-  v8::Local<v8::Object> jsSupportVectors = FF::newInstance(Nan::New(Mat::constructor));
-  Mat::unwrap(jsSupportVectors)->setNativeObject(SVM::unwrapSelf(info)->getUncompressedSupportVectors());
-  info.GetReturnValue().Set(jsSupportVectors);
+  info.GetReturnValue().Set(Mat::Converter::wrap(SVM::unwrapSelf(info)->getUncompressedSupportVectors()));
 #endif
 }
 
@@ -177,9 +173,6 @@ NAN_METHOD(SVM::GetDecisionFunction) {
     FF_THROW("expected arg 0 to be a Int");
   }
 
-  v8::Local<v8::Object> alpha = FF::newInstance(Nan::New(Mat::constructor));
-  v8::Local<v8::Object> svidx = FF::newInstance(Nan::New(Mat::constructor));
-
   FF::TryCatch tryCatch;
   int i;
   if (FF::IntConverter::arg(0, &i, info)) {
@@ -187,12 +180,14 @@ NAN_METHOD(SVM::GetDecisionFunction) {
 	  tryCatch.throwNew(err);
 	  return;
   }
-  double rho = SVM::unwrapSelf(info)->getDecisionFunction(i, Mat::unwrap(alpha)->self, Mat::unwrap(svidx)->self);
+
+  cv::Mat alpha, svidx;
+  double rho = SVM::unwrapSelf(info)->getDecisionFunction(i, alpha, svidx);
 
   v8::Local<v8::Object> ret = Nan::New<v8::Object>();
   Nan::Set(ret, FF::newString("rho"), Nan::New((double)rho));
-  Nan::Set(ret, FF::newString("alpha"), alpha);
-  Nan::Set(ret, FF::newString("svidx"), svidx);
+  Nan::Set(ret, FF::newString("alpha"), Mat::Converter::wrap(alpha));
+  Nan::Set(ret, FF::newString("svidx"), Mat::Converter::wrap(svidx));
   info.GetReturnValue().Set(ret);
 }
 
@@ -210,7 +205,7 @@ NAN_METHOD(SVM::CalcError) {
 	}
 
 	v8::Local<v8::Object> jsResponses = FF::newInstance(Nan::New(Mat::constructor));
-	float error = FF_UNWRAP(info.This(), SVM)->svm->calcError(trainData, test, Mat::Converter::unwrap(jsResponses));
+	float error = SVM::unwrapSelf(info)->calcError(trainData, test, Mat::Converter::unwrapUnchecked(jsResponses));
 
 	v8::Local<v8::Object> ret = Nan::New<v8::Object>();
 	Nan::Set(ret, FF::newString("error"), Nan::New((double)error));
@@ -227,7 +222,7 @@ NAN_METHOD(SVM::Save) {
 		tryCatch.throwNew(err);
 		return;
 	}
-	Nan::ObjectWrap::Unwrap<SVM>(info.This())->svm->save(path);
+	SVM::unwrapSelf(info)->save(path);
 }
 
 NAN_METHOD(SVM::Load) {
@@ -240,9 +235,9 @@ NAN_METHOD(SVM::Load) {
 		return;
 	}
 #if CV_VERSION_MINOR < 2
-	Nan::ObjectWrap::Unwrap<SVM>(info.This())->svm = cv::ml::SVM::load<cv::ml::SVM>(path);
+	SVM::unwrapSelf(info) = cv::ml::SVM::load<cv::ml::SVM>(path);
 #else
-	Nan::ObjectWrap::Unwrap<SVM>(info.This())->svm = cv::ml::SVM::load(path);
+	SVM::unwrapSelf(info) = cv::ml::SVM::load(path);
 #endif
 }
 

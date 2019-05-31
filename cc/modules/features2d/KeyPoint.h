@@ -6,32 +6,28 @@
 #ifndef FF_KEYPOINT_H_
 #define FF_KEYPOINT_H_
 
-class KeyPoint : public Nan::ObjectWrap {
+class KeyPoint : public FF::ObjectWrap<KeyPoint, cv::KeyPoint> {
 public:
-  int localId = -1;
-  cv::KeyPoint keyPoint;
-
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
-
-	static FF_GETTER_JSOBJ(KeyPoint, GetPoint, keyPoint.pt, Point2);
-  static FF_GETTER(KeyPoint, GetLocalId, localId);
-	static FF_GETTER(KeyPoint, GetAngle, keyPoint.angle);
-	static FF_GETTER(KeyPoint, GetClassId, keyPoint.class_id);
-	static FF_GETTER(KeyPoint, GetResponse, keyPoint.response);
-	static FF_GETTER(KeyPoint, GetSize, keyPoint.size);
-	static FF_GETTER(KeyPoint, GetOctave, keyPoint.octave);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::KeyPoint* getNativeObjectPtr() { return &keyPoint; }
-	cv::KeyPoint getNativeObject() { return keyPoint; }
-
-	typedef InstanceConverter<KeyPoint, cv::KeyPoint> Converter;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {
 		return "KeyPoint";
 	}
+
+	int localId = -1;
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
+
+	static NAN_GETTER(GetPoint) {
+		info.GetReturnValue().Set(Point2::Converter::wrap(unwrapSelf(info).pt));
+	}
+	static FF_GETTER(KeyPoint, GetLocalId, localId);
+	static FF_GETTER(KeyPoint, GetAngle, self.angle);
+	static FF_GETTER(KeyPoint, GetClassId, self.class_id);
+	static FF_GETTER(KeyPoint, GetResponse, self.response);
+	static FF_GETTER(KeyPoint, GetSize, self.size);
+	static FF_GETTER(KeyPoint, GetOctave, self.octave);
 };
 
 #endif

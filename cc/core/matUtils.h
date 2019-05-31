@@ -178,8 +178,8 @@ namespace FF {
 	static inline void matPutVec2(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 2> >(r, c) = cv::Vec<type, 2>(
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()),
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked())
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked())
 		);
 	}
 
@@ -187,8 +187,8 @@ namespace FF {
 	static inline void matPutVec2(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c, int z) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 2> >(r, c, z) = cv::Vec<type, 2>(
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()),
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked())
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked())
 		);
 	}
 
@@ -196,9 +196,9 @@ namespace FF {
 	static inline void matPutVec3(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 3> >(r, c) = cv::Vec<type, 3>(
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()),
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()),
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 2).ToLocalChecked())
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 2).ToLocalChecked())
 		);
 	}
 
@@ -206,9 +206,9 @@ namespace FF {
 	static inline void matPutVec3(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c, int z) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 3> >(r, c, z) = cv::Vec<type, 3>(
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()),
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()),
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 2).ToLocalChecked())
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 2).ToLocalChecked())
 		);
 	}
 
@@ -216,10 +216,10 @@ namespace FF {
 	static inline void matPutVec4(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 4> >(r, c) = cv::Vec<type, 4>(
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()),
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()),
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 2).ToLocalChecked()),
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 3).ToLocalChecked())
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 2).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 3).ToLocalChecked())
 		);
 	}
 
@@ -227,10 +227,10 @@ namespace FF {
 	static inline void matPutVec4(cv::Mat mat, v8::Local<v8::Value> vector, int r, int c, int z) {
 		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
 		mat.at< cv::Vec<type, 4> >(r, c, z) = cv::Vec<type, 4>(
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()),
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()),
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 2).ToLocalChecked()),
-			(type)FF::DoubleConverter::unwrap(Nan::Get(vec, 3).ToLocalChecked())
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 2).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 3).ToLocalChecked())
 		);
 	}
 
