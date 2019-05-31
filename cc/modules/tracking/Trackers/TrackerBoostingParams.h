@@ -4,35 +4,27 @@
 #ifndef __FF_TRACKERBOOSTINGPARAMS_H__
 #define __FF_TRACKERBOOSTINGPARAMS_H__
 
-class TrackerBoostingParams : public Nan::ObjectWrap {
+class TrackerBoostingParams : public FF::ObjectWrap<TrackerBoostingParams, cv::TrackerBoosting::Params> {
 public:
-	cv::TrackerBoosting::Params params;
-
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
-
-	static FF_GETTER(TrackerBoostingParams, numClassifiersGet, params.numClassifiers);
-	static FF_SETTER_INT(TrackerBoostingParams, numClassifiers, params.numClassifiers);
-	static FF_GETTER(TrackerBoostingParams, samplerOverlapGet, params.samplerOverlap);
-	static FF_SETTER_NUMBER(TrackerBoostingParams, samplerOverlap, params.samplerOverlap);
-	static FF_GETTER(TrackerBoostingParams, samplerSearchFactorGet, params.samplerSearchFactor);
-	static FF_SETTER_NUMBER(TrackerBoostingParams, samplerSearchFactor, params.samplerSearchFactor);
-	static FF_GETTER(TrackerBoostingParams, iterationInitGet, params.iterationInit);
-	static FF_SETTER_INT(TrackerBoostingParams, iterationInit, params.iterationInit);
-	static FF_GETTER(TrackerBoostingParams, featureSetNumFeaturesGet, params.featureSetNumFeatures);
-	static FF_SETTER_INT(TrackerBoostingParams, featureSetNumFeatures, params.featureSetNumFeatures);
-
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::TrackerBoosting::Params* getNativeObjectPtr() { return &params; }
-	cv::TrackerBoosting::Params getNativeObject() { return params; }
-
-	typedef InstanceConverter<TrackerBoostingParams, cv::TrackerBoosting::Params> Converter;
 
 	static const char* getClassName() {
 		return "TrackerBoostingParams";
 	}
+
+  static NAN_MODULE_INIT(Init);
+  static NAN_METHOD(New);
+
+	static FF_GETTER(TrackerBoostingParams, numClassifiersGet, self.numClassifiers);
+	static FF_SETTER_INT(TrackerBoostingParams, numClassifiers, self.numClassifiers);
+	static FF_GETTER(TrackerBoostingParams, samplerOverlapGet, self.samplerOverlap);
+	static FF_SETTER_NUMBER(TrackerBoostingParams, samplerOverlap, self.samplerOverlap);
+	static FF_GETTER(TrackerBoostingParams, samplerSearchFactorGet, self.samplerSearchFactor);
+	static FF_SETTER_NUMBER(TrackerBoostingParams, samplerSearchFactor, self.samplerSearchFactor);
+	static FF_GETTER(TrackerBoostingParams, iterationInitGet, self.iterationInit);
+	static FF_SETTER_INT(TrackerBoostingParams, iterationInit, self.iterationInit);
+	static FF_GETTER(TrackerBoostingParams, featureSetNumFeaturesGet, self.featureSetNumFeatures);
+	static FF_SETTER_INT(TrackerBoostingParams, featureSetNumFeatures, self.featureSetNumFeatures);
 };
 
 #endif

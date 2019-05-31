@@ -40,7 +40,7 @@ NAN_METHOD(SuperpixelLSC::New) {
 	self->image = worker.image;
 	self->region_size = worker.region_size;
 	self->ratio = worker.ratio;
-	self->superpixelLsc = cv::ximgproc::createSuperpixelLSC(
+	self->self = cv::ximgproc::createSuperpixelLSC(
 		worker.image,
 		worker.region_size,
 		worker.ratio
@@ -60,10 +60,10 @@ NAN_METHOD(SuperpixelLSC::Iterate) {
 	}
 
 	SuperpixelLSC* self = Nan::ObjectWrap::Unwrap<SuperpixelLSC>(info.This());
-	self->superpixelLsc->iterate((int)iterations);
-	self->superpixelLsc->getLabels(self->labels);
-	self->numCalculatedSuperpixels = self->superpixelLsc->getNumberOfSuperpixels();
-	self->superpixelLsc->getLabelContourMask(self->labelContourMask, false);
+	self->self->iterate((int)iterations);
+	self->self->getLabels(self->labels);
+	self->numCalculatedSuperpixels = self->self->getNumberOfSuperpixels();
+	self->self->getLabelContourMask(self->labelContourMask, false);
 }
 
 #endif

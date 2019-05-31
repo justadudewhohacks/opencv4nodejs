@@ -27,7 +27,7 @@ NAN_METHOD(TrackerMILParams::New) {
 	FF_ASSERT_CONSTRUCT_CALL(TrackerMILParams);
 	FF_METHOD_CONTEXT("TrackerMILParams::New");
 	TrackerMILParams* self = new TrackerMILParams();
-	self->params = cv::TrackerMIL::Params();
+	self->self = cv::TrackerMIL::Params();
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };

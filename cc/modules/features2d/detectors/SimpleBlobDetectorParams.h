@@ -5,64 +5,57 @@
 #ifndef __FF_SIMPLEBLOBDETECTORPARAMS_H__
 #define __FF_SIMPLEBLOBDETECTORPARAMS_H__
 
-class SimpleBlobDetectorParams : public Nan::ObjectWrap {
+class SimpleBlobDetectorParams : public FF::ObjectWrap <SimpleBlobDetectorParams, cv::SimpleBlobDetector::Params> {
 public:
-	cv::SimpleBlobDetector::Params params;
-
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
-
-	static FF_GETTER(SimpleBlobDetectorParams, blobColorGet, params.blobColor);
-  static FF_SETTER_UINT(SimpleBlobDetectorParams, blobColor, params.blobColor);
-  static FF_GETTER(SimpleBlobDetectorParams, filterByAreaGet, params.filterByArea);
-  static FF_SETTER_BOOL(SimpleBlobDetectorParams, filterByArea, params.filterByArea);
-  static FF_GETTER(SimpleBlobDetectorParams, filterByCircularityGet, params.filterByCircularity);
-  static FF_SETTER_BOOL(SimpleBlobDetectorParams, filterByCircularity, params.filterByCircularity);
-  static FF_GETTER(SimpleBlobDetectorParams, filterByColorGet, params.filterByColor);
-  static FF_SETTER_BOOL(SimpleBlobDetectorParams, filterByColor, params.filterByColor);
-  static FF_GETTER(SimpleBlobDetectorParams, filterByConvexityGet, params.filterByConvexity);
-  static FF_SETTER_BOOL(SimpleBlobDetectorParams, filterByConvexity, params.filterByConvexity);
-  static FF_GETTER(SimpleBlobDetectorParams, filterByInertiaGet, params.filterByInertia);
-  static FF_SETTER_BOOL(SimpleBlobDetectorParams, filterByInertia, params.filterByInertia);
-	static FF_GETTER(SimpleBlobDetectorParams, maxAreaGet, params.maxArea);
-	static FF_SETTER_NUMBER(SimpleBlobDetectorParams, maxArea, params.maxArea);
-	static FF_GETTER(SimpleBlobDetectorParams, maxCircularityGet, params.maxCircularity);
-  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, maxCircularity, params.maxCircularity);
-	static FF_GETTER(SimpleBlobDetectorParams, maxConvexityGet, params.maxConvexity);
-  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, maxConvexity, params.maxConvexity);
-	static FF_GETTER(SimpleBlobDetectorParams, maxInertiaRatioGet, params.maxInertiaRatio);
-  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, maxInertiaRatio, params.maxInertiaRatio);
-	static FF_GETTER(SimpleBlobDetectorParams, maxThresholdGet, params.maxThreshold);
-	static FF_SETTER_NUMBER(SimpleBlobDetectorParams, maxThreshold, params.maxThreshold);
-	static FF_GETTER(SimpleBlobDetectorParams, minAreaGet, params.minArea);
-	static FF_SETTER_NUMBER(SimpleBlobDetectorParams, minArea, params.minArea);
-  static FF_GETTER(SimpleBlobDetectorParams, minCircularityGet, params.minCircularity);
-  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, minCircularity, params.minCircularity);
-  static FF_GETTER(SimpleBlobDetectorParams, minConvexityGet, params.minConvexity);
-  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, minConvexity, params.minConvexity);
-  static FF_GETTER(SimpleBlobDetectorParams, minDistBetweenBlobsGet, params.minDistBetweenBlobs);
-  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, minDistBetweenBlobs, params.minDistBetweenBlobs);
-  static FF_GETTER(SimpleBlobDetectorParams, minInertiaRatioGet, params.minInertiaRatio);
-  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, minInertiaRatio, params.minInertiaRatio);
-	static NAN_GETTER(minRepeatabilityGet) { 
-		info.GetReturnValue().Set((int)Nan::ObjectWrap::Unwrap<SimpleBlobDetectorParams>(info.This())->params.minRepeatability);
-	}
-  static FF_SETTER_INT(SimpleBlobDetectorParams, minRepeatability, params.minRepeatability);
-  static FF_GETTER(SimpleBlobDetectorParams, minThresholdGet, params.minThreshold);
-  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, minThreshold, params.minThreshold);
-  static FF_GETTER(SimpleBlobDetectorParams, thresholdStepGet, params.thresholdStep);
-  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, thresholdStep, params.thresholdStep);
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::SimpleBlobDetector::Params* getNativeObjectPtr() { return &params; }
-	cv::SimpleBlobDetector::Params getNativeObject() { return params; }
-
-	typedef InstanceConverter<SimpleBlobDetectorParams, cv::SimpleBlobDetector::Params> Converter;
 
 	static const char* getClassName() {
 		return "SimpleBlobDetector";
 	}
+
+  static NAN_MODULE_INIT(Init);
+  static NAN_METHOD(New);
+
+	static FF_GETTER(SimpleBlobDetectorParams, blobColorGet, self.blobColor);
+  static FF_SETTER_UINT(SimpleBlobDetectorParams, blobColor, self.blobColor);
+  static FF_GETTER(SimpleBlobDetectorParams, filterByAreaGet, self.filterByArea);
+  static FF_SETTER_BOOL(SimpleBlobDetectorParams, filterByArea, self.filterByArea);
+  static FF_GETTER(SimpleBlobDetectorParams, filterByCircularityGet, self.filterByCircularity);
+  static FF_SETTER_BOOL(SimpleBlobDetectorParams, filterByCircularity, self.filterByCircularity);
+  static FF_GETTER(SimpleBlobDetectorParams, filterByColorGet, self.filterByColor);
+  static FF_SETTER_BOOL(SimpleBlobDetectorParams, filterByColor, self.filterByColor);
+  static FF_GETTER(SimpleBlobDetectorParams, filterByConvexityGet, self.filterByConvexity);
+  static FF_SETTER_BOOL(SimpleBlobDetectorParams, filterByConvexity, self.filterByConvexity);
+  static FF_GETTER(SimpleBlobDetectorParams, filterByInertiaGet, self.filterByInertia);
+  static FF_SETTER_BOOL(SimpleBlobDetectorParams, filterByInertia, self.filterByInertia);
+	static FF_GETTER(SimpleBlobDetectorParams, maxAreaGet, self.maxArea);
+	static FF_SETTER_NUMBER(SimpleBlobDetectorParams, maxArea, self.maxArea);
+	static FF_GETTER(SimpleBlobDetectorParams, maxCircularityGet, self.maxCircularity);
+  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, maxCircularity, self.maxCircularity);
+	static FF_GETTER(SimpleBlobDetectorParams, maxConvexityGet, self.maxConvexity);
+  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, maxConvexity, self.maxConvexity);
+	static FF_GETTER(SimpleBlobDetectorParams, maxInertiaRatioGet, self.maxInertiaRatio);
+  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, maxInertiaRatio, self.maxInertiaRatio);
+	static FF_GETTER(SimpleBlobDetectorParams, maxThresholdGet, self.maxThreshold);
+	static FF_SETTER_NUMBER(SimpleBlobDetectorParams, maxThreshold, self.maxThreshold);
+	static FF_GETTER(SimpleBlobDetectorParams, minAreaGet, self.minArea);
+	static FF_SETTER_NUMBER(SimpleBlobDetectorParams, minArea, self.minArea);
+  static FF_GETTER(SimpleBlobDetectorParams, minCircularityGet, self.minCircularity);
+  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, minCircularity, self.minCircularity);
+  static FF_GETTER(SimpleBlobDetectorParams, minConvexityGet, self.minConvexity);
+  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, minConvexity, self.minConvexity);
+  static FF_GETTER(SimpleBlobDetectorParams, minDistBetweenBlobsGet, self.minDistBetweenBlobs);
+  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, minDistBetweenBlobs, self.minDistBetweenBlobs);
+  static FF_GETTER(SimpleBlobDetectorParams, minInertiaRatioGet, self.minInertiaRatio);
+  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, minInertiaRatio, self.minInertiaRatio);
+	static NAN_GETTER(minRepeatabilityGet) { 
+		info.GetReturnValue().Set((int)Nan::ObjectWrap::Unwrap<SimpleBlobDetectorParams>(info.This())->self.minRepeatability);
+	}
+  static FF_SETTER_INT(SimpleBlobDetectorParams, minRepeatability, self.minRepeatability);
+  static FF_GETTER(SimpleBlobDetectorParams, minThresholdGet, self.minThreshold);
+  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, minThreshold, self.minThreshold);
+  static FF_GETTER(SimpleBlobDetectorParams, thresholdStepGet, self.thresholdStep);
+  static FF_SETTER_NUMBER(SimpleBlobDetectorParams, thresholdStep, self.thresholdStep);
 };
 
 #endif

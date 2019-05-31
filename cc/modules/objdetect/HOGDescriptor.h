@@ -19,10 +19,19 @@ public:
 		return "HOGDescriptor";
 	}
 
-	static FF_GETTER_JSOBJ(HOGDescriptor, winSize, self->winSize, Size);
-	static FF_GETTER_JSOBJ(HOGDescriptor, blockSize, self->blockSize, Size);
-	static FF_GETTER_JSOBJ(HOGDescriptor, blockStride, self->blockStride, Size);
-	static FF_GETTER_JSOBJ(HOGDescriptor, cellSize, self->cellSize, Size);
+	static NAN_GETTER(winSize) {
+		info.GetReturnValue().Set(Size::Converter::wrap(unwrapThis(info)->winSize));
+	}
+	static NAN_GETTER(blockSize) {
+		info.GetReturnValue().Set(Size::Converter::wrap(unwrapThis(info)->blockSize));
+	}
+	static NAN_GETTER(blockStride) {
+		info.GetReturnValue().Set(Size::Converter::wrap(unwrapThis(info)->blockStride));
+	}
+	static NAN_GETTER(cellSize) {
+		info.GetReturnValue().Set(Size::Converter::wrap(unwrapThis(info)->cellSize));
+	}
+
 	static FF_GETTER(HOGDescriptor, nbins, self->nbins);
 	static FF_GETTER(HOGDescriptor, derivAperture, self->derivAperture);
 	static FF_GETTER(HOGDescriptor, histogramNormType, self->histogramNormType);

@@ -289,7 +289,7 @@ NAN_METHOD(Imgproc::FitLine) {
 	isPoint2 && Point2::ArrayConverter::arg(0, &pts2d, info) ||
 	!isPoint2 && Point3::ArrayConverter::arg(0, &pts3d, info)
 	) ||
-	FF::IntConverter::arg(1, &distType, info) ||
+	FF::UintConverter::arg(1, &distType, info) ||
 	FF::DoubleConverter::arg(2, &param, info) ||
 	FF::DoubleConverter::arg(3, &reps, info) ||
 	FF::DoubleConverter::arg(4, &aeps, info)

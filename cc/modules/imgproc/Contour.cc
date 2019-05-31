@@ -198,8 +198,7 @@ NAN_METHOD(Contour::MinEnclosingCircle) {
 	cv::minEnclosingCircle(Contour::unwrapSelf(info), center, radius);
 
 	v8::Local<v8::Object> jsCircle = Nan::New<v8::Object>();
-	v8::Local<v8::Object> jsCenter = Point2::Converter::wrap(center);
-	Nan::Set(jsCircle, FF::newString("center"), jsCenter);
+	Nan::Set(jsCircle, FF::newString("center"), Point2::Converter::wrap(center));
 	Nan::Set(jsCircle, FF::newString("radius"), Nan::New((double)radius));
 	info.GetReturnValue().Set(jsCircle);
 }

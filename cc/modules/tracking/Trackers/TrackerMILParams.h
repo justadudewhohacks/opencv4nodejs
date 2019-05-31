@@ -4,38 +4,32 @@
 #ifndef __FF_TRACKERMILPARAMS_H__
 #define __FF_TRACKERMILPARAMS_H__
 
-class TrackerMILParams : public Nan::ObjectWrap {
+class TrackerMILParams : public FF::ObjectWrap<TrackerMILParams, cv::TrackerMIL::Params> {
 public:
-	cv::TrackerMIL::Params params;
-
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
-
-	static FF_GETTER(TrackerMILParams, samplerInitInRadiusGet, params.samplerInitInRadius);
-	static FF_SETTER_NUMBER(TrackerMILParams, samplerInitInRadius, params.samplerInitInRadius);
-	static FF_GETTER(TrackerMILParams, samplerSearchWinSizeGet, params.samplerSearchWinSize);
-	static FF_SETTER_NUMBER(TrackerMILParams, samplerSearchWinSize, params.samplerSearchWinSize);
-	static FF_GETTER(TrackerMILParams, samplerTrackInRadiusGet, params.samplerTrackInRadius);
-	static FF_SETTER_NUMBER(TrackerMILParams, samplerTrackInRadius, params.samplerTrackInRadius);
-	static FF_GETTER(TrackerMILParams, samplerInitMaxNegNumGet, params.samplerInitMaxNegNum);
-	static FF_SETTER_INT(TrackerMILParams, samplerInitMaxNegNum, params.samplerInitMaxNegNum);
-	static FF_GETTER(TrackerMILParams, samplerTrackMaxPosNumGet, params.samplerTrackMaxPosNum);
-	static FF_SETTER_INT(TrackerMILParams, samplerTrackMaxPosNum, params.samplerTrackMaxPosNum);
-	static FF_GETTER(TrackerMILParams, samplerTrackMaxNegNumGet, params.samplerTrackMaxNegNum);
-	static FF_SETTER_INT(TrackerMILParams, samplerTrackMaxNegNum, params.samplerTrackMaxNegNum);
-	static FF_GETTER(TrackerMILParams, featureSetNumFeaturesGet, params.featureSetNumFeatures);
-	static FF_SETTER_INT(TrackerMILParams, featureSetNumFeatures, params.featureSetNumFeatures);
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::TrackerMIL::Params* getNativeObjectPtr() { return &params; }
-	cv::TrackerMIL::Params getNativeObject() { return params; }
-
-	typedef InstanceConverter<TrackerMILParams, cv::TrackerMIL::Params> Converter;
 
 	static const char* getClassName() {
 		return "TrackerMILParams";
 	}
+
+
+  static NAN_MODULE_INIT(Init);
+  static NAN_METHOD(New);
+
+	static FF_GETTER(TrackerMILParams, samplerInitInRadiusGet, self.samplerInitInRadius);
+	static FF_SETTER_NUMBER(TrackerMILParams, samplerInitInRadius, self.samplerInitInRadius);
+	static FF_GETTER(TrackerMILParams, samplerSearchWinSizeGet, self.samplerSearchWinSize);
+	static FF_SETTER_NUMBER(TrackerMILParams, samplerSearchWinSize, self.samplerSearchWinSize);
+	static FF_GETTER(TrackerMILParams, samplerTrackInRadiusGet, self.samplerTrackInRadius);
+	static FF_SETTER_NUMBER(TrackerMILParams, samplerTrackInRadius, self.samplerTrackInRadius);
+	static FF_GETTER(TrackerMILParams, samplerInitMaxNegNumGet, self.samplerInitMaxNegNum);
+	static FF_SETTER_INT(TrackerMILParams, samplerInitMaxNegNum, self.samplerInitMaxNegNum);
+	static FF_GETTER(TrackerMILParams, samplerTrackMaxPosNumGet, self.samplerTrackMaxPosNum);
+	static FF_SETTER_INT(TrackerMILParams, samplerTrackMaxPosNum, self.samplerTrackMaxPosNum);
+	static FF_GETTER(TrackerMILParams, samplerTrackMaxNegNumGet, self.samplerTrackMaxNegNum);
+	static FF_SETTER_INT(TrackerMILParams, samplerTrackMaxNegNum, self.samplerTrackMaxNegNum);
+	static FF_GETTER(TrackerMILParams, featureSetNumFeaturesGet, self.featureSetNumFeatures);
+	static FF_SETTER_INT(TrackerMILParams, featureSetNumFeatures, self.featureSetNumFeatures);
 };
 
 #endif

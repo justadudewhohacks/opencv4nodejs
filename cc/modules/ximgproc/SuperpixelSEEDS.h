@@ -5,9 +5,8 @@
 #ifndef __FF_SUPERPIXELSEEDS_H__
 #define __FF_SUPERPIXELSEEDS_H__
 
-class SuperpixelSEEDS : public Nan::ObjectWrap {
+class SuperpixelSEEDS : public FF::ObjectWrap<SuperpixelSEEDS, cv::Ptr<cv::ximgproc::SuperpixelSEEDS>> {
 public:
-	cv::Ptr<cv::ximgproc::SuperpixelSEEDS> superpixelSeeds;
 	cv::Mat img;
 	cv::Mat labels;
 	cv::Mat labelContourMask;
@@ -22,9 +21,16 @@ public:
   static NAN_METHOD(New);
 	static NAN_METHOD(Iterate);
 
-	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetImg, img, Mat);
-	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetLabels, labels, Mat);
-	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetLabelContourMask, labelContourMask, Mat);
+	static NAN_GETTER(GetImg) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->img));
+	}
+	static NAN_GETTER(GetLabels) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->labels));
+	}
+	static NAN_GETTER(GetLabelContourMask) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->labelContourMask));
+	}
+
 	static FF_GETTER(SuperpixelSEEDS, GetNumSuperpixels, num_superpixels);
 	static FF_GETTER(SuperpixelSEEDS, GeNumLevels, num_levels);
 	static FF_GETTER(SuperpixelSEEDS, GetPrior, prior);

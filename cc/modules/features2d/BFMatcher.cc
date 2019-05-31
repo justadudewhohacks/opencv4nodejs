@@ -37,7 +37,7 @@ NAN_METHOD(BFMatcher::New) {
 	BFMatcher* self = new BFMatcher();
 	self->normType = worker.normType;
 	self->crossCheck = worker.crossCheck;
-	self->bfmatcher = cv::BFMatcher(
+	self->self = cv::BFMatcher(
 		worker.normType,
 		worker.crossCheck
 	);

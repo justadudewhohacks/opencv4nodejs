@@ -95,7 +95,7 @@ NAN_METHOD(HOGDescriptor::CheckDetectorSize) {
 NAN_METHOD(HOGDescriptor::SetSVMDetector) {
   FF_METHOD_CONTEXT("SetSVMDetector");
   std::vector<float> detector;
-  if (!FF::hasArg(info, 0) || FF::FloatArrayConverter::unwrapUncheckedTo(&detector, info[0])) {
+  if (!FF::hasArg(info, 0) || FF::FloatArrayConverter::unwrapTo(&detector, info[0])) {
     FF_THROW("expected detector to be an Array of type Number");
   }
   HOGDescriptor::unwrapSelf(info)->setSVMDetector(detector);

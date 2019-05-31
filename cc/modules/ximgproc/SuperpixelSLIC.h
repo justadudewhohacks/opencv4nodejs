@@ -7,7 +7,7 @@
 #ifndef __FF_SUPERPIXELSLIC_H__
 #define __FF_SUPERPIXELSLIC_H__
 
-class SuperpixelSLIC : public Nan::ObjectWrap {
+class SuperpixelSLIC : public FF::ObjectWrap<SuperpixelSLIC, cv::Ptr<cv::ximgproc::SuperpixelSLIC>> {
 public:
 	cv::Ptr<cv::ximgproc::SuperpixelSLIC> superpixelSlic;
 	cv::Mat image;
@@ -22,9 +22,16 @@ public:
   static NAN_METHOD(New);
 	static NAN_METHOD(Iterate);
 
-	static FF_GETTER_JSOBJ(SuperpixelSLIC, GetImg, image, Mat);
-	static FF_GETTER_JSOBJ(SuperpixelSLIC, GetLabels, labels, Mat);
-	static FF_GETTER_JSOBJ(SuperpixelSLIC, GetLabelContourMask, labelContourMask, Mat);
+	static NAN_GETTER(GetImg) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->image));
+	}
+	static NAN_GETTER(GetLabels) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->labels));
+	}
+	static NAN_GETTER(GetLabelContourMask) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->labelContourMask));
+	}
+
 	static FF_GETTER(SuperpixelSLIC, GetAlgorithm, algorithm);
 	static FF_GETTER(SuperpixelSLIC, GetRegionSize, region_size);
 	static FF_GETTER(SuperpixelSLIC, GetRuler, ruler);

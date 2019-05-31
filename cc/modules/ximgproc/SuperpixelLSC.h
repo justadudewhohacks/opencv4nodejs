@@ -7,9 +7,8 @@
 #ifndef __FF_SUPERPIXELLSC_H__
 #define __FF_SUPERPIXELLSC_H__
 
-class SuperpixelLSC : public Nan::ObjectWrap {
+class SuperpixelLSC : public FF::ObjectWrap<SuperpixelLSC, cv::Ptr<cv::ximgproc::SuperpixelLSC>> {
 public:
-	cv::Ptr<cv::ximgproc::SuperpixelLSC> superpixelLsc;
 	cv::Mat image;
 	cv::Mat labels;
 	cv::Mat labelContourMask;
@@ -21,9 +20,15 @@ public:
   static NAN_METHOD(New);
 	static NAN_METHOD(Iterate);
 
-	static FF_GETTER_JSOBJ(SuperpixelLSC, GetImg, image, Mat);
-	static FF_GETTER_JSOBJ(SuperpixelLSC, GetLabels, labels, Mat);
-	static FF_GETTER_JSOBJ(SuperpixelLSC, GetLabelContourMask, labelContourMask, Mat);
+	static NAN_GETTER(GetImg) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->image));
+	}
+	static NAN_GETTER(GetLabels) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->labels));
+	}
+	static NAN_GETTER(GetLabelContourMask) {
+		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->labelContourMask));
+	}
 	static FF_GETTER(SuperpixelLSC, GetRegionSize, region_size);
 	static FF_GETTER(SuperpixelLSC, GetRatio, ratio);
 	static FF_GETTER(SuperpixelLSC, GetNumCalculatedSuperpixels, numCalculatedSuperpixels);

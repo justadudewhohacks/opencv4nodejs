@@ -30,7 +30,7 @@ namespace HOGDescriptorBindings {
 				FF::UintConverter::optArg(4, &nbins, info) ||
 				FF::IntConverter::optArg(5, &derivAperture, info) ||
 				FF::DoubleConverter::optArg(6, &winSigma, info) ||
-				FF::IntConverter::optArg(7, &histogramNormType, info) ||
+				FF::UintConverter::optArg(7, &histogramNormType, info) ||
 				FF::DoubleConverter::optArg(8, &L2HysThreshold, info) ||
 				FF::BoolConverter::optArg(9, &gammaCorrection, info) ||
 				FF::UintConverter::optArg(10, &nlevels, info) ||
@@ -309,7 +309,7 @@ namespace HOGDescriptorBindings {
 
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("foundLocations").ToLocalChecked(), ObjectArrayConverter<Rect, cv::Rect2d, cv::Rect>::wrap(foundLocations));
+      Nan::Set(ret, Nan::New("foundLocations").ToLocalChecked(), Rect::ArrayWithCastConverter<cv::Rect>::wrap(foundLocations));
       Nan::Set(ret, Nan::New("foundWeights").ToLocalChecked(), FF::DoubleArrayConverter::wrap(foundWeights));
       return ret;
     }
@@ -368,13 +368,13 @@ namespace HOGDescriptorBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return ObjectArrayConverter<Rect, cv::Rect2d, cv::Rect>::wrap(foundLocations);
+      return Rect::ArrayWithCastConverter<cv::Rect>::wrap(foundLocations);
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::arg(0, &img, info) ||
-        ObjectArrayConverter<DetectionROI, cv::DetectionROI>::arg(1, &locations, info)
+        DetectionROI::ArrayConverter::arg(1, &locations, info)
       );
     }
 
@@ -417,12 +417,12 @@ namespace HOGDescriptorBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return ObjectArrayConverter<Rect, cv::Rect2d, cv::Rect>::wrap(rectList);
+      return Rect::ArrayWithCastConverter<cv::Rect>::wrap(rectList);
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        ObjectArrayConverter<Rect, cv::Rect2d, cv::Rect>::arg(0, &rectList, info) ||
+        Rect::ArrayWithCastConverter<cv::Rect>::arg(0, &rectList, info) ||
         FF::DoubleArrayConverter::arg(1, &weights, info) ||
         FF::IntConverter::arg(2, &groupThreshold, info) ||
         FF::DoubleConverter::arg(3, &eps, info)

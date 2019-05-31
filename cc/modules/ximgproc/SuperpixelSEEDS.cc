@@ -45,7 +45,7 @@ NAN_METHOD(SuperpixelSEEDS::New) {
 	self->histogram_bins = worker.histogram_bins;
 	self->double_step = worker.double_step;
 
-	self->superpixelSeeds = cv::ximgproc::createSuperpixelSEEDS(
+	self->self = cv::ximgproc::createSuperpixelSEEDS(
 		worker.img.cols,
 		worker.img.rows,
 		worker.img.channels(),
@@ -70,10 +70,10 @@ NAN_METHOD(SuperpixelSEEDS::Iterate) {
 	}
 
 	SuperpixelSEEDS* self = Nan::ObjectWrap::Unwrap<SuperpixelSEEDS>(info.This());
-	self->superpixelSeeds->iterate(self->img, (int)iterations);
-	self->superpixelSeeds->getLabels(self->labels);
-	self->numCalculatedSuperpixels = self->superpixelSeeds->getNumberOfSuperpixels();
-	self->superpixelSeeds->getLabelContourMask(self->labelContourMask);
+	self->self->iterate(self->img, (int)iterations);
+	self->self->getLabels(self->labels);
+	self->numCalculatedSuperpixels = self->self->getNumberOfSuperpixels();
+	self->self->getLabelContourMask(self->labelContourMask);
 }
 
 #endif // HAVE_XIMGPROC

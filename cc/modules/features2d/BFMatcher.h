@@ -8,22 +8,19 @@
 #ifndef __FF_BFMATCHER_H__
 #define __FF_BFMATCHER_H__
 
-class BFMatcher : public Nan::ObjectWrap {
+class BFMatcher : public FF::ObjectWrap<BFMatcher, cv::BFMatcher> {
 public:
-    cv::BFMatcher bfmatcher;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "BFMatcher";
+	}
 
 	int normType;
 	bool crossCheck;
 
 	static FF_GETTER(BFMatcher, GetNormType, normType)
 	static FF_GETTER(BFMatcher, GetCrossCheck, crossCheck)
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::BFMatcher* getNativeObjectPtr() { return &bfmatcher; }
-	cv::BFMatcher getNativeObject() { return bfmatcher; }
-
-	typedef InstanceConverter<BFMatcher, cv::BFMatcher> Converter;
 
 	static NAN_MODULE_INIT(Init);
 
@@ -32,12 +29,6 @@ public:
     static NAN_METHOD(matchAsync);
     static NAN_METHOD(knnMatch);
     static NAN_METHOD(knnMatchAsync);
-
-    static const char* getClassName() {
-        return "BFMatcher";
-    }
-
-
 
 	struct NewWorker : CatchCvExceptionWorker {
 	public:
