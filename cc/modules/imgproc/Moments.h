@@ -5,10 +5,8 @@
 #ifndef __FF_MOMENTS_H__
 #define __FF_MOMENTS_H__
 
-class Moments : public FF::ObjectWrap<Moments> {
+class Moments : public FF::ObjectWrap<Moments, cv::Moments> {
 public:
-	typedef cv::Moments Type;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {
@@ -19,34 +17,34 @@ public:
 	static NAN_METHOD(New);
 
 	// spatial moments
-	static FF_GETTER(Moments, m00, moments.m00);
-	static FF_GETTER(Moments, m10, moments.m10);
-	static FF_GETTER(Moments, m01, moments.m01);
-	static FF_GETTER(Moments, m20, moments.m20);
-	static FF_GETTER(Moments, m11, moments.m11);
-	static FF_GETTER(Moments, m02, moments.m02);
-	static FF_GETTER(Moments, m30, moments.m30);
-	static FF_GETTER(Moments, m21, moments.m21);
-	static FF_GETTER(Moments, m12, moments.m12);
-	static FF_GETTER(Moments, m03, moments.m03);
+	static FF_GETTER(Moments, m00, self.m00);
+	static FF_GETTER(Moments, m10, self.m10);
+	static FF_GETTER(Moments, m01, self.m01);
+	static FF_GETTER(Moments, m20, self.m20);
+	static FF_GETTER(Moments, m11, self.m11);
+	static FF_GETTER(Moments, m02, self.m02);
+	static FF_GETTER(Moments, m30, self.m30);
+	static FF_GETTER(Moments, m21, self.m21);
+	static FF_GETTER(Moments, m12, self.m12);
+	static FF_GETTER(Moments, m03, self.m03);
 
 	// central moments
-	static FF_GETTER(Moments, mu20, moments.mu20);
-	static FF_GETTER(Moments, mu11, moments.mu11);
-	static FF_GETTER(Moments, mu02, moments.mu02);
-	static FF_GETTER(Moments, mu30, moments.mu30);
-	static FF_GETTER(Moments, mu21, moments.mu21);
-	static FF_GETTER(Moments, mu12, moments.mu12);
-	static FF_GETTER(Moments, mu03, moments.mu03);
+	static FF_GETTER(Moments, mu20, self.mu20);
+	static FF_GETTER(Moments, mu11, self.mu11);
+	static FF_GETTER(Moments, mu02, self.mu02);
+	static FF_GETTER(Moments, mu30, self.mu30);
+	static FF_GETTER(Moments, mu21, self.mu21);
+	static FF_GETTER(Moments, mu12, self.mu12);
+	static FF_GETTER(Moments, mu03, self.mu03);
 
 	// central normalized  moments
-	static FF_GETTER(Moments, nu20, moments.nu20);
-	static FF_GETTER(Moments, nu11, moments.nu11);
-	static FF_GETTER(Moments, nu02, moments.nu02);
-	static FF_GETTER(Moments, nu30, moments.nu30);
-	static FF_GETTER(Moments, nu21, moments.nu21);
-	static FF_GETTER(Moments, nu12, moments.nu12);
-	static FF_GETTER(Moments, nu03, moments.nu03);
+	static FF_GETTER(Moments, nu20, self.nu20);
+	static FF_GETTER(Moments, nu11, self.nu11);
+	static FF_GETTER(Moments, nu02, self.nu02);
+	static FF_GETTER(Moments, nu30, self.nu30);
+	static FF_GETTER(Moments, nu21, self.nu21);
+	static FF_GETTER(Moments, nu12, self.nu12);
+	static FF_GETTER(Moments, nu03, self.nu03);
 
 	static NAN_METHOD(HuMoments);
 };

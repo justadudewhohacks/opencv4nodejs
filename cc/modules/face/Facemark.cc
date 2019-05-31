@@ -182,7 +182,7 @@ bool Facemark::detector(cv::InputArray image, cv::OutputArray faces,
     .ToLocalChecked()->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 
   std::vector<cv::Rect> _faces;
-  ObjectArrayConverter<Rect, cv::Rect>::unwrapTo(&_faces, jsObject);
+  Rect::ArrayConverter::unwrapTo(&_faces, jsObject);
 
   cv::Mat(_faces).copyTo(faces);
 

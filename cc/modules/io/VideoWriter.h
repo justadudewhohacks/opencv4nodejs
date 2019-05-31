@@ -6,10 +6,8 @@
 #ifndef __FF_VIDEOWRITER_H__
 #define __FF_VIDEOWRITER_H__
 
-class VideoWriter : public FF::ObjectWrap<VideoWriter>{
+class VideoWriter : public FF::ObjectWrap<VideoWriter, cv::VideoWriter> {
 public:
-	typedef cv::VideoWriter Type;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {

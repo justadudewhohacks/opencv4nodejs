@@ -7,10 +7,8 @@
 #ifndef __FF_RECT_H__
 #define __FF_RECT_H__
 
-class Rect : public FF::ObjectWrap<Rect> {
+class Rect : public FF::ObjectWrap<Rect, cv::Rect2d> {
 public:
-	typedef cv::Rect2d Type;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {

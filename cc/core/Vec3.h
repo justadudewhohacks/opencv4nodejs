@@ -6,10 +6,8 @@
 #ifndef __FF_VEC3_H__
 #define __FF_VEC3_H__
 
-class Vec3 : public FF::ObjectWrap<Vec3> {
+class Vec3 : public FF::ObjectWrap<Vec3, cv::Vec3d> {
 public:
-	typedef cv::Vec3d Type;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {

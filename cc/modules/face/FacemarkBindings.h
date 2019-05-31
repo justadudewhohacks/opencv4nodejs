@@ -48,7 +48,7 @@ namespace FacemarkBindings {
 
 	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (Mat::Converter::arg(0, &image, info) ||
-			  ObjectArrayConverter<Rect, cv::Rect>::arg(1, &faces, info));
+			  Rect::ArrayConverter::arg(1, &faces, info));
 	  }
   };
 
@@ -114,7 +114,7 @@ namespace FacemarkBindings {
 
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Value> ret =
-          ObjectArrayConverter<Rect, cv::Rect>::wrap(faces);
+          Rect::ArrayConverter::wrap(faces);
       return ret;
     }
 

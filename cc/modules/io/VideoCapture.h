@@ -7,10 +7,8 @@
 #ifndef __FF_VIDEOCAPTURE_H__
 #define __FF_VIDEOCAPTURE_H__
 
-class VideoCapture : public FF::ObjectWrap<VideoCapture> {
+class VideoCapture : public FF::ObjectWrap<VideoCapture, cv::VideoCapture> {
 public:
-	typedef cv::VideoCapture Type;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {

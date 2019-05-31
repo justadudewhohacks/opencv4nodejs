@@ -51,11 +51,11 @@ namespace CascadeClassifierBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       if (isGpu) {
-        return ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects);
+        return Rect::ArrayConverter::wrap(objectRects);
       }
       else {
         v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-        Nan::Set(ret, FF::newString("objects"), ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects));
+        Nan::Set(ret, FF::newString("objects"), Rect::ArrayConverter::wrap(objectRects));
         Nan::Set(ret, FF::newString("numDetections"), FF::IntArrayConverter::wrap(numDetections));
         return ret;
       }
@@ -111,7 +111,7 @@ namespace CascadeClassifierBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, FF::newString("objects"), ObjectArrayConverter<Rect, cv::Rect>::wrap(objectRects));
+      Nan::Set(ret, FF::newString("objects"), Rect::ArrayConverter::wrap(objectRects));
       Nan::Set(ret, FF::newString("rejectLevels"), FF::IntArrayConverter::wrap(rejectLevels));
       Nan::Set(ret, FF::newString("levelWeights"), FF::DoubleArrayConverter::wrap(levelWeights));
       return ret;

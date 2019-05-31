@@ -6,10 +6,8 @@
 #ifndef __FF_CONTOUR_H__
 #define __FF_CONTOUR_H__
 
-class Contour: public FF::ObjectWrap<Contour> {
+class Contour: public FF::ObjectWrap<Contour, std::vector<cv::Point2i>> {
 public:
-	typedef  std::vector<cv::Point2i> Type;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {

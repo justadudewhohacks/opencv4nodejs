@@ -7,10 +7,8 @@
 #ifndef __FF_ROTATEDRECT_H__
 #define __FF_ROTATEDRECT_H__
 
-class RotatedRect : public FF::ObjectWrap<RotatedRect> {
+class RotatedRect : public FF::ObjectWrap<RotatedRect, cv::RotatedRect> {
 public:
-	typedef cv::RotatedRect Type;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {

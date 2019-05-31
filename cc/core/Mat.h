@@ -12,10 +12,8 @@
 #ifndef __FF_MAT_H__
 #define __FF_MAT_H__
 
-class Mat : public FF::ObjectWrap<Mat> {
+class Mat : public FF::ObjectWrap<Mat, cv::Mat> {
 public:
-	typedef cv::Mat Type;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {

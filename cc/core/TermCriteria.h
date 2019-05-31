@@ -5,10 +5,8 @@
 #ifndef __FF_TERMCRITERIA_H__
 #define __FF_TERMCRITERIA_H__
 
-class TermCriteria : public FF::ObjectWrap<TermCriteria> {
+class TermCriteria : public FF::ObjectWrap<TermCriteria, cv::TermCriteria> {
 public:
-	typedef cv::TermCriteria Type;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {

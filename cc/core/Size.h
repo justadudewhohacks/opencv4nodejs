@@ -5,10 +5,8 @@
 #ifndef __FF_SIZE_H__
 #define __FF_SIZE_H__
 
-class Size : public FF::ObjectWrap<Size> {
+class Size : public FF::ObjectWrap<Size, cv::Size2d> {
 public:
-	typedef cv::Size2d Type;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {

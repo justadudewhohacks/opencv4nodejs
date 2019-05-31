@@ -802,7 +802,7 @@ namespace MatImgprocBindings {
       v8::Local<v8::Array> ret = Nan::New<v8::Array>(contours.size());
       for (uint i = 0; i < ret->Length(); i++) {
         v8::Local<v8::Object> jsContour = FF::newInstance(Nan::New(Contour::constructor));
-        FF_UNWRAP(jsContour, Contour)->contour = contours.at(i);
+        FF_UNWRAP(jsContour, Contour)->self = contours.at(i);
         FF_UNWRAP(jsContour, Contour)->hierarchy = hierarchy.at(i);
 		Nan::Set(ret, i, jsContour);
       }
@@ -1055,7 +1055,7 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2i>::arg(0, &pts, info) ||
+        Point2::ArrayOfArraysWithCastConverter<cv::Point2i>::arg(0, &pts, info) ||
         FF::BoolConverter::arg(1, &isClosed, info)
       );
     }
@@ -1079,7 +1079,7 @@ namespace MatImgprocBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2i>::arg(0, &pts, info)
+        Point2::ArrayOfArraysWithCastConverter<cv::Point2i>::arg(0, &pts, info)
       );
     }
   
@@ -1491,7 +1491,7 @@ namespace MatImgprocBindings {
     }
   
     v8::Local<v8::Value> getReturnValue() {
-      return ObjectArrayConverter<Vec2, cv::Vec2d, cv::Vec2f>::wrap(lines);
+      return Vec2::ArrayWithCastConverter<cv::Vec2f>::wrap(lines);
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1542,7 +1542,7 @@ namespace MatImgprocBindings {
     }
   
     v8::Local<v8::Value> getReturnValue() {
-      return ObjectArrayConverter<Vec4, cv::Vec4d, cv::Vec4f>::wrap(linesP);
+      return Vec4::ArrayWithCastConverter<cv::Vec4f>::wrap(linesP);
     }
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -1589,7 +1589,7 @@ namespace MatImgprocBindings {
     }
   
     v8::Local<v8::Value> getReturnValue() {
-      return ObjectArrayConverter<Vec3, cv::Vec3d, cv::Vec3f>::wrap(circles);
+      return Vec3::ArrayWithCastConverter<cv::Vec3f>::wrap(circles);
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
@@ -2173,7 +2173,7 @@ namespace MatImgprocBindings {
 
 	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  ObjectArrayOfArraysConverter<Point2, cv::Point2d, cv::Point2i>::arg(0, &contours, info) ||
+			  Point2::ArrayOfArraysWithCastConverter<cv::Point2i>::arg(0, &contours, info) ||
 			  FF::IntConverter::arg(1, &contourIdx, info) ||
 			  Vec3::Converter::arg(2, &color, info)
 			);
@@ -2183,7 +2183,7 @@ namespace MatImgprocBindings {
 		  return (
 			  FF::IntConverter::optArg(3, &thickness, info) ||
 			  FF::IntConverter::optArg(4, &lineType, info) ||
-			  ObjectArrayConverter<Vec4, cv::Vec4d, cv::Vec4i>::optArg(5, &hierarchy, info) ||
+			  Vec4::ArrayWithCastConverter<cv::Vec4i>::optArg(5, &hierarchy, info) ||
 			  FF::IntConverter::optArg(6, &maxLevel, info) ||
 			  Point2::Converter::optArg(7, &offset, info)
 			);
@@ -2198,7 +2198,7 @@ namespace MatImgprocBindings {
 		  return (
 			  FF::IntConverter::optProp(&thickness, "thickness", opts) ||
 			  FF::IntConverter::optProp(&lineType, "lineType", opts) ||
-			  ObjectArrayConverter<Vec4, cv::Vec4d, cv::Vec4i>::optProp(&hierarchy, "hierarchy", opts) ||
+			  Vec4::ArrayWithCastConverter<cv::Vec4i>::optProp(&hierarchy, "hierarchy", opts) ||
 			  FF::IntConverter::optProp(&maxLevel, "maxLevel", opts) ||
 			  Point2::Converter::optProp(&offset, "offset", opts)
 			);

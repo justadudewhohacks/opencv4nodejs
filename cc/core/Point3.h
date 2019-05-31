@@ -6,10 +6,8 @@
 #ifndef __FF_POINT3_H__
 #define __FF_POINT3_H__
 
-class Point3 : public FF::ObjectWrap<Point3> {
+class Point3 : public FF::ObjectWrap<Point3, cv::Point3d> {
 public:
-	typedef cv::Point3d Type;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {

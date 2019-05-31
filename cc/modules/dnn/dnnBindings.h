@@ -201,7 +201,7 @@ namespace DnnBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        ObjectArrayConverter<Rect, cv::Rect>::arg(0, &bboxes, info) ||
+        Rect::ArrayConverter::arg(0, &bboxes, info) ||
         FF::FloatArrayConverter::arg(1, &scores, info) ||
         FF::FloatConverter::arg(2, &score_threshold, info) ||
         FF::FloatConverter::arg(3, &nms_threshold, info)

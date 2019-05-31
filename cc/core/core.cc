@@ -81,7 +81,7 @@ NAN_METHOD(Core::Partition) {
   }
   else if (Vec2::hasInstance(data0)) {
 	std::vector<cv::Vec2d> pts;
-	if (ObjectArrayConverter<Vec2, cv::Vec2d>::arg(0, &pts, info)) {
+	if (Vec2::ArrayConverter::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
 		return;
 	}
@@ -89,7 +89,7 @@ NAN_METHOD(Core::Partition) {
   }
   else if (Vec3::hasInstance(data0)) {
 	std::vector<cv::Vec3d> pts;
-	if (ObjectArrayConverter<Vec3, cv::Vec3d>::arg(0, &pts, info)) {
+	if (Vec3::ArrayConverter::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
 		return;
 	}
@@ -97,7 +97,7 @@ NAN_METHOD(Core::Partition) {
   }
   else if (Vec4::hasInstance(data0)) {
 	std::vector<cv::Vec4d> pts;
-	if (ObjectArrayConverter<Vec4, cv::Vec4d>::arg(0, &pts, info)) {
+	if (Vec4::ArrayConverter::arg(0, &pts, info)) {
 		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
 		return;
 	}
@@ -142,7 +142,7 @@ NAN_METHOD(Core::Kmeans) {
   int k, attempts, flags;
   if ((
 	  isPoint2 && Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &pts2d, info) ||
-	  !isPoint2 && ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::arg(0, &pts3d, info)
+	  !isPoint2 && Point3::ArrayWithCastConverter<cv::Point3f>::arg(0, &pts3d, info)
 	  ) ||
 	  FF::IntConverter::arg(1, &k, info) ||
 	  TermCriteria::Converter::arg(2, &termCriteria, info) ||
@@ -178,7 +178,7 @@ NAN_METHOD(Core::Kmeans) {
     for (int i = 0; i < centersMat.rows; i++) {
       centers.push_back(cv::Point3f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1), centersMat.at<float>(i, 2)));
     }
-	Nan::Set(ret, FF::newString("centers"), ObjectArrayConverter<Point3, cv::Point3d, cv::Point3f>::wrap(centers));
+	Nan::Set(ret, FF::newString("centers"), Point3::ArrayWithCastConverter<cv::Point3f>::wrap(centers));
   } 
   
   info.GetReturnValue().Set(ret);
@@ -224,12 +224,10 @@ NAN_METHOD(Core::GetNumThreads) {
 NAN_METHOD(Core::SetNumThreads) {
   FF_METHOD_CONTEXT("Core::SetNumThreads");
 
-  if(!FF::IntConverter::assertType(info[0])) {
+  int num;
+  if(!FF::IntConverter::arg(0, &num, info)) {
     return Nan::ThrowError("Core::SetNumThreads expected arg0 to an int");
   }
-
-  int32_t num = (int32_t)FF::IntConverter::unwrap(info[0]);
-
   cv::setNumThreads(num);
 }
 

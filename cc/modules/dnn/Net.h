@@ -5,10 +5,9 @@
 
 #ifndef __FF_NET_H__
 #define __FF_NET_H__
-class Net : public FF::ObjectWrap<Net> {
-public:
-	typedef cv::dnn::Net Type;
 
+class Net : public FF::ObjectWrap<Net, cv::dnn::Net> {
+public:
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {
