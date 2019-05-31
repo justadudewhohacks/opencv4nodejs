@@ -34,14 +34,19 @@ NAN_METHOD(SURFDetector::New) {
 	}
 
 	SURFDetector* self = new SURFDetector();
+	try {
+		self->detector = cv::xfeatures2d::SURF::create(
+			worker.hessianThreshold,
+			worker.nOctaves,
+			worker.nOctaveLayers,
+			worker.extended,
+			worker.upright
+		);
+	}
+	catch (std::exception &e) {
+		return tryCatch.throwNew(Nan::New(FF::Utils::formatError("SIFTDetector::New", e.what())).ToLocalChecked());
+	}
 	self->Wrap(info.Holder());
-	self->detector = cv::xfeatures2d::SURF::create(
-		worker.hessianThreshold,
-		worker.nOctaves,
-		worker.nOctaveLayers,
-		worker.extended,
-		worker.upright
-	);
 	info.GetReturnValue().Set(info.Holder());
 }
 

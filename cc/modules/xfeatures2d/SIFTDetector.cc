@@ -35,19 +35,23 @@ NAN_METHOD(SIFTDetector::New) {
 	}
 
 	SIFTDetector* self = new SIFTDetector();
-	self->Wrap(info.Holder());
 	self->nFeatures = worker.nFeatures;
 	self->nOctaveLayers = worker.nOctaveLayers;
 	self->contrastThreshold = worker.contrastThreshold;
 	self->edgeThreshold = worker.edgeThreshold;
 	self->sigma = worker.sigma;
-	self->detector = cv::xfeatures2d::SIFT::create(
-		worker.nFeatures,
-		worker.nOctaveLayers,
-		worker.contrastThreshold,
-		worker.edgeThreshold,
-		worker.sigma
-	);
+	try {
+		self->detector = cv::xfeatures2d::SIFT::create(
+			worker.nFeatures,
+			worker.nOctaveLayers,
+			worker.contrastThreshold,
+			worker.edgeThreshold,
+			worker.sigma
+		);
+	} catch (std::exception &e) {
+		return tryCatch.throwNew(Nan::New(FF::Utils::formatError("SIFTDetector::New", e.what())).ToLocalChecked());
+	}
+	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }
 
