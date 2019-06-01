@@ -26,13 +26,14 @@ NAN_MODULE_INIT(Rect::Init) {
 };
 
 NAN_METHOD(Rect::New) {
-  FF_ASSERT_CONSTRUCT_CALL(Rect);
+	FF::TryCatch tryCatch("Rect::New");
+	FF_ASSERT_CONSTRUCT_CALL();
   Rect* self = new Rect();
   if (info.Length() == 0) {
     self->self = cv::Rect2d();
   } else {
     if (info.Length() < 4) {
-      return Nan::ThrowError("Rect::New - expected arguments x, y, width, height");
+      return tryCatch.throwError("expected arguments x, y, width, height");
     }
     double x = info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     double y = info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();

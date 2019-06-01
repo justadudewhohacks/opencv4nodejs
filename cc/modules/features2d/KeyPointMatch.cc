@@ -16,7 +16,8 @@ NAN_MODULE_INIT(KeyPointMatch::Init) {
 };
 
 NAN_METHOD(KeyPointMatch::New) {
-  FF_ASSERT_CONSTRUCT_CALL(KeyPointMatch);
+	FF::TryCatch tryCatch("KeyPointMatch::New");
+	FF_ASSERT_CONSTRUCT_CALL();
   if (info.Length() > 0) {
     // TODO check args
     KeyPointMatch *keyPointMatch = new KeyPointMatch();

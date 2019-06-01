@@ -18,7 +18,8 @@ NAN_MODULE_INIT(TrackerMedianFlow::Init) {
 };
 
 NAN_METHOD(TrackerMedianFlow::New) {
-	FF_ASSERT_CONSTRUCT_CALL(TrackerMedianFlow);
+	FF::TryCatch tryCatch("TrackerMedianFlow::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 
 	TrackerMedianFlow* self = new TrackerMedianFlow();
 	cv::TrackerMedianFlow::Params params;

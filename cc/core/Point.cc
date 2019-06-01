@@ -34,9 +34,10 @@ NAN_MODULE_INIT(Point::Init) {
 };
 
 NAN_METHOD(Point::New) {
-	FF_ASSERT_CONSTRUCT_CALL(Point);
+	FF::TryCatch tryCatch("Point::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	if (info.Length() < 2) {
-		return Nan::ThrowError("Point::New - expected arguments x, y, (z)");
+		return tryCatch.throwError("expected arguments x, y, (z)");
 	}
 	double x = info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	double y = info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();

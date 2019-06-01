@@ -35,7 +35,8 @@ NAN_MODULE_INIT(TrackerKCFParams::Init) {
 
 
 NAN_METHOD(TrackerKCFParams::New) {
-	FF_ASSERT_CONSTRUCT_CALL(TrackerKCFParams);
+	FF::TryCatch tryCatch("TrackerKCFParams::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	TrackerKCFParams* self = new TrackerKCFParams();
 	self->self = cv::TrackerKCF::Params();
 	self->Wrap(info.Holder());

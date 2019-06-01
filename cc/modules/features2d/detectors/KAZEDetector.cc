@@ -22,14 +22,12 @@ NAN_MODULE_INIT(KAZEDetector::Init) {
 };
 
 NAN_METHOD(KAZEDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(KAZEDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("KAZEDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	KAZEDetector::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("KAZEDetector::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	KAZEDetector* self = new KAZEDetector();

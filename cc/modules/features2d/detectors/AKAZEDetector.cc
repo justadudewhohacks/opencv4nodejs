@@ -23,14 +23,12 @@ NAN_MODULE_INIT(AKAZEDetector::Init) {
 };
 
 NAN_METHOD(AKAZEDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(AKAZEDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("AKAZEDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	AKAZEDetector::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("AKAZEDetector::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	AKAZEDetector* self = new AKAZEDetector();

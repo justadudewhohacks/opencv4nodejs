@@ -19,14 +19,12 @@ NAN_MODULE_INIT(FASTDetector::Init) {
 };
 
 NAN_METHOD(FASTDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(FASTDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("FASTDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	FASTDetector::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("FASTDetector::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	FASTDetector* self = new FASTDetector();

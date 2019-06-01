@@ -38,7 +38,7 @@ NAN_MODULE_INIT(SVM::Init) {
 };
 
 void SVM::setParams(v8::Local<v8::Object> params) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SVM::setParams");
 	double c = this->self->getC();
 	double coef0 = this->self->getCoef0();
 	double degree = this->self->getDegree();
@@ -57,8 +57,7 @@ void SVM::setParams(v8::Local<v8::Object> params) {
 		FF::UintConverter::optProp(&kernelType, "kernelType", params) ||
 		Mat::Converter::optProp(&classWeights, "classWeights", params)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("SVM::setParams"));
-		return;
+		return tryCatch.reThrow();
 	}
 	this->self->setC(c);
 	this->self->setCoef0(coef0);
@@ -71,20 +70,19 @@ void SVM::setParams(v8::Local<v8::Object> params) {
 }
 
 NAN_METHOD(SVM::New) {
-  FF_ASSERT_CONSTRUCT_CALL(SVM);
-  FF_METHOD_CONTEXT("SVM::New");
+	FF::TryCatch tryCatch("SVM::New");
+  FF_ASSERT_CONSTRUCT_CALL();
   SVM* self = new SVM();
   self->setNativeObject(cv::ml::SVM::create());
   if (info.Length() > 0) {
 	if (!info[0]->IsObject()) {
-		FF_THROW("expected arg 0 to be an object");
+		return tryCatch.throwError("expected arg 0 to be an object");
 	}
 	v8::Local<v8::Object> args = v8::Local<v8::Object>::Cast(info[0]);
 
-    Nan::TryCatch tryCatch;
     self->setParams(args);
     if (tryCatch.HasCaught()) {
-      tryCatch.ReThrow();
+      return tryCatch.reThrow();
     }
   }
   self->Wrap(info.Holder());
@@ -92,27 +90,26 @@ NAN_METHOD(SVM::New) {
 };
 
 NAN_METHOD(SVM::SetParams) {
+	FF::TryCatch tryCatch("SVM::SetParams");
   if (!info[0]->IsObject()) {
-    return Nan::ThrowError("SVM::SetParams - args object required");
+    return tryCatch.throwError("SVM::SetParams - args object required");
   }
   v8::Local<v8::Object> args = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 
-  Nan::TryCatch tryCatch;
   SVM::unwrapThis(info)->setParams(args);
   if (tryCatch.HasCaught()) {
-    tryCatch.ReThrow();
+	  return tryCatch.reThrow();
   }
   info.GetReturnValue().Set(info.This());
 };
 
 NAN_METHOD(SVM::Predict) {
-  FF_METHOD_CONTEXT("SVM::Predict");
+	FF::TryCatch tryCatch("SVM::Predict");
 
   if (!info[0]->IsArray() && !Mat::hasInstance(info[0])) {
-    FF_THROW("expected arg 0 to be an ARRAY or an instance of Mat");
+	  return tryCatch.throwError("expected arg 0 to be an ARRAY or an instance of Mat");
   }
 
-  FF::TryCatch tryCatch;
   cv::Mat results;
   if (info[0]->IsArray()) {
 	std::vector<float> samples;
@@ -121,9 +118,7 @@ NAN_METHOD(SVM::Predict) {
 		FF::FloatArrayConverter::arg(0, &samples, info) ||
 		FF::UintConverter::optArg(1, &flags, info)
 	) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Predict");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
     SVM::unwrapSelf(info)->predict(samples, results, (int)flags);
   }
@@ -134,9 +129,7 @@ NAN_METHOD(SVM::Predict) {
 		Mat::Converter::arg(0, &samples, info) ||
 		FF::UintConverter::optArg(1, &flags, info)
 		) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Predict");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 	SVM::unwrapSelf(info)->predict(samples, results, (int)flags);
   }
@@ -158,27 +151,24 @@ NAN_METHOD(SVM::GetSupportVectors) {
 }
 
 NAN_METHOD(SVM::GetUncompressedSupportVectors) {
-  FF_METHOD_CONTEXT("SVM::GetUncompressedSupportVectors");
+	FF::TryCatch tryCatch("SVM::GetUncompressedSupportVectors");
 #if CV_VERSION_MINOR < 2
-  FF_THROW("getUncompressedSupportVectors not implemented for v3.0, v3.1");
+	return tryCatch.throwError("getUncompressedSupportVectors not implemented for v3.0, v3.1");
 #else
   info.GetReturnValue().Set(Mat::Converter::wrap(SVM::unwrapSelf(info)->getUncompressedSupportVectors()));
 #endif
 }
 
 NAN_METHOD(SVM::GetDecisionFunction) {
-  FF_METHOD_CONTEXT("SVM::GetDecisionFunction");
+	FF::TryCatch tryCatch("SVM::GetDecisionFunction");
 
   if (!info[0]->IsNumber()) {
-    FF_THROW("expected arg 0 to be a Int");
+	  return tryCatch.throwError("expected arg 0 to be a Int");
   }
 
-  FF::TryCatch tryCatch;
   int i;
   if (FF::IntConverter::arg(0, &i, info)) {
-	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::GetDecisionFunction");
-	  tryCatch.throwNew(err);
-	  return;
+	  return tryCatch.reThrow();
   }
 
   cv::Mat alpha, svidx;
@@ -192,16 +182,14 @@ NAN_METHOD(SVM::GetDecisionFunction) {
 }
 
 NAN_METHOD(SVM::CalcError) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SVM::CalcError");
 	cv::Ptr<cv::ml::TrainData> trainData;
 	bool test;
 	if (
 		TrainData::Converter::arg(0, &trainData, info) ||
 		FF::BoolConverter::arg(1, &test, info)
 		) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::CalcError");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	v8::Local<v8::Object> jsResponses = FF::newInstance(Nan::New(Mat::constructor));
@@ -214,25 +202,21 @@ NAN_METHOD(SVM::CalcError) {
 }
 
 NAN_METHOD(SVM::Save) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SVM::Save");
 
 	std::string path;
 	if (FF::StringConverter::arg(0, &path, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Save");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 	SVM::unwrapSelf(info)->save(path);
 }
 
 NAN_METHOD(SVM::Load) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SVM::Load");
 
 	std::string path;
 	if (FF::StringConverter::arg(0, &path, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SVM::Load");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 #if CV_VERSION_MINOR < 2
 	SVM::unwrapThis(info)->setNativeObject(cv::ml::SVM::load<cv::ml::SVM>(path));

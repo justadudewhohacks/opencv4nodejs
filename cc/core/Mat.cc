@@ -125,7 +125,8 @@ NAN_MODULE_INIT(Mat::Init) {
 };
 
 NAN_METHOD(Mat::New) {
-  FF_ASSERT_CONSTRUCT_CALL(Mat);
+	FF::TryCatch tryCatch("Mat::New");
+	FF_ASSERT_CONSTRUCT_CALL();
   Mat* self = new Mat();
   /* from channels */
   if (info.Length() == 1 && info[0]->IsArray()) {
@@ -134,20 +135,20 @@ NAN_METHOD(Mat::New) {
     for (uint i = 0; i < jsChannelMats->Length(); i++) {
       v8::Local<v8::Object> jsChannelMat = FF_CAST_OBJ(Nan::Get(jsChannelMats, i).ToLocalChecked());
 	  if (!Nan::New(Mat::constructor)->HasInstance(jsChannelMat)) {
-		return Nan::ThrowError(FF::newString("expected channel " + std::to_string(i) + " to be an instance of Mat"));
+		return tryCatch.throwError("expected channel " + std::to_string(i) + " to be an instance of Mat");
 	  }
       cv::Mat channelMat = Mat::Converter::unwrapUnchecked(jsChannelMat);
       channels.push_back(channelMat);
       if (i > 0) {
 		if (channels.at(i - 1).rows != channelMat.rows) {
-			return Nan::ThrowError(FF::newString("Mat::New - rows mismatch "
+			return tryCatch.throwError("Mat::New - rows mismatch "
 				+ std::to_string(channels.at(i - 1).rows) + ", have " + std::to_string(channelMat.rows)
-				+ " at channel " + std::to_string(i)));
+				+ " at channel " + std::to_string(i));
 		}
 		if (channels.at(i - 1).cols != channelMat.cols) {
-			return Nan::ThrowError(FF::newString("Mat::New - cols mismatch "
+			return tryCatch.throwError("Mat::New - cols mismatch "
 				+ std::to_string(channels.at(i - 1).cols) + ", have " + std::to_string(channelMat.rows)
-				+ " at channel " + std::to_string(i)));
+				+ " at channel " + std::to_string(i));
 		}
       }
     }
@@ -163,11 +164,11 @@ NAN_METHOD(Mat::New) {
     long numCols = -1;
     for (uint i = 0; i < rowArray->Length(); i++) {
       if (!Nan::Get(rowArray, i).ToLocalChecked()->IsArray()) {
-        return Nan::ThrowError(Nan::New("Mat::New - Column should be an array, at column: " + std::to_string(i)).ToLocalChecked());
+        return tryCatch.throwError("Mat::New - Column should be an array, at column: " + std::to_string(i));
       }
       v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, i).ToLocalChecked());
       if (numCols != -1 && numCols != colArray->Length()) {
-        return Nan::ThrowError(Nan::New("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i)).ToLocalChecked());
+        return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i));
       }
       numCols = colArray->Length();
     }
@@ -185,9 +186,9 @@ NAN_METHOD(Mat::New) {
     if (info[3]->IsArray()) {
       v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[3]);
       if (mat.channels() != (long)vec->Length()) {
-        return Nan::ThrowError(FF::newString(
+        return tryCatch.throwError(
           std::string("Mat::New - number of channels (") + std::to_string(mat.channels())
-          + std::string(") do not match fill vector length ") + std::to_string(vec->Length()))
+          + std::string(") do not match fill vector length ") + std::to_string(vec->Length())
         );
       }
       FF_MAT_APPLY_TYPED_OPERATOR(mat, vec, type, FF_MAT_FILL, FF::matPut);
@@ -217,29 +218,26 @@ NAN_METHOD(Mat::New) {
 }
 
 NAN_METHOD(Mat::Eye) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Mat::Eye");
 	int rows, cols, type;
 	if (
 		FF::IntConverter::arg(0, &rows, info) ||
 		FF::IntConverter::arg(1, &cols, info) ||
 		FF::IntConverter::arg(2, &type, info)
 	) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Mat::Eye"));
-		return;
+		return tryCatch.reThrow();
 	}
 	info.GetReturnValue().Set(Mat::Converter::wrap(cv::Mat::eye(cv::Size(cols, rows), type)));
 }
 
 NAN_METHOD(Mat::FlattenFloat) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Mat::FlattenFloat");
 	int rows, cols;
 	if (
 		FF::IntConverter::arg(0, &rows, info) ||
 		FF::IntConverter::arg(1, &cols, info)
 		) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::FlattenFloat");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	cv::Mat matSelf = Mat::unwrapSelf(info);
@@ -248,7 +246,7 @@ NAN_METHOD(Mat::FlattenFloat) {
 }
 
 NAN_METHOD(Mat::At) {
-  FF_METHOD_CONTEXT("Mat::At");
+	FF::TryCatch tryCatch("Mat::At");
 
   cv::Mat matSelf = Mat::unwrapSelf(info);
   v8::Local<v8::Value> val;
@@ -256,7 +254,7 @@ NAN_METHOD(Mat::At) {
 
   if (FF_IS_ARRAY(info[0])) {
     if ((long)v8::Local<v8::Array>::Cast(info[0])->Length() != matSelf.dims) {
-      FF_THROW("expected array length to be equal to the dims");
+		tryCatch.throwError("expected array length to be equal to the dims");
     }
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT_ARRAY, FF::matGet);
   } else {
@@ -286,7 +284,7 @@ NAN_METHOD(Mat::At) {
 }
 
 NAN_METHOD(Mat::AtRaw) {
-  FF_METHOD_CONTEXT("Mat::AtRaw");
+	FF::TryCatch tryCatch("Mat::AtRaw");
   cv::Mat matSelf = Mat::unwrapSelf(info);
   FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[0] - 1, "Mat::At row");
   FF_ASSERT_INDEX_RANGE(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[1] - 1, "Mat::At col");
@@ -296,7 +294,7 @@ NAN_METHOD(Mat::AtRaw) {
 }
 
 NAN_METHOD(Mat::Set) {
-  FF_METHOD_CONTEXT("Mat::Set");
+	FF::TryCatch tryCatch("Mat::Set");
   cv::Mat matSelf = Mat::unwrapSelf(info);
   FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[0] - 1, "Mat::At row");
   FF_ASSERT_INDEX_RANGE(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[1] - 1, "Mat::At col");
@@ -323,7 +321,7 @@ NAN_METHOD(Mat::Set) {
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, info[2], matSelf.type(), FF_MAT_SET, FF::matPut);
   }
   else {
-    return Nan::ThrowError(FF::newString("Mat::Set - unexpected argument 2"));
+    return tryCatch.throwError("unexpected argument 2");
   }
 }
 
@@ -344,6 +342,7 @@ NAN_METHOD(Mat::SetToAsync) {
 }
 
 NAN_METHOD(Mat::GetDataAsArray) {
+	FF::TryCatch tryCatch("Mat::GetDataAsArray");
   cv::Mat mat = Mat::unwrapSelf(info);
   v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(mat.size[0]);
   if (mat.dims > 2) { // 3D
@@ -355,15 +354,16 @@ NAN_METHOD(Mat::GetDataAsArray) {
 }
 
 NAN_METHOD(Mat::GetRegion) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Mat::GetRegion");
 	cv::Rect2d rect;
 	if (Rect::Converter::arg(0, &rect, info)) {
-		return tryCatch.throwNew(tryCatch.formatCatchedError("Mat::GetRegion"));
+		return tryCatch.reThrow();
 	}
 	info.GetReturnValue().Set(Mat::Converter::wrap(Mat::unwrapSelf(info)(rect)));
 }
 
 NAN_METHOD(Mat::Norm) {
+	FF::TryCatch tryCatch("Mat::Norm");
   bool withSrc2 = FF::hasArg(info, 0) && Mat::hasInstance(info[0]);
   uint i = withSrc2 ? 1 : 0;
   double norm;
@@ -375,7 +375,6 @@ NAN_METHOD(Mat::Norm) {
   uint normType = cv::NORM_L2;
   cv::Mat mask = cv::noArray().getMat();
 
-  FF::TryCatch tryCatch;
   if (
 	  (hasOptArgsObj && (
 		FF::UintConverter::optProp(&normType, "normType", optArgs) ||
@@ -385,16 +384,13 @@ NAN_METHOD(Mat::Norm) {
 		Mat::Converter::optArg(i + 1, &mask, info)
 		)
 	  ) {
-	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::Norm");
-	  tryCatch.throwNew(err);
-	  return;
+	  return tryCatch.reThrow();
   }
 
   if (withSrc2) {
 	cv::Mat src2;
 	if (Mat::Converter::arg(0, &src2, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Mat::Norm"));
-		return;
+		return tryCatch.reThrow();
 	}
     norm = cv::norm(Mat::unwrapSelf(info), src2, (int)normType, mask);
   }
@@ -421,8 +417,9 @@ NAN_METHOD(Mat::NormalizeAsync) {
 }
 
 NAN_METHOD(Mat::Row) {
+	FF::TryCatch tryCatch("Mat::Row");
   if (!info[0]->IsNumber()) {
-    return Nan::ThrowError("usage: row(int r)");
+    return tryCatch.throwError("usage: row(int r)");
   }
   int r = (int)info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
   cv::Mat mat = Mat::unwrapSelf(info);
@@ -446,12 +443,12 @@ NAN_METHOD(Mat::Row) {
         Nan::Set(row, c, jsVec);
       }
     } else {
-      return Nan::ThrowError(Nan::New("not implemented yet - mat type:" + std::to_string(mat.type())).ToLocalChecked());
+      return tryCatch.throwError("not implemented yet - mat type:" + std::to_string(mat.type()));
     }
   } catch(std::exception &e) {
-    return Nan::ThrowError(e.what());
+    return tryCatch.throwError(e.what());
   } catch(...) {
-    return Nan::ThrowError("... Exception");
+    return tryCatch.throwError("... Exception");
   }
   info.GetReturnValue().Set(row);
 }

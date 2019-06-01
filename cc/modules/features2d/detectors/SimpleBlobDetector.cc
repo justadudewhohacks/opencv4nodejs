@@ -17,13 +17,12 @@ NAN_MODULE_INIT(SimpleBlobDetector::Init) {
 };
 
 NAN_METHOD(SimpleBlobDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(SimpleBlobDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SimpleBlobDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 
 	cv::SimpleBlobDetector::Params params;
 	if (SimpleBlobDetectorParams::Converter::arg(0, &params, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("SimpleBlobDetector::New"));
-		return;
+		return tryCatch.reThrow();
 	}
 
 	SimpleBlobDetector* self = new SimpleBlobDetector();

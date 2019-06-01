@@ -22,12 +22,11 @@ NAN_MODULE_INIT(KeyPoint::Init) {
 };
 
 NAN_METHOD(KeyPoint::New) {
-	FF_ASSERT_CONSTRUCT_CALL(KeyPoint);
+	FF::TryCatch tryCatch("KeyPoint::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	KeyPoint* self = new KeyPoint();
 
 	if (info.Length() > 0) {
-		FF::TryCatch tryCatch;
-
 		cv::Point2d pt;
 		double size, angle, response; 
 		int octave, classId;
@@ -39,9 +38,7 @@ NAN_METHOD(KeyPoint::New) {
 			FF::IntConverter::arg(4, &octave, info) ||
 			FF::IntConverter::arg(5, &classId, info)
 		) {
-			v8::Local<v8::Value> err = tryCatch.formatCatchedError("KeyPoint::New");
-			tryCatch.throwNew(err);
-			return;
+			return tryCatch.reThrow();
 		}
 		self->self = cv::KeyPoint(pt, size, angle, response, octave, classId);
 	}

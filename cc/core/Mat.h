@@ -46,7 +46,7 @@ public:
 
 	FF_INIT_MAT_OPERATIONS();
 	static NAN_METHOD(Dot) {
-		FF_OPERATOR_RET_SCALAR(&cv::Mat::dot, FF_APPLY_CLASS_FUNC, Mat);
+		FF_OPERATOR_RET_SCALAR(&cv::Mat::dot, FF_APPLY_CLASS_FUNC, Mat, "Dot");
 	}
 
   static NAN_METHOD(New);

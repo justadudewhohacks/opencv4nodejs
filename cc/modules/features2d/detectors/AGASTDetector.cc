@@ -51,14 +51,12 @@ public:
 };
 
 NAN_METHOD(AGASTDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(AGASTDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("AGASTDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	AGASTDetector::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("AGASTDetector::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	AGASTDetector* self = new AGASTDetector();

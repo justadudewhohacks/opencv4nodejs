@@ -24,7 +24,8 @@ NAN_MODULE_INIT(TrackerMILParams::Init) {
 };
 
 NAN_METHOD(TrackerMILParams::New) {
-	FF_ASSERT_CONSTRUCT_CALL(TrackerMILParams);
+	FF::TryCatch tryCatch("TrackerMILParams::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	TrackerMILParams* self = new TrackerMILParams();
 	self->self = cv::TrackerMIL::Params();
 	self->Wrap(info.Holder());

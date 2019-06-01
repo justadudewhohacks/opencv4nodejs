@@ -15,11 +15,11 @@ NAN_MODULE_INIT(TermCriteria::Init) {
 };
 
 NAN_METHOD(TermCriteria::New) {
-	FF_ASSERT_CONSTRUCT_CALL(TermCriteria);
+	FF::TryCatch tryCatch("TermCriteria::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	TermCriteria* self = new TermCriteria();
 
 	if (info.Length() > 0) {
-		FF::TryCatch tryCatch;
 		int type, maxCount;
 		double epsilon;
 		if (
@@ -27,8 +27,7 @@ NAN_METHOD(TermCriteria::New) {
 			FF::IntConverter::arg(1, &maxCount, info) ||
 			FF::DoubleConverter::arg(2, &epsilon, info)
 		) {
-			tryCatch.throwNew(tryCatch.formatCatchedError("TermCriteria::New"));
-			return;
+			return tryCatch.reThrow();
 		}
 		self->self = cv::TermCriteria(type, maxCount, epsilon);
 	}

@@ -16,10 +16,10 @@ NAN_MODULE_INIT(DescriptorMatch::Init) {
 };
 
 NAN_METHOD(DescriptorMatch::New) {
-  FF_ASSERT_CONSTRUCT_CALL(DescriptorMatch);
+	FF::TryCatch tryCatch("DescriptorMatch::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	DescriptorMatch* self = new DescriptorMatch();
 	if (info.Length() > 0) {
-		FF::TryCatch tryCatch;
 		int queryIdx, trainIdx;
 		double distance;
 		if (
@@ -27,8 +27,7 @@ NAN_METHOD(DescriptorMatch::New) {
 			FF::IntConverter::arg(1, &trainIdx, info) ||
 			FF::DoubleConverter::arg(2, &distance, info)
 			) {
-			tryCatch.throwNew(tryCatch.formatCatchedError("TermCriteria::New"));
-			return;
+			return tryCatch.reThrow();
 		}
 		self->self = cv::DMatch(queryIdx, trainIdx, distance);
 	}

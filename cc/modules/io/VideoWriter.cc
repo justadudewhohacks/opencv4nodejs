@@ -20,14 +20,12 @@ NAN_MODULE_INIT(VideoWriter::Init) {
 };
 
 NAN_METHOD(VideoWriter::New) {
-	FF_ASSERT_CONSTRUCT_CALL(VideoWriter);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("VideoWriter::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	VideoWriterBindings::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("VideoWriter::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	VideoWriter* self = new VideoWriter();

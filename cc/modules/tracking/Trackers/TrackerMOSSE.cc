@@ -21,7 +21,8 @@ NAN_MODULE_INIT(TrackerMOSSE::Init) {
 
 
 NAN_METHOD(TrackerMOSSE::New) {
-	FF_ASSERT_CONSTRUCT_CALL(TrackerMOSSE);
+	FF::TryCatch tryCatch("TrackerMOSSE::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 
 	TrackerMOSSE* self = new TrackerMOSSE();
 	self->tracker = cv::TrackerMOSSE::create();

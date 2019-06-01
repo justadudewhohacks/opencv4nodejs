@@ -19,14 +19,12 @@ NAN_MODULE_INIT(BackgroundSubtractorMOG2::Init) {
 };
 
 NAN_METHOD(BackgroundSubtractorMOG2::New) {
-	FF_ASSERT_CONSTRUCT_CALL(BackgroundSubtractorKNN);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("BackgroundSubtractor::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	BackgroundSubtractorMOG2::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("BackgroundSubtractorMOG2::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	BackgroundSubtractorMOG2* self = new BackgroundSubtractorMOG2();

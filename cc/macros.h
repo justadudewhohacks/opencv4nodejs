@@ -7,9 +7,6 @@
 #define FF_CAST_OBJ(val) Nan::To<v8::Object>(val).ToLocalChecked()
 #define FF_IS_ARRAY(val) val->IsArray()
 
-#define FF_METHOD_CONTEXT(methodName) std::string ff_methodName = methodName;
-#define FF_THROW(msg) return Nan::ThrowError(FF::newString(std::string(ff_methodName) + " - " + std::string(msg)));
-
 /* ------------- */
 
 #define FF_GETTER(clazz, name, prop)	\
@@ -30,18 +27,17 @@
 #define FF_SET_CV_CONSTANT(obj, cvConstant) \
 	FF_SET_JS_PROP(obj, cvConstant, Nan::New<v8::Integer>(cvConstant));
 
-#define FF_ASSERT_CONSTRUCT_CALL(ctor)																\
-  if (!info.IsConstructCall()) {																			\
-    return Nan::ThrowError(FF::newString(std::string(#ctor)						\
-        + "::New - expect to be called with \"new\"")); 							\
+#define FF_ASSERT_CONSTRUCT_CALL() \
+  if (!info.IsConstructCall()) { \
+    return tryCatch.throwError("constructor has to be called with \"new\" keyword"); \
   }
 
 #define FF_SETTER(clazz, name, prop, ff_converter, ff_type)	\
 	NAN_SETTER(name##Set) {	\
-		FF::TryCatch tryCatch; \
+		FF::TryCatch tryCatch(#name); \
 		ff_type val; \
 		if (ff_converter::unwrapTo(&val, value)) { \
-			return tryCatch.throwNew(tryCatch.formatCatchedError(#name)); \
+			return tryCatch.reThrow(); \
 		} \
 		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = val; \
 	}

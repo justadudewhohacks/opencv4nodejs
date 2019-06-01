@@ -24,14 +24,12 @@ NAN_MODULE_INIT(BFMatcher::Init) {
 };
 
 NAN_METHOD(BFMatcher::New) {
-	FF_ASSERT_CONSTRUCT_CALL(BFMatcher);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("BFMatcher::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	BFMatcher::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("BFMatcher::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	BFMatcher* self = new BFMatcher();

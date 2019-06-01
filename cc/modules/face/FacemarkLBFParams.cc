@@ -36,7 +36,8 @@ NAN_MODULE_INIT(FacemarkLBFParams::Init) {
 };
 
 NAN_METHOD(FacemarkLBFParams::New) {
-  FF_ASSERT_CONSTRUCT_CALL(FacemarkLBFParams);
+	FF::TryCatch tryCatch("FacemarkLBFParams::New");
+	FF_ASSERT_CONSTRUCT_CALL();
   FacemarkLBFParams *self = new FacemarkLBFParams();
   self->self = cv::face::FacemarkLBF::Params();
   self->Wrap(info.Holder());

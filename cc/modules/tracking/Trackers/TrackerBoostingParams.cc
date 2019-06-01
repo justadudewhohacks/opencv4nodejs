@@ -23,7 +23,8 @@ NAN_MODULE_INIT(TrackerBoostingParams::Init) {
 
 
 NAN_METHOD(TrackerBoostingParams::New) {
-	FF_ASSERT_CONSTRUCT_CALL(TrackerBoostingParams);
+	FF::TryCatch tryCatch("TrackerBoostingParams::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	TrackerBoostingParams* self = new TrackerBoostingParams();
 	self->self = cv::TrackerBoosting::Params();
 	self->Wrap(info.Holder());

@@ -29,14 +29,14 @@ public:
 
 	FF_INIT_VEC2_OPERATIONS();
 	static NAN_METHOD(Dot) {
-		FF_OPERATOR_RET_SCALAR(&cv::Vec2d::dot, FF_APPLY_CLASS_FUNC, Vec2);
+		FF_OPERATOR_RET_SCALAR(&cv::Vec2d::dot, FF_APPLY_CLASS_FUNC, Vec2, "Dot");
 	}
 	static NAN_METHOD(Norm) {
 		info.GetReturnValue().Set(Nan::New(cv::norm(Vec2::unwrapSelf(info))));
 	}
 
 	static NAN_METHOD(At) {
-		FF_METHOD_CONTEXT("Vec2::At");
+		FF::TryCatch tryCatch("Vec2::At");
 		FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 1, "Vec2");
 		cv::Vec2d vecSelf = Vec2::unwrapSelf(info);
 		info.GetReturnValue().Set(vecSelf[info[0]->ToUint32(Nan::GetCurrentContext()).ToLocalChecked()->Value()]);

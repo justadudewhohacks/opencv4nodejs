@@ -30,14 +30,12 @@ NAN_MODULE_INIT(MSERDetector::Init) {
 };
 
 NAN_METHOD(MSERDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(MSERDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MSERDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	MSERDetector::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("MSERDetector::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	MSERDetector* self = new MSERDetector();

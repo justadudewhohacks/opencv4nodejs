@@ -22,14 +22,12 @@ NAN_MODULE_INIT(OCRHMMDecoder::Init) {
 };
 
 NAN_METHOD(OCRHMMDecoder::New) {
-  FF_ASSERT_CONSTRUCT_CALL(OCRHMMDecoder);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("OCRHMMDecoder::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	OCRHMMDecoderBindings::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("OCRHMMDecoder::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	OCRHMMDecoder* self = new OCRHMMDecoder();

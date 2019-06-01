@@ -6,25 +6,21 @@
 #if CV_VERSION_MINOR >= 4
 
 NAN_METHOD(Facemark::Save) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Facemark::Save");
 
 	std::string path;
 	if (FF::StringConverter::arg(0, &path, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Facemark::Save");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 	Nan::ObjectWrap::Unwrap<Facemark>(info.This())->save(path);
 }
 
 NAN_METHOD(Facemark::Load) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Facemark::Load");
 
 	std::string path;
 	if (FF::StringConverter::arg(0, &path, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Facemark::Load");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 	Nan::ObjectWrap::Unwrap<Facemark>(info.This())->load(path);
 }
@@ -133,10 +129,9 @@ NAN_METHOD(Facemark::GetFacesAsync) {
 }
 
 NAN_METHOD(Facemark::SetFaceDetector) {
+	FF::TryCatch tryCatch("Facemark::SetFaceDetector");
   if (!info[0]->IsFunction()) {
-    return Nan::ThrowError(Nan::New("Facemark::SetFaceDetector - Error: "
-                                    "expected argument 0 to be of type")
-                               .ToLocalChecked());
+    return tryCatch.throwError("expected argument 0 to be of type");
   }
   v8::Local<v8::Function> cbFunc = v8::Local<v8::Function>::Cast(info[0]);
   Nan::Callback *callback = new Nan::Callback(cbFunc);

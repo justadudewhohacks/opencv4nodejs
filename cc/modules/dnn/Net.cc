@@ -29,7 +29,8 @@ NAN_MODULE_INIT(Net::Init) {
 };
 
 NAN_METHOD(Net::New) {
-  FF_ASSERT_CONSTRUCT_CALL(Net);
+	FF::TryCatch tryCatch("Net::New");
+	FF_ASSERT_CONSTRUCT_CALL();
   Net* self = new Net();
   self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());

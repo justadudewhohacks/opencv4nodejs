@@ -49,9 +49,10 @@ NAN_MODULE_INIT(Vec::Init) {
 };
 
 NAN_METHOD(Vec::New) {
-	FF_ASSERT_CONSTRUCT_CALL(Vec);
+	FF::TryCatch tryCatch("Vec::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	if (info.Length() < 2) {
-		return Nan::ThrowError("Vec::New - expected arguments (w), x, y, (z)");
+		return tryCatch.throwError("Vec::New - expected arguments (w), x, y, (z)");
 	}
 	v8::Local<v8::Object> jsVec;
 	if (info.Length() == 4) {

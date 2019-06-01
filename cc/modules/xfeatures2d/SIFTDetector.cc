@@ -24,14 +24,12 @@ NAN_MODULE_INIT(SIFTDetector::Init) {
 
 
 NAN_METHOD(SIFTDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(SIFTDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SIFTDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	SIFTDetector::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SIFTDetector::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	SIFTDetector* self = new SIFTDetector();
@@ -49,7 +47,7 @@ NAN_METHOD(SIFTDetector::New) {
 			worker.sigma
 		);
 	} catch (std::exception &e) {
-		return tryCatch.throwNew(Nan::New(FF::Utils::formatError("SIFTDetector::New", e.what())).ToLocalChecked());
+		return tryCatch.throwError(e.what());
 	}
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());

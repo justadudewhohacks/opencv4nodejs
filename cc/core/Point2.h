@@ -34,7 +34,7 @@ public:
 	}
 
 	static NAN_METHOD(At) {
-		FF_METHOD_CONTEXT("Point2::At");
+		FF::TryCatch tryCatch("Point2::At");
 		FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 1, "Point2");
 		cv::Point2d ptSelf = Point2::unwrapSelf(info);
 		const double coords[] = { ptSelf.x, ptSelf.y };

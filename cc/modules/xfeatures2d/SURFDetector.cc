@@ -23,14 +23,11 @@ NAN_MODULE_INIT(SURFDetector::Init) {
 };
 
 NAN_METHOD(SURFDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(SURFDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SURFDetector::New");
 	SURFDetector::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SURFDetector::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	SURFDetector* self = new SURFDetector();
@@ -44,7 +41,7 @@ NAN_METHOD(SURFDetector::New) {
 		);
 	}
 	catch (std::exception &e) {
-		return tryCatch.throwNew(Nan::New(FF::Utils::formatError("SIFTDetector::New", e.what())).ToLocalChecked());
+		return tryCatch.throwError(e.what());
 	}
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());

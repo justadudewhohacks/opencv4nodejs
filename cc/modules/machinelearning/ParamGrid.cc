@@ -16,16 +16,14 @@ NAN_MODULE_INIT(ParamGrid::Init) {
 };
 
 NAN_METHOD(ParamGrid::New) {
-  FF_ASSERT_CONSTRUCT_CALL(ParamGrid);
+	FF::TryCatch tryCatch("ParamGrid::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	ParamGrid* self = new ParamGrid();
 	if (info.Length() > 0) {
-		FF::TryCatch tryCatch;
 		if (info.Length() == 1) {
 			unsigned int paramId;
 			if (FF::UintConverter::arg(0, &paramId, info)) {
-				v8::Local<v8::Value> err = tryCatch.formatCatchedError("ParamGrid::New");
-				tryCatch.throwNew(err);
-				return;
+				return tryCatch.reThrow();
 			}
 			self->self = cv::ml::SVM::getDefaultGrid(paramId);
 		}
@@ -36,9 +34,7 @@ NAN_METHOD(ParamGrid::New) {
 				FF::DoubleConverter::arg(1, &maxVal, info) ||
 				FF::DoubleConverter::arg(2, &logStep, info)
 			) {
-				v8::Local<v8::Value> err = tryCatch.formatCatchedError("ParamGrid::New");
-				tryCatch.throwNew(err);
-				return;
+				return tryCatch.reThrow();
 			}
 			self->self = cv::ml::ParamGrid(minVal, maxVal, logStep);
 		}

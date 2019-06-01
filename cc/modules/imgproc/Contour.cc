@@ -40,12 +40,13 @@ NAN_MODULE_INIT(Contour::Init) {
 };
 
 NAN_METHOD(Contour::New) {
-	FF_ASSERT_CONSTRUCT_CALL(Contour);
+	FF::TryCatch tryCatch("Contour::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	if (info.Length() > 1) {
-		return Nan::ThrowError("Contour::New - expected one or zero argument");
+		return tryCatch.throwError("expected one or zero argument");
 	}
 	if (info.Length() == 1 && !info[0]->IsArray()) {
-		return Nan::ThrowError("Contour::New - expected arg0 to be an array");
+		return tryCatch.throwError("expected arg0 to be an array");
 	}
 
 	Contour* self = new Contour();
@@ -58,7 +59,7 @@ NAN_METHOD(Contour::New) {
 			if (jsPt->IsArray()) {
 				v8::Local<v8::Array> jsObj = v8::Local<v8::Array>::Cast(jsPt);
 				if (jsObj->Length() != 2)
-					return Nan::ThrowError("Contour::New - expected arg0 to consist of only Point2 or array of length 2");
+					return tryCatch.throwError("expected arg0 to consist of only Point2 or array of length 2");
 				double x = FF::DoubleConverter::unwrapUnchecked(Nan::Get(jsObj, 0).ToLocalChecked());
 				double y = FF::DoubleConverter::unwrapUnchecked(Nan::Get(jsObj, 1).ToLocalChecked());
 				cv_pt = cv::Point2d(x, y);
@@ -67,7 +68,7 @@ NAN_METHOD(Contour::New) {
 				cv_pt = Point2::Converter::unwrapUnchecked(jsPt);
 			}
 			else {
-				return Nan::ThrowError("Contour::New - expected arg0 to consist of only Point2 or array of length 2");
+				return tryCatch.throwError("expected arg0 to consist of only Point2 or array of length 2");
 			}
 			self->self.emplace_back(cv::Point2i(cv_pt.x, cv_pt.y));
 		}
@@ -98,15 +99,14 @@ NAN_METHOD(Contour::ApproxPolyDPAsync) {
 }
 
 NAN_METHOD(Contour::ApproxPolyDPContour) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Contour::ApproxPolyDPContour");
 	double epsilon;
 	bool closed;
 	if (
 		FF::DoubleConverter::arg(0, &epsilon, info) ||
 		FF::BoolConverter::arg(1, &closed, info)
 	) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ApproxPolyDPContour"));
-		return;
+		return tryCatch.reThrow();
 	}
 
 	std::vector<cv::Point> curve;
@@ -120,11 +120,10 @@ NAN_METHOD(Contour::ApproxPolyDPContour) {
 }
 
 NAN_METHOD(Contour::ArcLength) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Contour::ArcLength");
 	bool closed = false;
 	if (FF::BoolConverter::optArg(0, &closed, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ArcLength"));
-		return;
+		return tryCatch.reThrow();
 	}
 
 	double arcLength = cv::arcLength(Contour::unwrapSelf(info), closed);
@@ -136,11 +135,10 @@ NAN_METHOD(Contour::BoundingRect) {
 }
 
 NAN_METHOD(Contour::ConvexHull) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Contour::ConvexHull");
 	bool clockwise = false;
 	if (FF::BoolConverter::optArg(0, &clockwise, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ConvexHull"));
-		return;
+		return tryCatch.reThrow();
 	}
 
 	std::vector<cv::Point> hullPoints;
@@ -158,11 +156,10 @@ NAN_METHOD(Contour::ConvexHull) {
 }
 
 NAN_METHOD(Contour::ConvexHullIndices) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Contour::ConvexHullIndices");
 	bool clockwise = false;
 	if (FF::BoolConverter::optArg(0, &clockwise, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ConvexHullIndices"));
-		return;
+		return tryCatch.reThrow();
 	}
 
 	std::vector<int> hullIndices;
@@ -175,11 +172,10 @@ NAN_METHOD(Contour::ConvexHullIndices) {
 	info.GetReturnValue().Set(FF::IntArrayConverter::wrap(hullIndices));
 }
 NAN_METHOD(Contour::ConvexityDefects) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Contour::ConvexityDefects");
 	std::vector<int> hull;
 	if (FF::IntArrayConverter::arg(0, &hull, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::ConvexityDefects"));
-		return;
+		return tryCatch.reThrow();
 	}
 
 	std::vector<cv::Vec4d> defects;
@@ -213,11 +209,10 @@ NAN_METHOD(Contour::MinEnclosingTriangle) {
 }
 
 NAN_METHOD(Contour::PointPolygonTest) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Contour::PointPolygonTest");
 	cv::Point2d point;
 	if (Point2::Converter::arg(0, &point, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::PointPolygonTest"));
-		return;
+		return tryCatch.reThrow();
 	}
 
 	double dist = cv::pointPolygonTest(
@@ -229,15 +224,14 @@ NAN_METHOD(Contour::PointPolygonTest) {
 }
 
 NAN_METHOD(Contour::MatchShapes) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Contour::MatchShapes");
 	std::vector<cv::Point> contour2;
 	uint method;
 	if (
 		Contour::Converter::arg(0, &contour2, info) ||
 		FF::UintConverter::arg(1, &method, info)
 	) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Contour::MatchShapes"));
-		return;
+		return tryCatch.reThrow();
 	}
 
 	// parameter not supported

@@ -30,7 +30,8 @@ NAN_MODULE_INIT(FacemarkAAMParams::Init) {
 };
 
 NAN_METHOD(FacemarkAAMParams::New) {
-  FF_ASSERT_CONSTRUCT_CALL(FacemarkAAMParams);
+	FF::TryCatch tryCatch("FacemarkAAMParams::New");
+	FF_ASSERT_CONSTRUCT_CALL();
   FacemarkAAMParams *self = new FacemarkAAMParams();
   self->self = cv::face::FacemarkAAM::Params();
   self->Wrap(info.Holder());

@@ -74,7 +74,7 @@ NAN_MODULE_INIT(Features2d::Init) {
 };
 
 NAN_METHOD(Features2d::DrawKeyPoints) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Features2d::DrawKeyPoints");
 
 	cv::Mat img;
 	std::vector<cv::KeyPoint> kps;
@@ -82,8 +82,7 @@ NAN_METHOD(Features2d::DrawKeyPoints) {
 		Mat::Converter::arg(0, &img, info) ||
 		KeyPoint::ArrayConverter::arg(1, &kps, info)
 	) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Features2d::DrawKeyPoints"));
-		return;
+		return tryCatch.reThrow();
 	}
 
 	cv::Mat drawMat;
@@ -92,7 +91,7 @@ NAN_METHOD(Features2d::DrawKeyPoints) {
 }
 
 NAN_METHOD(Features2d::DrawMatches) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Features2d::DrawMatches");
 
 	cv::Mat img1, img2;
 	std::vector<cv::KeyPoint> kps1, kps2;
@@ -104,8 +103,7 @@ NAN_METHOD(Features2d::DrawMatches) {
 		KeyPoint::ArrayConverter::arg(3, &kps2, info) ||
 		DescriptorMatch::ArrayConverter::arg(4, &dMatches, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Features2d::DrawMatches"));
-		return;
+		return tryCatch.reThrow();
 	}
 
 	cv::Mat drawMat;

@@ -27,14 +27,12 @@ NAN_MODULE_INIT(SuperpixelSEEDS::Init) {
 };
 
 NAN_METHOD(SuperpixelSEEDS::New) {
-	FF_ASSERT_CONSTRUCT_CALL(SuperpixelSEEDS);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SuperpixelSEEDS::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	SuperpixelSEEDS::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSEEDS::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	SuperpixelSEEDS* self = new SuperpixelSEEDS();
@@ -60,13 +58,11 @@ NAN_METHOD(SuperpixelSEEDS::New) {
 }
 
 NAN_METHOD(SuperpixelSEEDS::Iterate) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SuperpixelSEEDS::Iterate");
 
 	uint iterations = 4;
 	if (FF::UintConverter::optArg(0, &iterations, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSEEDS::Iterate");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	SuperpixelSEEDS* self = Nan::ObjectWrap::Unwrap<SuperpixelSEEDS>(info.This());

@@ -67,23 +67,23 @@ NAN_MODULE_INIT(Io::Init) {
 };
 
 NAN_METHOD(Io::Imshow) {
-  FF_METHOD_CONTEXT("Imshow");
+  FF::TryCatch tryCatch("Io::Imshow");
   if (!info[0]->IsString()) {
-    FF_THROW("expected arg0 to be the window name");
+    return tryCatch.throwError("expected arg0 to be the window name");
   }
   if (!Mat::hasInstance(info[1])) {
-    FF_THROW("expected arg1 to be an instance of Mat");
+    return tryCatch.throwError("expected arg1 to be an instance of Mat");
   }
   cv::imshow(FF::StringConverter::unwrapUnchecked(info[0]), Mat::Converter::unwrapUnchecked(info[1]));
 }
 
 NAN_METHOD(Io::ImshowWait) {
-  FF_METHOD_CONTEXT("ImshowWait");
+	FF::TryCatch tryCatch("Io::ImshowWait");
   if (!info[0]->IsString()) {
-    FF_THROW("expected arg0 to be the window name");
+    return tryCatch.throwError("expected arg0 to be the window name");
   }
   if (!Mat::hasInstance(info[1])) {
-    FF_THROW("expected arg1 to be an instance of Mat");
+    return tryCatch.throwError("expected arg1 to be an instance of Mat");
   }
   cv::imshow(FF::StringConverter::unwrapUnchecked(info[0]), Mat::Converter::unwrapUnchecked(info[1]));
   cv::waitKey();
@@ -100,24 +100,20 @@ NAN_METHOD(Io::WaitKey) {
 }
 
 NAN_METHOD(Io::MoveWindow) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Io::MoveWindow");
 	std::string winName;
 	int x, y;
 	if (FF::StringConverter::arg(0, &winName, info) || FF::IntConverter::arg(1, &x, info) || FF::IntConverter::arg(2, &y, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Io::MoveWindow");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 	cv::moveWindow(winName, x, y);
 }
 
 NAN_METHOD(Io::DestroyWindow) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Io::DestroyWindow");
 	std::string winName;
 	if (FF::StringConverter::arg(0, &winName, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Io::DestroyWindow");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
   cv::destroyWindow(winName);
 }
@@ -127,18 +123,15 @@ NAN_METHOD(Io::DestroyAllWindows) {
 }
 
 NAN_METHOD(Io::Imdecode) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Io::Imdecode");
 
   if (!info[0]->IsUint8Array()) {
-	tryCatch.throwNew(FF::newString("Io::Imdecode - expected arg 0 to be a Buffer of Uint8 Values"));
-	return;
+	return tryCatch.throwError("expected arg 0 to be a Buffer of Uint8 Values");
   }
 
   int flags = cv::IMREAD_ANYCOLOR;
   if (FF::IntConverter::optArg(1, &flags, info)) {
-	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Io::Imdecode");
-	  tryCatch.throwNew(err);
-	  return;
+	  return tryCatch.reThrow();
   }
 
   char *data = static_cast<char *>(node::Buffer::Data(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
@@ -150,10 +143,10 @@ NAN_METHOD(Io::Imdecode) {
 }
 
 NAN_METHOD(Io::ImdecodeAsync) {
-  FF_METHOD_CONTEXT("ImdecodeAsync");
+	FF::TryCatch tryCatch("Io::ImdecodeAsync");
 
   if (!info[0]->IsUint8Array()) {
-    FF_THROW("expected arg 0 to be a Buffer of Uint8 Values");
+    return tryCatch.throwError("expected arg 0 to be a Buffer of Uint8 Values");
   }
 
   std::shared_ptr<IoBindings::ImdecodeWorker> worker = std::make_shared<IoBindings::ImdecodeWorker>();
@@ -162,17 +155,13 @@ NAN_METHOD(Io::ImdecodeAsync) {
   if (FF::hasArg(info, 1) && FF::IntConverterImpl::assertType(info[1])) {
 	worker->flags = info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	if (!info[2]->IsFunction()) {
-		return Nan::ThrowError(Nan::New("Io::ImdecodeAsync - Error: "
-			"expected argument 2 to be of type Function")
-			.ToLocalChecked());
+		return tryCatch.throwError("expected argument 2 to be of type Function");
 	}
 	cbFunc = v8::Local<v8::Function>::Cast(info[2]);
   }
   else {
 	if (!info[1]->IsFunction()) {
-		return Nan::ThrowError(Nan::New("Io::ImdecodeAsync - Error: "
-			"expected argument 1 to be of type Function")
-			.ToLocalChecked());
+		return tryCatch.throwError("expected argument 1 to be of type Function");
 	}
 	cbFunc = v8::Local<v8::Function>::Cast(info[1]);
     worker->flags = cv::IMREAD_ANYCOLOR;

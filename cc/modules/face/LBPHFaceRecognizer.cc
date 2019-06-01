@@ -52,14 +52,12 @@ public:
 };
 
 NAN_METHOD(LBPHFaceRecognizer::New) {
-	FF_ASSERT_CONSTRUCT_CALL(LBPHFaceRecognizer);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("LBPHFaceRecognizer::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	LBPHFaceRecognizer::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("LBPHFaceRecognizer::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	LBPHFaceRecognizer* self = new LBPHFaceRecognizer();

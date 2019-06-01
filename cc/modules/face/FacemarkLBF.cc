@@ -21,14 +21,12 @@ NAN_MODULE_INIT(FacemarkLBF::Init) {
 };
 
 NAN_METHOD(FacemarkLBF::New) {
-  FF_ASSERT_CONSTRUCT_CALL(FacemarkLBF);
-  FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("FacemarkLBF::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 
   cv::face::FacemarkLBF::Params params;
   if (FacemarkLBFParams::Converter::optArg(0, &params, info)) {
-	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("FacemarkLBF::New");
-	  tryCatch.throwNew(err);
-	  return;
+	  return tryCatch.reThrow();
   }
 
   FacemarkLBF *self = new FacemarkLBF();

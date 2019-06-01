@@ -38,30 +38,28 @@ static std::function<bool(TNativeObject, TNativeObject)> predicateFactory(v8::Lo
 }
 
 NAN_METHOD(Core::Partition) {
-  FF_METHOD_CONTEXT("Core::Partition");
+	FF::TryCatch tryCatch("Core::Partition");
   if (!info[0]->IsArray()) {
-	  FF_THROW("expected arg 0 to be an array");
+	  return tryCatch.throwError("expected arg 0 to be an array");
   }
   v8::Local<v8::Array> jsData = v8::Local<v8::Array>::Cast(info[0]);
   if (!info[1]->IsFunction()) {
-    FF_THROW("expected arg 1 to be a function");
+	  return tryCatch.throwError("expected arg 1 to be a function");
   }
   if (jsData->Length() < 2) {
-    FF_THROW("expected data to contain atleast 2 elements");
+	  return tryCatch.throwError("expected data to contain atleast 2 elements");
   }
 
   v8::Local<v8::Function> cb = v8::Local<v8::Function>::Cast(info[1]);
   v8::Local<v8::Value> data0 = Nan::Get(jsData, 0).ToLocalChecked();
 
-  FF::TryCatch tryCatch;
   int numLabels = 0;
   std::vector<int> labels;
 
   if (Point2::hasInstance(data0)) {
     std::vector<cv::Point2d> pts;
 	if (Point2::ArrayConverter::arg(0, &pts, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
-		return;
+		return tryCatch.reThrow();
 	}
 
     numLabels = cv::partition(pts, labels, predicateFactory<Point2, cv::Point2d>(cb));
@@ -69,40 +67,35 @@ NAN_METHOD(Core::Partition) {
   else if (Point3::hasInstance(data0)) {
     std::vector<cv::Point3d> pts;
 	if (Point3::ArrayConverter::arg(0, &pts, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
-		return;
+		return tryCatch.reThrow();
 	}
 	numLabels = cv::partition(pts, labels, predicateFactory<Point3, cv::Point3d>(cb));
   }
   else if (Vec2::hasInstance(data0)) {
 	std::vector<cv::Vec2d> pts;
 	if (Vec2::ArrayConverter::arg(0, &pts, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
-		return;
+		return tryCatch.reThrow();
 	}
     numLabels = cv::partition(pts, labels, predicateFactory<Vec2, cv::Vec2d>(cb));
   }
   else if (Vec3::hasInstance(data0)) {
 	std::vector<cv::Vec3d> pts;
 	if (Vec3::ArrayConverter::arg(0, &pts, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
-		return;
+		return tryCatch.reThrow();
 	}
 	numLabels = cv::partition(pts, labels, predicateFactory<Vec3, cv::Vec3d>(cb));
   }
   else if (Vec4::hasInstance(data0)) {
 	std::vector<cv::Vec4d> pts;
 	if (Vec4::ArrayConverter::arg(0, &pts, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
-		return;
+		return tryCatch.reThrow();
 	}
     numLabels = cv::partition(pts, labels, predicateFactory<Vec4, cv::Vec4d>(cb));
   }
   else if (Mat::hasInstance(data0)) {
     std::vector<cv::Mat> mats;
 	if (Mat::ArrayConverter::arg(0, &mats, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Core::Partition"));
-		return;
+		return tryCatch.reThrow();
 	}
     numLabels = cv::partition(mats, labels, predicateFactory<Mat, cv::Mat>(cb));
   }
@@ -114,22 +107,19 @@ NAN_METHOD(Core::Partition) {
 }
 
 NAN_METHOD(Core::Kmeans) {
-  FF_METHOD_CONTEXT("Core::Kmeans");
-
-
+	FF::TryCatch tryCatch("Core::Kmeans");
   if (!info[0]->IsArray()) {
-	  FF_THROW("expected arg 0 to be an array");
+	  return tryCatch.throwError("expected arg 0 to be an array");
   }
   v8::Local<v8::Array> jsData = v8::Local<v8::Array>::Cast(info[0]);
   
   if (jsData->Length() < 1) {
-    FF_THROW("expected data to contain at least 1 element");
+	  return tryCatch.throwError("expected data to contain at least 1 element");
   }
   
   v8::Local<v8::Value> data0 = Nan::Get(jsData, 0).ToLocalChecked();
   bool isPoint2 = Point2::hasInstance(data0);
 
-  FF::TryCatch tryCatch;
   std::vector<cv::Point2f> pts2d;
   std::vector<cv::Point3f> pts3d;
 
@@ -144,8 +134,7 @@ NAN_METHOD(Core::Kmeans) {
 	  FF::IntConverter::arg(3, &attempts, info) ||
 	  FF::IntConverter::arg(4, &flags, info)
 	  ) {
-	  tryCatch.throwNew(tryCatch.formatCatchedError("Imgproc::FitLine"));
-	  return;
+	  return tryCatch.reThrow();
   }
 
   std::vector<int> labels;
@@ -216,9 +205,10 @@ NAN_METHOD(Core::GetNumThreads) {
 }
 
 NAN_METHOD(Core::SetNumThreads) {
+	FF::TryCatch tryCatch("Core::SetNumThreads");
   int num;
   if(FF::IntConverter::arg(0, &num, info)) {
-    return Nan::ThrowError("Core::SetNumThreads expected arg0 to an int");
+    return tryCatch.reThrow();
   }
   cv::setNumThreads(num);
 }

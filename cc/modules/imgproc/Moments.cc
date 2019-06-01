@@ -39,7 +39,8 @@ NAN_MODULE_INIT(Moments::Init) {
 };
 
 NAN_METHOD(Moments::New) {
-	FF_ASSERT_CONSTRUCT_CALL(Moments);
+	FF::TryCatch tryCatch("Moments::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	Moments* self = new Moments();
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());

@@ -22,20 +22,18 @@ NAN_MODULE_INIT(CascadeClassifier::Init) {
 };
 
 NAN_METHOD(CascadeClassifier::New) {
-	FF_ASSERT_CONSTRUCT_CALL(CascadeClassifier);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("CascadeClassifier::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	CascadeClassifierBindings::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("CascadeClassifier::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	CascadeClassifier* self = new CascadeClassifier();
 	self->setNativeObject(cv::CascadeClassifier(worker.xmlFilePath));
 	if (worker.applyUnwrappers(info)) {
-		return Nan::ThrowError(FF::newString(std::string("CascadeClassifier::New") + " - " + std::string("failed to load cascade.xml file: " + worker.xmlFilePath)));
+		return tryCatch.throwError(std::string("failed to load cascade.xml file: " + worker.xmlFilePath));
 	}
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());

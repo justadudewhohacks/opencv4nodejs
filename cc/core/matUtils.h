@@ -11,12 +11,10 @@
     val = get(mat, info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value());
 
 #define FF_MAT_AT_ARRAY(mat, val, get)  \
-  {                                     \
-	FF::TryCatch tryCatch; \
+  { \
 	std::vector<int> vec; \
 	if (FF::IntArrayConverter::arg(0, &vec, info)) { \
-		tryCatch.throwNew(tryCatch.formatCatchedError("Mat::At")); \
-		return; \
+		return tryCatch.reThrow(); \
 	} \
     const int* idx = &vec.front();      \
     val = get(mat, idx);                \
@@ -152,15 +150,15 @@
 		ITERATOR(mat, arg, OPERATOR##Vec4<double>)\
 			break;\
 	default:\
-		Nan::ThrowError(Nan::New("invalid matType: " + std::to_string(type)).ToLocalChecked());\
+		return tryCatch.throwError("invalid matType: " + std::to_string(type));\
 		break;\
 	}\
 }
 
-#define FF_ASSERT_CHANNELS(cn, have, what)																						\
-	if (cn != have) {																																		\
-		return Nan::ThrowError(FF::newString(std::string(what) + " - expected vector with "	\
-			+ std::to_string(cn) + " channels, have " + std::to_string(have)));							\
+#define FF_ASSERT_CHANNELS(cn, have, what) \
+	if (cn != have) { \
+		return tryCatch.throwError(std::string(what) + " - expected vector with " \
+			+ std::to_string(cn) + " channels, have " + std::to_string(have));	\
 	}
 
 namespace FF {

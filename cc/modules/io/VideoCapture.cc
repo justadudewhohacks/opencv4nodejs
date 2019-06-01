@@ -20,8 +20,8 @@ NAN_MODULE_INIT(VideoCapture::Init) {
 };
 
 NAN_METHOD(VideoCapture::New) {
-  FF_ASSERT_CONSTRUCT_CALL(VideoCapture);
-  FF_METHOD_CONTEXT("VideoCapture::New");
+	FF::TryCatch tryCatch("VideoCapture::New");
+  FF_ASSERT_CONSTRUCT_CALL();
   VideoCapture* self = new VideoCapture();
   if (info[0]->IsString()) {
     self->path = FF::StringConverter::unwrapUnchecked(info[0]);
@@ -31,10 +31,10 @@ NAN_METHOD(VideoCapture::New) {
     self->self.open(info[0]->ToUint32(Nan::GetCurrentContext()).ToLocalChecked()->Value());
   }
   else {
-    FF_THROW("expected arg 0 to be path or device port");
+    return tryCatch.throwError("expected arg 0 to be path or device port");
   }
   if (!self->self.isOpened()) {
-    FF_THROW("failed to open capture");
+    return tryCatch.throwError("failed to open capture");
   }
 
   self->Wrap(info.Holder());
@@ -42,11 +42,12 @@ NAN_METHOD(VideoCapture::New) {
 }
 
 NAN_METHOD(VideoCapture::Reset) {
+	FF::TryCatch tryCatch("VideoCapture::Reset");
   VideoCapture* self = Nan::ObjectWrap::Unwrap<VideoCapture>(info.This());
   self->self.release();
   self->self.open(self->path);
   if (!self->self.isOpened()) {
-	return Nan::ThrowError(FF::newString(std::string("VideoCapture::Reset") + " - " + std::string("failed to reset capture")));
+	return tryCatch.throwError("failed to reset capture");
   }
 }
 

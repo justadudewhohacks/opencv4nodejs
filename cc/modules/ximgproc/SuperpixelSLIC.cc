@@ -27,14 +27,12 @@ NAN_MODULE_INIT(SuperpixelSLIC::Init) {
 };
 
 NAN_METHOD(SuperpixelSLIC::New) {
-	FF_ASSERT_CONSTRUCT_CALL(SuperpixelSLIC);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SuperpixelSLIC::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	SuperpixelSLIC::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSLIC::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	SuperpixelSLIC* self = new SuperpixelSLIC();
@@ -53,13 +51,11 @@ NAN_METHOD(SuperpixelSLIC::New) {
 }
 
 NAN_METHOD(SuperpixelSLIC::Iterate) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SuperpixelSLIC::Iterate");
 
 	uint iterations = 10;
 	if (FF::UintConverter::optArg(0, &iterations, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSLIC::Iterate");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	SuperpixelSLIC* self = Nan::ObjectWrap::Unwrap<SuperpixelSLIC>(info.This());

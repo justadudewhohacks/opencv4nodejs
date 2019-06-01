@@ -45,7 +45,7 @@ public:
 	}
 
 	static NAN_SETTER(pupilsSet) {
-		FF::TryCatch tryCatch;
+		FF::TryCatch tryCatch("FacemarkLBFParams::pupilsSet");
 		v8::Local<v8::Array> jsArr = v8::Local<v8::Array>::Cast(value);
 		for (uint i = 0; i < jsArr->Length(); i++) {
 			std::vector<int> vec;

@@ -6,7 +6,7 @@
 
 #define FF_ASSERT_INDEX_RANGE(idx, max, what)																										\
 	if (idx < 0 || max < idx) {																																		\
-		FF_THROW("Index out of bounds: " + std::string(what) + " at index " + std::to_string(idx));	\
+		return tryCatch.throwError("Index out of bounds: " + std::string(what) + " at index " + std::to_string(idx));	\
 	}				
 
 #define FF_APPLY_FUNC(func, arg0, arg1, ret) func(arg0, arg1, ret);
@@ -16,17 +16,15 @@
 
 /* TODO fix non scalar matrix multiplication, division */
 
-#define FF_ERR_WHERE(func, clazz) std::string(#clazz) + "  " + std::string(#func) + " : "
-
 #define FF_SELF_OPERATOR(func)							\
 	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));	\
 	func(unwrapSelf(info), unwrapClassPtrUnchecked(jsObj)->self);			\
 	return info.GetReturnValue().Set(jsObj);					
 
-#define FF_SCALAR_OPERATOR(func, applyFunc, clazz)			\
-	if (!info[0]->IsNumber()) {																			\
-		return Nan::ThrowError(FF::newString(FF_ERR_WHERE(func, clazz)	\
-			+ std::string("expected arg to be a Scalar")));							\
+#define FF_SCALAR_OPERATOR(func, applyFunc, clazz, methodName) \
+	FF::TryCatch tryCatch(methodName); \
+	if (!info[0]->IsNumber()) {	\
+		return tryCatch.throwError("expected arg to be a Scalar"); \
 	}																																\
 	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));							\
 	applyFunc(																											\
@@ -37,9 +35,10 @@
 	);																															\
 	return info.GetReturnValue().Set(jsObj);																																																										
 
-#define FF_OPERATOR(func, applyFunc, clazz) \
+#define FF_OPERATOR(func, applyFunc, clazz, methodName) \
+	FF::TryCatch tryCatch(methodName); \
 	if (!Nan::New(constructor)->HasInstance(info[0])) { \
-			return Nan::ThrowError(FF::newString(FF_ERR_WHERE(func, clazz) + std::string("expected arg to be an instance of ") + std::string(#clazz))); \
+			return tryCatch.throwError("expected arg to be an instance of " + std::string(#clazz)); \
 	} \
 	v8::Local<v8::Object> jsObj = FF::newInstance(Nan::New(constructor));															\
 	applyFunc(																																			\
@@ -50,9 +49,10 @@
 	);																																							\
 	return info.GetReturnValue().Set(jsObj);
 
-#define FF_OPERATOR_RET_SCALAR(func, applyFunc, clazz)									\
+#define FF_OPERATOR_RET_SCALAR(func, applyFunc, clazz, methodName) \
+	FF::TryCatch tryCatch(methodName); \
 	if (!Nan::New(constructor)->HasInstance(info[0])) { \
-			return Nan::ThrowError(FF::newString(FF_ERR_WHERE(func, clazz) + std::string("expected arg to be an instance of ") + std::string(#clazz))); \
+			return tryCatch.throwError("expected arg to be an instance of " + std::string(#clazz)); \
 	} \
 	double ret;																																			\
 	applyFunc(																																			\
@@ -94,28 +94,28 @@
 
 #define FF_INIT_ARITHMETIC_OPERATIONS(clazz)					\
 	static NAN_METHOD(Add) {																			\
-		FF_OPERATOR(+, FF_APPLY_OPERATOR, clazz);				\
+		FF_OPERATOR(+, FF_APPLY_OPERATOR, clazz, "Add");				\
 	}																															\
 	static NAN_METHOD(Sub) {																			\
-		FF_OPERATOR(-, FF_APPLY_OPERATOR, clazz);				\
+		FF_OPERATOR(-, FF_APPLY_OPERATOR, clazz, "Sub");				\
 	}																															\
 	static NAN_METHOD(Mul) {																			\
-		FF_SCALAR_OPERATOR(*, FF_APPLY_OPERATOR, clazz);	\
+		FF_SCALAR_OPERATOR(*, FF_APPLY_OPERATOR, clazz, "Mul");	\
 	}																															\
 	static NAN_METHOD(Div) {																			\
-		FF_SCALAR_OPERATOR(/, FF_APPLY_OPERATOR, clazz);	\
+		FF_SCALAR_OPERATOR(/, FF_APPLY_OPERATOR, clazz, "Div");	\
 	}																															\
 
 #define FF_INIT_MATRIX_OPERATIONS(clazz)											\
 	FF_INIT_ARITHMETIC_OPERATIONS(clazz)												\
 	static NAN_METHOD(HMul) {																							\
-		FF_OPERATOR(cv::multiply, FF_APPLY_FUNC, clazz);					\
+		FF_OPERATOR(cv::multiply, FF_APPLY_FUNC, clazz, "HMul");					\
 	}																																			\
 	static NAN_METHOD(HDiv) {																							\
-		FF_OPERATOR(cv::divide, FF_APPLY_FUNC, clazz);						\
+		FF_OPERATOR(cv::divide, FF_APPLY_FUNC, clazz, "HDiv");						\
 	}																																			\
 	static NAN_METHOD(Absdiff) {																					\
-		FF_OPERATOR(cv::absdiff, FF_APPLY_FUNC, clazz);					\
+		FF_OPERATOR(cv::absdiff, FF_APPLY_FUNC, clazz, "Absdiff");					\
 	}																																			\
 	static NAN_METHOD(Exp) {																							\
 		FF_SELF_OPERATOR(cv::exp);																\
@@ -130,22 +130,22 @@
 #define FF_INIT_MAT_OPERATIONS()																						\
 	FF_INIT_MATRIX_OPERATIONS(Mat);										\
 	static NAN_METHOD(And) {																									\
-		FF_OPERATOR(&, FF_APPLY_OPERATOR, Mat);					\
+		FF_OPERATOR(&, FF_APPLY_OPERATOR, Mat, "And");					\
 	}																																					\
 	static NAN_METHOD(Or) {																										\
-		FF_OPERATOR(|, FF_APPLY_OPERATOR, Mat);					\
+		FF_OPERATOR(|, FF_APPLY_OPERATOR, Mat, "Or");					\
 	}																																					\
 	static NAN_METHOD(BitwiseAnd) {																						\
-		FF_OPERATOR(cv::bitwise_and, FF_APPLY_FUNC, Mat);\
+		FF_OPERATOR(cv::bitwise_and, FF_APPLY_FUNC, Mat, "BitwiseAnd");\
 	}																																					\
 	static NAN_METHOD(BitwiseNot) {																						\
 		FF_SELF_OPERATOR(cv::bitwise_not);								\
 	}																																					\
 	static NAN_METHOD(BitwiseOr) {																						\
-		FF_OPERATOR(cv::bitwise_or, FF_APPLY_FUNC, Mat);	\
+		FF_OPERATOR(cv::bitwise_or, FF_APPLY_FUNC, Mat, "BitwiseOr");	\
 	}																																					\
 	static NAN_METHOD(BitwiseXor) {																						\
-		FF_OPERATOR(cv::bitwise_xor, FF_APPLY_FUNC, Mat);\
+		FF_OPERATOR(cv::bitwise_xor, FF_APPLY_FUNC, Mat, "BitwiseXor");\
 	}																																					\
 	static NAN_METHOD(Abs) {																									\
 		return info.GetReturnValue().Set(Converter::wrap(cv::abs(unwrapSelf(info))));\
@@ -158,7 +158,7 @@
 		FF_SELF_OPERATOR(cv::transpose);									\
 	}																																					\
 	static NAN_METHOD(MatMul) {																								\
-		FF_OPERATOR(*, FF_APPLY_OPERATOR, Mat);					\
+		FF_OPERATOR(*, FF_APPLY_OPERATOR, Mat, "MatMul");					\
 	}																																					
 
 #define FF_INIT_VEC2_OPERATIONS()	FF_INIT_MATRIX_OPERATIONS(Vec2);

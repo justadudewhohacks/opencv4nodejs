@@ -14,11 +14,12 @@ NAN_MODULE_INIT(Size::Init) {
 };
 
 NAN_METHOD(Size::New) {
-	FF_ASSERT_CONSTRUCT_CALL(Size);
+	FF::TryCatch tryCatch("Size::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	Size* self = new Size();
 	if (info.Length() > 0) {
 		if (info.Length() < 2) {
-			return Nan::ThrowError("Size::New - expected arguments width, height");
+			return tryCatch.throwError("expected arguments width, height");
 		}
 		double width = info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 		double height = info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();

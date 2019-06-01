@@ -25,14 +25,12 @@ NAN_MODULE_INIT(ORBDetector::Init) {
 };
 
 NAN_METHOD(ORBDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(ORBDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("ORBDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	ORBDetector::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("ORBDetector::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	ORBDetector* self = new ORBDetector();

@@ -49,14 +49,12 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
   Nan::Set(target,FF::newString("HOGDescriptor"), FF::getFunction(ctor));
 };
 NAN_METHOD(HOGDescriptor::New) {
-	FF_ASSERT_CONSTRUCT_CALL(HOGDescriptor);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("HOGDescriptor::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	HOGDescriptorBindings::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("HOGDescriptor::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	HOGDescriptor* self = new HOGDescriptor();
@@ -93,34 +91,30 @@ NAN_METHOD(HOGDescriptor::CheckDetectorSize) {
 }
 
 NAN_METHOD(HOGDescriptor::SetSVMDetector) {
-  FF_METHOD_CONTEXT("SetSVMDetector");
+  FF::TryCatch tryCatch("HOGDescriptor::SetSVMDetector");
   std::vector<float> detector;
   if (!FF::hasArg(info, 0) || FF::FloatArrayConverter::unwrapTo(&detector, info[0])) {
-    FF_THROW("expected detector to be an Array of type Number");
+	  return tryCatch.throwError("expected detector to be an Array of type Number");
   }
   HOGDescriptor::unwrapSelf(info)->setSVMDetector(detector);
 }
 
 NAN_METHOD(HOGDescriptor::Save) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("HOGDescriptor::Save");
 
 	std::string path;
 	if (FF::StringConverter::arg(0, &path, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("HOGDescriptor::Save");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 	HOGDescriptor::unwrapSelf(info)->save(path);
 }
 
 NAN_METHOD(HOGDescriptor::Load) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("HOGDescriptor::Load");
 
 	std::string path;
 	if (FF::StringConverter::arg(0, &path, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("HOGDescriptor::Load");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 	HOGDescriptor::unwrapSelf(info)->load(path);
 }

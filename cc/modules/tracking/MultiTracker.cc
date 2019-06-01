@@ -31,7 +31,8 @@ NAN_MODULE_INIT(MultiTracker::Init) {
 };
 
 NAN_METHOD(MultiTracker::New) {
-	FF_ASSERT_CONSTRUCT_CALL(MultiTracker);
+	FF::TryCatch tryCatch("MultiTracker::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	MultiTracker* self = new MultiTracker();
 	self->setNativeObject(cv::MultiTracker::create());
 	self->Wrap(info.Holder());
@@ -39,15 +40,14 @@ NAN_METHOD(MultiTracker::New) {
 };
 
 NAN_METHOD(MultiTracker::AddMIL) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddMIL");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 	) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddMIL"));
-		return;
+		return tryCatch.reThrow();
 	}
 #if CV_MINOR_VERSION > 2
 	cv::Ptr<cv::Tracker> type = cv::TrackerMIL::create();
@@ -59,15 +59,14 @@ NAN_METHOD(MultiTracker::AddMIL) {
 }
 
 NAN_METHOD(MultiTracker::AddBOOSTING) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddBOOSTING");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddBOOSTING"));
-		return;
+		return tryCatch.reThrow();
 	}
 #if CV_MINOR_VERSION > 2
 	cv::Ptr<cv::Tracker> type = cv::TrackerBoosting::create();
@@ -79,15 +78,14 @@ NAN_METHOD(MultiTracker::AddBOOSTING) {
 }
 
 NAN_METHOD(MultiTracker::AddMEDIANFLOW) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddMEDIANFLOW");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddMEDIANFLOW"));
-		return;
+		return tryCatch.reThrow();
 	}
 #if CV_MINOR_VERSION > 2
 	cv::Ptr<cv::Tracker> type = cv::TrackerMedianFlow::create();
@@ -99,15 +97,14 @@ NAN_METHOD(MultiTracker::AddMEDIANFLOW) {
 }
 
 NAN_METHOD(MultiTracker::AddTLD) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddTLD");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddTLD"));
-		return;
+		return tryCatch.reThrow();
 	}
 #if CV_MINOR_VERSION > 2
 	cv::Ptr<cv::Tracker> type = cv::TrackerTLD::create();
@@ -119,15 +116,14 @@ NAN_METHOD(MultiTracker::AddTLD) {
 }
 
 NAN_METHOD(MultiTracker::AddKCF) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddKCF");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddKCF"));
-		return;
+		return tryCatch.reThrow();
 	}
 #if CV_MINOR_VERSION > 2
 	cv::Ptr<cv::Tracker> type = cv::TrackerKCF::create();
@@ -139,10 +135,10 @@ NAN_METHOD(MultiTracker::AddKCF) {
 }
 
 NAN_METHOD(MultiTracker::Update) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::Update");
 	cv::Mat image;
 	if (Mat::Converter::arg(0, &image, info)) {
-		return tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::Update"));
+		return tryCatch.reThrow();
 	}
 
 	std::vector<cv::Rect2d> rects;
@@ -152,15 +148,14 @@ NAN_METHOD(MultiTracker::Update) {
 #if CV_MINOR_VERSION > 3
 
 NAN_METHOD(MultiTracker::AddMOSSE) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddMOSSE");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddMOSSE"));
-		return;
+		return tryCatch.reThrow();
 	}
 	cv::Ptr<cv::Tracker> type = cv::TrackerMOSSE::create();
 	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
@@ -171,15 +166,14 @@ NAN_METHOD(MultiTracker::AddMOSSE) {
 #if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
 
 NAN_METHOD(MultiTracker::AddCSRT) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddCSRT");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddCSRT"));
-		return;
+		return tryCatch.reThrow();
 	}
 	cv::Ptr<cv::Tracker> type = cv::TrackerCSRT::create();
 	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);

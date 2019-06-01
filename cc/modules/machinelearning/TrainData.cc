@@ -20,16 +20,14 @@ NAN_MODULE_INIT(TrainData::Init) {
 };
 
 NAN_METHOD(TrainData::New) {
-  FF_ASSERT_CONSTRUCT_CALL(TrainData);
+	FF::TryCatch tryCatch("TrainData::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	TrainData* self = new TrainData();
 	if (info.Length() > 0) {
-		FF::TryCatch tryCatch;
 		TrainData::NewWorker worker;
 
 		if (worker.applyUnwrappers(info)) {
-			v8::Local<v8::Value> err = tryCatch.formatCatchedError("TrainData::New");
-			tryCatch.throwNew(err);
-			return;
+			return tryCatch.reThrow();
 		}
 
 		// TODO: uchar / char converter

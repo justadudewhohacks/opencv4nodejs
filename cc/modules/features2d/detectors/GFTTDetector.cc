@@ -22,14 +22,12 @@ NAN_MODULE_INIT(GFTTDetector::Init) {
 };
 
 NAN_METHOD(GFTTDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(GFTTDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("GFTTDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	GFTTDetector::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("GFTTDetector::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	GFTTDetector* self = new GFTTDetector();

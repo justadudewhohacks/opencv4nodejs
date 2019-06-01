@@ -26,9 +26,10 @@ public:
 	}
 
 	static NAN_SETTER(locationsSet) {
+		FF::TryCatch tryCatch("DetectionROI::locationsSet");
 		std::vector<cv::Point> locations;
 		if (Point2::ArrayWithCastConverter<cv::Point2i>::unwrapTo(&locations, value)) {
-			return Nan::ThrowError("expected locations to be an Array of type Point2");
+			return tryCatch.throwError("expected locations to be an Array of type Point2");
 		}
 		DetectionROI::unwrapThis(info)->self.locations = locations;
 	}
@@ -38,9 +39,10 @@ public:
 	}
 
 	static NAN_SETTER(confidencesSet) {
+		FF::TryCatch tryCatch("DetectionROI::locationsSet");
 		std::vector<double> confidences;
 		if (FF::DoubleArrayConverter::unwrapTo(&confidences, value)) {
-			return Nan::ThrowError("expected confidences to be an Array of type Number");
+			return tryCatch.throwError("expected confidences to be an Array of type Number");
 		}
 		DetectionROI::unwrapThis(info)->self.confidences = confidences;
 	}

@@ -14,15 +14,14 @@ NAN_METHOD(Tracker::Clear) {
 }
 
 NAN_METHOD(Tracker::Init) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Tracker::Init");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Tracker::Init"));
-		return;
+		return tryCatch.reThrow();
 	}
 
 	bool ret = Tracker::unwrapThis(info)->getTracker()->init(image, boundingBox);
@@ -30,11 +29,10 @@ NAN_METHOD(Tracker::Init) {
 }
 
 NAN_METHOD(Tracker::Update) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Tracker::Update");
 	cv::Mat image;
 	if (Mat::Converter::arg(0, &image, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Tracker::Update"));
-		return;
+		return tryCatch.reThrow();
 	}
 	v8::Local<v8::Object> jsRect = FF::newInstance(Nan::New(Rect::constructor));
 	bool ret = Tracker::unwrapThis(info)->getTracker()->update(image, Rect::Converter::unwrapUnchecked(jsRect));

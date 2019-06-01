@@ -35,7 +35,8 @@ NAN_MODULE_INIT(SimpleBlobDetectorParams::Init) {
 
 
 NAN_METHOD(SimpleBlobDetectorParams::New) {
-	FF_ASSERT_CONSTRUCT_CALL(SimpleBlobDetectorParams);
+	FF::TryCatch tryCatch("SimpleBlobDetectorParams::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	SimpleBlobDetectorParams* self = new SimpleBlobDetectorParams();
 	self->self = cv::SimpleBlobDetector::Params();
 	self->Wrap(info.Holder());
