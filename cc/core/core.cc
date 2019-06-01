@@ -139,8 +139,8 @@ NAN_METHOD(Core::Kmeans) {
   cv::TermCriteria termCriteria;
   int k, attempts, flags;
   if ((
-	  isPoint2 && Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &pts2d, info) ||
-	  !isPoint2 && Point3::ArrayWithCastConverter<cv::Point3f>::arg(0, &pts3d, info)
+	  (isPoint2 && Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &pts2d, info)) ||
+	  (!isPoint2 && Point3::ArrayWithCastConverter<cv::Point3f>::arg(0, &pts3d, info))
 	  ) ||
 	  FF::IntConverter::arg(1, &k, info) ||
 	  TermCriteria::Converter::arg(2, &termCriteria, info) ||

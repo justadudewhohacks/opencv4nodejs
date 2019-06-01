@@ -214,11 +214,11 @@ NAN_METHOD(Imgproc::Plot1DHist) {
 		Mat::Converter::arg(1, &plot, info) ||
 		Vec3::Converter::arg(2, &color, info) ||
 		(
-			FF::isArgObject(info, 3) && (
+			(FF::isArgObject(info, 3) && (
 				FF::IntConverter::optProp(&lineType, "lineType", opts) ||
 				FF::IntConverter::optProp(&thickness, "thickness", opts) ||
 				FF::IntConverter::optProp(&shift, "shift", opts)
-			) || (
+			)) || (
 				FF::IntConverter::optArg(3, &lineType, info) ||
 				FF::IntConverter::optArg(4, &thickness, info) ||
 				FF::IntConverter::optArg(5, &shift, info)
@@ -286,8 +286,8 @@ NAN_METHOD(Imgproc::FitLine) {
   uint distType;
   double param, reps, aeps;
   if ((
-	isPoint2 && Point2::ArrayConverter::arg(0, &pts2d, info) ||
-	!isPoint2 && Point3::ArrayConverter::arg(0, &pts3d, info)
+	(isPoint2 && Point2::ArrayConverter::arg(0, &pts2d, info)) ||
+	(!isPoint2 && Point3::ArrayConverter::arg(0, &pts3d, info))
 	) ||
 	FF::UintConverter::arg(1, &distType, info) ||
 	FF::DoubleConverter::arg(2, &param, info) ||

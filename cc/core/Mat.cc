@@ -379,10 +379,10 @@ NAN_METHOD(Mat::Norm) {
 
   FF::TryCatch tryCatch;
   if (
-	  hasOptArgsObj && (
+	  (hasOptArgsObj && (
 		FF::UintConverter::optProp(&normType, "normType", optArgs) ||
 		Mat::Converter::optProp(&mask, "mask", optArgs)
-		) || (
+		)) || (
 		FF::UintConverter::optArg(i, &normType, info) ||
 		Mat::Converter::optArg(i + 1, &mask, info)
 		)
@@ -460,8 +460,7 @@ NAN_METHOD(Mat::Row) {
 
 NAN_METHOD(Mat::Release) {
     // must get pointer to the original; else we are just getting a COPY and then releasing that!
-    cv::Mat *mat = &(Mat::unwrapSelf(info));
-    mat->release();
+    Mat::unwrapThis(info)->self.release();
 }
 
 NAN_METHOD(Mat::PushBack) {

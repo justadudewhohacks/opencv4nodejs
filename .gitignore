@@ -12,3 +12,4 @@ data/dnn
 .idea/
 dist
 .DS_Store
+native-node-utils

@@ -41,7 +41,7 @@
 		FF::TryCatch tryCatch; \
 		ff_type val; \
 		if (ff_converter::unwrapTo(&val, value)) { \
-			tryCatch.throwNew(tryCatch.formatCatchedError(#name)); \
+			return tryCatch.throwNew(tryCatch.formatCatchedError(#name)); \
 		} \
 		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = val; \
 	}
