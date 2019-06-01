@@ -117,8 +117,6 @@ NAN_METHOD(Imgproc::UndistortPointsAsync) {
 }
 
 NAN_METHOD(Imgproc::CalcHist) {
-  FF_METHOD_CONTEXT("CalcHist");
-
   FF::TryCatch tryCatch;
   cv::Mat img, mask = cv::noArray().getMat();
   std::vector<std::vector<float>> _ranges;

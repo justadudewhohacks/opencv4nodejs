@@ -23,10 +23,7 @@ NAN_MODULE_INIT(Core::Init) {
 };
 
 NAN_METHOD(Core::GetBuildInformation) {
-  FF_METHOD_CONTEXT("Core::GetBuildInformation");
-
-  v8::Local<v8::Value> ret = FF::newString(cv::getBuildInformation());
-  info.GetReturnValue().Set(ret);
+  info.GetReturnValue().Set(FF::newString(cv::getBuildInformation()));
 }
 
 template<class TClass, class TNativeObject>
@@ -215,13 +212,10 @@ NAN_METHOD(Core::PolarToCartAsync) {
 }
 
 NAN_METHOD(Core::GetNumThreads) {
-  FF_METHOD_CONTEXT("Core::GetNumThreads");
   info.GetReturnValue().Set(FF::IntConverter::wrap(cv::getNumThreads()));
 }
 
 NAN_METHOD(Core::SetNumThreads) {
-  FF_METHOD_CONTEXT("Core::SetNumThreads");
-
   int num;
   if(FF::IntConverter::arg(0, &num, info)) {
     return Nan::ThrowError("Core::SetNumThreads expected arg0 to an int");
@@ -230,6 +224,5 @@ NAN_METHOD(Core::SetNumThreads) {
 }
 
 NAN_METHOD(Core::GetThreadNum) {
-  FF_METHOD_CONTEXT("Core::GetNumThreads");
   info.GetReturnValue().Set(FF::IntConverter::wrap(cv::getThreadNum()));
 }

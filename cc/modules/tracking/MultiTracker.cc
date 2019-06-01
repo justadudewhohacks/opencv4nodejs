@@ -32,7 +32,6 @@ NAN_MODULE_INIT(MultiTracker::Init) {
 
 NAN_METHOD(MultiTracker::New) {
 	FF_ASSERT_CONSTRUCT_CALL(MultiTracker);
-	FF_METHOD_CONTEXT("MultiTracker::New");
 	MultiTracker* self = new MultiTracker();
 	self->setNativeObject(cv::MultiTracker::create());
 	self->Wrap(info.Holder());

@@ -22,7 +22,6 @@ NAN_MODULE_INIT(TrackerGOTURN::Init) {
 
 NAN_METHOD(TrackerGOTURN::New) {
 	FF_ASSERT_CONSTRUCT_CALL(TrackerGOTURN);
-	FF_METHOD_CONTEXT("TrackerGOTURN::New");
 
 	TrackerGOTURN* self = new TrackerGOTURN();
 #if CV_VERSION_MINOR > 2

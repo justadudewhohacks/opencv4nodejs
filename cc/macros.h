@@ -53,16 +53,14 @@
 #define FF_SETTER_STRING(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::StringConverter, std::string)
 
 #define FF_SETTER_SIMPLE(clazz, name, prop, converter)  										\
-	NAN_SETTER(name##Set) {																										\
-		FF_METHOD_CONTEXT(#name);												      									\
+	NAN_SETTER(name##Set) {											      									\
 		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = converter::unwrapUnchecked(	\
 			value																																	\
 		);																																			\
 	}
 
 #define FF_SETTER_COMPLEX(clazz, name, prop, type, converter) 	\
-	NAN_SETTER(name##Set) {																				\
-		FF_METHOD_CONTEXT(#name);												    				\
+	NAN_SETTER(name##Set) {										    				\
 		type target;																								\
 		converter::unwrapTo(&target, value);													\
 		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = target;	\

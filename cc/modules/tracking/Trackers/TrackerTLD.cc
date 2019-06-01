@@ -20,7 +20,6 @@ NAN_MODULE_INIT(TrackerTLD::Init) {
 
 NAN_METHOD(TrackerTLD::New) {
 	FF_ASSERT_CONSTRUCT_CALL(TrackerTLD);
-	FF_METHOD_CONTEXT("TrackerTLD::New");
 
 	TrackerTLD* self = new TrackerTLD();
 #if CV_VERSION_MINOR > 2

@@ -17,7 +17,6 @@ NAN_MODULE_INIT(DescriptorMatch::Init) {
 
 NAN_METHOD(DescriptorMatch::New) {
   FF_ASSERT_CONSTRUCT_CALL(DescriptorMatch);
-	FF_METHOD_CONTEXT("DescriptorMatch::New");
 	DescriptorMatch* self = new DescriptorMatch();
 	if (info.Length() > 0) {
 		FF::TryCatch tryCatch;

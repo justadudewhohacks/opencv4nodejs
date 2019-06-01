@@ -24,7 +24,6 @@ NAN_MODULE_INIT(TrackerBoostingParams::Init) {
 
 NAN_METHOD(TrackerBoostingParams::New) {
 	FF_ASSERT_CONSTRUCT_CALL(TrackerBoostingParams);
-	FF_METHOD_CONTEXT("TrackerBoostingParams::New");
 	TrackerBoostingParams* self = new TrackerBoostingParams();
 	self->self = cv::TrackerBoosting::Params();
 	self->Wrap(info.Holder());

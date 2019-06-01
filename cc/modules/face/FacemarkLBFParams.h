@@ -45,11 +45,10 @@ public:
 	}
 
 	static NAN_SETTER(pupilsSet) {
-		FF_METHOD_CONTEXT("pupils");
+		FF::TryCatch tryCatch;
 		v8::Local<v8::Array> jsArr = v8::Local<v8::Array>::Cast(value);
 		for (uint i = 0; i < jsArr->Length(); i++) {
 			std::vector<int> vec;
-			Nan::TryCatch tryCatch;
 			if (FF::IntArrayConverter::unwrapTo(&vec, Nan::Get(jsArr, i).ToLocalChecked())) {
 				tryCatch.ReThrow();
 			}

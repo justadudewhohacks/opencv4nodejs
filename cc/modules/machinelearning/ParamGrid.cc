@@ -17,7 +17,6 @@ NAN_MODULE_INIT(ParamGrid::Init) {
 
 NAN_METHOD(ParamGrid::New) {
   FF_ASSERT_CONSTRUCT_CALL(ParamGrid);
-	FF_METHOD_CONTEXT("ParamGrid::New");
 	ParamGrid* self = new ParamGrid();
 	if (info.Length() > 0) {
 		FF::TryCatch tryCatch;

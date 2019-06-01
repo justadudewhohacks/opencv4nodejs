@@ -133,8 +133,6 @@ NAN_METHOD(Facemark::GetFacesAsync) {
 }
 
 NAN_METHOD(Facemark::SetFaceDetector) {
-  FF_METHOD_CONTEXT("SetFaceDetector");
-
   if (!info[0]->IsFunction()) {
     return Nan::ThrowError(Nan::New("Facemark::SetFaceDetector - Error: "
                                     "expected argument 0 to be of type")

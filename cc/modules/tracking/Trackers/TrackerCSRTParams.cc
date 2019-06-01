@@ -49,7 +49,6 @@ NAN_MODULE_INIT(TrackerCSRTParams::Init) {
 
 NAN_METHOD(TrackerCSRTParams::New) {
 	FF_ASSERT_CONSTRUCT_CALL(TrackerCSRTParams);
-	FF_METHOD_CONTEXT("TrackerCSRTParams::New");
 	TrackerCSRTParams* self = new TrackerCSRTParams();
 	self->self = cv::TrackerCSRT::Params();
 	self->Wrap(info.Holder());

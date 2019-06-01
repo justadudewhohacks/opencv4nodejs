@@ -364,8 +364,6 @@ NAN_METHOD(Mat::GetRegion) {
 }
 
 NAN_METHOD(Mat::Norm) {
-  FF_METHOD_CONTEXT("Mat::Norm");
-
   bool withSrc2 = FF::hasArg(info, 0) && Mat::hasInstance(info[0]);
   uint i = withSrc2 ? 1 : 0;
   double norm;
