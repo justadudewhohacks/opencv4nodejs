@@ -16,9 +16,9 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	static FF_GETTER(DescriptorMatch, GetQueryIdx, self.queryIdx)
-	static FF_GETTER(DescriptorMatch, GetTrainIdx, self.trainIdx)
-	static FF_GETTER(DescriptorMatch, GetDistance, self.distance)
+	FF_ACCESSORS(queryIdx, FF::IntConverter);
+	FF_ACCESSORS(trainIdx, FF::IntConverter);
+	FF_ACCESSORS(distance, FF::FloatConverter);
 };
 
 #endif

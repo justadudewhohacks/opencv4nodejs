@@ -7,18 +7,18 @@ NAN_MODULE_INIT(KAZEDetector::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	FeatureDetector::Init(ctor);
-  constructor.Reset(ctor);
+	constructor.Reset(ctor);
 	ctor->SetClassName(Nan::New("KAZEDetector").ToLocalChecked());
-  instanceTemplate->SetInternalFieldCount(1);
+	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("extended").ToLocalChecked(), KAZEDetector::GetExtended);
-	Nan::SetAccessor(instanceTemplate, Nan::New("upright").ToLocalChecked(), KAZEDetector::GetUpright);
-	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), KAZEDetector::GetThreshold);
-	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaves").ToLocalChecked(), KAZEDetector::GetNOctaves);
-	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaveLayers").ToLocalChecked(), KAZEDetector::GetNOctaveLayers);
-	Nan::SetAccessor(instanceTemplate, Nan::New("diffusivity").ToLocalChecked(), KAZEDetector::GetDiffusivity);
+	Nan::SetAccessor(instanceTemplate, Nan::New("extended").ToLocalChecked(), extended_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("upright").ToLocalChecked(), upright_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), threshold_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaves").ToLocalChecked(), nOctaves_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaveLayers").ToLocalChecked(), nOctaveLayers_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("diffusivity").ToLocalChecked(), diffusivity_getter);
 
-  Nan::Set(target,Nan::New("KAZEDetector").ToLocalChecked(), FF::getFunction(ctor));
+	Nan::Set(target,Nan::New("KAZEDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(KAZEDetector::New) {
@@ -31,7 +31,7 @@ NAN_METHOD(KAZEDetector::New) {
 	}
 
 	KAZEDetector* self = new KAZEDetector();
-	self->detector = cv::KAZE::create(worker.extended, worker.upright, worker.threshold, worker.nOctaves, worker.nOctaveLayers, worker.diffusivity);
+	self->self = cv::KAZE::create(worker.extended, worker.upright, worker.threshold, worker.nOctaves, worker.nOctaveLayers, worker.diffusivity);
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }

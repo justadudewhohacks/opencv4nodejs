@@ -22,13 +22,14 @@ public:
 
 	static NAN_MODULE_INIT(Init);
 
-	static FF_GETTER(Mat, GetRows, self.rows);
-	static FF_GETTER(Mat, GetCols, self.cols);
-	static FF_GETTER(Mat, GetType, self.type());
-	static FF_GETTER(Mat, GetChannels, self.channels());
-	static FF_GETTER(Mat, GetDims, self.dims);
-	static FF_GETTER(Mat, GetDepth, self.depth());
-	static FF_GETTER(Mat, GetIsEmpty, self.empty());
+	FF_GETTER(rows, FF::IntConverter);
+	FF_GETTER(cols, FF::IntConverter);
+	FF_GETTER_CUSTOM(type, FF::IntConverter, self.type());
+	FF_GETTER_CUSTOM(channels, FF::IntConverter, self.channels());
+	FF_GETTER_CUSTOM(dims, FF::IntConverter, self.dims);
+	FF_GETTER_CUSTOM(depth, FF::IntConverter, self.depth());
+	FF_GETTER_CUSTOM(empty, FF::IntConverter, self.empty());
+
 	static NAN_GETTER(GetElemSize) {
 		info.GetReturnValue().Set((int)Mat::unwrapSelf(info).elemSize());
 	};

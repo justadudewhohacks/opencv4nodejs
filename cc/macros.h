@@ -3,24 +3,36 @@
 #ifndef __FF_MACROS_H__
 #define __FF_MACROS_H__
 
-/* TO BE REMOVED */
-#define FF_CAST_OBJ(val) Nan::To<v8::Object>(val).ToLocalChecked()
-#define FF_IS_ARRAY(val) val->IsArray()
-
-/* ------------- */
-
-#define FF_GETTER(clazz, name, prop)	\
-	NAN_GETTER(name) { info.GetReturnValue().Set(Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop); }
-
-#define FF_GETTER_SIMPLE(clazz, name, prop, converter)  \
-	NAN_GETTER(name) { 																		\
-		v8::Local<v8::Value> jsValue = converter::wrap(			\
-			Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop	\
-		);																									\
-		info.GetReturnValue().Set(jsValue);									\
+/* define getters, custom expression for accessing properties of "self" */
+#define FF_GETTER_CUSTOM(ff_property_name, ff_property_converter, ff_access_property_expr) \
+	static ff_property_converter::Type getProperty_##ff_property_name(ClassType* self) { \
+		return self->ff_access_property_expr; \
+	} \
+	static NAN_GETTER(ff_property_name##_getter) { \
+		getter<ff_property_converter>(info, getProperty_##ff_property_name); \
 	}
 
-#define FF_GETTER_COMPLEX(clazz, name, prop, converter) FF_GETTER_SIMPLE(clazz, name, prop, converter)
+/* define getters */
+#define FF_GETTER(ff_property_name, ff_property_converter) \
+	FF_GETTER_CUSTOM(ff_property_name, ff_property_converter, self.ff_property_name)
+
+/* define accessors, custom expression for accessing properties of "self" */
+#define FF_ACCESSORS_CUSTOM(ff_property_name, ff_property_converter, ff_access_property_expr) \
+	FF_GETTER_CUSTOM(ff_property_name, ff_property_converter, ff_access_property_expr); \
+	static void setProperty_##ff_property_name(ClassType* self, ff_property_converter::Type val) { \
+		self->ff_access_property_expr = val; \
+	} \
+	static NAN_SETTER(ff_property_name##_setter) { \
+		setter<ff_property_converter>(#ff_property_name, info, value, setProperty_##ff_property_name); \
+	}
+
+/* define accessors */
+#define FF_ACCESSORS(ff_property_name, ff_property_converter) \
+	FF_ACCESSORS_CUSTOM(ff_property_name, ff_property_converter, self.ff_property_name)
+
+/* define accessors, self is pointer type */
+#define FF_ACCESSORS_PTR(ff_property_name, ff_property_converter) \
+	FF_ACCESSORS_CUSTOM(ff_property_name, ff_property_converter, self->ff_property_name)
 
 #define FF_SET_JS_PROP(obj, prop, val) Nan::Set(obj, FF::newString(#prop), val)
 
@@ -31,35 +43,5 @@
   if (!info.IsConstructCall()) { \
     return tryCatch.throwError("constructor has to be called with \"new\" keyword"); \
   }
-
-#define FF_SETTER(clazz, name, prop, ff_converter, ff_type)	\
-	NAN_SETTER(name##Set) {	\
-		FF::TryCatch tryCatch(#name); \
-		ff_type val; \
-		if (ff_converter::unwrapTo(&val, value)) { \
-			return tryCatch.reThrow(); \
-		} \
-		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = val; \
-	}
-
-#define FF_SETTER_INT(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::IntConverter, int)
-#define FF_SETTER_UINT(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::UintConverter, uint)
-#define FF_SETTER_NUMBER(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::DoubleConverter, double)
-#define FF_SETTER_BOOL(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::BoolConverter, bool)
-#define FF_SETTER_STRING(clazz, name, prop) FF_SETTER(clazz, name, prop, FF::StringConverter, std::string)
-
-#define FF_SETTER_SIMPLE(clazz, name, prop, converter)  										\
-	NAN_SETTER(name##Set) {											      									\
-		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = converter::unwrapUnchecked(	\
-			value																																	\
-		);																																			\
-	}
-
-#define FF_SETTER_COMPLEX(clazz, name, prop, type, converter) 	\
-	NAN_SETTER(name##Set) {										    				\
-		type target;																								\
-		converter::unwrapTo(&target, value);													\
-		Nan::ObjectWrap::Unwrap<clazz>(info.This())->prop = target;	\
-	}
 
 #endif

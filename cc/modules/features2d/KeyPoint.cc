@@ -10,13 +10,13 @@ NAN_MODULE_INIT(KeyPoint::Init) {
 	instanceTemplate->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("KeyPoint").ToLocalChecked());
 
-  Nan::SetAccessor(instanceTemplate, Nan::New("localId").ToLocalChecked(), GetLocalId);
-  Nan::SetAccessor(instanceTemplate, Nan::New("point").ToLocalChecked(), GetPoint);
-  Nan::SetAccessor(instanceTemplate, Nan::New("angle").ToLocalChecked(), GetAngle);
-  Nan::SetAccessor(instanceTemplate, Nan::New("classId").ToLocalChecked(), GetClassId);
-  Nan::SetAccessor(instanceTemplate, Nan::New("response").ToLocalChecked(), GetResponse);
-  Nan::SetAccessor(instanceTemplate, Nan::New("size").ToLocalChecked(), GetSize);
-  Nan::SetAccessor(instanceTemplate, Nan::New("octave").ToLocalChecked(), GetOctave);
+  Nan::SetAccessor(instanceTemplate, Nan::New("localId").ToLocalChecked(), localId_getter);
+  Nan::SetAccessor(instanceTemplate, Nan::New("pt").ToLocalChecked(), pt_getter, pt_setter);
+  Nan::SetAccessor(instanceTemplate, Nan::New("angle").ToLocalChecked(), angle_getter, angle_setter);
+  Nan::SetAccessor(instanceTemplate, Nan::New("class_id").ToLocalChecked(), class_id_getter, class_id_setter);
+  Nan::SetAccessor(instanceTemplate, Nan::New("response").ToLocalChecked(), response_getter, response_setter);
+  Nan::SetAccessor(instanceTemplate, Nan::New("size").ToLocalChecked(), size_getter, size_setter);
+  Nan::SetAccessor(instanceTemplate, Nan::New("octave").ToLocalChecked(), octave_getter, octave_setter);
 
   Nan::Set(target,Nan::New("KeyPoint").ToLocalChecked(), FF::getFunction(ctor));
 };

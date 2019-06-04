@@ -8,6 +8,10 @@ class MSERDetector : public FeatureDetector, public FF::ObjectWrapTemplate<MSERD
 public:
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
+	static const char* getClassName() {
+		return "MSERDetector";
+	}
+
 	cv::Ptr<cv::FeatureDetector> getDetector(void) {
 		return self;
 	}
@@ -29,16 +33,16 @@ public:
   static NAN_MODULE_INIT(Init); 
   static NAN_METHOD(New);
 
-	static FF_GETTER(MSERDetector, GetDelta, delta);
-	static FF_GETTER(MSERDetector, GetMinArea, minArea);
-	static FF_GETTER(MSERDetector, GetMaxArea, maxArea);
-	static FF_GETTER(MSERDetector, GetMaxVariation, maxVariation);
-	static FF_GETTER(MSERDetector, GetMinDiversity, minDiversity);
-	static FF_GETTER(MSERDetector, GetMaxEvolution, maxEvolution);
-	static FF_GETTER(MSERDetector, GetAreaThreshold, areaThreshold);
-	static FF_GETTER(MSERDetector, GetMinMargin, minMargin);
-	static FF_GETTER(MSERDetector, GetEdgeBlurSize, edgeBlurSize);
-    
+	FF_GETTER_CUSTOM(delta, FF::IntConverter, delta);
+	FF_GETTER_CUSTOM(minArea, FF::IntConverter, minArea);
+	FF_GETTER_CUSTOM(maxArea, FF::IntConverter, maxArea);
+	FF_GETTER_CUSTOM(maxVariation, FF::DoubleConverter, maxVariation);
+	FF_GETTER_CUSTOM(minDiversity, FF::DoubleConverter, minDiversity);
+	FF_GETTER_CUSTOM(maxEvolution, FF::IntConverter, maxEvolution);
+	FF_GETTER_CUSTOM(areaThreshold, FF::DoubleConverter, areaThreshold);
+	FF_GETTER_CUSTOM(minMargin, FF::DoubleConverter, minMargin);
+	FF_GETTER_CUSTOM(edgeBlurSize, FF::IntConverter, edgeBlurSize);
+
     static NAN_METHOD(DetectRegions);
 	static NAN_METHOD(DetectRegionsAsync);
 

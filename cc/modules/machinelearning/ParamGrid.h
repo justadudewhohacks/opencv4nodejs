@@ -16,9 +16,9 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	static FF_GETTER(ParamGrid, minVal, self.minVal);
-	static FF_GETTER(ParamGrid, maxVal, self.maxVal);
-	static FF_GETTER(ParamGrid, logStep, self.logStep);
+	FF_ACCESSORS(minVal, FF::DoubleConverter);
+	FF_ACCESSORS(maxVal, FF::DoubleConverter);
+	FF_ACCESSORS(logStep, FF::DoubleConverter);
 };
 
 #endif

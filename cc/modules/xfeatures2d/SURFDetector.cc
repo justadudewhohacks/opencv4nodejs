@@ -13,11 +13,11 @@ NAN_MODULE_INIT(SURFDetector::Init) {
   instanceTemplate->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("SURFDetector").ToLocalChecked());
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("hessianThreshold").ToLocalChecked(), SURFDetector::GetHessianThreshold);
-	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaves").ToLocalChecked(), SURFDetector::GetNOctaves);
-	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaveLayers").ToLocalChecked(), SURFDetector::GetNOctaveLayers);
-	Nan::SetAccessor(instanceTemplate, Nan::New("extended").ToLocalChecked(), SURFDetector::GetExtended);
-	Nan::SetAccessor(instanceTemplate, Nan::New("upright").ToLocalChecked(), SURFDetector::GetUpright);
+	Nan::SetAccessor(instanceTemplate, Nan::New("hessianThreshold").ToLocalChecked(), hessianThreshold_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaves").ToLocalChecked(), nOctaves_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaveLayers").ToLocalChecked(), nOctaveLayers_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("extended").ToLocalChecked(), extended_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("upright").ToLocalChecked(), upright_getter);
 
   Nan::Set(target,Nan::New("SURFDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
@@ -32,7 +32,7 @@ NAN_METHOD(SURFDetector::New) {
 
 	SURFDetector* self = new SURFDetector();
 	try {
-		self->detector = cv::xfeatures2d::SURF::create(
+		self->self = cv::xfeatures2d::SURF::create(
 			worker.hessianThreshold,
 			worker.nOctaves,
 			worker.nOctaveLayers,

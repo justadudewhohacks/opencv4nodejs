@@ -7,8 +7,8 @@ NAN_MODULE_INIT(Size::Init) {
 	Size::constructor.Reset(ctor);
 	ctor->InstanceTemplate()->SetInternalFieldCount(1);
 	ctor->SetClassName(Nan::New("Size").ToLocalChecked());
-	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("width").ToLocalChecked(), Size::GetWidth);
-	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("height").ToLocalChecked(), Size::GetHeight);
+	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("width").ToLocalChecked(), Size::width_getter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("height").ToLocalChecked(), Size::height_getter);
 
   Nan::Set(target,Nan::New("Size").ToLocalChecked(), FF::getFunction(ctor));
 };

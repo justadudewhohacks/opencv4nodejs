@@ -24,9 +24,9 @@ public:
 		FF_PROTO_SET_MATRIX_OPERATIONS(ctor);
 	}
 
-	static FF_GETTER(Vec3, GetX, self[0]);
-	static FF_GETTER(Vec3, GetY, self[1]);
-	static FF_GETTER(Vec3, GetZ, self[2]);
+	FF_GETTER_CUSTOM(x, FF::DoubleConverter, self[0]);
+	FF_GETTER_CUSTOM(y, FF::DoubleConverter, self[1]);
+	FF_GETTER_CUSTOM(z, FF::DoubleConverter, self[2]);
 
 	FF_INIT_VEC3_OPERATIONS();
 	static NAN_METHOD(Dot) {

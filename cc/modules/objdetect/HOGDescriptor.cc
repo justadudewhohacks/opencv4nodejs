@@ -11,18 +11,18 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
   ctor->SetClassName(FF::newString("HOGDescriptor"));
   instanceTemplate->SetInternalFieldCount(1);
 
-  Nan::SetAccessor(instanceTemplate, FF::newString("winSize"), winSize);
-  Nan::SetAccessor(instanceTemplate, FF::newString("blockSize"), blockSize);
-  Nan::SetAccessor(instanceTemplate, FF::newString("blockStride"), blockStride);
-  Nan::SetAccessor(instanceTemplate, FF::newString("cellSize"), cellSize);
-  Nan::SetAccessor(instanceTemplate, FF::newString("nbins"), nbins);
-  Nan::SetAccessor(instanceTemplate, FF::newString("derivAperture"), derivAperture);
-  Nan::SetAccessor(instanceTemplate, FF::newString("histogramNormType"), histogramNormType);
-  Nan::SetAccessor(instanceTemplate, FF::newString("nlevels"), nlevels);
-  Nan::SetAccessor(instanceTemplate, FF::newString("winSigma"), winSigma);
-  Nan::SetAccessor(instanceTemplate, FF::newString("L2HysThreshold"), L2HysThreshold);
-  Nan::SetAccessor(instanceTemplate, FF::newString("gammaCorrection"), gammaCorrection);
-  Nan::SetAccessor(instanceTemplate, FF::newString("signedGradient"), signedGradient);
+  Nan::SetAccessor(instanceTemplate, FF::newString("winSize"), winSize_getter, winSize_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("blockSize"), blockSize_getter, blockSize_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("blockStride"), blockStride_getter, blockStride_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("cellSize"), cellSize_getter, cellSize_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("nbins"), nbins_getter, nbins_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("derivAperture"), derivAperture_getter, derivAperture_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("histogramNormType"), histogramNormType_getter, histogramNormType_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("nlevels"), nlevels_getter, nlevels_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("winSigma"), winSigma_getter, winSigma_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("L2HysThreshold"), L2HysThreshold_getter, L2HysThreshold_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("gammaCorrection"), gammaCorrection_getter, gammaCorrection_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("signedGradient"), signedGradient_getter, signedGradient_setter);
 
   Nan::SetMethod(ctor, "getDaimlerPeopleDetector", GetDaimlerPeopleDetector);
   Nan::SetMethod(ctor, "getDefaultPeopleDetector", GetDefaultPeopleDetector);

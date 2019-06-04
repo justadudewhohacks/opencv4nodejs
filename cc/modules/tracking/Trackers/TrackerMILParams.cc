@@ -12,13 +12,13 @@ NAN_MODULE_INIT(TrackerMILParams::Init) {
 	ctor->SetClassName(FF::newString("TrackerMILParams"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, FF::newString("samplerInitInRadius"), samplerInitInRadiusGet, samplerInitInRadiusSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("samplerSearchWinSize"), samplerSearchWinSizeGet, samplerSearchWinSizeSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("samplerTrackInRadius"), samplerTrackInRadiusGet, samplerTrackInRadiusSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("samplerInitMaxNegNum"), samplerInitMaxNegNumGet, samplerInitMaxNegNumSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("samplerTrackMaxPosNum"), samplerTrackMaxPosNumGet, samplerTrackMaxPosNumSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("samplerTrackMaxNegNum"), samplerTrackMaxNegNumGet, samplerTrackMaxNegNumSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("featureSetNumFeatures"), featureSetNumFeaturesGet, featureSetNumFeaturesSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerInitInRadius"), samplerInitInRadius_getter, samplerInitInRadius_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerSearchWinSize"), samplerSearchWinSize_getter, samplerSearchWinSize_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerTrackInRadius"), samplerTrackInRadius_getter, samplerTrackInRadius_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerInitMaxNegNum"), samplerInitMaxNegNum_getter, samplerInitMaxNegNum_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerTrackMaxPosNum"), samplerTrackMaxPosNum_getter, samplerTrackMaxPosNum_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerTrackMaxNegNum"), samplerTrackMaxNegNum_getter, samplerTrackMaxNegNum_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("featureSetNumFeatures"), featureSetNumFeatures_getter, featureSetNumFeatures_setter);
 
 	Nan::Set(target,FF::newString("TrackerMILParams"), FF::getFunction(ctor));
 };

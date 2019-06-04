@@ -15,13 +15,13 @@ NAN_MODULE_INIT(Mat::Init) {
   constructor.Reset(ctor);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("Mat").ToLocalChecked());
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("rows").ToLocalChecked(), Mat::GetRows);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("cols").ToLocalChecked(), Mat::GetCols);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("type").ToLocalChecked(), Mat::GetType);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("channels").ToLocalChecked(), Mat::GetChannels);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("dims").ToLocalChecked(), Mat::GetDims);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("depth").ToLocalChecked(), Mat::GetDepth);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("empty").ToLocalChecked(), Mat::GetIsEmpty);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("rows").ToLocalChecked(), Mat::rows_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("cols").ToLocalChecked(), Mat::cols_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("type").ToLocalChecked(), Mat::type_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("channels").ToLocalChecked(), Mat::channels_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("dims").ToLocalChecked(), Mat::dims_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("depth").ToLocalChecked(), Mat::depth_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("empty").ToLocalChecked(), Mat::empty_getter);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("sizes").ToLocalChecked(), Mat::GetSizes);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("elemSize").ToLocalChecked(), Mat::GetElemSize);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("step").ToLocalChecked(), Mat::GetStep);
@@ -133,7 +133,7 @@ NAN_METHOD(Mat::New) {
     v8::Local<v8::Array> jsChannelMats = v8::Local<v8::Array>::Cast(info[0]);
     std::vector<cv::Mat> channels;
     for (uint i = 0; i < jsChannelMats->Length(); i++) {
-      v8::Local<v8::Object> jsChannelMat = FF_CAST_OBJ(Nan::Get(jsChannelMats, i).ToLocalChecked());
+      v8::Local<v8::Object> jsChannelMat = Nan::To<v8::Object>(Nan::Get(jsChannelMats, i).ToLocalChecked()).ToLocalChecked();
 	  if (!Nan::New(Mat::constructor)->HasInstance(jsChannelMat)) {
 		return tryCatch.throwError("expected channel " + std::to_string(i) + " to be an instance of Mat");
 	  }
@@ -252,7 +252,7 @@ NAN_METHOD(Mat::At) {
   v8::Local<v8::Value> val;
   v8::Local<v8::Value> jsVal;
 
-  if (FF_IS_ARRAY(info[0])) {
+  if (info[0]->IsArray()) {
     if ((long)v8::Local<v8::Array>::Cast(info[0])->Length() != matSelf.dims) {
 		tryCatch.throwError("expected array length to be equal to the dims");
     }

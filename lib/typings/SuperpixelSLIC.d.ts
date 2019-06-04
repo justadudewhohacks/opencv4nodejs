@@ -1,7 +1,7 @@
 import { Mat } from './Mat.d';
 
 export class SuperpixelSLIC {
-  readonly img: Mat;
+  readonly image: Mat;
   readonly labels: Mat;
   readonly labelContourMask: Mat;
   readonly algorithm: number;

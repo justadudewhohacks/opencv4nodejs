@@ -5,24 +5,26 @@
 #ifndef __FF_SURFDETECTOR_H__
 #define __FF_SURFDETECTOR_H__
 
-class SURFDetector : public FeatureDetector {
+class SURFDetector : public FeatureDetector, public FF::ObjectWrapTemplate<SURFDetector, cv::Ptr<cv::xfeatures2d::SURF>> {
 public:
-	cv::Ptr<cv::xfeatures2d::SURF> detector;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-  static NAN_MODULE_INIT(Init); 
-  static NAN_METHOD(New);
-
-	static FF_GETTER(SURFDetector, GetHessianThreshold, detector->getHessianThreshold());
-	static FF_GETTER(SURFDetector, GetNOctaves, detector->getNOctaves());
-	static FF_GETTER(SURFDetector, GetNOctaveLayers, detector->getNOctaveLayers());
-	static FF_GETTER(SURFDetector, GetExtended, detector->getExtended());
-	static FF_GETTER(SURFDetector, GetUpright, detector->getUpright());
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Ptr<cv::FeatureDetector> getDetector() {
-		return detector;
+	static const char* getClassName() {
+		return "SURFDetector";
 	}
+
+	cv::Ptr<cv::FeatureDetector> getDetector(void) {
+		return self;
+	}
+
+	FF_GETTER_CUSTOM(hessianThreshold, FF::DoubleConverter, self->getHessianThreshold());
+	FF_GETTER_CUSTOM(nOctaves, FF::IntConverter, self->getNOctaves());
+	FF_GETTER_CUSTOM(nOctaveLayers, FF::IntConverter, self->getNOctaveLayers());
+	FF_GETTER_CUSTOM(extended, FF::BoolConverter, self->getExtended());
+	FF_GETTER_CUSTOM(upright, FF::BoolConverter, self->getUpright());
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 
 	struct NewWorker : CatchCvExceptionWorker {
 	public:

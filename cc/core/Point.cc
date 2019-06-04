@@ -8,8 +8,8 @@ NAN_MODULE_INIT(Point::Init) {
 	Point2::constructor.Reset(pt2Ctor);
 	pt2Ctor->InstanceTemplate()->SetInternalFieldCount(1);
 	pt2Ctor->SetClassName(Nan::New("Point2").ToLocalChecked());
-	Nan::SetAccessor(pt2Ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Point2::GetX);
-	Nan::SetAccessor(pt2Ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Point2::GetY);
+	Nan::SetAccessor(pt2Ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Point2::x_getter);
+	Nan::SetAccessor(pt2Ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Point2::y_getter);
 	Nan::SetPrototypeMethod(pt2Ctor, "norm", Point2::Norm);
 	Nan::SetPrototypeMethod(pt2Ctor, "at", Point2::At);
 	Point2::Init(pt2Ctor);
@@ -18,9 +18,9 @@ NAN_MODULE_INIT(Point::Init) {
 	Point3::constructor.Reset(pt3Ctor);
 	pt3Ctor->InstanceTemplate()->SetInternalFieldCount(1);
 	pt3Ctor->SetClassName(Nan::New("Point3").ToLocalChecked());
-	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Point3::GetX);
-	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Point3::GetY);
-	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("z").ToLocalChecked(), Point3::GetZ);
+	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Point3::x_getter);
+	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Point3::y_getter);
+	Nan::SetAccessor(pt3Ctor->InstanceTemplate(), Nan::New("z").ToLocalChecked(), Point3::z_getter);
 	Nan::SetPrototypeMethod(pt3Ctor, "norm", Point3::Norm);
 	Nan::SetPrototypeMethod(pt3Ctor, "at", Point3::At);
 	Point3::Init(pt3Ctor);

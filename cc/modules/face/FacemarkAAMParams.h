@@ -18,26 +18,16 @@ public:
   static NAN_MODULE_INIT(Init);
   static NAN_METHOD(New);
 
-  static FF_GETTER(FacemarkAAMParams, mGet, self.m);
-  static FF_SETTER_INT(FacemarkAAMParams, m, self.m);
-  static FF_GETTER(FacemarkAAMParams, maxMGet, self.max_m);
-  static FF_SETTER_INT(FacemarkAAMParams, maxM, self.max_m);
-  static FF_GETTER(FacemarkAAMParams, maxNGet, self.max_n);
-  static FF_SETTER_INT(FacemarkAAMParams, maxN, self.max_n);
-  static FF_GETTER_SIMPLE(FacemarkAAMParams, modelFilenameGet, self.model_filename, FF::StringConverter);
-  static FF_SETTER_SIMPLE(FacemarkAAMParams, modelFilename, self.model_filename, FF::StringConverter);
-  static FF_GETTER(FacemarkAAMParams, nGet, self.n);
-  static FF_SETTER_INT(FacemarkAAMParams, n, self.n);
-  static FF_GETTER(FacemarkAAMParams, nIterGet, self.n_iter);
-  static FF_SETTER_INT(FacemarkAAMParams, nIter, self.n_iter);
-  static FF_GETTER(FacemarkAAMParams, saveModelGet, self.save_model);
-  static FF_SETTER_BOOL(FacemarkAAMParams, saveModel, self.save_model);
-  static FF_GETTER_COMPLEX(FacemarkAAMParams, scalesGet, self.scales, FF::FloatArrayConverter);
-  static FF_SETTER_COMPLEX(FacemarkAAMParams, scales, self.scales, std::vector<float>, FF::FloatArrayConverter);
-  static FF_GETTER(FacemarkAAMParams, textureMaxMGet, self.texture_max_m);
-  static FF_SETTER_INT(FacemarkAAMParams, textureMaxM, self.texture_max_m);
-  static FF_GETTER(FacemarkAAMParams, verboseGet, self.verbose);
-  static FF_SETTER_BOOL(FacemarkAAMParams, verbose, self.verbose);
+  FF_ACCESSORS(m, FF::IntConverter);
+  FF_ACCESSORS(max_m, FF::IntConverter);
+  FF_ACCESSORS(max_n, FF::IntConverter);
+  FF_ACCESSORS(model_filename, FF::StringConverter);
+  FF_ACCESSORS(n, FF::IntConverter);
+  FF_ACCESSORS(n_iter, FF::IntConverter);
+  FF_ACCESSORS(save_model, FF::BoolConverter);
+  FF_ACCESSORS(scales, FF::FloatArrayConverter);
+  FF_ACCESSORS(texture_max_m, FF::IntConverter);
+  FF_ACCESSORS(verbose, FF::BoolConverter);
 };
 
 #endif

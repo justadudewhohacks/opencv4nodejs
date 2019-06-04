@@ -11,13 +11,13 @@ NAN_MODULE_INIT(AKAZEDetector::Init) {
 	ctor->SetClassName(Nan::New("AKAZEDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("descriptorType").ToLocalChecked(), AKAZEDetector::GetDescriptorType);
-	Nan::SetAccessor(instanceTemplate, Nan::New("descriptorSize").ToLocalChecked(), AKAZEDetector::GetDescriptorSize);
-	Nan::SetAccessor(instanceTemplate, Nan::New("descriptorChannels").ToLocalChecked(), AKAZEDetector::GetDescriptorChannels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), AKAZEDetector::GetThreshold);
-	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaves").ToLocalChecked(), AKAZEDetector::GetNOctaves);
-	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaveLayers").ToLocalChecked(), AKAZEDetector::GetNOctaveLayers);
-	Nan::SetAccessor(instanceTemplate, Nan::New("diffusivity").ToLocalChecked(), AKAZEDetector::GetDiffusity);
+	Nan::SetAccessor(instanceTemplate, Nan::New("descriptorType").ToLocalChecked(), descriptorType_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("descriptorSize").ToLocalChecked(), descriptorSize_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("descriptorChannels").ToLocalChecked(), descriptorChannels_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), threshold_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaves").ToLocalChecked(), nOctaves_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaveLayers").ToLocalChecked(), nOctaveLayers_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("diffusivity").ToLocalChecked(), diffusivity_getter);
 
   Nan::Set(target,Nan::New("AKAZEDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
@@ -32,7 +32,7 @@ NAN_METHOD(AKAZEDetector::New) {
 	}
 
 	AKAZEDetector* self = new AKAZEDetector();
-	self->detector = cv::AKAZE::create(worker.descriptorType, worker.descriptorSize, worker.descriptorChannels, worker.threshold, worker.nOctaves, worker.nOctaveLayers, worker.diffusivity);
+	self->self = cv::AKAZE::create(worker.descriptorType, worker.descriptorSize, worker.descriptorChannels, worker.threshold, worker.nOctaves, worker.nOctaveLayers, worker.diffusivity);
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }

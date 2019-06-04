@@ -9,12 +9,12 @@ NAN_MODULE_INIT(TrainData::Init) {
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(FF::newString("TrainData"));
 
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("layout"), layout);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("samples"), samples);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("responses"), responses);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("varIdx"), varIdx);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("sampleWeights"), sampleWeights);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("varType"), varType);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("layout"), layout_getter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("samples"), samples_getter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("responses"), responses_getter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("varIdx"), varIdx_getter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("sampleWeights"), sampleWeights_getter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("varType"), varType_getter);
 
 	Nan::Set(target,FF::newString("TrainData"), FF::getFunction(ctor));
 };

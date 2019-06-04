@@ -5,29 +5,32 @@
 #ifndef __FF_SIFTDETECTOR_H__
 #define __FF_SIFTDETECTOR_H__
 
-class SIFTDetector : public FeatureDetector {
+class SIFTDetector : public FeatureDetector, public FF::ObjectWrapTemplate<SIFTDetector, cv::Ptr<cv::xfeatures2d::SIFT>> {
 public:
-	cv::Ptr<cv::xfeatures2d::SIFT> detector;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "SIFTDetector";
+	}
+
+	cv::Ptr<cv::FeatureDetector> getDetector(void) {
+		return self;
+	}
+
 	int nFeatures;
 	int nOctaveLayers;
 	double contrastThreshold;
 	double edgeThreshold;
 	double sigma;
 
-  static NAN_MODULE_INIT(Init); 
-  static NAN_METHOD(New);
+	FF_GETTER_CUSTOM(nFeatures, FF::IntConverter, nFeatures);
+	FF_GETTER_CUSTOM(nOctaveLayers, FF::IntConverter, nOctaveLayers);
+	FF_GETTER_CUSTOM(contrastThreshold, FF::DoubleConverter, contrastThreshold);
+	FF_GETTER_CUSTOM(edgeThreshold, FF::DoubleConverter, edgeThreshold);
+	FF_GETTER_CUSTOM(sigma, FF::DoubleConverter, sigma);
 
-	static FF_GETTER(SIFTDetector, GetNFeatures, nFeatures);
-	static FF_GETTER(SIFTDetector, GeNOctaveLayers, nOctaveLayers);
-	static FF_GETTER(SIFTDetector, GetContrastThreshold, contrastThreshold);
-	static FF_GETTER(SIFTDetector, GetEdgeThreshold, edgeThreshold);
-	static FF_GETTER(SIFTDetector, GetSigma, sigma);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Ptr<cv::FeatureDetector> getDetector() {
-		return detector;
-	}
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 
 	struct NewWorker : CatchCvExceptionWorker {
 	public:

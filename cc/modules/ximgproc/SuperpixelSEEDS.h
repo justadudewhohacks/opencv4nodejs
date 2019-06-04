@@ -7,7 +7,13 @@
 
 class SuperpixelSEEDS : public FF::ObjectWrap<SuperpixelSEEDS, cv::Ptr<cv::ximgproc::SuperpixelSEEDS>> {
 public:
-	cv::Mat img;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "SuperpixelSEEDS";
+	}
+
+	cv::Mat image;
 	cv::Mat labels;
 	cv::Mat labelContourMask;
 	int num_superpixels;
@@ -17,28 +23,19 @@ public:
 	bool double_step = false;
 	int numCalculatedSuperpixels = 0;
 
-  static NAN_MODULE_INIT(Init); 
-  static NAN_METHOD(New);
+	FF_GETTER_CUSTOM(image, Mat::Converter, image);
+	FF_GETTER_CUSTOM(labels, Mat::Converter, labels);
+	FF_GETTER_CUSTOM(labelContourMask, Mat::Converter, labelContourMask);
+	FF_GETTER_CUSTOM(num_superpixels, FF::IntConverter, num_superpixels);
+	FF_GETTER_CUSTOM(num_levels, FF::IntConverter, num_levels);
+	FF_GETTER_CUSTOM(prior, FF::IntConverter, prior);
+	FF_GETTER_CUSTOM(histogram_bins, FF::IntConverter, histogram_bins);
+	FF_GETTER_CUSTOM(double_step, FF::BoolConverter, double_step);
+	FF_GETTER_CUSTOM(numCalculatedSuperpixels, FF::IntConverter, numCalculatedSuperpixels);
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 	static NAN_METHOD(Iterate);
-
-	static NAN_GETTER(GetImg) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->img));
-	}
-	static NAN_GETTER(GetLabels) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->labels));
-	}
-	static NAN_GETTER(GetLabelContourMask) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->labelContourMask));
-	}
-
-	static FF_GETTER(SuperpixelSEEDS, GetNumSuperpixels, num_superpixels);
-	static FF_GETTER(SuperpixelSEEDS, GeNumLevels, num_levels);
-	static FF_GETTER(SuperpixelSEEDS, GetPrior, prior);
-	static FF_GETTER(SuperpixelSEEDS, GetHistogramBins, histogram_bins);
-	static FF_GETTER(SuperpixelSEEDS, GetDoubleStep, double_step);
-	static FF_GETTER(SuperpixelSEEDS, GetNumCalculatedSuperpixels, numCalculatedSuperpixels);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
 
   struct NewWorker : public CatchCvExceptionWorker {
   public:

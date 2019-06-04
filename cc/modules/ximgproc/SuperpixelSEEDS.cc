@@ -11,15 +11,16 @@ NAN_MODULE_INIT(SuperpixelSEEDS::Init) {
   instanceTemplate->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("SuperpixelSEEDS").ToLocalChecked());
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("img").ToLocalChecked(), SuperpixelSEEDS::GetImg);
-	Nan::SetAccessor(instanceTemplate, Nan::New("numSuperpixels").ToLocalChecked(), SuperpixelSEEDS::GetNumSuperpixels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("numLevels").ToLocalChecked(), SuperpixelSEEDS::GeNumLevels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("prior").ToLocalChecked(), SuperpixelSEEDS::GetPrior);
-	Nan::SetAccessor(instanceTemplate, Nan::New("histogramBins").ToLocalChecked(), SuperpixelSEEDS::GetHistogramBins);
-	Nan::SetAccessor(instanceTemplate, Nan::New("doubleStep").ToLocalChecked(), SuperpixelSEEDS::GetDoubleStep);
-	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), SuperpixelSEEDS::GetNumCalculatedSuperpixels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), SuperpixelSEEDS::GetLabels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), SuperpixelSEEDS::GetLabelContourMask);
+
+	Nan::SetAccessor(instanceTemplate, Nan::New("image").ToLocalChecked(), image_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), labels_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), labelContourMask_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("num_superpixels").ToLocalChecked(), num_superpixels_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("num_levels").ToLocalChecked(), num_levels_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("prior").ToLocalChecked(), prior_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("histogram_bins").ToLocalChecked(), histogram_bins_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("double_step").ToLocalChecked(), double_step_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), numCalculatedSuperpixels_getter);
 
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelSEEDS::Iterate);
 
@@ -36,7 +37,7 @@ NAN_METHOD(SuperpixelSEEDS::New) {
 	}
 
 	SuperpixelSEEDS* self = new SuperpixelSEEDS();
-	self->img = worker.img;
+	self->image = worker.img;
 	self->num_superpixels = worker.num_superpixels;
 	self->num_levels = worker.num_levels;
 	self->prior = worker.prior;
@@ -66,7 +67,7 @@ NAN_METHOD(SuperpixelSEEDS::Iterate) {
 	}
 
 	SuperpixelSEEDS* self = Nan::ObjectWrap::Unwrap<SuperpixelSEEDS>(info.This());
-	self->self->iterate(self->img, (int)iterations);
+	self->self->iterate(self->image, (int)iterations);
 	self->self->getLabels(self->labels);
 	self->numCalculatedSuperpixels = self->self->getNumberOfSuperpixels();
 	self->self->getLabelContourMask(self->labelContourMask);

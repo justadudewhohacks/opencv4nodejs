@@ -16,8 +16,8 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	static FF_GETTER(Size, GetWidth, self.width);
-	static FF_GETTER(Size, GetHeight, self.height);
+	FF_ACCESSORS(width, FF::DoubleConverter);
+	FF_ACCESSORS(height, FF::DoubleConverter);
 };
 
 #endif

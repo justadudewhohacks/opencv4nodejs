@@ -13,12 +13,12 @@ NAN_MODULE_INIT(SuperpixelLSC::Init) {
   instanceTemplate->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("SuperpixelLSC").ToLocalChecked());
 
-  Nan::SetAccessor(instanceTemplate, Nan::New("img").ToLocalChecked(), SuperpixelLSC::GetImg);
-	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), SuperpixelLSC::GetLabels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), SuperpixelLSC::GetLabelContourMask);
-	Nan::SetAccessor(instanceTemplate, Nan::New("regionSize").ToLocalChecked(), SuperpixelLSC::GetRegionSize);
-	Nan::SetAccessor(instanceTemplate, Nan::New("ratio").ToLocalChecked(), SuperpixelLSC::GetRatio);
-	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), SuperpixelLSC::GetNumCalculatedSuperpixels);
+  Nan::SetAccessor(instanceTemplate, Nan::New("image").ToLocalChecked(), image_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), labels_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), labelContourMask_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("region_size").ToLocalChecked(), region_size_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("ratio").ToLocalChecked(), ratio_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), numCalculatedSuperpixels_getter);
 
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelLSC::Iterate);
 

@@ -11,9 +11,9 @@ NAN_MODULE_INIT(BRISKDetector::Init) {
 	ctor->SetClassName(Nan::New("BRISKDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("thresh").ToLocalChecked(), BRISKDetector::GetThresh);
-	Nan::SetAccessor(instanceTemplate, Nan::New("octaves").ToLocalChecked(), BRISKDetector::GetOctaves);
-	Nan::SetAccessor(instanceTemplate, Nan::New("patternScale").ToLocalChecked(), BRISKDetector::GetPatternScale);
+	Nan::SetAccessor(instanceTemplate, Nan::New("thresh").ToLocalChecked(), thresh_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("octaves").ToLocalChecked(), octaves_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("patternScale").ToLocalChecked(), patternScale_getter);
 
   Nan::Set(target,Nan::New("BRISKDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
@@ -31,7 +31,7 @@ NAN_METHOD(BRISKDetector::New) {
 	self->thresh = worker.thresh;
 	self->octaves = worker.octaves;
 	self->patternScale = worker.patternScale;
-	self->detector = cv::BRISK::create(self->thresh, self->octaves, (float)self->patternScale);
+	self->self = cv::BRISK::create(self->thresh, self->octaves, (float)self->patternScale);
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }

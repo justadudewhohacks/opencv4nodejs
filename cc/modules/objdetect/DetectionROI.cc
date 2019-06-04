@@ -10,9 +10,9 @@ NAN_MODULE_INIT(DetectionROI::Init) {
 	ctor->SetClassName(FF::newString("DetectionROI"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, FF::newString("scale"), scaleGet, scaleSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("locations"), locationsGet, locationsSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("confidences"), confidencesGet, confidencesSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("scale"), scale_getter, scale_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("locations"), locations_getter, locations_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("confidences"), confidences_getter, confidences_setter);
 
 	Nan::Set(target,FF::newString("DetectionROI"), FF::getFunction(ctor));
 };

@@ -17,35 +17,9 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	static FF_GETTER(DetectionROI, scaleGet, self.scale);
-	static FF_SETTER_NUMBER(DetectionROI, scale, self.scale);
-
-	static NAN_GETTER(locationsGet) {
-		v8::Local<v8::Value> val = Point2::ArrayWithCastConverter<cv::Point2i>::wrap(unwrapSelf(info).locations);
-		info.GetReturnValue().Set(val);
-	}
-
-	static NAN_SETTER(locationsSet) {
-		FF::TryCatch tryCatch("DetectionROI::locationsSet");
-		std::vector<cv::Point> locations;
-		if (Point2::ArrayWithCastConverter<cv::Point2i>::unwrapTo(&locations, value)) {
-			return tryCatch.throwError("expected locations to be an Array of type Point2");
-		}
-		DetectionROI::unwrapThis(info)->self.locations = locations;
-	}
-
-	static NAN_GETTER(confidencesGet) {
-		info.GetReturnValue().Set(FF::DoubleArrayConverter::wrap(unwrapSelf(info).confidences));
-	}
-
-	static NAN_SETTER(confidencesSet) {
-		FF::TryCatch tryCatch("DetectionROI::locationsSet");
-		std::vector<double> confidences;
-		if (FF::DoubleArrayConverter::unwrapTo(&confidences, value)) {
-			return tryCatch.throwError("expected confidences to be an Array of type Number");
-		}
-		DetectionROI::unwrapThis(info)->self.confidences = confidences;
-	}
+	FF_ACCESSORS(scale, FF::DoubleConverter);
+	FF_ACCESSORS(locations, Point2::ArrayWithCastConverter<cv::Point2i>);
+	FF_ACCESSORS(confidences, FF::DoubleArrayConverter);
 };
 
 #endif

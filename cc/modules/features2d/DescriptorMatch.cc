@@ -3,16 +3,16 @@
 Nan::Persistent<v8::FunctionTemplate> DescriptorMatch::constructor;
 
 NAN_MODULE_INIT(DescriptorMatch::Init) {
-  v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(DescriptorMatch::New);
-  constructor.Reset(ctor);
-  ctor->InstanceTemplate()->SetInternalFieldCount(1);
-  ctor->SetClassName(Nan::New("DescriptorMatch").ToLocalChecked());
+	v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(DescriptorMatch::New);
+	constructor.Reset(ctor);
+	ctor->InstanceTemplate()->SetInternalFieldCount(1);
+	ctor->SetClassName(Nan::New("DescriptorMatch").ToLocalChecked());
 
-	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("queryIdx").ToLocalChecked(), GetQueryIdx);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("trainIdx").ToLocalChecked(), GetTrainIdx);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("distance").ToLocalChecked(), GetDistance);
+	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("queryIdx").ToLocalChecked(), queryIdx_getter, queryIdx_setter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("trainIdx").ToLocalChecked(), trainIdx_getter, trainIdx_setter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("distance").ToLocalChecked(), distance_getter, distance_setter);
 
-  Nan::Set(target,Nan::New("DescriptorMatch").ToLocalChecked(), FF::getFunction(ctor));
+	Nan::Set(target,Nan::New("DescriptorMatch").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(DescriptorMatch::New) {

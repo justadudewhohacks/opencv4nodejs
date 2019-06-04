@@ -9,24 +9,24 @@ NAN_MODULE_INIT(MSERDetector::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	FeatureDetector::Init(ctor);
-  constructor.Reset(ctor);
+	constructor.Reset(ctor);
 	ctor->SetClassName(Nan::New("MSERDetector").ToLocalChecked());
-  instanceTemplate->SetInternalFieldCount(1);
+	instanceTemplate->SetInternalFieldCount(1);
 
-    Nan::SetPrototypeMethod(ctor, "detectRegions", MSERDetector::DetectRegions);
+	Nan::SetPrototypeMethod(ctor, "detectRegions", MSERDetector::DetectRegions);
 	Nan::SetPrototypeMethod(ctor, "detectRegionsAsync", MSERDetector::DetectRegionsAsync);
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("delta").ToLocalChecked(), MSERDetector::GetDelta);
-	Nan::SetAccessor(instanceTemplate, Nan::New("minArea").ToLocalChecked(), MSERDetector::GetMinArea);
-	Nan::SetAccessor(instanceTemplate, Nan::New("maxArea").ToLocalChecked(), MSERDetector::GetMaxArea);
-	Nan::SetAccessor(instanceTemplate, Nan::New("maxVariation").ToLocalChecked(), MSERDetector::GetMaxVariation);
-	Nan::SetAccessor(instanceTemplate, Nan::New("minDiversity").ToLocalChecked(), MSERDetector::GetMinDiversity);
-	Nan::SetAccessor(instanceTemplate, Nan::New("maxEvolution").ToLocalChecked(), MSERDetector::GetMaxEvolution);
-	Nan::SetAccessor(instanceTemplate, Nan::New("areaThreshold").ToLocalChecked(), MSERDetector::GetAreaThreshold);
-	Nan::SetAccessor(instanceTemplate, Nan::New("minMargin").ToLocalChecked(), MSERDetector::GetMinMargin);
-	Nan::SetAccessor(instanceTemplate, Nan::New("edgeBlurSize").ToLocalChecked(), MSERDetector::GetEdgeBlurSize);
+	Nan::SetAccessor(instanceTemplate, Nan::New("delta").ToLocalChecked(), delta_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("minArea").ToLocalChecked(), minArea_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("maxArea").ToLocalChecked(), maxArea_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("maxVariation").ToLocalChecked(), maxVariation_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("minDiversity").ToLocalChecked(), minDiversity_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("maxEvolution").ToLocalChecked(), maxEvolution_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("areaThreshold").ToLocalChecked(), areaThreshold_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("minMargin").ToLocalChecked(), minMargin_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("edgeBlurSize").ToLocalChecked(), edgeBlurSize_getter);
 
-  Nan::Set(target,Nan::New("MSERDetector").ToLocalChecked(), FF::getFunction(ctor));
+	Nan::Set(target,Nan::New("MSERDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(MSERDetector::New) {

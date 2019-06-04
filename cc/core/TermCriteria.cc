@@ -7,9 +7,9 @@ NAN_MODULE_INIT(TermCriteria::Init) {
 	TermCriteria::constructor.Reset(ctor);
 	ctor->InstanceTemplate()->SetInternalFieldCount(1);
 	ctor->SetClassName(FF::newString("TermCriteria"));
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("type"), TermCriteria::GetType);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("maxCount"), TermCriteria::GetMaxCount);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("epsilon"), TermCriteria::GetEpsilon);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("type"), type_getter, type_setter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("maxCount"), maxCount_getter, maxCount_setter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("epsilon"), epsilon_getter, epsilon_setter);
 
   Nan::Set(target,FF::newString("TermCriteria"), FF::getFunction(ctor));
 };

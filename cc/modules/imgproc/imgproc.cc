@@ -139,7 +139,7 @@ NAN_METHOD(Imgproc::CalcHist) {
   // TODO replace old macros
   for (int i = 0; i < dims; ++i) {
     ranges.push_back(new float[dims]);
-    v8::Local<v8::Object> jsAxis = FF_CAST_OBJ(Nan::Get(jsHistAxes, i).ToLocalChecked());
+    v8::Local<v8::Object> jsAxis = Nan::To<v8::Object>((Nan::Get(jsHistAxes, i).ToLocalChecked())).ToLocalChecked();
 	if (!FF::hasOwnProperty(jsAxis, "ranges")) {
 		return tryCatch.throwError("expected axis object to have ranges property");
 	}

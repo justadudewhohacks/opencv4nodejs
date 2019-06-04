@@ -17,10 +17,10 @@ public:
 
 	static NAN_MODULE_INIT(Init);
 
-	static FF_GETTER(Rect, GetX, self.x);
-	static FF_GETTER(Rect, GetY, self.y);
-	static FF_GETTER(Rect, GetWidth, self.width);
-	static FF_GETTER(Rect, GetHeight, self.height);
+	FF_ACCESSORS(x, FF::DoubleConverter);
+	FF_ACCESSORS(y, FF::DoubleConverter);
+	FF_ACCESSORS(width, FF::DoubleConverter);
+	FF_ACCESSORS(height, FF::DoubleConverter);
 
 	static NAN_METHOD(New);
 	static NAN_METHOD(And);

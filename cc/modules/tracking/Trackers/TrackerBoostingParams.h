@@ -15,16 +15,11 @@ public:
   static NAN_MODULE_INIT(Init);
   static NAN_METHOD(New);
 
-	static FF_GETTER(TrackerBoostingParams, numClassifiersGet, self.numClassifiers);
-	static FF_SETTER_INT(TrackerBoostingParams, numClassifiers, self.numClassifiers);
-	static FF_GETTER(TrackerBoostingParams, samplerOverlapGet, self.samplerOverlap);
-	static FF_SETTER_NUMBER(TrackerBoostingParams, samplerOverlap, self.samplerOverlap);
-	static FF_GETTER(TrackerBoostingParams, samplerSearchFactorGet, self.samplerSearchFactor);
-	static FF_SETTER_NUMBER(TrackerBoostingParams, samplerSearchFactor, self.samplerSearchFactor);
-	static FF_GETTER(TrackerBoostingParams, iterationInitGet, self.iterationInit);
-	static FF_SETTER_INT(TrackerBoostingParams, iterationInit, self.iterationInit);
-	static FF_GETTER(TrackerBoostingParams, featureSetNumFeaturesGet, self.featureSetNumFeatures);
-	static FF_SETTER_INT(TrackerBoostingParams, featureSetNumFeatures, self.featureSetNumFeatures);
+	FF_ACCESSORS(numClassifiers, FF::IntConverter);
+	FF_ACCESSORS(samplerOverlap, FF::FloatConverter);
+	FF_ACCESSORS(samplerSearchFactor, FF::FloatConverter);
+	FF_ACCESSORS(iterationInit, FF::IntConverter);
+	FF_ACCESSORS(featureSetNumFeatures, FF::IntConverter);
 };
 
 #endif

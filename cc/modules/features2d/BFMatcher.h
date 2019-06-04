@@ -19,8 +19,8 @@ public:
 	int normType;
 	bool crossCheck;
 
-	static FF_GETTER(BFMatcher, GetNormType, normType)
-	static FF_GETTER(BFMatcher, GetCrossCheck, crossCheck)
+	FF_GETTER_CUSTOM(normType, FF::IntConverter, normType);
+	FF_GETTER_CUSTOM(crossCheck, FF::BoolConverter, crossCheck);
 
 	static NAN_MODULE_INIT(Init);
 

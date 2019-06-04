@@ -12,8 +12,8 @@ NAN_MODULE_INIT(BFMatcher::Init) {
 
    ctor->SetClassName(Nan::New("BFMatcher").ToLocalChecked());
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("normType").ToLocalChecked(), BFMatcher::GetNormType);
-  Nan::SetAccessor(instanceTemplate, Nan::New("crossCheck").ToLocalChecked(), BFMatcher::GetCrossCheck);
+	Nan::SetAccessor(instanceTemplate, Nan::New("normType").ToLocalChecked(), normType_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("crossCheck").ToLocalChecked(), crossCheck_getter);
 
     Nan::SetPrototypeMethod(ctor, "match", match);
     Nan::SetPrototypeMethod(ctor, "matchAsync", matchAsync);

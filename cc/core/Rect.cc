@@ -8,10 +8,10 @@ NAN_MODULE_INIT(Rect::Init) {
   Rect::constructor.Reset(ctor);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("Rect").ToLocalChecked());
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Rect::GetX);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Rect::GetY);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("width").ToLocalChecked(), Rect::GetWidth);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("height").ToLocalChecked(), Rect::GetHeight);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Rect::x_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Rect::y_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("width").ToLocalChecked(), Rect::width_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("height").ToLocalChecked(), Rect::height_getter);
 
   Nan::SetPrototypeMethod(ctor, "and", And);
   Nan::SetPrototypeMethod(ctor, "or", Or);

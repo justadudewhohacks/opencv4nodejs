@@ -19,27 +19,18 @@ public:
 		return "HOGDescriptor";
 	}
 
-	static NAN_GETTER(winSize) {
-		info.GetReturnValue().Set(Size::Converter::wrap(unwrapSelf(info)->winSize));
-	}
-	static NAN_GETTER(blockSize) {
-		info.GetReturnValue().Set(Size::Converter::wrap(unwrapSelf(info)->blockSize));
-	}
-	static NAN_GETTER(blockStride) {
-		info.GetReturnValue().Set(Size::Converter::wrap(unwrapSelf(info)->blockStride));
-	}
-	static NAN_GETTER(cellSize) {
-		info.GetReturnValue().Set(Size::Converter::wrap(unwrapSelf(info)->cellSize));
-	}
-
-	static FF_GETTER(HOGDescriptor, nbins, self->nbins);
-	static FF_GETTER(HOGDescriptor, derivAperture, self->derivAperture);
-	static FF_GETTER(HOGDescriptor, histogramNormType, self->histogramNormType);
-	static FF_GETTER(HOGDescriptor, nlevels, self->nlevels);
-	static FF_GETTER(HOGDescriptor, winSigma, self->winSigma);
-	static FF_GETTER(HOGDescriptor, L2HysThreshold, self->L2HysThreshold);
-	static FF_GETTER(HOGDescriptor, gammaCorrection, self->gammaCorrection);
-	static FF_GETTER(HOGDescriptor, signedGradient, self->signedGradient);
+	FF_ACCESSORS_PTR(winSize, Size::Converter);
+	FF_ACCESSORS_PTR(blockSize, Size::Converter);
+	FF_ACCESSORS_PTR(blockStride, Size::Converter);
+	FF_ACCESSORS_PTR(cellSize, Size::Converter);
+	FF_ACCESSORS_PTR(nbins, FF::IntConverter);
+	FF_ACCESSORS_PTR(derivAperture, FF::IntConverter);
+	FF_ACCESSORS_PTR(winSigma, FF::DoubleConverter);
+	FF_ACCESSORS_PTR(histogramNormType, FF::IntConverter);
+	FF_ACCESSORS_PTR(L2HysThreshold, FF::DoubleConverter);
+	FF_ACCESSORS_PTR(gammaCorrection, FF::BoolConverter);
+	FF_ACCESSORS_PTR(nlevels, FF::IntConverter);
+	FF_ACCESSORS_PTR(signedGradient, FF::BoolConverter);
 
 	static NAN_MODULE_INIT(Init);
 

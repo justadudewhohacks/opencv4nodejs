@@ -69,7 +69,7 @@ namespace NetBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 #if CV_VERSION_MINOR > 2
-      if (FF_IS_ARRAY(info[0])) {
+      if (info[0]->IsArray()) {
         return FF::StringArrayConverter::optArg(0, &outBlobNames, info);
       }
 #endif

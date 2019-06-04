@@ -16,9 +16,13 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	static FF_GETTER(TermCriteria, GetType, self.type);
-	static FF_GETTER(TermCriteria, GetMaxCount, self.maxCount);
-	static FF_GETTER(TermCriteria, GetEpsilon, self.epsilon);
+	int type; //!< the type of termination criteria: COUNT, EPS or COUNT + EPS
+	int maxCount; //!< the maximum number of iterations/elements
+	double epsilon;
+
+	FF_ACCESSORS(type, FF::IntConverter);
+	FF_ACCESSORS(maxCount, FF::IntConverter);
+	FF_ACCESSORS(epsilon, FF::DoubleConverter);
 };
 
 #endif

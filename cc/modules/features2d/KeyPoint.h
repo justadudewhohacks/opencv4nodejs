@@ -19,15 +19,13 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	static NAN_GETTER(GetPoint) {
-		info.GetReturnValue().Set(Point2::Converter::wrap(unwrapSelf(info).pt));
-	}
-	static FF_GETTER(KeyPoint, GetLocalId, localId);
-	static FF_GETTER(KeyPoint, GetAngle, self.angle);
-	static FF_GETTER(KeyPoint, GetClassId, self.class_id);
-	static FF_GETTER(KeyPoint, GetResponse, self.response);
-	static FF_GETTER(KeyPoint, GetSize, self.size);
-	static FF_GETTER(KeyPoint, GetOctave, self.octave);
+	FF_GETTER_CUSTOM(localId, FF::IntConverter, localId);
+	FF_ACCESSORS(pt, Point2::Converter);
+	FF_ACCESSORS(angle, FF::FloatConverter);
+	FF_ACCESSORS(class_id, FF::IntConverter);
+	FF_ACCESSORS(response, FF::FloatConverter);
+	FF_ACCESSORS(size, FF::FloatConverter);
+	FF_ACCESSORS(octave, FF::IntConverter);
 };
 
 #endif

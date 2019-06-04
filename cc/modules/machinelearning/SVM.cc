@@ -9,16 +9,16 @@ NAN_MODULE_INIT(SVM::Init) {
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("SVM").ToLocalChecked());
 
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("c"), c);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("coef0"), coef0);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("degree"), degree);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("gamma"), gamma);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("nu"), nu);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("p"), p);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("kernelType"), kernelType);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("classWeights"), classWeights);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("varCount"), varCount);
-  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("isTrained"), isTrained);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("c"), c_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("coef0"), coef0_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("degree"), degree_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("gamma"), gamma_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("nu"), nu_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("p"), p_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("kernelType"), kernelType_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("classWeights"), classWeights_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("varCount"), varCount_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("isTrained"), isTrained_getter);
 
   Nan::SetPrototypeMethod(ctor, "setParams", SetParams);
   Nan::SetPrototypeMethod(ctor, "train", Train);

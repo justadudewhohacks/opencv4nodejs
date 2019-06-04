@@ -17,24 +17,13 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	static FF_GETTER(TrainData, layout, self->getLayout());
-	static NAN_GETTER(samples) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapSelf(info)->getSamples()));
-	}
-	static NAN_GETTER(responses) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapSelf(info)->getResponses()));
-	}
-	static NAN_GETTER(varIdx) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapSelf(info)->getVarIdx()));
-	}
-	static NAN_GETTER(sampleWeights) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapSelf(info)->getSampleWeights()));
-	}
-	static NAN_GETTER(varType) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapSelf(info)->getVarType()));
-	}
+	FF_GETTER_CUSTOM(layout, FF::IntConverter, self->getLayout());
+	FF_GETTER_CUSTOM(samples, Mat::Converter, self->getSamples());
+	FF_GETTER_CUSTOM(responses, Mat::Converter, self->getResponses());
+	FF_GETTER_CUSTOM(varIdx, Mat::Converter, self->getVarIdx());
+	FF_GETTER_CUSTOM(sampleWeights, Mat::Converter, self->getSampleWeights());
+	FF_GETTER_CUSTOM(varType, Mat::Converter, self->getVarType());
 
-	// TODO Getters
 
 	struct NewWorker : public CatchCvExceptionWorker {
 	public:

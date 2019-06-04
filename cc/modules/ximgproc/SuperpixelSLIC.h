@@ -9,6 +9,12 @@
 
 class SuperpixelSLIC : public FF::ObjectWrap<SuperpixelSLIC, cv::Ptr<cv::ximgproc::SuperpixelSLIC>> {
 public:
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "SuperpixelSLIC";
+	}
+
 	cv::Ptr<cv::ximgproc::SuperpixelSLIC> superpixelSlic;
 	cv::Mat image;
 	cv::Mat labels;
@@ -18,26 +24,18 @@ public:
 	float ruler;
 	int numCalculatedSuperpixels = 0;
 
-  static NAN_MODULE_INIT(Init); 
-  static NAN_METHOD(New);
+	FF_GETTER_CUSTOM(image, Mat::Converter, image);
+	FF_GETTER_CUSTOM(labels, Mat::Converter, labels);
+	FF_GETTER_CUSTOM(labelContourMask, Mat::Converter, labelContourMask);
+	FF_GETTER_CUSTOM(algorithm, FF::IntConverter, algorithm);
+	FF_GETTER_CUSTOM(region_size, FF::IntConverter, region_size);
+	FF_GETTER_CUSTOM(ruler, FF::FloatConverter, ruler);
+	FF_GETTER_CUSTOM(numCalculatedSuperpixels, FF::IntConverter, numCalculatedSuperpixels);
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 	static NAN_METHOD(Iterate);
 
-	static NAN_GETTER(GetImg) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->image));
-	}
-	static NAN_GETTER(GetLabels) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->labels));
-	}
-	static NAN_GETTER(GetLabelContourMask) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->labelContourMask));
-	}
-
-	static FF_GETTER(SuperpixelSLIC, GetAlgorithm, algorithm);
-	static FF_GETTER(SuperpixelSLIC, GetRegionSize, region_size);
-	static FF_GETTER(SuperpixelSLIC, GetRuler, ruler);
-	static FF_GETTER(SuperpixelSLIC, GetNumCalculatedSuperpixels, numCalculatedSuperpixels);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
 
   struct NewWorker : public CatchCvExceptionWorker {
   public:

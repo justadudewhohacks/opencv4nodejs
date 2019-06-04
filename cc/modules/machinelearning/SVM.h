@@ -21,18 +21,17 @@ public:
 
 	static NAN_MODULE_INIT(Init);
 	
-	static FF_GETTER(SVM, c, self->getC());
-	static FF_GETTER(SVM, coef0, self->getCoef0());
-	static FF_GETTER(SVM, degree, self->getDegree());
-	static FF_GETTER(SVM, gamma, self->getGamma());
-	static FF_GETTER(SVM, nu, self->getNu());
-	static FF_GETTER(SVM, p, self->getP());
-	static FF_GETTER(SVM, kernelType, self->getKernelType());
-	static FF_GETTER(SVM, varCount, self->getVarCount());
-	static FF_GETTER(SVM, isTrained, self->isTrained());
-	static NAN_GETTER(classWeights) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapSelf(info)->getClassWeights()));
-	}
+	FF_GETTER_CUSTOM(c, FF::DoubleConverter, self->getC());
+	FF_GETTER_CUSTOM(coef0, FF::DoubleConverter, self->getCoef0());
+	FF_GETTER_CUSTOM(degree, FF::DoubleConverter, self->getDegree());
+	FF_GETTER_CUSTOM(gamma, FF::DoubleConverter, self->getGamma());
+	FF_GETTER_CUSTOM(nu, FF::DoubleConverter, self->getNu());
+	FF_GETTER_CUSTOM(p, FF::DoubleConverter, self->getP());
+	FF_GETTER_CUSTOM(kernelType, FF::IntConverter, self->getKernelType());
+	FF_GETTER_CUSTOM(varCount, FF::IntConverter, self->getVarCount());
+	FF_GETTER_CUSTOM(isTrained, FF::BoolConverter, self->isTrained());
+	FF_GETTER_CUSTOM(classWeights, Mat::Converter, self->getClassWeights());
+
 	// TODO custom kernel
 
 	static NAN_METHOD(New);

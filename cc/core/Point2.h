@@ -24,8 +24,8 @@ public:
 		info.GetReturnValue().Set(info.Holder());
 	};
 
-	static FF_GETTER(Point2, GetX, self.x);
-	static FF_GETTER(Point2, GetY, self.y);
+	FF_ACCESSORS(x, FF::DoubleConverter);
+	FF_ACCESSORS(y, FF::DoubleConverter);
 
 	FF_INIT_ARITHMETIC_OPERATIONS(Point2);
 

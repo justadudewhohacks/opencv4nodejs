@@ -81,14 +81,14 @@ describe('features2d', () => {
   describe('GFTTDetector', () => {
     const defaults = {
       k: 0.04,
-      useHarrisDetector: false,
+      harrisDetector: false,
       blockSize: 3,
       minDistance: 1,
       qualityLevel: 0.01,
-      maxCorners: 1000
+      maxFeatures: 1000
     };
     const customProps = {
-      args: ['maxCorners', 'qualityLevel', 'minDistance', 'blockSize', 'useHarrisDetector', 'k'],
+      args: ['maxFeatures', 'qualityLevel', 'minDistance', 'blockSize', 'harrisDetector', 'k'],
       values: [2000, 0.04, 2, 6, true, 0.16]
     };
     const Detector = cv.GFTTDetector;
@@ -140,12 +140,12 @@ describe('features2d', () => {
       WTA_K: 2,
       firstLevel: 0,
       edgeThreshold: 31,
-      nlevels: 8,
+      nLevels: 8,
       scaleFactor: 1.2000000476837158,
-      nfeatures: 500
+      maxFeatures: 500
     };
     const customProps = {
-      args: ['nfeatures', 'scaleFactor', 'nlevels', 'edgeThreshold', 'firstLevel', 'WTA_K', 'scoreType', 'patchSize', 'fastThreshold'],
+      args: ['maxFeatures', 'scaleFactor', 'nLevels', 'edgeThreshold', 'firstLevel', 'WTA_K', 'scoreType', 'patchSize', 'fastThreshold'],
       values: [1000, 2 * 1.2000000476837158, 16, 62, 2, 3, 1, 62, 40]
     };
     const Detector = cv.ORBDetector;

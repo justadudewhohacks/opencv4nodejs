@@ -9,22 +9,17 @@
 #ifndef __FF_FACEMARKAAMDATA_H__
 #define __FF_FACEMARKAAMDATA_H__
 
-typedef Point2::ArrayWithCastConverter<cv::Point2f> s0_converter;
-
-class FacemarkAAMData : public Nan::ObjectWrap {
+class FacemarkAAMData : public FF::ObjectWrap<FacemarkAAMData, cv::face::FacemarkAAM::Data> {
 public:
-  cv::face::FacemarkAAM::Data data;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+	static const char* getClassName() {
+		return "FacemarkAAMData";
+	}
 
   static NAN_MODULE_INIT(Init);
   static NAN_METHOD(New);
 
-  static FF_GETTER_COMPLEX(FacemarkAAMData, s0Get, data.s0, s0_converter);
-  static FF_SETTER_COMPLEX(FacemarkAAMData, s0, data.s0, std::vector<cv::Point2f>, s0_converter);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::face::FacemarkAAM::Data* getNativeObjectPtr() { return &data; }
-	cv::face::FacemarkAAM::Data getNativeObject() { return data; }
+  FF_ACCESSORS(s0, Point2::ArrayWithCastConverter<cv::Point2f>);
 };
 
 #endif

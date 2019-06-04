@@ -12,11 +12,11 @@ NAN_MODULE_INIT(TrackerBoostingParams::Init) {
 	ctor->SetClassName(FF::newString("TrackerBoostingParams"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, FF::newString("numClassifiers"), numClassifiersGet, numClassifiersSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("samplerOverlap"), samplerOverlapGet, samplerOverlapSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("samplerSearchFactor"), samplerSearchFactorGet, samplerSearchFactorSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("iterationInit"), iterationInitGet, iterationInitSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("featureSetNumFeatures"), featureSetNumFeaturesGet, featureSetNumFeaturesSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("numClassifiers"), numClassifiers_getter, numClassifiers_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerOverlap"), samplerOverlap_getter, samplerOverlap_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("samplerSearchFactor"), samplerSearchFactor_getter, samplerSearchFactor_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("iterationInit"), iterationInit_getter, iterationInit_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("featureSetNumFeatures"), featureSetNumFeatures_getter, featureSetNumFeatures_setter);
 
 	Nan::Set(target,FF::newString("TrackerBoostingParams"), FF::getFunction(ctor));
 };

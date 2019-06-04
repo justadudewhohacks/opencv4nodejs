@@ -9,6 +9,12 @@
 
 class SuperpixelLSC : public FF::ObjectWrap<SuperpixelLSC, cv::Ptr<cv::ximgproc::SuperpixelLSC>> {
 public:
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "SuperpixelLSC";
+	}
+
 	cv::Mat image;
 	cv::Mat labels;
 	cv::Mat labelContourMask;
@@ -16,24 +22,17 @@ public:
 	double ratio = 0.075;
 	int numCalculatedSuperpixels = 0;
 
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
+	FF_GETTER_CUSTOM(image, Mat::Converter, image);
+	FF_GETTER_CUSTOM(labels, Mat::Converter, labels);
+	FF_GETTER_CUSTOM(labelContourMask, Mat::Converter, labelContourMask);
+	FF_GETTER_CUSTOM(region_size, FF::IntConverter, region_size);
+	FF_GETTER_CUSTOM(ratio, FF::DoubleConverter, ratio);
+	FF_GETTER_CUSTOM(numCalculatedSuperpixels, FF::IntConverter, numCalculatedSuperpixels);
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 	static NAN_METHOD(Iterate);
 
-	static NAN_GETTER(GetImg) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->image));
-	}
-	static NAN_GETTER(GetLabels) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->labels));
-	}
-	static NAN_GETTER(GetLabelContourMask) {
-		info.GetReturnValue().Set(Mat::Converter::wrap(unwrapThis(info)->labelContourMask));
-	}
-	static FF_GETTER(SuperpixelLSC, GetRegionSize, region_size);
-	static FF_GETTER(SuperpixelLSC, GetRatio, ratio);
-	static FF_GETTER(SuperpixelLSC, GetNumCalculatedSuperpixels, numCalculatedSuperpixels);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
 
   struct NewWorker : public CatchCvExceptionWorker {
   public:

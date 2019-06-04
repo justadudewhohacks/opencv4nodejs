@@ -5,22 +5,24 @@
 #ifndef __FF_BACKGROUNDSUBTRACTORKNN_H__
 #define __FF_BACKGROUNDSUBTRACTORKNN_H__
 
-class BackgroundSubtractorKNN : public BackgroundSubtractor {
+class BackgroundSubtractorKNN : public BackgroundSubtractor, public FF::ObjectWrapTemplate<BackgroundSubtractorKNN, cv::Ptr<cv::BackgroundSubtractorKNN>> {
 public:
-	cv::Ptr<cv::BackgroundSubtractorKNN> subtractor;
-
-	static FF_GETTER(BackgroundSubtractorKNN, GetHistory, subtractor->getHistory());
-	static FF_GETTER(BackgroundSubtractorKNN, GetDist2Threshold, subtractor->getDist2Threshold());
-	static FF_GETTER(BackgroundSubtractorKNN, GetDetectShadows, subtractor->getDetectShadows());
-
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-	cv::Ptr<cv::BackgroundSubtractor> getSubtractor() {
-		return subtractor;
+	static const char* getClassName() {
+		return "BackgroundSubtractorKNN";
 	}
+
+	cv::Ptr<cv::BackgroundSubtractor> getSubtractor() {
+		return self;
+	}
+
+	FF_GETTER_CUSTOM(history, FF::IntConverter, self->getHistory());
+	FF_GETTER_CUSTOM(dist2Threshold, FF::DoubleConverter, self->getDist2Threshold());
+	FF_GETTER_CUSTOM(detectShadows, FF::BoolConverter, self->getDetectShadows());
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 
 	struct NewWorker : CatchCvExceptionWorker {
 	public:

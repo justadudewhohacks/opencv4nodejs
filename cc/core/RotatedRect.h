@@ -18,16 +18,12 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	static FF_GETTER(RotatedRect, GetAngle, self.angle);
+	FF_ACCESSORS(angle, FF::FloatConverter);
+	FF_ACCESSORS(center, Point2::Converter);
+	FF_ACCESSORS(size, Size::Converter);
 
-	static NAN_GETTER(GetCenter) {
-		info.GetReturnValue().Set(Point2::Converter::wrap(unwrapSelf(info).center));
-	}
-	static NAN_GETTER(GetSize) {
-		info.GetReturnValue().Set(Size::Converter::wrap(unwrapSelf(info).size));
-	}
 	static NAN_METHOD(BoundingRect) {
-		info.GetReturnValue().Set(Size::Converter::wrap(unwrapSelf(info).size));
+		info.GetReturnValue().Set(Rect::Converter::wrap(unwrapSelf(info).boundingRect()));
 	}
 };
 

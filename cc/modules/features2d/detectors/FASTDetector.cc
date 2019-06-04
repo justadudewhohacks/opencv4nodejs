@@ -11,9 +11,9 @@ NAN_MODULE_INIT(FASTDetector::Init) {
 	ctor->SetClassName(Nan::New("FASTDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), FASTDetector::GetThreshold);
-	Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), FASTDetector::GetNonmaxSuppression);
-	Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), FASTDetector::GetType);
+  Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), threshold_getter);
+  Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), nonmaxSuppression_getter);
+  Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), type_getter);
 
   Nan::Set(target,Nan::New("FASTDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
@@ -28,7 +28,7 @@ NAN_METHOD(FASTDetector::New) {
 	}
 
 	FASTDetector* self = new FASTDetector();
-	self->detector = cv::FastFeatureDetector::create(
+	self->self = cv::FastFeatureDetector::create(
 		worker.threshold,
 		worker.nonmaxSuppression,
 		worker.type

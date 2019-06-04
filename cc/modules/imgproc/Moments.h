@@ -17,34 +17,34 @@ public:
 	static NAN_METHOD(New);
 
 	// spatial moments
-	static FF_GETTER(Moments, m00, self.m00);
-	static FF_GETTER(Moments, m10, self.m10);
-	static FF_GETTER(Moments, m01, self.m01);
-	static FF_GETTER(Moments, m20, self.m20);
-	static FF_GETTER(Moments, m11, self.m11);
-	static FF_GETTER(Moments, m02, self.m02);
-	static FF_GETTER(Moments, m30, self.m30);
-	static FF_GETTER(Moments, m21, self.m21);
-	static FF_GETTER(Moments, m12, self.m12);
-	static FF_GETTER(Moments, m03, self.m03);
+	FF_ACCESSORS(m00, FF::DoubleConverter);
+	FF_ACCESSORS(m10, FF::DoubleConverter);
+	FF_ACCESSORS(m01, FF::DoubleConverter);
+	FF_ACCESSORS(m20, FF::DoubleConverter);
+	FF_ACCESSORS(m11, FF::DoubleConverter);
+	FF_ACCESSORS(m02, FF::DoubleConverter);
+	FF_ACCESSORS(m30, FF::DoubleConverter);
+	FF_ACCESSORS(m21, FF::DoubleConverter);
+	FF_ACCESSORS(m12, FF::DoubleConverter);
+	FF_ACCESSORS(m03, FF::DoubleConverter);
 
 	// central moments
-	static FF_GETTER(Moments, mu20, self.mu20);
-	static FF_GETTER(Moments, mu11, self.mu11);
-	static FF_GETTER(Moments, mu02, self.mu02);
-	static FF_GETTER(Moments, mu30, self.mu30);
-	static FF_GETTER(Moments, mu21, self.mu21);
-	static FF_GETTER(Moments, mu12, self.mu12);
-	static FF_GETTER(Moments, mu03, self.mu03);
+	FF_ACCESSORS(mu20, FF::DoubleConverter);
+	FF_ACCESSORS(mu11, FF::DoubleConverter);
+	FF_ACCESSORS(mu02, FF::DoubleConverter);
+	FF_ACCESSORS(mu30, FF::DoubleConverter);
+	FF_ACCESSORS(mu21, FF::DoubleConverter);
+	FF_ACCESSORS(mu12, FF::DoubleConverter);
+	FF_ACCESSORS(mu03, FF::DoubleConverter);
 
 	// central normalized  moments
-	static FF_GETTER(Moments, nu20, self.nu20);
-	static FF_GETTER(Moments, nu11, self.nu11);
-	static FF_GETTER(Moments, nu02, self.nu02);
-	static FF_GETTER(Moments, nu30, self.nu30);
-	static FF_GETTER(Moments, nu21, self.nu21);
-	static FF_GETTER(Moments, nu12, self.nu12);
-	static FF_GETTER(Moments, nu03, self.nu03);
+	FF_ACCESSORS(nu20, FF::DoubleConverter);
+	FF_ACCESSORS(nu11, FF::DoubleConverter);
+	FF_ACCESSORS(nu02, FF::DoubleConverter);
+	FF_ACCESSORS(nu30, FF::DoubleConverter);
+	FF_ACCESSORS(nu21, FF::DoubleConverter);
+	FF_ACCESSORS(nu12, FF::DoubleConverter);
+	FF_ACCESSORS(nu03, FF::DoubleConverter);
 
 	static NAN_METHOD(HuMoments);
 };
