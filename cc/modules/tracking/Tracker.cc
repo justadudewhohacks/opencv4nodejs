@@ -34,11 +34,12 @@ NAN_METHOD(Tracker::Update) {
 	if (Mat::Converter::arg(0, &image, info)) {
 		return tryCatch.reThrow();
 	}
-	v8::Local<v8::Object> jsRect = FF::newInstance(Nan::New(Rect::constructor));
-	bool ret = Tracker::unwrapThis(info)->getTracker()->update(image, Rect::Converter::unwrapUnchecked(jsRect));
+
+	cv::Rect2d rect;
+	bool ret = Tracker::unwrapThis(info)->getTracker()->update(image, rect);
 	
 	if (ret) {
-		info.GetReturnValue().Set(jsRect);
+		info.GetReturnValue().Set(Rect::Converter::wrap(rect));
 	} else {
 		info.GetReturnValue().Set(Nan::Null());
 	}
