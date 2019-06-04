@@ -34,7 +34,7 @@ NAN_METHOD(MultiTracker::New) {
 	FF::TryCatch tryCatch("MultiTracker::New");
 	FF_ASSERT_CONSTRUCT_CALL();
 	MultiTracker* self = new MultiTracker();
-	self->setNativeObject(cv::MultiTracker::create());
+	self->setNativeObject(cv::makePtr<cv::MultiTracker>());
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };
