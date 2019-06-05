@@ -12,7 +12,7 @@ services:
 env:
   global:
     - MIN_SUPPORTED_NODEJS_VERSION=6
-    - LATEST_STABLE_NODEJS_VERSION=11
+    - LATEST_STABLE_NODEJS_VERSION=12
   matrix:
     - BUILD_TASK=test
       TAG=3.0.0-contrib
@@ -46,10 +46,10 @@ env:
       NODE_MAJOR_VERSION=10
     - BUILD_TASK=test
       TAG=3.4.6-contrib
-      NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
+      NODE_MAJOR_VERSION=11
     - BUILD_TASK=test
       TAG=3.4.6-contrib
-      NODE_MAJOR_VERSION=12
+      NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
 
 before_install:
   - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh
