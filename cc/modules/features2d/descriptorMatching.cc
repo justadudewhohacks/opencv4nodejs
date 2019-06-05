@@ -134,7 +134,7 @@ void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, std::string match
 #else
 void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	FF::SyncBinding(
+	FF::SyncBindingBase(
 		std::make_shared<MatchWorker>(cv::DescriptorMatcher::create(matcherType)),
 		"MSERDetector::Match",
 		info
@@ -146,7 +146,7 @@ void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string 
 #else
 void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	FF::AsyncBinding(
+	FF::AsyncBindingBase(
 		std::make_shared<MatchWorker>(cv::DescriptorMatcher::create(matcherType)),
 		"MSERDetector::MatchAsync",
 		info

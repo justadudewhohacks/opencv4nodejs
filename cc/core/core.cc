@@ -169,35 +169,19 @@ NAN_METHOD(Core::Kmeans) {
 }
 
 NAN_METHOD(Core::CartToPolar) {
-  FF::SyncBinding(
-    std::make_shared<CoreBindings::CartToPolarBinding>(),
-    "Core::CartToPolar",
-    info
-  );
+	FF::SyncBinding<CoreBindings::CartToPolar>("Core", "CartToPolar", info);
 }
 
 NAN_METHOD(Core::CartToPolarAsync) {
-  FF::AsyncBinding(
-    std::make_shared<CoreBindings::CartToPolarBinding>(),
-    "Core::CartToPolarAsync",
-    info
-  );
+	FF::AsyncBinding<CoreBindings::CartToPolar>("Core", "CartToPolar", info);
 }
 
 NAN_METHOD(Core::PolarToCart) {
-  FF::SyncBinding(
-    std::make_shared<CoreBindings::PolarToCartBinding>(),
-    "Core::PolarToCart",
-    info
-  );
+	FF::SyncBinding<CoreBindings::PolarToCart>("Core", "PolarToCart", info);
 }
 
 NAN_METHOD(Core::PolarToCartAsync) {
-  FF::AsyncBinding(
-    std::make_shared<CoreBindings::PolarToCartBinding>(),
-    "Core::PolarToCartAsync",
-    info
-  );
+	FF::AsyncBinding<CoreBindings::PolarToCart>("Core", "PolarToCart", info);
 }
 
 NAN_METHOD(Core::GetNumThreads) {

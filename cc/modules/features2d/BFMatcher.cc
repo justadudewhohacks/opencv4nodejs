@@ -44,7 +44,7 @@ NAN_METHOD(BFMatcher::New) {
 }
 
 NAN_METHOD(BFMatcher::match) {
-  FF::SyncBinding(
+  FF::SyncBindingBase(
     std::make_shared<BFMatcherBindings::MatchWorker>(BFMatcher::unwrapSelf(info)),
     "BFMatcher::match",
     info
@@ -52,7 +52,7 @@ NAN_METHOD(BFMatcher::match) {
 }
 
 NAN_METHOD(BFMatcher::matchAsync) {
-  FF::AsyncBinding(
+  FF::AsyncBindingBase(
     std::make_shared<BFMatcherBindings::MatchWorker>(BFMatcher::unwrapSelf(info)),
     "BFMatcher::matchAsync",
     info
@@ -60,7 +60,7 @@ NAN_METHOD(BFMatcher::matchAsync) {
 }
 
 NAN_METHOD(BFMatcher::knnMatch) {
-  FF::SyncBinding(
+  FF::SyncBindingBase(
     std::make_shared<BFMatcherBindings::MatchKnnWorker>(BFMatcher::unwrapSelf(info)),
     "BFMatcher::knnMatch",
     info
@@ -69,7 +69,7 @@ NAN_METHOD(BFMatcher::knnMatch) {
 
 
 NAN_METHOD(BFMatcher::knnMatchAsync) {
-  FF::AsyncBinding(
+  FF::AsyncBindingBase(
     std::make_shared<BFMatcherBindings::MatchKnnWorker>(BFMatcher::unwrapSelf(info)),
     "BFMatcher::knnMatchAsync",
     info

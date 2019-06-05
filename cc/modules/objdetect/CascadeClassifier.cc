@@ -40,7 +40,7 @@ NAN_METHOD(CascadeClassifier::New) {
 }
 
 NAN_METHOD(CascadeClassifier::DetectMultiScale) {
-  FF::SyncBinding(
+  FF::SyncBindingBase(
     std::make_shared<CascadeClassifierBindings::DetectMultiScaleWorker>(CascadeClassifier::unwrapSelf(info)),
     "CascadeClassifier::DetectMultiScale",
     info
@@ -48,7 +48,7 @@ NAN_METHOD(CascadeClassifier::DetectMultiScale) {
 }
 
 NAN_METHOD(CascadeClassifier::DetectMultiScaleAsync) {
-  FF::AsyncBinding(
+  FF::AsyncBindingBase(
     std::make_shared<CascadeClassifierBindings::DetectMultiScaleWorker>(CascadeClassifier::unwrapSelf(info)),
     "CascadeClassifier::DetectMultiScaleAsync",
     info
@@ -56,7 +56,7 @@ NAN_METHOD(CascadeClassifier::DetectMultiScaleAsync) {
 }
 
 NAN_METHOD(CascadeClassifier::DetectMultiScaleGpu) {
-  FF::SyncBinding(
+  FF::SyncBindingBase(
     std::make_shared<CascadeClassifierBindings::DetectMultiScaleWorker>(CascadeClassifier::unwrapSelf(info)),
     "CascadeClassifier::DetectMultiScaleGpu",
     info
@@ -64,7 +64,7 @@ NAN_METHOD(CascadeClassifier::DetectMultiScaleGpu) {
 }
 
 NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevels) {
-  FF::SyncBinding(
+  FF::SyncBindingBase(
     std::make_shared<CascadeClassifierBindings::DetectMultiScaleWithRejectLevelsWorker>(CascadeClassifier::unwrapSelf(info)),
     "CascadeClassifier::DetectMultiScaleWithRejectLevels",
     info
@@ -72,7 +72,7 @@ NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevels) {
 }
 
 NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevelsAsync) {
-  FF::AsyncBinding(
+  FF::AsyncBindingBase(
     std::make_shared<CascadeClassifierBindings::DetectMultiScaleWithRejectLevelsWorker>(CascadeClassifier::unwrapSelf(info)),
     "CascadeClassifier::DetectMultiScaleWithRejectLevelsAsync",
     info
@@ -80,7 +80,7 @@ NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevelsAsync) {
 }
 
 NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevelsGpu) {
-  FF::SyncBinding(
+  FF::SyncBindingBase(
     std::make_shared<CascadeClassifierBindings::DetectMultiScaleWithRejectLevelsWorker>(CascadeClassifier::unwrapSelf(info)),
     "CascadeClassifier::DetectMultiScaleWithRejectLevelsGpu",
     info

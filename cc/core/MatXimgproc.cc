@@ -9,7 +9,7 @@ void MatXimgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(MatXimgproc::GuidedFilter) {
-  FF::SyncBinding(
+  FF::SyncBindingBase(
     std::make_shared<MatXimgprocBindings::GuidedFilterWorker>(Mat::unwrapSelf(info)),
     "Mat::GuidedFilter",
     info
@@ -17,7 +17,7 @@ NAN_METHOD(MatXimgproc::GuidedFilter) {
 }
 
 NAN_METHOD(MatXimgproc::GuidedFilterAsync) {
-  FF::AsyncBinding(
+  FF::AsyncBindingBase(
     std::make_shared<MatXimgprocBindings::GuidedFilterWorker>(Mat::unwrapSelf(info)),
     "Mat::GuidedFilterAsync",
     info

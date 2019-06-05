@@ -1,4 +1,3 @@
-#include "Binding.h"
 #include "NativeNodeUtils.h"
 #include <functional>
 

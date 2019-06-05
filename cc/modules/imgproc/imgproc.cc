@@ -102,12 +102,12 @@ NAN_METHOD(Imgproc::GetPerspectiveTransform) {
   info.GetReturnValue().Set(Mat::Converter::wrap(cv::getPerspectiveTransform(srcPoints, dstPoints)));
 }
 NAN_METHOD(Imgproc::UndistortPoints) {
-  FF::SyncBinding(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
+  FF::SyncBindingBase(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
                   "Imgproc::UndistortPoints", info);
 }
 
 NAN_METHOD(Imgproc::UndistortPointsAsync) {
-  FF::AsyncBinding(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
+  FF::AsyncBindingBase(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
                    "Imgproc::UndistortPointsAsync", info);
 }
 
@@ -301,7 +301,7 @@ NAN_METHOD(Imgproc::FitLine) {
 }
 
 NAN_METHOD(Imgproc::GetTextSize) {
-  FF::SyncBinding(
+  FF::SyncBindingBase(
     std::make_shared<ImgprocBindings::GetTextSizeWorker>(),
     "Imgproc::GetTextSize",
     info
@@ -309,7 +309,7 @@ NAN_METHOD(Imgproc::GetTextSize) {
 }
 
 NAN_METHOD(Imgproc::GetTextSizeAsync) {
-  FF::AsyncBinding(
+  FF::AsyncBindingBase(
     std::make_shared<ImgprocBindings::GetTextSizeWorker>(),
     "Imgproc::GetTextSizeAsync",
     info
@@ -317,24 +317,24 @@ NAN_METHOD(Imgproc::GetTextSizeAsync) {
 }
 
 NAN_METHOD(Imgproc::ApplyColorMap) {
-  FF::SyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
+  FF::SyncBindingBase(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
                   "Imgproc::ApplyColorMap", info);
 }
 
 NAN_METHOD(Imgproc::ApplyColorMapAsync) {
-  FF::AsyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
+  FF::AsyncBindingBase(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
                    "Imgproc::ApplyColorMapAsync", info);
 }
 
 #if CV_VERSION_MINOR > 1
 
 NAN_METHOD(Imgproc::Canny) {
-	FF::SyncBinding(std::make_shared<ImgprocBindings::CannyWorker>(),
+	FF::SyncBindingBase(std::make_shared<ImgprocBindings::CannyWorker>(),
 		"Imgproc::Canny", info);
 }
 
 NAN_METHOD(Imgproc::CannyAsync) {
-	FF::AsyncBinding(std::make_shared<ImgprocBindings::CannyWorker>(),
+	FF::AsyncBindingBase(std::make_shared<ImgprocBindings::CannyWorker>(),
 		"Imgproc::CannyAsync", info);
 }
 

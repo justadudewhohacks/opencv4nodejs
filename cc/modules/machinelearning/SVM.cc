@@ -228,14 +228,14 @@ NAN_METHOD(SVM::Load) {
 NAN_METHOD(SVM::Train) {
   bool isTrainFromTrainData = TrainData::hasInstance(info[0]);
   if (isTrainFromTrainData) {
-	FF::SyncBinding(
+	FF::SyncBindingBase(
 		std::make_shared<SVMBindings::TrainFromTrainDataWorker>(SVM::unwrapSelf(info)),
 		"SVM::Train",
 		info
 	);
   }
   else {
-	FF::SyncBinding(
+	FF::SyncBindingBase(
 	  std::make_shared<SVMBindings::TrainFromMatWorker>(SVM::unwrapSelf(info)),
 	  "SVM::Train",
       info
@@ -246,14 +246,14 @@ NAN_METHOD(SVM::Train) {
 NAN_METHOD(SVM::TrainAsync) {
   bool isTrainFromTrainData = TrainData::hasInstance(info[0]);
   if (isTrainFromTrainData) {
-	FF::AsyncBinding(
+	FF::AsyncBindingBase(
 	  std::make_shared<SVMBindings::TrainFromTrainDataWorker>(SVM::unwrapSelf(info)),
 	  "SVM::TrainAsync",
 	  info
 	);
   }
   else {
-	FF::AsyncBinding(
+	FF::AsyncBindingBase(
 	  std::make_shared<SVMBindings::TrainFromMatWorker>(SVM::unwrapSelf(info)),
 	  "SVM::TrainAsync",
 	  info
@@ -262,7 +262,7 @@ NAN_METHOD(SVM::TrainAsync) {
 }
 
 NAN_METHOD(SVM::TrainAuto) {
-  FF::SyncBinding(
+  FF::SyncBindingBase(
     std::make_shared<SVMBindings::TrainAutoWorker>(SVM::unwrapSelf(info)),
     "SVM::TrainAuto",
     info
@@ -270,7 +270,7 @@ NAN_METHOD(SVM::TrainAuto) {
 }
 
 NAN_METHOD(SVM::TrainAutoAsync) {
-  FF::AsyncBinding(
+  FF::AsyncBindingBase(
     std::make_shared<SVMBindings::TrainAutoWorker>(SVM::unwrapSelf(info)),
     "SVM::TrainAutoAsync",
     info

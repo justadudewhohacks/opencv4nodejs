@@ -69,9 +69,9 @@ namespace MatBindings {
     }
   };
 
-  class PushBackBinding : public CvBinding {
+  class PushBack : public CvBinding {
   public:
-	  PushBackBinding(cv::Mat self) {
+	  PushBack(cv::Mat self) {
 		  auto mat = req<Mat::Converter>();
 		  auto res = ret<Mat::Converter>("res", self);
 		  executeBinding = [=]() {
@@ -80,9 +80,9 @@ namespace MatBindings {
 	  };
   };
 
-  class PopBackBinding : public CvBinding {
+  class PopBack : public CvBinding {
   public:
-	  PopBackBinding(cv::Mat self) {
+	  PopBack(cv::Mat self) {
 		  auto num = opt<FF::IntConverter>("num", 1);
 		  auto res = ret<Mat::Converter>("res", self);
 		  executeBinding = [=]() {
@@ -126,9 +126,9 @@ namespace MatBindings {
     }
   };
 
-  class CopyBinding : public CvBinding {
+  class Copy : public CvBinding {
   public:
-	  CopyBinding(cv::Mat self) {
+	  Copy(cv::Mat self) {
 		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 		  auto dst = ret<Mat::Converter>("dst");
 
@@ -138,9 +138,9 @@ namespace MatBindings {
 	  };
   };
 
-  class CopyToBinding : public CvBinding {
+  class CopyTo : public CvBinding {
   public:
-	  CopyToBinding(cv::Mat self) {
+	  CopyTo(cv::Mat self) {
 		  auto dst = req<Mat::Converter>();
 		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 		  auto dstRet = ret<Mat::Converter>("dst");
@@ -152,9 +152,9 @@ namespace MatBindings {
 	  };
   };
 
-  class ConvertToBinding : public CvBinding {
+  class ConvertTo : public CvBinding {
   public:
-	  ConvertToBinding(cv::Mat self) {
+	  ConvertTo(cv::Mat self) {
 		  auto rtype = req<FF::IntConverter>();
 		  auto alpha = opt<FF::DoubleConverter>("alpha", 1.0);
 		  auto beta = opt<FF::DoubleConverter>("beta", 0.0);
@@ -166,9 +166,9 @@ namespace MatBindings {
 	  };
   };
 
-  class SplitChannelsBinding : public CvBinding {
+  class SplitChannels : public CvBinding {
   public:
-	  SplitChannelsBinding(cv::Mat self) {
+	  SplitChannels(cv::Mat self) {
 		  auto mv = ret<Mat::ArrayConverter>("mv");
 
 		  executeBinding = [=]() {
@@ -177,9 +177,9 @@ namespace MatBindings {
 	  };
   };
 
-  class AddWeightedBinding : public CvBinding {
+  class AddWeighted : public CvBinding {
   public:
-	  AddWeightedBinding(cv::Mat self) {
+	  AddWeighted(cv::Mat self) {
 
 		  auto alpha = req<FF::DoubleConverter>();
 		  auto src2 = req<Mat::Converter>();
@@ -194,9 +194,9 @@ namespace MatBindings {
 	  };
   };
 
-  class MinMaxLocBinding : public CvBinding {
+  class MinMaxLoc : public CvBinding {
   public:
-	  MinMaxLocBinding(cv::Mat self) {
+	  MinMaxLoc(cv::Mat self) {
 		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 		  auto minVal = ret<FF::DoubleConverter>("minVal");
 		  auto maxVal = ret<FF::DoubleConverter>("maxVal");
@@ -209,9 +209,9 @@ namespace MatBindings {
 	  };
   };
 
-  class FindNonZeroBinding : public CvBinding {
+  class FindNonZero : public CvBinding {
   public:
-	  FindNonZeroBinding(cv::Mat self) {
+	  FindNonZero(cv::Mat self) {
 		  auto idx = ret<Point2::ArrayWithCastConverter<cv::Point2i>>("idx");
 
 		  executeBinding = [=]() {
@@ -220,9 +220,9 @@ namespace MatBindings {
 	  };
   };
 
-  class CountNonZeroBinding : public CvBinding {
+  class CountNonZero : public CvBinding {
   public:
-	  CountNonZeroBinding(cv::Mat self) {
+	  CountNonZero(cv::Mat self) {
 		  auto num = ret<FF::IntConverter>("num");
 
 		  executeBinding = [=]() {
@@ -231,9 +231,9 @@ namespace MatBindings {
 	  };
   };
 
-  class PadToSquareBinding : public CvBinding {
+  class PadToSquare : public CvBinding {
   public:
-	  PadToSquareBinding(cv::Mat self) {
+	  PadToSquare(cv::Mat self) {
 		  auto fillVec = opt<Vec3::Converter>("fillVec", cv::Vec3d());
 		  auto out = ret<Mat::Converter>("out");
 
@@ -457,11 +457,11 @@ namespace MatBindings {
     }
   };
 
-  class SumBinding : public CvBinding {
+  class Sum : public CvBinding {
   public:
 	  int channels;
 	  cv::Scalar sum;
-	  SumBinding(cv::Mat self): channels(self.channels()) {
+	  Sum(cv::Mat self): channels(self.channels()) {
 		  executeBinding = [=]() {
 			  sum = cv::sum(self);
 		  };
@@ -483,9 +483,9 @@ namespace MatBindings {
 	  }
   };
 
-  class ConvertScaleAbsBinding : public CvBinding {
+  class ConvertScaleAbs : public CvBinding {
   public:
-	  ConvertScaleAbsBinding(cv::Mat self) {
+	  ConvertScaleAbs(cv::Mat self) {
 		  auto alpha = opt<FF::DoubleConverter>("alpha", 1);
 		  auto beta = opt<FF::DoubleConverter>("beta", 0);
 		  auto dst = ret<Mat::Converter>("dst");
@@ -496,9 +496,9 @@ namespace MatBindings {
 	  };
   };
 
-  class GoodFeaturesToTrackBinding : public CvBinding {
+  class GoodFeaturesToTrack : public CvBinding {
   public:
-	  GoodFeaturesToTrackBinding(cv::Mat self) {
+	  GoodFeaturesToTrack(cv::Mat self) {
 		  auto maxCorners = req<FF::IntConverter>();
 		  auto qualityLevel = req<FF::DoubleConverter>();
 		  auto minDistance = req<FF::DoubleConverter>();
@@ -522,9 +522,9 @@ namespace MatBindings {
 	  };
   };
 
-  class MeanBinding : public CvBinding {
+  class Mean : public CvBinding {
   public:
-	  MeanBinding(cv::Mat self) {
+	  Mean(cv::Mat self) {
 		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 		  auto mean = ret<Vec4::Converter>("mean");
 
@@ -534,9 +534,9 @@ namespace MatBindings {
 	  };
   };
 
-  class MeanStdDevBinding : public CvBinding {
+  class MeanStdDev : public CvBinding {
   public:
-	  MeanStdDevBinding(cv::Mat self) {
+	  MeanStdDev(cv::Mat self) {
 		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 		  auto mean = ret<Mat::Converter>("mean");
 		  auto stddev = ret<Mat::Converter>("stddev");
@@ -617,9 +617,9 @@ namespace MatBindings {
 	  }
   };
 
-  class ReduceBinding : public CvBinding {
+  class Reduce : public CvBinding {
   public:
-	  ReduceBinding(cv::Mat self) {
+	  Reduce(cv::Mat self) {
 		  auto dim = req<FF::IntConverter>();
 		  auto rtype = req<FF::IntConverter>();
 		  auto dtype = opt<FF::IntConverter>("dtype", -1);
@@ -631,9 +631,9 @@ namespace MatBindings {
 	  };
   };
 
-  class EigenBinding : public CvBinding {
+  class Eigen : public CvBinding {
   public:
-	  EigenBinding(cv::Mat self) {
+	  Eigen(cv::Mat self) {
 		  auto eigenvalues = ret<Mat::Converter>("eigenvalues");
 
 		  executeBinding = [=]() {
@@ -642,9 +642,9 @@ namespace MatBindings {
 	  };
   };
 
-  class SolveBinding : public CvBinding {
+  class Solve : public CvBinding {
   public:
-	  SolveBinding(cv::Mat self) {
+	  Solve(cv::Mat self) {
 		  auto mat2 = req<Mat::Converter>();
 		  auto flags = opt<FF::IntConverter>("flags", 0);
 		  auto dst = ret<Mat::Converter>("dst");
@@ -655,9 +655,9 @@ namespace MatBindings {
 	  };
   };
 
-  class NormalizeBinding : public CvBinding {
+  class Normalize : public CvBinding {
   public:
-	  NormalizeBinding(cv::Mat self) {
+	  Normalize(cv::Mat self) {
 		  auto alpha = opt<FF::DoubleConverter>("alpha", 1);
 		  auto beta = opt<FF::DoubleConverter>("beta", 0);
 		  auto normType = opt<FF::IntConverter>("normType", cv::NORM_L2);

@@ -6,9 +6,9 @@
 
 namespace CoreBindings {
 
-	class CartToPolarBinding : public CvBinding {
+	class CartToPolar : public CvBinding {
 	public:
-		CartToPolarBinding() {
+		CartToPolar() {
 			auto x = req<Mat::Converter>();
 			auto y = req<Mat::Converter>();
 			auto angleInDegrees = opt<FF::BoolConverter>("angleInDegrees", false);
@@ -21,9 +21,9 @@ namespace CoreBindings {
 		};
 	};
 
-	class PolarToCartBinding : public CvBinding {
+	class PolarToCart : public CvBinding {
 	public:
-		PolarToCartBinding() {
+		PolarToCart() {
 			auto magnitude = req<Mat::Converter>();
 			auto angle = req<Mat::Converter>();
 			auto angleInDegrees = opt<FF::BoolConverter>("angleInDegrees", false);
