@@ -522,62 +522,29 @@ namespace MatBindings {
 	  };
   };
 
-  struct MeanWorker : public CatchCvExceptionWorker {
+  class MeanBinding : public CvBinding {
   public:
-	  cv::Mat self;
-	  MeanWorker(cv::Mat self) {
-		  this->self = self;
-	  }
+	  MeanBinding(cv::Mat self) {
+		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+		  auto mean = ret<Vec4::Converter>("mean");
 
-	  cv::Mat mask = cv::noArray().getMat();
-
-	  cv::Scalar mean;
-
-	  std::string executeCatchCvExceptionWorker() {
-		  mean = cv::mean(self, mask);
-		  return "";
-	  }
-
-	  v8::Local<v8::Value> getReturnValue() {
-		  return Vec4::Converter::wrap(cv::Vec4d(mean));
-	  }
-
-	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		  return (
-			  Mat::Converter::optArg(0, &mask, info)
-			);
-	  }
+		  executeBinding = [=]() {
+			  mean->ref() = cv::mean(self, mask->ref());
+		  };
+	  };
   };
 
-  struct MeanStdDevWorker : public CatchCvExceptionWorker {
+  class MeanStdDevBinding : public CvBinding {
   public:
-    cv::Mat self;
-    MeanStdDevWorker(cv::Mat self) {
-      this->self = self;
-    }
+	  MeanStdDevBinding(cv::Mat self) {
+		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+		  auto mean = ret<Mat::Converter>("mean");
+		  auto stddev = ret<Mat::Converter>("stddev");
 
-    cv::Mat mask = cv::noArray().getMat();
-
-    cv::Mat mean;
-    cv::Mat stddev;
-
-    std::string executeCatchCvExceptionWorker() {
-      cv::meanStdDev(self, mean, stddev, mask);
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() {
-      v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, Nan::New("mean").ToLocalChecked(), Mat::Converter::wrap(mean));
-      Nan::Set(ret, Nan::New("stddev").ToLocalChecked(), Mat::Converter::wrap(stddev));
-      return ret;
-    }
-
-    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        Mat::Converter::optArg(0, &mask, info)
-      );
-    }
+		  executeBinding = [=]() {
+			  cv::meanStdDev(self, mean->ref(), stddev->ref(), mask->ref());
+		  };
+	  };
   };
 
   struct CopyMakeBorderWorker : public CatchCvExceptionWorker {
@@ -650,142 +617,60 @@ namespace MatBindings {
 	  }
   };
 
-  struct ReduceWorker : public CatchCvExceptionWorker {
+  class ReduceBinding : public CvBinding {
   public:
-	  cv::Mat self;
-	  ReduceWorker(cv::Mat self) {
-		  this->self = self;
-	  }
+	  ReduceBinding(cv::Mat self) {
+		  auto dim = req<FF::IntConverter>();
+		  auto rtype = req<FF::IntConverter>();
+		  auto dtype = opt<FF::IntConverter>("dtype", -1);
+		  auto result = ret<Mat::Converter>("result");
 
-	  cv::Mat result;
-    int dim;
-    int rtype;
-    int dtype = -1;
-
-	  std::string executeCatchCvExceptionWorker() {
-			cv::reduce(self, result, dim, rtype, dtype);
-		  return "";
-	  }
-
-	  v8::Local<v8::Value> getReturnValue() {
-		  return Mat::Converter::wrap(result);
-	  }
-
-	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		  return (
-			  FF::IntConverter::arg(0, &dim, info) ||
-			  FF::IntConverter::arg(1, &rtype, info)
-			);
-	  }
-
-	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		  return (
-			  FF::IntConverter::optArg(2, &dtype, info)
-			);
-	  }
-  };
-  
-  struct EigenWorker : public CatchCvExceptionWorker {
-  public:
-	  cv::Mat self;
-	  EigenWorker(cv::Mat self) {
-		  this->self = self;
-	  }
-
-	  cv::Mat eigenvalues;
-
-	  std::string executeCatchCvExceptionWorker() {
-			cv::eigen(self, eigenvalues);
-		  return "";
-	  }
-
-	  v8::Local<v8::Value> getReturnValue() {
-		  return Mat::Converter::wrap(eigenvalues);
-	  }
-  };
-  
-  struct SolveWorker : public CatchCvExceptionWorker {
-  public:
-	  cv::Mat self;
-	  SolveWorker(cv::Mat self) {
-		  this->self = self;
-	  }
-    
-	  cv::Mat mat2;
-	  cv::Mat dst;
-    int flags = 0; // cv.DECOMP_LU
-    
-	  std::string executeCatchCvExceptionWorker() {
-			cv::solve(self, mat2, dst, flags);
-		  return "";
-	  }
-
-	  v8::Local<v8::Value> getReturnValue() {
-		  return Mat::Converter::wrap(dst);
-	  }
-    
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        Mat::Converter::arg(0, &mat2, info)
-      );
-    }
-    
-    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        FF::IntConverter::optArg(1, &flags, info)
-      );
-    }    
+		  executeBinding = [=]() {
+			  cv::reduce(self, result->ref(), dim->ref(), rtype->ref(), dtype->ref());
+		  };
+	  };
   };
 
-  struct NormalizeWorker : public CatchCvExceptionWorker {
+  class EigenBinding : public CvBinding {
   public:
-	  cv::Mat self;
-	  NormalizeWorker(cv::Mat self) {
-		  this->self = self;
-	  }
+	  EigenBinding(cv::Mat self) {
+		  auto eigenvalues = ret<Mat::Converter>("eigenvalues");
 
-	  double alpha = 1;
-	  double beta = 0;
-	  int norm_type = cv::NORM_L2;
-	  int dtype = -1;
-	  cv::Mat mask = cv::noArray().getMat();
-
-	  cv::Mat returnValue;
-
-	  std::string executeCatchCvExceptionWorker() {
-		  cv::normalize(self, returnValue, alpha, beta, norm_type, dtype, mask);
-		  return "";
-	  }
-
-	  v8::Local<v8::Value> getReturnValue() {
-		  return Mat::Converter::wrap(returnValue);
-	  }
-
-	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-		  return (
-			  FF::DoubleConverter::optArg(0, &alpha, info) ||
-			  FF::DoubleConverter::optArg(1, &beta, info) ||
-			  FF::IntConverter::optArg(2, &norm_type, info) ||
-			  FF::IntConverter::optArg(3, &dtype, info) ||
-			  Mat::Converter::optArg(4, &mask, info)
-			  );
-	  }
-
-	  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-		  return FF::isArgObject(info, 0);
-	  }
-
-	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-		  v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-		  return (
-			  FF::DoubleConverter::optProp(&alpha, "alpha", opts) ||
-			  FF::DoubleConverter::optProp(&beta, "beta", opts) ||
-			  FF::IntConverter::optProp(&norm_type, "normType", opts) ||
-			  FF::IntConverter::optProp(&dtype, "dtype", opts) ||
-			  Mat::Converter::optProp(&mask, "mask", opts)
-			);
-	  }
+		  executeBinding = [=]() {
+			  cv::eigen(self, eigenvalues->ref());
+		  };
+	  };
   };
+
+  class SolveBinding : public CvBinding {
+  public:
+	  SolveBinding(cv::Mat self) {
+		  auto mat2 = req<Mat::Converter>();
+		  auto flags = opt<FF::IntConverter>("flags", 0);
+		  auto dst = ret<Mat::Converter>("dst");
+
+		  executeBinding = [=]() {
+			  cv::solve(self, mat2->ref(), dst->ref(), flags->ref());
+		  };
+	  };
+  };
+
+  class NormalizeBinding : public CvBinding {
+  public:
+	  NormalizeBinding(cv::Mat self) {
+		  auto alpha = opt<FF::DoubleConverter>("alpha", 1);
+		  auto beta = opt<FF::DoubleConverter>("beta", 0);
+		  auto normType = opt<FF::IntConverter>("normType", cv::NORM_L2);
+		  auto dtype = opt<FF::IntConverter>("dtype", -1);
+		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+		  auto dst = ret<Mat::Converter>("dst");
+
+		  executeBinding = [=]() {
+			  cv::normalize(self, dst->ref(), alpha->ref(), beta->ref(), normType->ref(), dtype->ref(), mask->ref());
+		  };
+	  };
+  };
+
   
 #if CV_VERSION_MINOR > 1
   struct RotateWorker : public OpWithCodeWorker {

@@ -170,7 +170,7 @@ NAN_METHOD(Core::Kmeans) {
 
 NAN_METHOD(Core::CartToPolar) {
   FF::SyncBinding(
-    std::make_shared<CoreBindings::CartToPolarWorker>(),
+    std::make_shared<CoreBindings::CartToPolarBinding>(),
     "Core::CartToPolar",
     info
   );
@@ -178,7 +178,7 @@ NAN_METHOD(Core::CartToPolar) {
 
 NAN_METHOD(Core::CartToPolarAsync) {
   FF::AsyncBinding(
-    std::make_shared<CoreBindings::CartToPolarWorker>(),
+    std::make_shared<CoreBindings::CartToPolarBinding>(),
     "Core::CartToPolarAsync",
     info
   );
@@ -186,7 +186,7 @@ NAN_METHOD(Core::CartToPolarAsync) {
 
 NAN_METHOD(Core::PolarToCart) {
   FF::SyncBinding(
-    std::make_shared<CoreBindings::PolarToCartWorker>(),
+    std::make_shared<CoreBindings::PolarToCartBinding>(),
     "Core::PolarToCart",
     info
   );
@@ -194,7 +194,7 @@ NAN_METHOD(Core::PolarToCart) {
 
 NAN_METHOD(Core::PolarToCartAsync) {
   FF::AsyncBinding(
-    std::make_shared<CoreBindings::PolarToCartWorker>(),
+    std::make_shared<CoreBindings::PolarToCartBinding>(),
     "Core::PolarToCartAsync",
     info
   );

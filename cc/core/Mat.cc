@@ -402,7 +402,7 @@ NAN_METHOD(Mat::Norm) {
 
 NAN_METHOD(Mat::Normalize) {
 	FF::SyncBinding(
-		std::make_shared<MatBindings::NormalizeWorker>(Mat::unwrapSelf(info)),
+		std::make_shared<MatBindings::NormalizeBinding>(Mat::unwrapSelf(info)),
 		"Mat::Normalize",
 		info
 	);
@@ -410,7 +410,7 @@ NAN_METHOD(Mat::Normalize) {
 
 NAN_METHOD(Mat::NormalizeAsync) {
 	FF::AsyncBinding(
-		std::make_shared<MatBindings::NormalizeWorker>(Mat::unwrapSelf(info)),
+		std::make_shared<MatBindings::NormalizeBinding>(Mat::unwrapSelf(info)),
 		"Mat::NormalizeAsync",
 		info
 	);
@@ -828,7 +828,7 @@ NAN_METHOD(Mat::GoodFeaturesToTrackAsync) {
 
 NAN_METHOD(Mat::Mean) {
 	FF::SyncBinding(
-		std::make_shared<MatBindings::MeanWorker>(Mat::unwrapSelf(info)),
+		std::make_shared<MatBindings::MeanBinding>(Mat::unwrapSelf(info)),
 		"Mat::Mean",
 		info
 	);
@@ -836,7 +836,7 @@ NAN_METHOD(Mat::Mean) {
 
 NAN_METHOD(Mat::MeanAsync) {
 	FF::AsyncBinding(
-		std::make_shared<MatBindings::MeanWorker>(Mat::unwrapSelf(info)),
+		std::make_shared<MatBindings::MeanBinding>(Mat::unwrapSelf(info)),
 		"Mat::MeanAsync",
 		info
 	);
@@ -844,7 +844,7 @@ NAN_METHOD(Mat::MeanAsync) {
 
 NAN_METHOD(Mat::MeanStdDev) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::MeanStdDevWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::MeanStdDevBinding>(Mat::unwrapSelf(info)),
     "Mat::MeanStdDev",
     info
   );
@@ -852,7 +852,7 @@ NAN_METHOD(Mat::MeanStdDev) {
 
 NAN_METHOD(Mat::MeanStdDevAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::MeanStdDevWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::MeanStdDevBinding>(Mat::unwrapSelf(info)),
     "Mat::MeanStdDevAsync",
     info
   );
@@ -876,7 +876,7 @@ NAN_METHOD(Mat::CopyMakeBorderAsync) {
 
 NAN_METHOD(Mat::Reduce) {
 	FF::SyncBinding(
-		std::make_shared<MatBindings::ReduceWorker>(Mat::unwrapSelf(info)),
+		std::make_shared<MatBindings::ReduceBinding>(Mat::unwrapSelf(info)),
 		"Mat::Reduce",
 		info
 	);
@@ -884,7 +884,7 @@ NAN_METHOD(Mat::Reduce) {
 
 NAN_METHOD(Mat::ReduceAsync) {
 	FF::AsyncBinding(
-		std::make_shared<MatBindings::ReduceWorker>(Mat::unwrapSelf(info)),
+		std::make_shared<MatBindings::ReduceBinding>(Mat::unwrapSelf(info)),
 		"Mat::ReduceAsync",
 		info
 	);
@@ -892,7 +892,7 @@ NAN_METHOD(Mat::ReduceAsync) {
 
 NAN_METHOD(Mat::Eigen) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::EigenWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::EigenBinding>(Mat::unwrapSelf(info)),
     "Mat::Eigen",
     info
   );
@@ -900,7 +900,7 @@ NAN_METHOD(Mat::Eigen) {
 
 NAN_METHOD(Mat::EigenAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::EigenWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::EigenBinding>(Mat::unwrapSelf(info)),
     "Mat::EigenAsync",
     info
   );
@@ -908,7 +908,7 @@ NAN_METHOD(Mat::EigenAsync) {
 
 NAN_METHOD(Mat::Solve) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::SolveWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::SolveBinding>(Mat::unwrapSelf(info)),
     "Mat::Solve",
     info
   );
@@ -916,7 +916,7 @@ NAN_METHOD(Mat::Solve) {
 
 NAN_METHOD(Mat::SolveAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::SolveWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::SolveBinding>(Mat::unwrapSelf(info)),
     "Mat::SolveAsync",
     info
   );
