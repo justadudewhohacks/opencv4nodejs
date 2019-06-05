@@ -31,6 +31,8 @@ public:
 #endif
   static NAN_METHOD(ApplyColorMap);
   static NAN_METHOD(ApplyColorMapAsync);
+  static NAN_METHOD(WarpPerspective);
+  static NAN_METHOD(WarpPerspectiveAsync);
 };
 
 #endif

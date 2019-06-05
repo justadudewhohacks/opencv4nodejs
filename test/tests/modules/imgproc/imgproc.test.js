@@ -252,4 +252,30 @@ describe('imgproc', () => {
       });
     });
   });
+
+  describe('warpPerspective', () => {
+    const src = new cv.Mat([[0, 0, 0],[0, 0, 0],[0, 0, 0],[0, 0, 0]], cv.CV_32F);
+    const M = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);
+    const size = new cv.Size(100, 100);
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'warpPerspective',
+      getRequiredArgs: () => ([
+        src,
+        M,
+        size
+      ]),
+      getOptionalArgsMap: () => ([
+        ['flags', cv.INTER_LINEAR],
+        ['borderMode', cv.BORDER_CONSTANT],
+        ['borderValue', new cv.Vec(255, 255, 255)]
+      ]),
+      hasAsync: true,
+      expectOutput: res => {
+        expect(res).to.be.instanceOf(cv.Mat)
+        assertPropsWithValue(res)({ rows: 100, cols: 100 })
+      }
+    });
+  });
 });

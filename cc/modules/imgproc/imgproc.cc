@@ -33,6 +33,8 @@ NAN_MODULE_INIT(Imgproc::Init) {
   Nan::SetMethod(target, "getTextSizeAsync", GetTextSizeAsync);
   Nan::SetMethod(target, "applyColorMap", ApplyColorMap);
   Nan::SetMethod(target, "applyColorMapAsync", ApplyColorMapAsync);
+  Nan::SetMethod(target, "warpPerspective", WarpPerspective);
+  Nan::SetMethod(target, "warpPerspectiveAsync", WarpPerspectiveAsync);
 #if CV_VERSION_MINOR > 1
   Nan::SetMethod(target, "canny", Canny);
   Nan::SetMethod(target, "cannyAsync", CannyAsync);
@@ -350,6 +352,16 @@ NAN_METHOD(Imgproc::ApplyColorMap) {
 NAN_METHOD(Imgproc::ApplyColorMapAsync) {
   FF::AsyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
                    "Imgproc::ApplyColorMapAsync", info);
+}
+
+NAN_METHOD(Imgproc::WarpPerspective) {
+  FF::SyncBinding(std::make_shared<ImgprocBindings::WarpPerspectiveWorker>(),
+                  "Imgproc::WarpPerspective", info);
+}
+
+NAN_METHOD(Imgproc::WarpPerspectiveAsync) {
+  FF::AsyncBinding(std::make_shared<ImgprocBindings::WarpPerspectiveWorker>(),
+                   "Imgproc::WarpPerspectiveAsync", info);
 }
 
 #if CV_VERSION_MINOR > 1

@@ -145,6 +145,61 @@ namespace ImgprocBindings {
       return ObjectArrayConverter<Point2, cv::Point2d, cv::Point2f>::wrap(destPoints);
     }
   };
+
+  struct WarpPerspectiveWorker : public CatchCvExceptionWorker {
+  public:
+    // Required args
+    cv::Mat src;
+    cv::Mat M;
+    cv::Size2d dsize;
+
+    // Optional args
+    int flags = cv::INTER_LINEAR;
+    int borderMode = cv::BORDER_CONSTANT;
+    cv::Vec3d borderValue = cv::Vec3d();
+
+    // Output
+    cv::Mat dst;
+
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        Mat::Converter::arg(0, &src, info) ||
+        Mat::Converter::arg(1, &M, info) ||
+        Size::Converter::arg(2, &dsize, info)
+      );
+    }
+
+    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        IntConverter::optArg(3, &flags, info) ||
+        IntConverter::optArg(4, &borderMode, info) ||
+        Vec3::Converter::optArg(5, &borderValue, info)
+      );
+    }
+
+    bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return FF::isArgObject(info, 3);
+    }
+
+    bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+      v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+
+      return (
+        IntConverter::optProp(&flags, "flags", opts) ||
+        IntConverter::optProp(&borderMode, "borderMode", opts) ||
+        Vec3::Converter::optProp(&borderValue, "borderValue", opts)
+      );
+    }
+
+    std::string executeCatchCvExceptionWorker() {
+      cv::warpPerspective(src, dst, M, dsize, flags, borderMode, borderValue);
+      return "";
+    }
+
+    v8::Local<v8::Value> getReturnValue() { 
+      return Mat::Converter::wrap(dst);
+    }
+  };
 }
 
 #endif
