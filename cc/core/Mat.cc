@@ -460,7 +460,7 @@ NAN_METHOD(Mat::Release) {
 
 NAN_METHOD(Mat::PushBack) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::PushBackWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::PushBackBinding>(Mat::unwrapSelf(info)),
     "Mat::PushBack",
     info
   );
@@ -468,7 +468,7 @@ NAN_METHOD(Mat::PushBack) {
 
 NAN_METHOD(Mat::PushBackAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::PushBackWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::PushBackBinding>(Mat::unwrapSelf(info)),
     "Mat::PushBackAsync",
     info
   );
@@ -476,7 +476,7 @@ NAN_METHOD(Mat::PushBackAsync) {
 
 NAN_METHOD(Mat::PopBack) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::PopBackWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::PopBackBinding>(Mat::unwrapSelf(info)),
     "Mat::PopBack",
     info
   );
@@ -484,7 +484,7 @@ NAN_METHOD(Mat::PopBack) {
 
 NAN_METHOD(Mat::PopBackAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::PopBackWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::PopBackBinding>(Mat::unwrapSelf(info)),
     "Mat::PopBackAsync",
     info
   );
@@ -780,7 +780,7 @@ NAN_METHOD(Mat::FlipAsync) {
 
 NAN_METHOD(Mat::Sum) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::SumWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::SumBinding>(Mat::unwrapSelf(info)),
     "Mat::Sum",
     info
   );
@@ -788,7 +788,7 @@ NAN_METHOD(Mat::Sum) {
 
 NAN_METHOD(Mat::SumAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::SumWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::SumBinding>(Mat::unwrapSelf(info)),
     "Mat::SumAsync",
     info
   );
@@ -796,7 +796,7 @@ NAN_METHOD(Mat::SumAsync) {
 
 NAN_METHOD(Mat::ConvertScaleAbs) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::ConvertScaleAbsWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::ConvertScaleAbsBinding>(Mat::unwrapSelf(info)),
     "Mat::ConvertScaleAbs",
     info
   );
@@ -804,7 +804,7 @@ NAN_METHOD(Mat::ConvertScaleAbs) {
 
 NAN_METHOD(Mat::ConvertScaleAbsAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::ConvertScaleAbsWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::ConvertScaleAbsBinding>(Mat::unwrapSelf(info)),
     "Mat::ConvertScaleAbsAsync",
     info
   );
@@ -812,7 +812,7 @@ NAN_METHOD(Mat::ConvertScaleAbsAsync) {
 
 NAN_METHOD(Mat::GoodFeaturesToTrack) {
   FF::SyncBinding(
-    std::make_shared<MatBindings::GoodFeaturesToTrackWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::GoodFeaturesToTrackBinding>(Mat::unwrapSelf(info)),
     "Mat::GoodFeaturesToTrack",
     info
   );
@@ -820,7 +820,7 @@ NAN_METHOD(Mat::GoodFeaturesToTrack) {
 
 NAN_METHOD(Mat::GoodFeaturesToTrackAsync) {
   FF::AsyncBinding(
-    std::make_shared<MatBindings::GoodFeaturesToTrackWorker>(Mat::unwrapSelf(info)),
+    std::make_shared<MatBindings::GoodFeaturesToTrackBinding>(Mat::unwrapSelf(info)),
     "Mat::GoodFeaturesToTrackAsync",
     info
   );

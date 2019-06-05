@@ -5,7 +5,7 @@
 
 namespace FF {
 
-	class IValue {
+	class INamedValue {
 	public:
 		virtual std::string getName() = 0;
 		virtual v8::Local<v8::Value> wrap() = 0;
@@ -22,268 +22,103 @@ namespace FF {
 	};
 
 	template <class T>
-	class ValueBase {
+	class Value {
 	public:
-		T get() {
+		Value() {};
+		Value(T val) : val(val) {};
+
+		T& ref() {
 			return val;
 		}
 
-		void set(T val) {
-			this->val = val;
+		T* ptr() {
+			return &val;
 		}
-	protected:
+	private:
 		T val;
 	};
 
-	template <class Converter, class T>
-	class Value : public IValue, public ValueBase<T> {
+	template <class Converter>
+	class NamedValue : public INamedValue, public Value<typename Converter::Type> {
 	public:
-		Value(std::string name) : name(name) {}
+		typedef Value<typename Converter::Type> super;
+
+		NamedValue(std::string name) : name(name) {};
+		NamedValue(std::string name, typename Converter::Type defaultValue) : super(defaultValue), name(name) {};
 
 		v8::Local<v8::Value> wrap() {
-			return Converter::wrap(val);
+			return Converter::wrap(super::ref());
 		}
 
 		std::string getName() {
 			return name;
 		}
-	protected:
+
+	private:
 		std::string name;
 	};
 
-	template <class Converter, class T>
-	class Arg : public Value<Converter, T>, public IArg {
+	template <class Converter>
+	class Arg : public NamedValue<Converter>, public IArg {
 	public:
-		Arg() : Value<Converter, T>("") {}
+		typedef NamedValue<Converter> super;
+
+		Arg() : super("") {};
 
 		bool unwrapArg(int argN, Nan::NAN_METHOD_ARGS_TYPE info) {
-			return Converter::arg(argN, &val, info);
+			return Converter::arg(argN, super::super::ptr(), info);
 		}
 	};
 
-	template <class Converter, class T>
-	class OptArg : public Value<Converter, T>, public IOptArg {
+	template <class Converter>
+	class OptArg : public NamedValue<Converter>, public IOptArg {
 	public:
-		OptArg(std::string name) : Value<Converter, T>(name) {}
+		typedef NamedValue<Converter> super;
+
+		OptArg(std::string name) : super(name) {};
+		OptArg(std::string name, typename Converter::Type defaultValue) : super(name, defaultValue) {};
 
 		bool unwrapArg(int argN, Nan::NAN_METHOD_ARGS_TYPE info) {
-			return Converter::optArg(argN, &val, info);
+			return Converter::optArg(argN, super::super::ptr(), info);
 		}
 
 		bool unwrapProp(v8::Local<v8::Object> opts) {
-			return Converter::optProp(&val, name.c_str(), opts);
+			return Converter::optProp(super::super::ptr(), super::getName().c_str(), opts);
 		}
 	};
-
-	template <class Converter, class T>
-	class ReturnValue : public Value<Converter, T> {
-	public:
-		ReturnValue(std::string name) : Value<Converter, T>(name) {}
-	};
-
-	typedef ValueBase<int> IntValue;
-	typedef ValueBase<uint> UintValue;
-	typedef ValueBase<double> DoubleValue;
-	typedef ValueBase<float> FloatValue;
-	typedef ValueBase<bool> BoolValue;
-	typedef ValueBase<std::string> StringValue;
-	typedef ValueBase<std::vector<int>> IntArrayValue;
-	typedef ValueBase<std::vector<uint>> UintArrayValue;
-	typedef ValueBase<std::vector<double>> DoubleArrayValue;
-	typedef ValueBase<std::vector<float>> FloatArrayValue;
-	typedef ValueBase<std::vector<bool>> BoolArrayValue;
-	typedef ValueBase<std::vector<std::string>> StringArrayValue;
-
-	typedef std::shared_ptr<IntValue> Int;
-	typedef std::shared_ptr<UintValue> Uint;
-	typedef std::shared_ptr<DoubleValue> Double;
-	typedef std::shared_ptr<FloatValue> Float;
-	typedef std::shared_ptr<BoolValue> Bool;
-	typedef std::shared_ptr<StringValue> String;
-	typedef std::shared_ptr<IntArrayValue> IntArray;
-	typedef std::shared_ptr<UintArrayValue> UintArray;
-	typedef std::shared_ptr<DoubleArrayValue> DoubleArray;
-	typedef std::shared_ptr<FloatArrayValue> FloatArray;
-	typedef std::shared_ptr<BoolArrayValue> BoolArray;
-	typedef std::shared_ptr<StringArrayValue> StringArray;
 
 	class BindingBase {
 	public:
-		Int intRequired() {
-			return addRequiredArg<Arg<FF::IntConverter, int>>();
-		}
-
-		Int intOptional(int defaultValue, std::string name) {
-			return addOptionalArg<OptArg<FF::IntConverter, int>, int>(defaultValue, name);
-		}
-
-		Int intReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<FF::IntConverter, int>>(name);
-		}
-
-		IntArray intArrayRequired() {
-			return addRequiredArg<Arg<FF::IntArrayConverter, std::vector<int>>>();
-		}
-
-		IntArray intArrayOptional(std::string name) {
-			return addOptionalArg<OptArg<FF::IntArrayConverter, std::vector<int>>>(name);
-		}
-
-		IntArray intArrayReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<FF::IntArrayConverter, std::vector<int>>>(name);
-		}
-
-
-		Uint uintRequired() {
-			return addRequiredArg<Arg<FF::IntConverter, uint>>();
-		}
-
-		Uint uintOptional(uint defaultValue, std::string name) {
-			return addOptionalArg<OptArg<FF::IntConverter, uint>, uint>(defaultValue, name);
-		}
-
-		Uint uintReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<FF::IntConverter, uint>>(name);
-		}
-
-		UintArray uintArrayRequired() {
-			return addRequiredArg<Arg<UFF::IntArrayConverter, std::vector<uint>>>();
-		}
-
-		UintArray uintArrayOptional(std::string name) {
-			return addOptionalArg<OptArg<UFF::IntArrayConverter, std::vector<uint>>>(name);
-		}
-
-		UintArray uintArrayReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<UFF::IntArrayConverter, std::vector<uint>>>(name);
-		}
-
-		Double doubleRequired() {
-			return addRequiredArg<Arg<FF::DoubleConverter, double>>();
-		}
-
-		Double doubleOptional(double defaultValue, std::string name) {
-			return addOptionalArg<OptArg<FF::DoubleConverter, double>, double>(defaultValue, name);
-		}
-
-		Double doubleReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<FF::DoubleConverter, double>>(name);
-		}
-
-		DoubleArray doubleArrayRequired() {
-			return addRequiredArg<Arg<FF::DoubleArrayConverter, std::vector<double>>>();
-		}
-
-		DoubleArray doubleArrayOptional(std::string name) {
-			return addOptionalArg<OptArg<FF::DoubleArrayConverter, std::vector<double>>>(name);
-		}
-
-		DoubleArray doubleArrayReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<FF::DoubleArrayConverter, std::vector<double>>>(name);
-		}
-
-		Float floatRequired() {
-			return addRequiredArg<Arg<FF::FloatConverter, float>>();
-		}
-
-		Float floatOptional(float defaultValue, std::string name) {
-			return addOptionalArg<OptArg<FF::FloatConverter, float>, float>(defaultValue, name);
-		}
-
-		Float floatReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<FF::FloatConverter, float>>(name);
-		}
-
-		FloatArray floatArrayRequired() {
-			return addRequiredArg<Arg<FF::FloatArrayConverter, std::vector<float>>>();
-		}
-
-		FloatArray floatArrayOptional(std::string name) {
-			return addOptionalArg<OptArg<FF::FloatArrayConverter, std::vector<float>>>(name);
-		}
-
-		FloatArray floatArrayReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<FF::FloatArrayConverter, std::vector<float>>>(name);
-		}
-
-		Bool boolRequired() {
-			return addRequiredArg<Arg<FF::BoolConverter, bool>>();
-		}
-
-		Bool boolOptional(bool defaultValue, std::string name) {
-			return addOptionalArg<OptArg<FF::BoolConverter, bool>, bool>(defaultValue, name);
-		}
-
-		Bool boolReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<FF::BoolConverter, bool>>(name);
-		}
-
-		BoolArray boolArrayRequired() {
-			return addRequiredArg<Arg<FF::BoolArrayConverter, std::vector<bool>>>();
-		}
-
-		BoolArray boolArrayOptional(std::string name) {
-			return addOptionalArg<OptArg<FF::BoolArrayConverter, std::vector<bool>>>(name);
-		}
-
-		BoolArray boolArrayReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<FF::BoolArrayConverter, std::vector<bool>>>(name);
-		}
-		String stringRequired() {
-			return addRequiredArg<Arg<FF::StringConverter, std::string>>();
-		}
-
-		String stringOptional(std::string defaultValue, std::string name) {
-			return addOptionalArg<OptArg<FF::StringConverter, std::string>, std::string>(defaultValue, name);
-		}
-
-		String stringReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<FF::StringConverter, std::string>>(name);
-		}
-
-		StringArray stringArrayRequired() {
-			return addRequiredArg<Arg<StringArrayConverter, std::vector<std::string>>>();
-		}
-
-		StringArray stringArrayOptional(std::string name) {
-			return addOptionalArg<OptArg<StringArrayConverter, std::vector<std::string>>>(name);
-		}
-
-		StringArray stringArrayReturnValue(std::string name) {
-			return addReturnValue<ReturnValue<StringArrayConverter, std::vector<std::string>>>(name);
-		}
-
-		template <class ValueType>
-		std::shared_ptr<ValueType> addRequiredArg() {
-			std::shared_ptr<ValueType> val = std::make_shared<ValueType>();
+		template <class Converter>
+		std::shared_ptr<Value<typename Converter::Type>> req() {
+			std::shared_ptr<Arg<Converter>> val = std::make_shared<Arg<Converter>>();
 			requiredArgs.push_back(val);
 			return val;
 		}
 
-		template <class ValueType>
-		std::shared_ptr<ValueType> addOptionalArg(std::string name) {
-			std::shared_ptr<ValueType> val = std::make_shared<ValueType>(name);
+		template <class Converter>
+		std::shared_ptr<Value<typename Converter::Type>> opt(std::string name, typename Converter::Type defaultValue) {
+			std::shared_ptr<OptArg<Converter>> val = std::make_shared<OptArg<Converter>>(name, defaultValue);
 			optionalArgs.push_back(val);
 			return val;
 		}
 
-		template <class ValueType, class T>
-		std::shared_ptr<ValueType> addOptionalArg(T defaultValue, std::string name) {
-			std::shared_ptr<ValueType> val = std::make_shared<ValueType>(name);
-			val->set(defaultValue);
-			optionalArgs.push_back(val);
+		template <class Converter>
+		std::shared_ptr<Value<typename Converter::Type>> ret(std::string name) {
+			std::shared_ptr<NamedValue<Converter>> val = std::make_shared<NamedValue<Converter>>(name);
+			returnValues.push_back(val);
 			return val;
 		}
 
-		template <class ValueType>
-		std::shared_ptr<ValueType> addReturnValue(std::string name) {
-			std::shared_ptr<ValueType> val = std::make_shared<ValueType>(name);
+		template <class Converter>
+		std::shared_ptr<Value<typename Converter::Type>> ret(std::string name, typename Converter::Type defaultValue) {
+			std::shared_ptr<NamedValue<Converter>> val = std::make_shared<NamedValue<Converter>>(name, defaultValue);
 			returnValues.push_back(val);
 			return val;
 		}
 
 		bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			for (int idx = 0; idx < requiredArgs.size(); idx++) {
+			for (uint idx = 0; idx < requiredArgs.size(); idx++) {
 				if (requiredArgs[idx]->unwrapArg(idx, info)) {
 					return true;
 				}
@@ -292,8 +127,9 @@ namespace FF {
 		}
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			for (int idx = 0; idx < optionalArgs.size(); idx++) {
-				if (optionalArgs[idx]->unwrapArg(idx, info)) {
+			uint optArgsIdx = requiredArgs.size();
+			for (uint idx = 0; idx < optionalArgs.size(); idx++) {
+				if (optionalArgs[idx]->unwrapArg(optArgsIdx + idx, info)) {
 					return true;
 				}
 			}
@@ -301,13 +137,14 @@ namespace FF {
 		}
 
 		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return optionalArgs.size() > 1;
+			int optArgsIdx = requiredArgs.size();
+			return optionalArgs.size() > 1 && FF::isArgObject(info, optArgsIdx);
 		}
 
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			int optArgsIdx = requiredArgs.size();
 			v8::Local<v8::Object> opts = info[optArgsIdx]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-			for (int idx = 0; idx < optionalArgs.size(); idx++) {
+			for (uint idx = 0; idx < optionalArgs.size(); idx++) {
 				if (optionalArgs[idx]->unwrapProp(opts)) {
 					return true;
 				}
@@ -323,9 +160,8 @@ namespace FF {
 				return returnValues[0]->wrap();
 			}
 			v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-			for (std::shared_ptr<IValue> val : returnValues) {
+			for (std::shared_ptr<INamedValue> val : returnValues) {
 				Nan::Set(ret, Nan::New(val->getName()).ToLocalChecked(), val->wrap());
-				;
 			}
 			return ret;
 		}
@@ -333,7 +169,7 @@ namespace FF {
 	protected:
 		std::vector<std::shared_ptr<IArg>> requiredArgs;
 		std::vector<std::shared_ptr<IOptArg>> optionalArgs;
-		std::vector<std::shared_ptr<IValue>> returnValues;
+		std::vector<std::shared_ptr<INamedValue>> returnValues;
 	};
 
 
