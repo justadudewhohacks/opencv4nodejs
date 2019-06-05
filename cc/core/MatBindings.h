@@ -126,259 +126,132 @@ namespace MatBindings {
     }
   };
 
-  struct CopyWorker : public CatchCvExceptionWorker {
+  class CopyBinding : public CvBinding {
   public:
-    cv::Mat self;
-    CopyWorker(cv::Mat self) {
-      this->self = self;
-    }
+	  CopyBinding(cv::Mat self) {
+		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+		  auto dst = ret<Mat::Converter>("dst");
 
-    cv::Mat dst;
-    cv::Mat mask = cv::noArray().getMat();
-
-    std::string executeCatchCvExceptionWorker() {
-      self.copyTo(dst, mask);
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() {
-      return Mat::Converter::wrap(dst);
-    }
-
-    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        Mat::Converter::optArg(0, &mask, info)
-      );
-    }
+		  executeBinding = [=]() {
+			  self.copyTo(dst->ref(), mask->ref());
+		  };
+	  };
   };
 
-  struct CopyToWorker : public CopyWorker {
+  class CopyToBinding : public CvBinding {
   public:
-    CopyToWorker(cv::Mat self) : CopyWorker(self){
-    }
+	  CopyToBinding(cv::Mat self) {
+		  auto dst = req<Mat::Converter>();
+		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+		  auto dstRet = ret<Mat::Converter>("dst");
 
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        Mat::Converter::arg(0, &dst, info)
-      );
-    }
-
-    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        Mat::Converter::optArg(1, &mask, info)
-      );
-    }
+		  executeBinding = [=]() {
+			  self.copyTo(dst->ref(), mask->ref());
+			  dstRet->ref() = dst->ref();
+		  };
+	  };
   };
 
-  struct ConvertToWorker : public CatchCvExceptionWorker {
+  class ConvertToBinding : public CvBinding {
   public:
-    cv::Mat self;
-    ConvertToWorker(cv::Mat self) {
-      this->self = self;
-    }
+	  ConvertToBinding(cv::Mat self) {
+		  auto rtype = req<FF::IntConverter>();
+		  auto alpha = opt<FF::DoubleConverter>("alpha", 1.0);
+		  auto beta = opt<FF::DoubleConverter>("beta", 0.0);
+		  auto dst = ret<Mat::Converter>("dst");
 
-    int rtype;
-    double alpha = 1.0;
-    double beta = 0.0;
-
-    cv::Mat dst;
-
-    std::string executeCatchCvExceptionWorker() {
-      self.convertTo(dst, rtype, alpha, beta);
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() {
-      return Mat::Converter::wrap(dst);
-    }
-
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        FF::IntConverter::arg(0, &rtype, info)
-      );
-    }
-
-    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        FF::DoubleConverter::optArg(1, &alpha, info) ||
-        FF::DoubleConverter::optArg(2, &beta, info)
-      );
-    }
-
-    bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF::isArgObject(info, 1);
-    }
-
-    bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-      return (
-        FF::DoubleConverter::optProp(&alpha, "alpha", opts) ||
-        FF::DoubleConverter::optProp(&beta, "beta", opts)
-      );
-    }
+		  executeBinding = [=]() {
+			  self.convertTo(dst->ref(), rtype->ref(), alpha->ref(), beta->ref());
+		  };
+	  };
   };
 
-  struct SplitChannelsWorker : public CatchCvExceptionWorker {
+  class SplitChannelsBinding : public CvBinding {
   public:
-    cv::Mat self;
-    SplitChannelsWorker(cv::Mat self) {
-      this->self = self;
-    }
+	  SplitChannelsBinding(cv::Mat self) {
+		  auto mv = ret<Mat::ArrayConverter>("mv");
 
-
-    std::vector<cv::Mat> mv;
-
-    std::string executeCatchCvExceptionWorker() {
-      cv::split(self, mv);
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() {
-      return Mat::ArrayConverter::wrap(mv);
-    }
+		  executeBinding = [=]() {
+			  cv::split(self, mv->ref());
+		  };
+	  };
   };
 
-  struct AddWeightedWorker : public CatchCvExceptionWorker {
+  class AddWeightedBinding : public CvBinding {
   public:
-    cv::Mat self;
-    AddWeightedWorker(cv::Mat self) {
-      this->self = self;
-    }
+	  AddWeightedBinding(cv::Mat self) {
 
-    double alpha;
-    cv::Mat src2;
-    double beta;
-    double gamma;
-    int dtype = -1;
+		  auto alpha = req<FF::DoubleConverter>();
+		  auto src2 = req<Mat::Converter>();
+		  auto beta = req<FF::DoubleConverter>();
+		  auto gamma = req<FF::DoubleConverter>();
+		  auto dtype = opt<FF::IntConverter>("dtype" , -1);
+		  auto dst = ret<Mat::Converter>("dst");
 
-    cv::Mat dst;
-
-    std::string executeCatchCvExceptionWorker() {
-      cv::addWeighted(self, alpha, src2, beta, gamma, dst, dtype);
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() {
-      return Mat::Converter::wrap(dst);
-    }
-
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        FF::DoubleConverter::arg(0, &alpha, info) ||
-        Mat::Converter::arg(1, &src2, info) ||
-        FF::DoubleConverter::arg(2, &beta, info) ||
-        FF::DoubleConverter::arg(3, &gamma, info)
-        );
-    }
-
-    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        FF::IntConverter::optArg(4, &dtype, info)
-      );
-    }
+		  executeBinding = [=]() {
+			  cv::addWeighted(self, alpha->ref(), src2->ref(), beta->ref(), gamma->ref(), dst->ref(), dtype->ref());
+		  };
+	  };
   };
 
-  struct MinMaxLocWorker : public CatchCvExceptionWorker {
+  class MinMaxLocBinding : public CvBinding {
   public:
-    cv::Mat self;
-    MinMaxLocWorker(cv::Mat self) {
-      this->self = self;
-    }
+	  MinMaxLocBinding(cv::Mat self) {
+		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+		  auto minVal = ret<FF::DoubleConverter>("minVal");
+		  auto maxVal = ret<FF::DoubleConverter>("maxVal");
+		  auto minLoc = ret<Point2::WithCastConverter<cv::Point2i>>("minLoc");
+		  auto maxLoc = ret<Point2::WithCastConverter<cv::Point2i>>("maxLoc");
 
-    double minVal, maxVal;
-    cv::Point2i minLoc, maxLoc;
-    cv::Mat mask = cv::noArray().getMat();
-
-    std::string executeCatchCvExceptionWorker() {
-      cv::minMaxLoc(self, &minVal, &maxVal, &minLoc, &maxLoc, mask);
-      return "";
-    }
-
-    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return Mat::Converter::optArg(0, &mask, info);
-    }
-
-    v8::Local<v8::Value> getReturnValue() {
-      v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, FF::newString("minVal"), Nan::New(minVal));
-      Nan::Set(ret, FF::newString("maxVal"), Nan::New(maxVal));
-      Nan::Set(ret, FF::newString("minLoc"), Point2::Converter::wrap(minLoc));
-      Nan::Set(ret, FF::newString("maxLoc"), Point2::Converter::wrap(maxLoc));
-      return ret;
-    }
+		  executeBinding = [=]() {
+			  cv::minMaxLoc(self, minVal->ptr(), maxVal->ptr(), minLoc->ptr(), maxLoc->ptr(), mask->ref());
+		  };
+	  };
   };
 
-  struct FindNonZeroWorker : public CatchCvExceptionWorker {
+  class FindNonZeroBinding : public CvBinding {
   public:
-    cv::Mat self;
-    FindNonZeroWorker(cv::Mat self) {
-      this->self = self;
-    }
+	  FindNonZeroBinding(cv::Mat self) {
+		  auto idx = ret<Point2::ArrayWithCastConverter<cv::Point2i>>("idx");
 
-    std::vector<cv::Point> idx;
-
-    std::string executeCatchCvExceptionWorker() {
-      cv::findNonZero(self, idx);
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() {
-      return Point2::ArrayWithCastConverter<cv::Point2i>::wrap(idx);
-    }
+		  executeBinding = [=]() {
+			  cv::findNonZero(self, idx->ref());
+		  };
+	  };
   };
 
-  struct CountNonZeroWorker : public CatchCvExceptionWorker {
+  class CountNonZeroBinding : public CvBinding {
   public:
-    cv::Mat self;
-    CountNonZeroWorker(cv::Mat self) {
-      this->self = self;
-    }
+	  CountNonZeroBinding(cv::Mat self) {
+		  auto num = ret<FF::IntConverter>("num");
 
-    int num;
-
-    std::string executeCatchCvExceptionWorker() {
-      num = cv::countNonZero(self);
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() {
-      return FF::IntConverter::wrap(num);
-    }
+		  executeBinding = [=]() {
+			  num->ref() = cv::countNonZero(self);
+		  };
+	  };
   };
 
-  struct PadToSquareWorker : public CatchCvExceptionWorker {
+  class PadToSquareBinding : public CvBinding {
   public:
-    cv::Mat self;
-    PadToSquareWorker(cv::Mat self) {
-      this->self = self;
-    }
+	  PadToSquareBinding(cv::Mat self) {
+		  auto fillVec = opt<Vec3::Converter>("fillVec", cv::Vec3d());
+		  auto out = ret<Mat::Converter>("out");
 
-    cv::Vec3d fillVec = cv::Vec3d();
-    cv::Mat out;
-    std::string executeCatchCvExceptionWorker() {
-      int maxDim = (std::max)(self.cols, self.rows);
-      out = cv::Mat(maxDim, maxDim, self.type(), (cv::Vec3b)fillVec);
+		  executeBinding = [=]() {
+			  int maxDim = (std::max)(self.cols, self.rows);
+			  out->ref() = cv::Mat(maxDim, maxDim, self.type(), (cv::Vec3b)fillVec->ref());
 
-      int offX = 0, offY = 0;
-      if (self.cols > self.rows) {
-        offY = (self.cols - self.rows) / 2;
-      }
-      else {
-        offX = (self.rows - self.cols) / 2;
-      }
-      cv::Mat roi = out(cv::Rect(offX, offY, self.cols, self.rows));
-      self.copyTo(roi);
-
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() {
-      return Mat::Converter::wrap(out);
-    }
-
-    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return Vec3::Converter::optArg(0, &fillVec, info);
-    }
+			  int offX = 0, offY = 0;
+			  if (self.cols > self.rows) {
+				  offY = (self.cols - self.rows) / 2;
+			  }
+			  else {
+				  offX = (self.rows - self.cols) / 2;
+			  }
+			  cv::Mat roi = out->ref()(cv::Rect(offX, offY, self.cols, self.rows));
+			  self.copyTo(roi);
+		  };
+	  };
   };
 
   struct DTWorker : public CatchCvExceptionWorker {
