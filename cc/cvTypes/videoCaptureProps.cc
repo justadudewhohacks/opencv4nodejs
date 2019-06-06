@@ -44,10 +44,13 @@ void VideoCaptureProps::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(target, CAP_PROP_BUFFERSIZE);
 	FF_SET_CV_CONSTANT(target, CAP_PROP_AUTOFOCUS);
 #endif
+
+#if CV_VERSION_LOWER_THAN(4, 0, 0)
 	FF_SET_CV_CONSTANT(target, CAP_MODE_BGR);
 	FF_SET_CV_CONSTANT(target, CAP_MODE_RGB);
 	FF_SET_CV_CONSTANT(target, CAP_MODE_GRAY);
 	FF_SET_CV_CONSTANT(target, CAP_MODE_YUYV);
+#endif
 
 	FF_SET_CV_CONSTANT(target, CAP_ANY);
 	FF_SET_CV_CONSTANT(target, CAP_VFW);

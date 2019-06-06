@@ -1,4 +1,5 @@
 #include "opencv2/core.hpp"
+#include "macros.h"
 
 #if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 

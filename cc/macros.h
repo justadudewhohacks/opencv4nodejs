@@ -4,9 +4,14 @@
 #define __FF_MACROS_H__
 
 #define CV_VERSION_GREATER_EQUAL(major, minor, revision) \
-	CV_VERSION_MAJOR > major  \
-	|| (CV_VERSION_MAJOR == major && CV_VERSION_MINOR >= minor) \
-	|| (CV_VERSION_MAJOR == major && CV_VERSION_MINOR == minor && CV_VERSION_REVISION >= revision)
+	(	\
+		CV_VERSION_MAJOR > major  \
+		|| (CV_VERSION_MAJOR == major && CV_VERSION_MINOR >= minor) \
+		|| (CV_VERSION_MAJOR == major && CV_VERSION_MINOR == minor && CV_VERSION_REVISION >= revision) \
+	)
+
+#define CV_VERSION_LOWER_THAN(major, minor, revision) \
+	!(CV_VERSION_GREATER_EQUAL(major, minor, revision))
 
 /* define getters, custom expression for accessing properties of "self" */
 #define FF_GETTER_CUSTOM(ff_property_name, ff_property_converter, ff_access_property_expr) \

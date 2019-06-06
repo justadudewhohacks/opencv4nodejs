@@ -54,9 +54,25 @@ public:
         variables = NULL;
     }
 
-    cv::UMatData* allocate(int dims, const int* sizes, int type,
-                       void* data0, size_t* step, int /*flags*/, cv::UMatUsageFlags /*usageFlags*/) const;
-    bool allocate(cv::UMatData* u, int /*accessFlags*/, cv::UMatUsageFlags /*usageFlags*/) const;
+    cv::UMatData* allocate(
+		int dims, const int* sizes, int type, void* data0, size_t* step,
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+		cv::AccessFlag,
+#else
+		int /*flags*/,
+#endif
+		cv::UMatUsageFlags /*usageFlags*/
+	) const;
+
+    bool allocate(cv::UMatData* u,
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+		cv::AccessFlag,
+#else
+		int /*flags*/,
+#endif
+		cv::UMatUsageFlags /*usageFlags*/
+	) const;
+
     void deallocate(cv::UMatData* u) const;
 
     int64_t readtotalmem();
