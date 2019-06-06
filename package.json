@@ -29,12 +29,12 @@
   "main": "./lib/opencv4nodejs.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "install": "node-gyp rebuild",
+    "install": "node-gyp rebuild --jobs max",
     "configure": "node-gyp configure",
-    "build": "node-gyp configure build",
-    "rebuild": "node-gyp rebuild",
+    "build": "node-gyp configure build --jobs max",
+    "rebuild": "node-gyp rebuild --jobs max",
     "clean": "node-gyp clean",
-    "build-debug": "node-gyp rebuild --debug"
+    "build-debug": "node-gyp rebuild --debug --jobs max"
   },
   "gypfile": true,
   "dependencies": {
