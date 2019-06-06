@@ -32,7 +32,7 @@ describe('text', () => {
     });
   });
 
-  if (global.cvVersionGreaterEqual(3, 1, 0)) {
+  if (global.utils.cvVersionGreaterEqual(3, 1, 0)) {
     describe('loadOCRHMMClassifierCNN', () => {
       generateAPITests({
         getDut: () => cv,

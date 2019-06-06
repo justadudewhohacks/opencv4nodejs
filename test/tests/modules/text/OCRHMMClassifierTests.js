@@ -13,7 +13,7 @@ module.exports = () => {
     let testImg;
 
     before(() => {
-      classifier = global.cvVersionGreaterEqual(3, 1, 0)
+      classifier = global.utils.cvVersionGreaterEqual(3, 1, 0)
         ? cv.loadOCRHMMClassifierCNN(path.resolve('../data/text-models/OCRBeamSearch_CNN_model_data.xml.gz'))
         : cv.loadOCRHMMClassifierNM(path.resolve('../data/text-models/OCRHMM_knn_model_data.xml.gz'));
       testImg = readTestImage().bgrToGray();

@@ -19,7 +19,7 @@ module.exports = () => {
       assertPropsWithValue(trackerParams)(params);
     });
 
-    (global.cvVersionGreaterEqual(3, 1, 0) ? it : it.skip)('TrackerKCFParams', () => {
+    (global.utils.cvVersionGreaterEqual(3, 1, 0) ? it : it.skip)('TrackerKCFParams', () => {
       const params = {
         sigma: 0.9,
         lambda: 0.8,
@@ -43,7 +43,7 @@ module.exports = () => {
       const floatSafe = true;
       assertPropsWithValue(trackerParams)(params, floatSafe);
     });
-    (global.cvVersionGreaterEqual(3, 4, 1) ? it : it.skip)('TrackerCSRTParams', () => {
+    (global.utils.cvVersionGreaterEqual(3, 4, 1) ? it : it.skip)('TrackerCSRTParams', () => {
       const params = {
         admm_iterations: 22,
         background_ratio: 3,
@@ -72,7 +72,7 @@ module.exports = () => {
         weights_lr: 0.03,
         window_function: "kaiser"
       };
-      if(global.cvVersionGreaterEqual(3, 4, 4)){
+      if(global.utils.cvVersionGreaterEqual(3, 4, 4)){
         params.psr_threshold = 0.4;
       }
 

@@ -79,7 +79,7 @@ module.exports = () => {
         });
       });
 
-      (global.cvVersionEqual(3, 1, 0) ? describe.skip : describe)('detectMultiScaleWithRejectLevels', () => {
+      (global.utils.cvVersionEqual(3, 1, 0) ? describe.skip : describe)('detectMultiScaleWithRejectLevels', () => {
         const expectOutput = (ret) => {
           expect(ret).to.have.property('objects').to.be.an('array');
           expect(ret).to.have.property('rejectLevels').to.be.an('array');

@@ -89,7 +89,7 @@ module.exports = (getTestImg) => {
       });
     });
 
-    (global.cvVersionLowerThan(3, 2, 0) ? describe.skip : describe)('matchBruteForceHammingLut', () => {
+    (global.utils.cvVersionLowerThan(3, 2, 0) ? describe.skip : describe)('matchBruteForceHammingLut', () => {
       it('matchBruteForceHammingLut', () => {
         const matches = cv.matchBruteForceHammingLut(orbDesc, orbDesc);
         expect(orbKps.length).to.be.above(0);
@@ -107,7 +107,7 @@ module.exports = (getTestImg) => {
       });
     });
 
-    (global.cvVersionLowerThan(3, 2, 0) ? describe.skip : describe)('matchBruteForceSL2', () => {
+    (global.utils.cvVersionLowerThan(3, 2, 0) ? describe.skip : describe)('matchBruteForceSL2', () => {
       it('matchBruteForceSL2', () => {
         const matches = cv.matchBruteForceSL2(orbDesc, orbDesc);
         expect(orbKps.length).to.be.above(0);

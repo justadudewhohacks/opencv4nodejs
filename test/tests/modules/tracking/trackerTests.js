@@ -53,7 +53,7 @@ const TrackerTestGenerator = getTestImg => (trackerName) => {
 
       // update test for TrackerTLD for 3.1.0 and 3.2.0 seem to not finish on Travis + Docker
       if (!(
-        && (global.cvVersionEqual(3, 1, 0) || global.cvVersionEqual(3, 2, 0))
+        && (global.utils.cvVersionEqual(3, 1, 0) || global.utils.cvVersionEqual(3, 2, 0))
         && process.env.DOCKER_BUILD
         && trackerName === 'TrackerTLD'
       )) {
@@ -91,15 +91,15 @@ module.exports = () => {
     'TrackerTLD'
   ];
 
-  const hasCSRT = global.cvVersionGreaterEqual(3, 4, 1);
-  const hasMOSSE = global.cvVersionGreaterEqual(3, 4, 0);
-  const hasKCF = global.cvVersionGreaterEqual(3, 1, 0);
+  const hasCSRT = global.utils.cvVersionGreaterEqual(3, 4, 1);
+  const hasMOSSE = global.utils.cvVersionGreaterEqual(3, 4, 0);
+  const hasKCF = global.utils.cvVersionGreaterEqual(3, 1, 0);
 
   if (hasKCF) {
     trackerNames.push('TrackerKCF');
   }
 
-  if (global.cvVersionGreaterEqual(3, 2, 0)) {
+  if (global.utils.cvVersionGreaterEqual(3, 2, 0)) {
     // trackerNames.push('TrackerGOTURN'); TODO: sample goturn.prototxt
   }
   if (hasCSRT) {
@@ -112,7 +112,7 @@ module.exports = () => {
     generateTrackerTests(trackerName);
   });
 
-  (global.cvVersionGreaterEqual(3, 1, 0) ? describe : describe.skip)('MultiTracker', () => {
+  (global.utils.cvVersionGreaterEqual(3, 1, 0) ? describe : describe.skip)('MultiTracker', () => {
     describe('add', () => {
       it('addMIL', () => {
         const tracker = new cv.MultiTracker();
@@ -172,7 +172,7 @@ module.exports = () => {
           methods.push('addKCF');
         }
 
-        // if (global.cvVersionGreaterEqual(3, 2, 0)) {
+        // if (global.utils.cvVersionGreaterEqual(3, 2, 0)) {
         //   methods.push('addGOTURN');
         // }
         if (hasCSRT) {

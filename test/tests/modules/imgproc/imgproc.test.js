@@ -86,7 +86,7 @@ describe('imgproc', () => {
     });
 
     // TODO causes sigsegv on 3.0.0 and 3.1.0
-    (global.cvVersionLowerThan(3, 2, 0) ? it.skip : it)('should return 3 dimensional hist', () => {
+    (global.utils.cvVersionLowerThan(3, 2, 0) ? it.skip : it)('should return 3 dimensional hist', () => {
       const histAxes = [
         {
           channel: 0,
@@ -160,7 +160,7 @@ describe('imgproc', () => {
     });
   });
 
-  (global.cvVersionLowerThan(3, 2, 0) ? describe.skip : describe)('canny', () => {
+  (global.utils.cvVersionLowerThan(3, 2, 0) ? describe.skip : describe)('canny', () => {
     const th1 = 2.8;
     const th2 = 0.8;
     const L2gradient = true;
