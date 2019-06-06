@@ -10,7 +10,6 @@ NAN_MODULE_INIT(DescriptorMatchingKnn::Init) {
 	Nan::SetMethod(target, "matchKnnBruteForceL1Async", MatchKnnBruteForceL1Async);
 	Nan::SetMethod(target, "matchKnnBruteForceHammingAsync", MatchKnnBruteForceHammingAsync);
 #if CV_VERSION_GREATER_EQUAL(3, 3, 0)
-#else
 	Nan::SetMethod(target, "matchKnnBruteForceHammingLut", MatchKnnBruteForceHammingLut);
 	Nan::SetMethod(target, "matchKnnBruteForceSL2", MatchKnnBruteForceSL2);
 	Nan::SetMethod(target, "matchKnnBruteForceHammingLutAsync", MatchKnnBruteForceHammingLutAsync);
