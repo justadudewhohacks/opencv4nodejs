@@ -25,16 +25,5 @@ NAN_MODULE_INIT(ORBDetector::Init) {
 };
 
 NAN_METHOD(ORBDetector::New) {
-	FF::TryCatch tryCatch("ORBDetector::New");
-	FF_ASSERT_CONSTRUCT_CALL();
-	ORBDetector::NewWorker worker;
-
-	if (worker.applyUnwrappers(info)) {
-		return tryCatch.reThrow();
-	}
-
-	ORBDetector* self = new ORBDetector();
-	self->self = cv::ORB::create(worker.maxFeatures, worker.scaleFactor, worker.nLevels, worker.edgeThreshold, worker.firstLevel, worker.WTA_K, worker.scoreType, worker.patchSize, worker.fastThreshold);
-	self->Wrap(info.Holder());
-	info.GetReturnValue().Set(info.Holder());
+	NewBinding().construct(info);
 }

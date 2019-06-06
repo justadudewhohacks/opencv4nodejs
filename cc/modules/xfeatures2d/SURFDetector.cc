@@ -23,28 +23,7 @@ NAN_MODULE_INIT(SURFDetector::Init) {
 };
 
 NAN_METHOD(SURFDetector::New) {
-	FF::TryCatch tryCatch("SURFDetector::New");
-	SURFDetector::NewWorker worker;
-
-	if (worker.applyUnwrappers(info)) {
-		return tryCatch.reThrow();
-	}
-
-	SURFDetector* self = new SURFDetector();
-	try {
-		self->self = cv::xfeatures2d::SURF::create(
-			worker.hessianThreshold,
-			worker.nOctaves,
-			worker.nOctaveLayers,
-			worker.extended,
-			worker.upright
-		);
-	}
-	catch (std::exception &e) {
-		return tryCatch.throwError(e.what());
-	}
-	self->Wrap(info.Holder());
-	info.GetReturnValue().Set(info.Holder());
+	NewBinding().construct(info);
 }
 
 

@@ -1,4 +1,5 @@
 #include "macros.h"
+#include "CvBinding.h"
 #include <opencv2/xfeatures2d.hpp>
 #include "features2d/FeatureDetector.h"
 
@@ -32,43 +33,38 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	struct NewWorker : CatchCvExceptionWorker {
+	class NewBinding : public CvBinding {
 	public:
+		void construct(Nan::NAN_METHOD_ARGS_TYPE info) {
+			FF::TryCatch tryCatch("SIFTDetector::New");
+			FF_ASSERT_CONSTRUCT_CALL();
 
-		int nFeatures = 0;
-		int nOctaveLayers = 3;
-		double contrastThreshold = 0.04;
-		double edgeThreshold = 10;
-		double sigma = 1.6;
+			auto nFeatures = opt<FF::IntConverter>("nFeatures", 0);
+			auto nOctaveLayers = opt<FF::IntConverter>("nOctaveLayers", 3);
+			auto contrastThreshold = opt<FF::DoubleConverter>("contrastThreshold", 0.04);
+			auto edgeThreshold = opt<FF::DoubleConverter>("edgeThreshold", 10);
+			auto sigma = opt<FF::DoubleConverter>("sigma", 1.6);
 
-		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return (
-				FF::IntConverter::optArg(0, &nFeatures, info) ||
-				FF::IntConverter::optArg(1, &nOctaveLayers, info) ||
-				FF::DoubleConverter::optArg(2, &contrastThreshold, info) ||
-				FF::DoubleConverter::optArg(3, &edgeThreshold, info) ||
-				FF::DoubleConverter::optArg(4, &sigma, info)
-				);
-		}
+			if (applyUnwrappers(info)) {
+				return tryCatch.reThrow();
+			}
 
-		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return FF::isArgObject(info, 0);
-		}
-
-		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-			return (
-				FF::IntConverter::optProp(&nFeatures, "nFeatures", opts) ||
-				FF::IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
-				FF::DoubleConverter::optProp(&contrastThreshold, "contrastThreshold", opts) ||
-				FF::DoubleConverter::optProp(&edgeThreshold, "edgeThreshold", opts) ||
-				FF::DoubleConverter::optProp(&sigma, "sigma", opts)
-				);
-		}
-
-		std::string executeCatchCvExceptionWorker() {
-			return "";
-		}
+			SIFTDetector* self = new SIFTDetector();
+			self->nFeatures = nFeatures->ref();
+			self->nOctaveLayers = nOctaveLayers->ref();
+			self->contrastThreshold = contrastThreshold->ref();
+			self->edgeThreshold = edgeThreshold->ref();
+			self->sigma = sigma->ref();
+			self->setNativeObject(cv::xfeatures2d::SIFT::create(
+				self->nFeatures,
+				self->nOctaveLayers,
+				self->contrastThreshold,
+				self->edgeThreshold,
+				self->sigma
+			));
+			self->Wrap(info.Holder());
+			info.GetReturnValue().Set(info.Holder());
+		};
 	};
 };
 

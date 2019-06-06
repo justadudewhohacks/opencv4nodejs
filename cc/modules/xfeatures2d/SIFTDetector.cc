@@ -24,33 +24,7 @@ NAN_MODULE_INIT(SIFTDetector::Init) {
 
 
 NAN_METHOD(SIFTDetector::New) {
-	FF::TryCatch tryCatch("SIFTDetector::New");
-	FF_ASSERT_CONSTRUCT_CALL();
-	SIFTDetector::NewWorker worker;
-
-	if (worker.applyUnwrappers(info)) {
-		return tryCatch.reThrow();
-	}
-
-	SIFTDetector* self = new SIFTDetector();
-	self->nFeatures = worker.nFeatures;
-	self->nOctaveLayers = worker.nOctaveLayers;
-	self->contrastThreshold = worker.contrastThreshold;
-	self->edgeThreshold = worker.edgeThreshold;
-	self->sigma = worker.sigma;
-	try {
-		self->self = cv::xfeatures2d::SIFT::create(
-			worker.nFeatures,
-			worker.nOctaveLayers,
-			worker.contrastThreshold,
-			worker.edgeThreshold,
-			worker.sigma
-		);
-	} catch (std::exception &e) {
-		return tryCatch.throwError(e.what());
-	}
-	self->Wrap(info.Holder());
-	info.GetReturnValue().Set(info.Holder());
+	NewBinding().construct(info);
 }
 
 #endif // HAVE_XFEATURES2D

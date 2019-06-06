@@ -1,4 +1,5 @@
 #include "macros.h"
+#include "CvBinding.h"
 #include <opencv2/xfeatures2d.hpp>
 #include "features2d/FeatureDetector.h"
 
@@ -26,45 +27,34 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	struct NewWorker : CatchCvExceptionWorker {
+	class NewBinding : public CvBinding {
 	public:
+		void construct(Nan::NAN_METHOD_ARGS_TYPE info) {
+			FF::TryCatch tryCatch("SURFDetector::New");
+			FF_ASSERT_CONSTRUCT_CALL();
 
-		double hessianThreshold = 100;
-		int nOctaves = 4;
-		int nOctaveLayers = 3;
-		bool extended = false;
-		bool upright = false;
+			auto hessianThreshold = opt<FF::DoubleConverter>("hessianThreshold", 100);
+			auto nOctaves = opt<FF::IntConverter>("nOctaves", 4);
+			auto nOctaveLayers = opt<FF::DoubleConverter>("nOctaveLayers", 3);
+			auto extended = opt<FF::BoolConverter>("extended", false);
+			auto upright = opt<FF::BoolConverter>("upright", false);
 
-		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return (
-				FF::DoubleConverter::optArg(0, &hessianThreshold, info) ||
-				FF::IntConverter::optArg(1, &nOctaves, info) ||
-				FF::IntConverter::optArg(2, &nOctaveLayers, info) ||
-				FF::BoolConverter::optArg(3, &extended, info) ||
-				FF::BoolConverter::optArg(4, &upright, info)
-				);
-		}
+			if (applyUnwrappers(info)) {
+				return tryCatch.reThrow();
+			}
 
-		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return FF::isArgObject(info, 0);
-		}
-
-		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-			return (
-				FF::DoubleConverter::optProp(&hessianThreshold, "hessianThreshold", opts) ||
-				FF::IntConverter::optProp(&nOctaves, "nOctaves", opts) ||
-				FF::IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
-				FF::BoolConverter::optProp(&extended, "extended", opts) ||
-				FF::BoolConverter::optProp(&upright, "upright", opts)
-				);
-		}
-
-		std::string executeCatchCvExceptionWorker() {
-			return "";
-		}
+			SURFDetector* self = new SURFDetector();
+			self->setNativeObject(cv::xfeatures2d::SURF::create(
+				hessianThreshold->ref(),
+				nOctaves->ref(),
+				nOctaveLayers->ref(),
+				extended->ref(),
+				upright->ref()
+			));
+			self->Wrap(info.Holder());
+			info.GetReturnValue().Set(info.Holder());
+		};
 	};
-
 };
 
 #endif
