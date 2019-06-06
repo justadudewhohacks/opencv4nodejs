@@ -1,4 +1,5 @@
 #include "MatImgproc.h"
+#include "CvBinding.h"
 
 #ifndef __FF_MATIMGPROCBINDINGS_H__
 #define __FF_MATIMGPROCBINDINGS_H__
@@ -500,128 +501,49 @@ namespace MatImgprocBindings {
     }
   };
   
-  struct BlurWorker: public CatchCvExceptionWorker {
+  class Blur : public CvBinding {
   public:
-    cv::Mat mat;
-  
-    BlurWorker(cv::Mat mat) {
-      this->mat = mat;
-    }
-  
-    cv::Size2d kSize;
-    cv::Point2d anchor = cv::Point2d(-1, -1);
-    int borderType = cv::BORDER_CONSTANT;
-  
-    cv::Mat blurMat;
-  
-    std::string executeCatchCvExceptionWorker() {
-      cv::blur(mat, blurMat, kSize, anchor, borderType);
-      return "";
-    }
-  
-    v8::Local<v8::Value> getReturnValue() {
-      return Mat::Converter::wrap(blurMat);
-    }
-  
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return Size::Converter::arg(0, &kSize, info);
-    }
-  
-    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        Point2::Converter::optArg(1, &anchor, info) ||
-        FF::IntConverter::optArg(2, &borderType, info)
-      );
-    }
-  
-    bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF::isArgObject(info, 1) && !Point2::hasInstance(info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
-    }
-  
-    bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-      return (
-        Point2::Converter::optProp(&anchor, "anchor", opts) ||
-        FF::IntConverter::optProp(&borderType, "borderType", opts)
-      );
-    }
+	  Blur(cv::Mat self) {
+		  auto kSize = req<Size::Converter>();
+		  auto anchor = opt<Point2::Converter>("anchor", cv::Point2d());
+		  auto borderType = opt<FF::IntConverter>("borderType", cv::BORDER_CONSTANT);
+		  auto blurMat = ret<Mat::Converter>("blurMat");
+
+		  executeBinding = [=]() {
+			  cv::blur(self, blurMat->ref(), kSize->ref(), anchor->ref(), borderType->ref());
+		  };
+	  };
+
+	  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return FF::isArgObject(info, 1) && !Point2::hasInstance(info[1]);
+	  }
   };
-  
-  struct GaussianBlurWorker: public CatchCvExceptionWorker {
+
+  class GaussianBlur : public CvBinding {
   public:
-    cv::Mat mat;
-  
-    GaussianBlurWorker(cv::Mat mat) {
-      this->mat = mat;
-    }
-  
-    cv::Size2d kSize;
-    double sigmaX;
-    double sigmaY = 0;
-    int borderType = cv::BORDER_CONSTANT;
-  
-    cv::Mat blurMat;
-  
-    std::string executeCatchCvExceptionWorker() {
-      cv::GaussianBlur(mat, blurMat, kSize, sigmaX, sigmaY, borderType);
-      return "";
-    }
-  
-    v8::Local<v8::Value> getReturnValue() {
-      return Mat::Converter::wrap(blurMat);
-    }
-  
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        Size::Converter::arg(0, &kSize, info) ||
-        FF::DoubleConverter::arg(1, &sigmaX, info)
-      );
-    }
-  
-    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        FF::DoubleConverter::optArg(2, &sigmaY, info) ||
-        FF::IntConverter::optArg(3, &borderType, info)
-      );
-    }
-  
-    bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF::isArgObject(info, 2);
-    }
-  
-    bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-      return (
-        FF::DoubleConverter::optProp(&sigmaY, "sigmaY", opts) ||
-        FF::IntConverter::optProp(&borderType, "borderType", opts)
-      );
-    }
+	  GaussianBlur(cv::Mat self) {
+		  auto kSize = req<Size::Converter>();
+		  auto sigmaX = req<FF::DoubleConverter>();
+		  auto sigmaY = opt<FF::DoubleConverter>("sigmaX", 0);
+		  auto borderType = opt<FF::IntConverter>("borderType", cv::BORDER_CONSTANT);
+		  auto blurMat = ret<Mat::Converter>("blurMat");
+
+		  executeBinding = [=]() {
+			  cv::GaussianBlur(self, blurMat->ref(), kSize->ref(), sigmaX->ref(), sigmaY->ref(), borderType->ref());
+		  };
+	  };
   };
-  
-  struct MedianBlurWorker : public CatchCvExceptionWorker {
+
+  class MedianBlur : public CvBinding {
   public:
-    cv::Mat mat;
-  
-    MedianBlurWorker(cv::Mat mat) {
-      this->mat = mat;
-    }
-  
-    int kSize;
-  
-    cv::Mat blurMat;
-  
-    std::string executeCatchCvExceptionWorker() {
-      cv::medianBlur(mat, blurMat, kSize);
-      return "";
-    }
-  
-    v8::Local<v8::Value> getReturnValue() {
-      return Mat::Converter::wrap(blurMat);
-    }
-  
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF::IntConverter::arg(0, &kSize, info);
-    }
+	  MedianBlur(cv::Mat self) {
+		  auto kSize = req<FF::IntConverter>();
+		  auto blurMat = ret<Mat::Converter>("blurMat");
+
+		  executeBinding = [=]() {
+			  cv::medianBlur(self, blurMat->ref(), kSize->ref());
+		  };
+	  };
   };
   
   struct ConnectedComponentsWorker : public CatchCvExceptionWorker {

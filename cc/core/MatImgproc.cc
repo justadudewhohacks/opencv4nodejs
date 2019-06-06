@@ -370,51 +370,27 @@ NAN_METHOD(MatImgproc::DistanceTransformWithLabelsAsync) {
 }
 
 NAN_METHOD(MatImgproc::Blur) {
-  FF::SyncBindingBase(
-    std::make_shared<MatImgprocBindings::BlurWorker>(Mat::unwrapSelf(info)),
-    "Mat::Blur",
-    info
-  );
+	Mat::SyncBinding<MatImgprocBindings::Blur>("Blur", info);
 }
 
 NAN_METHOD(MatImgproc::BlurAsync) {
-  FF::AsyncBindingBase(
-    std::make_shared<MatImgprocBindings::BlurWorker>(Mat::unwrapSelf(info)),
-    "Mat::BlurAsync",
-    info
-  );
+	Mat::AsyncBinding<MatImgprocBindings::Blur>("Blur", info);
 }
 
 NAN_METHOD(MatImgproc::GaussianBlur) {
-  FF::SyncBindingBase(
-    std::make_shared<MatImgprocBindings::GaussianBlurWorker>(Mat::unwrapSelf(info)),
-    "Mat::GaussianBlur",
-    info
-  );
+	Mat::SyncBinding<MatImgprocBindings::GaussianBlur>("GaussianBlur", info);
 }
 
 NAN_METHOD(MatImgproc::GaussianBlurAsync) {
-  FF::AsyncBindingBase(
-    std::make_shared<MatImgprocBindings::GaussianBlurWorker>(Mat::unwrapSelf(info)),
-    "Mat::GaussianBlurAsync",
-    info
-  );
+	Mat::AsyncBinding<MatImgprocBindings::GaussianBlur>("GaussianBlur", info);
 }
 
 NAN_METHOD(MatImgproc::MedianBlur) {
-  FF::SyncBindingBase(
-    std::make_shared<MatImgprocBindings::MedianBlurWorker>(Mat::unwrapSelf(info)),
-    "Mat::MedianBlur",
-    info
-  );
+	Mat::SyncBinding<MatImgprocBindings::MedianBlur>("MedianBlur", info);
 }
 
 NAN_METHOD(MatImgproc::MedianBlurAsync) {
-  FF::AsyncBindingBase(
-    std::make_shared<MatImgprocBindings::MedianBlurWorker>(Mat::unwrapSelf(info)),
-    "Mat::MedianBlurAsync",
-    info
-  );
+	Mat::AsyncBinding<MatImgprocBindings::MedianBlur>("MedianBlur", info);
 }
 
 NAN_METHOD(MatImgproc::ConnectedComponents) {
