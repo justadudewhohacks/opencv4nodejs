@@ -524,7 +524,7 @@ namespace MatImgprocBindings {
 	  GaussianBlur(cv::Mat self) {
 		  auto kSize = req<Size::Converter>();
 		  auto sigmaX = req<FF::DoubleConverter>();
-		  auto sigmaY = opt<FF::DoubleConverter>("sigmaX", 0);
+		  auto sigmaY = opt<FF::DoubleConverter>("sigmaY", 0);
 		  auto borderType = opt<FF::IntConverter>("borderType", cv::BORDER_CONSTANT);
 		  auto blurMat = ret<Mat::Converter>("blurMat");
 

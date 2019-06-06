@@ -76,7 +76,7 @@ namespace MatImgprocBindings {
       auto sigmaX = req<FF::DoubleConverter>();
 
       // optional parameters
-      auto sigmaY = opt<FF::DoubleConverter>("sigmaX", 0);
+      auto sigmaY = opt<FF::DoubleConverter>("sigmaY", 0);
       auto borderType = opt<FF::IntConverter>("borderType", cv::BORDER_CONSTANT);
 
       // return values
