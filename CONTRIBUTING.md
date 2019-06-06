@@ -61,7 +61,7 @@ Adding a new nodejs binding to an OpenCV function is done in 3 simple steps:
 
 ### 1. Add the Function Binding
 
-Let's consider the GaussianBlur example. Since the first argument is a cv::Mat, we are going to make this a class method binding. Furthermore, GaussianBlur is implemented in the imgproc package of OpenCV (as we have to include '#include <opencv2/imgproc.hpp>' to use this method). Therefore we want to implement the binding in MatImgprocBindings.h:
+Let's consider the GaussianBlur example. Since the first argument is a cv::Mat, we are going to make this a class method binding. Furthermore, GaussianBlur is implemented in the imgproc package of OpenCV (as we have to include `#include <opencv2/imgproc.hpp>` to use this method). Therefore we want to implement the binding in MatImgprocBindings.h:
 
 ``` c++
 namespace MatImgprocBindings {
@@ -186,7 +186,7 @@ export class Mat {
 
 And that's it! You can now open a Pull Request, which will be built on the CI.
 
-## Implementing a wrapped class
+## Implementing a Wrapped Class
 
 If you want to add a new class wrapper for one of the OpenCV classes you should make this class extend
 the FF::ObjectWrap<TClass, T> template, which allows us to use all the helper functions and converters
