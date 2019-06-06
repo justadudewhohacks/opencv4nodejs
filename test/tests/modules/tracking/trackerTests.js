@@ -53,7 +53,7 @@ const TrackerTestGenerator = getTestImg => (trackerName) => {
 
       // update test for TrackerTLD for 3.1.0 and 3.2.0 seem to not finish on Travis + Docker
       if (!(
-        && (global.utils.cvVersionEqual(3, 1, 0) || global.utils.cvVersionEqual(3, 2, 0))
+        (global.utils.cvVersionEqual(3, 1, 0) || global.utils.cvVersionEqual(3, 2, 0))
         && process.env.DOCKER_BUILD
         && trackerName === 'TrackerTLD'
       )) {
