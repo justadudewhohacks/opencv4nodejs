@@ -17,5 +17,5 @@ module.exports = Object.assign(
   testUtils,
   matTestUtils,
   defaultTests,
-  { getNodeMajorVersion, cvVersionGreaterEqual }
+  { getNodeMajorVersion, cvVersionGreaterEqual, cvVersionLowerThan, cvVersionEqual }
 );
