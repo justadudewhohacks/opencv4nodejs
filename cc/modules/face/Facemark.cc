@@ -3,7 +3,7 @@
 #include "Facemark.h"
 #include "FacemarkBindings.h"
 
-#if CV_VERSION_MINOR >= 4
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 
 NAN_METHOD(Facemark::Save) {
 	FF::TryCatch tryCatch("Facemark::Save");
@@ -32,7 +32,7 @@ void Facemark::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "fitAsync", FitAsync);
   Nan::SetPrototypeMethod(ctor, "save", Save);
   Nan::SetPrototypeMethod(ctor, "load", Load);
-#if CV_MINOR_VERSION < 2
+#if CV_VERSION_MAJOR <= 3 && CV_VERSION_MINOR < 2
   Nan::SetPrototypeMethod(ctor, "addTrainingSample", AddTrainingSample);
   Nan::SetPrototypeMethod(ctor, "addTrainingSampleAsync",
 	  AddTrainingSampleAsync);
@@ -78,7 +78,7 @@ NAN_METHOD(Facemark::FitAsync) {
 	);
 }
 
-#if CV_MINOR_VERSION < 2
+#if CV_VERSION_MAJOR <= 3 && CV_VERSION_MINOR < 2
 
 NAN_METHOD(Facemark::AddTrainingSample) {
 	FF::SyncBindingBase(

@@ -62,10 +62,10 @@ NAN_METHOD(LBPHFaceRecognizer::New) {
 
 	LBPHFaceRecognizer* self = new LBPHFaceRecognizer();
 	self->Wrap(info.Holder());
-#if CV_VERSION_MINOR < 3
-	self->faceRecognizer = cv::face::createLBPHFaceRecognizer(worker.radius, worker.neighbors, worker.grid_x, worker.grid_y, worker.threshold);
-#else
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	self->faceRecognizer = cv::face::LBPHFaceRecognizer::create(worker.radius, worker.neighbors, worker.grid_x, worker.grid_y, worker.threshold);
+#else
+	self->faceRecognizer = cv::face::createLBPHFaceRecognizer(worker.radius, worker.neighbors, worker.grid_x, worker.grid_y, worker.threshold);
 #endif
 	info.GetReturnValue().Set(info.Holder());
 };

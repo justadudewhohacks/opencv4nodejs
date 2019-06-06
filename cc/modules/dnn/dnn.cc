@@ -1,6 +1,6 @@
 #include "opencv2/core.hpp"
 
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 
 // cv 3.3+ should have dnn by default
 //#ifdef HAVE_DNN
@@ -19,7 +19,7 @@ NAN_MODULE_INIT(Dnn::Init) {
   Nan::SetMethod(target, "blobFromImageAsync", BlobFromImageAsync);
   Nan::SetMethod(target, "blobFromImages", BlobFromImages);
   Nan::SetMethod(target, "blobFromImagesAsync", BlobFromImagesAsync);
-#if CV_VERSION_MINOR > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
   Nan::SetMethod(target, "readNetFromDarknet", ReadNetFromDarknet);
   Nan::SetMethod(target, "readNetFromDarknetAsync", ReadNetFromDarknetAsync);
   Nan::SetMethod(target, "NMSBoxes", NMSBoxes);
@@ -91,7 +91,7 @@ NAN_METHOD(Dnn::BlobFromImagesAsync) {
   );
 }
 
-#if CV_VERSION_MINOR > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 NAN_METHOD(Dnn::ReadNetFromDarknet) {
   FF::SyncBindingBase(
       std::make_shared<DnnBindings::ReadNetFromDarknetWorker>(),

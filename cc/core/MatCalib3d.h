@@ -44,7 +44,7 @@ public:
   static NAN_METHOD(ReprojectImageTo3DAsync);
   static NAN_METHOD(DecomposeHomographyMat);
   static NAN_METHOD(DecomposeHomographyMatAsync);
-#if CV_VERSION_MINOR > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
   static NAN_METHOD(FindEssentialMat);
   static NAN_METHOD(FindEssentialMatAsync);
   static NAN_METHOD(RecoverPose);

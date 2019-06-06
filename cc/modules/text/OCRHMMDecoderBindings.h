@@ -51,7 +51,7 @@ namespace OCRHMMDecoderBindings {
     }
   
     std::string executeCatchCvExceptionWorker() {
-  #if CV_MINOR_VERSION > 0
+  #if CV_VERSION_GREATER_EQUAL(3, 1, 0)
       if (mask.empty()) {
         output_text = decoder->run(img, min_confidence, component_level);
       }
@@ -75,7 +75,7 @@ namespace OCRHMMDecoderBindings {
       );
     }
   
-  #if CV_MINOR_VERSION > 0
+  #if CV_VERSION_GREATER_EQUAL(3, 1, 0)
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::optArg(2, &mask, info) ||
@@ -96,7 +96,7 @@ namespace OCRHMMDecoderBindings {
   
   
     std::string executeCatchCvExceptionWorker() {
-  #if CV_MINOR_VERSION > 0
+  #if CV_VERSION_GREATER_EQUAL(3, 1, 0)
       if (mask.empty()) {
         decoder->run(img, output_text, &component_rects, &component_texts, &component_confidences, component_level);
       }

@@ -29,13 +29,13 @@ NAN_MODULE_INIT(Calib3d::Init) {
   Nan::SetMethod(target, "getValidDisparityROIAsync", GetValidDisparityROIAsync);
   Nan::SetMethod(target, "estimateAffine3D", EstimateAffine3D);
   Nan::SetMethod(target, "estimateAffine3DAsync", EstimateAffine3DAsync);
-#if CV_VERSION_MINOR > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
   Nan::SetMethod(target, "sampsonDistance", SampsonDistance);
   Nan::SetMethod(target, "sampsonDistanceAsync", SampsonDistanceAsync);
   Nan::SetMethod(target, "calibrateCamera", CalibrateCamera);
   Nan::SetMethod(target, "calibrateCameraAsync", CalibrateCameraAsync);
 #endif
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   Nan::SetMethod(target, "calibrateCameraExtended", CalibrateCameraExtended);
   Nan::SetMethod(target, "calibrateCameraExtendedAsync", CalibrateCameraExtendedAsync);
   Nan::SetMethod(target, "estimateAffine2D", EstimateAffine2D);
@@ -43,7 +43,7 @@ NAN_MODULE_INIT(Calib3d::Init) {
   Nan::SetMethod(target, "estimateAffinePartial2D", EstimateAffinePartial2D);
   Nan::SetMethod(target, "estimateAffinePartial2DAsync", EstimateAffinePartial2DAsync);
 #endif
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
   Nan::SetMethod(target, "solveP3P", SolveP3P);
   Nan::SetMethod(target, "solveP3PAsync", SolveP3PAsync);
 #endif
@@ -273,7 +273,7 @@ NAN_METHOD(Calib3d::EstimateAffine3DAsync) {
   );
 }
 
-#if CV_VERSION_MINOR > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 
 NAN_METHOD(Calib3d::SampsonDistance) {
   FF::SyncBindingBase(
@@ -309,7 +309,7 @@ NAN_METHOD(Calib3d::CalibrateCameraAsync) {
 
 #endif
 
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 
 NAN_METHOD(Calib3d::CalibrateCameraExtended) {
   FF::SyncBindingBase(
@@ -360,7 +360,7 @@ NAN_METHOD(Calib3d::EstimateAffinePartial2DAsync) {
 }
 #endif
 
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 
 NAN_METHOD(Calib3d::SolveP3P) {
   FF::SyncBindingBase(

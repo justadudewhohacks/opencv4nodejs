@@ -3,7 +3,7 @@
 #include "FacemarkAAM.h"
 #include "FacemarkAAMParams.h"
 
-#if CV_VERSION_MINOR >= 4
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 
 Nan::Persistent<v8::FunctionTemplate> FacemarkAAM::constructor;
 

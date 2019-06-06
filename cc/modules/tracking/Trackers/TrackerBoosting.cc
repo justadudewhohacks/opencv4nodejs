@@ -30,7 +30,7 @@ NAN_METHOD(TrackerBoosting::New) {
 	}
 
 	TrackerBoosting* self = new TrackerBoosting();
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	self->tracker = cv::TrackerBoosting::create(params);
 #else
 	self->tracker = cv::TrackerBoosting::createTracker(params);

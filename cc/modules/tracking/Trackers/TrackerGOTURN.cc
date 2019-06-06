@@ -2,7 +2,7 @@
 
 #include "TrackerGOTURN.h"
 
-#if CV_MINOR_VERSION > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 
 Nan::Persistent<v8::FunctionTemplate> TrackerGOTURN::constructor;
 
@@ -25,7 +25,7 @@ NAN_METHOD(TrackerGOTURN::New) {
 	FF_ASSERT_CONSTRUCT_CALL();
 
 	TrackerGOTURN* self = new TrackerGOTURN();
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	self->tracker = cv::TrackerGOTURN::create();
 #else
 	self->tracker = cv::TrackerGOTURN::createTracker();

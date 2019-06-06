@@ -8,7 +8,7 @@ NAN_MODULE_INIT(Text::Init) {
   OCRHMMClassifier::Init(target);
   Nan::SetMethod(target, "loadOCRHMMClassifierNM", LoadOCRHMMClassifierNM);
   Nan::SetMethod(target, "loadOCRHMMClassifierNMAsync", LoadOCRHMMClassifierNMAsync);
-#if CV_MINOR_VERSION > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
   Nan::SetMethod(target, "loadOCRHMMClassifierCNN", LoadOCRHMMClassifierCNN);
   Nan::SetMethod(target, "loadOCRHMMClassifierCNNAsync", LoadOCRHMMClassifierCNNAsync);
   Nan::SetMethod(target, "createOCRHMMTransitionsTable", CreateOCRHMMTransitionsTable);
@@ -32,7 +32,7 @@ NAN_METHOD(Text::LoadOCRHMMClassifierNMAsync) {
   );
 }
 
-#if CV_MINOR_VERSION > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 
 NAN_METHOD(Text::LoadOCRHMMClassifierCNN) {
   FF::SyncBindingBase(

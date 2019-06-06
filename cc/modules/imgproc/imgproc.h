@@ -25,7 +25,7 @@ public:
   static NAN_METHOD(FitLine);
   static NAN_METHOD(GetTextSize);
   static NAN_METHOD(GetTextSizeAsync);
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   static NAN_METHOD(Canny);
   static NAN_METHOD(CannyAsync);
 #endif

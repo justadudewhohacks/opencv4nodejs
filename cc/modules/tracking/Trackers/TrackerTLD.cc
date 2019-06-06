@@ -23,7 +23,7 @@ NAN_METHOD(TrackerTLD::New) {
 	FF_ASSERT_CONSTRUCT_CALL();
 
 	TrackerTLD* self = new TrackerTLD();
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	self->tracker = cv::TrackerTLD::create();
 #else
 	self->tracker = cv::TrackerTLD::createTracker();

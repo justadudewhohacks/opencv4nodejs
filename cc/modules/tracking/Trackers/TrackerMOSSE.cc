@@ -2,7 +2,7 @@
 
 #include "TrackerMOSSE.h"
 
-#if CV_MINOR_VERSION > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 
 Nan::Persistent<v8::FunctionTemplate> TrackerMOSSE::constructor;
 

@@ -1,7 +1,7 @@
 #include "Facemark.h"
 #include "FacemarkAAMData.h"
 
-#if CV_VERSION_MINOR >= 4
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 
 #ifndef __FF_FACEMARKBINDINGS_H_
 #define __FF_FACEMARKBINDINGS_H_
@@ -50,7 +50,7 @@ namespace FacemarkBindings {
 	  }
   };
 
-#if CV_MINOR_VERSION < 2
+#if CV_VERSION_MAJOR <= 3 && CV_VERSION_MINOR < 2
   struct AddTrainingSampleWorker : public CatchCvExceptionWorker {
   public:
 	  cv::Ptr<cv::face::Facemark> self;

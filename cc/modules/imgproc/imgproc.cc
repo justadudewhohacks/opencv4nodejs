@@ -33,7 +33,7 @@ NAN_MODULE_INIT(Imgproc::Init) {
   Nan::SetMethod(target, "getTextSizeAsync", GetTextSizeAsync);
   Nan::SetMethod(target, "applyColorMap", ApplyColorMap);
   Nan::SetMethod(target, "applyColorMapAsync", ApplyColorMapAsync);
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   Nan::SetMethod(target, "canny", Canny);
   Nan::SetMethod(target, "cannyAsync", CannyAsync);
 #endif
@@ -326,7 +326,7 @@ NAN_METHOD(Imgproc::ApplyColorMapAsync) {
                    "Imgproc::ApplyColorMapAsync", info);
 }
 
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 
 NAN_METHOD(Imgproc::Canny) {
 	FF::SyncBindingBase(std::make_shared<ImgprocBindings::CannyWorker>(),

@@ -6,19 +6,19 @@
 #include "./Trackers/TrackerMIL.h"
 #include "./Trackers/TrackerTLD.h"
 
-#if CV_MINOR_VERSION > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 #include "./Trackers/TrackerKCF.h"
 #include "MultiTracker.h"
 #endif
 
-#if CV_MINOR_VERSION > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 #include "./Trackers/TrackerGOTURN.h"
 #endif
 
-#if CV_MINOR_VERSION > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 #include "./Trackers/TrackerMOSSE.h"
 #endif
-#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
+#if CV_VERSION_GREATER_EQUAL(3, 4, 1)
 #include "./Trackers/TrackerCSRT.h"
 #endif
 
@@ -28,7 +28,7 @@ NAN_MODULE_INIT(Tracking::Init) {
 	TrackerMIL::Init(target);
 	TrackerTLD::Init(target);
 
-#if CV_MINOR_VERSION > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 	TrackerKCF::Init(target);
 	MultiTracker::Init(target);
 	v8::Local<v8::Object> trackerKCFModes = Nan::New<v8::Object>();
@@ -38,14 +38,14 @@ NAN_MODULE_INIT(Tracking::Init) {
 	Nan::Set(target,FF::newString("trackerKCFModes"), trackerKCFModes);
 #endif
 
-#if CV_MINOR_VERSION > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 	TrackerGOTURN::Init(target);
 #endif
 
-#if CV_MINOR_VERSION > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 	TrackerMOSSE::Init(target);
 #endif
-#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
+#if CV_VERSION_GREATER_EQUAL(3, 4, 1)
 	TrackerCSRT::Init(target);
 #endif
 

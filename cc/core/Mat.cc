@@ -105,7 +105,7 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "solve", Solve);
   Nan::SetPrototypeMethod(ctor, "solveAsync", SolveAsync);
 
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
   Nan::SetPrototypeMethod(ctor, "rotateAsync", RotateAsync);
 #endif
@@ -762,7 +762,7 @@ NAN_METHOD(Mat::SolveAsync) {
 	Mat::AsyncBinding<MatBindings::Solve>("Solve", info);
 }
 
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 NAN_METHOD(Mat::Rotate) {
   FF::SyncBindingBase(
     std::make_shared<MatBindings::RotateWorker>(Mat::unwrapSelf(info)),

@@ -38,7 +38,7 @@ void MatCalib3d::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "reprojectImageTo3DAsync", ReprojectImageTo3DAsync);
   Nan::SetPrototypeMethod(ctor, "decomposeHomographyMat", DecomposeHomographyMat);
   Nan::SetPrototypeMethod(ctor, "decomposeHomographyMatAsync", DecomposeHomographyMatAsync);
-#if CV_VERSION_MINOR > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
   Nan::SetPrototypeMethod(ctor, "findEssentialMat", FindEssentialMat);
   Nan::SetPrototypeMethod(ctor, "findEssentialMatAsync", FindEssentialMatAsync);
   Nan::SetPrototypeMethod(ctor, "recoverPose", RecoverPose);
@@ -334,7 +334,7 @@ NAN_METHOD(MatCalib3d::DecomposeHomographyMatAsync) {
   );
 }
 
-#if CV_VERSION_MINOR > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 
 NAN_METHOD(MatCalib3d::FindEssentialMat) {
   FF::SyncBindingBase(

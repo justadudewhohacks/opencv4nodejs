@@ -15,7 +15,7 @@ public:
 	static NAN_METHOD(LoadOCRHMMClassifierNM);
 	static NAN_METHOD(LoadOCRHMMClassifierNMAsync);
 
-#if CV_MINOR_VERSION > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 	static NAN_METHOD(LoadOCRHMMClassifierCNN);
 	static NAN_METHOD(LoadOCRHMMClassifierCNNAsync);
 

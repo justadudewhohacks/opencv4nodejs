@@ -676,7 +676,7 @@ namespace Calib3dBindings {
     }
   };
 
-#if CV_VERSION_MINOR > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
   struct SampsonDistanceWorker : public CatchCvExceptionWorker {
   public:
     cv::Vec2d pt1;
@@ -765,7 +765,7 @@ namespace Calib3dBindings {
   };
 #endif
 
-#if CV_VERSION_MINOR > 1 
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0) 
   struct CalibrateCameraExtendedWorker : public CalibrateCameraWorker {
   public:
     cv::Mat stdDeviationsIntrinsics;
@@ -852,7 +852,7 @@ namespace Calib3dBindings {
   };
 #endif
 
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
   struct SolveP3PWorker : public SolvePxPWorker {
   public:
     int flags = cv::SOLVEPNP_P3P;

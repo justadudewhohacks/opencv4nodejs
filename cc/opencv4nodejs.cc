@@ -27,7 +27,7 @@
 #include "modules/face/face.h"
 #endif // HAVE_FACE
 
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 #include "modules/dnn/dnn.h"
 #endif
 
@@ -52,9 +52,9 @@ void init(v8::Local<v8::Object> target) {
 
 
 	v8::Local<v8::Object> version = Nan::New<v8::Object>();
-	Nan::Set(version, FF::newString("major"), Nan::New(CV_MAJOR_VERSION));
-	Nan::Set(version, FF::newString("minor"), Nan::New(CV_MINOR_VERSION));
-	Nan::Set(version, FF::newString("subminor"), Nan::New(CV_SUBMINOR_VERSION));
+	Nan::Set(version, FF::newString("major"), Nan::New(CV_VERSION_MAJOR));
+	Nan::Set(version, FF::newString("minor"), Nan::New(CV_VERSION_MINOR));
+	Nan::Set(version, FF::newString("subminor"), Nan::New(CV_VERSION_REVISION));
 	Nan::Set(target, FF::newString("version"), version);
 
 	v8::Local<v8::Object> xmodules = Nan::New<v8::Object>();
@@ -70,7 +70,7 @@ void init(v8::Local<v8::Object> target) {
   Features2d::Init(target);
   Objdetect::Init(target);
 	MachineLearning::Init(target);
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	Nan::Set(xmodules, FF::newString("dnn"), Nan::New(true));
 	Dnn::Init(target);
 #endif

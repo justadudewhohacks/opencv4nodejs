@@ -152,10 +152,10 @@ NAN_METHOD(SVM::GetSupportVectors) {
 
 NAN_METHOD(SVM::GetUncompressedSupportVectors) {
 	FF::TryCatch tryCatch("SVM::GetUncompressedSupportVectors");
-#if CV_VERSION_MINOR < 2
-	return tryCatch.throwError("getUncompressedSupportVectors not implemented for v3.0, v3.1");
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
+	info.GetReturnValue().Set(Mat::Converter::wrap(SVM::unwrapSelf(info)->getUncompressedSupportVectors()));
 #else
-  info.GetReturnValue().Set(Mat::Converter::wrap(SVM::unwrapSelf(info)->getUncompressedSupportVectors()));
+	return tryCatch.throwError("getUncompressedSupportVectors not implemented for v3.0, v3.1");
 #endif
 }
 
@@ -218,10 +218,10 @@ NAN_METHOD(SVM::Load) {
 	if (FF::StringConverter::arg(0, &path, info)) {
 		return tryCatch.reThrow();
 	}
-#if CV_VERSION_MINOR < 2
-	SVM::unwrapThis(info)->setNativeObject(cv::ml::SVM::load<cv::ml::SVM>(path));
-#else
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 	SVM::unwrapThis(info)->setNativeObject(cv::ml::SVM::load(path));
+#else
+	SVM::unwrapThis(info)->setNativeObject(cv::ml::SVM::load<cv::ml::SVM>(path));
 #endif
 }
 

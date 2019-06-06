@@ -124,7 +124,7 @@ public:
   static NAN_METHOD(Solve);
   static NAN_METHOD(SolveAsync);
 
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   static NAN_METHOD(Rotate);
   static NAN_METHOD(RotateAsync);
 #endif

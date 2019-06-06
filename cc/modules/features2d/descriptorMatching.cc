@@ -9,7 +9,8 @@ NAN_MODULE_INIT(DescriptorMatching::Init) {
 	Nan::SetMethod(target, "matchBruteForceAsync", MatchBruteForceAsync);
 	Nan::SetMethod(target, "matchBruteForceL1Async", MatchBruteForceL1Async);
 	Nan::SetMethod(target, "matchBruteForceHammingAsync", MatchBruteForceHammingAsync);
-#if 2 <= CV_VERSION_MINOR
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
+#else
 	Nan::SetMethod(target, "matchBruteForceHammingLut", MatchBruteForceHammingLut);
 	Nan::SetMethod(target, "matchBruteForceSL2", MatchBruteForceSL2);
 	Nan::SetMethod(target, "matchBruteForceHammingLutAsync", MatchBruteForceHammingLutAsync);
@@ -17,41 +18,7 @@ NAN_MODULE_INIT(DescriptorMatching::Init) {
 #endif
 };
 
-#if CV_VERSION_MINOR < 2
-
-NAN_METHOD(DescriptorMatching::MatchFlannBased) {
-	match(info, "FlannBased");
-}
-
-NAN_METHOD(DescriptorMatching::MatchBruteForce) {
-	match(info, "BruteForce");
-}
-
-NAN_METHOD(DescriptorMatching::MatchBruteForceL1) {
-	match(info, "BruteForce-L1");
-}
-
-NAN_METHOD(DescriptorMatching::MatchBruteForceHamming) {
-	match(info, "BruteForce-Hamming");
-}
-
-NAN_METHOD(DescriptorMatching::MatchFlannBasedAsync) {
-	matchAsync(info, "FlannBased");
-}
-
-NAN_METHOD(DescriptorMatching::MatchBruteForceAsync) {
-	matchAsync(info, "BruteForce");
-}
-
-NAN_METHOD(DescriptorMatching::MatchBruteForceL1Async) {
-	matchAsync(info, "BruteForce-L1");
-}
-
-NAN_METHOD(DescriptorMatching::MatchBruteForceHammingAsync) {
-	matchAsync(info, "BruteForce-Hamming");
-}
-
-#else
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 
 NAN_METHOD(DescriptorMatching::MatchFlannBased) {
 	match(info, cv::DescriptorMatcher::FLANNBASED);
@@ -101,6 +68,40 @@ NAN_METHOD(DescriptorMatching::MatchBruteForceSL2Async) {
 	matchAsync(info, cv::DescriptorMatcher::BRUTEFORCE_SL2);
 }
 
+#else
+
+NAN_METHOD(DescriptorMatching::MatchFlannBased) {
+	match(info, "FlannBased");
+}
+
+NAN_METHOD(DescriptorMatching::MatchBruteForce) {
+	match(info, "BruteForce");
+}
+
+NAN_METHOD(DescriptorMatching::MatchBruteForceL1) {
+	match(info, "BruteForce-L1");
+}
+
+NAN_METHOD(DescriptorMatching::MatchBruteForceHamming) {
+	match(info, "BruteForce-Hamming");
+}
+
+NAN_METHOD(DescriptorMatching::MatchFlannBasedAsync) {
+	matchAsync(info, "FlannBased");
+}
+
+NAN_METHOD(DescriptorMatching::MatchBruteForceAsync) {
+	matchAsync(info, "BruteForce");
+}
+
+NAN_METHOD(DescriptorMatching::MatchBruteForceL1Async) {
+	matchAsync(info, "BruteForce-L1");
+}
+
+NAN_METHOD(DescriptorMatching::MatchBruteForceHammingAsync) {
+	matchAsync(info, "BruteForce-Hamming");
+}
+
 #endif
 
 struct DescriptorMatching::MatchWorker : public CatchCvExceptionWorker {
@@ -129,10 +130,10 @@ public:
 	}
 };
 
-#if CV_VERSION_MINOR < 2
-void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
-#else
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
+#else
+void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
 #endif
 	FF::SyncBindingBase(
 		std::make_shared<MatchWorker>(cv::DescriptorMatcher::create(matcherType)),
@@ -141,10 +142,10 @@ void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) 
 	);
 }
 
-#if CV_VERSION_MINOR < 2
-void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
-#else
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
+#else
+void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
 #endif
 	FF::AsyncBindingBase(
 		std::make_shared<MatchWorker>(cv::DescriptorMatcher::create(matcherType)),

@@ -27,7 +27,7 @@ namespace TextBindings {
   };
 
 
-#if CV_MINOR_VERSION > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 
   struct LoadOCRHMMClassifierCNNWorker : public LoadOCRHMMClassifierWorker {
     std::string executeCatchCvExceptionWorker() {

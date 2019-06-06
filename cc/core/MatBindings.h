@@ -513,7 +513,7 @@ namespace MatBindings {
 
 			  cv::goodFeaturesToTrack(
 				  self, corners->ref(), maxCorners->ref(), qualityLevel->ref(), minDistance->ref(), mask->ref(), blockSize->ref(),
-#if CV_VERSION_MINOR >= 4
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 				  gradientSize->ref(),
 #endif
 				  useHarrisDetector->ref(), harrisK->ref()
@@ -672,7 +672,7 @@ namespace MatBindings {
   };
 
   
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   struct RotateWorker : public OpWithCodeWorker {
   public:
     RotateWorker(cv::Mat self) : OpWithCodeWorker(self) {

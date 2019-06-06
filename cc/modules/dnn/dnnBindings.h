@@ -5,7 +5,7 @@
 
 namespace DnnBindings {
 
-#if CV_VERSION_MINOR > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
   struct ReadNetFromDarknetWorker : public CatchCvExceptionWorker{
   public:
     std::string cfgFile;
@@ -45,7 +45,7 @@ namespace DnnBindings {
     cv::dnn::Net net;
 
     std::string executeCatchCvExceptionWorker() {
-#if CV_VERSION_MINOR > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
       net = cv::dnn::readNetFromTensorflow(modelFile, configFile);
 #else
       net = cv::dnn::readNetFromTensorflow(modelFile);
@@ -123,7 +123,7 @@ namespace DnnBindings {
     cv::Mat returnValue;
 
     std::string executeCatchCvExceptionWorker() {
-#if CV_VERSION_MINOR > 3 && CV_VERSION_REVISION > 2
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0) && CV_VERSION_REVISION > 2
       if (isSingleImage) {
         returnValue = cv::dnn::blobFromImage(image, scalefactor, size, mean, swapRB, crop, ddepth);
       }
@@ -180,7 +180,7 @@ namespace DnnBindings {
     }
   };
 
-#if CV_VERSION_MINOR > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
   struct NMSBoxes : public CatchCvExceptionWorker {
   public:
     std::vector<cv::Rect> bboxes;

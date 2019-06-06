@@ -3,7 +3,7 @@
 #include "TrackerKCF.h"
 #include "TrackerKCFParams.h"
 
-#if CV_MINOR_VERSION > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 
 Nan::Persistent<v8::FunctionTemplate> TrackerKCF::constructor;
 
@@ -32,7 +32,7 @@ NAN_METHOD(TrackerKCF::New) {
 	}
 
 	TrackerKCF* self = new TrackerKCF();
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	self->tracker = cv::TrackerKCF::create(params);
 #else
 	self->tracker = cv::TrackerKCF::createTracker(params);

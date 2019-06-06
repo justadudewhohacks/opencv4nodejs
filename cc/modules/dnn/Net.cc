@@ -1,6 +1,6 @@
 #include "opencv2/core.hpp"
 
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 
 // cv 3.3+ should have dnn by default
 //#ifdef HAVE_DNN

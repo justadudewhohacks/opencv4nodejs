@@ -1,6 +1,6 @@
 #include "../Tracker.h"
 
-#if CV_MINOR_VERSION > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 
 #ifndef __FF_TRACKERKCF_H__
 #define __FF_TRACKERKCF_H__
