@@ -9,32 +9,32 @@ void FeatureDetector::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(FeatureDetector::Detect) {
-  FF::SyncBinding(
-    std::make_shared<FeatureDetectorBindings::DetectWorker>(FF_UNWRAP(info.This(), FeatureDetector)->getDetector()),
+  FF::SyncBindingBase(
+    std::make_shared<FeatureDetectorBindings::DetectWorker>(FeatureDetector::unwrapThis(info)->getDetector()),
     "FeatureDetector::Detect",
     info
   );
 }
 
 NAN_METHOD(FeatureDetector::DetectAsync) {
-  FF::AsyncBinding(
-    std::make_shared<FeatureDetectorBindings::DetectWorker>(FF_UNWRAP(info.This(), FeatureDetector)->getDetector()),
+  FF::AsyncBindingBase(
+    std::make_shared<FeatureDetectorBindings::DetectWorker>(FeatureDetector::unwrapThis(info)->getDetector()),
     "FeatureDetector::DetectAsync",
     info
   );
 }
 
 NAN_METHOD(FeatureDetector::Compute) {
-  FF::SyncBinding(
-    std::make_shared<FeatureDetectorBindings::ComputeWorker>(FF_UNWRAP(info.This(), FeatureDetector)->getDetector()),
+  FF::SyncBindingBase(
+    std::make_shared<FeatureDetectorBindings::ComputeWorker>(FeatureDetector::unwrapThis(info)->getDetector()),
     "FeatureDetector::Compute",
     info
   );
 }
 
 NAN_METHOD(FeatureDetector::ComputeAsync) {
-  FF::AsyncBinding(
-    std::make_shared<FeatureDetectorBindings::ComputeWorker>(FF_UNWRAP(info.This(), FeatureDetector)->getDetector()),
+  FF::AsyncBindingBase(
+    std::make_shared<FeatureDetectorBindings::ComputeWorker>(FeatureDetector::unwrapThis(info)->getDetector()),
     "FeatureDetector::ComputeAsync",
     info
   );

@@ -5,7 +5,7 @@
 #ifndef __FF_BACKGROUNDSUBTRACTOR_H__
 #define __FF_BACKGROUNDSUBTRACTOR_H__
 
-class BackgroundSubtractor : public Nan::ObjectWrap {
+class BackgroundSubtractor : public FF::ObjectWrapBase<BackgroundSubtractor>, public Nan::ObjectWrap {
 public:
 	virtual cv::Ptr<cv::BackgroundSubtractor> getSubtractor() = 0;
 	cv::Mat fgMask;

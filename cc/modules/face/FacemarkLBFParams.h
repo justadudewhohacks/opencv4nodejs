@@ -1,6 +1,5 @@
 #include "macros.h"
-#include "TypeConverters.h"
-#include "ArrayConverters.h"
+#include "NativeNodeUtils.h"
 #include "Rect.h"
 #include <opencv2/face.hpp>
 
@@ -9,77 +8,53 @@
 #ifndef __FF_FACEMARKLBFPARAMS_H__
 #define __FF_FACEMARKLBFPARAMS_H__
 
-class FacemarkLBFParams : public Nan::ObjectWrap {
+class FacemarkLBFParams : public FF::ObjectWrap<FacemarkLBFParams, cv::face::FacemarkLBF::Params> {
 public:
-  cv::face::FacemarkLBF::Params params;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "FacemarkLBFParams";
+	}
 
   static NAN_MODULE_INIT(Init);
   static NAN_METHOD(New);
+  FF_ACCESSORS(bagging_overlap, FF::DoubleConverter);
+  FF_ACCESSORS(cascade_face, FF::StringConverter);
+  FF_ACCESSORS(detectROI, Rect::Converter);
+  FF_ACCESSORS(feats_m, FF::IntArrayConverter);
+  FF_ACCESSORS(initShape_n, FF::IntConverter);
+  FF_ACCESSORS(model_filename, FF::StringConverter);
+  FF_ACCESSORS(n_landmarks, FF::IntConverter);
+  FF_ACCESSORS(radius_m, FF::DoubleArrayConverter);
+  FF_ACCESSORS(save_model, FF::BoolConverter);
+  FF_ACCESSORS(seed, FF::UintConverter);
+  FF_ACCESSORS(shape_offset, FF::DoubleConverter);
+  FF_ACCESSORS(stages_n, FF::IntConverter);
+  FF_ACCESSORS(tree_depth, FF::IntConverter);
+  FF_ACCESSORS(tree_n, FF::IntConverter);
+  FF_ACCESSORS(verbose, FF::BoolConverter);
 
-  static FF_GETTER(FacemarkLBFParams, baggingOverlapGet, params.bagging_overlap);
-  static FF_SETTER_NUMBER(FacemarkLBFParams, baggingOverlap, params.bagging_overlap);
-  static FF_GETTER_SIMPLE(FacemarkLBFParams, cascadeFaceGet, params.cascade_face, StringConverter);
-  static FF_SETTER_SIMPLE(FacemarkLBFParams, cascadeFace, params.cascade_face, StringConverter);
-  static FF_GETTER_SIMPLE(FacemarkLBFParams, detectROIGet, params.detectROI, Rect::Converter);
-  static FF_SETTER_SIMPLE(FacemarkLBFParams, detectROI, params.detectROI, Rect::Converter);
-  static FF_GETTER_COMPLEX(FacemarkLBFParams, featsMGet, params.feats_m, IntArrayConverter);
-  static FF_SETTER_COMPLEX(FacemarkLBFParams, featsM, params.feats_m, std::vector<int>, IntArrayConverter);
-  static FF_GETTER(FacemarkLBFParams, initShapeNGet, params.initShape_n);
-  static FF_SETTER_INT(FacemarkLBFParams, initShapeN, params.initShape_n);
-  static FF_GETTER_SIMPLE(FacemarkLBFParams, modelFilenameGet, params.model_filename, StringConverter);
-  static FF_SETTER_SIMPLE(FacemarkLBFParams, modelFilename, params.model_filename, StringConverter);
-  static FF_GETTER(FacemarkLBFParams, nLandmarksGet, params.n_landmarks);
-  static FF_SETTER_INT(FacemarkLBFParams, nLandmarks, params.n_landmarks);
+  static NAN_GETTER(pupils_getter) {
+	  Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->self.pupils;
+	  v8::Local<v8::Array> jsArr = Nan::New<v8::Array>(2);
+	  for (uint i = 0; i < jsArr->Length(); i++) {
+		  Nan::Set(jsArr, i, FF::IntArrayConverter::wrap(
+			  Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->self.pupils[i])
+		  );
+	  }
+	  info.GetReturnValue().Set(jsArr);
+  }
 
-	static NAN_GETTER(pupilsGet) {
-		v8::Local<v8::Array> jsArr = Nan::New<v8::Array>(2);
-		for (uint i = 0; i < jsArr->Length(); i++) {
-			Nan::Set(jsArr, i, ArrayConverterType<IntTypeConverter, int>::wrap(
-				Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->params.pupils[i])
-			);
-		}
-		info.GetReturnValue().Set(jsArr);
-	}
-
-	static NAN_SETTER(pupilsSet) {
-		FF_METHOD_CONTEXT("pupils");
-		v8::Local<v8::Array> jsArr = v8::Local<v8::Array>::Cast(value);
-		for (uint i = 0; i < jsArr->Length(); i++) {
-			std::vector<int> vec;
-			Nan::TryCatch tryCatch;
-			if (IntArrayConverter::unwrap(&vec, Nan::Get(jsArr, i).ToLocalChecked())) {
-				tryCatch.ReThrow();
-			}
-			Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->params.pupils[i] = vec;
-		}
-	}
-
-  static FF_GETTER_COMPLEX(FacemarkLBFParams, radiusMGet, params.radius_m, DoubleArrayConverter);
-  static FF_SETTER_COMPLEX(FacemarkLBFParams, radiusM, params.radius_m, std::vector<double>, DoubleArrayConverter);
-  static FF_GETTER(FacemarkLBFParams, saveModelGet, params.save_model);
-  static FF_SETTER_BOOL(FacemarkLBFParams, saveModel, params.save_model);
-  static FF_GETTER(FacemarkLBFParams, seedGet, params.seed);
-  static FF_SETTER_UINT(FacemarkLBFParams, seed, params.seed);
-  static FF_GETTER(FacemarkLBFParams, shapeOffsetGet, params.shape_offset);
-  static FF_SETTER_NUMBER(FacemarkLBFParams, shapeOffset, params.shape_offset);
-  static FF_GETTER(FacemarkLBFParams, stagesNGet, params.stages_n);
-  static FF_SETTER_INT(FacemarkLBFParams, stagesN, params.stages_n);
-  static FF_GETTER(FacemarkLBFParams, treeDepthGet, params.tree_depth);
-  static FF_SETTER_INT(FacemarkLBFParams, treeDepth, params.tree_depth);
-  static FF_GETTER(FacemarkLBFParams, treeNGet, params.tree_n);
-  static FF_SETTER_INT(FacemarkLBFParams, treeN, params.tree_n);
-  static FF_GETTER(FacemarkLBFParams, verboseGet, params.verbose);
-  static FF_SETTER_BOOL(FacemarkLBFParams, verbose, params.verbose);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-  cv::face::FacemarkLBF::Params* getNativeObjectPtr() { return &params; }
-  cv::face::FacemarkLBF::Params getNativeObject() { return params; }
-
-  typedef InstanceConverter<FacemarkLBFParams, cv::face::FacemarkLBF::Params> Converter;
-
-  static const char* getClassName() {
-	  return "FacemarkLBFParams";
+  static NAN_SETTER(pupils_setter) {
+	  FF::TryCatch tryCatch("FacemarkLBFParams::pupils_setter");
+	  v8::Local<v8::Array> jsArr = v8::Local<v8::Array>::Cast(value);
+	  for (uint i = 0; i < jsArr->Length(); i++) {
+		  std::vector<int> vec;
+		  if (FF::IntArrayConverter::unwrapTo(&vec, Nan::Get(jsArr, i).ToLocalChecked())) {
+			  tryCatch.ReThrow();
+		  }
+		  Nan::ObjectWrap::Unwrap<FacemarkLBFParams>(info.This())->self.pupils[i] = vec;
+	  }
   }
 };
 

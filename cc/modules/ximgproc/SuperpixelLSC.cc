@@ -13,12 +13,12 @@ NAN_MODULE_INIT(SuperpixelLSC::Init) {
   instanceTemplate->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("SuperpixelLSC").ToLocalChecked());
 
-  Nan::SetAccessor(instanceTemplate, Nan::New("img").ToLocalChecked(), SuperpixelLSC::GetImg);
-	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), SuperpixelLSC::GetLabels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), SuperpixelLSC::GetLabelContourMask);
-	Nan::SetAccessor(instanceTemplate, Nan::New("regionSize").ToLocalChecked(), SuperpixelLSC::GetRegionSize);
-	Nan::SetAccessor(instanceTemplate, Nan::New("ratio").ToLocalChecked(), SuperpixelLSC::GetRatio);
-	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), SuperpixelLSC::GetNumCalculatedSuperpixels);
+  Nan::SetAccessor(instanceTemplate, Nan::New("image").ToLocalChecked(), image_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), labels_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), labelContourMask_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("region_size").ToLocalChecked(), region_size_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("ratio").ToLocalChecked(), ratio_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), numCalculatedSuperpixels_getter);
 
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelLSC::Iterate);
 
@@ -26,21 +26,19 @@ NAN_MODULE_INIT(SuperpixelLSC::Init) {
 };
 
 NAN_METHOD(SuperpixelLSC::New) {
-	FF_ASSERT_CONSTRUCT_CALL(SuperpixelLSC);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SuperpixelLSC::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	SuperpixelLSC::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelLSC::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	SuperpixelLSC* self = new SuperpixelLSC();
 	self->image = worker.image;
 	self->region_size = worker.region_size;
 	self->ratio = worker.ratio;
-	self->superpixelLsc = cv::ximgproc::createSuperpixelLSC(
+	self->self = cv::ximgproc::createSuperpixelLSC(
 		worker.image,
 		worker.region_size,
 		worker.ratio
@@ -50,20 +48,18 @@ NAN_METHOD(SuperpixelLSC::New) {
 }
 
 NAN_METHOD(SuperpixelLSC::Iterate) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SuperpixelLSC::Iterate");
 
 	uint iterations = 10;
-	if (UintConverter::optArg(0, &iterations, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelLSC::Iterate");
-		tryCatch.throwNew(err);
-		return;
+	if (FF::UintConverter::optArg(0, &iterations, info)) {
+		return tryCatch.reThrow();
 	}
 
 	SuperpixelLSC* self = Nan::ObjectWrap::Unwrap<SuperpixelLSC>(info.This());
-	self->superpixelLsc->iterate((int)iterations);
-	self->superpixelLsc->getLabels(self->labels);
-	self->numCalculatedSuperpixels = self->superpixelLsc->getNumberOfSuperpixels();
-	self->superpixelLsc->getLabelContourMask(self->labelContourMask, false);
+	self->self->iterate((int)iterations);
+	self->self->getLabels(self->labels);
+	self->numCalculatedSuperpixels = self->self->getNumberOfSuperpixels();
+	self->self->getLabelContourMask(self->labelContourMask, false);
 }
 
 #endif

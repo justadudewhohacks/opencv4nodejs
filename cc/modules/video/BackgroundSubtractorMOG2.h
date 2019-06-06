@@ -4,23 +4,24 @@
 
 #ifndef __FF_BACKGROUNDSUBTRACTORMOG2_H__
 #define __FF_BACKGROUNDSUBTRACTORMOG2_H__
-
-class BackgroundSubtractorMOG2 : public BackgroundSubtractor {
+class BackgroundSubtractorMOG2 : public BackgroundSubtractor, public FF::ObjectWrapTemplate<BackgroundSubtractorMOG2, cv::Ptr<cv::BackgroundSubtractorMOG2>> {
 public:
-	cv::Ptr<cv::BackgroundSubtractorMOG2> subtractor;
-
-	static FF_GETTER(BackgroundSubtractorMOG2, GetHistory, subtractor->getHistory());
-	static FF_GETTER(BackgroundSubtractorMOG2, GetVarThreshold, subtractor->getVarThreshold());
-	static FF_GETTER(BackgroundSubtractorMOG2, GetDetectShadows, subtractor->getDetectShadows());
-
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-	cv::Ptr<cv::BackgroundSubtractor> getSubtractor() {
-		return subtractor;
+	static const char* getClassName() {
+		return "BackgroundSubtractorMOG2";
 	}
+
+	cv::Ptr<cv::BackgroundSubtractor> getSubtractor() {
+		return self;
+	}
+
+	FF_GETTER_CUSTOM(history, FF::IntConverter, self->getHistory());
+	FF_GETTER_CUSTOM(varThreshold, FF::DoubleConverter, self->getVarThreshold());
+	FF_GETTER_CUSTOM(detectShadows, FF::BoolConverter, self->getDetectShadows());
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 
 	struct NewWorker : CatchCvExceptionWorker {
 	public:
@@ -31,9 +32,9 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				UintConverter::optArg(0, &history, info) ||
-				DoubleConverter::optArg(1, &varThreshold, info) ||
-				BoolConverter::optArg(2, &detectShadows, info)
+				FF::UintConverter::optArg(0, &history, info) ||
+				FF::DoubleConverter::optArg(1, &varThreshold, info) ||
+				FF::BoolConverter::optArg(2, &detectShadows, info)
 				);
 		}
 
@@ -44,9 +45,9 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				UintConverter::optProp(&history, "history", opts) ||
-				DoubleConverter::optProp(&varThreshold, "varThreshold", opts) ||
-				BoolConverter::optProp(&detectShadows, "detectShadows", opts)
+				FF::UintConverter::optProp(&history, "history", opts) ||
+				FF::DoubleConverter::optProp(&varThreshold, "varThreshold", opts) ||
+				FF::BoolConverter::optProp(&detectShadows, "detectShadows", opts)
 				);
 		}
 

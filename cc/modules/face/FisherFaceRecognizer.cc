@@ -18,14 +18,12 @@ NAN_MODULE_INIT(FisherFaceRecognizer::Init) {
 };
 
 NAN_METHOD(FisherFaceRecognizer::New) {
-	FF_ASSERT_CONSTRUCT_CALL(FisherFaceRecognizer);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("FisherFaceRecognizer::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	FaceRecognizerBindings::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("FisherFaceRecognizer::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	FisherFaceRecognizer* self = new FisherFaceRecognizer();

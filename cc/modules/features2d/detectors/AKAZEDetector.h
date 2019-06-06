@@ -4,26 +4,28 @@
 #ifndef __FF_AKAZEDETECTOR_H__
 #define __FF_AKAZEDETECTOR_H__
 
-class AKAZEDetector : public FeatureDetector {
+class AKAZEDetector : public FeatureDetector, public FF::ObjectWrapTemplate<AKAZEDetector, cv::Ptr<cv::AKAZE>> {
 public:
-	cv::Ptr<cv::AKAZE> detector;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-  static NAN_MODULE_INIT(Init); 
-  static NAN_METHOD(New);
-
-	static FF_GETTER(AKAZEDetector, GetDescriptorType, detector->getDescriptorType());
-	static FF_GETTER(AKAZEDetector, GetDescriptorSize, detector->getDescriptorSize());
-	static FF_GETTER(AKAZEDetector, GetDescriptorChannels, detector->getDescriptorChannels());
-	static FF_GETTER(AKAZEDetector, GetThreshold, detector->getThreshold());
-	static FF_GETTER(AKAZEDetector, GetNOctaves, detector->getNOctaves());
-	static FF_GETTER(AKAZEDetector, GetNOctaveLayers, detector->getNOctaveLayers());
-	static FF_GETTER(AKAZEDetector, GetDiffusity, detector->getDiffusivity());
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
+	static const char* getClassName() {
+		return "AKAZEDetector";
+	}
 
 	cv::Ptr<cv::FeatureDetector> getDetector() {
-		return detector;
+		return self;
 	}
+
+	FF_GETTER_CUSTOM(descriptorType, FF::IntConverter, self->getDescriptorType());
+	FF_GETTER_CUSTOM(descriptorSize, FF::IntConverter, self->getDescriptorSize());
+	FF_GETTER_CUSTOM(descriptorChannels, FF::IntConverter, self->getDescriptorChannels());
+	FF_GETTER_CUSTOM(threshold, FF::DoubleConverter, self->getThreshold());
+	FF_GETTER_CUSTOM(nOctaves, FF::IntConverter, self->getNOctaves());
+	FF_GETTER_CUSTOM(nOctaveLayers, FF::IntConverter, self->getNOctaveLayers());
+	FF_GETTER_CUSTOM(diffusivity, FF::IntConverter, self->getDiffusivity());
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 
 	struct NewWorker : CatchCvExceptionWorker {
 	public:
@@ -37,13 +39,13 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntConverter::optArg(0, &descriptorType, info) ||
-				IntConverter::optArg(1, &descriptorSize, info) ||
-				IntConverter::optArg(2, &descriptorChannels, info) ||
-				DoubleConverter::optArg(3, &threshold, info) ||
-				IntConverter::optArg(4, &nOctaves, info) ||
-				IntConverter::optArg(5, &nOctaveLayers, info) ||
-				IntConverter::optArg(6, &diffusivity, info)
+				FF::IntConverter::optArg(0, &descriptorType, info) ||
+				FF::IntConverter::optArg(1, &descriptorSize, info) ||
+				FF::IntConverter::optArg(2, &descriptorChannels, info) ||
+				FF::DoubleConverter::optArg(3, &threshold, info) ||
+				FF::IntConverter::optArg(4, &nOctaves, info) ||
+				FF::IntConverter::optArg(5, &nOctaveLayers, info) ||
+				FF::IntConverter::optArg(6, &diffusivity, info)
 				);
 		}
 
@@ -54,13 +56,13 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntConverter::optProp(&descriptorType, "descriptorType", opts) ||
-				IntConverter::optProp(&descriptorSize, "descriptorSize", opts) ||
-				IntConverter::optProp(&descriptorChannels, "descriptorChannels", opts) ||
-				DoubleConverter::optProp(&threshold, "threshold", opts) ||
-				IntConverter::optProp(&nOctaves, "nOctaves", opts) ||
-				IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
-				IntConverter::optProp(&diffusivity, "diffusivity", opts)
+				FF::IntConverter::optProp(&descriptorType, "descriptorType", opts) ||
+				FF::IntConverter::optProp(&descriptorSize, "descriptorSize", opts) ||
+				FF::IntConverter::optProp(&descriptorChannels, "descriptorChannels", opts) ||
+				FF::DoubleConverter::optProp(&threshold, "threshold", opts) ||
+				FF::IntConverter::optProp(&nOctaves, "nOctaves", opts) ||
+				FF::IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
+				FF::IntConverter::optProp(&diffusivity, "diffusivity", opts)
 				);
 		}
 

@@ -7,7 +7,7 @@
 #ifndef __FF_FACERECOGNIZER_H__
 #define __FF_FACERECOGNIZER_H__
 
-class FaceRecognizer : public Nan::ObjectWrap {
+class FaceRecognizer : public FF::ObjectWrapBase<FaceRecognizer>, public Nan::ObjectWrap {
 public:
 	virtual cv::Ptr<cv::face::FaceRecognizer> getFaceRecognizer() = 0;
 	virtual void save(std::string) = 0;

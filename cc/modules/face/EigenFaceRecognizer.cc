@@ -18,14 +18,12 @@ NAN_MODULE_INIT(EigenFaceRecognizer::Init) {
 };
 
 NAN_METHOD(EigenFaceRecognizer::New) {
-	FF_ASSERT_CONSTRUCT_CALL(EigenFaceRecognizer);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("EigenFaceRecognizer::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	FaceRecognizerBindings::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("EigenFaceRecognizer::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	EigenFaceRecognizer* self = new EigenFaceRecognizer();

@@ -1,71 +1,70 @@
 #include "macros.h"
+#include "CvBinding.h"
 #include <opencv2/xfeatures2d.hpp>
 #include "features2d/FeatureDetector.h"
 
 #ifndef __FF_SIFTDETECTOR_H__
 #define __FF_SIFTDETECTOR_H__
 
-class SIFTDetector : public FeatureDetector {
+class SIFTDetector : public FeatureDetector, public FF::ObjectWrapTemplate<SIFTDetector, cv::Ptr<cv::xfeatures2d::SIFT>> {
 public:
-	cv::Ptr<cv::xfeatures2d::SIFT> detector;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "SIFTDetector";
+	}
+
+	cv::Ptr<cv::FeatureDetector> getDetector(void) {
+		return self;
+	}
+
 	int nFeatures;
 	int nOctaveLayers;
 	double contrastThreshold;
 	double edgeThreshold;
 	double sigma;
 
-  static NAN_MODULE_INIT(Init); 
-  static NAN_METHOD(New);
+	FF_GETTER_CUSTOM(nFeatures, FF::IntConverter, nFeatures);
+	FF_GETTER_CUSTOM(nOctaveLayers, FF::IntConverter, nOctaveLayers);
+	FF_GETTER_CUSTOM(contrastThreshold, FF::DoubleConverter, contrastThreshold);
+	FF_GETTER_CUSTOM(edgeThreshold, FF::DoubleConverter, edgeThreshold);
+	FF_GETTER_CUSTOM(sigma, FF::DoubleConverter, sigma);
 
-	static FF_GETTER(SIFTDetector, GetNFeatures, nFeatures);
-	static FF_GETTER(SIFTDetector, GeNOctaveLayers, nOctaveLayers);
-	static FF_GETTER(SIFTDetector, GetContrastThreshold, contrastThreshold);
-	static FF_GETTER(SIFTDetector, GetEdgeThreshold, edgeThreshold);
-	static FF_GETTER(SIFTDetector, GetSigma, sigma);
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Ptr<cv::FeatureDetector> getDetector() {
-		return detector;
-	}
-
-	struct NewWorker : CatchCvExceptionWorker {
+	class NewBinding : public CvBinding {
 	public:
+		void construct(Nan::NAN_METHOD_ARGS_TYPE info) {
+			FF::TryCatch tryCatch("SIFTDetector::New");
+			FF_ASSERT_CONSTRUCT_CALL();
 
-		int nFeatures = 0;
-		int nOctaveLayers = 3;
-		double contrastThreshold = 0.04;
-		double edgeThreshold = 10;
-		double sigma = 1.6;
+			auto nFeatures = opt<FF::IntConverter>("nFeatures", 0);
+			auto nOctaveLayers = opt<FF::IntConverter>("nOctaveLayers", 3);
+			auto contrastThreshold = opt<FF::DoubleConverter>("contrastThreshold", 0.04);
+			auto edgeThreshold = opt<FF::DoubleConverter>("edgeThreshold", 10);
+			auto sigma = opt<FF::DoubleConverter>("sigma", 1.6);
 
-		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return (
-				IntConverter::optArg(0, &nFeatures, info) ||
-				IntConverter::optArg(1, &nOctaveLayers, info) ||
-				DoubleConverter::optArg(2, &contrastThreshold, info) ||
-				DoubleConverter::optArg(3, &edgeThreshold, info) ||
-				DoubleConverter::optArg(4, &sigma, info)
-				);
-		}
+			if (applyUnwrappers(info)) {
+				return tryCatch.reThrow();
+			}
 
-		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return FF::isArgObject(info, 0);
-		}
-
-		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-			return (
-				IntConverter::optProp(&nFeatures, "nFeatures", opts) ||
-				IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
-				DoubleConverter::optProp(&contrastThreshold, "contrastThreshold", opts) ||
-				DoubleConverter::optProp(&edgeThreshold, "edgeThreshold", opts) ||
-				DoubleConverter::optProp(&sigma, "sigma", opts)
-				);
-		}
-
-		std::string executeCatchCvExceptionWorker() {
-			return "";
-		}
+			SIFTDetector* self = new SIFTDetector();
+			self->nFeatures = nFeatures->ref();
+			self->nOctaveLayers = nOctaveLayers->ref();
+			self->contrastThreshold = contrastThreshold->ref();
+			self->edgeThreshold = edgeThreshold->ref();
+			self->sigma = sigma->ref();
+			self->setNativeObject(cv::xfeatures2d::SIFT::create(
+				self->nFeatures,
+				self->nOctaveLayers,
+				self->contrastThreshold,
+				self->edgeThreshold,
+				self->sigma
+			));
+			self->Wrap(info.Holder());
+			info.GetReturnValue().Set(info.Holder());
+		};
 	};
 };
 

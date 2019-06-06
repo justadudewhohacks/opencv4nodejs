@@ -21,13 +21,13 @@ namespace ContourBindings {
 		}
 
 		v8::Local<v8::Value> getReturnValue() {
-			return ObjectArrayConverter<Point2, cv::Point2d, cv::Point2i>::wrap(curve);
+			return Point2::ArrayWithCastConverter<cv::Point2i>::wrap(curve);
 		}
 
 		bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				DoubleConverter::arg(0, &epsilon, info) ||
-				BoolConverter::arg(1, &closed, info)
+				FF::DoubleConverter::arg(0, &epsilon, info) ||
+				FF::BoolConverter::arg(1, &closed, info)
 			);
 		}
 	};

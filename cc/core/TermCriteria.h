@@ -5,27 +5,24 @@
 #ifndef __FF_TERMCRITERIA_H__
 #define __FF_TERMCRITERIA_H__
 
-class TermCriteria : public Nan::ObjectWrap {
+class TermCriteria : public FF::ObjectWrap<TermCriteria, cv::TermCriteria> {
 public:
-	cv::TermCriteria termCriteria;
-
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
-
-	static FF_GETTER(TermCriteria, GetType, termCriteria.type);
-	static FF_GETTER(TermCriteria, GetMaxCount, termCriteria.maxCount);
-	static FF_GETTER(TermCriteria, GetEpsilon, termCriteria.epsilon);
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::TermCriteria* getNativeObjectPtr() { return &termCriteria; }
-	cv::TermCriteria getNativeObject() { return termCriteria; }
-
-	typedef InstanceConverter<TermCriteria, cv::TermCriteria> Converter;
 
 	static const char* getClassName() {
 		return "TermCriteria";
 	}
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
+
+	int type; //!< the type of termination criteria: COUNT, EPS or COUNT + EPS
+	int maxCount; //!< the maximum number of iterations/elements
+	double epsilon;
+
+	FF_ACCESSORS(type, FF::IntConverter);
+	FF_ACCESSORS(maxCount, FF::IntConverter);
+	FF_ACCESSORS(epsilon, FF::DoubleConverter);
 };
 
 #endif

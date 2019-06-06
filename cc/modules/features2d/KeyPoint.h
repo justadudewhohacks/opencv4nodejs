@@ -6,32 +6,26 @@
 #ifndef FF_KEYPOINT_H_
 #define FF_KEYPOINT_H_
 
-class KeyPoint : public Nan::ObjectWrap {
+class KeyPoint : public FF::ObjectWrap<KeyPoint, cv::KeyPoint> {
 public:
-  int localId = -1;
-  cv::KeyPoint keyPoint;
-
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
-
-	static FF_GETTER_JSOBJ(KeyPoint, GetPoint, keyPoint.pt, FF_UNWRAP_PT2_AND_GET, Point2::constructor);
-  static FF_GETTER(KeyPoint, GetLocalId, localId);
-	static FF_GETTER(KeyPoint, GetAngle, keyPoint.angle);
-	static FF_GETTER(KeyPoint, GetClassId, keyPoint.class_id);
-	static FF_GETTER(KeyPoint, GetResponse, keyPoint.response);
-	static FF_GETTER(KeyPoint, GetSize, keyPoint.size);
-	static FF_GETTER(KeyPoint, GetOctave, keyPoint.octave);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::KeyPoint* getNativeObjectPtr() { return &keyPoint; }
-	cv::KeyPoint getNativeObject() { return keyPoint; }
-
-	typedef InstanceConverter<KeyPoint, cv::KeyPoint> Converter;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {
 		return "KeyPoint";
 	}
+
+	int localId = -1;
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
+
+	FF_GETTER_CUSTOM(localId, FF::IntConverter, localId);
+	FF_ACCESSORS(pt, Point2::Converter);
+	FF_ACCESSORS(angle, FF::FloatConverter);
+	FF_ACCESSORS(class_id, FF::IntConverter);
+	FF_ACCESSORS(response, FF::FloatConverter);
+	FF_ACCESSORS(size, FF::FloatConverter);
+	FF_ACCESSORS(octave, FF::IntConverter);
 };
 
 #endif

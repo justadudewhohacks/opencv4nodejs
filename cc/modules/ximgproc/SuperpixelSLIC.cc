@@ -7,34 +7,33 @@
 Nan::Persistent<v8::FunctionTemplate> SuperpixelSLIC::constructor;
 
 NAN_MODULE_INIT(SuperpixelSLIC::Init) {
-  v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(SuperpixelSLIC::New);
+	v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(SuperpixelSLIC::New);
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
-  constructor.Reset(ctor);
-  instanceTemplate->SetInternalFieldCount(1);
-  ctor->SetClassName(Nan::New("SuperpixelSLIC").ToLocalChecked());
+	constructor.Reset(ctor);
+	instanceTemplate->SetInternalFieldCount(1);
+	ctor->SetClassName(Nan::New("SuperpixelSLIC").ToLocalChecked());
 
-  Nan::SetAccessor(instanceTemplate, Nan::New("img").ToLocalChecked(), SuperpixelSLIC::GetImg);
-	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), SuperpixelSLIC::GetLabels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), SuperpixelSLIC::GetLabelContourMask);
-	Nan::SetAccessor(instanceTemplate, Nan::New("algorithm").ToLocalChecked(), SuperpixelSLIC::GetAlgorithm);
-	Nan::SetAccessor(instanceTemplate, Nan::New("regionSize").ToLocalChecked(), SuperpixelSLIC::GetRegionSize);
-	Nan::SetAccessor(instanceTemplate, Nan::New("ruler").ToLocalChecked(), SuperpixelSLIC::GetRuler);
-	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), SuperpixelSLIC::GetNumCalculatedSuperpixels);
+
+	Nan::SetAccessor(instanceTemplate, Nan::New("image").ToLocalChecked(), image_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), labels_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), labelContourMask_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), numCalculatedSuperpixels_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("algorithm").ToLocalChecked(), algorithm_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("region_size").ToLocalChecked(), region_size_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("ruler").ToLocalChecked(), ruler_getter);
 
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelSLIC::Iterate);
 
-  Nan::Set(target,Nan::New("SuperpixelSLIC").ToLocalChecked(), FF::getFunction(ctor));
+	Nan::Set(target,Nan::New("SuperpixelSLIC").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(SuperpixelSLIC::New) {
-	FF_ASSERT_CONSTRUCT_CALL(SuperpixelSLIC);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SuperpixelSLIC::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	SuperpixelSLIC::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSLIC::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	SuperpixelSLIC* self = new SuperpixelSLIC();
@@ -53,13 +52,11 @@ NAN_METHOD(SuperpixelSLIC::New) {
 }
 
 NAN_METHOD(SuperpixelSLIC::Iterate) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SuperpixelSLIC::Iterate");
 
 	uint iterations = 10;
-	if (UintConverter::optArg(0, &iterations, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSLIC::Iterate");
-		tryCatch.throwNew(err);
-		return;
+	if (FF::UintConverter::optArg(0, &iterations, info)) {
+		return tryCatch.reThrow();
 	}
 
 	SuperpixelSLIC* self = Nan::ObjectWrap::Unwrap<SuperpixelSLIC>(info.This());

@@ -27,11 +27,11 @@ public:
 
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			IntConverter::optArg(0, &radius, info) ||
-			IntConverter::optArg(1, &neighbors, info) ||
-			IntConverter::optArg(2, &grid_x, info) ||
-			IntConverter::optArg(3, &grid_y, info) ||
-			DoubleConverter::optArg(4, &threshold, info)
+			FF::IntConverter::optArg(0, &radius, info) ||
+			FF::IntConverter::optArg(1, &neighbors, info) ||
+			FF::IntConverter::optArg(2, &grid_x, info) ||
+			FF::IntConverter::optArg(3, &grid_y, info) ||
+			FF::DoubleConverter::optArg(4, &threshold, info)
 		);
 	}
 
@@ -42,24 +42,22 @@ public:
 	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 		v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 		return (
-			IntConverter::optProp(&radius, "radius", opts) ||
-			IntConverter::optProp(&neighbors, "neighbors", opts) ||
-			IntConverter::optProp(&grid_x, "grid_x", opts) ||
-			IntConverter::optProp(&grid_y, "grid_y", opts) ||
-			DoubleConverter::optProp(&threshold, "threshold", opts)
+			FF::IntConverter::optProp(&radius, "radius", opts) ||
+			FF::IntConverter::optProp(&neighbors, "neighbors", opts) ||
+			FF::IntConverter::optProp(&grid_x, "grid_x", opts) ||
+			FF::IntConverter::optProp(&grid_y, "grid_y", opts) ||
+			FF::DoubleConverter::optProp(&threshold, "threshold", opts)
 		);
 	}
 };
 
 NAN_METHOD(LBPHFaceRecognizer::New) {
-	FF_ASSERT_CONSTRUCT_CALL(LBPHFaceRecognizer);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("LBPHFaceRecognizer::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	LBPHFaceRecognizer::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("LBPHFaceRecognizer::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	LBPHFaceRecognizer* self = new LBPHFaceRecognizer();

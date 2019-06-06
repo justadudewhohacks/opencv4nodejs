@@ -11,3 +11,4 @@ ci/coverage-report
 !data/people.jpeg
 !data/traffic.mp4
 !data/text-models
+!native-node-utils

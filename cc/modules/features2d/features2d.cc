@@ -74,25 +74,24 @@ NAN_MODULE_INIT(Features2d::Init) {
 };
 
 NAN_METHOD(Features2d::DrawKeyPoints) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Features2d::DrawKeyPoints");
 
 	cv::Mat img;
 	std::vector<cv::KeyPoint> kps;
 	if (
 		Mat::Converter::arg(0, &img, info) ||
-		ObjectArrayConverter<KeyPoint, cv::KeyPoint>::arg(1, &kps, info)
+		KeyPoint::ArrayConverter::arg(1, &kps, info)
 	) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Features2d::DrawKeyPoints"));
-		return;
+		return tryCatch.reThrow();
 	}
 
-	v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
-	cv::drawKeypoints(img, kps, FF_UNWRAP_MAT_AND_GET(jsMat));
-	info.GetReturnValue().Set(jsMat);
+	cv::Mat drawMat;
+	cv::drawKeypoints(img, kps, drawMat);
+	info.GetReturnValue().Set(Mat::Converter::wrap(drawMat));
 }
 
 NAN_METHOD(Features2d::DrawMatches) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Features2d::DrawMatches");
 
 	cv::Mat img1, img2;
 	std::vector<cv::KeyPoint> kps1, kps2;
@@ -100,15 +99,14 @@ NAN_METHOD(Features2d::DrawMatches) {
 	if (
 		Mat::Converter::arg(0, &img1, info) ||
 		Mat::Converter::arg(1, &img2, info) ||
-		ObjectArrayConverter<KeyPoint, cv::KeyPoint>::arg(2, &kps1, info) ||
-		ObjectArrayConverter<KeyPoint, cv::KeyPoint>::arg(3, &kps2, info) ||
-		ObjectArrayConverter<DescriptorMatch, cv::DMatch>::arg(4, &dMatches, info)
+		KeyPoint::ArrayConverter::arg(2, &kps1, info) ||
+		KeyPoint::ArrayConverter::arg(3, &kps2, info) ||
+		DescriptorMatch::ArrayConverter::arg(4, &dMatches, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Features2d::DrawMatches"));
-		return;
+		return tryCatch.reThrow();
 	}
 
-	v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
-	cv::drawMatches(img1, kps1, img2, kps2, dMatches, FF_UNWRAP_MAT_AND_GET(jsMat));
-	info.GetReturnValue().Set(jsMat);
+	cv::Mat drawMat;
+	cv::drawMatches(img1, kps1, img2, kps2, dMatches, drawMat);
+	info.GetReturnValue().Set(Mat::Converter::wrap(drawMat));
 }

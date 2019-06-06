@@ -29,68 +29,69 @@ NAN_MODULE_INIT(Net::Init) {
 };
 
 NAN_METHOD(Net::New) {
-  FF_ASSERT_CONSTRUCT_CALL(Net);
+	FF::TryCatch tryCatch("Net::New");
+	FF_ASSERT_CONSTRUCT_CALL();
   Net* self = new Net();
   self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(Net::SetInput) {
-  FF::SyncBinding(
-    std::make_shared<NetBindings::SetInputWorker>(Net::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<NetBindings::SetInputWorker>(Net::unwrapSelf(info)),
     "Net::SetInput",
     info
   );
 }
 
 NAN_METHOD(Net::SetInputAsync) {
-  FF::AsyncBinding(
-    std::make_shared<NetBindings::SetInputWorker>(Net::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<NetBindings::SetInputWorker>(Net::unwrapSelf(info)),
     "Net::SetInputAsync",
     info
   );
 }
 
 NAN_METHOD(Net::Forward) {
-  FF::SyncBinding(
-    std::make_shared<NetBindings::ForwardWorker>(Net::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<NetBindings::ForwardWorker>(Net::unwrapSelf(info)),
     "Net::Forward",
     info
   );
 }
 
 NAN_METHOD(Net::ForwardAsync) {
-  FF::AsyncBinding(
-    std::make_shared<NetBindings::ForwardWorker>(Net::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<NetBindings::ForwardWorker>(Net::unwrapSelf(info)),
     "Net::ForwardAsync",
     info
   );
 }
 
 NAN_METHOD(Net::GetLayerNames) {
-  FF::SyncBinding(
-      std::make_shared<NetBindings::GetLayerNamesWorker>(Net::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+      std::make_shared<NetBindings::GetLayerNamesWorker>(Net::unwrapSelf(info)),
       "Net::GetLayerNames",
       info);
 }
 
 NAN_METHOD(Net::GetLayerNamesAsync) {
-  FF::AsyncBinding(
-      std::make_shared<NetBindings::GetLayerNamesWorker>(Net::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+      std::make_shared<NetBindings::GetLayerNamesWorker>(Net::unwrapSelf(info)),
       "Net::GetLayerNamesAsync",
       info);
 }
 
 NAN_METHOD(Net::GetUnconnectedOutLayers) {
-  FF::SyncBinding(
-      std::make_shared<NetBindings::GetUnconnectedOutLayersWorker>(Net::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+      std::make_shared<NetBindings::GetUnconnectedOutLayersWorker>(Net::unwrapSelf(info)),
       "Net::GetUnconnectedOutLayers",
       info);
 }
 
 NAN_METHOD(Net::GetUnconnectedOutLayersAsync) {
-  FF::AsyncBinding(
-      std::make_shared<NetBindings::GetUnconnectedOutLayersWorker>(Net::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+      std::make_shared<NetBindings::GetUnconnectedOutLayersWorker>(Net::unwrapSelf(info)),
       "Net::GetUnconnectedOutLayersAsync",
       info);
 }

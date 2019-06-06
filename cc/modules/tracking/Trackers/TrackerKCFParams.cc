@@ -14,31 +14,31 @@ NAN_MODULE_INIT(TrackerKCFParams::Init) {
 	ctor->SetClassName(FF::newString("TrackerKCFParams"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, FF::newString("sigma"), sigmaGet, sigmaSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("lambda"), lambdaGet, lambdaSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("interp_factor"), interp_factorGet, interp_factorSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("output_sigma_factor"), output_sigma_factorGet, output_sigma_factorSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("pca_learning_rate"), pca_learning_rateGet, pca_learning_rateSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("resize"), resizeGet, resizeSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("split_coeff"), split_coeffGet, split_coeffSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("wrap_kernel"), wrap_kernelGet, wrap_kernelSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("compress_feature"), compress_featureGet, compress_featureSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("max_patch_size"), max_patch_sizeGet, max_patch_sizeSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("compressed_size"), compressed_sizeGet, compressed_sizeSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("desc_pca"), desc_pcaGet, desc_pcaSet);
-	Nan::SetAccessor(instanceTemplate, FF::newString("desc_npca"), desc_npcaGet, desc_npcaSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("sigma"), sigma_getter, sigma_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("lambda"), lambda_getter, lambda_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("interp_factor"), interp_factor_getter, interp_factor_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("output_sigma_factor"), output_sigma_factor_getter, output_sigma_factor_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("pca_learning_rate"), pca_learning_rate_getter, pca_learning_rate_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("resize"), resize_getter, resize_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("split_coeff"), split_coeff_getter, split_coeff_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("wrap_kernel"), wrap_kernel_getter, wrap_kernel_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("compress_feature"), compress_feature_getter, compress_feature_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("max_patch_size"), max_patch_size_getter, max_patch_size_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("compressed_size"), compressed_size_getter, compressed_size_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("desc_pca"), desc_pca_getter, desc_pca_setter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("desc_npca"), desc_npca_getter, desc_npca_setter);
 #if CV_MINOR_VERSION > 2
-	Nan::SetAccessor(instanceTemplate, FF::newString("detect_thresh"), detect_threshGet, detect_threshSet);
+	Nan::SetAccessor(instanceTemplate, FF::newString("detect_thresh"), detect_thresh_getter, detect_thresh_setter);
 #endif
 	Nan::Set(target,FF::newString("TrackerKCFParams"), FF::getFunction(ctor));
 };
 
 
 NAN_METHOD(TrackerKCFParams::New) {
-	FF_ASSERT_CONSTRUCT_CALL(TrackerKCFParams);
-	FF_METHOD_CONTEXT("TrackerKCFParams::New");
+	FF::TryCatch tryCatch("TrackerKCFParams::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	TrackerKCFParams* self = new TrackerKCFParams();
-	self->params = cv::TrackerKCF::Params();
+	self->self = cv::TrackerKCF::Params();
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };

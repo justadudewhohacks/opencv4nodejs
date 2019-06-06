@@ -4,22 +4,24 @@
 #ifndef __FF_FASTDETECTOR_H__
 #define __FF_FASTDETECTOR_H__
 
-class FASTDetector : public FeatureDetector {
+class FASTDetector : public FeatureDetector, public FF::ObjectWrapTemplate<FASTDetector, cv::Ptr<cv::FastFeatureDetector>> {
 public:
-	cv::Ptr<cv::FastFeatureDetector> detector;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-  static NAN_MODULE_INIT(Init); 
-  static NAN_METHOD(New);
-
-	static FF_GETTER(FASTDetector, GetThreshold, detector->getThreshold());
-	static FF_GETTER(FASTDetector, GetNonmaxSuppression, detector->getNonmaxSuppression());
-	static FF_GETTER(FASTDetector, GetType, detector->getType());
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
+	static const char* getClassName() {
+		return "FASTDetector";
+	}
 
 	cv::Ptr<cv::FeatureDetector> getDetector() {
-		return detector;
+		return self;
 	}
+
+	FF_GETTER_CUSTOM(threshold, FF::IntConverter, self->getThreshold());
+	FF_GETTER_CUSTOM(nonmaxSuppression, FF::BoolConverter, self->getNonmaxSuppression());
+	FF_GETTER_CUSTOM(type, FF::IntConverter, self->getType());
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 
 	struct NewWorker : public CatchCvExceptionWorker {
 	public:
@@ -34,9 +36,9 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntConverter::optArg(0, &threshold, info) ||
-				BoolConverter::optArg(1, &nonmaxSuppression, info) ||
-				IntConverter::optArg(2, &type, info)
+				FF::IntConverter::optArg(0, &threshold, info) ||
+				FF::BoolConverter::optArg(1, &nonmaxSuppression, info) ||
+				FF::IntConverter::optArg(2, &type, info)
 				);
 		}
 
@@ -47,9 +49,9 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntConverter::optProp(&threshold, "threshold", opts) ||
-				BoolConverter::optProp(&nonmaxSuppression, "nonmaxSuppression", opts) ||
-				IntConverter::optProp(&type, "type", opts)
+				FF::IntConverter::optProp(&threshold, "threshold", opts) ||
+				FF::BoolConverter::optProp(&nonmaxSuppression, "nonmaxSuppression", opts) ||
+				FF::IntConverter::optProp(&type, "type", opts)
 				);
 		}
 	};

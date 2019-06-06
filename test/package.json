@@ -4,7 +4,7 @@
   "scripts": {
     "test": "mocha --require ./globals --timeout 30000 --recursive ./tests",
     "test-appveyor": "mocha --require ./globals --timeout 30000 --recursive ./tests",
-    "test-docker": "DOCKER_BUILD=true mocha --require ./globals --timeout 30000 --recursive ./tests",
+    "test-docker": "DOCKER_BUILD=true mocha --require ./globals --timeout 60000 --recursive ./tests",
     "test-externalMemTrackingOther": "mocha --require ./globals --timeout 30000 --recursive ./externalMemTracking/other",
     "test-externalMemTracking": "mocha ./externalMemTracking/testDefaultDisabled.js && mocha ./externalMemTracking/testDisableWithEnv.js && npm run test-externalMemTrackingOther",
     "gc": "set WITH_GC=true &&mocha --expose-gc --require ./globals --timeout 2000 --recursive ./tests",

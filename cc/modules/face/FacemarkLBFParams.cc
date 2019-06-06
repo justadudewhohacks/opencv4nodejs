@@ -15,31 +15,31 @@ NAN_MODULE_INIT(FacemarkLBFParams::Init) {
   ctor->SetClassName(FF::newString("FacemarkLBFParams"));
   instanceTemplate->SetInternalFieldCount(1);
 
-  Nan::SetAccessor(instanceTemplate, FF::newString("baggingOverlap"), baggingOverlapGet, baggingOverlapSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("cascadeFace"), cascadeFaceGet, cascadeFaceSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("detectROI"), detectROIGet, detectROISet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("featsM"), featsMGet, featsMSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("initShapeN"), initShapeNGet, initShapeNSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("modelFilename"), modelFilenameGet, modelFilenameSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("nLandmarks"), nLandmarksGet, nLandmarksSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("pupils"), pupilsGet, pupilsSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("radiusM"), radiusMGet, radiusMSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("saveModel"), saveModelGet, saveModelSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("seed"), seedGet, seedSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("shapeOffset"), shapeOffsetGet, shapeOffsetSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("stagesN"), stagesNGet, stagesNSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("treeDepth"), treeDepthGet, treeDepthSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("treeN"), treeNGet, treeNSet);
-  Nan::SetAccessor(instanceTemplate, FF::newString("verbose"), verboseGet, verboseSet);
+  Nan::SetAccessor(instanceTemplate, FF::newString("bagging_overlap"), bagging_overlap_getter, bagging_overlap_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("cascade_face"), cascade_face_getter, cascade_face_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("detectROI"), detectROI_getter, detectROI_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("feats_m"), feats_m_getter, feats_m_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("initShape_n"), initShape_n_getter, initShape_n_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("model_filename"), model_filename_getter, model_filename_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("n_landmarks"), n_landmarks_getter, n_landmarks_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("pupils"), pupils_getter, pupils_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("radius_m"), radius_m_getter, radius_m_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("save_model"), save_model_getter, save_model_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("seed"), seed_getter, seed_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("shape_offset"), shape_offset_getter, shape_offset_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("stages_n"), stages_n_getter, stages_n_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("tree_depth"), tree_depth_getter, tree_depth_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("tree_n"), tree_n_getter, tree_n_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("verbose"), verbose_getter, verbose_setter);
 
   Nan::Set(target,FF::newString("FacemarkLBFParams"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FacemarkLBFParams::New) {
-  FF_ASSERT_CONSTRUCT_CALL(FacemarkLBFParams);
-  FF_METHOD_CONTEXT("FacemarkLBFParams::New");
+	FF::TryCatch tryCatch("FacemarkLBFParams::New");
+	FF_ASSERT_CONSTRUCT_CALL();
   FacemarkLBFParams *self = new FacemarkLBFParams();
-  self->params = cv::face::FacemarkLBF::Params();
+  self->self = cv::face::FacemarkLBF::Params();
   self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());
 };

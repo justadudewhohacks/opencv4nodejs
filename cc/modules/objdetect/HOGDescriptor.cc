@@ -11,18 +11,18 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
   ctor->SetClassName(FF::newString("HOGDescriptor"));
   instanceTemplate->SetInternalFieldCount(1);
 
-  Nan::SetAccessor(instanceTemplate, FF::newString("winSize"), winSize);
-  Nan::SetAccessor(instanceTemplate, FF::newString("blockSize"), blockSize);
-  Nan::SetAccessor(instanceTemplate, FF::newString("blockStride"), blockStride);
-  Nan::SetAccessor(instanceTemplate, FF::newString("cellSize"), cellSize);
-  Nan::SetAccessor(instanceTemplate, FF::newString("nbins"), nbins);
-  Nan::SetAccessor(instanceTemplate, FF::newString("derivAperture"), derivAperture);
-  Nan::SetAccessor(instanceTemplate, FF::newString("histogramNormType"), histogramNormType);
-  Nan::SetAccessor(instanceTemplate, FF::newString("nlevels"), nlevels);
-  Nan::SetAccessor(instanceTemplate, FF::newString("winSigma"), winSigma);
-  Nan::SetAccessor(instanceTemplate, FF::newString("L2HysThreshold"), L2HysThreshold);
-  Nan::SetAccessor(instanceTemplate, FF::newString("gammaCorrection"), gammaCorrection);
-  Nan::SetAccessor(instanceTemplate, FF::newString("signedGradient"), signedGradient);
+  Nan::SetAccessor(instanceTemplate, FF::newString("winSize"), winSize_getter, winSize_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("blockSize"), blockSize_getter, blockSize_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("blockStride"), blockStride_getter, blockStride_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("cellSize"), cellSize_getter, cellSize_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("nbins"), nbins_getter, nbins_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("derivAperture"), derivAperture_getter, derivAperture_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("histogramNormType"), histogramNormType_getter, histogramNormType_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("nlevels"), nlevels_getter, nlevels_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("winSigma"), winSigma_getter, winSigma_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("L2HysThreshold"), L2HysThreshold_getter, L2HysThreshold_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("gammaCorrection"), gammaCorrection_getter, gammaCorrection_setter);
+  Nan::SetAccessor(instanceTemplate, FF::newString("signedGradient"), signedGradient_getter, signedGradient_setter);
 
   Nan::SetMethod(ctor, "getDaimlerPeopleDetector", GetDaimlerPeopleDetector);
   Nan::SetMethod(ctor, "getDefaultPeopleDetector", GetDefaultPeopleDetector);
@@ -49,18 +49,16 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
   Nan::Set(target,FF::newString("HOGDescriptor"), FF::getFunction(ctor));
 };
 NAN_METHOD(HOGDescriptor::New) {
-	FF_ASSERT_CONSTRUCT_CALL(HOGDescriptor);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("HOGDescriptor::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	HOGDescriptorBindings::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("HOGDescriptor::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	HOGDescriptor* self = new HOGDescriptor();
-	self->hog = std::make_shared<cv::HOGDescriptor>(
+	self->setNativeObject(std::make_shared<cv::HOGDescriptor>(
 		worker.winSize,
 		worker.blockSize,
 		worker.blockStride,
@@ -73,165 +71,161 @@ NAN_METHOD(HOGDescriptor::New) {
 		worker.gammaCorrection,
 		(int)worker.nlevels,
 		worker.signedGradient
-		);
+	));
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(HOGDescriptor::GetDaimlerPeopleDetector) {
   std::vector<float> detector = cv::HOGDescriptor::getDaimlerPeopleDetector();
-  info.GetReturnValue().Set(FloatArrayConverter::wrap(detector));
+  info.GetReturnValue().Set(FF::FloatArrayConverter::wrap(detector));
 }
 
 NAN_METHOD(HOGDescriptor::GetDefaultPeopleDetector) {
   std::vector<float> detector = cv::HOGDescriptor::getDefaultPeopleDetector();
-  info.GetReturnValue().Set(FloatArrayConverter::wrap(detector));
+  info.GetReturnValue().Set(FF::FloatArrayConverter::wrap(detector));
 }
 
 NAN_METHOD(HOGDescriptor::CheckDetectorSize) {
-  info.GetReturnValue().Set(Nan::New(HOGDescriptor::Converter::unwrap(info.This())->checkDetectorSize()));
+  info.GetReturnValue().Set(Nan::New(HOGDescriptor::unwrapSelf(info)->checkDetectorSize()));
 }
 
 NAN_METHOD(HOGDescriptor::SetSVMDetector) {
-  FF_METHOD_CONTEXT("SetSVMDetector");
+  FF::TryCatch tryCatch("HOGDescriptor::SetSVMDetector");
   std::vector<float> detector;
-  if (!FF::hasArg(info, 0) || FloatArrayConverter::unwrap(&detector, info[0])) {
-    FF_THROW("expected detector to be an Array of type Number");
+  if (!FF::hasArg(info, 0) || FF::FloatArrayConverter::unwrapTo(&detector, info[0])) {
+	  return tryCatch.throwError("expected detector to be an Array of type Number");
   }
-  HOGDescriptor::Converter::unwrap(info.This())->setSVMDetector(detector);
+  HOGDescriptor::unwrapSelf(info)->setSVMDetector(detector);
 }
 
 NAN_METHOD(HOGDescriptor::Save) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("HOGDescriptor::Save");
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("HOGDescriptor::Save");
-		tryCatch.throwNew(err);
-		return;
+	if (FF::StringConverter::arg(0, &path, info)) {
+		return tryCatch.reThrow();
 	}
-	Nan::ObjectWrap::Unwrap<HOGDescriptor>(info.This())->hog->save(path);
+	HOGDescriptor::unwrapSelf(info)->save(path);
 }
 
 NAN_METHOD(HOGDescriptor::Load) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("HOGDescriptor::Load");
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("HOGDescriptor::Load");
-		tryCatch.throwNew(err);
-		return;
+	if (FF::StringConverter::arg(0, &path, info)) {
+		return tryCatch.reThrow();
 	}
-	Nan::ObjectWrap::Unwrap<HOGDescriptor>(info.This())->hog->load(path);
+	HOGDescriptor::unwrapSelf(info)->load(path);
 }
 
 NAN_METHOD(HOGDescriptor::Compute) {
-  FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::ComputeWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::ComputeWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::Compute",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::ComputeAsync) {
-  FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::ComputeWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::ComputeWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::ComputeAsync",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::ComputeGradient) {
-  FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::ComputeGradientWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::ComputeGradientWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::ComputeGradient",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::ComputeGradientAsync) {
-  FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::ComputeGradientWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::ComputeGradientWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::ComputeGradientAsync",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::Detect) {
-  FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::DetectWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::Detect",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::DetectAsync) {
-  FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::DetectWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectAsync",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::DetectROI) {
-  FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectROIWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::DetectROIWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectROI",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::DetectROIAsync) {
-  FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectROIWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::DetectROIWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectROIAsync",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::DetectMultiScale) {
-  FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectMultiScaleWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::DetectMultiScaleWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectMultiScale",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::DetectMultiScaleAsync) {
-  FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectMultiScaleWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::DetectMultiScaleWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectMultiScaleAsync",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::DetectMultiScaleROI) {
-  FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectMultiScaleROIWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::DetectMultiScaleROIWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectMultiScaleROI",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::DetectMultiScaleROIAsync) {
-  FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::DetectMultiScaleROIWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::DetectMultiScaleROIWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectMultiScaleROIAsync",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::GroupRectangles) {
-  FF::SyncBinding(
-    std::make_shared<HOGDescriptorBindings::GroupRectanglesWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::GroupRectanglesWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::GroupRectangles",
     info
   );
 }
 
 NAN_METHOD(HOGDescriptor::GroupRectanglesAsync) {
-  FF::AsyncBinding(
-    std::make_shared<HOGDescriptorBindings::GroupRectanglesWorker>(HOGDescriptor::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<HOGDescriptorBindings::GroupRectanglesWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::GroupRectanglesAsync",
     info
   );

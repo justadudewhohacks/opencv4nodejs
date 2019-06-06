@@ -6,21 +6,17 @@ void BackgroundSubtractor::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(BackgroundSubtractor::Apply) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("BackgroundSubtractor::Apply");
 	cv::Mat frame;
 	double learningRate = -1;
 	if (
 		Mat::Converter::arg(0, &frame, info) ||
-		DoubleConverter::optArg(1, &learningRate, info)
+		FF::DoubleConverter::optArg(1, &learningRate, info)
 		) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("BackgroundSubtractor::Apply");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
-	BackgroundSubtractor* self = FF_UNWRAP(info.This(), BackgroundSubtractor);
+	BackgroundSubtractor* self = BackgroundSubtractor::unwrapThis(info);
 	self->getSubtractor()->apply(frame, self->fgMask, learningRate);
-	v8::Local<v8::Object> jsMat = FF::newInstance(Nan::New(Mat::constructor));
-	FF_UNWRAP_MAT_AND_GET(jsMat) = self->fgMask;
-	info.GetReturnValue().Set(jsMat);
+	info.GetReturnValue().Set(Mat::Converter::wrap(self->fgMask));
 }

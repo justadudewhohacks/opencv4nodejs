@@ -29,7 +29,7 @@ struct MatchWorker : public CatchCvExceptionWorker {
         }
 
         v8::Local<v8::Value> getReturnValue() {
-            return ObjectArrayConverter<DescriptorMatch, cv::DMatch>::wrap(dmatches);
+            return DescriptorMatch::ArrayConverter::wrap(dmatches);
         }
     };
 
@@ -55,11 +55,11 @@ struct MatchKnnWorker : public CatchCvExceptionWorker {
         bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
             return Mat::Converter::arg(0, &descFrom, info)
                 || Mat::Converter::arg(1, &descTo, info)
-                || IntConverter::arg(2, &k, info);
+                || FF::IntConverter::arg(2, &k, info);
         }
 
         v8::Local<v8::Value> getReturnValue() {
-            return ObjectArrayOfArraysConverter<DescriptorMatch, cv::DMatch>::wrap(dmatches);
+            return DescriptorMatch::ArrayOfArraysConverter::wrap(dmatches);
         }
 };
 

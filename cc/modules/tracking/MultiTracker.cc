@@ -31,148 +31,134 @@ NAN_MODULE_INIT(MultiTracker::Init) {
 };
 
 NAN_METHOD(MultiTracker::New) {
-	FF_ASSERT_CONSTRUCT_CALL(MultiTracker);
-	FF_METHOD_CONTEXT("MultiTracker::New");
+	FF::TryCatch tryCatch("MultiTracker::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	MultiTracker* self = new MultiTracker();
-	self->tracker = cv::MultiTracker();
+	self->setNativeObject(cv::makePtr<cv::MultiTracker>());
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };
 
 NAN_METHOD(MultiTracker::AddMIL) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddMIL");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 	) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddMIL"));
-		return;
+		return tryCatch.reThrow();
 	}
 #if CV_MINOR_VERSION > 2
 	cv::Ptr<cv::Tracker> type = cv::TrackerMIL::create();
 #else
 	const std::string type("MIL");
 #endif
-	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
 NAN_METHOD(MultiTracker::AddBOOSTING) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddBOOSTING");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddBOOSTING"));
-		return;
+		return tryCatch.reThrow();
 	}
 #if CV_MINOR_VERSION > 2
 	cv::Ptr<cv::Tracker> type = cv::TrackerBoosting::create();
 #else
 	const std::string type("BOOSTING");
 #endif
-	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
 NAN_METHOD(MultiTracker::AddMEDIANFLOW) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddMEDIANFLOW");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddMEDIANFLOW"));
-		return;
+		return tryCatch.reThrow();
 	}
 #if CV_MINOR_VERSION > 2
 	cv::Ptr<cv::Tracker> type = cv::TrackerMedianFlow::create();
 #else
 	const std::string type("MEDIANFLOW");
 #endif
-	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
 NAN_METHOD(MultiTracker::AddTLD) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddTLD");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddTLD"));
-		return;
+		return tryCatch.reThrow();
 	}
 #if CV_MINOR_VERSION > 2
 	cv::Ptr<cv::Tracker> type = cv::TrackerTLD::create();
 #else
 	const std::string type("TLD");
 #endif
-	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
 NAN_METHOD(MultiTracker::AddKCF) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddKCF");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddKCF"));
-		return;
+		return tryCatch.reThrow();
 	}
 #if CV_MINOR_VERSION > 2
 	cv::Ptr<cv::Tracker> type = cv::TrackerKCF::create();
 #else
 	const std::string type("KCF");
 #endif
-	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
 NAN_METHOD(MultiTracker::Update) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::Update");
 	cv::Mat image;
 	if (Mat::Converter::arg(0, &image, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::Update"));
-		return;
+		return tryCatch.reThrow();
 	}
 
 	std::vector<cv::Rect2d> rects;
-	FF_UNWRAP(info.This(), MultiTracker)->tracker.update(image, rects);
-
-	v8::Local<v8::Array> jsRects = Nan::New<v8::Array>(rects.size());
-	for (unsigned long i = 0; i < rects.size(); i++) {
-		v8::Local<v8::Object> jsRect = FF::newInstance(Nan::New(Rect::constructor));
-		FF_UNWRAP_RECT_AND_GET(jsRect) = rects.at(i);
-		Nan::Set(jsRects, i, jsRect);
-	}
-	info.GetReturnValue().Set(jsRects);
+	MultiTracker::unwrapSelf(info)->update(image, rects);
+	info.GetReturnValue().Set(Rect::ArrayConverter::wrap(rects));
 }
 #if CV_MINOR_VERSION > 3
 
 NAN_METHOD(MultiTracker::AddMOSSE) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddMOSSE");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddMOSSE"));
-		return;
+		return tryCatch.reThrow();
 	}
 	cv::Ptr<cv::Tracker> type = cv::TrackerMOSSE::create();
-	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 
@@ -180,18 +166,17 @@ NAN_METHOD(MultiTracker::AddMOSSE) {
 #if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
 
 NAN_METHOD(MultiTracker::AddCSRT) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MultiTracker::AddCSRT");
 	cv::Mat image;
 	cv::Rect2d boundingBox;
 	if (
 		Mat::Converter::arg(0, &image, info) ||
 		Rect::Converter::arg(1, &boundingBox, info)
 		) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("MultiTracker::AddCSRT"));
-		return;
+		return tryCatch.reThrow();
 	}
 	cv::Ptr<cv::Tracker> type = cv::TrackerCSRT::create();
-	bool ret = FF_UNWRAP(info.This(), MultiTracker)->tracker.add(type, image, boundingBox);
+	bool ret = MultiTracker::unwrapSelf(info)->add(type, image, boundingBox);
 	info.GetReturnValue().Set(Nan::New(ret));
 }
 #endif

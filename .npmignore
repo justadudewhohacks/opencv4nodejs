@@ -16,3 +16,4 @@ tmpdata
 ci
 .dockerignore
 dist
+native-node-utils

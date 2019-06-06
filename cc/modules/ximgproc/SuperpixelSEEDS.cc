@@ -11,15 +11,16 @@ NAN_MODULE_INIT(SuperpixelSEEDS::Init) {
   instanceTemplate->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("SuperpixelSEEDS").ToLocalChecked());
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("img").ToLocalChecked(), SuperpixelSEEDS::GetImg);
-	Nan::SetAccessor(instanceTemplate, Nan::New("numSuperpixels").ToLocalChecked(), SuperpixelSEEDS::GetNumSuperpixels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("numLevels").ToLocalChecked(), SuperpixelSEEDS::GeNumLevels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("prior").ToLocalChecked(), SuperpixelSEEDS::GetPrior);
-	Nan::SetAccessor(instanceTemplate, Nan::New("histogramBins").ToLocalChecked(), SuperpixelSEEDS::GetHistogramBins);
-	Nan::SetAccessor(instanceTemplate, Nan::New("doubleStep").ToLocalChecked(), SuperpixelSEEDS::GetDoubleStep);
-	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), SuperpixelSEEDS::GetNumCalculatedSuperpixels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), SuperpixelSEEDS::GetLabels);
-	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), SuperpixelSEEDS::GetLabelContourMask);
+
+	Nan::SetAccessor(instanceTemplate, Nan::New("image").ToLocalChecked(), image_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("labels").ToLocalChecked(), labels_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("labelContourMask").ToLocalChecked(), labelContourMask_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("num_superpixels").ToLocalChecked(), num_superpixels_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("num_levels").ToLocalChecked(), num_levels_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("prior").ToLocalChecked(), prior_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("histogram_bins").ToLocalChecked(), histogram_bins_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("double_step").ToLocalChecked(), double_step_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("numCalculatedSuperpixels").ToLocalChecked(), numCalculatedSuperpixels_getter);
 
 	Nan::SetPrototypeMethod(ctor, "iterate", SuperpixelSEEDS::Iterate);
 
@@ -27,25 +28,23 @@ NAN_MODULE_INIT(SuperpixelSEEDS::Init) {
 };
 
 NAN_METHOD(SuperpixelSEEDS::New) {
-	FF_ASSERT_CONSTRUCT_CALL(SuperpixelSEEDS);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SuperpixelSEEDS::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	SuperpixelSEEDS::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSEEDS::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	SuperpixelSEEDS* self = new SuperpixelSEEDS();
-	self->img = worker.img;
+	self->image = worker.img;
 	self->num_superpixels = worker.num_superpixels;
 	self->num_levels = worker.num_levels;
 	self->prior = worker.prior;
 	self->histogram_bins = worker.histogram_bins;
 	self->double_step = worker.double_step;
 
-	self->superpixelSeeds = cv::ximgproc::createSuperpixelSEEDS(
+	self->self = cv::ximgproc::createSuperpixelSEEDS(
 		worker.img.cols,
 		worker.img.rows,
 		worker.img.channels(),
@@ -60,20 +59,18 @@ NAN_METHOD(SuperpixelSEEDS::New) {
 }
 
 NAN_METHOD(SuperpixelSEEDS::Iterate) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("SuperpixelSEEDS::Iterate");
 
 	uint iterations = 4;
-	if (UintConverter::optArg(0, &iterations, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("SuperpixelSEEDS::Iterate");
-		tryCatch.throwNew(err);
-		return;
+	if (FF::UintConverter::optArg(0, &iterations, info)) {
+		return tryCatch.reThrow();
 	}
 
 	SuperpixelSEEDS* self = Nan::ObjectWrap::Unwrap<SuperpixelSEEDS>(info.This());
-	self->superpixelSeeds->iterate(self->img, (int)iterations);
-	self->superpixelSeeds->getLabels(self->labels);
-	self->numCalculatedSuperpixels = self->superpixelSeeds->getNumberOfSuperpixels();
-	self->superpixelSeeds->getLabelContourMask(self->labelContourMask);
+	self->self->iterate(self->image, (int)iterations);
+	self->self->getLabels(self->labels);
+	self->numCalculatedSuperpixels = self->self->getNumberOfSuperpixels();
+	self->self->getLabelContourMask(self->labelContourMask);
 }
 
 #endif // HAVE_XIMGPROC

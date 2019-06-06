@@ -7,9 +7,14 @@
 #ifndef __FF_SUPERPIXELLSC_H__
 #define __FF_SUPERPIXELLSC_H__
 
-class SuperpixelLSC : public Nan::ObjectWrap {
+class SuperpixelLSC : public FF::ObjectWrap<SuperpixelLSC, cv::Ptr<cv::ximgproc::SuperpixelLSC>> {
 public:
-	cv::Ptr<cv::ximgproc::SuperpixelLSC> superpixelLsc;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "SuperpixelLSC";
+	}
+
 	cv::Mat image;
 	cv::Mat labels;
 	cv::Mat labelContourMask;
@@ -17,18 +22,17 @@ public:
 	double ratio = 0.075;
 	int numCalculatedSuperpixels = 0;
 
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
+	FF_GETTER_CUSTOM(image, Mat::Converter, image);
+	FF_GETTER_CUSTOM(labels, Mat::Converter, labels);
+	FF_GETTER_CUSTOM(labelContourMask, Mat::Converter, labelContourMask);
+	FF_GETTER_CUSTOM(region_size, FF::IntConverter, region_size);
+	FF_GETTER_CUSTOM(ratio, FF::DoubleConverter, ratio);
+	FF_GETTER_CUSTOM(numCalculatedSuperpixels, FF::IntConverter, numCalculatedSuperpixels);
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 	static NAN_METHOD(Iterate);
 
-	static FF_GETTER_JSOBJ(SuperpixelLSC, GetImg, image, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(SuperpixelLSC, GetLabels, labels, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(SuperpixelLSC, GetLabelContourMask, labelContourMask, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER(SuperpixelLSC, GetRegionSize, region_size);
-	static FF_GETTER(SuperpixelLSC, GetRatio, ratio);
-	static FF_GETTER(SuperpixelLSC, GetNumCalculatedSuperpixels, numCalculatedSuperpixels);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
 
   struct NewWorker : public CatchCvExceptionWorker {
   public:
@@ -49,8 +53,8 @@ public:
 
 	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  IntConverter::optArg(1, &region_size, info) ||
-			  FloatConverter::optArg(2, &ratio, info)
+			  FF::IntConverter::optArg(1, &region_size, info) ||
+			  FF::FloatConverter::optArg(2, &ratio, info)
 			  );
 	  }
 
@@ -61,8 +65,8 @@ public:
 	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 		  return (
-			  IntConverter::optProp(&region_size, "region_size", opts) ||
-			  FloatConverter::optProp(&ratio, "ratio", opts)
+			  FF::IntConverter::optProp(&region_size, "region_size", opts) ||
+			  FF::FloatConverter::optProp(&ratio, "ratio", opts)
 			  );
 	  }
   };

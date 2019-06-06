@@ -16,7 +16,7 @@ namespace OCRHMMDecoderBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         OCRHMMClassifier::Converter::arg(0, &classifier, info) ||
-        StringConverter::arg(1, &vocabulary, info) ||
+        FF::StringConverter::arg(1, &vocabulary, info) ||
         Mat::Converter::arg(2, &transition_probabilities_table, info) ||
         Mat::Converter::arg(3, &emission_probabilities_table, info)
       );
@@ -24,7 +24,7 @@ namespace OCRHMMDecoderBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(4, &mode, info)
+        FF::IntConverter::optArg(4, &mode, info)
       );
     }
   };
@@ -65,13 +65,13 @@ namespace OCRHMMDecoderBindings {
     }
   
     v8::Local<v8::Value> getReturnValue() {
-      return StringConverter::wrap(output_text);
+      return FF::StringConverter::wrap(output_text);
     }
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::arg(0, &img, info) ||
-        IntConverter::arg(1, &min_confidence, info)
+        FF::IntConverter::arg(1, &min_confidence, info)
       );
     }
   
@@ -79,7 +79,7 @@ namespace OCRHMMDecoderBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::optArg(2, &mask, info) ||
-        IntConverter::optArg(3, &component_level, info)
+        FF::IntConverter::optArg(3, &component_level, info)
       );
     }
   #endif
@@ -111,10 +111,10 @@ namespace OCRHMMDecoderBindings {
   
     v8::Local<v8::Value> getReturnValue() {
       v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, FF::newString("outputText"), StringConverter::wrap(output_text));
-      Nan::Set(ret, FF::newString("rects"), ObjectArrayConverter<Rect, cv::Rect2d, cv::Rect>::wrap(component_rects));
-      Nan::Set(ret, FF::newString("words"), StringArrayConverter::wrap(component_texts));
-      Nan::Set(ret, FF::newString("confidences"), FloatArrayConverter::wrap(component_confidences));
+      Nan::Set(ret, FF::newString("outputText"), FF::StringConverter::wrap(output_text));
+      Nan::Set(ret, FF::newString("rects"), Rect::ArrayWithCastConverter<cv::Rect>::wrap(component_rects));
+      Nan::Set(ret, FF::newString("words"), FF::StringArrayConverter::wrap(component_texts));
+      Nan::Set(ret, FF::newString("confidences"), FF::FloatArrayConverter::wrap(component_confidences));
       return ret;
     }
   
@@ -129,7 +129,7 @@ namespace OCRHMMDecoderBindings {
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::optArg(1, &mask, info) ||
-        IntConverter::optArg(2, &component_level, info)
+        FF::IntConverter::optArg(2, &component_level, info)
       );
     }
   };

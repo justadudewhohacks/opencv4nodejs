@@ -18,12 +18,12 @@ NAN_MODULE_INIT(TrackerMedianFlow::Init) {
 };
 
 NAN_METHOD(TrackerMedianFlow::New) {
-	FF_ASSERT_CONSTRUCT_CALL(TrackerMedianFlow);
-	FF_METHOD_CONTEXT("TrackerMedianFlow::New");
+	FF::TryCatch tryCatch("TrackerMedianFlow::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 
 	TrackerMedianFlow* self = new TrackerMedianFlow();
 	cv::TrackerMedianFlow::Params params;
-	if (FF::hasArg(info, 0) && IntTypeConverter::assertType(info[0])) {
+	if (FF::hasArg(info, 0) && FF::IntConverterImpl::assertType(info[0])) {
 		params.pointsInGrid = info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	}
 

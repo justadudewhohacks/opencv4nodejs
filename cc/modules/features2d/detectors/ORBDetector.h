@@ -1,82 +1,72 @@
 #include "macros.h"
+#include "CvBinding.h"
 #include "../FeatureDetector.h"
 
 #ifndef __FF_ORBDETECTOR_H__
 #define __FF_ORBDETECTOR_H__
 
-class ORBDetector : public FeatureDetector {
+
+class ORBDetector : public FeatureDetector, public FF::ObjectWrapTemplate<ORBDetector, cv::Ptr<cv::ORB>> {
 public:
-	cv::Ptr<cv::ORB> detector;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-  static NAN_MODULE_INIT(Init); 
-  static NAN_METHOD(New);
-
-	static FF_GETTER(ORBDetector, GetNFeatures, detector->getMaxFeatures());
-	static FF_GETTER(ORBDetector, GetScaleFactor, detector->getScaleFactor());
-	static FF_GETTER(ORBDetector, GetNlevels, detector->getNLevels());
-	static FF_GETTER(ORBDetector, GetEdgeThreshold, detector->getEdgeThreshold());
-	static FF_GETTER(ORBDetector, GetFirstLevel, detector->getFirstLevel());
-	static FF_GETTER(ORBDetector, GetWTA_K, detector->getWTA_K());
-	static FF_GETTER(ORBDetector, GetScoreType, detector->getScoreType());
-	static FF_GETTER(ORBDetector, GetPatchSize, detector->getPatchSize());
-	static FF_GETTER(ORBDetector, GetFastThreshold, detector->getFastThreshold());
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Ptr<cv::FeatureDetector> getDetector() {
-		return detector;
+	static const char* getClassName() {
+		return "ORBDetector";
 	}
 
-	struct NewWorker : CatchCvExceptionWorker {
+	cv::Ptr<cv::FeatureDetector> getDetector() {
+		return self;
+	}
+
+	FF_GETTER_CUSTOM(maxFeatures, FF::IntConverter, self->getMaxFeatures());
+	FF_GETTER_CUSTOM(scaleFactor, FF::FloatConverter, self->getScaleFactor());
+	FF_GETTER_CUSTOM(nLevels, FF::IntConverter, self->getNLevels());
+	FF_GETTER_CUSTOM(edgeThreshold, FF::IntConverter, self->getEdgeThreshold());
+	FF_GETTER_CUSTOM(firstLevel, FF::IntConverter, self->getFirstLevel());
+	FF_GETTER_CUSTOM(WTA_K, FF::IntConverter, self->getWTA_K());
+	FF_GETTER_CUSTOM(scoreType, FF::IntConverter, self->getScoreType());
+	FF_GETTER_CUSTOM(patchSize, FF::IntConverter, self->getPatchSize());
+	FF_GETTER_CUSTOM(fastThreshold, FF::IntConverter, self->getFastThreshold());
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
+
+	class NewBinding : public CvBinding {
 	public:
-		int nfeatures = 500;
-		double scaleFactor = 1.2f;
-		int nlevels = 8;
-		int edgeThreshold = 31;
-		int firstLevel = 0;
-		int WTA_K = 2;
-		int scoreType = cv::ORB::HARRIS_SCORE;
-		int patchSize = 31;
-		int fastThreshold = 20;
+		void construct(Nan::NAN_METHOD_ARGS_TYPE info) {
+			FF::TryCatch tryCatch("SURFDetector::New");
+			FF_ASSERT_CONSTRUCT_CALL();
 
-		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return (
-				IntConverter::optArg(0, &nfeatures, info) ||
-				DoubleConverter::optArg(1, &scaleFactor, info) ||
-				IntConverter::optArg(2, &nlevels, info) ||
-				IntConverter::optArg(3, &edgeThreshold, info) ||
-				IntConverter::optArg(4, &firstLevel, info) ||
-				IntConverter::optArg(5, &WTA_K, info) ||
-				IntConverter::optArg(6, &scoreType, info) ||
-				IntConverter::optArg(7, &patchSize, info) ||
-				IntConverter::optArg(8, &fastThreshold, info)
-				);
-		}
+			auto maxFeatures = opt<FF::IntConverter>("maxFeatures", 500);
+			auto scaleFactor = opt<FF::DoubleConverter>("scaleFactor", (double)1.2f);
+			auto nLevels = opt<FF::IntConverter>("nLevels", 8);
+			auto edgeThreshold = opt<FF::IntConverter>("edgeThreshold", 31);
+			auto firstLevel = opt<FF::IntConverter>("firstLevel", 0);
+			auto WTA_K = opt<FF::IntConverter>("WTA_K", 2);
+			auto scoreType = opt<FF::IntConverter>("scoreType", cv::ORB::HARRIS_SCORE);
+			auto patchSize = opt<FF::IntConverter>("patchSize", 31);
+			auto fastThreshold = opt<FF::IntConverter>("fastThreshold", 20);
 
-		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return FF::isArgObject(info, 0);
-		}
+			if (applyUnwrappers(info)) {
+				return tryCatch.reThrow();
+			}
 
-		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-			return (
-				IntConverter::optProp(&nfeatures, "nfeatures", opts) ||
-				DoubleConverter::optProp(&scaleFactor, "scaleFactor", opts) ||
-				IntConverter::optProp(&nlevels, "nlevels", opts) ||
-				IntConverter::optProp(&edgeThreshold, "edgeThreshold", opts) ||
-				IntConverter::optProp(&firstLevel, "firstLevel", opts) ||
-				IntConverter::optProp(&WTA_K, "WTA_K", opts) ||
-				IntConverter::optProp(&scoreType, "scoreType", opts) ||
-				IntConverter::optProp(&patchSize, "patchSize", opts) ||
-				IntConverter::optProp(&fastThreshold, "fastThreshold", opts)
-				);
-		}
-
-		std::string executeCatchCvExceptionWorker() {
-			return "";
-		}
+			ORBDetector* self = new ORBDetector();
+			self->setNativeObject(cv::ORB::create(
+				maxFeatures->ref(), 
+				scaleFactor->ref(),
+				nLevels->ref(),
+				edgeThreshold->ref(),
+				firstLevel->ref(),
+				WTA_K->ref(),
+				scoreType->ref(),
+				patchSize->ref(),
+				fastThreshold->ref()
+			));
+			self->Wrap(info.Holder());
+			info.GetReturnValue().Set(info.Holder());
+		};
 	};
-
 };
 
 #endif

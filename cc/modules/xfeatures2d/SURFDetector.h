@@ -1,68 +1,60 @@
 #include "macros.h"
+#include "CvBinding.h"
 #include <opencv2/xfeatures2d.hpp>
 #include "features2d/FeatureDetector.h"
 
 #ifndef __FF_SURFDETECTOR_H__
 #define __FF_SURFDETECTOR_H__
 
-class SURFDetector : public FeatureDetector {
+class SURFDetector : public FeatureDetector, public FF::ObjectWrapTemplate<SURFDetector, cv::Ptr<cv::xfeatures2d::SURF>> {
 public:
-	cv::Ptr<cv::xfeatures2d::SURF> detector;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-  static NAN_MODULE_INIT(Init); 
-  static NAN_METHOD(New);
-
-	static FF_GETTER(SURFDetector, GetHessianThreshold, detector->getHessianThreshold());
-	static FF_GETTER(SURFDetector, GetNOctaves, detector->getNOctaves());
-	static FF_GETTER(SURFDetector, GetNOctaveLayers, detector->getNOctaveLayers());
-	static FF_GETTER(SURFDetector, GetExtended, detector->getExtended());
-	static FF_GETTER(SURFDetector, GetUpright, detector->getUpright());
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Ptr<cv::FeatureDetector> getDetector() {
-		return detector;
+	static const char* getClassName() {
+		return "SURFDetector";
 	}
 
-	struct NewWorker : CatchCvExceptionWorker {
+	cv::Ptr<cv::FeatureDetector> getDetector(void) {
+		return self;
+	}
+
+	FF_GETTER_CUSTOM(hessianThreshold, FF::DoubleConverter, self->getHessianThreshold());
+	FF_GETTER_CUSTOM(nOctaves, FF::IntConverter, self->getNOctaves());
+	FF_GETTER_CUSTOM(nOctaveLayers, FF::IntConverter, self->getNOctaveLayers());
+	FF_GETTER_CUSTOM(extended, FF::BoolConverter, self->getExtended());
+	FF_GETTER_CUSTOM(upright, FF::BoolConverter, self->getUpright());
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
+
+	class NewBinding : public CvBinding {
 	public:
+		void construct(Nan::NAN_METHOD_ARGS_TYPE info) {
+			FF::TryCatch tryCatch("SURFDetector::New");
+			FF_ASSERT_CONSTRUCT_CALL();
 
-		double hessianThreshold = 100;
-		int nOctaves = 4;
-		int nOctaveLayers = 3;
-		bool extended = false;
-		bool upright = false;
+			auto hessianThreshold = opt<FF::DoubleConverter>("hessianThreshold", 100);
+			auto nOctaves = opt<FF::IntConverter>("nOctaves", 4);
+			auto nOctaveLayers = opt<FF::DoubleConverter>("nOctaveLayers", 3);
+			auto extended = opt<FF::BoolConverter>("extended", false);
+			auto upright = opt<FF::BoolConverter>("upright", false);
 
-		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return (
-				DoubleConverter::optArg(0, &hessianThreshold, info) ||
-				IntConverter::optArg(1, &nOctaves, info) ||
-				IntConverter::optArg(2, &nOctaveLayers, info) ||
-				BoolConverter::optArg(3, &extended, info) ||
-				BoolConverter::optArg(4, &upright, info)
-				);
-		}
+			if (applyUnwrappers(info)) {
+				return tryCatch.reThrow();
+			}
 
-		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return FF::isArgObject(info, 0);
-		}
-
-		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-			return (
-				DoubleConverter::optProp(&hessianThreshold, "hessianThreshold", opts) ||
-				IntConverter::optProp(&nOctaves, "nOctaves", opts) ||
-				IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
-				BoolConverter::optProp(&extended, "extended", opts) ||
-				BoolConverter::optProp(&upright, "upright", opts)
-				);
-		}
-
-		std::string executeCatchCvExceptionWorker() {
-			return "";
-		}
+			SURFDetector* self = new SURFDetector();
+			self->setNativeObject(cv::xfeatures2d::SURF::create(
+				hessianThreshold->ref(),
+				nOctaves->ref(),
+				nOctaveLayers->ref(),
+				extended->ref(),
+				upright->ref()
+			));
+			self->Wrap(info.Holder());
+			info.GetReturnValue().Set(info.Holder());
+		};
 	};
-
 };
 
 #endif

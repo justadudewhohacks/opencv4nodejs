@@ -11,26 +11,24 @@ NAN_MODULE_INIT(FASTDetector::Init) {
 	ctor->SetClassName(Nan::New("FASTDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), FASTDetector::GetThreshold);
-	Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), FASTDetector::GetNonmaxSuppression);
-	Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), FASTDetector::GetType);
+  Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), threshold_getter);
+  Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), nonmaxSuppression_getter);
+  Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), type_getter);
 
   Nan::Set(target,Nan::New("FASTDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FASTDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(FASTDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("FASTDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	FASTDetector::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("FASTDetector::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	FASTDetector* self = new FASTDetector();
-	self->detector = cv::FastFeatureDetector::create(
+	self->self = cv::FastFeatureDetector::create(
 		worker.threshold,
 		worker.nonmaxSuppression,
 		worker.type

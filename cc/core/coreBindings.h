@@ -1,78 +1,39 @@
 #include "core.h"
+#include "CvBinding.h"
 
 #ifndef __FF_COREBINDINGS_H__
 #define __FF_COREBINDINGS_H__
 
 namespace CoreBindings {
 
-	struct CartToPolarWorker : public CatchCvExceptionWorker {
+	class CartToPolar : public CvBinding {
 	public:
-		cv::Mat x;
-		cv::Mat y;
-		bool angleInDegrees = false;
+		CartToPolar() {
+			auto x = req<Mat::Converter>();
+			auto y = req<Mat::Converter>();
+			auto angleInDegrees = opt<FF::BoolConverter>("angleInDegrees", false);
+			auto magnitude = ret<Mat::Converter>("magnitude");
+			auto angle = ret<Mat::Converter>("angle");
 
-		cv::Mat magnitude;
-		cv::Mat angle;
-
-		std::string executeCatchCvExceptionWorker() {
-			cv::cartToPolar(x, y, magnitude, angle, angleInDegrees);
-			return "";
-		}
-
-		v8::Local<v8::Value> getReturnValue() {
-			v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-			Nan::Set(ret, Nan::New("magnitude").ToLocalChecked(), Mat::Converter::wrap(magnitude));
-			Nan::Set(ret, Nan::New("angle").ToLocalChecked(), Mat::Converter::wrap(angle));
-			return ret;
-		}
-
-		bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return (
-				Mat::Converter::arg(0, &x, info) ||
-				Mat::Converter::arg(1, &y, info)
-				);
-		}
-
-		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return (
-				BoolConverter::optArg(2, &angleInDegrees, info)
-				);
-		}
+			executeBinding = [=]() {
+				cv::cartToPolar(x->ref(), y->ref(), magnitude->ref(), angle->ref(), angleInDegrees->ref());
+			};
+		};
 	};
 
-	struct PolarToCartWorker : public CatchCvExceptionWorker {
+	class PolarToCart : public CvBinding {
 	public:
-		cv::Mat magnitude;
-		cv::Mat angle;
-		bool angleInDegrees = false;
+		PolarToCart() {
+			auto magnitude = req<Mat::Converter>();
+			auto angle = req<Mat::Converter>();
+			auto angleInDegrees = opt<FF::BoolConverter>("angleInDegrees", false);
+			auto x = ret<Mat::Converter>("x");
+			auto y = ret<Mat::Converter>("y");
 
-		cv::Mat x;
-		cv::Mat y;
-
-		std::string executeCatchCvExceptionWorker() {
-			cv::polarToCart(magnitude, angle, x, y, angleInDegrees);
-			return "";
-		}
-
-		v8::Local<v8::Value> getReturnValue() {
-			v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-			Nan::Set(ret, Nan::New("x").ToLocalChecked(), Mat::Converter::wrap(x));
-			Nan::Set(ret, Nan::New("y").ToLocalChecked(), Mat::Converter::wrap(y));
-			return ret;
-		}
-
-		bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return (
-				Mat::Converter::arg(0, &magnitude, info) ||
-				Mat::Converter::arg(1, &angle, info)
-				);
-		}
-
-		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return (
-				BoolConverter::optArg(2, &angleInDegrees, info)
-				);
-		}
+			executeBinding = [=]() {
+				cv::polarToCart(magnitude->ref(), angle->ref(), x->ref(), y->ref(), angleInDegrees->ref());
+			};
+		};
 	};
 
 }

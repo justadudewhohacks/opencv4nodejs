@@ -5,10 +5,15 @@
 #ifndef __FF_SUPERPIXELSEEDS_H__
 #define __FF_SUPERPIXELSEEDS_H__
 
-class SuperpixelSEEDS : public Nan::ObjectWrap {
+class SuperpixelSEEDS : public FF::ObjectWrap<SuperpixelSEEDS, cv::Ptr<cv::ximgproc::SuperpixelSEEDS>> {
 public:
-	cv::Ptr<cv::ximgproc::SuperpixelSEEDS> superpixelSeeds;
-	cv::Mat img;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "SuperpixelSEEDS";
+	}
+
+	cv::Mat image;
 	cv::Mat labels;
 	cv::Mat labelContourMask;
 	int num_superpixels;
@@ -18,21 +23,19 @@ public:
 	bool double_step = false;
 	int numCalculatedSuperpixels = 0;
 
-  static NAN_MODULE_INIT(Init); 
-  static NAN_METHOD(New);
+	FF_GETTER_CUSTOM(image, Mat::Converter, image);
+	FF_GETTER_CUSTOM(labels, Mat::Converter, labels);
+	FF_GETTER_CUSTOM(labelContourMask, Mat::Converter, labelContourMask);
+	FF_GETTER_CUSTOM(num_superpixels, FF::IntConverter, num_superpixels);
+	FF_GETTER_CUSTOM(num_levels, FF::IntConverter, num_levels);
+	FF_GETTER_CUSTOM(prior, FF::IntConverter, prior);
+	FF_GETTER_CUSTOM(histogram_bins, FF::IntConverter, histogram_bins);
+	FF_GETTER_CUSTOM(double_step, FF::BoolConverter, double_step);
+	FF_GETTER_CUSTOM(numCalculatedSuperpixels, FF::IntConverter, numCalculatedSuperpixels);
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 	static NAN_METHOD(Iterate);
-
-	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetImg, img, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetLabels, labels, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(SuperpixelSEEDS, GetLabelContourMask, labelContourMask, FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER(SuperpixelSEEDS, GetNumSuperpixels, num_superpixels);
-	static FF_GETTER(SuperpixelSEEDS, GeNumLevels, num_levels);
-	static FF_GETTER(SuperpixelSEEDS, GetPrior, prior);
-	static FF_GETTER(SuperpixelSEEDS, GetHistogramBins, histogram_bins);
-	static FF_GETTER(SuperpixelSEEDS, GetDoubleStep, double_step);
-	static FF_GETTER(SuperpixelSEEDS, GetNumCalculatedSuperpixels, numCalculatedSuperpixels);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
 
   struct NewWorker : public CatchCvExceptionWorker {
   public:
@@ -51,16 +54,16 @@ public:
 	  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
 			  Mat::Converter::arg(0, &img, info) ||
-			  IntConverter::arg(1, &num_superpixels, info) ||
-			  IntConverter::arg(2, &num_levels, info)
+			  FF::IntConverter::arg(1, &num_superpixels, info) ||
+			  FF::IntConverter::arg(2, &num_levels, info)
 			);
 	  }
 
 	  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  return (
-			  IntConverter::optArg(3, &histogram_bins, info) ||
-			  IntConverter::optArg(4, &prior, info) ||
-			  BoolConverter::optArg(5, &double_step, info)
+			  FF::IntConverter::optArg(3, &histogram_bins, info) ||
+			  FF::IntConverter::optArg(4, &prior, info) ||
+			  FF::BoolConverter::optArg(5, &double_step, info)
 			  );
 	  }
 
@@ -71,9 +74,9 @@ public:
 	  bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 		  v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 		  return (
-			  IntConverter::optProp(&histogram_bins, "histogram_bins", opts) ||
-			  IntConverter::optProp(&prior, "prior", opts) ||
-			  BoolConverter::optProp(&double_step, "double_step", opts)
+			  FF::IntConverter::optProp(&histogram_bins, "histogram_bins", opts) ||
+			  FF::IntConverter::optProp(&prior, "prior", opts) ||
+			  FF::BoolConverter::optProp(&double_step, "double_step", opts)
 			);
 	  }
   };

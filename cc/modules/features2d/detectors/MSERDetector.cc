@@ -9,35 +9,33 @@ NAN_MODULE_INIT(MSERDetector::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	FeatureDetector::Init(ctor);
-  constructor.Reset(ctor);
+	constructor.Reset(ctor);
 	ctor->SetClassName(Nan::New("MSERDetector").ToLocalChecked());
-  instanceTemplate->SetInternalFieldCount(1);
+	instanceTemplate->SetInternalFieldCount(1);
 
-    Nan::SetPrototypeMethod(ctor, "detectRegions", MSERDetector::DetectRegions);
+	Nan::SetPrototypeMethod(ctor, "detectRegions", MSERDetector::DetectRegions);
 	Nan::SetPrototypeMethod(ctor, "detectRegionsAsync", MSERDetector::DetectRegionsAsync);
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("delta").ToLocalChecked(), MSERDetector::GetDelta);
-	Nan::SetAccessor(instanceTemplate, Nan::New("minArea").ToLocalChecked(), MSERDetector::GetMinArea);
-	Nan::SetAccessor(instanceTemplate, Nan::New("maxArea").ToLocalChecked(), MSERDetector::GetMaxArea);
-	Nan::SetAccessor(instanceTemplate, Nan::New("maxVariation").ToLocalChecked(), MSERDetector::GetMaxVariation);
-	Nan::SetAccessor(instanceTemplate, Nan::New("minDiversity").ToLocalChecked(), MSERDetector::GetMinDiversity);
-	Nan::SetAccessor(instanceTemplate, Nan::New("maxEvolution").ToLocalChecked(), MSERDetector::GetMaxEvolution);
-	Nan::SetAccessor(instanceTemplate, Nan::New("areaThreshold").ToLocalChecked(), MSERDetector::GetAreaThreshold);
-	Nan::SetAccessor(instanceTemplate, Nan::New("minMargin").ToLocalChecked(), MSERDetector::GetMinMargin);
-	Nan::SetAccessor(instanceTemplate, Nan::New("edgeBlurSize").ToLocalChecked(), MSERDetector::GetEdgeBlurSize);
+	Nan::SetAccessor(instanceTemplate, Nan::New("delta").ToLocalChecked(), delta_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("minArea").ToLocalChecked(), minArea_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("maxArea").ToLocalChecked(), maxArea_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("maxVariation").ToLocalChecked(), maxVariation_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("minDiversity").ToLocalChecked(), minDiversity_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("maxEvolution").ToLocalChecked(), maxEvolution_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("areaThreshold").ToLocalChecked(), areaThreshold_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("minMargin").ToLocalChecked(), minMargin_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("edgeBlurSize").ToLocalChecked(), edgeBlurSize_getter);
 
-  Nan::Set(target,Nan::New("MSERDetector").ToLocalChecked(), FF::getFunction(ctor));
+	Nan::Set(target,Nan::New("MSERDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(MSERDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(MSERDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("MSERDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	MSERDetector::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("MSERDetector::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	MSERDetector* self = new MSERDetector();
@@ -51,7 +49,7 @@ NAN_METHOD(MSERDetector::New) {
 	self->areaThreshold = worker.areaThreshold;
 	self->minMargin = worker.minMargin;
 	self->edgeBlurSize = worker.edgeBlurSize;
-	self->detector = cv::MSER::create(worker.delta, worker.minArea, worker.maxArea, worker.maxVariation,
+	self->self = cv::MSER::create(worker.delta, worker.minArea, worker.maxArea, worker.maxVariation,
 		worker.minDiversity, worker.maxEvolution, worker.areaThreshold, worker.minMargin, worker.edgeBlurSize);
 	info.GetReturnValue().Set(info.Holder());
 }
@@ -60,12 +58,12 @@ struct DetectRegionsWorker : public CatchCvExceptionWorker {
 public:
     cv::Ptr<cv::MSER> det;
 
-    DetectRegionsWorker( MSERDetector *mser){
-        this->det = mser->getMSERDetector();
+    DetectRegionsWorker(cv::Ptr<cv::MSER> det){
+        this->det = det;
     }
 
     cv::Mat img;
-    std::vector<std::vector<cv::Point> > regions;
+    std::vector<std::vector<cv::Point>> regions;
     std::vector<cv::Rect> mser_bbox;
 
     std::string executeCatchCvExceptionWorker() {
@@ -81,24 +79,24 @@ public:
 
     v8::Local<v8::Value> getReturnValue() {
         v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-        Nan::Set(ret, FF::newString("msers"), ObjectArrayOfArraysConverter<Point2, cv::Point>::wrap(regions));
-        Nan::Set(ret, FF::newString("bboxes"), ObjectArrayConverter<Rect, cv::Rect>::wrap(mser_bbox));
+        Nan::Set(ret, FF::newString("msers"), Point2::ArrayOfArraysWithCastConverter<cv::Point2i>::wrap(regions));
+        Nan::Set(ret, FF::newString("bboxes"), Rect::ArrayWithCastConverter<cv::Rect>::wrap(mser_bbox));
         return ret;
     }
 };
 
 
 NAN_METHOD(MSERDetector::DetectRegions) {
-	FF::SyncBinding(
-		std::make_shared<DetectRegionsWorker>(FF_UNWRAP(info.This(), MSERDetector)),
+	FF::SyncBindingBase(
+		std::make_shared<DetectRegionsWorker>(MSERDetector::unwrapSelf(info)),
 		"MSERDetector::DetectRegions",
 		info
 	);
 }
 
 NAN_METHOD(MSERDetector::DetectRegionsAsync) {
-	FF::AsyncBinding(
-		std::make_shared<DetectRegionsWorker>(FF_UNWRAP(info.This(), MSERDetector)),
+	FF::AsyncBindingBase(
+		std::make_shared<DetectRegionsWorker>(MSERDetector::unwrapSelf(info)),
 		"MSERDetector::DetectRegionsAsync",
 		info
 	);

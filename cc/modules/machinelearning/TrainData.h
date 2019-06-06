@@ -6,32 +6,24 @@
 #ifndef __FF_TRAINDATA_H__
 #define __FF_TRAINDATA_H__
 
-class TrainData: public Nan::ObjectWrap {
+class TrainData: public FF::ObjectWrap<TrainData, cv::Ptr<cv::ml::TrainData>> {
 public:
-	cv::Ptr<cv::ml::TrainData> trainData;
-
-	static NAN_MODULE_INIT(Init);
-	static NAN_METHOD(New);
-
-	static FF_GETTER(TrainData, layout, trainData->getLayout());
-	static FF_GETTER_JSOBJ(TrainData, samples, trainData->getSamples(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(TrainData, responses, trainData->getResponses(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(TrainData, varIdx, trainData->getVarIdx(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(TrainData, sampleWeights, trainData->getSampleWeights(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-	static FF_GETTER_JSOBJ(TrainData, varType, trainData->getVarType(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
-
-	// TODO Getters
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Ptr<cv::ml::TrainData>* getNativeObjectPtr() { return &trainData; }
-	cv::Ptr<cv::ml::TrainData> getNativeObject() { return trainData; }
-
-	typedef InstanceConverter<TrainData, cv::Ptr<cv::ml::TrainData> > Converter;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
 	static const char* getClassName() {
 		return "TrainData";
 	}
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
+
+	FF_GETTER_CUSTOM(layout, FF::IntConverter, self->getLayout());
+	FF_GETTER_CUSTOM(samples, Mat::Converter, self->getSamples());
+	FF_GETTER_CUSTOM(responses, Mat::Converter, self->getResponses());
+	FF_GETTER_CUSTOM(varIdx, Mat::Converter, self->getVarIdx());
+	FF_GETTER_CUSTOM(sampleWeights, Mat::Converter, self->getSampleWeights());
+	FF_GETTER_CUSTOM(varType, Mat::Converter, self->getVarType());
+
 
 	struct NewWorker : public CatchCvExceptionWorker {
 	public:
@@ -50,17 +42,17 @@ public:
 		bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
 				Mat::Converter::arg(0, &samples, info) ||
-				IntConverter::arg(1, &layout, info) ||
+				FF::IntConverter::arg(1, &layout, info) ||
 				Mat::Converter::arg(2, &responses, info)
 			);
 		}
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntArrayConverter::optArg(3, &varIdx, info) ||
-				IntArrayConverter::optArg(4, &sampleIdx, info) ||
-				FloatArrayConverter::optArg(5, &sampleWeights, info) ||
-				UintArrayConverter::optArg(6, &varType, info)
+				FF::IntArrayConverter::optArg(3, &varIdx, info) ||
+				FF::IntArrayConverter::optArg(4, &sampleIdx, info) ||
+				FF::FloatArrayConverter::optArg(5, &sampleWeights, info) ||
+				FF::UintArrayConverter::optArg(6, &varType, info)
 			);
 		}
 
@@ -71,10 +63,10 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntArrayConverter::optProp(&varIdx, "varIdx", opts) ||
-				IntArrayConverter::optProp(&sampleIdx, "sampleIdx", opts) ||
-				FloatArrayConverter::optProp(&sampleWeights, "sampleWeights", opts) ||
-				UintArrayConverter::optProp(&varType, "varType", opts)
+				FF::IntArrayConverter::optProp(&varIdx, "varIdx", opts) ||
+				FF::IntArrayConverter::optProp(&sampleIdx, "sampleIdx", opts) ||
+				FF::FloatArrayConverter::optProp(&sampleWeights, "sampleWeights", opts) ||
+				FF::UintArrayConverter::optProp(&varType, "varType", opts)
 			);
 		}
 	};

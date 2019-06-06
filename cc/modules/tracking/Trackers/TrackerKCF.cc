@@ -23,14 +23,12 @@ NAN_MODULE_INIT(TrackerKCF::Init) {
 
 
 NAN_METHOD(TrackerKCF::New) {
-	FF_ASSERT_CONSTRUCT_CALL(TrackerKCF);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("TrackerKCF::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 
 	cv::TrackerKCF::Params params;
 	if (TrackerKCFParams::Converter::optArg(0, &params, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("TrackerKCF::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	TrackerKCF* self = new TrackerKCF();

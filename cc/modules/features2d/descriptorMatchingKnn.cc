@@ -123,11 +123,11 @@ public:
 	bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return Mat::Converter::arg(0, &descFrom, info)
 			|| Mat::Converter::arg(1, &descTo, info)
-			|| IntConverter::arg(2, &k, info);
+			|| FF::IntConverter::arg(2, &k, info);
 	}
 
 	v8::Local<v8::Value> getReturnValue() {
-		return ObjectArrayOfArraysConverter<DescriptorMatch, cv::DMatch>::wrap(dmatches);
+		return DescriptorMatch::ArrayOfArraysConverter::wrap(dmatches);
 	}
 };
 
@@ -136,7 +136,7 @@ void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, std::string
 #else
 void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	FF::SyncBinding(
+	FF::SyncBindingBase(
 		std::make_shared<MatchKnnWorker>(cv::DescriptorMatcher::create(matcherType)),
 		"MSERDetector::MatchKnn",
 		info
@@ -148,7 +148,7 @@ void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::s
 #else
 void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #endif
-	FF::AsyncBinding(
+	FF::AsyncBindingBase(
 		std::make_shared<MatchKnnWorker>(cv::DescriptorMatcher::create(matcherType)),
 		"MSERDetector::MatchKnnAsync",
 		info

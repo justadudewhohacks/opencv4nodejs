@@ -15,13 +15,13 @@ NAN_MODULE_INIT(Mat::Init) {
   constructor.Reset(ctor);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("Mat").ToLocalChecked());
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("rows").ToLocalChecked(), Mat::GetRows);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("cols").ToLocalChecked(), Mat::GetCols);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("type").ToLocalChecked(), Mat::GetType);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("channels").ToLocalChecked(), Mat::GetChannels);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("dims").ToLocalChecked(), Mat::GetDims);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("depth").ToLocalChecked(), Mat::GetDepth);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("empty").ToLocalChecked(), Mat::GetIsEmpty);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("rows").ToLocalChecked(), Mat::rows_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("cols").ToLocalChecked(), Mat::cols_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("type").ToLocalChecked(), Mat::type_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("channels").ToLocalChecked(), Mat::channels_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("dims").ToLocalChecked(), Mat::dims_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("depth").ToLocalChecked(), Mat::depth_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("empty").ToLocalChecked(), Mat::empty_getter);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("sizes").ToLocalChecked(), Mat::GetSizes);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("elemSize").ToLocalChecked(), Mat::GetElemSize);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("step").ToLocalChecked(), Mat::GetStep);
@@ -124,40 +124,37 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::Set(target,Nan::New("Mat").ToLocalChecked(), FF::getFunction(ctor));
 };
 
-void Mat::setNativeProps(cv::Mat mat) {
-  this->mat = mat;
-};
-
 NAN_METHOD(Mat::New) {
-  FF_ASSERT_CONSTRUCT_CALL(Mat);
+	FF::TryCatch tryCatch("Mat::New");
+	FF_ASSERT_CONSTRUCT_CALL();
   Mat* self = new Mat();
   /* from channels */
   if (info.Length() == 1 && info[0]->IsArray()) {
     v8::Local<v8::Array> jsChannelMats = v8::Local<v8::Array>::Cast(info[0]);
     std::vector<cv::Mat> channels;
     for (uint i = 0; i < jsChannelMats->Length(); i++) {
-      v8::Local<v8::Object> jsChannelMat = FF_CAST_OBJ(Nan::Get(jsChannelMats, i).ToLocalChecked());
+      v8::Local<v8::Object> jsChannelMat = Nan::To<v8::Object>(Nan::Get(jsChannelMats, i).ToLocalChecked()).ToLocalChecked();
 	  if (!Nan::New(Mat::constructor)->HasInstance(jsChannelMat)) {
-		return Nan::ThrowError(FF::newString("expected channel " + std::to_string(i) + " to be an instance of Mat"));
+		return tryCatch.throwError("expected channel " + std::to_string(i) + " to be an instance of Mat");
 	  }
-      cv::Mat channelMat = FF_UNWRAP_MAT_AND_GET(jsChannelMat);
+      cv::Mat channelMat = Mat::Converter::unwrapUnchecked(jsChannelMat);
       channels.push_back(channelMat);
       if (i > 0) {
 		if (channels.at(i - 1).rows != channelMat.rows) {
-			return Nan::ThrowError(FF::newString("Mat::New - rows mismatch "
+			return tryCatch.throwError("Mat::New - rows mismatch "
 				+ std::to_string(channels.at(i - 1).rows) + ", have " + std::to_string(channelMat.rows)
-				+ " at channel " + std::to_string(i)));
+				+ " at channel " + std::to_string(i));
 		}
 		if (channels.at(i - 1).cols != channelMat.cols) {
-			return Nan::ThrowError(FF::newString("Mat::New - cols mismatch "
+			return tryCatch.throwError("Mat::New - cols mismatch "
 				+ std::to_string(channels.at(i - 1).cols) + ", have " + std::to_string(channelMat.rows)
-				+ " at channel " + std::to_string(i)));
+				+ " at channel " + std::to_string(i));
 		}
       }
     }
     cv::Mat mat;
     cv::merge(channels, mat);
-    self->setNativeProps(mat);
+    self->setNativeObject(mat);
   }
   /* data array, type */
   else if (info.Length() == 2 && info[0]->IsArray() && info[1]->IsInt32()) {
@@ -167,18 +164,18 @@ NAN_METHOD(Mat::New) {
     long numCols = -1;
     for (uint i = 0; i < rowArray->Length(); i++) {
       if (!Nan::Get(rowArray, i).ToLocalChecked()->IsArray()) {
-        return Nan::ThrowError(Nan::New("Mat::New - Column should be an array, at column: " + std::to_string(i)).ToLocalChecked());
+        return tryCatch.throwError("Mat::New - Column should be an array, at column: " + std::to_string(i));
       }
       v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, i).ToLocalChecked());
       if (numCols != -1 && numCols != colArray->Length()) {
-        return Nan::ThrowError(Nan::New("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i)).ToLocalChecked());
+        return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i));
       }
       numCols = colArray->Length();
     }
 
     cv::Mat mat = cv::Mat(rowArray->Length(), numCols, type);
     FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, type, FF_MAT_FROM_JS_ARRAY, FF::matPut);
-    self->setNativeProps(mat);
+    self->setNativeObject(mat);
   }
   /* row, col, type */
   else if (info[0]->IsNumber() && info[1]->IsNumber() && info[2]->IsInt32()) {
@@ -189,9 +186,9 @@ NAN_METHOD(Mat::New) {
     if (info[3]->IsArray()) {
       v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[3]);
       if (mat.channels() != (long)vec->Length()) {
-        return Nan::ThrowError(FF::newString(
+        return tryCatch.throwError(
           std::string("Mat::New - number of channels (") + std::to_string(mat.channels())
-          + std::string(") do not match fill vector length ") + std::to_string(vec->Length()))
+          + std::string(") do not match fill vector length ") + std::to_string(vec->Length())
         );
       }
       FF_MAT_APPLY_TYPED_OPERATOR(mat, vec, type, FF_MAT_FILL, FF::matPut);
@@ -199,7 +196,7 @@ NAN_METHOD(Mat::New) {
     if (info[3]->IsNumber()) {
       FF_MAT_APPLY_TYPED_OPERATOR(mat, info[3], type, FF_MAT_FILL, FF::matPut);
     }
-    self->setNativeProps(mat);
+    self->setNativeObject(mat);
   }
   /* raw data, row, col, type */
   else if (info.Length() == 4 && info[1]->IsNumber() && info[2]->IsNumber() && info[3]->IsInt32()) {
@@ -208,7 +205,7 @@ NAN_METHOD(Mat::New) {
     cv::Mat mat(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[2]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), type);
     size_t size = mat.rows * mat.cols * mat.elemSize();
     memcpy(mat.data, data, size);
-    self->setNativeProps(mat);
+    self->setNativeObject(mat);
   }
   self->Wrap(info.Holder());
 
@@ -221,49 +218,43 @@ NAN_METHOD(Mat::New) {
 }
 
 NAN_METHOD(Mat::Eye) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Mat::Eye");
 	int rows, cols, type;
 	if (
-		IntConverter::arg(0, &rows, info) ||
-		IntConverter::arg(1, &cols, info) ||
-		IntConverter::arg(2, &type, info)
+		FF::IntConverter::arg(0, &rows, info) ||
+		FF::IntConverter::arg(1, &cols, info) ||
+		FF::IntConverter::arg(2, &type, info)
 	) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::Eye");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
-	v8::Local<v8::Object> jsEyeMat = FF::newInstance(Nan::New(Mat::constructor));
-	FF_UNWRAP_MAT_AND_GET(jsEyeMat) = cv::Mat::eye(cv::Size(cols, rows), type);
-	info.GetReturnValue().Set(jsEyeMat);
+	info.GetReturnValue().Set(Mat::Converter::wrap(cv::Mat::eye(cv::Size(cols, rows), type)));
 }
 
 NAN_METHOD(Mat::FlattenFloat) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Mat::FlattenFloat");
 	int rows, cols;
 	if (
-		IntConverter::arg(0, &rows, info) ||
-		IntConverter::arg(1, &cols, info)
+		FF::IntConverter::arg(0, &rows, info) ||
+		FF::IntConverter::arg(1, &cols, info)
 		) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::FlattenFloat");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
-	cv::Mat matSelf = Mat::Converter::unwrap(info.This());
+	cv::Mat matSelf = Mat::unwrapSelf(info);
 	cv::Mat mat2D(rows, cols, CV_32F, matSelf.ptr<float>());
 	info.GetReturnValue().Set(Mat::Converter::wrap(mat2D));
 }
 
 NAN_METHOD(Mat::At) {
-  FF_METHOD_CONTEXT("Mat::At");
+	FF::TryCatch tryCatch("Mat::At");
 
-  cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+  cv::Mat matSelf = Mat::unwrapSelf(info);
   v8::Local<v8::Value> val;
   v8::Local<v8::Value> jsVal;
 
-  if (FF_IS_ARRAY(info[0])) {
+  if (info[0]->IsArray()) {
     if ((long)v8::Local<v8::Array>::Cast(info[0])->Length() != matSelf.dims) {
-      FF_THROW("expected array length to be equal to the dims");
+		tryCatch.throwError("expected array length to be equal to the dims");
     }
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, val, matSelf.type(), FF_MAT_AT_ARRAY, FF::matGet);
   } else {
@@ -274,18 +265,15 @@ NAN_METHOD(Mat::At) {
 
   if (val->IsArray()) {
     v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(val);
-    v8::Local<v8::Object> jsVec;
+    v8::Local<v8::Value> jsVec;
     if (vec->Length() == 2) {
-      jsVec = FF::newInstance(Nan::New(Vec2::constructor));
-      FF_UNWRAP_VEC2(jsVec)->vec = cv::Vec2d(DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()));
+      jsVec = Vec2::Converter::wrap(cv::Vec2d(FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()), FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked())));
     }
     else if (vec->Length() == 3) {
-      jsVec = FF::newInstance(Nan::New(Vec3::constructor));
-      FF_UNWRAP_VEC3(jsVec)->vec = cv::Vec3d(DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 2).ToLocalChecked()));
+      jsVec = Vec3::Converter::wrap(cv::Vec3d(FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()), FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked()), FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 2).ToLocalChecked())));
     }
     else {
-      jsVec = FF::newInstance(Nan::New(Vec4::constructor));
-      FF_UNWRAP_VEC4(jsVec)->vec = cv::Vec4d(DoubleConverter::unwrap(Nan::Get(vec, 0).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 1).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 2).ToLocalChecked()), DoubleConverter::unwrap(Nan::Get(vec, 3).ToLocalChecked()));
+      jsVec = Vec4::Converter::wrap(cv::Vec4d(FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()), FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked()), FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 2).ToLocalChecked()), FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 3).ToLocalChecked())));
     }
     jsVal = jsVec;
   }
@@ -296,8 +284,8 @@ NAN_METHOD(Mat::At) {
 }
 
 NAN_METHOD(Mat::AtRaw) {
-  FF_METHOD_CONTEXT("Mat::AtRaw");
-  cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+	FF::TryCatch tryCatch("Mat::AtRaw");
+  cv::Mat matSelf = Mat::unwrapSelf(info);
   FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[0] - 1, "Mat::At row");
   FF_ASSERT_INDEX_RANGE(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[1] - 1, "Mat::At col");
   v8::Local<v8::Value> val;
@@ -306,8 +294,8 @@ NAN_METHOD(Mat::AtRaw) {
 }
 
 NAN_METHOD(Mat::Set) {
-  FF_METHOD_CONTEXT("Mat::Set");
-  cv::Mat matSelf = FF_UNWRAP_MAT_AND_GET(info.This());
+	FF::TryCatch tryCatch("Mat::Set");
+  cv::Mat matSelf = Mat::unwrapSelf(info);
   FF_ASSERT_INDEX_RANGE(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[0] - 1, "Mat::At row");
   FF_ASSERT_INDEX_RANGE(info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), matSelf.size[1] - 1, "Mat::At col");
 
@@ -317,44 +305,45 @@ NAN_METHOD(Mat::Set) {
     FF_ASSERT_CHANNELS(cn, (long)vec->Length(), "Mat::Set");
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, vec, matSelf.type(), FF_MAT_SET, FF::matPut);
   }
-  else if (Vec2::Converter::hasInstance(info[2])) {
+  else if (Vec2::hasInstance(info[2])) {
     FF_ASSERT_CHANNELS(cn, 2, "Mat::Set");
-    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<2>(FF_UNWRAP_VEC2_AND_GET(info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())), matSelf.type(), FF_MAT_SET, FF::matPut);
+    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<2>(Vec2::Converter::unwrapUnchecked(info[2])), matSelf.type(), FF_MAT_SET, FF::matPut);
   }
-  else if (Vec3::Converter::hasInstance(info[2])) {
+  else if (Vec3::hasInstance(info[2])) {
     FF_ASSERT_CHANNELS(cn, 3, "Mat::Set");
-    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<3>(FF_UNWRAP_VEC3_AND_GET(info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())), matSelf.type(), FF_MAT_SET, FF::matPut);
+    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<3>(Vec3::Converter::unwrapUnchecked(info[2])), matSelf.type(), FF_MAT_SET, FF::matPut);
   }
-  else if (Vec4::Converter::hasInstance(info[2])) {
+  else if (Vec4::hasInstance(info[2])) {
     FF_ASSERT_CHANNELS(cn, 4, "Mat::Set");
-    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<4>(FF_UNWRAP_VEC4_AND_GET(info[2]->ToObject(Nan::GetCurrentContext()).ToLocalChecked())), matSelf.type(), FF_MAT_SET, FF::matPut);
+    FF_MAT_APPLY_TYPED_OPERATOR(matSelf, FF::vecToJsArr<4>(Vec4::Converter::unwrapUnchecked(info[2])), matSelf.type(), FF_MAT_SET, FF::matPut);
   }
   else if (info[2]->IsNumber()) {
     FF_MAT_APPLY_TYPED_OPERATOR(matSelf, info[2], matSelf.type(), FF_MAT_SET, FF::matPut);
   }
   else {
-    return Nan::ThrowError(FF::newString("Mat::Set - unexpected argument 2"));
+    return tryCatch.throwError("unexpected argument 2");
   }
 }
 
 NAN_METHOD(Mat::SetTo) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::SetToWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatBindings::SetToWorker>(Mat::unwrapSelf(info)),
     "Mat::SetTo",
     info
   );
 }
 
 NAN_METHOD(Mat::SetToAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::SetToWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatBindings::SetToWorker>(Mat::unwrapSelf(info)),
     "Mat::SetToAsync",
     info
   );
 }
 
 NAN_METHOD(Mat::GetDataAsArray) {
-  cv::Mat mat = FF_UNWRAP_MAT_AND_GET(info.This());
+	FF::TryCatch tryCatch("Mat::GetDataAsArray");
+  cv::Mat mat = Mat::unwrapSelf(info);
   v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(mat.size[0]);
   if (mat.dims > 2) { // 3D
     FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT_3D, FF::matGet);
@@ -365,19 +354,17 @@ NAN_METHOD(Mat::GetDataAsArray) {
 }
 
 NAN_METHOD(Mat::GetRegion) {
-  if (!Rect::Converter::hasInstance(info[0])) {
-    return Nan::ThrowError("Mat::GetRegion expected arg0 to be an instance of Rect");
-  }
-  cv::Rect2d rect = FF_UNWRAP(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked(), Rect)->rect;
-  v8::Local<v8::Object> jsRegion = FF::newInstance(Nan::New(constructor));
-  FF_UNWRAP_MAT_AND_GET(jsRegion) = FF_UNWRAP_MAT_AND_GET(info.This())(rect);
-  info.GetReturnValue().Set(jsRegion);
+	FF::TryCatch tryCatch("Mat::GetRegion");
+	cv::Rect2d rect;
+	if (Rect::Converter::arg(0, &rect, info)) {
+		return tryCatch.reThrow();
+	}
+	info.GetReturnValue().Set(Mat::Converter::wrap(Mat::unwrapSelf(info)(rect)));
 }
 
 NAN_METHOD(Mat::Norm) {
-  FF_METHOD_CONTEXT("Mat::Norm");
-
-  bool withSrc2 = FF::hasArg(info, 0) && Mat::Converter::hasInstance(info[0]);
+	FF::TryCatch tryCatch("Mat::Norm");
+  bool withSrc2 = FF::hasArg(info, 0) && Mat::hasInstance(info[0]);
   uint i = withSrc2 ? 1 : 0;
   double norm;
 
@@ -388,57 +375,46 @@ NAN_METHOD(Mat::Norm) {
   uint normType = cv::NORM_L2;
   cv::Mat mask = cv::noArray().getMat();
 
-  FF::TryCatch tryCatch;
   if (
-	  hasOptArgsObj && (
-		UintConverter::optProp(&normType, "normType", optArgs) ||
+	  (hasOptArgsObj && (
+		FF::UintConverter::optProp(&normType, "normType", optArgs) ||
 		Mat::Converter::optProp(&mask, "mask", optArgs)
-		) || (
-		UintConverter::optArg(i, &normType, info) ||
+		)) || (
+		FF::UintConverter::optArg(i, &normType, info) ||
 		Mat::Converter::optArg(i + 1, &mask, info)
 		)
 	  ) {
-	  v8::Local<v8::Value> err = tryCatch.formatCatchedError("Mat::Norm");
-	  tryCatch.throwNew(err);
-	  return;
+	  return tryCatch.reThrow();
   }
 
   if (withSrc2) {
 	cv::Mat src2;
 	if (Mat::Converter::arg(0, &src2, info)) {
-		tryCatch.throwNew(tryCatch.formatCatchedError("Mat::Norm"));
-		return;
+		return tryCatch.reThrow();
 	}
-    norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), src2, (int)normType, mask);
+    norm = cv::norm(Mat::unwrapSelf(info), src2, (int)normType, mask);
   }
   else {
-    norm = cv::norm(FF_UNWRAP_MAT_AND_GET(info.This()), (int)normType, mask);
+    norm = cv::norm(Mat::unwrapSelf(info), (int)normType, mask);
   }
   info.GetReturnValue().Set(norm);
 }
 
 NAN_METHOD(Mat::Normalize) {
-	FF::SyncBinding(
-		std::make_shared<MatBindings::NormalizeWorker>(Mat::Converter::unwrap(info.This())),
-		"Mat::Normalize",
-		info
-	);
+	Mat::SyncBinding<MatBindings::Normalize>("Normalize", info);
 }
 
 NAN_METHOD(Mat::NormalizeAsync) {
-	FF::AsyncBinding(
-		std::make_shared<MatBindings::NormalizeWorker>(Mat::Converter::unwrap(info.This())),
-		"Mat::NormalizeAsync",
-		info
-	);
+	Mat::AsyncBinding<MatBindings::Normalize>("Normalize", info);
 }
 
 NAN_METHOD(Mat::Row) {
+	FF::TryCatch tryCatch("Mat::Row");
   if (!info[0]->IsNumber()) {
-    return Nan::ThrowError("usage: row(int r)");
+    return tryCatch.throwError("usage: row(int r)");
   }
   int r = (int)info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-  cv::Mat mat = Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat;
+  cv::Mat mat = Mat::unwrapSelf(info);
   v8::Local<v8::Array> row = Nan::New<v8::Array>(mat.cols);
   try {
     if (mat.type() == CV_32FC1) {
@@ -459,498 +435,345 @@ NAN_METHOD(Mat::Row) {
         Nan::Set(row, c, jsVec);
       }
     } else {
-      return Nan::ThrowError(Nan::New("not implemented yet - mat type:" + std::to_string(mat.type())).ToLocalChecked());
+      return tryCatch.throwError("not implemented yet - mat type:" + std::to_string(mat.type()));
     }
   } catch(std::exception &e) {
-    return Nan::ThrowError(e.what());
+    return tryCatch.throwError(e.what());
   } catch(...) {
-    return Nan::ThrowError("... Exception");
+    return tryCatch.throwError("... Exception");
   }
   info.GetReturnValue().Set(row);
 }
 
 NAN_METHOD(Mat::Release) {
     // must get pointer to the original; else we are just getting a COPY and then releasing that!
-    cv::Mat *mat = &(Nan::ObjectWrap::Unwrap<Mat>(info.This())->mat);
-    mat->release();
+    Mat::unwrapThis(info)->self.release();
 }
 
 NAN_METHOD(Mat::PushBack) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::PushBackWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::PushBack",
-    info
-  );
+	Mat::SyncBinding<MatBindings::PushBack>("PushBack", info);
 }
 
 NAN_METHOD(Mat::PushBackAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::PushBackWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::PushBackAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::PushBack>("PushBack", info);
 }
 
 NAN_METHOD(Mat::PopBack) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::PopBackWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::PopBack",
-    info
-  );
+	Mat::SyncBinding<MatBindings::PopBack>("PopBack", info);
 }
 
 NAN_METHOD(Mat::PopBackAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::PopBackWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::PopBackAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::PopBack>("PopBack", info);
 }
 
 NAN_METHOD(Mat::GetData) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::GetDataWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatBindings::GetDataWorker>(Mat::unwrapSelf(info)),
     "Mat::GetData",
     info
   );
 }
 
 NAN_METHOD(Mat::GetDataAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::GetDataWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatBindings::GetDataWorker>(Mat::unwrapSelf(info)),
     "Mat::GetDataAsync",
     info
   );
 }
 
 NAN_METHOD(Mat::Copy) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::CopyWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::Copy",
-    info
-  );
+	Mat::SyncBinding<MatBindings::Copy>("Copy", info);
 }
 
 NAN_METHOD(Mat::CopyAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::CopyWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::CopyAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::Copy>("Copy", info);
 }
 
 NAN_METHOD(Mat::CopyTo) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::CopyToWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::CopyTo",
-    info
-  );
+	Mat::SyncBinding<MatBindings::CopyTo>("CopyTo", info);
 }
 
 NAN_METHOD(Mat::CopyToAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::CopyToWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::CopyToAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::CopyTo>("CopyTo", info);
 }
 
 NAN_METHOD(Mat::ConvertTo) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::ConvertToWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::ConvertTo",
-    info
-  );
+	Mat::SyncBinding<MatBindings::ConvertTo>("ConvertTo", info);
 }
 
 NAN_METHOD(Mat::ConvertToAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::ConvertToWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::ConvertToAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::ConvertTo>("ConvertTo", info);
 }
 
 NAN_METHOD(Mat::SplitChannels) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::SplitChannelsWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::SplitChannels",
-    info
-  );
+	Mat::SyncBinding<MatBindings::SplitChannels>("SplitChannels", info);
 }
 
 NAN_METHOD(Mat::SplitChannelsAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::SplitChannelsWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::SplitChannelsAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::SplitChannels>("SplitChannels", info);
 }
 
 NAN_METHOD(Mat::AddWeighted) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::AddWeightedWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::AddWeighted",
-    info
-  );
+	Mat::SyncBinding<MatBindings::AddWeighted>("AddWeighted", info);
 }
 
 NAN_METHOD(Mat::AddWeightedAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::AddWeightedWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::AddWeightedAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::AddWeighted>("AddWeighted", info);
 }
 
 NAN_METHOD(Mat::MinMaxLoc) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::MinMaxLocWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::MinMaxLoc",
-    info
-  );
+	Mat::SyncBinding<MatBindings::MinMaxLoc>("MinMaxLoc", info);
 }
 
 NAN_METHOD(Mat::MinMaxLocAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::MinMaxLocWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::MinMaxLocAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::MinMaxLoc>("MinMaxLoc", info);
 }
 
 NAN_METHOD(Mat::FindNonZero) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::FindNonZeroWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::FindNonZero",
-    info
-  );
+	Mat::SyncBinding<MatBindings::FindNonZero>("FindNonZero", info);
 }
 
 NAN_METHOD(Mat::FindNonZeroAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::FindNonZeroWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::FindNonZeroAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::FindNonZero>("FindNonZero", info);
 }
 
 NAN_METHOD(Mat::CountNonZero) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::CountNonZeroWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::CountNonZero",
-    info
-  );
+	Mat::SyncBinding<MatBindings::CountNonZero>("CountNonZero", info);
 }
 
 NAN_METHOD(Mat::CountNonZeroAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::CountNonZeroWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::CountNonZeroAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::CountNonZero>("CountNonZero", info);
 }
 
 NAN_METHOD(Mat::PadToSquare) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::PadToSquareWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::PadToSquare",
-    info
-  );
+	Mat::SyncBinding<MatBindings::PadToSquare>("PadToSquare", info);
 }
 
 NAN_METHOD(Mat::PadToSquareAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::PadToSquareWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::PadToSquareAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::PadToSquare>("PadToSquare", info);
 }
 
 NAN_METHOD(Mat::Dct) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::DCTWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatBindings::DCTWorker>(Mat::unwrapSelf(info)),
     "Mat::Dct",
     info
   );
 }
 
 NAN_METHOD(Mat::DctAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::DCTWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatBindings::DCTWorker>(Mat::unwrapSelf(info)),
     "Mat::DctAsync",
     info
   );
 }
 
 NAN_METHOD(Mat::Idct) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::DCTWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatBindings::DCTWorker>(Mat::unwrapSelf(info)),
     "Mat::Idct",
     info
   );
 }
 
 NAN_METHOD(Mat::IdctAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::DCTWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatBindings::DCTWorker>(Mat::unwrapSelf(info)),
     "Mat::IdctAsync",
     info
   );
 }
 
 NAN_METHOD(Mat::Dft) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::DFTWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatBindings::DFTWorker>(Mat::unwrapSelf(info)),
     "Mat::Dft",
     info
   );
 }
 
 NAN_METHOD(Mat::DftAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::DFTWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatBindings::DFTWorker>(Mat::unwrapSelf(info)),
     "Mat::DftAsync",
     info
   );
 }
 
 NAN_METHOD(Mat::Idft) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::DFTWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatBindings::DFTWorker>(Mat::unwrapSelf(info)),
     "Mat::Idft",
     info
   );
 }
 
 NAN_METHOD(Mat::IdftAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::DFTWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatBindings::DFTWorker>(Mat::unwrapSelf(info)),
     "Mat::IdftAsync",
     info
   );
 }
 
 NAN_METHOD(Mat::MulSpectrums) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::MulSpectrumsWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatBindings::MulSpectrumsWorker>(Mat::unwrapSelf(info)),
     "Mat::MulSpectrums",
     info
   );
 }
 
 NAN_METHOD(Mat::MulSpectrumsAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::MulSpectrumsWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatBindings::MulSpectrumsWorker>(Mat::unwrapSelf(info)),
     "Mat::MulSpectrumsAsync",
     info
   );
 }
 
 NAN_METHOD(Mat::Transform) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::TransformWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatBindings::TransformWorker>(Mat::unwrapSelf(info)),
     "Mat::Transform",
     info
   );
 }
 
 NAN_METHOD(Mat::TransformAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::TransformWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatBindings::TransformWorker>(Mat::unwrapSelf(info)),
     "Mat::TransformAsync",
     info
   );
 }
 
 NAN_METHOD(Mat::PerspectiveTransform) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::PerspectiveTransformWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatBindings::PerspectiveTransformWorker>(Mat::unwrapSelf(info)),
     "Mat::PerspectiveTransform",
     info
   );
 }
 
 NAN_METHOD(Mat::PerspectiveTransformAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::PerspectiveTransformWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatBindings::PerspectiveTransformWorker>(Mat::unwrapSelf(info)),
     "Mat::PerspectiveTransformAsync",
     info
   );
 }
 
 NAN_METHOD(Mat::Flip) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::FlipWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatBindings::FlipWorker>(Mat::unwrapSelf(info)),
     "Mat::Flip",
     info
   );
 }
 
 NAN_METHOD(Mat::FlipAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::FlipWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatBindings::FlipWorker>(Mat::unwrapSelf(info)),
     "Mat::FlipAsync",
     info
   );
 }
 
 NAN_METHOD(Mat::Sum) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::SumWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::Sum",
-    info
-  );
+	Mat::SyncBinding<MatBindings::Sum>("Sum", info);
 }
 
 NAN_METHOD(Mat::SumAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::SumWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::SumAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::Sum>("Sum", info);
 }
 
 NAN_METHOD(Mat::ConvertScaleAbs) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::ConvertScaleAbsWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::ConvertScaleAbs",
-    info
-  );
+	Mat::SyncBinding<MatBindings::ConvertScaleAbs>("ConvertScaleAbs", info);
 }
 
 NAN_METHOD(Mat::ConvertScaleAbsAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::ConvertScaleAbsWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::ConvertScaleAbsAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::ConvertScaleAbs>("ConvertScaleAbs", info);
 }
 
 NAN_METHOD(Mat::GoodFeaturesToTrack) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::GoodFeaturesToTrackWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::GoodFeaturesToTrack",
-    info
-  );
+	Mat::SyncBinding<MatBindings::GoodFeaturesToTrack>("GoodFeaturesToTrack", info);
 }
 
 NAN_METHOD(Mat::GoodFeaturesToTrackAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::GoodFeaturesToTrackWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::GoodFeaturesToTrackAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::GoodFeaturesToTrack>("GoodFeaturesToTrack", info);
 }
 
 NAN_METHOD(Mat::Mean) {
-	FF::SyncBinding(
-		std::make_shared<MatBindings::MeanWorker>(Mat::Converter::unwrap(info.This())),
-		"Mat::Mean",
-		info
-	);
+	Mat::SyncBinding<MatBindings::Mean>("Mean", info);
 }
 
 NAN_METHOD(Mat::MeanAsync) {
-	FF::AsyncBinding(
-		std::make_shared<MatBindings::MeanWorker>(Mat::Converter::unwrap(info.This())),
-		"Mat::MeanAsync",
-		info
-	);
+	Mat::AsyncBinding<MatBindings::Mean>("Mean", info);
 }
 
 NAN_METHOD(Mat::MeanStdDev) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::MeanStdDevWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::MeanStdDev",
-    info
-  );
+	Mat::SyncBinding<MatBindings::MeanStdDev>("MeanStdDev", info);
 }
 
 NAN_METHOD(Mat::MeanStdDevAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::MeanStdDevWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::MeanStdDevAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::MeanStdDev>("MeanStdDev", info);
 }
 
 NAN_METHOD(Mat::CopyMakeBorder) {
-	FF::SyncBinding(
-		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::Converter::unwrap(info.This())),
+	FF::SyncBindingBase(
+		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::unwrapSelf(info)),
 		"Mat::CopyMakeBorder",
 		info
 	);
 }
 
 NAN_METHOD(Mat::CopyMakeBorderAsync) {
-	FF::AsyncBinding(
-		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::Converter::unwrap(info.This())),
+	FF::AsyncBindingBase(
+		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::unwrapSelf(info)),
 		"Mat::CopyMakeBorderAsync",
 		info
 	);
 }
 
 NAN_METHOD(Mat::Reduce) {
-	FF::SyncBinding(
-		std::make_shared<MatBindings::ReduceWorker>(Mat::Converter::unwrap(info.This())),
-		"Mat::Reduce",
-		info
-	);
+	Mat::SyncBinding<MatBindings::Reduce>("Reduce", info);
 }
 
 NAN_METHOD(Mat::ReduceAsync) {
-	FF::AsyncBinding(
-		std::make_shared<MatBindings::ReduceWorker>(Mat::Converter::unwrap(info.This())),
-		"Mat::ReduceAsync",
-		info
-	);
+	Mat::AsyncBinding<MatBindings::Reduce>("Reduce", info);
 }
 
 NAN_METHOD(Mat::Eigen) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::EigenWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::Eigen",
-    info
-  );
+	Mat::SyncBinding<MatBindings::Eigen>("Eigen", info);
 }
 
 NAN_METHOD(Mat::EigenAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::EigenWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::EigenAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::Eigen>("Eigen", info);
 }
 
 NAN_METHOD(Mat::Solve) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::SolveWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::Solve",
-    info
-  );
+	Mat::SyncBinding<MatBindings::Solve>("Solve", info);
 }
 
 NAN_METHOD(Mat::SolveAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::SolveWorker>(Mat::Converter::unwrap(info.This())),
-    "Mat::SolveAsync",
-    info
-  );
+	Mat::AsyncBinding<MatBindings::Solve>("Solve", info);
 }
 
 #if CV_VERSION_MINOR > 1
 NAN_METHOD(Mat::Rotate) {
-  FF::SyncBinding(
-    std::make_shared<MatBindings::RotateWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatBindings::RotateWorker>(Mat::unwrapSelf(info)),
     "Mat::Rotate",
     info
   );
 }
 
 NAN_METHOD(Mat::RotateAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatBindings::RotateWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatBindings::RotateWorker>(Mat::unwrapSelf(info)),
     "Mat::RotateAsync",
     info
   );

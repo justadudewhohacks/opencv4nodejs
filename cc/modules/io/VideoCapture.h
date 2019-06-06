@@ -7,21 +7,15 @@
 #ifndef __FF_VIDEOCAPTURE_H__
 #define __FF_VIDEOCAPTURE_H__
 
-class VideoCapture : public Nan::ObjectWrap {
+class VideoCapture : public FF::ObjectWrap<VideoCapture, cv::VideoCapture> {
 public:
-	cv::VideoCapture cap;
-	std::string path;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::VideoCapture* getNativeObjectPtr() { return &cap; }
-	cv::VideoCapture getNativeObject() { return cap; }
-
-	typedef InstanceConverter<VideoCapture, cv::VideoCapture> Converter;
 
 	static const char* getClassName() {
 		return "VideoCapture";
 	}
+
+	std::string path;
 
 	static NAN_MODULE_INIT(Init);
 

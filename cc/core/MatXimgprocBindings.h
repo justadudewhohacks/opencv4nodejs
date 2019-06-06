@@ -31,14 +31,14 @@ namespace MatXimgprocBindings {
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
         Mat::Converter::arg(0, &guide, info) ||
-        IntConverter::arg(1, &radius, info) ||
-        DoubleConverter::arg(2, &eps, info)
+        FF::IntConverter::arg(1, &radius, info) ||
+		  FF::DoubleConverter::arg(2, &eps, info)
         );
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        IntConverter::optArg(3, &ddepth, info)
+		  FF::IntConverter::optArg(3, &ddepth, info)
         );
     }
 
@@ -49,7 +49,7 @@ namespace MatXimgprocBindings {
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
-        IntConverter::optProp(&ddepth, "ddepth", opts)
+		  FF::IntConverter::optProp(&ddepth, "ddepth", opts)
       );
     }
   };

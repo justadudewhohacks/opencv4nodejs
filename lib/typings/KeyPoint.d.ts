@@ -6,7 +6,7 @@ export class KeyPoint {
   readonly angle: number;
   readonly response: number;
   readonly octave: number;
-  readonly classId: number;
+  readonly class_id: number;
   readonly localId: number;
-  constructor(point: Point2, size: number, angle: number, response: number, octave: number, classId: number);
+  constructor(point: Point2, size: number, angle: number, response: number, octave: number, class_id: number);
 }

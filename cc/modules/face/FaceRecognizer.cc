@@ -13,56 +13,52 @@ void FaceRecognizer::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(FaceRecognizer::Save) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("FaceRecognizer::Save");
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("FaceRecognizer::Save");
-		tryCatch.throwNew(err);
-		return;
+	if (FF::StringConverter::arg(0, &path, info)) {
+		return tryCatch.reThrow();
 	}
 	Nan::ObjectWrap::Unwrap<FaceRecognizer>(info.This())->save(path);
 }
 
 NAN_METHOD(FaceRecognizer::Load) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("FaceRecognizer::Load");
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("FaceRecognizer::Load");
-		tryCatch.throwNew(err);
-		return;
+	if (FF::StringConverter::arg(0, &path, info)) {
+		return tryCatch.reThrow();
 	}
 	Nan::ObjectWrap::Unwrap<FaceRecognizer>(info.This())->load(path);
 }
 
 NAN_METHOD(FaceRecognizer::Train) {
-  FF::SyncBinding(
-    std::make_shared<FaceRecognizerBindings::TrainWorker>(FF_UNWRAP(info.This(), FaceRecognizer)->getFaceRecognizer()),
+  FF::SyncBindingBase(
+    std::make_shared<FaceRecognizerBindings::TrainWorker>(FaceRecognizer::unwrapThis(info)->getFaceRecognizer()),
     "FaceRecognizer::Train",
     info
   );
 }
 
 NAN_METHOD(FaceRecognizer::TrainAsync) {
-  FF::AsyncBinding(
-    std::make_shared<FaceRecognizerBindings::TrainWorker>(FF_UNWRAP(info.This(), FaceRecognizer)->getFaceRecognizer()),
+  FF::AsyncBindingBase(
+    std::make_shared<FaceRecognizerBindings::TrainWorker>(FaceRecognizer::unwrapThis(info)->getFaceRecognizer()),
     "FaceRecognizer::TrainAsync",
     info
   );
 }
 
 NAN_METHOD(FaceRecognizer::Predict) {
-  FF::SyncBinding(
-    std::make_shared<FaceRecognizerBindings::PredictWorker>(FF_UNWRAP(info.This(), FaceRecognizer)->getFaceRecognizer()),
+  FF::SyncBindingBase(
+    std::make_shared<FaceRecognizerBindings::PredictWorker>(FaceRecognizer::unwrapThis(info)->getFaceRecognizer()),
     "FaceRecognizer::Predict",
     info
   );
 }
 
 NAN_METHOD(FaceRecognizer::PredictAsync) {
-  FF::AsyncBinding(
-    std::make_shared<FaceRecognizerBindings::PredictWorker>(FF_UNWRAP(info.This(), FaceRecognizer)->getFaceRecognizer()),
+  FF::AsyncBindingBase(
+    std::make_shared<FaceRecognizerBindings::PredictWorker>(FaceRecognizer::unwrapThis(info)->getFaceRecognizer()),
     "FaceRecognizer::PredictAsync",
     info
   );

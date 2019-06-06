@@ -15,16 +15,16 @@ NAN_MODULE_INIT(FacemarkAAMData::Init) {
   ctor->SetClassName(FF::newString("FacemarkAAMData"));
   instanceTemplate->SetInternalFieldCount(1);
 
-  Nan::SetAccessor(instanceTemplate, FF::newString("s0"), s0Get, s0Set);
+  Nan::SetAccessor(instanceTemplate, FF::newString("s0"), s0_getter, s0_setter);
 
   Nan::Set(target,FF::newString("FacemarkAAMData"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(FacemarkAAMData::New) {
-  FF_ASSERT_CONSTRUCT_CALL(FacemarkAAMData);
-  FF_METHOD_CONTEXT("FacemarkAAMData::New");
+	FF::TryCatch tryCatch("FacemarkAAMData::New");
+	FF_ASSERT_CONSTRUCT_CALL();
   FacemarkAAMData *self = new FacemarkAAMData();
-  self->data = cv::face::FacemarkAAM::Data();
+  self->self = cv::face::FacemarkAAM::Data();
   self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());
 };

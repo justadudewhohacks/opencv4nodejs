@@ -1,7 +1,7 @@
 import { Mat } from './Mat.d';
 
 export class SuperpixelLSC {
-  readonly img: Mat;
+  readonly image: Mat;
   readonly labels: Mat;
   readonly labelContourMask: Mat;
   readonly regionSize: number;

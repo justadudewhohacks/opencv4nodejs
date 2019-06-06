@@ -9,34 +9,29 @@
 #ifndef __FF_SVM_H__
 #define __FF_SVM_H__
 
-class SVM: public Nan::ObjectWrap {
+class SVM: public FF::ObjectWrap<SVM, cv::Ptr<cv::ml::SVM>> {
 public:
-	cv::Ptr<cv::ml::SVM> svm;
-
-	void setParams(v8::Local<v8::Object> params);
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Ptr<cv::ml::SVM>* getNativeObjectPtr() { return &svm; }
-	cv::Ptr<cv::ml::SVM> getNativeObject() { return svm; }
-
-	typedef InstanceConverter<SVM, cv::Ptr<cv::ml::SVM> > Converter;
 
 	static const char* getClassName() {
 		return "SVM";
 	}
 
+	void setParams(v8::Local<v8::Object> params);
+
 	static NAN_MODULE_INIT(Init);
 	
-	static FF_GETTER(SVM, c, svm->getC());
-	static FF_GETTER(SVM, coef0, svm->getCoef0());
-	static FF_GETTER(SVM, degree, svm->getDegree());
-	static FF_GETTER(SVM, gamma, svm->getGamma());
-	static FF_GETTER(SVM, nu, svm->getNu());
-	static FF_GETTER(SVM, p, svm->getP());
-	static FF_GETTER(SVM, kernelType, svm->getKernelType());
-	static FF_GETTER(SVM, varCount, svm->getVarCount());
-	static FF_GETTER(SVM, isTrained, svm->isTrained());
-	static FF_GETTER_JSOBJ(SVM, classWeights, svm->getClassWeights(), FF_UNWRAP_MAT_AND_GET, Mat::constructor);
+	FF_GETTER_CUSTOM(c, FF::DoubleConverter, self->getC());
+	FF_GETTER_CUSTOM(coef0, FF::DoubleConverter, self->getCoef0());
+	FF_GETTER_CUSTOM(degree, FF::DoubleConverter, self->getDegree());
+	FF_GETTER_CUSTOM(gamma, FF::DoubleConverter, self->getGamma());
+	FF_GETTER_CUSTOM(nu, FF::DoubleConverter, self->getNu());
+	FF_GETTER_CUSTOM(p, FF::DoubleConverter, self->getP());
+	FF_GETTER_CUSTOM(kernelType, FF::IntConverter, self->getKernelType());
+	FF_GETTER_CUSTOM(varCount, FF::IntConverter, self->getVarCount());
+	FF_GETTER_CUSTOM(isTrained, FF::BoolConverter, self->isTrained());
+	FF_GETTER_CUSTOM(classWeights, Mat::Converter, self->getClassWeights());
+
 	// TODO custom kernel
 
 	static NAN_METHOD(New);

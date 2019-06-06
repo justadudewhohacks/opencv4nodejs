@@ -47,288 +47,288 @@ void MatCalib3d::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(MatCalib3d::Rodrigues) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::RodriguesWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::RodriguesWorker>(Mat::unwrapSelf(info)),
     "Mat::Rodrigues",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::RodriguesAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::RodriguesWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::RodriguesWorker>(Mat::unwrapSelf(info)),
     "Mat::RodriguesAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::RQDecomp3x3) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::RQDecomp3x3Worker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::RQDecomp3x3Worker>(Mat::unwrapSelf(info)),
     "Mat::RQDecomp3x3",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::RQDecomp3x3Async) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::RQDecomp3x3Worker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::RQDecomp3x3Worker>(Mat::unwrapSelf(info)),
     "Mat::RQDecomp3x3Async",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::DecomposeProjectionMatrix) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::DecomposeProjectionMatrixWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::DecomposeProjectionMatrixWorker>(Mat::unwrapSelf(info)),
     "Mat::DecomposeProjectionMatrix",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::DecomposeProjectionMatrixAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::DecomposeProjectionMatrixWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::DecomposeProjectionMatrixWorker>(Mat::unwrapSelf(info)),
     "Mat::DecomposeProjectionMatrixAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::MatMulDeriv) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::MatMulDerivWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::MatMulDerivWorker>(Mat::unwrapSelf(info)),
     "Mat::MatMulDeriv",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::MatMulDerivAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::MatMulDerivWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::MatMulDerivWorker>(Mat::unwrapSelf(info)),
     "Mat::MatMulDerivAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::FindChessboardCorners) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::FindChessboardCornersWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::FindChessboardCornersWorker>(Mat::unwrapSelf(info)),
     "Mat::FindChessboardCorners",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::FindChessboardCornersAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::FindChessboardCornersWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::FindChessboardCornersWorker>(Mat::unwrapSelf(info)),
     "Mat::FindChessboardCornersAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::DrawChessboardCorners) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::DrawChessboardCornersWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::DrawChessboardCornersWorker>(Mat::unwrapSelf(info)),
     "Mat::DrawChessboardCorners",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::DrawChessboardCornersAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::DrawChessboardCornersWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::DrawChessboardCornersWorker>(Mat::unwrapSelf(info)),
     "Mat::DrawChessboardCornersAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::Find4QuadCornerSubpix) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::Find4QuadCornerSubpixWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::Find4QuadCornerSubpixWorker>(Mat::unwrapSelf(info)),
     "Mat::Find4QuadCornerSubpix",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::Find4QuadCornerSubpixAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::Find4QuadCornerSubpixWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::Find4QuadCornerSubpixWorker>(Mat::unwrapSelf(info)),
     "Mat::Find4QuadCornerSubpixAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::CalibrationMatrixValues) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::CalibrationMatrixValuesWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::CalibrationMatrixValuesWorker>(Mat::unwrapSelf(info)),
     "Mat::CalibrationMatrixValues",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::CalibrationMatrixValuesAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::CalibrationMatrixValuesWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::CalibrationMatrixValuesWorker>(Mat::unwrapSelf(info)),
     "Mat::CalibrationMatrixValuesAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::StereoRectify) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::StereoRectifyWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::StereoRectifyWorker>(Mat::unwrapSelf(info)),
     "Mat::StereoRectify",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::StereoRectifyAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::StereoRectifyWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::StereoRectifyWorker>(Mat::unwrapSelf(info)),
     "Mat::StereoRectifyAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::Rectify3Collinear) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::Rectify3CollinearWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::Rectify3CollinearWorker>(Mat::unwrapSelf(info)),
     "Mat::Rectify3Collinear",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::Rectify3CollinearAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::Rectify3CollinearWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::Rectify3CollinearWorker>(Mat::unwrapSelf(info)),
     "Mat::Rectify3CollinearAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::GetOptimalNewCameraMatrix) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::GetOptimalNewCameraMatrixWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::GetOptimalNewCameraMatrixWorker>(Mat::unwrapSelf(info)),
     "Mat::GetOptimalNewCameraMatrix",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::GetOptimalNewCameraMatrixAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::GetOptimalNewCameraMatrixWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::GetOptimalNewCameraMatrixWorker>(Mat::unwrapSelf(info)),
     "Mat::GetOptimalNewCameraMatrixAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::DecomposeEssentialMat) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::DecomposeEssentialMatWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::DecomposeEssentialMatWorker>(Mat::unwrapSelf(info)),
     "Mat::DecomposeEssentialMat",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::DecomposeEssentialMatAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::DecomposeEssentialMatWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::DecomposeEssentialMatWorker>(Mat::unwrapSelf(info)),
     "Mat::DecomposeEssentialMatAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::TriangulatePoints) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::TriangulatePointsWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::TriangulatePointsWorker>(Mat::unwrapSelf(info)),
     "Mat::TriangulatePoints",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::TriangulatePointsAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::TriangulatePointsWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::TriangulatePointsWorker>(Mat::unwrapSelf(info)),
     "Mat::TriangulatePointsAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::CorrectMatches) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::CorrectMatchesWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::CorrectMatchesWorker>(Mat::unwrapSelf(info)),
     "Mat::CorrectMatches",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::CorrectMatchesAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::CorrectMatchesWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::CorrectMatchesWorker>(Mat::unwrapSelf(info)),
     "Mat::CorrectMatchesAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::FilterSpeckles) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::FilterSpecklesWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::FilterSpecklesWorker>(Mat::unwrapSelf(info)),
     "Mat::FilterSpeckles",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::FilterSpecklesAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::FilterSpecklesWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::FilterSpecklesWorker>(Mat::unwrapSelf(info)),
     "Mat::FilterSpecklesAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::ValidateDisparity) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::ValidateDisparityWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::ValidateDisparityWorker>(Mat::unwrapSelf(info)),
     "Mat::ValidateDisparity",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::ValidateDisparityAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::ValidateDisparityWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::ValidateDisparityWorker>(Mat::unwrapSelf(info)),
     "Mat::ValidateDisparityAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::ReprojectImageTo3D) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::ReprojectImageTo3DWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::ReprojectImageTo3DWorker>(Mat::unwrapSelf(info)),
     "Mat::ReprojectImageTo3D",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::ReprojectImageTo3DAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::ReprojectImageTo3DWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::ReprojectImageTo3DWorker>(Mat::unwrapSelf(info)),
     "Mat::ReprojectImageTo3DAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::DecomposeHomographyMat) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::DecomposeHomographyMatWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::DecomposeHomographyMatWorker>(Mat::unwrapSelf(info)),
     "Mat::DecomposeHomographyMat",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::DecomposeHomographyMatAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::DecomposeHomographyMatWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::DecomposeHomographyMatWorker>(Mat::unwrapSelf(info)),
     "Mat::DecomposeHomographyMatAsync",
     info
   );
@@ -337,32 +337,32 @@ NAN_METHOD(MatCalib3d::DecomposeHomographyMatAsync) {
 #if CV_VERSION_MINOR > 0
 
 NAN_METHOD(MatCalib3d::FindEssentialMat) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::FindEssentialMatWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::FindEssentialMatWorker>(Mat::unwrapSelf(info)),
     "Mat::FindEssentialMat",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::FindEssentialMatAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::FindEssentialMatWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::FindEssentialMatWorker>(Mat::unwrapSelf(info)),
     "Mat::FindEssentialMatAsync",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::RecoverPose) {
-  FF::SyncBinding(
-    std::make_shared<MatCalib3dBindings::RecoverPoseWorker>(Mat::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<MatCalib3dBindings::RecoverPoseWorker>(Mat::unwrapSelf(info)),
     "Mat::RecoverPose",
     info
   );
 }
 
 NAN_METHOD(MatCalib3d::RecoverPoseAsync) {
-  FF::AsyncBinding(
-    std::make_shared<MatCalib3dBindings::RecoverPoseWorker>(Mat::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<MatCalib3dBindings::RecoverPoseWorker>(Mat::unwrapSelf(info)),
     "Mat::RecoverPoseAsync",
     info
   );

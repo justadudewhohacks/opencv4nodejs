@@ -15,8 +15,8 @@ describe('ximgproc', () => {
   });
 
   describe('SuperpixelSEEDS', () => {
-    const numSuperpixels = 100;
-    const numLevels = 2;
+    const num_superpixels = 100;
+    const num_levels = 2;
 
     describe('constructor', () => {
       it('should throw if no args', () => {
@@ -24,12 +24,12 @@ describe('ximgproc', () => {
       });
 
       it('should be constructable with required args', () => {
-        const superpixelSeeds = new cv.SuperpixelSEEDS(testImg, numSuperpixels, numLevels);
-        expect(superpixelSeeds).to.have.property('img').instanceOf(cv.Mat);
-        assertMetaData(testImg)(superpixelSeeds.img);
+        const superpixelSeeds = new cv.SuperpixelSEEDS(testImg, num_superpixels, num_levels);
+        expect(superpixelSeeds).to.have.property('image').instanceOf(cv.Mat);
+        assertMetaData(testImg)(superpixelSeeds.image);
         assertPropsWithValue(superpixelSeeds)({
-          numSuperpixels,
-          numLevels
+          num_superpixels,
+          num_levels
         });
       });
     });
@@ -37,7 +37,7 @@ describe('ximgproc', () => {
     // TODO: FIX ME
     describe('iterate', () => {
       it('should iterate with default values', () => {
-        const superpixelSeeds = new cv.SuperpixelSEEDS(testImg, numSuperpixels, numLevels);
+        const superpixelSeeds = new cv.SuperpixelSEEDS(testImg, num_superpixels, num_levels);
         superpixelSeeds.iterate();
         assert(superpixelSeeds.numCalculatedSuperpixels > 0, 'no superpixels calculated');
         assertPropsWithValue(superpixelSeeds.labels)({
@@ -58,8 +58,8 @@ describe('ximgproc', () => {
 
         it('should be constructable with required args', () => {
           const superpixel = new cv.SuperpixelSLIC(testImg, algorithm);
-          expect(superpixel).to.have.property('img').instanceOf(cv.Mat);
-          assertMetaData(testImg)(superpixel.img);
+          expect(superpixel).to.have.property('image').instanceOf(cv.Mat);
+          assertMetaData(testImg)(superpixel.image);
           assertPropsWithValue(superpixel)({
             algorithm
           });
@@ -87,8 +87,8 @@ describe('ximgproc', () => {
 
         it('should be constructable with required args', () => {
           const superpixel = new cv.SuperpixelLSC(testImg);
-          expect(superpixel).to.have.property('img').instanceOf(cv.Mat);
-          assertMetaData(testImg)(superpixel.img);
+          expect(superpixel).to.have.property('image').instanceOf(cv.Mat);
+          assertMetaData(testImg)(superpixel.image);
         });
       });
 

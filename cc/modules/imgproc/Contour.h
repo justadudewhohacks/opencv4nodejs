@@ -6,26 +6,33 @@
 #ifndef __FF_CONTOUR_H__
 #define __FF_CONTOUR_H__
 
-class Contour: public Nan::ObjectWrap {
+class Contour: public FF::ObjectWrap<Contour, std::vector<cv::Point2i>> {
 public:
-  std::vector<cv::Point2i> contour;
-  cv::Vec4i hierarchy;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "Contour";
+	}
+
+	cv::Vec4i hierarchy;
 
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
 	static NAN_GETTER(GetNumPoints) {
-		info.GetReturnValue().Set(Nan::New((uint)FF_UNWRAP_CONTOUR_AND_GET(info.This()).size()));
+		info.GetReturnValue().Set(Nan::New((uint)Contour::unwrapSelf(info).size()));
 	}
 
-	static FF_GETTER_JSOBJ(Contour, GetHierarchy, hierarchy, FF_UNWRAP_VEC4_AND_GET, Vec4::constructor);
+	static NAN_GETTER(GetHierarchy) {
+		info.GetReturnValue().Set(Vec4::Converter::wrap(unwrapThis(info)->hierarchy));
+	}
 
 	static NAN_GETTER(GetArea) {
-		info.GetReturnValue().Set(Nan::New(cv::contourArea(FF_UNWRAP_CONTOUR_AND_GET(info.This()), false)));
+		info.GetReturnValue().Set(Nan::New(cv::contourArea(Contour::unwrapSelf(info), false)));
 	}
 
 	static NAN_GETTER(GetIsConvex) {
-		info.GetReturnValue().Set(Nan::New(cv::isContourConvex(FF_UNWRAP_CONTOUR_AND_GET(info.This()))));
+		info.GetReturnValue().Set(Nan::New(cv::isContourConvex(Contour::unwrapSelf(info))));
 	}
 
 	static NAN_METHOD(GetPoints);
@@ -46,17 +53,6 @@ public:
 	static NAN_METHOD(FitEllipse);
 	static NAN_METHOD(MinAreaRect);
 	static NAN_METHOD(_Moments);
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-  std::vector<cv::Point2i>* getNativeObjectPtr() { return &contour; }
-  std::vector<cv::Point2i> getNativeObject() { return contour; }
-
-  typedef InstanceConverter<Contour, std::vector<cv::Point2i>> Converter;
-
-  static const char* getClassName() {
-	  return "Contour";
-  }
 };
 
 #endif

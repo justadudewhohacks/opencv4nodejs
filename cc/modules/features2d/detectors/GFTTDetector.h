@@ -4,44 +4,45 @@
 #ifndef __FF_GFTTDETECTOR_H__
 #define __FF_GFTTDETECTOR_H__
 
-class GFTTDetector : public FeatureDetector {
+class GFTTDetector : public FeatureDetector, public FF::ObjectWrapTemplate<GFTTDetector, cv::Ptr<cv::GFTTDetector>> {
 public:
-	cv::Ptr<cv::GFTTDetector> detector;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-  static NAN_MODULE_INIT(Init); 
-  static NAN_METHOD(New);
-
-	static FF_GETTER(GFTTDetector, GetMaxFeatures, detector->getMaxFeatures());
-	static FF_GETTER(GFTTDetector, GetQualityLevel, detector->getQualityLevel());
-	static FF_GETTER(GFTTDetector, GetMinDistance, detector->getMinDistance());
-	static FF_GETTER(GFTTDetector, GetBlockSize, detector->getBlockSize());
-	static FF_GETTER(GFTTDetector, GetUseHarrisDetector, detector->getHarrisDetector());
-	static FF_GETTER(GFTTDetector, GetK, detector->getK());
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Ptr<cv::FeatureDetector> getDetector() {
-		return detector;
+	static const char* getClassName() {
+		return "GFTTDetector";
 	}
 
+	cv::Ptr<cv::FeatureDetector> getDetector() {
+		return self;
+	}
+
+	FF_GETTER_CUSTOM(maxFeatures, FF::IntConverter, self->getMaxFeatures());
+	FF_GETTER_CUSTOM(qualityLevel, FF::DoubleConverter, self->getQualityLevel());
+	FF_GETTER_CUSTOM(minDistance, FF::DoubleConverter, self->getMinDistance());
+	FF_GETTER_CUSTOM(blockSize, FF::IntConverter, self->getBlockSize());
+	FF_GETTER_CUSTOM(harrisDetector, FF::BoolConverter, self->getHarrisDetector());
+	FF_GETTER_CUSTOM(k, FF::DoubleConverter, self->getK());
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
 
 	struct NewWorker : CatchCvExceptionWorker {
 	public:
-		int maxCorners = 1000;
+		int maxFeatures = 1000;
 		double qualityLevel = 0.01;
 		double minDistance = 1;
 		int blockSize = 3;
-		bool useHarrisDetector = false;
+		bool harrisDetector = false;
 		double k = 0.04;
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntConverter::optArg(0, &maxCorners, info) ||
-				DoubleConverter::optArg(1, &qualityLevel, info) ||
-				DoubleConverter::optArg(2, &minDistance, info) ||
-				IntConverter::optArg(3, &blockSize, info) ||
-				BoolConverter::optArg(4, &useHarrisDetector, info) ||
-				DoubleConverter::optArg(5, &k, info)
+				FF::IntConverter::optArg(0, &maxFeatures, info) ||
+				FF::DoubleConverter::optArg(1, &qualityLevel, info) ||
+				FF::DoubleConverter::optArg(2, &minDistance, info) ||
+				FF::IntConverter::optArg(3, &blockSize, info) ||
+				FF::BoolConverter::optArg(4, &harrisDetector, info) ||
+				FF::DoubleConverter::optArg(5, &k, info)
 				);
 		}
 
@@ -52,12 +53,12 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntConverter::optProp(&maxCorners, "maxCorners", opts) ||
-				DoubleConverter::optProp(&qualityLevel, "qualityLevel", opts) ||
-				DoubleConverter::optProp(&minDistance, "minDistance", opts) ||
-				IntConverter::optProp(&blockSize, "blockSize", opts) ||
-				BoolConverter::optProp(&useHarrisDetector, "useHarrisDetector", opts) ||
-				DoubleConverter::optProp(&k, "k", opts)
+				FF::IntConverter::optProp(&maxFeatures, "maxFeatures", opts) ||
+				FF::DoubleConverter::optProp(&qualityLevel, "qualityLevel", opts) ||
+				FF::DoubleConverter::optProp(&minDistance, "minDistance", opts) ||
+				FF::IntConverter::optProp(&blockSize, "blockSize", opts) ||
+				FF::BoolConverter::optProp(&harrisDetector, "harrisDetector", opts) ||
+				FF::DoubleConverter::optProp(&k, "k", opts)
 				);
 		}
 

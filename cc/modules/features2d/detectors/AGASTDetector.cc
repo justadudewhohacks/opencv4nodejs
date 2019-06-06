@@ -11,9 +11,9 @@ NAN_MODULE_INIT(AGASTDetector::Init) {
 	ctor->SetClassName(Nan::New("AGASTDetector").ToLocalChecked());
   instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), AGASTDetector::GetThreshold);
-	Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), AGASTDetector::GetNonmaxSuppression);
-	Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), AGASTDetector::GetType);
+	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), threshold_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), nonmaxSuppression_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), type_getter);
 
   Nan::Set(target,Nan::New("AGASTDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
@@ -26,9 +26,9 @@ public:
 
 	bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 		return (
-			IntConverter::optArg(0, &threshold, info) ||
-			BoolConverter::optArg(1, &nonmaxSuppression, info) ||
-			IntConverter::optArg(2, &type, info)
+			FF::IntConverter::optArg(0, &threshold, info) ||
+			FF::BoolConverter::optArg(1, &nonmaxSuppression, info) ||
+			FF::IntConverter::optArg(2, &type, info)
 		);
 	}
 
@@ -39,9 +39,9 @@ public:
 	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 		v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 		return (
-			IntConverter::optProp(&threshold, "threshold", opts) ||
-			BoolConverter::optProp(&nonmaxSuppression, "nonmaxSuppression", opts) ||
-			IntConverter::optProp(&type, "type", opts)
+			FF::IntConverter::optProp(&threshold, "threshold", opts) ||
+			FF::BoolConverter::optProp(&nonmaxSuppression, "nonmaxSuppression", opts) ||
+			FF::IntConverter::optProp(&type, "type", opts)
 		);
 	}
 
@@ -51,18 +51,16 @@ public:
 };
 
 NAN_METHOD(AGASTDetector::New) {
-	FF_ASSERT_CONSTRUCT_CALL(AGASTDetector);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("AGASTDetector::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	AGASTDetector::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("AGASTDetector::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	AGASTDetector* self = new AGASTDetector();
-	self->detector = cv::AgastFeatureDetector::create(worker.threshold, worker.nonmaxSuppression, worker.type);
+	self->self = cv::AgastFeatureDetector::create(worker.threshold, worker.nonmaxSuppression, worker.type);
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }

@@ -11,33 +11,26 @@
 #ifndef __FF_HOGDESCRIPTOR_H__
 #define __FF_HOGDESCRIPTOR_H__
 
-class HOGDescriptor : public Nan::ObjectWrap {
+class HOGDescriptor : public FF::ObjectWrap<HOGDescriptor, std::shared_ptr<cv::HOGDescriptor>> {
 public:
-	std::shared_ptr<cv::HOGDescriptor> hog;
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::HOGDescriptor* getNativeObjectPtr() { return hog.get(); }
-	std::shared_ptr<cv::HOGDescriptor> getNativeObject() { return hog; }
-
-	typedef InstanceConverter<HOGDescriptor, 	std::shared_ptr<cv::HOGDescriptor>> Converter;
 
 	static const char* getClassName() {
 		return "HOGDescriptor";
 	}
 
-	static FF_GETTER_JSOBJ(HOGDescriptor, winSize, hog->winSize, FF_UNWRAP_SIZE_AND_GET, Size::constructor);
-	static FF_GETTER_JSOBJ(HOGDescriptor, blockSize, hog->blockSize, FF_UNWRAP_SIZE_AND_GET, Size::constructor);
-	static FF_GETTER_JSOBJ(HOGDescriptor, blockStride, hog->blockStride, FF_UNWRAP_SIZE_AND_GET, Size::constructor);
-	static FF_GETTER_JSOBJ(HOGDescriptor, cellSize, hog->cellSize, FF_UNWRAP_SIZE_AND_GET, Size::constructor);
-	static FF_GETTER(HOGDescriptor, nbins, hog->nbins);
-	static FF_GETTER(HOGDescriptor, derivAperture, hog->derivAperture);
-	static FF_GETTER(HOGDescriptor, histogramNormType, hog->histogramNormType);
-	static FF_GETTER(HOGDescriptor, nlevels, hog->nlevels);
-	static FF_GETTER(HOGDescriptor, winSigma, hog->winSigma);
-	static FF_GETTER(HOGDescriptor, L2HysThreshold, hog->L2HysThreshold);
-	static FF_GETTER(HOGDescriptor, gammaCorrection, hog->gammaCorrection);
-	static FF_GETTER(HOGDescriptor, signedGradient, hog->signedGradient);
+	FF_ACCESSORS_PTR(winSize, Size::Converter);
+	FF_ACCESSORS_PTR(blockSize, Size::Converter);
+	FF_ACCESSORS_PTR(blockStride, Size::Converter);
+	FF_ACCESSORS_PTR(cellSize, Size::Converter);
+	FF_ACCESSORS_PTR(nbins, FF::IntConverter);
+	FF_ACCESSORS_PTR(derivAperture, FF::IntConverter);
+	FF_ACCESSORS_PTR(winSigma, FF::DoubleConverter);
+	FF_ACCESSORS_PTR(histogramNormType, FF::IntConverter);
+	FF_ACCESSORS_PTR(L2HysThreshold, FF::DoubleConverter);
+	FF_ACCESSORS_PTR(gammaCorrection, FF::BoolConverter);
+	FF_ACCESSORS_PTR(nlevels, FF::IntConverter);
+	FF_ACCESSORS_PTR(signedGradient, FF::BoolConverter);
 
 	static NAN_MODULE_INIT(Init);
 

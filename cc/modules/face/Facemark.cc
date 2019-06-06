@@ -6,25 +6,21 @@
 #if CV_VERSION_MINOR >= 4
 
 NAN_METHOD(Facemark::Save) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Facemark::Save");
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Facemark::Save");
-		tryCatch.throwNew(err);
-		return;
+	if (FF::StringConverter::arg(0, &path, info)) {
+		return tryCatch.reThrow();
 	}
 	Nan::ObjectWrap::Unwrap<Facemark>(info.This())->save(path);
 }
 
 NAN_METHOD(Facemark::Load) {
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("Facemark::Load");
 
 	std::string path;
-	if (StringConverter::arg(0, &path, info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("Facemark::Load");
-		tryCatch.throwNew(err);
-		return;
+	if (FF::StringConverter::arg(0, &path, info)) {
+		return tryCatch.reThrow();
 	}
 	Nan::ObjectWrap::Unwrap<Facemark>(info.This())->load(path);
 }
@@ -51,32 +47,32 @@ void Facemark::Init(v8::Local<v8::FunctionTemplate> ctor) {
 };
 
 NAN_METHOD(Facemark::LoadModel) {
-  FF::SyncBinding(
-    std::make_shared<FacemarkBindings::LoadModelWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+  FF::SyncBindingBase(
+    std::make_shared<FacemarkBindings::LoadModelWorker>(Facemark::unwrapThis(info)->getFacemark()),
     "Facemark::LoadModel",
     info
   );
 }
 
 NAN_METHOD(Facemark::LoadModelAsync) {
-  FF::AsyncBinding(
-    std::make_shared<FacemarkBindings::LoadModelWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+  FF::AsyncBindingBase(
+    std::make_shared<FacemarkBindings::LoadModelWorker>(Facemark::unwrapThis(info)->getFacemark()),
     "Facemark::LoadModelAsync",
     info
   );
 }
 
 NAN_METHOD(Facemark::Fit) {
-	FF::SyncBinding(
-		std::make_shared<FacemarkBindings::FitWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+	FF::SyncBindingBase(
+		std::make_shared<FacemarkBindings::FitWorker>(Facemark::unwrapThis(info)->getFacemark()),
 		"Facemark::Fit",
 		info
 	);
 }
 
 NAN_METHOD(Facemark::FitAsync) {
-	FF::AsyncBinding(
-		std::make_shared<FacemarkBindings::FitWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+	FF::AsyncBindingBase(
+		std::make_shared<FacemarkBindings::FitWorker>(Facemark::unwrapThis(info)->getFacemark()),
 		"Facemark::FitAsync",
 		info
 	);
@@ -85,65 +81,62 @@ NAN_METHOD(Facemark::FitAsync) {
 #if CV_MINOR_VERSION < 2
 
 NAN_METHOD(Facemark::AddTrainingSample) {
-	FF::SyncBinding(
-		std::make_shared<FacemarkBindings::AddTrainingSampleWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+	FF::SyncBindingBase(
+		std::make_shared<FacemarkBindings::AddTrainingSampleWorker>(Facemark::unwrapThis(info)->getFacemark()),
 		"Facemark::AddTrainingSample",
 		info
 	);
 }
 
 NAN_METHOD(Facemark::AddTrainingSampleAsync) {
-	FF::AsyncBinding(
-		std::make_shared<FacemarkBindings::AddTrainingSampleWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+	FF::AsyncBindingBase(
+		std::make_shared<FacemarkBindings::AddTrainingSampleWorker>(Facemark::unwrapThis(info)->getFacemark()),
 		"Facemark::AddTrainingSampleAsync",
 		info
 	);
 }
 
 NAN_METHOD(Facemark::GetData) {
-  FF::SyncBinding(
-    std::make_shared<FacemarkBindings::GetDataWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+  FF::SyncBindingBase(
+    std::make_shared<FacemarkBindings::GetDataWorker>(Facemark::unwrapThis(info)->getFacemark()),
     "Facemark::GetData",
     info
   );
 }
 
 NAN_METHOD(Facemark::GetDataAsync) {
-  FF::AsyncBinding(
-    std::make_shared<FacemarkBindings::GetDataWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+  FF::AsyncBindingBase(
+    std::make_shared<FacemarkBindings::GetDataWorker>(Facemark::unwrapThis(info)->getFacemark()),
     "Facemark::GetDataAsync",
     info
   );
 }
 
 NAN_METHOD(Facemark::GetFaces) {
-  FF::SyncBinding(
-    std::make_shared<FacemarkBindings::GetFacesWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+  FF::SyncBindingBase(
+    std::make_shared<FacemarkBindings::GetFacesWorker>(Facemark::unwrapThis(info)->getFacemark()),
     "Facemark::GetFaces",
     info
   );
 }
 
 NAN_METHOD(Facemark::GetFacesAsync) {
-  FF::AsyncBinding(
-    std::make_shared<FacemarkBindings::GetFacesWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+  FF::AsyncBindingBase(
+    std::make_shared<FacemarkBindings::GetFacesWorker>(Facemark::unwrapThis(info)->getFacemark()),
     "Facemark::GetFacesAsync",
     info
   );
 }
 
 NAN_METHOD(Facemark::SetFaceDetector) {
-  FF_METHOD_CONTEXT("SetFaceDetector");
-
+	FF::TryCatch tryCatch("Facemark::SetFaceDetector");
   if (!info[0]->IsFunction()) {
-    return Nan::ThrowError(Nan::New("Facemark::SetFaceDetector - Error: "
-                                    "expected argument 0 to be of type")
-                               .ToLocalChecked());
+    return tryCatch.throwError("expected argument 0 to be of type");
   }
   v8::Local<v8::Function> cbFunc = v8::Local<v8::Function>::Cast(info[0]);
   Nan::Callback *callback = new Nan::Callback(cbFunc);
 
-  bool results = FF_UNWRAP(info.This(), Facemark)
+  bool results = Facemark::unwrapThis(info)
       ->getFacemark()
       ->setFaceDetector((cv::face::FN_FaceDetector)detector, callback);
 
@@ -151,16 +144,16 @@ NAN_METHOD(Facemark::SetFaceDetector) {
 }
 
 NAN_METHOD(Facemark::Training) {
-  FF::SyncBinding(
-    std::make_shared<FacemarkBindings::TrainingWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+  FF::SyncBindingBase(
+    std::make_shared<FacemarkBindings::TrainingWorker>(Facemark::unwrapThis(info)->getFacemark()),
     "Facemark::Train",
     info
   );
 }
 
 NAN_METHOD(Facemark::TrainingAsync) {
-  FF::AsyncBinding(
-    std::make_shared<FacemarkBindings::TrainingWorker>(FF_UNWRAP(info.This(), Facemark)->getFacemark()),
+  FF::AsyncBindingBase(
+    std::make_shared<FacemarkBindings::TrainingWorker>(Facemark::unwrapThis(info)->getFacemark()),
     "Facemark::TrainAsync",
     info
   );
@@ -181,8 +174,8 @@ bool Facemark::detector(cv::InputArray image, cv::OutputArray faces,
   v8::Local<v8::Object> jsObject = resource.runInAsyncScope(Nan::GetCurrentContext()->Global(), **callback, 1, argv)
     .ToLocalChecked()->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 
-  std::vector<cv::Rect> _faces;
-  ObjectArrayConverter<Rect, cv::Rect>::unwrap(&_faces, jsObject);
+  std::vector<cv::Rect2d> _faces;
+  Rect::ArrayConverter::unwrapTo(&_faces, jsObject);
 
   cv::Mat(_faces).copyTo(faces);
 

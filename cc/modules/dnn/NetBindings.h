@@ -29,7 +29,7 @@ namespace NetBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        StringConverter::optArg(1, &name, info)
+        FF::StringConverter::optArg(1, &name, info)
       );
     }
   };
@@ -61,7 +61,7 @@ namespace NetBindings {
 
     v8::Local<v8::Value> getReturnValue() {
       if (outBlobNames.size() > 0) {
-        return ObjectArrayConverter<Mat, cv::Mat>::wrap(outputBlobs);
+        return Mat::ArrayConverter::wrap(outputBlobs);
       }
 
       return Mat::Converter::wrap(returnValue);
@@ -69,12 +69,12 @@ namespace NetBindings {
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 #if CV_VERSION_MINOR > 2
-      if (FF_IS_ARRAY(info[0])) {
-        return StringArrayConverter::optArg(0, &outBlobNames, info);
+      if (info[0]->IsArray()) {
+        return FF::StringArrayConverter::optArg(0, &outBlobNames, info);
       }
 #endif
       return (
-        StringConverter::optArg(0, &outputName, info)
+        FF::StringConverter::optArg(0, &outputName, info)
       );
     }
   };
@@ -98,7 +98,7 @@ namespace NetBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return StringArrayConverter::wrap(returnValue);
+      return FF::StringArrayConverter::wrap(returnValue);
     }
   };
 
@@ -117,7 +117,7 @@ namespace NetBindings {
     }
 
     v8::Local<v8::Value> getReturnValue() {
-      return IntArrayConverter::wrap(layerIndexes);
+      return FF::IntArrayConverter::wrap(layerIndexes);
     }
   };
 

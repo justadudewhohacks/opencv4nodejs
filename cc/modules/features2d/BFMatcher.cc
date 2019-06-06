@@ -12,8 +12,8 @@ NAN_MODULE_INIT(BFMatcher::Init) {
 
    ctor->SetClassName(Nan::New("BFMatcher").ToLocalChecked());
 
-	Nan::SetAccessor(instanceTemplate, Nan::New("normType").ToLocalChecked(), BFMatcher::GetNormType);
-  Nan::SetAccessor(instanceTemplate, Nan::New("crossCheck").ToLocalChecked(), BFMatcher::GetCrossCheck);
+	Nan::SetAccessor(instanceTemplate, Nan::New("normType").ToLocalChecked(), normType_getter);
+	Nan::SetAccessor(instanceTemplate, Nan::New("crossCheck").ToLocalChecked(), crossCheck_getter);
 
     Nan::SetPrototypeMethod(ctor, "match", match);
     Nan::SetPrototypeMethod(ctor, "matchAsync", matchAsync);
@@ -24,20 +24,18 @@ NAN_MODULE_INIT(BFMatcher::Init) {
 };
 
 NAN_METHOD(BFMatcher::New) {
-	FF_ASSERT_CONSTRUCT_CALL(BFMatcher);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("BFMatcher::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	BFMatcher::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("BFMatcher::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	BFMatcher* self = new BFMatcher();
 	self->normType = worker.normType;
 	self->crossCheck = worker.crossCheck;
-	self->bfmatcher = cv::BFMatcher(
+	self->self = cv::BFMatcher(
 		worker.normType,
 		worker.crossCheck
 	);
@@ -46,24 +44,24 @@ NAN_METHOD(BFMatcher::New) {
 }
 
 NAN_METHOD(BFMatcher::match) {
-  FF::SyncBinding(
-    std::make_shared<BFMatcherBindings::MatchWorker>(BFMatcher::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<BFMatcherBindings::MatchWorker>(BFMatcher::unwrapSelf(info)),
     "BFMatcher::match",
     info
   );
 }
 
 NAN_METHOD(BFMatcher::matchAsync) {
-  FF::AsyncBinding(
-    std::make_shared<BFMatcherBindings::MatchWorker>(BFMatcher::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<BFMatcherBindings::MatchWorker>(BFMatcher::unwrapSelf(info)),
     "BFMatcher::matchAsync",
     info
   );
 }
 
 NAN_METHOD(BFMatcher::knnMatch) {
-  FF::SyncBinding(
-    std::make_shared<BFMatcherBindings::MatchKnnWorker>(BFMatcher::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<BFMatcherBindings::MatchKnnWorker>(BFMatcher::unwrapSelf(info)),
     "BFMatcher::knnMatch",
     info
   );
@@ -71,8 +69,8 @@ NAN_METHOD(BFMatcher::knnMatch) {
 
 
 NAN_METHOD(BFMatcher::knnMatchAsync) {
-  FF::AsyncBinding(
-    std::make_shared<BFMatcherBindings::MatchKnnWorker>(BFMatcher::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<BFMatcherBindings::MatchKnnWorker>(BFMatcher::unwrapSelf(info)),
     "BFMatcher::knnMatchAsync",
     info
   );

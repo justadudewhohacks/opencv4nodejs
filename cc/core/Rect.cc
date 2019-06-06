@@ -8,10 +8,10 @@ NAN_MODULE_INIT(Rect::Init) {
   Rect::constructor.Reset(ctor);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("Rect").ToLocalChecked());
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Rect::GetX);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Rect::GetY);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("width").ToLocalChecked(), Rect::GetWidth);
-  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("height").ToLocalChecked(), Rect::GetHeight);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Rect::x_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Rect::y_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("width").ToLocalChecked(), Rect::width_getter);
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("height").ToLocalChecked(), Rect::height_getter);
 
   Nan::SetPrototypeMethod(ctor, "and", And);
   Nan::SetPrototypeMethod(ctor, "or", Or);
@@ -26,83 +26,84 @@ NAN_MODULE_INIT(Rect::Init) {
 };
 
 NAN_METHOD(Rect::New) {
-  FF_ASSERT_CONSTRUCT_CALL(Rect);
+	FF::TryCatch tryCatch("Rect::New");
+	FF_ASSERT_CONSTRUCT_CALL();
   Rect* self = new Rect();
   if (info.Length() == 0) {
-    self->rect = cv::Rect2d();
+    self->self = cv::Rect2d();
   } else {
     if (info.Length() < 4) {
-      return Nan::ThrowError("Rect::New - expected arguments x, y, width, height");
+      return tryCatch.throwError("expected arguments x, y, width, height");
     }
     double x = info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     double y = info[1]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     double width = info[2]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     double height = info[3]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-    self->rect = cv::Rect2d(x, y, width, height);
+    self->self = cv::Rect2d(x, y, width, height);
   }
   self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(Rect::And) {
-  FF::SyncBinding(
-    std::make_shared<RectBindings::AndWorker>(Rect::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<RectBindings::AndWorker>(Rect::unwrapSelf(info)),
     "Rect::And",
     info
   );
 }
 
 NAN_METHOD(Rect::Or) {
-  FF::SyncBinding(
-    std::make_shared<RectBindings::OrWorker>(Rect::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<RectBindings::OrWorker>(Rect::unwrapSelf(info)),
     "Rect::Or",
     info
   );
 }
 
 NAN_METHOD(Rect::ToSquare) {
-  FF::SyncBinding(
-    std::make_shared<RectBindings::ToSquareWorker>(Rect::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<RectBindings::ToSquareWorker>(Rect::unwrapSelf(info)),
     "Rect::ToSquare",
     info
   );
 }
 
 NAN_METHOD(Rect::ToSquareAsync) {
-  FF::AsyncBinding(
-    std::make_shared<RectBindings::ToSquareWorker>(Rect::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<RectBindings::ToSquareWorker>(Rect::unwrapSelf(info)),
     "Rect::ToSquareAsync",
     info
   );
 }
 
 NAN_METHOD(Rect::Pad) {
-  FF::SyncBinding(
-    std::make_shared<RectBindings::PadWorker>(Rect::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<RectBindings::PadWorker>(Rect::unwrapSelf(info)),
     "Rect::Pad",
     info
   );
 }
 
 NAN_METHOD(Rect::PadAsync) {
-  FF::AsyncBinding(
-    std::make_shared<RectBindings::PadWorker>(Rect::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<RectBindings::PadWorker>(Rect::unwrapSelf(info)),
     "Rect::PadAsync",
     info
   );
 }
 
 NAN_METHOD(Rect::Rescale) {
-  FF::SyncBinding(
-    std::make_shared<RectBindings::RescaleWorker>(Rect::Converter::unwrap(info.This())),
+  FF::SyncBindingBase(
+    std::make_shared<RectBindings::RescaleWorker>(Rect::unwrapSelf(info)),
     "Rect::Rescale",
     info
   );
 }
 
 NAN_METHOD(Rect::RescaleAsync) {
-  FF::AsyncBinding(
-    std::make_shared<RectBindings::RescaleWorker>(Rect::Converter::unwrap(info.This())),
+  FF::AsyncBindingBase(
+    std::make_shared<RectBindings::RescaleWorker>(Rect::unwrapSelf(info)),
     "Rect::RescaleAsync",
     info
   );

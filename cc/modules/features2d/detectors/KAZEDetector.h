@@ -4,25 +4,27 @@
 #ifndef __FF_KAZEDETECTOR_H__
 #define __FF_KAZEDETECTOR_H__
 
-class KAZEDetector : public FeatureDetector {
+class KAZEDetector : public FeatureDetector, public FF::ObjectWrapTemplate<KAZEDetector, cv::Ptr<cv::KAZE>> {
 public:
-	cv::Ptr<cv::KAZE> detector;
+	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static const char* getClassName() {
+		return "KAZEDetector";
+	}
+
+	cv::Ptr<cv::FeatureDetector> getDetector() {
+		return self;
+	}
+
+	FF_GETTER_CUSTOM(extended, FF::BoolConverter, self->getExtended());
+	FF_GETTER_CUSTOM(upright, FF::BoolConverter, self->getUpright());
+	FF_GETTER_CUSTOM(threshold, FF::FloatConverter, self->getThreshold());
+	FF_GETTER_CUSTOM(nOctaves, FF::IntConverter, self->getNOctaves());
+	FF_GETTER_CUSTOM(nOctaveLayers, FF::IntConverter, self->getNOctaveLayers());
+	FF_GETTER_CUSTOM(diffusivity, FF::IntConverter, self->getDiffusivity());
 
   static NAN_MODULE_INIT(Init); 
   static NAN_METHOD(New);
-
-	static FF_GETTER(KAZEDetector, GetExtended, detector->getExtended());
-	static FF_GETTER(KAZEDetector, GetUpright, detector->getUpright());
-	static FF_GETTER(KAZEDetector, GetThreshold, detector->getThreshold());
-	static FF_GETTER(KAZEDetector, GetNOctaves, detector->getNOctaves());
-	static FF_GETTER(KAZEDetector, GetNOctaveLayers, detector->getNOctaveLayers());
-	static FF_GETTER(KAZEDetector, GetDiffusivity, detector->getDiffusivity());
-
-  static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::Ptr<cv::FeatureDetector> getDetector() {
-		return detector;
-	}
 
 	struct NewWorker : CatchCvExceptionWorker {
 	public:
@@ -36,12 +38,12 @@ public:
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				BoolConverter::optArg(0, &extended, info) ||
-				BoolConverter::optArg(1, &upright, info) ||
-				DoubleConverter::optArg(2, &threshold, info) ||
-				IntConverter::optArg(3, &nOctaves, info) ||
-				IntConverter::optArg(4, &nOctaveLayers, info) ||
-				IntConverter::optArg(5, &diffusivity, info)
+				FF::BoolConverter::optArg(0, &extended, info) ||
+				FF::BoolConverter::optArg(1, &upright, info) ||
+				FF::DoubleConverter::optArg(2, &threshold, info) ||
+				FF::IntConverter::optArg(3, &nOctaves, info) ||
+				FF::IntConverter::optArg(4, &nOctaveLayers, info) ||
+				FF::IntConverter::optArg(5, &diffusivity, info)
 				);
 		}
 
@@ -52,12 +54,12 @@ public:
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				BoolConverter::optProp(&extended, "extended", opts) ||
-				BoolConverter::optProp(&upright, "upright", opts) ||
-				DoubleConverter::optProp(&threshold, "threshold", opts) ||
-				IntConverter::optProp(&nOctaves, "nOctaves", opts) ||
-				IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
-				IntConverter::optProp(&diffusivity, "diffusivity", opts)
+				FF::BoolConverter::optProp(&extended, "extended", opts) ||
+				FF::BoolConverter::optProp(&upright, "upright", opts) ||
+				FF::DoubleConverter::optProp(&threshold, "threshold", opts) ||
+				FF::IntConverter::optProp(&nOctaves, "nOctaves", opts) ||
+				FF::IntConverter::optProp(&nOctaveLayers, "nOctaveLayers", opts) ||
+				FF::IntConverter::optProp(&diffusivity, "diffusivity", opts)
 				);
 		}
 

@@ -11,8 +11,8 @@ namespace FaceRecognizerBindings {
 
 		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
 			return (
-				IntConverter::optArg(0, &num_components, info) ||
-				DoubleConverter::optArg(1, &threshold, info)
+				FF::IntConverter::optArg(0, &num_components, info) ||
+				FF::DoubleConverter::optArg(1, &threshold, info)
 				);
 		}
 
@@ -23,8 +23,8 @@ namespace FaceRecognizerBindings {
 		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
 			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
 			return (
-				IntConverter::optProp(&num_components, "num_components", opts) ||
-				DoubleConverter::optProp(&threshold, "threshold", opts)
+				FF::IntConverter::optProp(&num_components, "num_components", opts) ||
+				FF::DoubleConverter::optProp(&threshold, "threshold", opts)
 				);
 		}
 	};
@@ -46,8 +46,8 @@ namespace FaceRecognizerBindings {
   
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        ObjectArrayConverter<Mat, cv::Mat>::arg(0, &images, info) ||
-        IntArrayConverter::arg(1, &labels, info)
+        Mat::ArrayConverter::arg(0, &images, info) ||
+        FF::IntArrayConverter::arg(1, &labels, info)
       );
     }
   };

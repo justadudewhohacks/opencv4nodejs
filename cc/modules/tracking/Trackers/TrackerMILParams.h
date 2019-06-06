@@ -4,41 +4,24 @@
 #ifndef __FF_TRACKERMILPARAMS_H__
 #define __FF_TRACKERMILPARAMS_H__
 
-class TrackerMILParams : public Nan::ObjectWrap {
+class TrackerMILParams : public FF::ObjectWrap<TrackerMILParams, cv::TrackerMIL::Params> {
 public:
-	cv::TrackerMIL::Params params;
-
-  static NAN_MODULE_INIT(Init);
-  static NAN_METHOD(New);
-
-	static FF_GETTER(TrackerMILParams, samplerInitInRadiusGet, params.samplerInitInRadius);
-	static FF_SETTER_NUMBER(TrackerMILParams, samplerInitInRadius, params.samplerInitInRadius);
-	static FF_GETTER(TrackerMILParams, samplerSearchWinSizeGet, params.samplerSearchWinSize);
-	static FF_SETTER_NUMBER(TrackerMILParams, samplerSearchWinSize, params.samplerSearchWinSize);
-	static FF_GETTER(TrackerMILParams, samplerTrackInRadiusGet, params.samplerTrackInRadius);
-	static FF_SETTER_NUMBER(TrackerMILParams, samplerTrackInRadius, params.samplerTrackInRadius);
-	static FF_GETTER(TrackerMILParams, samplerInitMaxNegNumGet, params.samplerInitMaxNegNum);
-	static FF_SETTER_INT(TrackerMILParams, samplerInitMaxNegNum, params.samplerInitMaxNegNum);
-	static FF_GETTER(TrackerMILParams, samplerTrackMaxPosNumGet, params.samplerTrackMaxPosNum);
-	static FF_SETTER_INT(TrackerMILParams, samplerTrackMaxPosNum, params.samplerTrackMaxPosNum);
-	static FF_GETTER(TrackerMILParams, samplerTrackMaxNegNumGet, params.samplerTrackMaxNegNum);
-	static FF_SETTER_INT(TrackerMILParams, samplerTrackMaxNegNum, params.samplerTrackMaxNegNum);
-	static FF_GETTER(TrackerMILParams, featureSetNumFeaturesGet, params.featureSetNumFeatures);
-	static FF_SETTER_INT(TrackerMILParams, featureSetNumFeatures, params.featureSetNumFeatures);
-
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-
-	cv::TrackerMIL::Params* getNativeObjectPtr() { return &params; }
-	cv::TrackerMIL::Params getNativeObject() { return params; }
-
-	typedef InstanceConverter<TrackerMILParams, cv::TrackerMIL::Params> Converter;
 
 	static const char* getClassName() {
 		return "TrackerMILParams";
 	}
-};
 
-#define FF_UNWRAP_TRACKERMILPARAMS(obj) FF_UNWRAP(obj, TrackerMILParams)
-#define FF_UNWRAP_TRACKERMILPARAMS_AND_GET(obj) FF_UNWRAP_TRACKERMILPARAMS(obj)->params
+	FF_ACCESSORS(samplerInitInRadius, FF::FloatConverter);
+	FF_ACCESSORS(samplerSearchWinSize, FF::FloatConverter);
+	FF_ACCESSORS(samplerTrackInRadius, FF::FloatConverter);
+	FF_ACCESSORS(samplerInitMaxNegNum, FF::IntConverter);
+	FF_ACCESSORS(samplerTrackMaxPosNum, FF::IntConverter);
+	FF_ACCESSORS(samplerTrackMaxNegNum, FF::IntConverter);
+	FF_ACCESSORS(featureSetNumFeatures, FF::IntConverter);
+
+	static NAN_MODULE_INIT(Init);
+	static NAN_METHOD(New);
+};
 
 #endif

@@ -325,14 +325,14 @@ describe('Mat', () => {
         expect(buf).instanceOf(Buffer).lengthOf(18);
       });
     });
-    
+
     describe('getData after getRegion should throw an error', () => {
       it('should return buffer of with data of single channeled Mat', () => {
         const region = matC3.getRegion(new cv.Rect(0, 0, 2, 2));
         assertError(() => region.getData(), "Mat::GetData - Cannot call GetData when Region of Interest is defined (i.e. after getRegion) use matrix.copyTo to copy ROI to a new matrix")
       });
     });
-    
+
     describe('async', () => {
       it('should return buffer with data of single channeled Mat', (done) => {
         matC1.getDataAsync((err, buf) => {
@@ -998,11 +998,11 @@ describe('Mat', () => {
 
       assertError(
         () => img.getRegion(0, 1, 2, 3),
-        'Error: Mat::GetRegion expected arg0 to be an instance of Rect'
+        'Mat::GetRegion - Error: expected argument 0 to be of type Rect'
       );
     });
   });
-  
+
   describe('eigen', () => {
     const makeTest = (values, expectedResults) => () => {
       generateAPITests({
@@ -1028,7 +1028,7 @@ describe('Mat', () => {
   describe('solve', () => {
     const makeTest = (values1, values2, flags, expectedResults) => () => {
       const m2 = new cv.Mat(values2, cv.CV_32F);
-      
+
       generateAPITests({
         getDut: () => new cv.Mat(values1, cv.CV_32F),
         methodName: 'solve',

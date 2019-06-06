@@ -11,26 +11,24 @@ NAN_MODULE_INIT(BackgroundSubtractorMOG2::Init) {
 	ctor->SetClassName(FF::newString("BackgroundSubtractorMOG2"));
 	instanceTemplate->SetInternalFieldCount(1);
 
-	Nan::SetAccessor(instanceTemplate, FF::newString("history"), GetHistory);
-	Nan::SetAccessor(instanceTemplate, FF::newString("varThreshold"), GetVarThreshold);
-	Nan::SetAccessor(instanceTemplate, FF::newString("detectShadows"), GetDetectShadows);
+	Nan::SetAccessor(instanceTemplate, FF::newString("history"), history_getter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("varThreshold"), varThreshold_getter);
+	Nan::SetAccessor(instanceTemplate, FF::newString("detectShadows"), detectShadows_getter);
 
 	Nan::Set(target,FF::newString("BackgroundSubtractorMOG2"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(BackgroundSubtractorMOG2::New) {
-	FF_ASSERT_CONSTRUCT_CALL(BackgroundSubtractorKNN);
-	FF::TryCatch tryCatch;
+	FF::TryCatch tryCatch("BackgroundSubtractor::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	BackgroundSubtractorMOG2::NewWorker worker;
 
 	if (worker.applyUnwrappers(info)) {
-		v8::Local<v8::Value> err = tryCatch.formatCatchedError("BackgroundSubtractorMOG2::New");
-		tryCatch.throwNew(err);
-		return;
+		return tryCatch.reThrow();
 	}
 
 	BackgroundSubtractorMOG2* self = new BackgroundSubtractorMOG2();
-	self->subtractor = cv::createBackgroundSubtractorMOG2((int)worker.history, worker.varThreshold, worker.detectShadows);
+	self->self = cv::createBackgroundSubtractorMOG2((int)worker.history, worker.varThreshold, worker.detectShadows);
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }

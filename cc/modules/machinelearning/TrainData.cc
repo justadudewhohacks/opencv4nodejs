@@ -9,27 +9,25 @@ NAN_MODULE_INIT(TrainData::Init) {
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(FF::newString("TrainData"));
 
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("layout"), layout);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("samples"), samples);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("responses"), responses);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("varIdx"), varIdx);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("sampleWeights"), sampleWeights);
-	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("varType"), varType);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("layout"), layout_getter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("samples"), samples_getter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("responses"), responses_getter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("varIdx"), varIdx_getter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("sampleWeights"), sampleWeights_getter);
+	Nan::SetAccessor(ctor->InstanceTemplate(), FF::newString("varType"), varType_getter);
 
 	Nan::Set(target,FF::newString("TrainData"), FF::getFunction(ctor));
 };
 
 NAN_METHOD(TrainData::New) {
-  FF_ASSERT_CONSTRUCT_CALL(TrainData);
+	FF::TryCatch tryCatch("TrainData::New");
+	FF_ASSERT_CONSTRUCT_CALL();
 	TrainData* self = new TrainData();
 	if (info.Length() > 0) {
-		FF::TryCatch tryCatch;
 		TrainData::NewWorker worker;
 
 		if (worker.applyUnwrappers(info)) {
-			v8::Local<v8::Value> err = tryCatch.formatCatchedError("TrainData::New");
-			tryCatch.throwNew(err);
-			return;
+			return tryCatch.reThrow();
 		}
 
 		// TODO: uchar / char converter
@@ -37,7 +35,7 @@ NAN_METHOD(TrainData::New) {
 		for (auto val : worker.varType) {
 			varType.push_back(val);
 		}
-		self->trainData = cv::ml::TrainData::create(
+		self->self = cv::ml::TrainData::create(
 			worker.samples, worker.layout, worker.responses, worker.varIdx, worker.sampleIdx, worker.sampleWeights, varType
 		);
 	}

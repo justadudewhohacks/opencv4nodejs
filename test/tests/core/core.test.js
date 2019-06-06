@@ -211,23 +211,22 @@ describe('core', () => {
     });
 
     it('should throw when the argument is not integer', () => {
-      let err;
 
       const expectError = (fn, msg) => {
+        let err;
         try {
           fn();
         } catch (e) {
           err = e;
         }
 
-        expect(err.message).to.be
-          .equal(msg);
+        expect(err).to.be.equal(msg);
       };
 
       expectError(() => cv.setNumThreads('hello'),
-        'Core::SetNumThreads expected arg0 to an int');
+        'Core::SetNumThreads - Error: expected argument 0 to be of type int');
       expectError(() => cv.setNumThreads(1.1),
-        'Core::SetNumThreads expected arg0 to an int');
+        'Core::SetNumThreads - Error: expected argument 0 to be of type int');
     });
   });
 
@@ -247,7 +246,7 @@ describe('core', () => {
         err = e;
       }
 
-      expect(err.message).to.be.equal('Mat::New - expect to be called with "new"');
+      expect(err).to.be.equal('Mat::New - constructor has to be called with "new" keyword');
     });
   });
 
