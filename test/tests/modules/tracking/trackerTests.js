@@ -51,14 +51,22 @@ const TrackerTestGenerator = getTestImg => (trackerName) => {
         expect(() => newTracker().update()).to.throw('Tracker::Update - Error: expected argument 0 to be of type');
       });
 
-      it('returns bounding box', () => {
-        const tracker = newTracker();
-        tracker.init(getTestImg(), new cv.Rect(0, 0, 10, 10));
-        const rect = tracker.update(getTestImg());
-        if (rect !== null) {
-          expect(rect).to.be.instanceOf(cv.Rect);
-        }
-      });
+      // update test for TrackerTLD for 3.1.0 and 3.2.0 seem to not finish on Travis + Docker
+      if (!(
+        cv.version.major === 3
+        && (cv.version.minor === 1 || cv.version.minor === 2)
+        && process.env.DOCKER_BUILD
+        && trackerName === 'TrackerTLD'
+      )) {
+        it('returns bounding box', () => {
+          const tracker = newTracker();
+          tracker.init(getTestImg(), new cv.Rect(0, 0, 10, 10));
+          const rect = tracker.update(getTestImg());
+          if (rect !== null) {
+            expect(rect).to.be.instanceOf(cv.Rect);
+          }
+        });
+      }
     });
 
     describe('getModel', () => {
