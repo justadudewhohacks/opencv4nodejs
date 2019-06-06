@@ -14,7 +14,7 @@ module.exports = () => {
     let mask;
 
     before(() => {
-      classifier = cv.version.minor > 0
+      classifier = global.cvVersionGreaterEqual(3, 1, 0)
         ? cv.loadOCRHMMClassifierCNN(path.resolve('../data/text-models/OCRBeamSearch_CNN_model_data.xml.gz'))
         : cv.loadOCRHMMClassifierNM(path.resolve('../data/text-models/OCRHMM_knn_model_data.xml.gz'));
       testImg = readTestImage().bgrToGray();
@@ -45,7 +45,7 @@ module.exports = () => {
           testImg,
           confidence
         ]),
-        getOptionalArgs: () => (cv.version.minor > 0 ? ([
+        getOptionalArgs: () => (global.cvVersionGreaterEqual(3, 1, 0) ? ([
           mask
         ]) : ([])),
         expectOutput: (ret) => {
@@ -67,7 +67,7 @@ module.exports = () => {
         getRequiredArgs: () => ([
           testImg
         ]),
-        getOptionalArgs: () => (cv.version.minor > 0 ? ([
+        getOptionalArgs: () => (global.cvVersionGreaterEqual(3, 1, 0) ? ([
           mask
         ]) : ([])),
         expectOutput: (ret) => {

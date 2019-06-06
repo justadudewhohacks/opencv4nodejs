@@ -142,7 +142,7 @@ describe('calib3d', () => {
       });
     });
 
-    (cv.version.minor > 2 ? describe : describe.skip)('solveP3P', () => {
+    (global.cvVersionGreaterEqual(3, 3, 0) ? describe : describe.skip)('solveP3P', () => {
       generateAPITests({
         getDut: () => cv,
         methodName: 'solveP3P',
@@ -250,7 +250,7 @@ describe('calib3d', () => {
       ['termCriteria', new cv.TermCriteria()]
     ]);
 
-    (cv.version.minor > 0 ? describe : describe.skip)('calibrateCamera', () => {
+    (global.cvVersionGreaterEqual(3, 1, 0) ? describe : describe.skip)('calibrateCamera', () => {
       generateAPITests({
         getDut: () => cv,
         methodName: 'calibrateCamera',
@@ -260,7 +260,7 @@ describe('calib3d', () => {
       });
     });
 
-    (cv.version.minor > 1 ? describe : describe.skip)('calibrateCameraExtended', () => {
+    (global.cvVersionGreaterEqual(3, 2, 0) ? describe : describe.skip)('calibrateCameraExtended', () => {
       generateAPITests({
         getDut: () => cv,
         methodName: 'calibrateCameraExtended',
@@ -498,7 +498,7 @@ describe('calib3d', () => {
     });
   });
 
-  (cv.version.minor > 0 ? describe : describe.skip)('sampsonDistance', () => {
+  (global.cvVersionGreaterEqual(3, 1, 0) ? describe : describe.skip)('sampsonDistance', () => {
     const pt1 = new cv.Vec(0.5, 0.5);
     const pt2 = new cv.Vec(100.5, 100.5);
     const F = cv.Mat.eye(3, 3, cv.CV_64F);
@@ -515,7 +515,7 @@ describe('calib3d', () => {
     });
   });
 
-  (cv.version.minor > 1 ? describe : describe.skip)('estimateAffine2D', () => {
+  (global.cvVersionGreaterEqual(3, 2, 0) ? describe : describe.skip)('estimateAffine2D', () => {
     const expectOutput = (res) => {
       expect(res).to.have.property('out').to.be.instanceOf(cv.Mat);
       assertMetaData(res.out)(2, 3, cv.CV_64F);

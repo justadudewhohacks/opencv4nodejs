@@ -42,7 +42,7 @@ module.exports = () => {
       });
     });
 
-    if (cv.version.minor >= 3) {
+    if (global.cvVersionGreaterEqual(3, 3, 0)) {
       it('should process an image with a customized colormap', () => {
         generateAPITests({
           getDut: () => cv,

@@ -83,7 +83,7 @@ describe('dnn', () => {
     });
   });
 
-  if (cv.version.minor > 3) {
+  if (global.cvVersionGreaterEqual(3, 4, 0)) {
     describe('NMSBoxes', () => {
       generateAPITests({
         getDut: () => cv,

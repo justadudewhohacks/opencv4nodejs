@@ -199,7 +199,7 @@ describe('Mat', () => {
     });
 
     // TODO figure out whats wrong with 3.3.0+
-    (cv.version.minor >= 3 ? it.skip : it)('should normalize range of CV_64F', () => {
+    (global.cvVersionGreaterEqual(3, 3, 0) ? it.skip : it)('should normalize range of CV_64F', () => {
       const mat = new cv.Mat([
         [0.5, 1000.12345, 1000],
         [-1000.12345, 123.456, -123.456]
@@ -730,7 +730,7 @@ describe('Mat', () => {
     });
   });
 
-  (cv.version.minor < 2 ? describe.skip : describe)('rotate', () => {
+  (global.cvVersionLowerThan(3, 2, 0) ? describe.skip : describe)('rotate', () => {
     const src = new cv.Mat([
       [1, 0, 0],
       [1, 0, 0],
