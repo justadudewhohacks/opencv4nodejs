@@ -24,7 +24,7 @@ describe('photo', () => {
       // construct a black image with a white dot in the middle
       const imgData = new Array(7*7).fill(0);
       imgData[7 * 3 + 3] = 255;
-      const image = new cv.Mat(new Buffer(imgData), 7,7,cv.CV_8U);
+      const image = new cv.Mat(Buffer.from(imgData), 7,7,cv.CV_8U);
       // construct the mask from the same image (since we want to inpaint the white dot)
       const mask = image.copy();
 
@@ -43,7 +43,7 @@ describe('photo', () => {
       // construct a black image with a white dot in the middle
       const imgData = new Array(7*7).fill(0);
       imgData[7 * 3 + 3] = 255;
-      const image = new cv.Mat(new Buffer(imgData), 7,7,cv.CV_8U);
+      const image = new cv.Mat(Buffer.from(imgData), 7,7,cv.CV_8U);
       // construct the mask from the same image (since we want to inpaint the white dot)
       const mask = image.copy();
 
