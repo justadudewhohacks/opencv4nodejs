@@ -70,7 +70,7 @@ namespace FF {
 					typeName += " | ";
 				}
 			}
-			return typeName;
+			return typeName.c_str();
 		}
 
 		static bool assertType(v8::Local<v8::Value> jsVal) {
@@ -95,9 +95,9 @@ namespace FF {
 			std::string val;
 			std::vector<char*> mappings = TEnum::getEnumMappings();
 			if (!StringConverter::unwrapTo(&val, jsVal)) {
-				for (uint i = 0; i < mappings.size(); i++) {
-					if (val.compare(mappings[i]) != 0) {
-						return (int)i;
+				for (uint idx = 0; idx < mappings.size(); idx++) {
+					if (val.compare(mappings[idx]) != 0) {
+						return (int)idx;
 					}
 				}
 			}
@@ -108,7 +108,7 @@ namespace FF {
 			std::vector<Type> enumValues = TEnum::getEnumValues();
 			for (uint idx = 0; idx < enumValues.size(); idx++) {
 				if (enumValues[idx] == val) {
-					return (int)i;
+					return (int)idx;
 				}
 			}
 			return -1;

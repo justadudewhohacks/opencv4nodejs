@@ -22,7 +22,7 @@ public:
 		typedef cv::ORB::ScoreType Type;
 
 		static const char* getClassName() {
-			return "ScoreType";
+			return "ORBScoreType";
 		}
 
 		static std::vector<Type> getEnumValues() {

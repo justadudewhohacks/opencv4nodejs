@@ -47,33 +47,13 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
   Nan::SetPrototypeMethod(ctor, "load", Load);
 
   Nan::Set(target,FF::newString("HOGDescriptor"), FF::getFunction(ctor));
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  HistogramNormType::init(target);
+#endif
 };
+
 NAN_METHOD(HOGDescriptor::New) {
-	FF::TryCatch tryCatch("HOGDescriptor::New");
-	FF_ASSERT_CONSTRUCT_CALL();
-	HOGDescriptorBindings::NewWorker worker;
-
-	if (worker.applyUnwrappers(info)) {
-		return tryCatch.reThrow();
-	}
-
-	HOGDescriptor* self = new HOGDescriptor();
-	self->setNativeObject(std::make_shared<cv::HOGDescriptor>(
-		worker.winSize,
-		worker.blockSize,
-		worker.blockStride,
-		worker.cellSize,
-		(int)worker.nbins,
-		worker.derivAperture,
-		worker.winSigma,
-		(int)worker.histogramNormType,
-		worker.L2HysThreshold,
-		worker.gammaCorrection,
-		(int)worker.nlevels,
-		worker.signedGradient
-	));
-	self->Wrap(info.Holder());
-	info.GetReturnValue().Set(info.Holder());
+	NewBinding().construct(info);
 }
 
 NAN_METHOD(HOGDescriptor::GetDaimlerPeopleDetector) {

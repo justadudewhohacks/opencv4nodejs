@@ -22,7 +22,7 @@ public:
 		typedef cv::FastFeatureDetector::DetectorType Type;
 
 		static const char* getClassName() {
-			return "DetectorType";
+			return "FASTDetectorType";
 		}
 
 		static std::vector<Type> getEnumValues() {
@@ -67,39 +67,6 @@ public:
 			self->Wrap(info.Holder());
 			info.GetReturnValue().Set(info.Holder());
 		};
-	};
-
-	struct NewWorker : public CatchCvExceptionWorker {
-	public:
-
-		int threshold = 10;
-		bool nonmaxSuppression = true;
-		int type = cv::FastFeatureDetector::TYPE_9_16;
-
-		std::string executeCatchCvExceptionWorker() {
-			return "";
-		}
-
-		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return (
-				FF::IntConverter::optArg(0, &threshold, info) ||
-				FF::BoolConverter::optArg(1, &nonmaxSuppression, info) ||
-				FF::IntConverter::optArg(2, &type, info)
-				);
-		}
-
-		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return FF::isArgObject(info, 0);
-		}
-
-		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-			return (
-				FF::IntConverter::optProp(&threshold, "threshold", opts) ||
-				FF::BoolConverter::optProp(&nonmaxSuppression, "nonmaxSuppression", opts) ||
-				FF::IntConverter::optProp(&type, "type", opts)
-				);
-		}
 	};
 };
 

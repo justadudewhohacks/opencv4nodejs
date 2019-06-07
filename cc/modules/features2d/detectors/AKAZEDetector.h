@@ -23,7 +23,7 @@ public:
 		typedef cv::AKAZE::DescriptorType Type;
 
 		static const char* getClassName() {
-			return "DescriptorType";
+			return "AKAZEDescriptorType";
 		}
 
 		static std::vector<Type> getEnumValues() {

@@ -11,15 +11,14 @@ NAN_MODULE_INIT(AGASTDetector::Init) {
 	ctor->SetClassName(Nan::New("AGASTDetector").ToLocalChecked());
 	instanceTemplate->SetInternalFieldCount(1);
 
-#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
-	DetectorType::init(ctor);
-#endif
-
 	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), threshold_getter);
 	Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), nonmaxSuppression_getter);
 	Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), type_getter);
 
   Nan::Set(target,Nan::New("AGASTDetector").ToLocalChecked(), FF::getFunction(ctor));
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  DetectorType::init(target);
+#endif
 };
 
 struct NewWorker : CatchCvExceptionWorker {

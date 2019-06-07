@@ -11,10 +11,6 @@ NAN_MODULE_INIT(AKAZEDetector::Init) {
 	ctor->SetClassName(Nan::New("AKAZEDetector").ToLocalChecked());
 	instanceTemplate->SetInternalFieldCount(1);
 
-#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
-	DescriptorType::init(ctor);
-#endif
-
 	Nan::SetAccessor(instanceTemplate, Nan::New("descriptorType").ToLocalChecked(), descriptorType_getter);
 	Nan::SetAccessor(instanceTemplate, Nan::New("descriptorSize").ToLocalChecked(), descriptorSize_getter);
 	Nan::SetAccessor(instanceTemplate, Nan::New("descriptorChannels").ToLocalChecked(), descriptorChannels_getter);
@@ -24,6 +20,9 @@ NAN_MODULE_INIT(AKAZEDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("diffusivity").ToLocalChecked(), diffusivity_getter);
 
 	Nan::Set(target,Nan::New("AKAZEDetector").ToLocalChecked(), FF::getFunction(ctor));
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	DescriptorType::init(target);
+#endif
 };
 
 NAN_METHOD(AKAZEDetector::New) {

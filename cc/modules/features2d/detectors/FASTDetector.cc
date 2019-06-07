@@ -16,6 +16,9 @@ NAN_MODULE_INIT(FASTDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("type").ToLocalChecked(), type_getter);
 
 	Nan::Set(target,Nan::New("FASTDetector").ToLocalChecked(), FF::getFunction(ctor));
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	DetectorType::init(target);
+#endif
 };
 
 NAN_METHOD(FASTDetector::New) {

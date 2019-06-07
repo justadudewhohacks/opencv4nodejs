@@ -22,7 +22,7 @@ public:
 		typedef cv::AgastFeatureDetector::DetectorType Type;
 
 		static const char* getClassName() {
-			return "DetectorType";
+			return "AGASTDetectorType";
 		}
 
 		static std::vector<Type> getEnumValues() {

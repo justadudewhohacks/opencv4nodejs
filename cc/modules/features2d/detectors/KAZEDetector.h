@@ -22,7 +22,7 @@ public:
 		typedef cv::KAZE::DiffusivityType Type;
 
 		static const char* getClassName() {
-			return "DiffusivityType";
+			return "KAZEDiffusivityType";
 		}
 
 		static std::vector<Type> getEnumValues() {
