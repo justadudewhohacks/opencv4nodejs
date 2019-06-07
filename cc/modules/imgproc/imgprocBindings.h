@@ -1,4 +1,5 @@
 #include "imgproc.h"
+#include "CvBinding.h"
 #include <opencv2/imgproc.hpp>
 
 #ifndef __FF_IMGPROCBINDINGS_H_
@@ -116,30 +117,24 @@ namespace ImgprocBindings {
 
     v8::Local<v8::Value> getReturnValue() { return Mat::Converter::wrap(dst); }
   };
-  struct UndistortPointsWorker : public CatchCvExceptionWorker {
+
+#if CV_VERSION_LOWER_THAN(4, 0, 0)
+  // since 4.0.0 cv::undistortPoints has been moved from imgproc to calib3d
+  class UndistortPoints : public CvBinding {
   public:
-    cv::Mat distCoeffs;
-    cv::Mat cameraMatrix;
-    std::vector<cv::Point2f> srcPoints;
-    std::vector<cv::Point2f> destPoints; 
+	  UndistortPoints() {
+		  auto srcPoints = req<Point2::ArrayOfArraysWithCastConverter<cv::Point2f>>();
+		  auto cameraMatrix = req<Mat::Converter>();
+		  auto distCoeffs = req<Mat::Converter>();
+		  auto destPoints = ret<Point2::ArrayOfArraysWithCastConverter<cv::Point2f>>("destPoints");
 
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &srcPoints, info) ||
-        Mat::Converter::arg(1, &cameraMatrix, info) ||
-        Mat::Converter::arg(2, &distCoeffs, info)
-      );
-    }
-
-    std::string executeCatchCvExceptionWorker() {
-      cv::undistortPoints(srcPoints, destPoints, cameraMatrix, distCoeffs, cameraMatrix);
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() { 
-      return Point2::ArrayWithCastConverter<cv::Point2f>::wrap(destPoints);
-    }
+		  executeBinding = [=]() {
+			  cv::undistortPoints(srcPoints->ref(), destPoints->ref(), cameraMatrix->ref(), distCoeffs->ref(), cameraMatrix->ref());
+		  };
+	  };
   };
+#endif
+
 }
 
 #endif

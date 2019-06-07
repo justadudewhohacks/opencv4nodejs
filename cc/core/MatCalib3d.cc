@@ -44,6 +44,10 @@ void MatCalib3d::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "recoverPose", RecoverPose);
   Nan::SetPrototypeMethod(ctor, "recoverPoseAsync", RecoverPoseAsync);
 #endif
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  Nan::SetPrototypeMethod(ctor, "undistort", Undistort);
+  Nan::SetPrototypeMethod(ctor, "undistortAsync", UndistortAsync);
+#endif
 };
 
 NAN_METHOD(MatCalib3d::Rodrigues) {
@@ -368,4 +372,14 @@ NAN_METHOD(MatCalib3d::RecoverPoseAsync) {
   );
 }
 
+#endif
+
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+NAN_METHOD(MatCalib3d::Undistort) {
+	Mat::SyncBinding<MatCalib3dBindings::Undistort>("Undistort", info);
+}
+
+NAN_METHOD(MatCalib3d::UndistortAsync) {
+	Mat::AsyncBinding<MatCalib3dBindings::Undistort>("Undistort", info);
+}
 #endif

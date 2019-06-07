@@ -47,6 +47,10 @@ NAN_MODULE_INIT(Calib3d::Init) {
   Nan::SetMethod(target, "solveP3P", SolveP3P);
   Nan::SetMethod(target, "solveP3PAsync", SolveP3PAsync);
 #endif
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  Nan::SetMethod(target, "undistortPoints", UndistortPoints);
+  Nan::SetMethod(target, "undistortPointsAsync", UndistortPointsAsync);
+#endif
 };
 
 NAN_METHOD(Calib3d::FindHomography) {
@@ -378,4 +382,14 @@ NAN_METHOD(Calib3d::SolveP3PAsync) {
   );
 }
 
+#endif
+
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+NAN_METHOD(Calib3d::UndistortPoints) {
+	FF::SyncBinding<Calib3dBindings::UndistortPoints>("Calib3d", "UndistortPoints", info);
+}
+
+NAN_METHOD(Calib3d::UndistortPointsAsync) {
+	FF::AsyncBinding<Calib3dBindings::UndistortPoints>("Calib3d", "UndistortPoints", info);
+}
 #endif

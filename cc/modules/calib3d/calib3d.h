@@ -53,6 +53,10 @@ public:
   static NAN_METHOD(SolveP3P);
   static NAN_METHOD(SolveP3PAsync);
 #endif
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  static NAN_METHOD(UndistortPoints);
+  static NAN_METHOD(UndistortPointsAsync);
+#endif
 };
 
 #endif

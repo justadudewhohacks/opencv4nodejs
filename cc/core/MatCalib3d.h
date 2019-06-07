@@ -50,7 +50,10 @@ public:
   static NAN_METHOD(RecoverPose);
   static NAN_METHOD(RecoverPoseAsync);
 #endif
-
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  static NAN_METHOD(Undistort);
+  static NAN_METHOD(UndistortAsync);
+#endif
 };
 
 #endif

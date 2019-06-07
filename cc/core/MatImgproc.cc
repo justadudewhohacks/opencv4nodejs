@@ -109,8 +109,10 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "cornerEigenValsAndVecsAsync", CornerEigenValsAndVecsAsync);
   Nan::SetPrototypeMethod(ctor, "integral", Integral);
   Nan::SetPrototypeMethod(ctor, "integralAsync", IntegralAsync);
+#if CV_VERSION_LOWER_THAN(4, 0, 0)
   Nan::SetPrototypeMethod(ctor, "undistort", Undistort);
   Nan::SetPrototypeMethod(ctor, "undistortAsync", UndistortAsync);
+#endif
 };
 
 NAN_METHOD(MatImgproc::DrawContours) {
@@ -945,19 +947,13 @@ NAN_METHOD(MatImgproc::IntegralAsync) {
   );
 }
 
+#if CV_VERSION_LOWER_THAN(4, 0, 0)
 NAN_METHOD(MatImgproc::Undistort) {
-  FF::SyncBindingBase(
-    std::make_shared<MatImgprocBindings::UndistortWorker>(Mat::unwrapSelf(info)),
-    "Mat::Undistort",
-    info
-  );
+	Mat::SyncBinding<MatImgprocBindings::Undistort>("Undistort", info);
 }
 
 NAN_METHOD(MatImgproc::UndistortAsync) {
-  FF::AsyncBindingBase(
-    std::make_shared<MatImgprocBindings::UndistortWorker>(Mat::unwrapSelf(info)),
-    "Mat::UndistortAsync",
-    info
-  );
+	Mat::AsyncBinding<MatImgprocBindings::Undistort>("Undistort", info);
 }
+#endif
 

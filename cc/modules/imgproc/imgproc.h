@@ -18,19 +18,21 @@ public:
   static NAN_METHOD(GetRotationMatrix2D);
   static NAN_METHOD(GetAffineTransform);
   static NAN_METHOD(GetPerspectiveTransform);
-  static NAN_METHOD(UndistortPoints);
-  static NAN_METHOD(UndistortPointsAsync);
   static NAN_METHOD(CalcHist);
   static NAN_METHOD(Plot1DHist);
   static NAN_METHOD(FitLine);
   static NAN_METHOD(GetTextSize);
   static NAN_METHOD(GetTextSizeAsync);
+  static NAN_METHOD(ApplyColorMap);
+  static NAN_METHOD(ApplyColorMapAsync);
 #if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   static NAN_METHOD(Canny);
   static NAN_METHOD(CannyAsync);
 #endif
-  static NAN_METHOD(ApplyColorMap);
-  static NAN_METHOD(ApplyColorMapAsync);
+#if CV_VERSION_LOWER_THAN(4, 0, 0)
+  static NAN_METHOD(UndistortPoints);
+  static NAN_METHOD(UndistortPointsAsync);
+#endif
 };
 
 #endif
