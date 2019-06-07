@@ -6,7 +6,7 @@
 #define CV_VERSION_GREATER_EQUAL(major, minor, revision) \
 	(	\
 		CV_VERSION_MAJOR > major  \
-		|| (CV_VERSION_MAJOR == major && CV_VERSION_MINOR >= minor) \
+		|| (CV_VERSION_MAJOR == major && CV_VERSION_MINOR > minor) \
 		|| (CV_VERSION_MAJOR == major && CV_VERSION_MINOR == minor && CV_VERSION_REVISION >= revision) \
 	)
 
