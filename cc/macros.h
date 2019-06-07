@@ -54,4 +54,80 @@
     return tryCatch.throwError("constructor has to be called with \"new\" keyword"); \
   }
 
+/* TODO: move this to native-node-utils */
+namespace FF {
+	template<class TEnum>
+	class EnumConverterImpl {
+	public:
+		typedef typename TEnum::Type Type;
+
+		static const char* getTypeName() {
+			std::vector<char*> mappings = TEnum::getMappings();
+			std::string typeName = "";
+			for (uint i = 0; i < mappings.size(); i++) {
+				typeName += mappings[i];
+				if (i < (mappings.size() - 1)) {
+					typeName += " | ";
+				}
+			}
+			return typeName;
+		}
+
+		static bool assertType(v8::Local<v8::Value> jsVal) {
+			return getMappingIndex(jsVal) != -1;
+		}
+
+		static Type unwrapUnchecked(v8::Local<v8::Value> jsVal) {
+			int idx = getMappingIndex(jsVal);
+			if (idx == -1) {
+				idx = 0;
+			}
+			return TEnum::getEnumValues()[idx];
+		}
+
+		static v8::Local<v8::Value> wrap(Type val) {
+			std::vector<char*> mappings = TEnum::getMappings();
+			return StringConverter::wrap(mappings[getValueIndex(val)]);
+		}
+
+	private:
+		static int getMappingIndex(v8::Local<v8::Value> jsVal) {
+			std::string val;
+			std::vector<char*> mappings = TEnum::getMappings();
+			if (!StringConverter::unwrapTo(&val, jsVal)) {
+				for (uint i = 0; i < mappings.size(); i++) {
+					if (val.compare(mappings[i]) != 0) {
+						return (int)i;
+					}
+				}
+			}
+			return -1;
+		}
+
+		static int getValueIndex(Type val) {
+			std::vector<Type> enumValues = TEnum::getEnumValues();
+			for (uint idx = 0; idx < enumValues.size(); idx++) {
+				if (enumValues[idx] == val) {
+					return (int)i;
+				}
+			}
+			return -1;
+		}
+	};
+
+	template<class TEnum>
+	class EnumWrap {
+	public:
+		typedef AbstractConverter<EnumConverterImpl<TEnum>> Converter;
+
+		static void init(v8::Local<v8::Object> target) {
+			v8::Local<v8::Object> scoreTypes = Nan::New<v8::Object>();
+			for (char* e : TEnum::getEnumMappings()) {
+				Nan::Set(scoreTypes, newString(e), newString(e));
+			}
+			Nan::Set(target, newString(TEnum::getClassName()), scoreTypes);
+		}
+	};
+}
+
 #endif

@@ -5,7 +5,6 @@
 #ifndef __FF_ORBDETECTOR_H__
 #define __FF_ORBDETECTOR_H__
 
-
 class ORBDetector : public FeatureDetector, public FF::ObjectWrapTemplate<ORBDetector, cv::Ptr<cv::ORB>> {
 public:
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
@@ -17,6 +16,23 @@ public:
 	cv::Ptr<cv::FeatureDetector> getDetector() {
 		return self;
 	}
+
+	class ScoreType : public FF::EnumWrap<ScoreType> {
+	public:
+		typedef cv::ORB::ScoreType Type;
+
+		static const char* getClassName() {
+			return "ScoreType";
+		}
+
+		static std::vector<Type> getEnumValues() {
+			return { cv::ORB::ScoreType::HARRIS_SCORE, cv::ORB::ScoreType::FAST_SCORE };
+		}
+
+		static std::vector<char*> getEnumMappings() {
+			return { "HARRIS_SCORE", "FAST_SCORE" };
+		}
+	};
 
 	FF_GETTER_CUSTOM(maxFeatures, FF::IntConverter, self->getMaxFeatures());
 	FF_GETTER_CUSTOM(scaleFactor, FF::FloatConverter, self->getScaleFactor());
@@ -43,7 +59,11 @@ public:
 			auto edgeThreshold = opt<FF::IntConverter>("edgeThreshold", 31);
 			auto firstLevel = opt<FF::IntConverter>("firstLevel", 0);
 			auto WTA_K = opt<FF::IntConverter>("WTA_K", 2);
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+			auto scoreType = opt<ORBDetector::ScoreType::Converter>("scoreType", cv::ORB::HARRIS_SCORE);
+#else
 			auto scoreType = opt<FF::IntConverter>("scoreType", cv::ORB::HARRIS_SCORE);
+#endif
 			auto patchSize = opt<FF::IntConverter>("patchSize", 31);
 			auto fastThreshold = opt<FF::IntConverter>("fastThreshold", 20);
 

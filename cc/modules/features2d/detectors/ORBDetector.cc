@@ -7,9 +7,13 @@ NAN_MODULE_INIT(ORBDetector::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	FeatureDetector::Init(ctor);
-  constructor.Reset(ctor);
-  instanceTemplate->SetInternalFieldCount(1);
-  ctor->SetClassName(Nan::New("ORBDetector").ToLocalChecked());
+	constructor.Reset(ctor);
+	instanceTemplate->SetInternalFieldCount(1);
+	ctor->SetClassName(Nan::New("ORBDetector").ToLocalChecked());
+
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	ScoreType::init(ctor);
+#endif
 
 	Nan::SetAccessor(instanceTemplate, Nan::New("maxFeatures").ToLocalChecked(), maxFeatures_getter);
 	Nan::SetAccessor(instanceTemplate, Nan::New("scaleFactor").ToLocalChecked(), scaleFactor_getter);
@@ -21,7 +25,7 @@ NAN_MODULE_INIT(ORBDetector::Init) {
 	Nan::SetAccessor(instanceTemplate, Nan::New("patchSize").ToLocalChecked(), patchSize_getter);
 	Nan::SetAccessor(instanceTemplate, Nan::New("fastThreshold").ToLocalChecked(), fastThreshold_getter);
 
-	Nan::Set(target,Nan::New("ORBDetector").ToLocalChecked(), FF::getFunction(ctor));
+	Nan::Set(target, Nan::New("ORBDetector").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(ORBDetector::New) {
