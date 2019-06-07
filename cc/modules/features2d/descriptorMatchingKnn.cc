@@ -131,9 +131,9 @@ public:
 	}
 };
 
-#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
-void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
-#else
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, cv::DescriptorMatcher::MatcherType matcherType) {
+#elif CV_VERSION_GREATER_EQUAL(3, 2, 0)
 void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
 #endif
 	FF::SyncBindingBase(
@@ -143,7 +143,9 @@ void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, std::string
 	);
 }
 
-#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, cv::DescriptorMatcher::MatcherType matcherType) {
+#elif CV_VERSION_GREATER_EQUAL(3, 2, 0)
 void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #else
 void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {

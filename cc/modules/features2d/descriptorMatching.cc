@@ -129,26 +129,30 @@ public:
 	}
 };
 
-#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, cv::DescriptorMatcher::MatcherType matcherType) {
+#elif CV_VERSION_GREATER_EQUAL(3, 2, 0)
 void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #else
 void DescriptorMatching::match(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
 #endif
 	FF::SyncBindingBase(
 		std::make_shared<MatchWorker>(cv::DescriptorMatcher::create(matcherType)),
-		"MSERDetector::Match",
+		"Match",
 		info
 	);
 }
 
-#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, cv::DescriptorMatcher::MatcherType matcherType) {
+#elif CV_VERSION_GREATER_EQUAL(3, 2, 0)
 void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
 #else
 void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
 #endif
 	FF::AsyncBindingBase(
 		std::make_shared<MatchWorker>(cv::DescriptorMatcher::create(matcherType)),
-		"MSERDetector::MatchAsync",
+		"MatchAsync",
 		info
 	);
 }

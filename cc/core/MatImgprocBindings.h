@@ -275,7 +275,7 @@ namespace MatImgprocBindings {
     cv::Mat dst;
   
     std::string executeCatchCvExceptionWorker() {
-      cv::cvtColor(self, dst, CV_BGR2GRAY);
+      cv::cvtColor(self, dst, cv::COLOR_BGR2GRAY);
       return "";
     }
   

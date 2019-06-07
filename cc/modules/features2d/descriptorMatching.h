@@ -26,7 +26,10 @@ public:
 	static NAN_METHOD(MatchBruteForceHammingLutAsync);
 	static NAN_METHOD(MatchBruteForceSL2Async);
 
-#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	static void match(Nan::NAN_METHOD_ARGS_TYPE info, cv::DescriptorMatcher::MatcherType matcherType);
+	static void matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, cv::DescriptorMatcher::MatcherType matcherType);
+#elif CV_VERSION_GREATER_EQUAL(3, 2, 0)
 	static void match(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType);
 	static void matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType);
 #else
