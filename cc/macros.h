@@ -57,12 +57,12 @@
 /* TODO: move this to native-node-utils */
 namespace FF {
 	template<class TEnum>
-	class EnumConverterImpl {
+	class EnumConverterImpl : public FF::UnwrapperBase<EnumConverterImpl<TEnum>, typename TEnum::Type> {
 	public:
 		typedef typename TEnum::Type Type;
 
 		static const char* getTypeName() {
-			std::vector<char*> mappings = TEnum::getMappings();
+			std::vector<char*> mappings = TEnum::getEnumMappings();
 			std::string typeName = "";
 			for (uint i = 0; i < mappings.size(); i++) {
 				typeName += mappings[i];
@@ -86,14 +86,14 @@ namespace FF {
 		}
 
 		static v8::Local<v8::Value> wrap(Type val) {
-			std::vector<char*> mappings = TEnum::getMappings();
+			std::vector<char*> mappings = TEnum::getEnumMappings();
 			return StringConverter::wrap(mappings[getValueIndex(val)]);
 		}
 
 	private:
 		static int getMappingIndex(v8::Local<v8::Value> jsVal) {
 			std::string val;
-			std::vector<char*> mappings = TEnum::getMappings();
+			std::vector<char*> mappings = TEnum::getEnumMappings();
 			if (!StringConverter::unwrapTo(&val, jsVal)) {
 				for (uint i = 0; i < mappings.size(); i++) {
 					if (val.compare(mappings[i]) != 0) {
@@ -120,7 +120,7 @@ namespace FF {
 	public:
 		typedef AbstractConverter<EnumConverterImpl<TEnum>> Converter;
 
-		static void init(v8::Local<v8::Object> target) {
+		static void init(Nan::ADDON_REGISTER_FUNCTION_ARGS_TYPE target) {
 			v8::Local<v8::Object> scoreTypes = Nan::New<v8::Object>();
 			for (char* e : TEnum::getEnumMappings()) {
 				Nan::Set(scoreTypes, newString(e), newString(e));

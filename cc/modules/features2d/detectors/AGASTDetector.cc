@@ -7,9 +7,13 @@ NAN_MODULE_INIT(AGASTDetector::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	FeatureDetector::Init(ctor);
-  constructor.Reset(ctor);
+	constructor.Reset(ctor);
 	ctor->SetClassName(Nan::New("AGASTDetector").ToLocalChecked());
-  instanceTemplate->SetInternalFieldCount(1);
+	instanceTemplate->SetInternalFieldCount(1);
+
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	DetectorType::init(ctor);
+#endif
 
 	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), threshold_getter);
 	Nan::SetAccessor(instanceTemplate, Nan::New("nonmaxSuppression").ToLocalChecked(), nonmaxSuppression_getter);
@@ -51,16 +55,5 @@ public:
 };
 
 NAN_METHOD(AGASTDetector::New) {
-	FF::TryCatch tryCatch("AGASTDetector::New");
-	FF_ASSERT_CONSTRUCT_CALL();
-	AGASTDetector::NewWorker worker;
-
-	if (worker.applyUnwrappers(info)) {
-		return tryCatch.reThrow();
-	}
-
-	AGASTDetector* self = new AGASTDetector();
-	self->self = cv::AgastFeatureDetector::create(worker.threshold, worker.nonmaxSuppression, worker.type);
-	self->Wrap(info.Holder());
-	info.GetReturnValue().Set(info.Holder());
+	NewBinding().construct(info);
 }

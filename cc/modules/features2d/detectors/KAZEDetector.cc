@@ -11,6 +11,10 @@ NAN_MODULE_INIT(KAZEDetector::Init) {
 	ctor->SetClassName(Nan::New("KAZEDetector").ToLocalChecked());
 	instanceTemplate->SetInternalFieldCount(1);
 
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	DiffusivityType::init(ctor);
+#endif
+
 	Nan::SetAccessor(instanceTemplate, Nan::New("extended").ToLocalChecked(), extended_getter);
 	Nan::SetAccessor(instanceTemplate, Nan::New("upright").ToLocalChecked(), upright_getter);
 	Nan::SetAccessor(instanceTemplate, Nan::New("threshold").ToLocalChecked(), threshold_getter);
@@ -22,16 +26,5 @@ NAN_MODULE_INIT(KAZEDetector::Init) {
 };
 
 NAN_METHOD(KAZEDetector::New) {
-	FF::TryCatch tryCatch("KAZEDetector::New");
-	FF_ASSERT_CONSTRUCT_CALL();
-	KAZEDetector::NewWorker worker;
-
-	if (worker.applyUnwrappers(info)) {
-		return tryCatch.reThrow();
-	}
-
-	KAZEDetector* self = new KAZEDetector();
-	self->self = cv::KAZE::create(worker.extended, worker.upright, worker.threshold, worker.nOctaves, worker.nOctaveLayers, worker.diffusivity);
-	self->Wrap(info.Holder());
-	info.GetReturnValue().Set(info.Holder());
+	NewBinding().construct(info);
 }
