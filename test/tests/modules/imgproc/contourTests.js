@@ -219,7 +219,7 @@ module.exports = () => {
     });
 
     describe('matchShapes', () => {
-      const method = cv.CV_CONTOURS_MATCH_I1;
+      const method = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.CONTOURS_MATCH_I1 : cv.CV_CONTOURS_MATCH_I1;
       it('should return zero for same shapes', () => {
         const similarity = leftmostContour.matchShapes(leftmostContour, method);
         expect(similarity).to.equal(0);

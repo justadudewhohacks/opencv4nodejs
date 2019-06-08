@@ -42,7 +42,11 @@ public:
 	FF_GETTER_CUSTOM(edgeThreshold, FF::IntConverter, self->getEdgeThreshold());
 	FF_GETTER_CUSTOM(firstLevel, FF::IntConverter, self->getFirstLevel());
 	FF_GETTER_CUSTOM(WTA_K, FF::IntConverter, self->getWTA_K());
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	FF_GETTER_CUSTOM(scoreType, ORBDetector::ScoreType::Converter, self->getScoreType());
+#else
 	FF_GETTER_CUSTOM(scoreType, FF::IntConverter, self->getScoreType());
+#endif
 	FF_GETTER_CUSTOM(patchSize, FF::IntConverter, self->getPatchSize());
 	FF_GETTER_CUSTOM(fastThreshold, FF::IntConverter, self->getFastThreshold());
 
@@ -52,7 +56,7 @@ public:
 	class NewBinding : public CvBinding {
 	public:
 		void construct(Nan::NAN_METHOD_ARGS_TYPE info) {
-			FF::TryCatch tryCatch("SURFDetector::New");
+			FF::TryCatch tryCatch("ORBDetector::New");
 			FF_ASSERT_CONSTRUCT_CALL();
 
 			auto maxFeatures = opt<FF::IntConverter>("maxFeatures", 500);

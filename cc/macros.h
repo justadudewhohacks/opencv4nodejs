@@ -96,7 +96,7 @@ namespace FF {
 			std::vector<char*> mappings = TEnum::getEnumMappings();
 			if (!StringConverter::unwrapTo(&val, jsVal)) {
 				for (uint idx = 0; idx < mappings.size(); idx++) {
-					if (val.compare(mappings[idx]) != 0) {
+					if (val.compare(mappings[idx]) == 0) {
 						return (int)idx;
 					}
 				}

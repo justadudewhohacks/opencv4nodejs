@@ -38,7 +38,11 @@ public:
 
 	FF_GETTER_CUSTOM(threshold, FF::DoubleConverter, self->getThreshold());
 	FF_GETTER_CUSTOM(nonmaxSuppression, FF::BoolConverter, self->getNonmaxSuppression());
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	FF_GETTER_CUSTOM(type, AGASTDetector::DetectorType::Converter, self->getType());
+#else
 	FF_GETTER_CUSTOM(type, FF::IntConverter, self->getType());
+#endif
 
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);

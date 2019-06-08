@@ -37,13 +37,21 @@ public:
 	};
 #endif
 
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	FF_GETTER_CUSTOM(descriptorType, AKAZEDetector::DescriptorType::Converter, self->getDescriptorType());
+#else
 	FF_GETTER_CUSTOM(descriptorType, FF::IntConverter, self->getDescriptorType());
+#endif
 	FF_GETTER_CUSTOM(descriptorSize, FF::IntConverter, self->getDescriptorSize());
 	FF_GETTER_CUSTOM(descriptorChannels, FF::IntConverter, self->getDescriptorChannels());
 	FF_GETTER_CUSTOM(threshold, FF::DoubleConverter, self->getThreshold());
 	FF_GETTER_CUSTOM(nOctaves, FF::IntConverter, self->getNOctaves());
 	FF_GETTER_CUSTOM(nOctaveLayers, FF::IntConverter, self->getNOctaveLayers());
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	FF_GETTER_CUSTOM(diffusivity, KAZEDetector::DiffusivityType::Converter, self->getDiffusivity());
+#else
 	FF_GETTER_CUSTOM(diffusivity, FF::IntConverter, self->getDiffusivity());
+#endif
 
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);

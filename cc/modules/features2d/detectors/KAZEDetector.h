@@ -41,7 +41,11 @@ public:
 	FF_GETTER_CUSTOM(threshold, FF::FloatConverter, self->getThreshold());
 	FF_GETTER_CUSTOM(nOctaves, FF::IntConverter, self->getNOctaves());
 	FF_GETTER_CUSTOM(nOctaveLayers, FF::IntConverter, self->getNOctaveLayers());
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	FF_GETTER_CUSTOM(diffusivity, KAZEDetector::DiffusivityType::Converter, self->getDiffusivity());
+#else
 	FF_GETTER_CUSTOM(diffusivity, FF::IntConverter, self->getDiffusivity());
+#endif
 
 	static NAN_MODULE_INIT(Init); 
 	static NAN_METHOD(New);

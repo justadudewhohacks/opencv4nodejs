@@ -241,7 +241,6 @@ describe('imgproc', () => {
           cameraMatrix,
           distCoeffs
         ]),
-        hasAsync: true,
         expectOutput: destPoints => {
           expect(destPoints.length).to.equal(expectedDestPoints.length);
           for(var i = 0; i < destPoints.length; i++){
