@@ -9,9 +9,9 @@ NAN_MODULE_INIT(SURFDetector::Init) {
 	v8::Local<v8::ObjectTemplate> instanceTemplate = ctor->InstanceTemplate();
 
 	FeatureDetector::Init(ctor);
-  constructor.Reset(ctor);
-  instanceTemplate->SetInternalFieldCount(1);
-  ctor->SetClassName(Nan::New("SURFDetector").ToLocalChecked());
+	constructor.Reset(ctor);
+	instanceTemplate->SetInternalFieldCount(1);
+	ctor->SetClassName(Nan::New("SURFDetector").ToLocalChecked());
 
 	Nan::SetAccessor(instanceTemplate, Nan::New("hessianThreshold").ToLocalChecked(), hessianThreshold_getter);
 	Nan::SetAccessor(instanceTemplate, Nan::New("nOctaves").ToLocalChecked(), nOctaves_getter);
@@ -23,7 +23,7 @@ NAN_MODULE_INIT(SURFDetector::Init) {
 };
 
 NAN_METHOD(SURFDetector::New) {
-	NewBinding().construct(info);
+	constructorBinding<Constructor>(info);
 }
 
 
