@@ -45,15 +45,24 @@ exports.generateAPITests = ({
   const hasOptArgs = !!getOptionalArgs().length;
   const hasOptArgsObject = getOptionalArgs().length > 1;
 
+  const expectAsyncOutput = (done, dut, args, res) => {
+    try {
+      expectOutput(res, dut, args);
+      done();
+    } catch (err) {
+      done(err);
+    }
+
+  }
+
   const expectOutputCallbacked = (done, dut, args) => (err, res) => {
-    expectOutput(res, dut, args);
-    done();
+    if (err) {
+      return done(err);
+    }
+    expectAsyncOutput(done, dut, args, res);
   };
 
-  const expectOutputPromisified = (done, dut, args) => (res) => {
-    expectOutput(res, dut, args);
-    done();
-  };
+  const expectOutputPromisified = (done, dut, args) => res => expectAsyncOutput(done, dut, args, res);
 
   const generateTests = (type) => {
     const isCallbacked = type === 'callbacked';
