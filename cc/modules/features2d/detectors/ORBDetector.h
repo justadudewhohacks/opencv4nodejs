@@ -30,7 +30,7 @@ public:
 			return { cv::ORB::ScoreType::HARRIS_SCORE, cv::ORB::ScoreType::FAST_SCORE };
 		}
 
-		static std::vector<char*> getEnumMappings() {
+		static std::vector<const char*> getEnumMappings() {
 			return { "HARRIS_SCORE", "FAST_SCORE" };
 		}
 	};

@@ -31,7 +31,7 @@ public:
 			return { Type::DESCRIPTOR_KAZE, Type::DESCRIPTOR_KAZE_UPRIGHT, Type::DESCRIPTOR_MLDB, Type::DESCRIPTOR_MLDB_UPRIGHT };
 		}
 
-		static std::vector<char*> getEnumMappings() {
+		static std::vector<const char*> getEnumMappings() {
 			return { "DESCRIPTOR_KAZE", "DESCRIPTOR_KAZE_UPRIGHT", "DESCRIPTOR_MLDB", "DESCRIPTOR_MLDB_UPRIGHT" };
 		}
 	};

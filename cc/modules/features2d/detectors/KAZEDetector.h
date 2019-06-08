@@ -30,7 +30,7 @@ public:
 			return { Type::DIFF_CHARBONNIER, Type::DIFF_PM_G1, Type::DIFF_PM_G2, Type::DIFF_WEICKERT };
 		}
 
-		static std::vector<char*> getEnumMappings() {
+		static std::vector<const char*> getEnumMappings() {
 			return { "DIFF_CHARBONNIER", "DIFF_PM_G1", "DIFF_PM_G2", "DIFF_WEICKERT" };
 		}
 	};

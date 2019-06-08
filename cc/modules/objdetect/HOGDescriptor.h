@@ -33,7 +33,7 @@ public:
 			return { Type::L2Hys };
 		}
 
-		static std::vector<char*> getEnumMappings() {
+		static std::vector<const char*> getEnumMappings() {
 			return { "L2Hys" };
 		}
 	};

@@ -62,7 +62,7 @@ namespace FF {
 		typedef typename TEnum::Type Type;
 
 		static std::string getTypeName() {
-			std::vector<char*> mappings = TEnum::getEnumMappings();
+			std::vector<const char*> mappings = TEnum::getEnumMappings();
 			std::string typeName = "";
 			for (uint i = 0; i < mappings.size(); i++) {
 				typeName += mappings[i];
@@ -86,14 +86,14 @@ namespace FF {
 		}
 
 		static v8::Local<v8::Value> wrap(Type val) {
-			std::vector<char*> mappings = TEnum::getEnumMappings();
+			std::vector<const char*> mappings = TEnum::getEnumMappings();
 			return StringConverter::wrap(mappings[getValueIndex(val)]);
 		}
 
 	private:
 		static int getMappingIndex(v8::Local<v8::Value> jsVal) {
 			std::string val;
-			std::vector<char*> mappings = TEnum::getEnumMappings();
+			std::vector<const char*> mappings = TEnum::getEnumMappings();
 			if (!StringConverter::unwrapTo(&val, jsVal)) {
 				for (uint idx = 0; idx < mappings.size(); idx++) {
 					if (val.compare(mappings[idx]) == 0) {
@@ -122,7 +122,7 @@ namespace FF {
 
 		static void init(Nan::ADDON_REGISTER_FUNCTION_ARGS_TYPE target) {
 			v8::Local<v8::Object> scoreTypes = Nan::New<v8::Object>();
-			for (char* e : TEnum::getEnumMappings()) {
+			for (const char* e : TEnum::getEnumMappings()) {
 				Nan::Set(scoreTypes, newString(e), newString(e));
 			}
 			Nan::Set(target, newString(TEnum::getClassName()), scoreTypes);

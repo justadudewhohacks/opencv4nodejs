@@ -30,7 +30,7 @@ public:
 			return { Type::AGAST_5_8, Type::AGAST_7_12d, Type::AGAST_7_12s, Type::OAST_9_16 };
 		}
 
-		static std::vector<char*> getEnumMappings() {
+		static std::vector<const char*> getEnumMappings() {
 			return { "AGAST_5_8", "AGAST_7_12d", "AGAST_7_12s", "OAST_9_16" };
 		}
 	};
