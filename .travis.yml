@@ -32,6 +32,8 @@ env:
     - BUILD_TASK=test
       TAG=3.4.0-contrib-world
       NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
+
+      # latest OpenCV 3
     - BUILD_TASK=test
       TAG=3.4.6
       NODE_MAJOR_VERSION=$MIN_SUPPORTED_NODEJS_VERSION
@@ -49,6 +51,15 @@ env:
       NODE_MAJOR_VERSION=11
     - BUILD_TASK=test
       TAG=3.4.6-contrib
+      NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
+
+    - BUILD_TASK=test
+      TAG=4.0.0-contrib
+      NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
+
+      # latest OpenCV 4
+    - BUILD_TASK=test
+      TAG=4.1.0-contrib
       NODE_MAJOR_VERSION=$LATEST_STABLE_NODEJS_VERSION
 
 before_install:
