@@ -17,7 +17,7 @@ NAN_MODULE_INIT(Text::Init) {
 }
 
 NAN_METHOD(Text::LoadOCRHMMClassifierNM) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<TextBindings::LoadOCRHMMClassifierNMWorker>(),
     "Text::LoadOCRHMMClassifierNM",
     info
@@ -25,7 +25,7 @@ NAN_METHOD(Text::LoadOCRHMMClassifierNM) {
 }
 
 NAN_METHOD(Text::LoadOCRHMMClassifierNMAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<TextBindings::LoadOCRHMMClassifierNMWorker>(),
     "Text::LoadOCRHMMClassifierNMAsync",
     info
@@ -35,7 +35,7 @@ NAN_METHOD(Text::LoadOCRHMMClassifierNMAsync) {
 #if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 
 NAN_METHOD(Text::LoadOCRHMMClassifierCNN) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<TextBindings::LoadOCRHMMClassifierCNNWorker>(),
     "Text::LoadOCRHMMClassifierCNN",
     info
@@ -43,7 +43,7 @@ NAN_METHOD(Text::LoadOCRHMMClassifierCNN) {
 }
 
 NAN_METHOD(Text::LoadOCRHMMClassifierCNNAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<TextBindings::LoadOCRHMMClassifierCNNWorker>(),
     "Text::LoadOCRHMMClassifierCNNAsync",
     info
@@ -51,7 +51,7 @@ NAN_METHOD(Text::LoadOCRHMMClassifierCNNAsync) {
 }
 
 NAN_METHOD(Text::CreateOCRHMMTransitionsTable) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<TextBindings::CreateOCRHMMTransitionsTableWorker>(),
     "Text::CreateOCRHMMTransitionsTable",
     info
@@ -59,7 +59,7 @@ NAN_METHOD(Text::CreateOCRHMMTransitionsTable) {
 }
 
 NAN_METHOD(Text::CreateOCRHMMTransitionsTableAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<TextBindings::CreateOCRHMMTransitionsTableWorker>(),
     "Text::CreateOCRHMMTransitionsTableAsync",
     info

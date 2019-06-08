@@ -46,7 +46,7 @@ NAN_METHOD(OCRHMMDecoder::New) {
 }
 
 NAN_METHOD(OCRHMMDecoder::Run) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
 	std::make_shared<OCRHMMDecoderBindings::RunWorker>(OCRHMMDecoder::unwrapSelf(info)),
     "OCRHMMDecoder::Run",
     info
@@ -54,7 +54,7 @@ NAN_METHOD(OCRHMMDecoder::Run) {
 }
 
 NAN_METHOD(OCRHMMDecoder::RunAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<OCRHMMDecoderBindings::RunWorker>(OCRHMMDecoder::unwrapSelf(info)),
     "OCRHMMDecoder::RunAsync",
     info
@@ -62,7 +62,7 @@ NAN_METHOD(OCRHMMDecoder::RunAsync) {
 }
 
 NAN_METHOD(OCRHMMDecoder::RunWithInfo) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<OCRHMMDecoderBindings::RunWithInfoWorker>(OCRHMMDecoder::unwrapSelf(info)),
     "OCRHMMDecoder::RunWithInfo",
     info
@@ -70,7 +70,7 @@ NAN_METHOD(OCRHMMDecoder::RunWithInfo) {
 }
 
 NAN_METHOD(OCRHMMDecoder::RunWithInfoAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<OCRHMMDecoderBindings::RunWithInfoWorker>(OCRHMMDecoder::unwrapSelf(info)),
     "OCRHMMDecoder::RunWithInfoAsync",
     info

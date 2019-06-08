@@ -17,6 +17,7 @@ public:
 		return self;
 	}
 
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
 	class DetectorType : public FF::EnumWrap<DetectorType> {
 	public:
 		typedef cv::AgastFeatureDetector::DetectorType Type;
@@ -33,6 +34,7 @@ public:
 			return { "AGAST_5_8", "AGAST_7_12d", "AGAST_7_12s", "OAST_9_16" };
 		}
 	};
+#endif
 
 	FF_GETTER_CUSTOM(threshold, FF::DoubleConverter, self->getThreshold());
 	FF_GETTER_CUSTOM(nonmaxSuppression, FF::BoolConverter, self->getNonmaxSuppression());

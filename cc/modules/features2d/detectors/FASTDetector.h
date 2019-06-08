@@ -17,6 +17,7 @@ public:
 		return self;
 	}
 
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
 	class DetectorType : public FF::EnumWrap<DetectorType> {
 	public:
 		typedef cv::FastFeatureDetector::DetectorType Type;
@@ -33,6 +34,7 @@ public:
 			return { "TYPE_5_8", "TYPE_7_12", "TYPE_9_16" };
 		}
 	};
+#endif
 
 	FF_GETTER_CUSTOM(threshold, FF::IntConverter, self->getThreshold());
 	FF_GETTER_CUSTOM(nonmaxSuppression, FF::BoolConverter, self->getNonmaxSuppression());

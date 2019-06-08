@@ -56,7 +56,7 @@ NAN_METHOD(VideoCapture::Release) {
 }
 
 NAN_METHOD(VideoCapture::Get) {
-	FF::SyncBindingBase(
+	FF::executeSyncBinding(
 		std::make_shared<VideoCaptureBindings::GetWorker>(VideoCapture::unwrapSelf(info)),
 		"VideoCapture::Get",
 		info
@@ -64,7 +64,7 @@ NAN_METHOD(VideoCapture::Get) {
 }
 
 NAN_METHOD(VideoCapture::GetAsync) {
-	FF::AsyncBindingBase(
+	FF::executeAsyncBinding(
 		std::make_shared<VideoCaptureBindings::GetWorker>(VideoCapture::unwrapSelf(info)),
 		"VideoCapture::GetAsync",
 		info
@@ -72,7 +72,7 @@ NAN_METHOD(VideoCapture::GetAsync) {
 }
 
 NAN_METHOD(VideoCapture::Read) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<VideoCaptureBindings::ReadWorker>(VideoCapture::unwrapSelf(info)),
     "VideoCapture::Read",
     info
@@ -80,7 +80,7 @@ NAN_METHOD(VideoCapture::Read) {
 }
 
 NAN_METHOD(VideoCapture::ReadAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<VideoCaptureBindings::ReadWorker>(VideoCapture::unwrapSelf(info)),
     "VideoCapture::ReadAsync",
     info
@@ -88,7 +88,7 @@ NAN_METHOD(VideoCapture::ReadAsync) {
 }
 
 NAN_METHOD(VideoCapture::Set) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<VideoCaptureBindings::SetWorker>(VideoCapture::unwrapSelf(info)),
     "VideoCapture::Set",
     info
@@ -96,7 +96,7 @@ NAN_METHOD(VideoCapture::Set) {
 }
 
 NAN_METHOD(VideoCapture::SetAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<VideoCaptureBindings::SetWorker>(VideoCapture::unwrapSelf(info)),
     "VideoCapture::SetAsync",
     info

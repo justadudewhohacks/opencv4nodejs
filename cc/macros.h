@@ -61,7 +61,7 @@ namespace FF {
 	public:
 		typedef typename TEnum::Type Type;
 
-		static const char* getTypeName() {
+		static std::string getTypeName() {
 			std::vector<char*> mappings = TEnum::getEnumMappings();
 			std::string typeName = "";
 			for (uint i = 0; i < mappings.size(); i++) {
@@ -70,7 +70,7 @@ namespace FF {
 					typeName += " | ";
 				}
 			}
-			return typeName.c_str();
+			return typeName;
 		}
 
 		static bool assertType(v8::Local<v8::Value> jsVal) {

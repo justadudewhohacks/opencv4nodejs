@@ -17,6 +17,7 @@ public:
 		return self;
 	}
 
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
 	class DiffusivityType : public FF::EnumWrap<DiffusivityType> {
 	public:
 		typedef cv::KAZE::DiffusivityType Type;
@@ -33,6 +34,7 @@ public:
 			return { "DIFF_CHARBONNIER", "DIFF_PM_G1", "DIFF_PM_G2", "DIFF_WEICKERT" };
 		}
 	};
+#endif
 
 	FF_GETTER_CUSTOM(extended, FF::BoolConverter, self->getExtended());
 	FF_GETTER_CUSTOM(upright, FF::BoolConverter, self->getUpright());

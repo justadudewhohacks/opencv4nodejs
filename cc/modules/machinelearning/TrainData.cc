@@ -22,23 +22,21 @@ NAN_MODULE_INIT(TrainData::Init) {
 NAN_METHOD(TrainData::New) {
 	FF::TryCatch tryCatch("TrainData::New");
 	FF_ASSERT_CONSTRUCT_CALL();
-	TrainData* self = new TrainData();
-	if (info.Length() > 0) {
-		TrainData::NewWorker worker;
+	TrainData::NewWorker worker;
 
-		if (worker.applyUnwrappers(info)) {
-			return tryCatch.reThrow();
-		}
-
-		// TODO: uchar / char converter
-		std::vector<uchar> varType;
-		for (auto val : worker.varType) {
-			varType.push_back(val);
-		}
-		self->self = cv::ml::TrainData::create(
-			worker.samples, worker.layout, worker.responses, worker.varIdx, worker.sampleIdx, worker.sampleWeights, varType
-		);
+	if (worker.applyUnwrappers(info)) {
+		return tryCatch.reThrow();
 	}
+
+	// TODO: uchar / char converter
+	std::vector<uchar> varType;
+	for (auto val : worker.varType) {
+		varType.push_back(val);
+	}
+	TrainData* self = new TrainData();
+	self->self = cv::ml::TrainData::create(
+		worker.samples, worker.layout, worker.responses, worker.varIdx, worker.sampleIdx, worker.sampleWeights, varType
+	);
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };

@@ -294,7 +294,7 @@ NAN_METHOD(Imgproc::FitLine) {
 }
 
 NAN_METHOD(Imgproc::GetTextSize) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<ImgprocBindings::GetTextSizeWorker>(),
     "Imgproc::GetTextSize",
     info
@@ -302,7 +302,7 @@ NAN_METHOD(Imgproc::GetTextSize) {
 }
 
 NAN_METHOD(Imgproc::GetTextSizeAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<ImgprocBindings::GetTextSizeWorker>(),
     "Imgproc::GetTextSizeAsync",
     info
@@ -310,24 +310,24 @@ NAN_METHOD(Imgproc::GetTextSizeAsync) {
 }
 
 NAN_METHOD(Imgproc::ApplyColorMap) {
-  FF::SyncBindingBase(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
+  FF::executeSyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
                   "Imgproc::ApplyColorMap", info);
 }
 
 NAN_METHOD(Imgproc::ApplyColorMapAsync) {
-  FF::AsyncBindingBase(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
+  FF::executeAsyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
                    "Imgproc::ApplyColorMapAsync", info);
 }
 
 #if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 
 NAN_METHOD(Imgproc::Canny) {
-	FF::SyncBindingBase(std::make_shared<ImgprocBindings::CannyWorker>(),
+	FF::executeSyncBinding(std::make_shared<ImgprocBindings::CannyWorker>(),
 		"Imgproc::Canny", info);
 }
 
 NAN_METHOD(Imgproc::CannyAsync) {
-	FF::AsyncBindingBase(std::make_shared<ImgprocBindings::CannyWorker>(),
+	FF::executeAsyncBinding(std::make_shared<ImgprocBindings::CannyWorker>(),
 		"Imgproc::CannyAsync", info);
 }
 
@@ -335,10 +335,10 @@ NAN_METHOD(Imgproc::CannyAsync) {
 
 #if CV_VERSION_LOWER_THAN(4, 0, 0)
 NAN_METHOD(Imgproc::UndistortPoints) {
-	FF::SyncBinding<ImgprocBindings::UndistortPoints>("Imgproc", "UndistortPoints", info);
+	FF::syncBinding<ImgprocBindings::UndistortPoints>("Imgproc", "UndistortPoints", info);
 }
 
 NAN_METHOD(Imgproc::UndistortPointsAsync) {
-	FF::AsyncBinding<ImgprocBindings::UndistortPoints>("Imgproc", "UndistortPoints", info);
+	FF::asyncBinding<ImgprocBindings::UndistortPoints>("Imgproc", "UndistortPoints", info);
 }
 #endif

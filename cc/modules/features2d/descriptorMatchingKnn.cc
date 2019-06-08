@@ -134,9 +134,11 @@ public:
 #if CV_VERSION_GREATER_EQUAL(4, 0, 0)
 void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, cv::DescriptorMatcher::MatcherType matcherType) {
 #elif CV_VERSION_GREATER_EQUAL(3, 2, 0)
+void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
+#else
 void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
 #endif
-	FF::SyncBindingBase(
+	FF::executeSyncBinding(
 		std::make_shared<MatchKnnWorker>(cv::DescriptorMatcher::create(matcherType)),
 		"MSERDetector::MatchKnn",
 		info
@@ -150,7 +152,7 @@ void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, int ma
 #else
 void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
 #endif
-	FF::AsyncBindingBase(
+	FF::executeAsyncBinding(
 		std::make_shared<MatchKnnWorker>(cv::DescriptorMatcher::create(matcherType)),
 		"MSERDetector::MatchKnnAsync",
 		info

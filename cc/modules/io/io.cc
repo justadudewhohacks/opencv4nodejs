@@ -178,7 +178,7 @@ NAN_METHOD(Io::ImdecodeAsync) {
 }
 
 NAN_METHOD(Io::Imread) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<IoBindings::ImreadWorker>(),
     "Io::Imread",
     info
@@ -186,7 +186,7 @@ NAN_METHOD(Io::Imread) {
 }
 
 NAN_METHOD(Io::ImreadAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<IoBindings::ImreadWorker>(),
     "Io::ImreadAsync",
     info
@@ -194,7 +194,7 @@ NAN_METHOD(Io::ImreadAsync) {
 }
 
 NAN_METHOD(Io::Imwrite) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<IoBindings::ImwriteWorker>(),
     "Io::Imwrite",
     info
@@ -202,7 +202,7 @@ NAN_METHOD(Io::Imwrite) {
 }
 
 NAN_METHOD(Io::ImwriteAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<IoBindings::ImwriteWorker>(),
     "Io::ImwriteAsync",
     info
@@ -210,7 +210,7 @@ NAN_METHOD(Io::ImwriteAsync) {
 }
 
 NAN_METHOD(Io::Imencode) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<IoBindings::ImencodeWorker>(),
     "Io::Imencode",
     info
@@ -218,7 +218,7 @@ NAN_METHOD(Io::Imencode) {
 }
 
 NAN_METHOD(Io::ImencodeAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<IoBindings::ImencodeWorker>(),
     "Io::ImencodeAsync",
     info

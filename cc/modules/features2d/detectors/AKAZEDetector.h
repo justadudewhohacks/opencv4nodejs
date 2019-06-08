@@ -18,6 +18,7 @@ public:
 		return self;
 	}
 
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
 	class DescriptorType : public FF::EnumWrap<DescriptorType> {
 	public:
 		typedef cv::AKAZE::DescriptorType Type;
@@ -34,6 +35,7 @@ public:
 			return { "DESCRIPTOR_KAZE", "DESCRIPTOR_KAZE_UPRIGHT", "DESCRIPTOR_MLDB", "DESCRIPTOR_MLDB_UPRIGHT" };
 		}
 	};
+#endif
 
 	FF_GETTER_CUSTOM(descriptorType, FF::IntConverter, self->getDescriptorType());
 	FF_GETTER_CUSTOM(descriptorSize, FF::IntConverter, self->getDescriptorSize());

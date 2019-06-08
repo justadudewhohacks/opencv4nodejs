@@ -20,6 +20,7 @@ public:
 		return "HOGDescriptor";
 	}
 
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
 	class HistogramNormType : public FF::EnumWrap<HistogramNormType> {
 	public:
 		typedef cv::HOGDescriptor::HistogramNormType Type;
@@ -36,6 +37,7 @@ public:
 			return { "L2Hys" };
 		}
 	};
+#endif
 
 	FF_ACCESSORS_PTR(winSize, Size::Converter);
 	FF_ACCESSORS_PTR(blockSize, Size::Converter);
@@ -78,12 +80,9 @@ public:
 	static NAN_METHOD(GroupRectangles);
 	static NAN_METHOD(GroupRectanglesAsync);
 
-	class NewBinding : public CvBinding {
+	class Constructor : public ConstructorBase {
 	public:
-		void construct(Nan::NAN_METHOD_ARGS_TYPE info) {
-			FF::TryCatch tryCatch("HOGDescriptor::New");
-			FF_ASSERT_CONSTRUCT_CALL();
-
+		Constructor(Nan::NAN_METHOD_ARGS_TYPE info) {
 			auto winSize = opt<Size::Converter>("winSize", cv::Size2d(64, 128));
 			auto blockSize = opt<Size::Converter>("blockSize", cv::Size2d(16, 16));
 			auto blockStride = opt<Size::Converter>("blockStride", cv::Size2d(8, 8));
@@ -101,28 +100,22 @@ public:
 			auto nlevels = opt<FF::IntConverter>("nlevels", cv::HOGDescriptor::DEFAULT_NLEVELS);
 			auto signedGradient = opt<FF::BoolConverter>("signedGradient", false);
 
-
-			if (applyUnwrappers(info)) {
-				return tryCatch.reThrow();
-			}
-
-			HOGDescriptor* self = new HOGDescriptor();
-			self->setNativeObject(std::make_shared<cv::HOGDescriptor>(
-				winSize->ref(),
-				blockSize->ref(),
-				blockStride->ref(),
-				cellSize->ref(),
-				nbins->ref(),
-				derivAperture->ref(),
-				winSigma->ref(),
-				histogramNormType->ref(),
-				L2HysThreshold->ref(),
-				gammaCorrection->ref(),
-				nlevels->ref(),
-				signedGradient->ref()
-			));
-			self->Wrap(info.Holder());
-			info.GetReturnValue().Set(info.Holder());
+			executeBinding = [=]() {
+				return std::make_shared<cv::HOGDescriptor>(
+					winSize->ref(),
+					blockSize->ref(),
+					blockStride->ref(),
+					cellSize->ref(),
+					nbins->ref(),
+					derivAperture->ref(),
+					winSigma->ref(),
+					histogramNormType->ref(),
+					L2HysThreshold->ref(),
+					gammaCorrection->ref(),
+					nlevels->ref(),
+					signedGradient->ref()
+				);
+			};
 		};
 	};
 };

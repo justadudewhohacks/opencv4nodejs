@@ -326,7 +326,7 @@ NAN_METHOD(Mat::Set) {
 }
 
 NAN_METHOD(Mat::SetTo) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<MatBindings::SetToWorker>(Mat::unwrapSelf(info)),
     "Mat::SetTo",
     info
@@ -334,7 +334,7 @@ NAN_METHOD(Mat::SetTo) {
 }
 
 NAN_METHOD(Mat::SetToAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<MatBindings::SetToWorker>(Mat::unwrapSelf(info)),
     "Mat::SetToAsync",
     info
@@ -401,11 +401,11 @@ NAN_METHOD(Mat::Norm) {
 }
 
 NAN_METHOD(Mat::Normalize) {
-	Mat::SyncBinding<MatBindings::Normalize>("Normalize", info);
+	Mat::syncBinding<MatBindings::Normalize>("Normalize", info);
 }
 
 NAN_METHOD(Mat::NormalizeAsync) {
-	Mat::AsyncBinding<MatBindings::Normalize>("Normalize", info);
+	Mat::asyncBinding<MatBindings::Normalize>("Normalize", info);
 }
 
 NAN_METHOD(Mat::Row) {
@@ -451,23 +451,23 @@ NAN_METHOD(Mat::Release) {
 }
 
 NAN_METHOD(Mat::PushBack) {
-	Mat::SyncBinding<MatBindings::PushBack>("PushBack", info);
+	Mat::syncBinding<MatBindings::PushBack>("PushBack", info);
 }
 
 NAN_METHOD(Mat::PushBackAsync) {
-	Mat::AsyncBinding<MatBindings::PushBack>("PushBack", info);
+	Mat::asyncBinding<MatBindings::PushBack>("PushBack", info);
 }
 
 NAN_METHOD(Mat::PopBack) {
-	Mat::SyncBinding<MatBindings::PopBack>("PopBack", info);
+	Mat::syncBinding<MatBindings::PopBack>("PopBack", info);
 }
 
 NAN_METHOD(Mat::PopBackAsync) {
-	Mat::AsyncBinding<MatBindings::PopBack>("PopBack", info);
+	Mat::asyncBinding<MatBindings::PopBack>("PopBack", info);
 }
 
 NAN_METHOD(Mat::GetData) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<MatBindings::GetDataWorker>(Mat::unwrapSelf(info)),
     "Mat::GetData",
     info
@@ -475,7 +475,7 @@ NAN_METHOD(Mat::GetData) {
 }
 
 NAN_METHOD(Mat::GetDataAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<MatBindings::GetDataWorker>(Mat::unwrapSelf(info)),
     "Mat::GetDataAsync",
     info
@@ -483,79 +483,79 @@ NAN_METHOD(Mat::GetDataAsync) {
 }
 
 NAN_METHOD(Mat::Copy) {
-	Mat::SyncBinding<MatBindings::Copy>("Copy", info);
+	Mat::syncBinding<MatBindings::Copy>("Copy", info);
 }
 
 NAN_METHOD(Mat::CopyAsync) {
-	Mat::AsyncBinding<MatBindings::Copy>("Copy", info);
+	Mat::asyncBinding<MatBindings::Copy>("Copy", info);
 }
 
 NAN_METHOD(Mat::CopyTo) {
-	Mat::SyncBinding<MatBindings::CopyTo>("CopyTo", info);
+	Mat::syncBinding<MatBindings::CopyTo>("CopyTo", info);
 }
 
 NAN_METHOD(Mat::CopyToAsync) {
-	Mat::AsyncBinding<MatBindings::CopyTo>("CopyTo", info);
+	Mat::asyncBinding<MatBindings::CopyTo>("CopyTo", info);
 }
 
 NAN_METHOD(Mat::ConvertTo) {
-	Mat::SyncBinding<MatBindings::ConvertTo>("ConvertTo", info);
+	Mat::syncBinding<MatBindings::ConvertTo>("ConvertTo", info);
 }
 
 NAN_METHOD(Mat::ConvertToAsync) {
-	Mat::AsyncBinding<MatBindings::ConvertTo>("ConvertTo", info);
+	Mat::asyncBinding<MatBindings::ConvertTo>("ConvertTo", info);
 }
 
 NAN_METHOD(Mat::SplitChannels) {
-	Mat::SyncBinding<MatBindings::SplitChannels>("SplitChannels", info);
+	Mat::syncBinding<MatBindings::SplitChannels>("SplitChannels", info);
 }
 
 NAN_METHOD(Mat::SplitChannelsAsync) {
-	Mat::AsyncBinding<MatBindings::SplitChannels>("SplitChannels", info);
+	Mat::asyncBinding<MatBindings::SplitChannels>("SplitChannels", info);
 }
 
 NAN_METHOD(Mat::AddWeighted) {
-	Mat::SyncBinding<MatBindings::AddWeighted>("AddWeighted", info);
+	Mat::syncBinding<MatBindings::AddWeighted>("AddWeighted", info);
 }
 
 NAN_METHOD(Mat::AddWeightedAsync) {
-	Mat::AsyncBinding<MatBindings::AddWeighted>("AddWeighted", info);
+	Mat::asyncBinding<MatBindings::AddWeighted>("AddWeighted", info);
 }
 
 NAN_METHOD(Mat::MinMaxLoc) {
-	Mat::SyncBinding<MatBindings::MinMaxLoc>("MinMaxLoc", info);
+	Mat::syncBinding<MatBindings::MinMaxLoc>("MinMaxLoc", info);
 }
 
 NAN_METHOD(Mat::MinMaxLocAsync) {
-	Mat::AsyncBinding<MatBindings::MinMaxLoc>("MinMaxLoc", info);
+	Mat::asyncBinding<MatBindings::MinMaxLoc>("MinMaxLoc", info);
 }
 
 NAN_METHOD(Mat::FindNonZero) {
-	Mat::SyncBinding<MatBindings::FindNonZero>("FindNonZero", info);
+	Mat::syncBinding<MatBindings::FindNonZero>("FindNonZero", info);
 }
 
 NAN_METHOD(Mat::FindNonZeroAsync) {
-	Mat::AsyncBinding<MatBindings::FindNonZero>("FindNonZero", info);
+	Mat::asyncBinding<MatBindings::FindNonZero>("FindNonZero", info);
 }
 
 NAN_METHOD(Mat::CountNonZero) {
-	Mat::SyncBinding<MatBindings::CountNonZero>("CountNonZero", info);
+	Mat::syncBinding<MatBindings::CountNonZero>("CountNonZero", info);
 }
 
 NAN_METHOD(Mat::CountNonZeroAsync) {
-	Mat::AsyncBinding<MatBindings::CountNonZero>("CountNonZero", info);
+	Mat::asyncBinding<MatBindings::CountNonZero>("CountNonZero", info);
 }
 
 NAN_METHOD(Mat::PadToSquare) {
-	Mat::SyncBinding<MatBindings::PadToSquare>("PadToSquare", info);
+	Mat::syncBinding<MatBindings::PadToSquare>("PadToSquare", info);
 }
 
 NAN_METHOD(Mat::PadToSquareAsync) {
-	Mat::AsyncBinding<MatBindings::PadToSquare>("PadToSquare", info);
+	Mat::asyncBinding<MatBindings::PadToSquare>("PadToSquare", info);
 }
 
 NAN_METHOD(Mat::Dct) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<MatBindings::DCTWorker>(Mat::unwrapSelf(info)),
     "Mat::Dct",
     info
@@ -563,7 +563,7 @@ NAN_METHOD(Mat::Dct) {
 }
 
 NAN_METHOD(Mat::DctAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<MatBindings::DCTWorker>(Mat::unwrapSelf(info)),
     "Mat::DctAsync",
     info
@@ -571,7 +571,7 @@ NAN_METHOD(Mat::DctAsync) {
 }
 
 NAN_METHOD(Mat::Idct) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<MatBindings::DCTWorker>(Mat::unwrapSelf(info)),
     "Mat::Idct",
     info
@@ -579,7 +579,7 @@ NAN_METHOD(Mat::Idct) {
 }
 
 NAN_METHOD(Mat::IdctAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<MatBindings::DCTWorker>(Mat::unwrapSelf(info)),
     "Mat::IdctAsync",
     info
@@ -587,7 +587,7 @@ NAN_METHOD(Mat::IdctAsync) {
 }
 
 NAN_METHOD(Mat::Dft) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<MatBindings::DFTWorker>(Mat::unwrapSelf(info)),
     "Mat::Dft",
     info
@@ -595,7 +595,7 @@ NAN_METHOD(Mat::Dft) {
 }
 
 NAN_METHOD(Mat::DftAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<MatBindings::DFTWorker>(Mat::unwrapSelf(info)),
     "Mat::DftAsync",
     info
@@ -603,7 +603,7 @@ NAN_METHOD(Mat::DftAsync) {
 }
 
 NAN_METHOD(Mat::Idft) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<MatBindings::DFTWorker>(Mat::unwrapSelf(info)),
     "Mat::Idft",
     info
@@ -611,7 +611,7 @@ NAN_METHOD(Mat::Idft) {
 }
 
 NAN_METHOD(Mat::IdftAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<MatBindings::DFTWorker>(Mat::unwrapSelf(info)),
     "Mat::IdftAsync",
     info
@@ -619,7 +619,7 @@ NAN_METHOD(Mat::IdftAsync) {
 }
 
 NAN_METHOD(Mat::MulSpectrums) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<MatBindings::MulSpectrumsWorker>(Mat::unwrapSelf(info)),
     "Mat::MulSpectrums",
     info
@@ -627,7 +627,7 @@ NAN_METHOD(Mat::MulSpectrums) {
 }
 
 NAN_METHOD(Mat::MulSpectrumsAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<MatBindings::MulSpectrumsWorker>(Mat::unwrapSelf(info)),
     "Mat::MulSpectrumsAsync",
     info
@@ -635,7 +635,7 @@ NAN_METHOD(Mat::MulSpectrumsAsync) {
 }
 
 NAN_METHOD(Mat::Transform) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<MatBindings::TransformWorker>(Mat::unwrapSelf(info)),
     "Mat::Transform",
     info
@@ -643,7 +643,7 @@ NAN_METHOD(Mat::Transform) {
 }
 
 NAN_METHOD(Mat::TransformAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<MatBindings::TransformWorker>(Mat::unwrapSelf(info)),
     "Mat::TransformAsync",
     info
@@ -651,7 +651,7 @@ NAN_METHOD(Mat::TransformAsync) {
 }
 
 NAN_METHOD(Mat::PerspectiveTransform) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<MatBindings::PerspectiveTransformWorker>(Mat::unwrapSelf(info)),
     "Mat::PerspectiveTransform",
     info
@@ -659,7 +659,7 @@ NAN_METHOD(Mat::PerspectiveTransform) {
 }
 
 NAN_METHOD(Mat::PerspectiveTransformAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<MatBindings::PerspectiveTransformWorker>(Mat::unwrapSelf(info)),
     "Mat::PerspectiveTransformAsync",
     info
@@ -667,7 +667,7 @@ NAN_METHOD(Mat::PerspectiveTransformAsync) {
 }
 
 NAN_METHOD(Mat::Flip) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<MatBindings::FlipWorker>(Mat::unwrapSelf(info)),
     "Mat::Flip",
     info
@@ -675,7 +675,7 @@ NAN_METHOD(Mat::Flip) {
 }
 
 NAN_METHOD(Mat::FlipAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<MatBindings::FlipWorker>(Mat::unwrapSelf(info)),
     "Mat::FlipAsync",
     info
@@ -683,47 +683,47 @@ NAN_METHOD(Mat::FlipAsync) {
 }
 
 NAN_METHOD(Mat::Sum) {
-	Mat::SyncBinding<MatBindings::Sum>("Sum", info);
+	Mat::syncBinding<MatBindings::Sum>("Sum", info);
 }
 
 NAN_METHOD(Mat::SumAsync) {
-	Mat::AsyncBinding<MatBindings::Sum>("Sum", info);
+	Mat::asyncBinding<MatBindings::Sum>("Sum", info);
 }
 
 NAN_METHOD(Mat::ConvertScaleAbs) {
-	Mat::SyncBinding<MatBindings::ConvertScaleAbs>("ConvertScaleAbs", info);
+	Mat::syncBinding<MatBindings::ConvertScaleAbs>("ConvertScaleAbs", info);
 }
 
 NAN_METHOD(Mat::ConvertScaleAbsAsync) {
-	Mat::AsyncBinding<MatBindings::ConvertScaleAbs>("ConvertScaleAbs", info);
+	Mat::asyncBinding<MatBindings::ConvertScaleAbs>("ConvertScaleAbs", info);
 }
 
 NAN_METHOD(Mat::GoodFeaturesToTrack) {
-	Mat::SyncBinding<MatBindings::GoodFeaturesToTrack>("GoodFeaturesToTrack", info);
+	Mat::syncBinding<MatBindings::GoodFeaturesToTrack>("GoodFeaturesToTrack", info);
 }
 
 NAN_METHOD(Mat::GoodFeaturesToTrackAsync) {
-	Mat::AsyncBinding<MatBindings::GoodFeaturesToTrack>("GoodFeaturesToTrack", info);
+	Mat::asyncBinding<MatBindings::GoodFeaturesToTrack>("GoodFeaturesToTrack", info);
 }
 
 NAN_METHOD(Mat::Mean) {
-	Mat::SyncBinding<MatBindings::Mean>("Mean", info);
+	Mat::syncBinding<MatBindings::Mean>("Mean", info);
 }
 
 NAN_METHOD(Mat::MeanAsync) {
-	Mat::AsyncBinding<MatBindings::Mean>("Mean", info);
+	Mat::asyncBinding<MatBindings::Mean>("Mean", info);
 }
 
 NAN_METHOD(Mat::MeanStdDev) {
-	Mat::SyncBinding<MatBindings::MeanStdDev>("MeanStdDev", info);
+	Mat::syncBinding<MatBindings::MeanStdDev>("MeanStdDev", info);
 }
 
 NAN_METHOD(Mat::MeanStdDevAsync) {
-	Mat::AsyncBinding<MatBindings::MeanStdDev>("MeanStdDev", info);
+	Mat::asyncBinding<MatBindings::MeanStdDev>("MeanStdDev", info);
 }
 
 NAN_METHOD(Mat::CopyMakeBorder) {
-	FF::SyncBindingBase(
+	FF::executeSyncBinding(
 		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::unwrapSelf(info)),
 		"Mat::CopyMakeBorder",
 		info
@@ -731,7 +731,7 @@ NAN_METHOD(Mat::CopyMakeBorder) {
 }
 
 NAN_METHOD(Mat::CopyMakeBorderAsync) {
-	FF::AsyncBindingBase(
+	FF::executeAsyncBinding(
 		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::unwrapSelf(info)),
 		"Mat::CopyMakeBorderAsync",
 		info
@@ -739,32 +739,32 @@ NAN_METHOD(Mat::CopyMakeBorderAsync) {
 }
 
 NAN_METHOD(Mat::Reduce) {
-	Mat::SyncBinding<MatBindings::Reduce>("Reduce", info);
+	Mat::syncBinding<MatBindings::Reduce>("Reduce", info);
 }
 
 NAN_METHOD(Mat::ReduceAsync) {
-	Mat::AsyncBinding<MatBindings::Reduce>("Reduce", info);
+	Mat::asyncBinding<MatBindings::Reduce>("Reduce", info);
 }
 
 NAN_METHOD(Mat::Eigen) {
-	Mat::SyncBinding<MatBindings::Eigen>("Eigen", info);
+	Mat::syncBinding<MatBindings::Eigen>("Eigen", info);
 }
 
 NAN_METHOD(Mat::EigenAsync) {
-	Mat::AsyncBinding<MatBindings::Eigen>("Eigen", info);
+	Mat::asyncBinding<MatBindings::Eigen>("Eigen", info);
 }
 
 NAN_METHOD(Mat::Solve) {
-	Mat::SyncBinding<MatBindings::Solve>("Solve", info);
+	Mat::syncBinding<MatBindings::Solve>("Solve", info);
 }
 
 NAN_METHOD(Mat::SolveAsync) {
-	Mat::AsyncBinding<MatBindings::Solve>("Solve", info);
+	Mat::asyncBinding<MatBindings::Solve>("Solve", info);
 }
 
 #if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 NAN_METHOD(Mat::Rotate) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<MatBindings::RotateWorker>(Mat::unwrapSelf(info)),
     "Mat::Rotate",
     info
@@ -772,7 +772,7 @@ NAN_METHOD(Mat::Rotate) {
 }
 
 NAN_METHOD(Mat::RotateAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<MatBindings::RotateWorker>(Mat::unwrapSelf(info)),
     "Mat::RotateAsync",
     info

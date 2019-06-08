@@ -20,7 +20,7 @@ NAN_MODULE_INIT(OCRHMMClassifier::Init) {
 };
 
 NAN_METHOD(OCRHMMClassifier::Eval) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<OCRHMMClassifierBindings::EvalWorker>(OCRHMMClassifier::unwrapSelf(info)),
     "OCRHMMClassifier::Eval",
     info
@@ -28,7 +28,7 @@ NAN_METHOD(OCRHMMClassifier::Eval) {
 }
 
 NAN_METHOD(OCRHMMClassifier::EvalAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<OCRHMMClassifierBindings::EvalWorker>(OCRHMMClassifier::unwrapSelf(info)),
     "OCRHMMClassifier::EvalAsync",
     info

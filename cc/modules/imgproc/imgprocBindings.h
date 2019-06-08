@@ -123,10 +123,10 @@ namespace ImgprocBindings {
   class UndistortPoints : public CvBinding {
   public:
 	  UndistortPoints() {
-		  auto srcPoints = req<Point2::ArrayOfArraysWithCastConverter<cv::Point2f>>();
+		  auto srcPoints = req<Point2::ArrayWithCastConverter<cv::Point2f>>();
 		  auto cameraMatrix = req<Mat::Converter>();
 		  auto distCoeffs = req<Mat::Converter>();
-		  auto destPoints = ret<Point2::ArrayOfArraysWithCastConverter<cv::Point2f>>("destPoints");
+		  auto destPoints = ret<Point2::ArrayWithCastConverter<cv::Point2f>>("destPoints");
 
 		  executeBinding = [=]() {
 			  cv::undistortPoints(srcPoints->ref(), destPoints->ref(), cameraMatrix->ref(), distCoeffs->ref(), cameraMatrix->ref());

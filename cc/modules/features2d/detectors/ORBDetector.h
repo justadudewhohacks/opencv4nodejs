@@ -17,6 +17,7 @@ public:
 		return self;
 	}
 
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
 	class ScoreType : public FF::EnumWrap<ScoreType> {
 	public:
 		typedef cv::ORB::ScoreType Type;
@@ -33,6 +34,7 @@ public:
 			return { "HARRIS_SCORE", "FAST_SCORE" };
 		}
 	};
+#endif
 
 	FF_GETTER_CUSTOM(maxFeatures, FF::IntConverter, self->getMaxFeatures());
 	FF_GETTER_CUSTOM(scaleFactor, FF::FloatConverter, self->getScaleFactor());
