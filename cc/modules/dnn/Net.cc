@@ -1,6 +1,7 @@
 #include "opencv2/core.hpp"
+#include "macros.h"
 
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 
 // cv 3.3+ should have dnn by default
 //#ifdef HAVE_DNN
@@ -37,7 +38,7 @@ NAN_METHOD(Net::New) {
 }
 
 NAN_METHOD(Net::SetInput) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<NetBindings::SetInputWorker>(Net::unwrapSelf(info)),
     "Net::SetInput",
     info
@@ -45,7 +46,7 @@ NAN_METHOD(Net::SetInput) {
 }
 
 NAN_METHOD(Net::SetInputAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<NetBindings::SetInputWorker>(Net::unwrapSelf(info)),
     "Net::SetInputAsync",
     info
@@ -53,7 +54,7 @@ NAN_METHOD(Net::SetInputAsync) {
 }
 
 NAN_METHOD(Net::Forward) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<NetBindings::ForwardWorker>(Net::unwrapSelf(info)),
     "Net::Forward",
     info
@@ -61,7 +62,7 @@ NAN_METHOD(Net::Forward) {
 }
 
 NAN_METHOD(Net::ForwardAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<NetBindings::ForwardWorker>(Net::unwrapSelf(info)),
     "Net::ForwardAsync",
     info
@@ -69,28 +70,28 @@ NAN_METHOD(Net::ForwardAsync) {
 }
 
 NAN_METHOD(Net::GetLayerNames) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
       std::make_shared<NetBindings::GetLayerNamesWorker>(Net::unwrapSelf(info)),
       "Net::GetLayerNames",
       info);
 }
 
 NAN_METHOD(Net::GetLayerNamesAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
       std::make_shared<NetBindings::GetLayerNamesWorker>(Net::unwrapSelf(info)),
       "Net::GetLayerNamesAsync",
       info);
 }
 
 NAN_METHOD(Net::GetUnconnectedOutLayers) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
       std::make_shared<NetBindings::GetUnconnectedOutLayersWorker>(Net::unwrapSelf(info)),
       "Net::GetUnconnectedOutLayers",
       info);
 }
 
 NAN_METHOD(Net::GetUnconnectedOutLayersAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
       std::make_shared<NetBindings::GetUnconnectedOutLayersWorker>(Net::unwrapSelf(info)),
       "Net::GetUnconnectedOutLayersAsync",
       info);

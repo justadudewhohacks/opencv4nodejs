@@ -24,7 +24,7 @@ NAN_MODULE_INIT(SIFTDetector::Init) {
 
 
 NAN_METHOD(SIFTDetector::New) {
-	NewBinding().construct(info);
+	constructorBinding<Constructor>(info);
 }
 
 #endif // HAVE_XFEATURES2D

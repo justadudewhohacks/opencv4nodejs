@@ -2,7 +2,7 @@
 
 #include "TrackerKCFParams.h"
 
-#if CV_MINOR_VERSION > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 
 Nan::Persistent<v8::FunctionTemplate> TrackerKCFParams::constructor;
 
@@ -27,7 +27,7 @@ NAN_MODULE_INIT(TrackerKCFParams::Init) {
 	Nan::SetAccessor(instanceTemplate, FF::newString("compressed_size"), compressed_size_getter, compressed_size_setter);
 	Nan::SetAccessor(instanceTemplate, FF::newString("desc_pca"), desc_pca_getter, desc_pca_setter);
 	Nan::SetAccessor(instanceTemplate, FF::newString("desc_npca"), desc_npca_getter, desc_npca_setter);
-#if CV_MINOR_VERSION > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	Nan::SetAccessor(instanceTemplate, FF::newString("detect_thresh"), detect_thresh_getter, detect_thresh_setter);
 #endif
 	Nan::Set(target,FF::newString("TrackerKCFParams"), FF::getFunction(ctor));

@@ -19,32 +19,39 @@ describe('features2d', () => {
   BFMatcherTests(() => testImg);
 
   describe('AGASTDetector', () => {
+    const TYPE_DEFAULT = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.AGASTDetectorType.OAST_9_16 : 3
+    const TYPE_CUSTOM = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.AGASTDetectorType.AGAST_7_12d : 1
     const defaults = {
-      type: 3,
+      type: TYPE_DEFAULT,
       nonmaxSuppression: true,
       threshold: 10
     };
     const customProps = {
       args: ['threshold', 'nonmaxSuppression', 'type'],
-      values: [1, false, 50]
+      values: [50, false, TYPE_CUSTOM]
     };
     const Detector = cv.AGASTDetector;
     detectorTests(() => testImg, defaults, customProps, Detector, false);
   });
 
   describe('AKAZEDetector', () => {
+    const DIFFUSIVITY_DEFAULT = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.KAZEDiffusivityType.DIFF_PM_G2 : 1
+    const DIFFUSIVITY_CUSTOM = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.KAZEDiffusivityType.DIFF_WEICKERT : 2
+    const DESCRIPTOR_TYPE_DEFAULT = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.AKAZEDescriptorType.DESCRIPTOR_MLDB : 5
+    const DESCRIPTOR_TYPE_CUSTOM = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.AKAZEDescriptorType.DESCRIPTOR_KAZE_UPRIGHT : 2
+
     const defaults = {
-      diffusivity: 1,
+      diffusivity: DIFFUSIVITY_DEFAULT,
       nOctaveLayers: 4,
       nOctaves: 4,
       threshold: 0.0010000000474974513,
       descriptorChannels: 3,
       descriptorSize: 0,
-      descriptorType: 5
+      descriptorType: DESCRIPTOR_TYPE_DEFAULT
     };
     const customProps = {
       args: ['descriptorType', 'descriptorSize', 'descriptorChannels', 'threshold', 'nOctaves', 'nOctaveLayers', 'diffusivity'],
-      values: [2, 8, 8, 2 * 0.0010000000474974513, 6, 1, 1]
+      values: [DESCRIPTOR_TYPE_CUSTOM, 8, 8, 2 * 0.0010000000474974513, 6, 1, DIFFUSIVITY_CUSTOM]
     };
     const Detector = cv.AKAZEDetector;
     detectorTests(() => testImg, defaults, customProps, Detector);
@@ -65,14 +72,17 @@ describe('features2d', () => {
   });
 
   describe('FASTDetector', () => {
+    const TYPE_DEFAULT = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.FASTDetectorType.TYPE_9_16 : 2
+    const TYPE_CUSTOM = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.FASTDetectorType.TYPE_7_12 : 1
+
     const defaults = {
-      type: 2,
+      type: TYPE_DEFAULT,
       nonmaxSuppression: true,
       threshold: 10
     };
     const customProps = {
       args: ['threshold', 'nonmaxSuppression', 'type'],
-      values: [1, false, 20]
+      values: [20, false, TYPE_CUSTOM]
     };
     const Detector = cv.FASTDetector;
     detectorTests(() => testImg, defaults, customProps, Detector, false);
@@ -96,8 +106,11 @@ describe('features2d', () => {
   });
 
   describe('KAZEDetector', () => {
+    const DIFFUSIVITY_DEFAULT = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.KAZEDiffusivityType.DIFF_PM_G2 : 1
+    const DIFFUSIVITY_CUSTOM = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.KAZEDiffusivityType.DIFF_WEICKERT : 2
+
     const defaults = {
-      diffusivity: 1,
+      diffusivity: DIFFUSIVITY_DEFAULT,
       nOctaveLayers: 4,
       nOctaves: 4,
       threshold: 0.0010000000474974513,
@@ -106,7 +119,7 @@ describe('features2d', () => {
     };
     const customProps = {
       args: ['extended', 'upright', 'threshold', 'nOctaves', 'nOctaveLayers', 'diffusivity'],
-      values: [true, true, 0.0020000000949949026, 8, 8, 2]
+      values: [true, true, 0.0020000000949949026, 8, 8, DIFFUSIVITY_CUSTOM]
     };
     const Detector = cv.KAZEDetector;
     detectorTests(() => testImg, defaults, customProps, Detector);
@@ -133,10 +146,12 @@ describe('features2d', () => {
   });
 
   describe('ORBDetector', () => {
+    const SCORE_TYPE_DEFAULT = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.ORBScoreType.HARRIS_SCORE : 0
+    const SCORE_TYPE_CUSTOM = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.ORBScoreType.FAST_SCORE : 1
     const defaults = {
       fastThreshold: 20,
       patchSize: 31,
-      scoreType: 0,
+      scoreType: SCORE_TYPE_DEFAULT,
       WTA_K: 2,
       firstLevel: 0,
       edgeThreshold: 31,
@@ -146,7 +161,7 @@ describe('features2d', () => {
     };
     const customProps = {
       args: ['maxFeatures', 'scaleFactor', 'nLevels', 'edgeThreshold', 'firstLevel', 'WTA_K', 'scoreType', 'patchSize', 'fastThreshold'],
-      values: [1000, 2 * 1.2000000476837158, 16, 62, 2, 3, 1, 62, 40]
+      values: [1000, 2 * 1.2000000476837158, 16, 62, 2, 3, SCORE_TYPE_CUSTOM, 62, 40]
     };
     const Detector = cv.ORBDetector;
     detectorTests(() => testImg, defaults, customProps, Detector);

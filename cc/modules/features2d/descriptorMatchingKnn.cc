@@ -9,7 +9,7 @@ NAN_MODULE_INIT(DescriptorMatchingKnn::Init) {
 	Nan::SetMethod(target, "matchKnnBruteForceAsync", MatchKnnBruteForceAsync);
 	Nan::SetMethod(target, "matchKnnBruteForceL1Async", MatchKnnBruteForceL1Async);
 	Nan::SetMethod(target, "matchKnnBruteForceHammingAsync", MatchKnnBruteForceHammingAsync);
-#if 2 <= CV_VERSION_MINOR
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 	Nan::SetMethod(target, "matchKnnBruteForceHammingLut", MatchKnnBruteForceHammingLut);
 	Nan::SetMethod(target, "matchKnnBruteForceSL2", MatchKnnBruteForceSL2);
 	Nan::SetMethod(target, "matchKnnBruteForceHammingLutAsync", MatchKnnBruteForceHammingLutAsync);
@@ -17,41 +17,7 @@ NAN_MODULE_INIT(DescriptorMatchingKnn::Init) {
 #endif
 };
 
-#if CV_VERSION_MINOR < 2
-
-NAN_METHOD(DescriptorMatchingKnn::MatchKnnFlannBased) {
-	matchKnn(info, "FlannBased");
-}
-
-NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForce) {
-	matchKnn(info, "BruteForce");
-}
-
-NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForceL1) {
-	matchKnn(info, "BruteForce-L1");
-}
-
-NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForceHamming) {
-	matchKnn(info, "BruteForce-Hamming");
-}
-
-NAN_METHOD(DescriptorMatchingKnn::MatchKnnFlannBasedAsync) {
-	matchKnnAsync(info, "FlannBased");
-}
-
-NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForceAsync) {
-	matchKnnAsync(info, "BruteForce");
-}
-
-NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForceL1Async) {
-	matchKnnAsync(info, "BruteForce-L1");
-}
-
-NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForceHammingAsync) {
-	matchKnnAsync(info, "BruteForce-Hamming");
-}
-
-#else
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 
 NAN_METHOD(DescriptorMatchingKnn::MatchKnnFlannBased) {
 	matchKnn(info, cv::DescriptorMatcher::FLANNBASED);
@@ -101,6 +67,40 @@ NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForceSL2Async) {
 	matchKnnAsync(info, cv::DescriptorMatcher::BRUTEFORCE_SL2);
 }
 
+#else
+
+NAN_METHOD(DescriptorMatchingKnn::MatchKnnFlannBased) {
+	matchKnn(info, "FlannBased");
+}
+
+NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForce) {
+	matchKnn(info, "BruteForce");
+}
+
+NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForceL1) {
+	matchKnn(info, "BruteForce-L1");
+}
+
+NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForceHamming) {
+	matchKnn(info, "BruteForce-Hamming");
+}
+
+NAN_METHOD(DescriptorMatchingKnn::MatchKnnFlannBasedAsync) {
+	matchKnnAsync(info, "FlannBased");
+}
+
+NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForceAsync) {
+	matchKnnAsync(info, "BruteForce");
+}
+
+NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForceL1Async) {
+	matchKnnAsync(info, "BruteForce-L1");
+}
+
+NAN_METHOD(DescriptorMatchingKnn::MatchKnnBruteForceHammingAsync) {
+	matchKnnAsync(info, "BruteForce-Hamming");
+}
+
 #endif
 
 struct DescriptorMatchingKnn::MatchKnnWorker : public CatchCvExceptionWorker {
@@ -131,24 +131,28 @@ public:
 	}
 };
 
-#if CV_VERSION_MINOR < 2
-void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
-#else
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, cv::DescriptorMatcher::MatcherType matcherType) {
+#elif CV_VERSION_GREATER_EQUAL(3, 2, 0)
 void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
+#else
+void DescriptorMatchingKnn::matchKnn(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
 #endif
-	FF::SyncBindingBase(
+	FF::executeSyncBinding(
 		std::make_shared<MatchKnnWorker>(cv::DescriptorMatcher::create(matcherType)),
 		"MSERDetector::MatchKnn",
 		info
 	);
 }
 
-#if CV_VERSION_MINOR < 2
-void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
-#else
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, cv::DescriptorMatcher::MatcherType matcherType) {
+#elif CV_VERSION_GREATER_EQUAL(3, 2, 0)
 void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, int matcherType) {
+#else
+void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string matcherType) {
 #endif
-	FF::AsyncBindingBase(
+	FF::executeAsyncBinding(
 		std::make_shared<MatchKnnWorker>(cv::DescriptorMatcher::create(matcherType)),
 		"MSERDetector::MatchKnnAsync",
 		info

@@ -2,7 +2,7 @@
 
 #include "TrackerCSRTParams.h"
 
-#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
+#if CV_VERSION_GREATER_EQUAL(3, 4, 1)
 
 Nan::Persistent<v8::FunctionTemplate> TrackerCSRTParams::constructor;
 
@@ -27,7 +27,7 @@ NAN_MODULE_INIT(TrackerCSRTParams::Init) {
 	Nan::SetAccessor(instanceTemplate, FF::newString("num_hog_channels_used"), num_hog_channels_used_getter, num_hog_channels_used_setter);
 	Nan::SetAccessor(instanceTemplate, FF::newString("number_of_scales"), number_of_scales_getter, number_of_scales_setter);
 	Nan::SetAccessor(instanceTemplate, FF::newString("padding"), padding_getter, padding_setter);
-#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 3)
+#if CV_VERSION_GREATER_EQUAL(3, 4, 4)
 	Nan::SetAccessor(instanceTemplate, FF::newString("psr_threshold"), psr_threshold_getter, psr_threshold_setter);
 #endif
 	Nan::SetAccessor(instanceTemplate, FF::newString("scale_lr"), scale_lr_getter, scale_lr_setter);

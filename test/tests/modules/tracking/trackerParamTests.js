@@ -19,7 +19,7 @@ module.exports = () => {
       assertPropsWithValue(trackerParams)(params);
     });
 
-    (cv.version.minor > 0 ? it : it.skip)('TrackerKCFParams', () => {
+    (global.utils.cvVersionGreaterEqual(3, 1, 0) ? it : it.skip)('TrackerKCFParams', () => {
       const params = {
         sigma: 0.9,
         lambda: 0.8,
@@ -43,7 +43,7 @@ module.exports = () => {
       const floatSafe = true;
       assertPropsWithValue(trackerParams)(params, floatSafe);
     });
-    ((cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.subminor > 0)) ? it : it.skip)('TrackerCSRTParams', () => {
+    (global.utils.cvVersionGreaterEqual(3, 4, 1) ? it : it.skip)('TrackerCSRTParams', () => {
       const params = {
         admm_iterations: 22,
         background_ratio: 3,
@@ -72,10 +72,10 @@ module.exports = () => {
         weights_lr: 0.03,
         window_function: "kaiser"
       };
-      if(cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.subminor > 3)){
+      if(global.utils.cvVersionGreaterEqual(3, 4, 4)){
         params.psr_threshold = 0.4;
       }
-      
+
       const trackerParams = new cv.TrackerCSRTParams();
       Object.keys(params).forEach((param) => { trackerParams[param] = params[param]; });
 

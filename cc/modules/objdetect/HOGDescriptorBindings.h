@@ -1,70 +1,10 @@
 #include "HOGDescriptor.h"
+#include "CvBinding.h"
 
 #ifndef __FF_HOGDESCRIPTORBINDINGS_H_
 #define __FF_HOGDESCRIPTORBINDINGS_H_
 
 namespace HOGDescriptorBindings {
-
-
-	struct NewWorker : CatchCvExceptionWorker {
-	public:
-		cv::Size2d winSize = cv::Size2d(64, 128);
-		cv::Size2d blockSize = cv::Size2d(16, 16);
-		cv::Size2d blockStride = cv::Size2d(8, 8);
-		cv::Size2d cellSize = cv::Size2d(8, 8);
-		uint nbins = 9;
-		int derivAperture = 1;
-		double winSigma = -1;
-		uint histogramNormType = cv::HOGDescriptor::L2Hys;
-		double L2HysThreshold = 0.2;
-		bool gammaCorrection = false;
-		uint nlevels = cv::HOGDescriptor::DEFAULT_NLEVELS;
-		bool signedGradient = false;
-
-		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return (
-				Size::Converter::optArg(0, &winSize, info) ||
-				Size::Converter::optArg(1, &blockSize, info) ||
-				Size::Converter::optArg(2, &blockStride, info) ||
-				Size::Converter::optArg(3, &cellSize, info) ||
-				FF::UintConverter::optArg(4, &nbins, info) ||
-				FF::IntConverter::optArg(5, &derivAperture, info) ||
-				FF::DoubleConverter::optArg(6, &winSigma, info) ||
-				FF::UintConverter::optArg(7, &histogramNormType, info) ||
-				FF::DoubleConverter::optArg(8, &L2HysThreshold, info) ||
-				FF::BoolConverter::optArg(9, &gammaCorrection, info) ||
-				FF::UintConverter::optArg(10, &nlevels, info) ||
-				FF::BoolConverter::optArg(11, &signedGradient, info)
-				);
-		}
-
-		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return FF::isArgObject(info, 0) && !Size::hasInstance(info[0]);
-		}
-
-		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-			return (
-				Size::Converter::optProp(&winSize, "winSize", opts) ||
-				Size::Converter::optProp(&blockSize, "blockSize", opts) ||
-				Size::Converter::optProp(&blockStride, "blockStride", opts) ||
-				Size::Converter::optProp(&cellSize, "cellSize", opts) ||
-				FF::UintConverter::optProp(&nbins, "nbins", opts) ||
-				FF::IntConverter::optProp(&derivAperture, "derivAperture", opts) ||
-				FF::DoubleConverter::optProp(&winSigma, "winSigma", opts) ||
-				FF::UintConverter::optProp(&histogramNormType, "histogramNormType", opts) ||
-				FF::DoubleConverter::optProp(&L2HysThreshold, "L2HysThreshold", opts) ||
-				FF::BoolConverter::optProp(&gammaCorrection, "gammaCorrection", opts) ||
-				FF::UintConverter::optProp(&nlevels, "nlevels", opts) ||
-				FF::BoolConverter::optProp(&signedGradient, "signedGradient", opts)
-				);
-		}
-
-		std::string executeCatchCvExceptionWorker() {
-			return "";
-		}
-	};
-
   struct ComputeWorker : CatchCvExceptionWorker  {
   public:
     std::shared_ptr<cv::HOGDescriptor> hog;

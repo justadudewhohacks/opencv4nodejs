@@ -19,7 +19,7 @@ public:
   static NAN_METHOD(BlobFromImageAsync);
   static NAN_METHOD(BlobFromImages);
   static NAN_METHOD(BlobFromImagesAsync);
-#if CV_VERSION_MINOR > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
   static NAN_METHOD(ReadNetFromDarknet);
   static NAN_METHOD(ReadNetFromDarknetAsync);
   static NAN_METHOD(NMSBoxes);

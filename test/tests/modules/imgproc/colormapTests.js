@@ -34,15 +34,13 @@ module.exports = () => {
           new cv.Mat([[0, 1, 100]], cv.CV_8UC1),
           cv.COLORMAP_HOT,
         ]),
-        hasAsync: true,
-        usesMacroInferno: false,
         expectOutput: res => {
           return expect(res).to.be.instanceOf(cv.Mat)
         },
       });
     });
 
-    if (cv.version.minor >= 3) {
+    if (global.utils.cvVersionGreaterEqual(3, 3, 0)) {
       it('should process an image with a customized colormap', () => {
         generateAPITests({
           getDut: () => cv,
@@ -51,8 +49,6 @@ module.exports = () => {
             new cv.Mat([[0, 1, 100]], cv.CV_8UC1),
             new cv.Mat(256, 1, cv.CV_8UC3),
           ]),
-          hasAsync: true,
-          usesMacroInferno: false,
           expectOutput: res => {
             return expect(res).to.be.instanceOf(cv.Mat)
           },

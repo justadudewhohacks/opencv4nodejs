@@ -2,7 +2,7 @@
 
 #include "MultiTracker.h"
 
-#if CV_MINOR_VERSION > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 
 Nan::Persistent<v8::FunctionTemplate> MultiTracker::constructor;
 
@@ -19,10 +19,10 @@ NAN_MODULE_INIT(MultiTracker::Init) {
 	Nan::SetPrototypeMethod(ctor, "addMEDIANFLOW", MultiTracker::AddMEDIANFLOW);
 	Nan::SetPrototypeMethod(ctor, "addTLD", MultiTracker::AddTLD);
 	Nan::SetPrototypeMethod(ctor, "addKCF", MultiTracker::AddKCF);
-#if CV_MINOR_VERSION > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 	Nan::SetPrototypeMethod(ctor, "addMOSSE", MultiTracker::AddTLD);
 #endif
-#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
+#if CV_VERSION_GREATER_EQUAL(3, 4, 1)
 	Nan::SetPrototypeMethod(ctor, "addCSRT", MultiTracker::AddKCF);
 #endif
 	Nan::SetPrototypeMethod(ctor, "update", MultiTracker::Update);
@@ -49,7 +49,7 @@ NAN_METHOD(MultiTracker::AddMIL) {
 	) {
 		return tryCatch.reThrow();
 	}
-#if CV_MINOR_VERSION > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	cv::Ptr<cv::Tracker> type = cv::TrackerMIL::create();
 #else
 	const std::string type("MIL");
@@ -68,7 +68,7 @@ NAN_METHOD(MultiTracker::AddBOOSTING) {
 		) {
 		return tryCatch.reThrow();
 	}
-#if CV_MINOR_VERSION > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	cv::Ptr<cv::Tracker> type = cv::TrackerBoosting::create();
 #else
 	const std::string type("BOOSTING");
@@ -87,7 +87,7 @@ NAN_METHOD(MultiTracker::AddMEDIANFLOW) {
 		) {
 		return tryCatch.reThrow();
 	}
-#if CV_MINOR_VERSION > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	cv::Ptr<cv::Tracker> type = cv::TrackerMedianFlow::create();
 #else
 	const std::string type("MEDIANFLOW");
@@ -106,7 +106,7 @@ NAN_METHOD(MultiTracker::AddTLD) {
 		) {
 		return tryCatch.reThrow();
 	}
-#if CV_MINOR_VERSION > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	cv::Ptr<cv::Tracker> type = cv::TrackerTLD::create();
 #else
 	const std::string type("TLD");
@@ -125,7 +125,7 @@ NAN_METHOD(MultiTracker::AddKCF) {
 		) {
 		return tryCatch.reThrow();
 	}
-#if CV_MINOR_VERSION > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	cv::Ptr<cv::Tracker> type = cv::TrackerKCF::create();
 #else
 	const std::string type("KCF");
@@ -145,7 +145,7 @@ NAN_METHOD(MultiTracker::Update) {
 	MultiTracker::unwrapSelf(info)->update(image, rects);
 	info.GetReturnValue().Set(Rect::ArrayConverter::wrap(rects));
 }
-#if CV_MINOR_VERSION > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 
 NAN_METHOD(MultiTracker::AddMOSSE) {
 	FF::TryCatch tryCatch("MultiTracker::AddMOSSE");
@@ -163,7 +163,7 @@ NAN_METHOD(MultiTracker::AddMOSSE) {
 }
 
 #endif
-#if CV_MINOR_VERSION > 4 || (CV_MINOR_VERSION == 4 && CV_SUBMINOR_VERSION > 0)
+#if CV_VERSION_GREATER_EQUAL(3, 4, 1)
 
 NAN_METHOD(MultiTracker::AddCSRT) {
 	FF::TryCatch tryCatch("MultiTracker::AddCSRT");

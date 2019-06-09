@@ -1,6 +1,6 @@
 #include "Facemark.h"
 
-#if CV_VERSION_MINOR >= 4
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 
 #ifndef __FF_FACEMARKAAM_H__
 #define __FF_FACEMARKAAM_H__

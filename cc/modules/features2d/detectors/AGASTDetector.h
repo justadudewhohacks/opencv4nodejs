@@ -1,4 +1,5 @@
 #include "macros.h"
+#include "CvBinding.h"
 #include "../FeatureDetector.h"
 
 #ifndef __FF_AGASTDETECTOR_H__
@@ -16,43 +17,62 @@ public:
 		return self;
 	}
 
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	class DetectorType : public FF::EnumWrap<DetectorType> {
+	public:
+		typedef cv::AgastFeatureDetector::DetectorType Type;
+
+		static const char* getClassName() {
+			return "AGASTDetectorType";
+		}
+
+		static std::vector<Type> getEnumValues() {
+			return { Type::AGAST_5_8, Type::AGAST_7_12d, Type::AGAST_7_12s, Type::OAST_9_16 };
+		}
+
+		static std::vector<const char*> getEnumMappings() {
+			return { "AGAST_5_8", "AGAST_7_12d", "AGAST_7_12s", "OAST_9_16" };
+		}
+	};
+#endif
+
 	FF_GETTER_CUSTOM(threshold, FF::DoubleConverter, self->getThreshold());
 	FF_GETTER_CUSTOM(nonmaxSuppression, FF::BoolConverter, self->getNonmaxSuppression());
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+	FF_GETTER_CUSTOM(type, AGASTDetector::DetectorType::Converter, self->getType());
+#else
 	FF_GETTER_CUSTOM(type, FF::IntConverter, self->getType());
+#endif
 
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	struct NewWorker : CatchCvExceptionWorker {
+	class NewBinding : public CvBinding {
 	public:
-		int threshold = 10;
-		bool nonmaxSuppression = true;
-		int type = cv::AgastFeatureDetector::OAST_9_16;
+		void construct(Nan::NAN_METHOD_ARGS_TYPE info) {
+			FF::TryCatch tryCatch("AGASTDetector::New");
+			FF_ASSERT_CONSTRUCT_CALL();
 
-		bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return (
-				FF::IntConverter::optArg(0, &threshold, info) ||
-				FF::BoolConverter::optArg(1, &nonmaxSuppression, info) ||
-				FF::IntConverter::optArg(2, &type, info)
-				);
-		}
+			auto threshold = opt<FF::IntConverter>("threshold", 10);
+			auto nonmaxSuppression = opt<FF::BoolConverter>("nonmaxSuppression", true);
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+			auto type = opt<AGASTDetector::DetectorType::Converter>("type", cv::AgastFeatureDetector::OAST_9_16);
+#else
+			auto type = opt<FF::IntConverter>("type", cv::AgastFeatureDetector::OAST_9_16);
+#endif
+			if (applyUnwrappers(info)) {
+				return tryCatch.reThrow();
+			}
 
-		bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-			return FF::isArgObject(info, 0);
-		}
-
-		bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-			v8::Local<v8::Object> opts = info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-			return (
-				FF::IntConverter::optProp(&threshold, "threshold", opts) ||
-				FF::BoolConverter::optProp(&nonmaxSuppression, "nonmaxSuppression", opts) ||
-				FF::IntConverter::optProp(&type, "type", opts)
-				);
-		}
-
-		std::string executeCatchCvExceptionWorker() {
-			return "";
-		}
+			AGASTDetector* self = new AGASTDetector();
+			self->setNativeObject(cv::AgastFeatureDetector::create(
+				threshold->ref(), 
+				nonmaxSuppression->ref(),
+				type->ref()
+			));
+			self->Wrap(info.Holder());
+			info.GetReturnValue().Set(info.Holder());
+		};
 	};
 };
 

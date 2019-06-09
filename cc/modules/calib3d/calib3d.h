@@ -35,13 +35,13 @@ public:
   static NAN_METHOD(GetValidDisparityROIAsync);
   static NAN_METHOD(EstimateAffine3D);
   static NAN_METHOD(EstimateAffine3DAsync);
-#if CV_VERSION_MINOR > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
   static NAN_METHOD(SampsonDistance);
   static NAN_METHOD(SampsonDistanceAsync);
   static NAN_METHOD(CalibrateCamera);
   static NAN_METHOD(CalibrateCameraAsync);
 #endif
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   static NAN_METHOD(CalibrateCameraExtended);
   static NAN_METHOD(CalibrateCameraExtendedAsync);
   static NAN_METHOD(EstimateAffine2D);
@@ -49,9 +49,13 @@ public:
   static NAN_METHOD(EstimateAffinePartial2D);
   static NAN_METHOD(EstimateAffinePartial2DAsync);
 #endif
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
   static NAN_METHOD(SolveP3P);
   static NAN_METHOD(SolveP3PAsync);
+#endif
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  static NAN_METHOD(UndistortPoints);
+  static NAN_METHOD(UndistortPointsAsync);
 #endif
 };
 

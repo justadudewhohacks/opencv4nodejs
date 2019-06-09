@@ -1,4 +1,5 @@
 #include "MatCalib3d.h"
+#include "CvBinding.h"
 
 #ifndef __FF_MATCALIB3DBINDINGS_H__
 #define __FF_MATCALIB3DBINDINGS_H__
@@ -703,7 +704,7 @@ namespace MatCalib3dBindings {
     }
   };
 
-#if CV_VERSION_MINOR > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
   struct FindEssentialMatWorker : public CatchCvExceptionWorker {
   public:
     cv::Mat self;
@@ -805,6 +806,22 @@ namespace MatCalib3dBindings {
     }
   };
 
+#endif
+
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  // since 4.0.0 cv::undistort has been moved from imgproc to calib3d
+  class Undistort : public CvBinding {
+  public:
+	  Undistort(cv::Mat self) {
+		  auto cameraMatrix = req<Mat::Converter>();
+		  auto distCoeffs = req<Mat::Converter>();
+		  auto undistortedMat = ret<Mat::Converter>("undistortedMat");
+
+		  executeBinding = [=]() {
+			  cv::undistort(self, undistortedMat->ref(), cameraMatrix->ref(), distCoeffs->ref());
+		  };
+	  };
+  };
 #endif
   
 

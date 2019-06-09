@@ -9,6 +9,8 @@ const {
 const { assert, expect } = require('chai');
 
 module.exports = () => {
+  const HISTOGRAM_NORM_TYPE = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.HOGHistogramNormType.L2Hys : 0
+
   let testImg;
   let peopleDetectorHog;
   before(() => {
@@ -39,7 +41,7 @@ module.exports = () => {
           18,
           2,
           1.8,
-          0,
+          HISTOGRAM_NORM_TYPE,
           0.4,
           true,
           64,
@@ -70,7 +72,7 @@ module.exports = () => {
           nbins: 18,
           derivAperture: 2,
           winSigma: 1.8,
-          histogramNormType: 0,
+          histogramNormType: HISTOGRAM_NORM_TYPE,
           L2HysThreshold: 0.4,
           gammaCorrection: true,
           numLevels: 64,
@@ -132,7 +134,7 @@ module.exports = () => {
           nbins: 18,
           derivAperture: 2,
           winSigma: 1.8,
-          histogramNormType: 0,
+          histogramNormType: HISTOGRAM_NORM_TYPE,
           L2HysThreshold: 0.4,
           gammaCorrection: true,
           numLevels: 64,

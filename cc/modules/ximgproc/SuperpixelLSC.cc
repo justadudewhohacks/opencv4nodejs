@@ -2,7 +2,7 @@
 
 #include "SuperpixelLSC.h"
 
-#if CV_MINOR_VERSION > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 
 Nan::Persistent<v8::FunctionTemplate> SuperpixelLSC::constructor;
 

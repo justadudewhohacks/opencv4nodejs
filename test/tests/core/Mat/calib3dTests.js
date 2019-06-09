@@ -251,7 +251,7 @@ module.exports = () => {
     });
 
     // TODO: figure out why rectify3Collinear is failing with docker and 3.4.3+
-    ((!process.env.DOCKER_BUILD && !process.env.BINDINGS_DEBUG && cv.version.minor < 3) ? describe : describe.skip)('rectify3Collinear', () => {
+    ((!process.env.DOCKER_BUILD && !process.env.BINDINGS_DEBUG && global.utils.cvVersionLowerThan(3, 3, 0)) ? describe : describe.skip)('rectify3Collinear', () => {
       const alpha = 0;
       const flags = cv.CALIB_ZERO_DISPARITY;
 
@@ -472,7 +472,7 @@ module.exports = () => {
     });
   });
 
-  (cv.version.minor < 1 ? describe.skip : describe)('findEssentialMat', () => {
+  (global.utils.cvVersionLowerThan(3, 1, 0) ? describe.skip : describe)('findEssentialMat', () => {
     const expectOutput = (res) => {
       expect(res).to.have.property('E').to.be.instanceOf(cv.Mat);
       assertMetaData(res.E)(3, 3, cv.CV_64F);
@@ -496,7 +496,7 @@ module.exports = () => {
     });
   });
 
-  (cv.version.minor < 1 ? describe.skip : describe)('recoverPose', () => {
+  (global.utils.cvVersionLowerThan(3, 1, 0) ? describe.skip : describe)('recoverPose', () => {
     const expectOutput = (res) => {
       expect(res).to.have.property('returnValue').to.be.a('Number');
       expect(res).to.have.property('R').to.be.instanceOf(cv.Mat);

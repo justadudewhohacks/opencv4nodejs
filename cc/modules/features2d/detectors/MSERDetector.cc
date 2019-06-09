@@ -87,7 +87,7 @@ public:
 
 
 NAN_METHOD(MSERDetector::DetectRegions) {
-	FF::SyncBindingBase(
+	FF::executeSyncBinding(
 		std::make_shared<DetectRegionsWorker>(MSERDetector::unwrapSelf(info)),
 		"MSERDetector::DetectRegions",
 		info
@@ -95,7 +95,7 @@ NAN_METHOD(MSERDetector::DetectRegions) {
 }
 
 NAN_METHOD(MSERDetector::DetectRegionsAsync) {
-	FF::AsyncBindingBase(
+	FF::executeAsyncBinding(
 		std::make_shared<DetectRegionsWorker>(MSERDetector::unwrapSelf(info)),
 		"MSERDetector::DetectRegionsAsync",
 		info

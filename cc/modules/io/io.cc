@@ -40,7 +40,7 @@ NAN_MODULE_INIT(Io::Init) {
   FF_SET_JS_PROP(target, IMWRITE_PXM_BINARY, Nan::New<v8::Integer>(cv::IMWRITE_PXM_BINARY));
   FF_SET_JS_PROP(target, IMWRITE_WEBP_QUALITY, Nan::New<v8::Integer>(cv::IMWRITE_WEBP_QUALITY));
 
-#if CV_VERSION_MINOR >= 1
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
   FF_SET_JS_PROP(target, IMREAD_REDUCED_GRAYSCALE_2, Nan::New<v8::Integer>(cv::IMREAD_REDUCED_GRAYSCALE_2));
   FF_SET_JS_PROP(target, IMREAD_REDUCED_COLOR_2, Nan::New<v8::Integer>(cv::IMREAD_REDUCED_COLOR_2));
   FF_SET_JS_PROP(target, IMREAD_REDUCED_GRAYSCALE_4, Nan::New<v8::Integer>(cv::IMREAD_REDUCED_GRAYSCALE_4));
@@ -48,7 +48,7 @@ NAN_MODULE_INIT(Io::Init) {
   FF_SET_JS_PROP(target, IMREAD_REDUCED_GRAYSCALE_8, Nan::New<v8::Integer>(cv::IMREAD_REDUCED_GRAYSCALE_8));
   FF_SET_JS_PROP(target, IMREAD_REDUCED_COLOR_8, Nan::New<v8::Integer>(cv::IMREAD_REDUCED_COLOR_8));
 #endif
-#if CV_VERSION_MINOR >= 2
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   FF_SET_JS_PROP(target, IMREAD_IGNORE_ORIENTATION, Nan::New<v8::Integer>(cv::IMREAD_IGNORE_ORIENTATION));
   FF_SET_JS_PROP(target, IMWRITE_PAM_TUPLETYPE, Nan::New<v8::Integer>(cv::IMWRITE_PAM_TUPLETYPE));
 
@@ -178,7 +178,7 @@ NAN_METHOD(Io::ImdecodeAsync) {
 }
 
 NAN_METHOD(Io::Imread) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<IoBindings::ImreadWorker>(),
     "Io::Imread",
     info
@@ -186,7 +186,7 @@ NAN_METHOD(Io::Imread) {
 }
 
 NAN_METHOD(Io::ImreadAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<IoBindings::ImreadWorker>(),
     "Io::ImreadAsync",
     info
@@ -194,7 +194,7 @@ NAN_METHOD(Io::ImreadAsync) {
 }
 
 NAN_METHOD(Io::Imwrite) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<IoBindings::ImwriteWorker>(),
     "Io::Imwrite",
     info
@@ -202,7 +202,7 @@ NAN_METHOD(Io::Imwrite) {
 }
 
 NAN_METHOD(Io::ImwriteAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<IoBindings::ImwriteWorker>(),
     "Io::ImwriteAsync",
     info
@@ -210,7 +210,7 @@ NAN_METHOD(Io::ImwriteAsync) {
 }
 
 NAN_METHOD(Io::Imencode) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<IoBindings::ImencodeWorker>(),
     "Io::Imencode",
     info
@@ -218,7 +218,7 @@ NAN_METHOD(Io::Imencode) {
 }
 
 NAN_METHOD(Io::ImencodeAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<IoBindings::ImencodeWorker>(),
     "Io::ImencodeAsync",
     info

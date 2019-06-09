@@ -27,7 +27,7 @@ NAN_METHOD(TrackerMedianFlow::New) {
 		params.pointsInGrid = info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 	}
 
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	self->tracker = cv::TrackerMedianFlow::create(params);
 #else
 	self->tracker = cv::TrackerMedianFlow::createTracker(params);

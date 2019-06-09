@@ -275,7 +275,7 @@ namespace MatImgprocBindings {
     cv::Mat dst;
   
     std::string executeCatchCvExceptionWorker() {
-      cv::cvtColor(self, dst, CV_BGR2GRAY);
+      cv::cvtColor(self, dst, cv::COLOR_BGR2GRAY);
       return "";
     }
   
@@ -2127,36 +2127,22 @@ namespace MatImgprocBindings {
 			);
 	  }
   };
-  
-  struct UndistortWorker: public CatchCvExceptionWorker {
+
+#if CV_VERSION_LOWER_THAN(4, 0, 0)
+  // since 4.0.0 cv::undistort has been moved from imgproc to calib3d
+  class Undistort : public CvBinding {
   public:
-    cv::Mat mat;
-  
-    UndistortWorker(cv::Mat mat) {
-      this->mat = mat;
-    }
-  
-    cv::Mat cameraMatrix;
-    cv::Mat distCoeffs;
-    cv::Mat undistortedMat;
-    
-    v8::Local<v8::Value> getReturnValue() {
-      return Mat::Converter::wrap(undistortedMat);
-    }
-  
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        Mat::Converter::arg(0, &cameraMatrix, info) ||
-        Mat::Converter::arg(1, &distCoeffs, info)
-      );
-    }
-  
-    std::string executeCatchCvExceptionWorker() {
-      cv::undistort(mat, undistortedMat, cameraMatrix, distCoeffs);
-      return "";
-    }
-    
+	  Undistort(cv::Mat self) {
+		  auto cameraMatrix = req<Mat::Converter>();
+		  auto distCoeffs = req<Mat::Converter>();
+		  auto undistortedMat = ret<Mat::Converter>("undistortedMat");
+
+		  executeBinding = [=]() {
+			  cv::undistort(self, undistortedMat->ref(), cameraMatrix->ref(), distCoeffs->ref());
+		  };
+	  };
   };
+#endif
 
 }
 

@@ -11,10 +11,10 @@ public:
 	}
 
 	void load(std::string path) {
-#if CV_VERSION_MINOR < 3
-		faceRecognizer->load(path);
-#else
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 		faceRecognizer = cv::Algorithm::load<cv::face::EigenFaceRecognizer>(path);
+#else
+		faceRecognizer->load(path);
 #endif
 	}
 

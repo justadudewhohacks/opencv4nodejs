@@ -7,8 +7,8 @@ module.exports = () => {
   describe('TrainData', () => {
     const cvVarType = cv.ml.VAR_ORDERED;
     describe('constructor', () => {
-      it('should be constructable without args', () => {
-        expect(new cv.TrainData()).to.be.instanceOf(cv.TrainData);
+      it('should throw if without args', () => {
+        expect(() => new cv.TrainData()).to.throw();
       });
 
       it('should be constructable from arguments', () => {

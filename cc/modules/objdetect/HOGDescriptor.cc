@@ -47,33 +47,13 @@ NAN_MODULE_INIT(HOGDescriptor::Init) {
   Nan::SetPrototypeMethod(ctor, "load", Load);
 
   Nan::Set(target,FF::newString("HOGDescriptor"), FF::getFunction(ctor));
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  HistogramNormType::init(target);
+#endif
 };
+
 NAN_METHOD(HOGDescriptor::New) {
-	FF::TryCatch tryCatch("HOGDescriptor::New");
-	FF_ASSERT_CONSTRUCT_CALL();
-	HOGDescriptorBindings::NewWorker worker;
-
-	if (worker.applyUnwrappers(info)) {
-		return tryCatch.reThrow();
-	}
-
-	HOGDescriptor* self = new HOGDescriptor();
-	self->setNativeObject(std::make_shared<cv::HOGDescriptor>(
-		worker.winSize,
-		worker.blockSize,
-		worker.blockStride,
-		worker.cellSize,
-		(int)worker.nbins,
-		worker.derivAperture,
-		worker.winSigma,
-		(int)worker.histogramNormType,
-		worker.L2HysThreshold,
-		worker.gammaCorrection,
-		(int)worker.nlevels,
-		worker.signedGradient
-	));
-	self->Wrap(info.Holder());
-	info.GetReturnValue().Set(info.Holder());
+	constructorBinding<Constructor>(info);
 }
 
 NAN_METHOD(HOGDescriptor::GetDaimlerPeopleDetector) {
@@ -120,7 +100,7 @@ NAN_METHOD(HOGDescriptor::Load) {
 }
 
 NAN_METHOD(HOGDescriptor::Compute) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<HOGDescriptorBindings::ComputeWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::Compute",
     info
@@ -128,7 +108,7 @@ NAN_METHOD(HOGDescriptor::Compute) {
 }
 
 NAN_METHOD(HOGDescriptor::ComputeAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<HOGDescriptorBindings::ComputeWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::ComputeAsync",
     info
@@ -136,7 +116,7 @@ NAN_METHOD(HOGDescriptor::ComputeAsync) {
 }
 
 NAN_METHOD(HOGDescriptor::ComputeGradient) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<HOGDescriptorBindings::ComputeGradientWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::ComputeGradient",
     info
@@ -144,7 +124,7 @@ NAN_METHOD(HOGDescriptor::ComputeGradient) {
 }
 
 NAN_METHOD(HOGDescriptor::ComputeGradientAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<HOGDescriptorBindings::ComputeGradientWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::ComputeGradientAsync",
     info
@@ -152,7 +132,7 @@ NAN_METHOD(HOGDescriptor::ComputeGradientAsync) {
 }
 
 NAN_METHOD(HOGDescriptor::Detect) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<HOGDescriptorBindings::DetectWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::Detect",
     info
@@ -160,7 +140,7 @@ NAN_METHOD(HOGDescriptor::Detect) {
 }
 
 NAN_METHOD(HOGDescriptor::DetectAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<HOGDescriptorBindings::DetectWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectAsync",
     info
@@ -168,7 +148,7 @@ NAN_METHOD(HOGDescriptor::DetectAsync) {
 }
 
 NAN_METHOD(HOGDescriptor::DetectROI) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<HOGDescriptorBindings::DetectROIWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectROI",
     info
@@ -176,7 +156,7 @@ NAN_METHOD(HOGDescriptor::DetectROI) {
 }
 
 NAN_METHOD(HOGDescriptor::DetectROIAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<HOGDescriptorBindings::DetectROIWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectROIAsync",
     info
@@ -184,7 +164,7 @@ NAN_METHOD(HOGDescriptor::DetectROIAsync) {
 }
 
 NAN_METHOD(HOGDescriptor::DetectMultiScale) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<HOGDescriptorBindings::DetectMultiScaleWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectMultiScale",
     info
@@ -192,7 +172,7 @@ NAN_METHOD(HOGDescriptor::DetectMultiScale) {
 }
 
 NAN_METHOD(HOGDescriptor::DetectMultiScaleAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<HOGDescriptorBindings::DetectMultiScaleWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectMultiScaleAsync",
     info
@@ -200,7 +180,7 @@ NAN_METHOD(HOGDescriptor::DetectMultiScaleAsync) {
 }
 
 NAN_METHOD(HOGDescriptor::DetectMultiScaleROI) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<HOGDescriptorBindings::DetectMultiScaleROIWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectMultiScaleROI",
     info
@@ -208,7 +188,7 @@ NAN_METHOD(HOGDescriptor::DetectMultiScaleROI) {
 }
 
 NAN_METHOD(HOGDescriptor::DetectMultiScaleROIAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<HOGDescriptorBindings::DetectMultiScaleROIWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::DetectMultiScaleROIAsync",
     info
@@ -216,7 +196,7 @@ NAN_METHOD(HOGDescriptor::DetectMultiScaleROIAsync) {
 }
 
 NAN_METHOD(HOGDescriptor::GroupRectangles) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<HOGDescriptorBindings::GroupRectanglesWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::GroupRectangles",
     info
@@ -224,7 +204,7 @@ NAN_METHOD(HOGDescriptor::GroupRectangles) {
 }
 
 NAN_METHOD(HOGDescriptor::GroupRectanglesAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<HOGDescriptorBindings::GroupRectanglesWorker>(HOGDescriptor::unwrapSelf(info)),
     "HOGDescriptor::GroupRectanglesAsync",
     info

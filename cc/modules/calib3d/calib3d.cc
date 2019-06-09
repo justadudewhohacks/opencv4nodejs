@@ -29,13 +29,13 @@ NAN_MODULE_INIT(Calib3d::Init) {
   Nan::SetMethod(target, "getValidDisparityROIAsync", GetValidDisparityROIAsync);
   Nan::SetMethod(target, "estimateAffine3D", EstimateAffine3D);
   Nan::SetMethod(target, "estimateAffine3DAsync", EstimateAffine3DAsync);
-#if CV_VERSION_MINOR > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
   Nan::SetMethod(target, "sampsonDistance", SampsonDistance);
   Nan::SetMethod(target, "sampsonDistanceAsync", SampsonDistanceAsync);
   Nan::SetMethod(target, "calibrateCamera", CalibrateCamera);
   Nan::SetMethod(target, "calibrateCameraAsync", CalibrateCameraAsync);
 #endif
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   Nan::SetMethod(target, "calibrateCameraExtended", CalibrateCameraExtended);
   Nan::SetMethod(target, "calibrateCameraExtendedAsync", CalibrateCameraExtendedAsync);
   Nan::SetMethod(target, "estimateAffine2D", EstimateAffine2D);
@@ -43,14 +43,18 @@ NAN_MODULE_INIT(Calib3d::Init) {
   Nan::SetMethod(target, "estimateAffinePartial2D", EstimateAffinePartial2D);
   Nan::SetMethod(target, "estimateAffinePartial2DAsync", EstimateAffinePartial2DAsync);
 #endif
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
   Nan::SetMethod(target, "solveP3P", SolveP3P);
   Nan::SetMethod(target, "solveP3PAsync", SolveP3PAsync);
+#endif
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  Nan::SetMethod(target, "undistortPoints", UndistortPoints);
+  Nan::SetMethod(target, "undistortPointsAsync", UndistortPointsAsync);
 #endif
 };
 
 NAN_METHOD(Calib3d::FindHomography) {
-	FF::SyncBindingBase(
+	FF::executeSyncBinding(
 		std::make_shared<Calib3dBindings::FindHomographyWorker>(),
 		"Calib3d::FindHomography",
 		info
@@ -58,7 +62,7 @@ NAN_METHOD(Calib3d::FindHomography) {
 }
 
 NAN_METHOD(Calib3d::FindHomographyAsync) {
-	FF::AsyncBindingBase(
+	FF::executeAsyncBinding(
 		std::make_shared<Calib3dBindings::FindHomographyWorker>(),
 		"Calib3d::FindHomographyAsync",
 		info
@@ -66,7 +70,7 @@ NAN_METHOD(Calib3d::FindHomographyAsync) {
 }
 
 NAN_METHOD(Calib3d::ComposeRT) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::ComposeRTWorker>(),
     "Calib3d::ComposeRT",
     info
@@ -74,7 +78,7 @@ NAN_METHOD(Calib3d::ComposeRT) {
 }
 
 NAN_METHOD(Calib3d::ComposeRTAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::ComposeRTWorker>(),
     "Calib3d::ComposeRTAsync",
     info
@@ -82,7 +86,7 @@ NAN_METHOD(Calib3d::ComposeRTAsync) {
 }
 
 NAN_METHOD(Calib3d::SolvePnP) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::SolvePnPWorker>(),
     "Calib3d::SolvePnP",
     info
@@ -90,7 +94,7 @@ NAN_METHOD(Calib3d::SolvePnP) {
 }
 
 NAN_METHOD(Calib3d::SolvePnPAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::SolvePnPWorker>(),
     "Calib3d::SolvePnPAsync",
     info
@@ -98,7 +102,7 @@ NAN_METHOD(Calib3d::SolvePnPAsync) {
 }
 
 NAN_METHOD(Calib3d::SolvePnPRansac) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::SolvePnPRansacWorker>(),
     "Calib3d::SolvePnPRansac",
     info
@@ -106,7 +110,7 @@ NAN_METHOD(Calib3d::SolvePnPRansac) {
 }
 
 NAN_METHOD(Calib3d::SolvePnPRansacAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::SolvePnPRansacWorker>(),
     "Calib3d::SolvePnPRansacAsync",
     info
@@ -114,7 +118,7 @@ NAN_METHOD(Calib3d::SolvePnPRansacAsync) {
 }
 
 NAN_METHOD(Calib3d::ProjectPoints) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::ProjectPointsWorker>(),
     "Calib3d::ProjectPoints",
     info
@@ -122,7 +126,7 @@ NAN_METHOD(Calib3d::ProjectPoints) {
 }
 
 NAN_METHOD(Calib3d::ProjectPointsAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::ProjectPointsWorker>(),
     "Calib3d::ProjectPointsAsync",
     info
@@ -130,7 +134,7 @@ NAN_METHOD(Calib3d::ProjectPointsAsync) {
 }
 
 NAN_METHOD(Calib3d::InitCameraMatrix2D) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::InitCameraMatrix2DWorker>(),
     "Calib3d::InitCameraMatrix2D",
     info
@@ -138,7 +142,7 @@ NAN_METHOD(Calib3d::InitCameraMatrix2D) {
 }
 
 NAN_METHOD(Calib3d::InitCameraMatrix2DAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::InitCameraMatrix2DWorker>(),
     "Calib3d::InitCameraMatrix2DAsync",
     info
@@ -146,7 +150,7 @@ NAN_METHOD(Calib3d::InitCameraMatrix2DAsync) {
 }
 
 NAN_METHOD(Calib3d::StereoCalibrate) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::StereoCalibrateWorker>(),
     "Calib3d::StereoCalibrate",
     info
@@ -154,7 +158,7 @@ NAN_METHOD(Calib3d::StereoCalibrate) {
 }
 
 NAN_METHOD(Calib3d::StereoCalibrateAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::StereoCalibrateWorker>(),
     "Calib3d::StereoCalibrateAsync",
     info
@@ -162,7 +166,7 @@ NAN_METHOD(Calib3d::StereoCalibrateAsync) {
 }
 
 NAN_METHOD(Calib3d::StereoRectifyUncalibrated) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::StereoRectifyUncalibratedWorker>(),
     "Calib3d::StereoRectifyUncalibrated",
     info
@@ -170,7 +174,7 @@ NAN_METHOD(Calib3d::StereoRectifyUncalibrated) {
 }
 
 NAN_METHOD(Calib3d::StereoRectifyUncalibratedAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::StereoRectifyUncalibratedWorker>(),
     "Calib3d::StereoRectifyUncalibratedAsync",
     info
@@ -178,7 +182,7 @@ NAN_METHOD(Calib3d::StereoRectifyUncalibratedAsync) {
 }
 
 NAN_METHOD(Calib3d::FindFundamentalMat) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::FindFundamentalMatWorker>(),
     "Calib3d::FindFundamentalMat",
     info
@@ -186,7 +190,7 @@ NAN_METHOD(Calib3d::FindFundamentalMat) {
 }
 
 NAN_METHOD(Calib3d::FindFundamentalMatAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::FindFundamentalMatWorker>(),
     "Calib3d::FindFundamentalMatAsync",
     info
@@ -194,7 +198,7 @@ NAN_METHOD(Calib3d::FindFundamentalMatAsync) {
 }
 
 NAN_METHOD(Calib3d::FindEssentialMat) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::FindEssentialMatWorker>(),
     "Calib3d::FindEssentialMat",
     info
@@ -202,7 +206,7 @@ NAN_METHOD(Calib3d::FindEssentialMat) {
 }
 
 NAN_METHOD(Calib3d::FindEssentialMatAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::FindEssentialMatWorker>(),
     "Calib3d::FindEssentialMatAsync",
     info
@@ -210,7 +214,7 @@ NAN_METHOD(Calib3d::FindEssentialMatAsync) {
 }
 
 NAN_METHOD(Calib3d::RecoverPose) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::RecoverPoseWorker>(),
     "Calib3d::RecoverPose",
     info
@@ -218,7 +222,7 @@ NAN_METHOD(Calib3d::RecoverPose) {
 }
 
 NAN_METHOD(Calib3d::RecoverPoseAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::RecoverPoseWorker>(),
     "Calib3d::RecoverPoseAsync",
     info
@@ -226,7 +230,7 @@ NAN_METHOD(Calib3d::RecoverPoseAsync) {
 }
 
 NAN_METHOD(Calib3d::ComputeCorrespondEpilines) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::ComputeCorrespondEpilinesWorker>(),
     "Calib3d::ComputeCorrespondEpilines",
     info
@@ -234,7 +238,7 @@ NAN_METHOD(Calib3d::ComputeCorrespondEpilines) {
 }
 
 NAN_METHOD(Calib3d::ComputeCorrespondEpilinesAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::ComputeCorrespondEpilinesWorker>(),
     "Calib3d::ComputeCorrespondEpilinesAsync",
     info
@@ -242,7 +246,7 @@ NAN_METHOD(Calib3d::ComputeCorrespondEpilinesAsync) {
 }
 
 NAN_METHOD(Calib3d::GetValidDisparityROI) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::GetValidDisparityROIWorker>(),
     "Calib3d::GetValidDisparityROI",
     info
@@ -250,7 +254,7 @@ NAN_METHOD(Calib3d::GetValidDisparityROI) {
 }
 
 NAN_METHOD(Calib3d::GetValidDisparityROIAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::GetValidDisparityROIWorker>(),
     "Calib3d::GetValidDisparityROIAsync",
     info
@@ -258,7 +262,7 @@ NAN_METHOD(Calib3d::GetValidDisparityROIAsync) {
 }
 
 NAN_METHOD(Calib3d::EstimateAffine3D) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::EstimateAffine3DWorker>(),
     "Calib3d::EstimateAffine3D",
     info
@@ -266,17 +270,17 @@ NAN_METHOD(Calib3d::EstimateAffine3D) {
 }
 
 NAN_METHOD(Calib3d::EstimateAffine3DAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::EstimateAffine3DWorker>(),
     "Calib3d::EstimateAffine3DAsync",
     info
   );
 }
 
-#if CV_VERSION_MINOR > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
 
 NAN_METHOD(Calib3d::SampsonDistance) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::SampsonDistanceWorker>(),
     "Calib3d::SampsonDistance",
     info
@@ -284,7 +288,7 @@ NAN_METHOD(Calib3d::SampsonDistance) {
 }
 
 NAN_METHOD(Calib3d::SampsonDistanceAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::SampsonDistanceWorker>(),
     "Calib3d::SampsonDistanceAsync",
     info
@@ -292,7 +296,7 @@ NAN_METHOD(Calib3d::SampsonDistanceAsync) {
 }
 
 NAN_METHOD(Calib3d::CalibrateCamera) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::CalibrateCameraWorker>(),
     "Calib3d::CalibrateCamera",
     info
@@ -300,7 +304,7 @@ NAN_METHOD(Calib3d::CalibrateCamera) {
 }
 
 NAN_METHOD(Calib3d::CalibrateCameraAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::CalibrateCameraWorker>(),
     "Calib3d::CalibrateCameraAsync",
     info
@@ -309,10 +313,10 @@ NAN_METHOD(Calib3d::CalibrateCameraAsync) {
 
 #endif
 
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 
 NAN_METHOD(Calib3d::CalibrateCameraExtended) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::CalibrateCameraExtendedWorker>(),
     "Calib3d::CalibrateCameraExtended",
     info
@@ -320,7 +324,7 @@ NAN_METHOD(Calib3d::CalibrateCameraExtended) {
 }
 
 NAN_METHOD(Calib3d::CalibrateCameraExtendedAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::CalibrateCameraExtendedWorker>(),
     "Calib3d::CalibrateCameraExtendedAsync",
     info
@@ -328,7 +332,7 @@ NAN_METHOD(Calib3d::CalibrateCameraExtendedAsync) {
 }
 
 NAN_METHOD(Calib3d::EstimateAffine2D) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::EstimateAffine2DWorker>(),
     "Calib3d::EstimateAffine2D",
     info
@@ -336,7 +340,7 @@ NAN_METHOD(Calib3d::EstimateAffine2D) {
 }
 
 NAN_METHOD(Calib3d::EstimateAffine2DAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::EstimateAffine2DWorker>(),
     "Calib3d::EstimateAffine2DAsync",
     info
@@ -344,7 +348,7 @@ NAN_METHOD(Calib3d::EstimateAffine2DAsync) {
 }
 
 NAN_METHOD(Calib3d::EstimateAffinePartial2D) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::EstimateAffinePartial2DWorker>(),
     "Calib3d::EstimateAffinePartial2D",
     info
@@ -352,7 +356,7 @@ NAN_METHOD(Calib3d::EstimateAffinePartial2D) {
 }
 
 NAN_METHOD(Calib3d::EstimateAffinePartial2DAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::EstimateAffinePartial2DWorker>(),
     "Calib3d::EstimateAffinePartial2DAsync",
     info
@@ -360,10 +364,10 @@ NAN_METHOD(Calib3d::EstimateAffinePartial2DAsync) {
 }
 #endif
 
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 
 NAN_METHOD(Calib3d::SolveP3P) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<Calib3dBindings::SolveP3PWorker>(),
     "Calib3d::SolveP3P",
     info
@@ -371,11 +375,21 @@ NAN_METHOD(Calib3d::SolveP3P) {
 }
 
 NAN_METHOD(Calib3d::SolveP3PAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<Calib3dBindings::SolveP3PWorker>(),
     "Calib3d::SolveP3PAsync",
     info
   );
 }
 
+#endif
+
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+NAN_METHOD(Calib3d::UndistortPoints) {
+	FF::syncBinding<Calib3dBindings::UndistortPoints>("Calib3d", "UndistortPoints", info);
+}
+
+NAN_METHOD(Calib3d::UndistortPointsAsync) {
+	FF::asyncBinding<Calib3dBindings::UndistortPoints>("Calib3d", "UndistortPoints", info);
+}
 #endif

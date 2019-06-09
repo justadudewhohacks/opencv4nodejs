@@ -30,7 +30,7 @@ NAN_METHOD(TrackerMIL::New) {
 	}
 
 	TrackerMIL* self = new TrackerMIL();
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	self->tracker = cv::TrackerMIL::create(params);
 #else
 	self->tracker = cv::TrackerMIL::createTracker(params);

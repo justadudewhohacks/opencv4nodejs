@@ -169,19 +169,19 @@ NAN_METHOD(Core::Kmeans) {
 }
 
 NAN_METHOD(Core::CartToPolar) {
-	FF::SyncBinding<CoreBindings::CartToPolar>("Core", "CartToPolar", info);
+	FF::syncBinding<CoreBindings::CartToPolar>("Core", "CartToPolar", info);
 }
 
 NAN_METHOD(Core::CartToPolarAsync) {
-	FF::AsyncBinding<CoreBindings::CartToPolar>("Core", "CartToPolar", info);
+	FF::asyncBinding<CoreBindings::CartToPolar>("Core", "CartToPolar", info);
 }
 
 NAN_METHOD(Core::PolarToCart) {
-	FF::SyncBinding<CoreBindings::PolarToCart>("Core", "PolarToCart", info);
+	FF::syncBinding<CoreBindings::PolarToCart>("Core", "PolarToCart", info);
 }
 
 NAN_METHOD(Core::PolarToCartAsync) {
-	FF::AsyncBinding<CoreBindings::PolarToCart>("Core", "PolarToCart", info);
+	FF::asyncBinding<CoreBindings::PolarToCart>("Core", "PolarToCart", info);
 }
 
 NAN_METHOD(Core::GetNumThreads) {

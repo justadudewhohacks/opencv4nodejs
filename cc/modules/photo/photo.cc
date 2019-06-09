@@ -9,7 +9,7 @@ NAN_MODULE_INIT(Photo::Init) {
 };
 
 NAN_METHOD(Photo::FastNlMeansDenoisingColored) {
-	FF::SyncBindingBase(
+	FF::executeSyncBinding(
 		std::make_shared<PhotoBindings::FastNlMeansDenoisingColoredWorker>(),
 		"Photo::FastNlMeansDenoisingColored",
 		info
@@ -17,7 +17,7 @@ NAN_METHOD(Photo::FastNlMeansDenoisingColored) {
 }
 
 NAN_METHOD(Photo::FastNlMeansDenoisingColoredAsync) {
-	FF::AsyncBindingBase(
+	FF::executeAsyncBinding(
 		std::make_shared<PhotoBindings::FastNlMeansDenoisingColoredWorker>(),
 		"Photo::FastNlMeansDenoisingColoredAsync",
 		info
@@ -25,7 +25,7 @@ NAN_METHOD(Photo::FastNlMeansDenoisingColoredAsync) {
 }
 
 NAN_METHOD(Photo::Inpaint) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<PhotoBindings::InpaintWorker>(),
     "Photo::Inpaint",
     info
@@ -33,7 +33,7 @@ NAN_METHOD(Photo::Inpaint) {
 }
 
 NAN_METHOD(Photo::InpaintAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<PhotoBindings::InpaintWorker>(),
     "Photo::InpaintAsync",
     info

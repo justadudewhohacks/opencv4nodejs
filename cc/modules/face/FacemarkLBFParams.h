@@ -3,7 +3,7 @@
 #include "Rect.h"
 #include <opencv2/face.hpp>
 
-#if CV_VERSION_MINOR >= 4
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 
 #ifndef __FF_FACEMARKLBFPARAMS_H__
 #define __FF_FACEMARKLBFPARAMS_H__

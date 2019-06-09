@@ -146,7 +146,7 @@ module.exports = () => {
         const defects = convexityDefectsContours[0].convexityDefects(hullIndices);
 
         // TODO figure out whats wrong with defects in 3.0, 3.1
-        if (cv.version.minor > 1) {
+        if (global.utils.cvVersionGreaterEqual(3, 2, 0)) {
           expect(defects).to.be.an('array').lengthOf(2);
         }
         defects.forEach((vec4) => {
@@ -199,7 +199,7 @@ module.exports = () => {
 
     // TODO min 5 points inputs cv exception
     describe('fitEllipse', () => {
-      (cv.version.minor < 2 ? it.skip : it)('should return fitEllipse', () => {
+      (global.utils.cvVersionLowerThan(3, 2, 0) ? it.skip : it)('should return fitEllipse', () => {
         expect(rightBottomContour.fitEllipse()).to.be.instanceOf(cv.RotatedRect);
       });
     });
@@ -219,7 +219,7 @@ module.exports = () => {
     });
 
     describe('matchShapes', () => {
-      const method = cv.CV_CONTOURS_MATCH_I1;
+      const method = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.CONTOURS_MATCH_I1 : cv.CV_CONTOURS_MATCH_I1;
       it('should return zero for same shapes', () => {
         const similarity = leftmostContour.matchShapes(leftmostContour, method);
         expect(similarity).to.equal(0);

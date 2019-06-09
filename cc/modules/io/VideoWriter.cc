@@ -39,7 +39,7 @@ NAN_METHOD(VideoWriter::Release) {
 }
 
 NAN_METHOD(VideoWriter::Get) {
-	FF::SyncBindingBase(
+	FF::executeSyncBinding(
 		std::make_shared<VideoWriterBindings::GetWorker>(VideoWriter::unwrapSelf(info)),
 		"VideoWriter::Get",
 		info
@@ -47,7 +47,7 @@ NAN_METHOD(VideoWriter::Get) {
 }
 
 NAN_METHOD(VideoWriter::GetAsync) {
-	FF::AsyncBindingBase(
+	FF::executeAsyncBinding(
 		std::make_shared<VideoWriterBindings::GetWorker>(VideoWriter::unwrapSelf(info)),
 		"VideoWriter::GetAsync",
 		info
@@ -55,7 +55,7 @@ NAN_METHOD(VideoWriter::GetAsync) {
 }
 
 NAN_METHOD(VideoWriter::Set) {
-	FF::SyncBindingBase(
+	FF::executeSyncBinding(
 		std::make_shared<VideoWriterBindings::SetWorker>(VideoWriter::unwrapSelf(info)),
 		"VideoCaptureVideoWriter::Set",
 		info
@@ -63,7 +63,7 @@ NAN_METHOD(VideoWriter::Set) {
 }
 
 NAN_METHOD(VideoWriter::SetAsync) {
-	FF::AsyncBindingBase(
+	FF::executeAsyncBinding(
 		std::make_shared<VideoWriterBindings::SetWorker>(VideoWriter::unwrapSelf(info)),
 		"VideoWriter::SetAsync",
 		info
@@ -71,7 +71,7 @@ NAN_METHOD(VideoWriter::SetAsync) {
 }
 
 NAN_METHOD(VideoWriter::Fourcc) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<VideoWriterBindings::FourccWorker>(),
     "VideoWriter::Fourcc",
     info
@@ -79,7 +79,7 @@ NAN_METHOD(VideoWriter::Fourcc) {
 }
 
 NAN_METHOD(VideoWriter::Write) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<VideoWriterBindings::WriteWorker>(VideoWriter::unwrapSelf(info)),
     "VideoWriter::Write",
     info
@@ -87,7 +87,7 @@ NAN_METHOD(VideoWriter::Write) {
 }
 
 NAN_METHOD(VideoWriter::WriteAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<VideoWriterBindings::WriteWorker>(VideoWriter::unwrapSelf(info)),
     "VideoWriter::WriteAsync",
     info

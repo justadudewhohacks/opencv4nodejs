@@ -1,4 +1,5 @@
 #include "imgproc.h"
+#include "CvBinding.h"
 #include <opencv2/imgproc.hpp>
 
 #ifndef __FF_IMGPROCBINDINGS_H_
@@ -38,7 +39,7 @@ namespace ImgprocBindings {
     }
   };
 
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   struct CannyWorker : public CatchCvExceptionWorker {
   public:
 
@@ -85,12 +86,7 @@ namespace ImgprocBindings {
     bool useUserColor = 0;
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-#if CV_VERSION_MINOR < 3
-      return (Mat::Converter::arg(0, &src, info) ||
-              FF::IntConverter::optArg(1, &colormap, info));
-#endif
-
-#if CV_VERSION_MINOR >= 3
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
       if (info[1]->IsNumber()) {
         return (Mat::Converter::arg(0, &src, info) ||
                 FF::IntConverter::optArg(1, &colormap, info));
@@ -100,51 +96,45 @@ namespace ImgprocBindings {
 
       return (Mat::Converter::arg(0, &src, info) ||
               Mat::Converter::arg(1, &userColor, info));
+#else
+	  return (Mat::Converter::arg(0, &src, info) ||
+		  FF::IntConverter::optArg(1, &colormap, info));
 #endif
     }
 
     std::string executeCatchCvExceptionWorker() {
-#if CV_VERSION_MINOR < 3
-      cv::applyColorMap(src, dst, colormap);
-      return "";
-#endif
-
-#if CV_VERSION_MINOR >= 3
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
       if (useUserColor) {
         cv::applyColorMap(src, dst, userColor);
       } else {
         cv::applyColorMap(src, dst, colormap);
       }
-      return "";
+#else
+	  cv::applyColorMap(src, dst, colormap);
 #endif
+      return "";
     }
 
     v8::Local<v8::Value> getReturnValue() { return Mat::Converter::wrap(dst); }
   };
-  struct UndistortPointsWorker : public CatchCvExceptionWorker {
+
+#if CV_VERSION_LOWER_THAN(4, 0, 0)
+  // since 4.0.0 cv::undistortPoints has been moved from imgproc to calib3d
+  class UndistortPoints : public CvBinding {
   public:
-    cv::Mat distCoeffs;
-    cv::Mat cameraMatrix;
-    std::vector<cv::Point2f> srcPoints;
-    std::vector<cv::Point2f> destPoints; 
+	  UndistortPoints() {
+		  auto srcPoints = req<Point2::ArrayWithCastConverter<cv::Point2f>>();
+		  auto cameraMatrix = req<Mat::Converter>();
+		  auto distCoeffs = req<Mat::Converter>();
+		  auto destPoints = ret<Point2::ArrayWithCastConverter<cv::Point2f>>("destPoints");
 
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        Point2::ArrayWithCastConverter<cv::Point2f>::arg(0, &srcPoints, info) ||
-        Mat::Converter::arg(1, &cameraMatrix, info) ||
-        Mat::Converter::arg(2, &distCoeffs, info)
-      );
-    }
-
-    std::string executeCatchCvExceptionWorker() {
-      cv::undistortPoints(srcPoints, destPoints, cameraMatrix, distCoeffs, cameraMatrix);
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() { 
-      return Point2::ArrayWithCastConverter<cv::Point2f>::wrap(destPoints);
-    }
+		  executeBinding = [=]() {
+			  cv::undistortPoints(srcPoints->ref(), destPoints->ref(), cameraMatrix->ref(), distCoeffs->ref(), cameraMatrix->ref());
+		  };
+	  };
   };
+#endif
+
 }
 
 #endif

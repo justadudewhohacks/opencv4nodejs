@@ -6,8 +6,7 @@ const {
 const {
   assertError,
   asyncFuncShouldRequireArgs,
-  _funcShouldRequireArgs,
-  funcShouldRequireArgs: __funcShouldRequireArgs
+  _funcShouldRequireArgs: funcShouldRequireArgs
 } = require('./testUtils');
 
 const getEmptyArray = () => ([]);
@@ -26,10 +25,7 @@ exports.generateAPITests = ({
   otherSyncTests = emptyFunc,
   otherAsyncCallbackedTests = emptyFunc,
   otherAsyncPromisedTests = emptyFunc,
-  hasAsync = true,
-  // provide backwards compatibility for bindings implemented with
-  // macro-inferno macros
-  usesMacroInferno = false
+  hasAsync = true
 }) => {
   const methodNameAsync = `${methodName}Async`;
   const getOptionalArgs = _getOptionalArgs || (() => getOptionalArgsMap().map(kv => kv[1]));
@@ -39,21 +35,28 @@ exports.generateAPITests = ({
     return optionalArgsObject;
   };
 
-  const funcShouldRequireArgs = usesMacroInferno ? __funcShouldRequireArgs : _funcShouldRequireArgs;
-
   const hasRequiredArgs = !!getRequiredArgs().length;
   const hasOptArgs = !!getOptionalArgs().length;
   const hasOptArgsObject = getOptionalArgs().length > 1;
 
+  const expectAsyncOutput = (done, dut, args, res) => {
+    try {
+      expectOutput(res, dut, args);
+      done();
+    } catch (err) {
+      done(err);
+    }
+
+  }
+
   const expectOutputCallbacked = (done, dut, args) => (err, res) => {
-    expectOutput(res, dut, args);
-    done();
+    if (err) {
+      return done(err);
+    }
+    expectAsyncOutput(done, dut, args, res);
   };
 
-  const expectOutputPromisified = (done, dut, args) => (res) => {
-    expectOutput(res, dut, args);
-    done();
-  };
+  const expectOutputPromisified = (done, dut, args) => res => expectAsyncOutput(done, dut, args, res);
 
   const generateTests = (type) => {
     const isCallbacked = type === 'callbacked';
@@ -63,8 +66,8 @@ exports.generateAPITests = ({
     const method = isAsync ? methodNameAsync : methodName;
     const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
 
-    const getErrPrefix = () => `${(methodNameSpace ? `${methodNameSpace}::` : '')}${capitalize(method)} -${usesMacroInferno ? '' : ' Error:'}`;
-    const typeErrMsg = argN => `${getErrPrefix()} expected ${usesMacroInferno ? 'arg' : 'argument'} ${argN} to be of type`;
+    const getErrPrefix = () => `${(methodNameSpace ? `${methodNameSpace}::` : '')}${capitalize(method)} - Error:`;
+    const typeErrMsg = argN => `${getErrPrefix()} expected argument ${argN} to be of type`;
     const propErrMsg = prop => `${getErrPrefix()} expected property ${prop} to be of type`;
 
     const expectSuccess = (args, done) => {

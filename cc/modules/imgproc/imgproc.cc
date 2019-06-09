@@ -27,15 +27,17 @@ NAN_MODULE_INIT(Imgproc::Init) {
   Nan::SetMethod(target, "fitLine", FitLine);
   Nan::SetMethod(target, "getAffineTransform", GetAffineTransform);
   Nan::SetMethod(target, "getPerspectiveTransform", GetPerspectiveTransform);
-  Nan::SetMethod(target, "undistortPoints", UndistortPoints);
-  Nan::SetMethod(target, "undistortPointsAsync", UndistortPointsAsync);
   Nan::SetMethod(target, "getTextSize", GetTextSize);
   Nan::SetMethod(target, "getTextSizeAsync", GetTextSizeAsync);
   Nan::SetMethod(target, "applyColorMap", ApplyColorMap);
   Nan::SetMethod(target, "applyColorMapAsync", ApplyColorMapAsync);
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   Nan::SetMethod(target, "canny", Canny);
   Nan::SetMethod(target, "cannyAsync", CannyAsync);
+#endif
+#if CV_VERSION_LOWER_THAN(4, 0, 0)
+  Nan::SetMethod(target, "undistortPoints", UndistortPoints);
+  Nan::SetMethod(target, "undistortPointsAsync", UndistortPointsAsync);
 #endif
   Moments::Init(target);
   Contour::Init(target);
@@ -100,15 +102,6 @@ NAN_METHOD(Imgproc::GetPerspectiveTransform) {
   }
 
   info.GetReturnValue().Set(Mat::Converter::wrap(cv::getPerspectiveTransform(srcPoints, dstPoints)));
-}
-NAN_METHOD(Imgproc::UndistortPoints) {
-  FF::SyncBindingBase(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
-                  "Imgproc::UndistortPoints", info);
-}
-
-NAN_METHOD(Imgproc::UndistortPointsAsync) {
-  FF::AsyncBindingBase(std::make_shared<ImgprocBindings::UndistortPointsWorker>(),
-                   "Imgproc::UndistortPointsAsync", info);
 }
 
 NAN_METHOD(Imgproc::CalcHist) {
@@ -301,7 +294,7 @@ NAN_METHOD(Imgproc::FitLine) {
 }
 
 NAN_METHOD(Imgproc::GetTextSize) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<ImgprocBindings::GetTextSizeWorker>(),
     "Imgproc::GetTextSize",
     info
@@ -309,7 +302,7 @@ NAN_METHOD(Imgproc::GetTextSize) {
 }
 
 NAN_METHOD(Imgproc::GetTextSizeAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<ImgprocBindings::GetTextSizeWorker>(),
     "Imgproc::GetTextSizeAsync",
     info
@@ -317,25 +310,35 @@ NAN_METHOD(Imgproc::GetTextSizeAsync) {
 }
 
 NAN_METHOD(Imgproc::ApplyColorMap) {
-  FF::SyncBindingBase(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
+  FF::executeSyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
                   "Imgproc::ApplyColorMap", info);
 }
 
 NAN_METHOD(Imgproc::ApplyColorMapAsync) {
-  FF::AsyncBindingBase(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
+  FF::executeAsyncBinding(std::make_shared<ImgprocBindings::ApplyColorMapWorker>(),
                    "Imgproc::ApplyColorMapAsync", info);
 }
 
-#if CV_VERSION_MINOR > 1
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
 
 NAN_METHOD(Imgproc::Canny) {
-	FF::SyncBindingBase(std::make_shared<ImgprocBindings::CannyWorker>(),
+	FF::executeSyncBinding(std::make_shared<ImgprocBindings::CannyWorker>(),
 		"Imgproc::Canny", info);
 }
 
 NAN_METHOD(Imgproc::CannyAsync) {
-	FF::AsyncBindingBase(std::make_shared<ImgprocBindings::CannyWorker>(),
+	FF::executeAsyncBinding(std::make_shared<ImgprocBindings::CannyWorker>(),
 		"Imgproc::CannyAsync", info);
 }
 
+#endif
+
+#if CV_VERSION_LOWER_THAN(4, 0, 0)
+NAN_METHOD(Imgproc::UndistortPoints) {
+	FF::syncBinding<ImgprocBindings::UndistortPoints>("Imgproc", "UndistortPoints", info);
+}
+
+NAN_METHOD(Imgproc::UndistortPointsAsync) {
+	FF::asyncBinding<ImgprocBindings::UndistortPoints>("Imgproc", "UndistortPoints", info);
+}
 #endif

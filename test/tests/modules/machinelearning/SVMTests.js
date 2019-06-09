@@ -185,7 +185,7 @@ module.exports = () => {
       });
 
       describe('getUncompressedSupportVectors', () => {
-        (cv.version.minor < 2 ? it.skip : it)('should return support vectors', () => {
+        (global.utils.cvVersionLowerThan(3, 2, 0) ? it.skip : it)('should return support vectors', () => {
           expect(svm.getUncompressedSupportVectors()).to.be.instanceOf(cv.Mat);
         });
       });

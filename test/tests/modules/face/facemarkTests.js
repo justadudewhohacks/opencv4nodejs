@@ -20,7 +20,7 @@ module.exports = (getTestImg, Facemark, FacemarkParams) => {
     });
   });
 
-  (cv.version.minor < 2 ? describe : describe.skip)('face detection tests', () => {
+  (global.utils.cvVersionLowerThan(3, 2, 0) ? describe : describe.skip)('face detection tests', () => {
     let facemark;
     before(() => {
       facemark = new Facemark();
@@ -70,7 +70,7 @@ module.exports = (getTestImg, Facemark, FacemarkParams) => {
     });
   });
 
-  (cv.version.minor < 2 ? describe : describe.skip)('train', () => {
+  (global.utils.cvVersionLowerThan(3, 2, 0) ? describe : describe.skip)('train', () => {
     let facemark;
 
     const landmarks = [];

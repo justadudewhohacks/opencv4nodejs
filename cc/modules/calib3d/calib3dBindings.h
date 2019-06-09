@@ -6,6 +6,7 @@
 #include "TermCriteria.h"
 #include "Rect.h"
 #include "macros.h"
+#include "CvBinding.h"
 
 #ifndef __FF_CALIB3DBINDINGS_H__
 #define __FF_CALIB3DBINDINGS_H__
@@ -676,7 +677,7 @@ namespace Calib3dBindings {
     }
   };
 
-#if CV_VERSION_MINOR > 0
+#if CV_VERSION_GREATER_EQUAL(3, 1, 0)
   struct SampsonDistanceWorker : public CatchCvExceptionWorker {
   public:
     cv::Vec2d pt1;
@@ -765,7 +766,7 @@ namespace Calib3dBindings {
   };
 #endif
 
-#if CV_VERSION_MINOR > 1 
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0) 
   struct CalibrateCameraExtendedWorker : public CalibrateCameraWorker {
   public:
     cv::Mat stdDeviationsIntrinsics;
@@ -852,7 +853,7 @@ namespace Calib3dBindings {
   };
 #endif
 
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
   struct SolveP3PWorker : public SolvePxPWorker {
   public:
     int flags = cv::SOLVEPNP_P3P;
@@ -881,7 +882,24 @@ namespace Calib3dBindings {
     }
   };
 #endif
-  
+
+
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  // since 4.0.0 cv::undistortPoints has been moved from imgproc to calib3d
+  class UndistortPoints : public CvBinding {
+  public:
+	  UndistortPoints() {
+		  auto srcPoints = req<Point2::ArrayWithCastConverter<cv::Point2f>>();
+		  auto cameraMatrix = req<Mat::Converter>();
+		  auto distCoeffs = req<Mat::Converter>();
+		  auto destPoints = ret<Point2::ArrayWithCastConverter<cv::Point2f>>("destPoints");
+
+		  executeBinding = [=]() {
+			  cv::undistortPoints(srcPoints->ref(), destPoints->ref(), cameraMatrix->ref(), distCoeffs->ref(), cameraMatrix->ref());
+		  };
+	  };
+  };
+#endif
 
 }
 

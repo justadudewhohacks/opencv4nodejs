@@ -1,6 +1,7 @@
 #include "opencv2/core.hpp"
+#include "macros.h"
 
-#if CV_VERSION_MINOR > 2
+#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
 
 // cv 3.3+ should have dnn by default
 //#ifdef HAVE_DNN
@@ -19,7 +20,7 @@ NAN_MODULE_INIT(Dnn::Init) {
   Nan::SetMethod(target, "blobFromImageAsync", BlobFromImageAsync);
   Nan::SetMethod(target, "blobFromImages", BlobFromImages);
   Nan::SetMethod(target, "blobFromImagesAsync", BlobFromImagesAsync);
-#if CV_VERSION_MINOR > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
   Nan::SetMethod(target, "readNetFromDarknet", ReadNetFromDarknet);
   Nan::SetMethod(target, "readNetFromDarknetAsync", ReadNetFromDarknetAsync);
   Nan::SetMethod(target, "NMSBoxes", NMSBoxes);
@@ -28,7 +29,7 @@ NAN_MODULE_INIT(Dnn::Init) {
 
 
 NAN_METHOD(Dnn::ReadNetFromTensorflow) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<DnnBindings::ReadNetFromTensorflowWorker>(),
     "ReadNetFromTensorflow",
     info
@@ -36,7 +37,7 @@ NAN_METHOD(Dnn::ReadNetFromTensorflow) {
 }
 
 NAN_METHOD(Dnn::ReadNetFromTensorflowAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<DnnBindings::ReadNetFromTensorflowWorker>(),
     "ReadNetFromTensorflowAsync",
     info
@@ -44,7 +45,7 @@ NAN_METHOD(Dnn::ReadNetFromTensorflowAsync) {
 }
 
 NAN_METHOD(Dnn::ReadNetFromCaffe) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<DnnBindings::ReadNetFromCaffeWorker>(),
     "ReadNetFromCaffe",
     info
@@ -52,7 +53,7 @@ NAN_METHOD(Dnn::ReadNetFromCaffe) {
 }
 
 NAN_METHOD(Dnn::ReadNetFromCaffeAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<DnnBindings::ReadNetFromCaffeWorker>(),
     "ReadNetFromCaffeAsync",
     info
@@ -60,7 +61,7 @@ NAN_METHOD(Dnn::ReadNetFromCaffeAsync) {
 }
 
 NAN_METHOD(Dnn::BlobFromImage) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<DnnBindings::BlobFromImageWorker>(true),
     "BlobFromImage",
     info
@@ -68,7 +69,7 @@ NAN_METHOD(Dnn::BlobFromImage) {
 }
 
 NAN_METHOD(Dnn::BlobFromImageAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<DnnBindings::BlobFromImageWorker>(true),
     "BlobFromImageAsync",
     info
@@ -76,7 +77,7 @@ NAN_METHOD(Dnn::BlobFromImageAsync) {
 }
 
 NAN_METHOD(Dnn::BlobFromImages) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<DnnBindings::BlobFromImageWorker>(false),
     "BlobFromImages",
     info
@@ -84,30 +85,30 @@ NAN_METHOD(Dnn::BlobFromImages) {
 }
 
 NAN_METHOD(Dnn::BlobFromImagesAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
     std::make_shared<DnnBindings::BlobFromImageWorker>(false),
     "BlobFromImagesAsync",
     info
   );
 }
 
-#if CV_VERSION_MINOR > 3
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 NAN_METHOD(Dnn::ReadNetFromDarknet) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
       std::make_shared<DnnBindings::ReadNetFromDarknetWorker>(),
       "ReadNetFromDarknet",
       info);
 }
 
 NAN_METHOD(Dnn::ReadNetFromDarknetAsync) {
-  FF::AsyncBindingBase(
+  FF::executeAsyncBinding(
       std::make_shared<DnnBindings::ReadNetFromDarknetWorker>(),
       "ReadNetFromDarknetAsync",
       info);
 }
 
 NAN_METHOD(Dnn::NMSBoxes) {
-  FF::SyncBindingBase(
+  FF::executeSyncBinding(
     std::make_shared<DnnBindings::NMSBoxes>(),
     "NMSBoxes",
     info

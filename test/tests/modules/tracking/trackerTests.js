@@ -51,11 +51,9 @@ const TrackerTestGenerator = getTestImg => (trackerName) => {
         expect(() => newTracker().update()).to.throw('Tracker::Update - Error: expected argument 0 to be of type');
       });
 
-      // update test for TrackerTLD for 3.1.0 and 3.2.0 seem to not finish on Travis + Docker
+      // update test for TrackerTLD for 3.1.0 and 3.2.0 seem to not finish
       if (!(
-        cv.version.major === 3
-        && (cv.version.minor === 1 || cv.version.minor === 2)
-        && process.env.DOCKER_BUILD
+        (global.utils.cvVersionEqual(3, 1, 0) || global.utils.cvVersionEqual(3, 2, 0))
         && trackerName === 'TrackerTLD'
       )) {
         it('returns bounding box', () => {
@@ -92,15 +90,15 @@ module.exports = () => {
     'TrackerTLD'
   ];
 
-  const hasCSRT = (cv.version.minor > 4 || (cv.version.minor === 4 && cv.version.patch > 0));
-  const hasMOSSE = (cv.version.minor > 3);
-  const hasKCF = (cv.version.minor > 0);
+  const hasCSRT = global.utils.cvVersionGreaterEqual(3, 4, 1);
+  const hasMOSSE = global.utils.cvVersionGreaterEqual(3, 4, 0);
+  const hasKCF = global.utils.cvVersionGreaterEqual(3, 1, 0);
 
   if (hasKCF) {
     trackerNames.push('TrackerKCF');
   }
 
-  if (cv.version.minor > 1) {
+  if (global.utils.cvVersionGreaterEqual(3, 2, 0)) {
     // trackerNames.push('TrackerGOTURN'); TODO: sample goturn.prototxt
   }
   if (hasCSRT) {
@@ -113,7 +111,7 @@ module.exports = () => {
     generateTrackerTests(trackerName);
   });
 
-  (cv.version.minor > 0 ? describe : describe.skip)('MultiTracker', () => {
+  (global.utils.cvVersionGreaterEqual(3, 1, 0) ? describe : describe.skip)('MultiTracker', () => {
     describe('add', () => {
       it('addMIL', () => {
         const tracker = new cv.MultiTracker();
@@ -173,7 +171,7 @@ module.exports = () => {
           methods.push('addKCF');
         }
 
-        // if (cv.version.minor > 1) {
+        // if (global.utils.cvVersionGreaterEqual(3, 2, 0)) {
         //   methods.push('addGOTURN');
         // }
         if (hasCSRT) {

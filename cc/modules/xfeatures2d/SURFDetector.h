@@ -18,6 +18,10 @@ public:
 		return self;
 	}
 
+	void Wrap(v8::Local<v8::Object> object) {
+		FeatureDetector::Wrap(object);
+	}
+
 	FF_GETTER_CUSTOM(hessianThreshold, FF::DoubleConverter, self->getHessianThreshold());
 	FF_GETTER_CUSTOM(nOctaves, FF::IntConverter, self->getNOctaves());
 	FF_GETTER_CUSTOM(nOctaveLayers, FF::IntConverter, self->getNOctaveLayers());
@@ -27,32 +31,24 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	class NewBinding : public CvBinding {
+	class Constructor : public ConstructorBase {
 	public:
-		void construct(Nan::NAN_METHOD_ARGS_TYPE info) {
-			FF::TryCatch tryCatch("SURFDetector::New");
-			FF_ASSERT_CONSTRUCT_CALL();
-
+		Constructor(Nan::NAN_METHOD_ARGS_TYPE info) {
 			auto hessianThreshold = opt<FF::DoubleConverter>("hessianThreshold", 100);
 			auto nOctaves = opt<FF::IntConverter>("nOctaves", 4);
 			auto nOctaveLayers = opt<FF::DoubleConverter>("nOctaveLayers", 3);
 			auto extended = opt<FF::BoolConverter>("extended", false);
 			auto upright = opt<FF::BoolConverter>("upright", false);
 
-			if (applyUnwrappers(info)) {
-				return tryCatch.reThrow();
-			}
-
-			SURFDetector* self = new SURFDetector();
-			self->setNativeObject(cv::xfeatures2d::SURF::create(
-				hessianThreshold->ref(),
-				nOctaves->ref(),
-				nOctaveLayers->ref(),
-				extended->ref(),
-				upright->ref()
-			));
-			self->Wrap(info.Holder());
-			info.GetReturnValue().Set(info.Holder());
+			executeBinding = [=]() {
+				return cv::xfeatures2d::SURF::create(
+					hessianThreshold->ref(),
+					nOctaves->ref(),
+					nOctaveLayers->ref(),
+					extended->ref(),
+					upright->ref()
+				);
+			};
 		};
 	};
 };

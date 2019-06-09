@@ -18,6 +18,10 @@ public:
 		return self;
 	}
 
+	void Wrap(v8::Local<v8::Object> object) {
+		FeatureDetector::Wrap(object);
+	}
+
 	int nFeatures;
 	int nOctaveLayers;
 	double contrastThreshold;
@@ -33,37 +37,32 @@ public:
 	static NAN_MODULE_INIT(Init);
 	static NAN_METHOD(New);
 
-	class NewBinding : public CvBinding {
+	class Constructor : public ConstructorBase {
 	public:
-		void construct(Nan::NAN_METHOD_ARGS_TYPE info) {
-			FF::TryCatch tryCatch("SIFTDetector::New");
-			FF_ASSERT_CONSTRUCT_CALL();
-
+		Constructor(Nan::NAN_METHOD_ARGS_TYPE info) {
 			auto nFeatures = opt<FF::IntConverter>("nFeatures", 0);
 			auto nOctaveLayers = opt<FF::IntConverter>("nOctaveLayers", 3);
 			auto contrastThreshold = opt<FF::DoubleConverter>("contrastThreshold", 0.04);
 			auto edgeThreshold = opt<FF::DoubleConverter>("edgeThreshold", 10);
 			auto sigma = opt<FF::DoubleConverter>("sigma", 1.6);
 
-			if (applyUnwrappers(info)) {
-				return tryCatch.reThrow();
-			}
+			executeBinding = [=]() {
+				return cv::xfeatures2d::SIFT::create(
+					nFeatures->ref(),
+					nOctaveLayers->ref(),
+					contrastThreshold->ref(),
+					edgeThreshold->ref(),
+					sigma->ref()
+				);
+			};
 
-			SIFTDetector* self = new SIFTDetector();
-			self->nFeatures = nFeatures->ref();
-			self->nOctaveLayers = nOctaveLayers->ref();
-			self->contrastThreshold = contrastThreshold->ref();
-			self->edgeThreshold = edgeThreshold->ref();
-			self->sigma = sigma->ref();
-			self->setNativeObject(cv::xfeatures2d::SIFT::create(
-				self->nFeatures,
-				self->nOctaveLayers,
-				self->contrastThreshold,
-				self->edgeThreshold,
-				self->sigma
-			));
-			self->Wrap(info.Holder());
-			info.GetReturnValue().Set(info.Holder());
+			modifySelf = [=](SIFTDetector* self) {
+				self->nFeatures = nFeatures->ref();
+				self->nOctaveLayers = nOctaveLayers->ref();
+				self->contrastThreshold = contrastThreshold->ref();
+				self->edgeThreshold = edgeThreshold->ref();
+				self->sigma = sigma->ref();
+			};
 		};
 	};
 };

@@ -34,7 +34,7 @@ describe('face', () => {
     recognizerTests(() => testImg, args, values, cv.LBPHFaceRecognizer);
   });
 
-  if (cv.version.minor >= 4) {
+  if (global.utils.cvVersionGreaterEqual(3, 4, 0)) {
     facemarkStructsTests();
 
     describe('FacemarkLBF', () => {

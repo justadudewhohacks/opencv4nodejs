@@ -47,7 +47,7 @@ describe('ximgproc', () => {
     });
   });
 
-  if (cv.version.minor > 0) {
+  if (global.utils.cvVersionGreaterEqual(3, 1, 0)) {
     describe('SuperpixelSLIC', () => {
       const algorithm = cv.SLICO;
 
