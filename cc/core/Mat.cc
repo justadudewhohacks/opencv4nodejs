@@ -2,6 +2,7 @@
 #include "MatImgproc.h"
 #include "MatCalib3d.h"
 #include "MatBindings.h"
+#include "CoreBindings.h"
 
 #ifdef HAVE_XIMGPROC
 #include "MatXimgproc.h"
@@ -60,14 +61,6 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "splitAsync", SplitChannelsAsync);
   Nan::SetPrototypeMethod(ctor, "splitChannels", SplitChannels);
   Nan::SetPrototypeMethod(ctor, "splitChannelsAsync", SplitChannelsAsync);
-  Nan::SetPrototypeMethod(ctor, "addWeighted", AddWeighted);
-  Nan::SetPrototypeMethod(ctor, "addWeightedAsync", AddWeightedAsync);
-  Nan::SetPrototypeMethod(ctor, "minMaxLoc", MinMaxLoc);
-  Nan::SetPrototypeMethod(ctor, "minMaxLocAsync", MinMaxLocAsync);
-  Nan::SetPrototypeMethod(ctor, "findNonZero", FindNonZero);
-  Nan::SetPrototypeMethod(ctor, "findNonZeroAsync", FindNonZeroAsync);
-  Nan::SetPrototypeMethod(ctor, "countNonZero", CountNonZero);
-  Nan::SetPrototypeMethod(ctor, "countNonZeroAsync", CountNonZeroAsync);
   Nan::SetPrototypeMethod(ctor, "padToSquare", PadToSquare);
   Nan::SetPrototypeMethod(ctor, "padToSquareAsync", PadToSquareAsync);
   Nan::SetPrototypeMethod(ctor, "dct", Dct);
@@ -111,6 +104,15 @@ NAN_MODULE_INIT(Mat::Init) {
 #endif
 
   Nan::SetPrototypeMethod(ctor, "release", Release);
+
+  Nan::SetPrototypeMethod(ctor, "addWeighted", AddWeighted);
+  Nan::SetPrototypeMethod(ctor, "addWeightedAsync", AddWeightedAsync);
+  Nan::SetPrototypeMethod(ctor, "minMaxLoc", MinMaxLoc);
+  Nan::SetPrototypeMethod(ctor, "minMaxLocAsync", MinMaxLocAsync);
+  Nan::SetPrototypeMethod(ctor, "findNonZero", FindNonZero);
+  Nan::SetPrototypeMethod(ctor, "findNonZeroAsync", FindNonZeroAsync);
+  Nan::SetPrototypeMethod(ctor, "countNonZero", CountNonZero);
+  Nan::SetPrototypeMethod(ctor, "countNonZeroAsync", CountNonZeroAsync);
 
 
   FF_PROTO_SET_MAT_OPERATIONS(ctor);
@@ -514,38 +516,6 @@ NAN_METHOD(Mat::SplitChannelsAsync) {
 	Mat::asyncBinding<MatBindings::SplitChannels>("SplitChannels", info);
 }
 
-NAN_METHOD(Mat::AddWeighted) {
-	Mat::syncBinding<MatBindings::AddWeighted>("AddWeighted", info);
-}
-
-NAN_METHOD(Mat::AddWeightedAsync) {
-	Mat::asyncBinding<MatBindings::AddWeighted>("AddWeighted", info);
-}
-
-NAN_METHOD(Mat::MinMaxLoc) {
-	Mat::syncBinding<MatBindings::MinMaxLoc>("MinMaxLoc", info);
-}
-
-NAN_METHOD(Mat::MinMaxLocAsync) {
-	Mat::asyncBinding<MatBindings::MinMaxLoc>("MinMaxLoc", info);
-}
-
-NAN_METHOD(Mat::FindNonZero) {
-	Mat::syncBinding<MatBindings::FindNonZero>("FindNonZero", info);
-}
-
-NAN_METHOD(Mat::FindNonZeroAsync) {
-	Mat::asyncBinding<MatBindings::FindNonZero>("FindNonZero", info);
-}
-
-NAN_METHOD(Mat::CountNonZero) {
-	Mat::syncBinding<MatBindings::CountNonZero>("CountNonZero", info);
-}
-
-NAN_METHOD(Mat::CountNonZeroAsync) {
-	Mat::asyncBinding<MatBindings::CountNonZero>("CountNonZero", info);
-}
-
 NAN_METHOD(Mat::PadToSquare) {
 	Mat::syncBinding<MatBindings::PadToSquare>("PadToSquare", info);
 }
@@ -779,3 +749,35 @@ NAN_METHOD(Mat::RotateAsync) {
   );
 }
 #endif
+
+NAN_METHOD(Mat::AddWeighted) {
+	Mat::syncBinding<CoreBindings::AddWeighted>("AddWeighted", info);
+}
+
+NAN_METHOD(Mat::AddWeightedAsync) {
+	Mat::asyncBinding<CoreBindings::AddWeighted>("AddWeighted", info);
+}
+
+NAN_METHOD(Mat::MinMaxLoc) {
+	Mat::syncBinding<CoreBindings::MinMaxLoc>("MinMaxLoc", info);
+}
+
+NAN_METHOD(Mat::MinMaxLocAsync) {
+	Mat::asyncBinding<CoreBindings::MinMaxLoc>("MinMaxLoc", info);
+}
+
+NAN_METHOD(Mat::FindNonZero) {
+	Mat::syncBinding<CoreBindings::FindNonZero>("FindNonZero", info);
+}
+
+NAN_METHOD(Mat::FindNonZeroAsync) {
+	Mat::asyncBinding<CoreBindings::FindNonZero>("FindNonZero", info);
+}
+
+NAN_METHOD(Mat::CountNonZero) {
+	Mat::syncBinding<CoreBindings::CountNonZero>("CountNonZero", info);
+}
+
+NAN_METHOD(Mat::CountNonZeroAsync) {
+	Mat::asyncBinding<CoreBindings::CountNonZero>("CountNonZero", info);
+}

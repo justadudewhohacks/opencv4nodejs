@@ -1,6 +1,7 @@
 const cv = global.dut;
 const {
   generateAPITests,
+  generateClassMethodTests,
   assertError,
   assertPropsWithValue,
   assertMetaData,
@@ -251,10 +252,11 @@ describe('Mat', () => {
       [80, 100, 120]
     ], cv.CV_8U);
 
-    generateAPITests({
-      getDut: () => mat1,
+    generateClassMethodTests({
+      getClassInstance: () => mat1,
       methodName: 'addWeighted',
-      methodNameSpace: 'Mat',
+      classNameSpace: 'Mat',
+      methodNameSpace: 'Core',
       getRequiredArgs: () => ([
         alpha,
         mat2,
@@ -266,8 +268,19 @@ describe('Mat', () => {
   });
 
   describe('minMaxLoc', () => {
+
+    const mat = new cv.Mat([
+      [0.1, 0.2, 0.3],
+      [0.4, 0.5, 0.6]
+    ], cv.CV_64F);
+
+    const mask = new cv.Mat([
+      [0, 1, 1],
+      [1, 1, 0]
+    ], cv.CV_8U);
+
     const expectOutput = (res, dut, args) => {
-      if (!args.filter(arg => !(typeof arg === 'function')).length) {
+      if (!args.some(arg => arg === mask)) {
         // without mask
         expect(res.minVal).to.equal(0.1);
         expect(res.maxVal).to.equal(0.6);
@@ -282,20 +295,11 @@ describe('Mat', () => {
       }
     };
 
-    const mat = new cv.Mat([
-      [0.1, 0.2, 0.3],
-      [0.4, 0.5, 0.6]
-    ], cv.CV_64F);
-
-    const mask = new cv.Mat([
-      [0, 1, 1],
-      [1, 1, 0]
-    ], cv.CV_8U);
-
-    generateAPITests({
-      getDut: () => mat,
+    generateClassMethodTests({
+      getClassInstance: () => mat,
       methodName: 'minMaxLoc',
-      methodNameSpace: 'Mat',
+      classNameSpace: 'Mat',
+      methodNameSpace: 'Core',
       getOptionalArgs: () => ([
         mask
       ]),
@@ -500,10 +504,11 @@ describe('Mat', () => {
       [0, 1, 0]
     ], cv.CV_8U);
 
-    generateAPITests({
-      getDut: () => mat,
+    generateClassMethodTests({
+      getClassInstance: () => mat,
       methodName: 'findNonZero',
-      methodNameSpace: 'Mat',
+      classNameSpace: 'Mat',
+      methodNameSpace: 'Core',
       expectOutput
     });
   });
@@ -518,10 +523,11 @@ describe('Mat', () => {
       [0, 1, 0]
     ], cv.CV_8U);
 
-    generateAPITests({
-      getDut: () => mat,
+    generateClassMethodTests({
+      getClassInstance: () => mat,
       methodName: 'countNonZero',
-      methodNameSpace: 'Mat',
+      classNameSpace: 'Mat',
+      methodNameSpace: 'Core',
       expectOutput
     });
   });

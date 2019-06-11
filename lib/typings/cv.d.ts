@@ -18,6 +18,8 @@ export interface HistAxes {
   ranges: number[];
 }
 
+export function addWeighted(mat: Mat, alpha: number, mat2: Mat, beta: number, gamma: number, dtype?: number): Mat;
+export function addWeightedAsync(mat: Mat, alpha: number, mat2: Mat, beta: number, gamma: number, dtype?: number): Promise<Mat>;
 export function applyColorMap(src: Mat, colormap: number | Mat): Mat;
 export function blobFromImage(image: Mat, scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Mat;
 export function blobFromImageAsync(image: Mat, scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Promise<Mat>;
@@ -36,6 +38,8 @@ export function composeRT(rvec1: Vec3, tvec1: Vec3, rvec2: Vec3, tvec2: Vec3): {
 export function composeRTAsync(rvec1: Vec3, tvec1: Vec3, rvec2: Vec3, tvec2: Vec3): Promise<{ rvec3: Vec3, tvec3: Vec3, dr3dr1: Mat, dr3dt1: Mat, dr3dr2: Mat, dr3dt2: Mat, dt3dr1: Mat, dt3dt1: Mat, dt3dr2: Mat, dt3dt2: Mat }>;
 export function computeCorrespondEpilines(points: Point2[], whichImage: number, F: Mat): Vec3[];
 export function computeCorrespondEpilinesAsync(points: Point2[], whichImage: number, F: Mat): Promise<Vec3[]>;
+export function countNonZero(mat: Mat): number;
+export function countNonZeroAsync(mat: Mat): Promise<number>;
 export function createOCRHMMTransitionsTable(vocabulary: string, lexicon: string[]): Mat;
 export function createOCRHMMTransitionsTableAsync(vocabulary: string, lexicon: string[]): Promise<Mat>;
 export function destroyAllWindows() :void;
@@ -58,6 +62,8 @@ export function findEssentialMatAsync(points1: Point2[], points2: Point2[], foca
 export function findFundamentalMat(points1: Point2[], points2: Point2[], method?: number, param1?: number, param2?: number): { F: Mat, mask: Mat };
 export function findFundamentalMatAsync(points1: Point2[], points2: Point2[], method?: number, param1?: number, param2?: number): Promise<{ F: Mat, mask: Mat }>;
 export function findHomography(srcPoints: Point2[], dstPoints: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number): { homography: Mat, mask: Mat };
+export function findNonZero(mat: Mat): Point2[];
+export function findNonZeroAsync(mat: Mat): Promise<Point2[]>;
 export function fitLine(points: Point2[], distType: number, param: number, reps: number, aeps: number): number[];
 export function fitLine(points: Point3[], distType: number, param: number, reps: number, aeps: number): number[];
 export function getAffineTransform(srcPoints: Point2[], dstPoints: Point2[]): Mat;
@@ -108,6 +114,8 @@ export function matchKnnBruteForceSL2(descriptors1: Mat, descriptors2: Mat, k: n
 export function matchKnnBruteForceSL2Async(descriptors1: Mat, descriptors2: Mat, k: number): Promise<DescriptorMatch[][]>;
 export function matchKnnFlannBased(descriptors1: Mat, descriptors2: Mat, k: number): DescriptorMatch[][];
 export function matchKnnFlannBasedAsync(descriptors1: Mat, descriptors2: Mat, k: number): Promise<DescriptorMatch[][]>;
+export function minMaxLoc(mat: Mat, mask?: Mat): { minVal: number, maxVal: number, minLoc: Point2, maxLoc: Point2 };
+export function minMaxLocAsync(mat: Mat, mask?: Mat): Promise<{ minVal: number, maxVal: number, minLoc: Point2, maxLoc: Point2 }>;
 export function partition(data: Point2[], predicate: (pt1: Point2, pt2: Point2) => boolean): { labels: number[], numLabels: number };
 export function partition(data: Point3[], predicate: (pt1: Point3, pt2: Point3) => boolean): { labels: number[], numLabels: number };
 export function partition(data: Vec2[], predicate: (vec1: Vec2, vec2: Vec2) => boolean): { labels: number[], numLabels: number };

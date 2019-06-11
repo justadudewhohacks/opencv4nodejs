@@ -9,26 +9,43 @@ const {
   _funcShouldRequireArgs: funcShouldRequireArgs
 } = require('./testUtils');
 
-const getEmptyArray = () => ([]);
-const emptyFunc = () => {};
+const {
+  emptyFunc,
+  getEmptyArray
+} = require('./commons');
 
-exports.generateAPITests = ({
-  beforeHook = null,
-  afterHook = null,
-  getDut,
-  methodName,
-  methodNameSpace,
-  getRequiredArgs = getEmptyArray,
-  getOptionalArgs: _getOptionalArgs,
-  getOptionalArgsMap = getEmptyArray,
-  expectOutput,
-  otherSyncTests = emptyFunc,
-  otherAsyncCallbackedTests = emptyFunc,
-  otherAsyncPromisedTests = emptyFunc,
-  hasAsync = true
-}) => {
+const getDefaultAPITestOpts = (opts) => ({
+  getRequiredArgs: getEmptyArray,
+  getOptionalArgsMap: getEmptyArray,
+  hasAsync: true,
+  otherSyncTests: emptyFunc,
+  otherAsyncCallbackedTests: emptyFunc,
+  otherAsyncPromisedTests: emptyFunc,
+  beforeHook: null,
+  afterHook: null,
+  ...opts
+})
+
+exports.getDefaultAPITestOpts = getDefaultAPITestOpts
+
+exports.generateAPITests = (opts) => {
+  const {
+    getDut,
+    methodName,
+    methodNameSpace,
+    expectOutput,
+    getRequiredArgs,
+    getOptionalArgsMap,
+    hasAsync,
+    otherSyncTests,
+    otherAsyncCallbackedTests,
+    otherAsyncPromisedTests,
+    beforeHook,
+    afterHook
+  } = getDefaultAPITestOpts(opts)
+
   const methodNameAsync = `${methodName}Async`;
-  const getOptionalArgs = _getOptionalArgs || (() => getOptionalArgsMap().map(kv => kv[1]));
+  const getOptionalArgs = opts.getOptionalArgs || (() => getOptionalArgsMap().map(kv => kv[1]));
   const getOptionalArgsObject = () => {
     const optionalArgsObject = {};
     getOptionalArgsMap().forEach((kv) => { optionalArgsObject[kv[0]] = kv[1]; });

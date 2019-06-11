@@ -20,6 +20,15 @@ NAN_MODULE_INIT(Core::Init) {
   Nan::SetMethod(target, "getNumThreads", GetNumThreads);
   Nan::SetMethod(target, "setNumThreads", SetNumThreads);
   Nan::SetMethod(target, "getThreadNum", GetThreadNum);
+
+  Nan::SetMethod(target, "addWeighted", AddWeighted);
+  Nan::SetMethod(target, "addWeightedAsync", AddWeightedAsync);
+  Nan::SetMethod(target, "minMaxLoc", MinMaxLoc);
+  Nan::SetMethod(target, "minMaxLocAsync", MinMaxLocAsync);
+  Nan::SetMethod(target, "findNonZero", FindNonZero);
+  Nan::SetMethod(target, "findNonZeroAsync", FindNonZeroAsync);
+  Nan::SetMethod(target, "countNonZero", CountNonZero);
+  Nan::SetMethod(target, "countNonZeroAsync", CountNonZeroAsync);
 };
 
 NAN_METHOD(Core::GetBuildInformation) {
@@ -199,4 +208,36 @@ NAN_METHOD(Core::SetNumThreads) {
 
 NAN_METHOD(Core::GetThreadNum) {
   info.GetReturnValue().Set(FF::IntConverter::wrap(cv::getThreadNum()));
+}
+
+NAN_METHOD(Core::AddWeighted) {
+	FF::syncBinding<CoreBindings::AddWeighted>("Core", "AddWeighted", info);
+}
+
+NAN_METHOD(Core::AddWeightedAsync) {
+	FF::asyncBinding<CoreBindings::AddWeighted>("Core", "AddWeighted", info);
+}
+
+NAN_METHOD(Core::MinMaxLoc) {
+	FF::syncBinding<CoreBindings::MinMaxLoc>("Core", "MinMaxLoc", info);
+}
+
+NAN_METHOD(Core::MinMaxLocAsync) {
+	FF::asyncBinding<CoreBindings::MinMaxLoc>("Core", "MinMaxLoc", info);
+}
+
+NAN_METHOD(Core::FindNonZero) {
+	FF::syncBinding<CoreBindings::FindNonZero>("Core", "FindNonZero", info);
+}
+
+NAN_METHOD(Core::FindNonZeroAsync) {
+	FF::asyncBinding<CoreBindings::FindNonZero>("Core", "FindNonZero", info);
+}
+
+NAN_METHOD(Core::CountNonZero) {
+	FF::syncBinding<CoreBindings::CountNonZero>("Core", "CountNonZero", info);
+}
+
+NAN_METHOD(Core::CountNonZeroAsync) {
+	FF::asyncBinding<CoreBindings::CountNonZero>("Core", "CountNonZero", info);
 }

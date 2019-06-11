@@ -25,6 +25,17 @@ public:
 	static NAN_METHOD(GetNumThreads);
 	static NAN_METHOD(SetNumThreads);
 	static NAN_METHOD(GetThreadNum);
+
+	static NAN_METHOD(AddWeighted);
+	static NAN_METHOD(AddWeightedAsync);
+	static NAN_METHOD(MinMaxLoc);
+	static NAN_METHOD(MinMaxLocAsync);
+	static NAN_METHOD(FindNonZero);
+	static NAN_METHOD(FindNonZeroAsync);
+	static NAN_METHOD(CountNonZero);
+	static NAN_METHOD(CountNonZeroAsync);
+	static NAN_METHOD(PadToSquare);
+	static NAN_METHOD(PadToSquareAsync);
 };
 
 #endif

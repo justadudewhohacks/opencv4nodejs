@@ -79,16 +79,6 @@ public:
   static NAN_METHOD(ConvertToAsync);
   static NAN_METHOD(SplitChannels);
   static NAN_METHOD(SplitChannelsAsync);
-  static NAN_METHOD(AddWeighted);
-  static NAN_METHOD(AddWeightedAsync);
-  static NAN_METHOD(MinMaxLoc);
-  static NAN_METHOD(MinMaxLocAsync);
-  static NAN_METHOD(FindNonZero);
-  static NAN_METHOD(FindNonZeroAsync);
-  static NAN_METHOD(CountNonZero);
-  static NAN_METHOD(CountNonZeroAsync);
-  static NAN_METHOD(PadToSquare);
-  static NAN_METHOD(PadToSquareAsync);
   static NAN_METHOD(Dct);
   static NAN_METHOD(DctAsync);
   static NAN_METHOD(Idct);
@@ -128,6 +118,17 @@ public:
   static NAN_METHOD(Rotate);
   static NAN_METHOD(RotateAsync);
 #endif
+
+  static NAN_METHOD(AddWeighted);
+  static NAN_METHOD(AddWeightedAsync);
+  static NAN_METHOD(MinMaxLoc);
+  static NAN_METHOD(MinMaxLocAsync);
+  static NAN_METHOD(FindNonZero);
+  static NAN_METHOD(FindNonZeroAsync);
+  static NAN_METHOD(CountNonZero);
+  static NAN_METHOD(CountNonZeroAsync);
+  static NAN_METHOD(PadToSquare);
+  static NAN_METHOD(PadToSquareAsync);
 
 };
 

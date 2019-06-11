@@ -71,7 +71,7 @@ namespace MatBindings {
 
   class PushBack : public CvBinding {
   public:
-	  PushBack(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto mat = req<Mat::Converter>();
 		  auto res = ret<Mat::Converter>("res", self);
 		  executeBinding = [=]() {
@@ -82,7 +82,7 @@ namespace MatBindings {
 
   class PopBack : public CvBinding {
   public:
-	  PopBack(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto num = opt<FF::IntConverter>("num", 1);
 		  auto res = ret<Mat::Converter>("res", self);
 		  executeBinding = [=]() {
@@ -128,7 +128,7 @@ namespace MatBindings {
 
   class Copy : public CvBinding {
   public:
-	  Copy(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 		  auto dst = ret<Mat::Converter>("dst");
 
@@ -140,7 +140,7 @@ namespace MatBindings {
 
   class CopyTo : public CvBinding {
   public:
-	  CopyTo(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto dst = req<Mat::Converter>();
 		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 		  auto dstRet = ret<Mat::Converter>("dst");
@@ -154,7 +154,7 @@ namespace MatBindings {
 
   class ConvertTo : public CvBinding {
   public:
-	  ConvertTo(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto rtype = req<FF::IntConverter>();
 		  auto alpha = opt<FF::DoubleConverter>("alpha", 1.0);
 		  auto beta = opt<FF::DoubleConverter>("beta", 0.0);
@@ -168,7 +168,7 @@ namespace MatBindings {
 
   class SplitChannels : public CvBinding {
   public:
-	  SplitChannels(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto mv = ret<Mat::ArrayConverter>("mv");
 
 		  executeBinding = [=]() {
@@ -177,63 +177,9 @@ namespace MatBindings {
 	  };
   };
 
-  class AddWeighted : public CvBinding {
-  public:
-	  AddWeighted(cv::Mat self) {
-
-		  auto alpha = req<FF::DoubleConverter>();
-		  auto src2 = req<Mat::Converter>();
-		  auto beta = req<FF::DoubleConverter>();
-		  auto gamma = req<FF::DoubleConverter>();
-		  auto dtype = opt<FF::IntConverter>("dtype" , -1);
-		  auto dst = ret<Mat::Converter>("dst");
-
-		  executeBinding = [=]() {
-			  cv::addWeighted(self, alpha->ref(), src2->ref(), beta->ref(), gamma->ref(), dst->ref(), dtype->ref());
-		  };
-	  };
-  };
-
-  class MinMaxLoc : public CvBinding {
-  public:
-	  MinMaxLoc(cv::Mat self) {
-		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
-		  auto minVal = ret<FF::DoubleConverter>("minVal");
-		  auto maxVal = ret<FF::DoubleConverter>("maxVal");
-		  auto minLoc = ret<Point2::WithCastConverter<cv::Point2i>>("minLoc");
-		  auto maxLoc = ret<Point2::WithCastConverter<cv::Point2i>>("maxLoc");
-
-		  executeBinding = [=]() {
-			  cv::minMaxLoc(self, minVal->ptr(), maxVal->ptr(), minLoc->ptr(), maxLoc->ptr(), mask->ref());
-		  };
-	  };
-  };
-
-  class FindNonZero : public CvBinding {
-  public:
-	  FindNonZero(cv::Mat self) {
-		  auto idx = ret<Point2::ArrayWithCastConverter<cv::Point2i>>("idx");
-
-		  executeBinding = [=]() {
-			  cv::findNonZero(self, idx->ref());
-		  };
-	  };
-  };
-
-  class CountNonZero : public CvBinding {
-  public:
-	  CountNonZero(cv::Mat self) {
-		  auto num = ret<FF::IntConverter>("num");
-
-		  executeBinding = [=]() {
-			  num->ref() = cv::countNonZero(self);
-		  };
-	  };
-  };
-
   class PadToSquare : public CvBinding {
   public:
-	  PadToSquare(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto fillVec = opt<Vec3::Converter>("fillVec", cv::Vec3d());
 		  auto out = ret<Mat::Converter>("out");
 
@@ -461,7 +407,8 @@ namespace MatBindings {
   public:
 	  int channels;
 	  cv::Scalar sum;
-	  Sum(cv::Mat self): channels(self.channels()) {
+	  void setup(cv::Mat self) { 
+		  channels = self.channels();
 		  executeBinding = [=]() {
 			  sum = cv::sum(self);
 		  };
@@ -485,7 +432,7 @@ namespace MatBindings {
 
   class ConvertScaleAbs : public CvBinding {
   public:
-	  ConvertScaleAbs(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto alpha = opt<FF::DoubleConverter>("alpha", 1);
 		  auto beta = opt<FF::DoubleConverter>("beta", 0);
 		  auto dst = ret<Mat::Converter>("dst");
@@ -498,7 +445,7 @@ namespace MatBindings {
 
   class GoodFeaturesToTrack : public CvBinding {
   public:
-	  GoodFeaturesToTrack(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto maxCorners = req<FF::IntConverter>();
 		  auto qualityLevel = req<FF::DoubleConverter>();
 		  auto minDistance = req<FF::DoubleConverter>();
@@ -524,7 +471,7 @@ namespace MatBindings {
 
   class Mean : public CvBinding {
   public:
-	  Mean(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 		  auto mean = ret<Vec4::Converter>("mean");
 
@@ -536,7 +483,7 @@ namespace MatBindings {
 
   class MeanStdDev : public CvBinding {
   public:
-	  MeanStdDev(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 		  auto mean = ret<Mat::Converter>("mean");
 		  auto stddev = ret<Mat::Converter>("stddev");
@@ -619,7 +566,7 @@ namespace MatBindings {
 
   class Reduce : public CvBinding {
   public:
-	  Reduce(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto dim = req<FF::IntConverter>();
 		  auto rtype = req<FF::IntConverter>();
 		  auto dtype = opt<FF::IntConverter>("dtype", -1);
@@ -633,7 +580,7 @@ namespace MatBindings {
 
   class Eigen : public CvBinding {
   public:
-	  Eigen(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto eigenvalues = ret<Mat::Converter>("eigenvalues");
 
 		  executeBinding = [=]() {
@@ -644,7 +591,7 @@ namespace MatBindings {
 
   class Solve : public CvBinding {
   public:
-	  Solve(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto mat2 = req<Mat::Converter>();
 		  auto flags = opt<FF::IntConverter>("flags", 0);
 		  auto dst = ret<Mat::Converter>("dst");
@@ -657,7 +604,7 @@ namespace MatBindings {
 
   class Normalize : public CvBinding {
   public:
-	  Normalize(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto alpha = opt<FF::DoubleConverter>("alpha", 1);
 		  auto beta = opt<FF::DoubleConverter>("beta", 0);
 		  auto normType = opt<FF::IntConverter>("normType", cv::NORM_L2);

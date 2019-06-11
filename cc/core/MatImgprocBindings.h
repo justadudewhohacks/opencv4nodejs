@@ -503,7 +503,7 @@ namespace MatImgprocBindings {
   
   class Blur : public CvBinding {
   public:
-	  Blur(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto kSize = req<Size::Converter>();
 		  auto anchor = opt<Point2::Converter>("anchor", cv::Point2d());
 		  auto borderType = opt<FF::IntConverter>("borderType", cv::BORDER_CONSTANT);
@@ -521,7 +521,7 @@ namespace MatImgprocBindings {
 
   class GaussianBlur : public CvBinding {
   public:
-	  GaussianBlur(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto kSize = req<Size::Converter>();
 		  auto sigmaX = req<FF::DoubleConverter>();
 		  auto sigmaY = opt<FF::DoubleConverter>("sigmaY", 0);
@@ -536,7 +536,7 @@ namespace MatImgprocBindings {
 
   class MedianBlur : public CvBinding {
   public:
-	  MedianBlur(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto kSize = req<FF::IntConverter>();
 		  auto blurMat = ret<Mat::Converter>("blurMat");
 
@@ -2132,7 +2132,7 @@ namespace MatImgprocBindings {
   // since 4.0.0 cv::undistort has been moved from imgproc to calib3d
   class Undistort : public CvBinding {
   public:
-	  Undistort(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto cameraMatrix = req<Mat::Converter>();
 		  auto distCoeffs = req<Mat::Converter>();
 		  auto undistortedMat = ret<Mat::Converter>("undistortedMat");
