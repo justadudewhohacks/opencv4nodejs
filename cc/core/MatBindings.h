@@ -71,7 +71,7 @@ namespace MatBindings {
 
   class PushBack : public CvBinding {
   public:
-	  PushBack(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto mat = req<Mat::Converter>();
 		  auto res = ret<Mat::Converter>("res", self);
 		  executeBinding = [=]() {
@@ -82,7 +82,7 @@ namespace MatBindings {
 
   class PopBack : public CvBinding {
   public:
-	  PopBack(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto num = opt<FF::IntConverter>("num", 1);
 		  auto res = ret<Mat::Converter>("res", self);
 		  executeBinding = [=]() {
@@ -128,7 +128,7 @@ namespace MatBindings {
 
   class Copy : public CvBinding {
   public:
-	  Copy(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 		  auto dst = ret<Mat::Converter>("dst");
 
@@ -140,7 +140,7 @@ namespace MatBindings {
 
   class CopyTo : public CvBinding {
   public:
-	  CopyTo(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto dst = req<Mat::Converter>();
 		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 		  auto dstRet = ret<Mat::Converter>("dst");
@@ -154,7 +154,7 @@ namespace MatBindings {
 
   class ConvertTo : public CvBinding {
   public:
-	  ConvertTo(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto rtype = req<FF::IntConverter>();
 		  auto alpha = opt<FF::DoubleConverter>("alpha", 1.0);
 		  auto beta = opt<FF::DoubleConverter>("beta", 0.0);
@@ -166,74 +166,9 @@ namespace MatBindings {
 	  };
   };
 
-  class SplitChannels : public CvBinding {
-  public:
-	  SplitChannels(cv::Mat self) {
-		  auto mv = ret<Mat::ArrayConverter>("mv");
-
-		  executeBinding = [=]() {
-			  cv::split(self, mv->ref());
-		  };
-	  };
-  };
-
-  class AddWeighted : public CvBinding {
-  public:
-	  AddWeighted(cv::Mat self) {
-
-		  auto alpha = req<FF::DoubleConverter>();
-		  auto src2 = req<Mat::Converter>();
-		  auto beta = req<FF::DoubleConverter>();
-		  auto gamma = req<FF::DoubleConverter>();
-		  auto dtype = opt<FF::IntConverter>("dtype" , -1);
-		  auto dst = ret<Mat::Converter>("dst");
-
-		  executeBinding = [=]() {
-			  cv::addWeighted(self, alpha->ref(), src2->ref(), beta->ref(), gamma->ref(), dst->ref(), dtype->ref());
-		  };
-	  };
-  };
-
-  class MinMaxLoc : public CvBinding {
-  public:
-	  MinMaxLoc(cv::Mat self) {
-		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
-		  auto minVal = ret<FF::DoubleConverter>("minVal");
-		  auto maxVal = ret<FF::DoubleConverter>("maxVal");
-		  auto minLoc = ret<Point2::WithCastConverter<cv::Point2i>>("minLoc");
-		  auto maxLoc = ret<Point2::WithCastConverter<cv::Point2i>>("maxLoc");
-
-		  executeBinding = [=]() {
-			  cv::minMaxLoc(self, minVal->ptr(), maxVal->ptr(), minLoc->ptr(), maxLoc->ptr(), mask->ref());
-		  };
-	  };
-  };
-
-  class FindNonZero : public CvBinding {
-  public:
-	  FindNonZero(cv::Mat self) {
-		  auto idx = ret<Point2::ArrayWithCastConverter<cv::Point2i>>("idx");
-
-		  executeBinding = [=]() {
-			  cv::findNonZero(self, idx->ref());
-		  };
-	  };
-  };
-
-  class CountNonZero : public CvBinding {
-  public:
-	  CountNonZero(cv::Mat self) {
-		  auto num = ret<FF::IntConverter>("num");
-
-		  executeBinding = [=]() {
-			  num->ref() = cv::countNonZero(self);
-		  };
-	  };
-  };
-
   class PadToSquare : public CvBinding {
   public:
-	  PadToSquare(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto fillVec = opt<Vec3::Converter>("fillVec", cv::Vec3d());
 		  auto out = ret<Mat::Converter>("out");
 
@@ -254,6 +189,7 @@ namespace MatBindings {
 	  };
   };
 
+  // TODO
   struct DTWorker : public CatchCvExceptionWorker {
   public:
     cv::Mat mat;
@@ -332,93 +268,6 @@ namespace MatBindings {
     }
   };
 
-  struct MulSpectrumsWorker : public CatchCvExceptionWorker {
-  public:
-    cv::Mat mat;
-    bool isInverse;
-
-    MulSpectrumsWorker(cv::Mat mat) {
-      this->mat = mat;
-    }
-
-    cv::Mat mat2;
-    bool dftRows = false;
-    bool conjB = false;
-
-    cv::Mat dst;
-
-    std::string executeCatchCvExceptionWorker() {
-      int flags = (dftRows ? cv::DFT_ROWS : 0);
-      cv::mulSpectrums(mat, mat2, dst, flags, conjB);
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() {
-      return Mat::Converter::wrap(dst);
-    }
-
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return Mat::Converter::arg(0, &mat2, info);
-    }
-
-    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        FF::BoolConverter::optArg(1, &dftRows, info) ||
-        FF::BoolConverter::optArg(2, &conjB, info)
-      );
-    }
-
-    bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF::isArgObject(info, 1);
-    }
-
-    bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
-      v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
-      return (
-        FF::BoolConverter::optProp(&dftRows, "dftRows", opts) ||
-        FF::BoolConverter::optProp(&conjB, "conjB", opts)
-      );
-    }
-  };
-
-  struct TransformWorker : public CatchCvExceptionWorker {
-  public:
-    cv::Mat self;
-    TransformWorker(cv::Mat self) {
-      this->self = self;
-    }
-
-    cv::Mat m;
-
-    cv::Mat dst;
-
-    std::string executeCatchCvExceptionWorker() {
-      cv::transform(self, dst, m);
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() {
-      return Mat::Converter::wrap(dst);
-    }
-
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        Mat::Converter::arg(0, &m, info)
-      );
-    }
-  };
-
-  struct PerspectiveTransformWorker : public TransformWorker {
-  public:
-    PerspectiveTransformWorker(cv::Mat self) : TransformWorker(self) {
-    }
-
-    std::string executeCatchCvExceptionWorker() {
-      cv::perspectiveTransform(self, dst, m);
-      return "";
-    }
-  };
-
   struct OpWithCodeWorker : public CatchCvExceptionWorker {
   public:
     cv::Mat self;
@@ -455,96 +304,6 @@ namespace MatBindings {
       cv::flip(self, dst, code);
       return "";
     }
-  };
-
-  class Sum : public CvBinding {
-  public:
-	  int channels;
-	  cv::Scalar sum;
-	  Sum(cv::Mat self): channels(self.channels()) {
-		  executeBinding = [=]() {
-			  sum = cv::sum(self);
-		  };
-	  };
-
-	  v8::Local<v8::Value> getReturnValue() {
-		  switch (channels) {
-		  case 1:
-			  return FF::DoubleConverter::wrap(sum[0]);
-		  case 2:
-			  return Vec2::Converter::wrap(cv::Vec2f(sum[0], sum[1]));
-		  case 3:
-			  return Vec3::Converter::wrap(cv::Vec3f(sum[0], sum[1], sum[2]));
-		  case 4:
-			  return Vec4::Converter::wrap(cv::Vec4f(sum));
-		  default:
-			  return Nan::Undefined();
-		  }
-	  }
-  };
-
-  class ConvertScaleAbs : public CvBinding {
-  public:
-	  ConvertScaleAbs(cv::Mat self) {
-		  auto alpha = opt<FF::DoubleConverter>("alpha", 1);
-		  auto beta = opt<FF::DoubleConverter>("beta", 0);
-		  auto dst = ret<Mat::Converter>("dst");
-
-		  executeBinding = [=]() {
-			  cv::convertScaleAbs(self, dst->ref(), alpha->ref(), beta->ref());
-		  };
-	  };
-  };
-
-  class GoodFeaturesToTrack : public CvBinding {
-  public:
-	  GoodFeaturesToTrack(cv::Mat self) {
-		  auto maxCorners = req<FF::IntConverter>();
-		  auto qualityLevel = req<FF::DoubleConverter>();
-		  auto minDistance = req<FF::DoubleConverter>();
-		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
-		  auto blockSize = opt<FF::IntConverter>("blockSize", 3);
-		  auto gradientSize = opt<FF::IntConverter>("gradientSize", 3);
-		  auto useHarrisDetector = opt<FF::BoolConverter>("useHarrisDetector", false);
-		  auto harrisK = opt<FF::DoubleConverter>("harrisK", 0.04);
-		  auto corners = ret<Point2::ArrayWithCastConverter<cv::Point2f>>("corners");
-
-		  executeBinding = [=]() {
-
-			  cv::goodFeaturesToTrack(
-				  self, corners->ref(), maxCorners->ref(), qualityLevel->ref(), minDistance->ref(), mask->ref(), blockSize->ref(),
-#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
-				  gradientSize->ref(),
-#endif
-				  useHarrisDetector->ref(), harrisK->ref()
-			  );
-		  };
-	  };
-  };
-
-  class Mean : public CvBinding {
-  public:
-	  Mean(cv::Mat self) {
-		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
-		  auto mean = ret<Vec4::Converter>("mean");
-
-		  executeBinding = [=]() {
-			  mean->ref() = cv::mean(self, mask->ref());
-		  };
-	  };
-  };
-
-  class MeanStdDev : public CvBinding {
-  public:
-	  MeanStdDev(cv::Mat self) {
-		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
-		  auto mean = ret<Mat::Converter>("mean");
-		  auto stddev = ret<Mat::Converter>("stddev");
-
-		  executeBinding = [=]() {
-			  cv::meanStdDev(self, mean->ref(), stddev->ref(), mask->ref());
-		  };
-	  };
   };
 
   struct CopyMakeBorderWorker : public CatchCvExceptionWorker {
@@ -615,60 +374,6 @@ namespace MatBindings {
 				)
 			);
 	  }
-  };
-
-  class Reduce : public CvBinding {
-  public:
-	  Reduce(cv::Mat self) {
-		  auto dim = req<FF::IntConverter>();
-		  auto rtype = req<FF::IntConverter>();
-		  auto dtype = opt<FF::IntConverter>("dtype", -1);
-		  auto result = ret<Mat::Converter>("result");
-
-		  executeBinding = [=]() {
-			  cv::reduce(self, result->ref(), dim->ref(), rtype->ref(), dtype->ref());
-		  };
-	  };
-  };
-
-  class Eigen : public CvBinding {
-  public:
-	  Eigen(cv::Mat self) {
-		  auto eigenvalues = ret<Mat::Converter>("eigenvalues");
-
-		  executeBinding = [=]() {
-			  cv::eigen(self, eigenvalues->ref());
-		  };
-	  };
-  };
-
-  class Solve : public CvBinding {
-  public:
-	  Solve(cv::Mat self) {
-		  auto mat2 = req<Mat::Converter>();
-		  auto flags = opt<FF::IntConverter>("flags", 0);
-		  auto dst = ret<Mat::Converter>("dst");
-
-		  executeBinding = [=]() {
-			  cv::solve(self, mat2->ref(), dst->ref(), flags->ref());
-		  };
-	  };
-  };
-
-  class Normalize : public CvBinding {
-  public:
-	  Normalize(cv::Mat self) {
-		  auto alpha = opt<FF::DoubleConverter>("alpha", 1);
-		  auto beta = opt<FF::DoubleConverter>("beta", 0);
-		  auto normType = opt<FF::IntConverter>("normType", cv::NORM_L2);
-		  auto dtype = opt<FF::IntConverter>("dtype", -1);
-		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
-		  auto dst = ret<Mat::Converter>("dst");
-
-		  executeBinding = [=]() {
-			  cv::normalize(self, dst->ref(), alpha->ref(), beta->ref(), normType->ref(), dtype->ref(), mask->ref());
-		  };
-	  };
   };
 
   

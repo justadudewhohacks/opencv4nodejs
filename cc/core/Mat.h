@@ -61,8 +61,6 @@ public:
   static NAN_METHOD(GetDataAsArray);
   static NAN_METHOD(GetRegion);
   static NAN_METHOD(Norm);
-  static NAN_METHOD(Normalize);
-  static NAN_METHOD(NormalizeAsync);
   static NAN_METHOD(Row);
   static NAN_METHOD(Release);
   static NAN_METHOD(PushBack);
@@ -77,16 +75,6 @@ public:
   static NAN_METHOD(CopyToAsync);
   static NAN_METHOD(ConvertTo);
   static NAN_METHOD(ConvertToAsync);
-  static NAN_METHOD(SplitChannels);
-  static NAN_METHOD(SplitChannelsAsync);
-  static NAN_METHOD(AddWeighted);
-  static NAN_METHOD(AddWeightedAsync);
-  static NAN_METHOD(MinMaxLoc);
-  static NAN_METHOD(MinMaxLocAsync);
-  static NAN_METHOD(FindNonZero);
-  static NAN_METHOD(FindNonZeroAsync);
-  static NAN_METHOD(CountNonZero);
-  static NAN_METHOD(CountNonZeroAsync);
   static NAN_METHOD(PadToSquare);
   static NAN_METHOD(PadToSquareAsync);
   static NAN_METHOD(Dct);
@@ -97,37 +85,48 @@ public:
   static NAN_METHOD(DftAsync);
   static NAN_METHOD(Idft);
   static NAN_METHOD(IdftAsync);
+  static NAN_METHOD(Flip);
+  static NAN_METHOD(FlipAsync);
+  static NAN_METHOD(CopyMakeBorder);
+  static NAN_METHOD(CopyMakeBorderAsync);
+
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
+  static NAN_METHOD(Rotate);
+  static NAN_METHOD(RotateAsync);
+#endif
+
+  static NAN_METHOD(AddWeighted);
+  static NAN_METHOD(AddWeightedAsync);
+  static NAN_METHOD(MinMaxLoc);
+  static NAN_METHOD(MinMaxLocAsync);
+  static NAN_METHOD(FindNonZero);
+  static NAN_METHOD(FindNonZeroAsync);
+  static NAN_METHOD(CountNonZero);
+  static NAN_METHOD(CountNonZeroAsync);
+  static NAN_METHOD(Normalize);
+  static NAN_METHOD(NormalizeAsync);
+  static NAN_METHOD(Split);
+  static NAN_METHOD(SplitAsync);
   static NAN_METHOD(MulSpectrums);
   static NAN_METHOD(MulSpectrumsAsync);
   static NAN_METHOD(Transform);
   static NAN_METHOD(TransformAsync);
   static NAN_METHOD(PerspectiveTransform);
   static NAN_METHOD(PerspectiveTransformAsync);
-  static NAN_METHOD(Flip);
-  static NAN_METHOD(FlipAsync);
   static NAN_METHOD(Sum);
   static NAN_METHOD(SumAsync);
   static NAN_METHOD(ConvertScaleAbs);
   static NAN_METHOD(ConvertScaleAbsAsync);
-  static NAN_METHOD(GoodFeaturesToTrack);
-  static NAN_METHOD(GoodFeaturesToTrackAsync);
   static NAN_METHOD(Mean);
   static NAN_METHOD(MeanAsync);
   static NAN_METHOD(MeanStdDev);
   static NAN_METHOD(MeanStdDevAsync);
-  static NAN_METHOD(CopyMakeBorder);
-  static NAN_METHOD(CopyMakeBorderAsync);
   static NAN_METHOD(Reduce);
   static NAN_METHOD(ReduceAsync);
   static NAN_METHOD(Eigen);
   static NAN_METHOD(EigenAsync);
   static NAN_METHOD(Solve);
   static NAN_METHOD(SolveAsync);
-
-#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
-  static NAN_METHOD(Rotate);
-  static NAN_METHOD(RotateAsync);
-#endif
 
 };
 

@@ -568,65 +568,6 @@ module.exports = (getTestImg) => {
     });
   });
 
-  describe('smoothing', () => {
-    const expectOutput = (blurred) => {
-      assertMetaData(blurred)(rgbMat.rows, rgbMat.cols, rgbMat.type);
-      expect(dangerousDeepEquals(blurred.getDataAsArray(), rgbMat.getDataAsArray())).to.be.false;
-    };
-
-    describe('blur', () => {
-      const kSize = new cv.Size(3, 3);
-
-      generateAPITests({
-        getDut: () => rgbMat.copy(),
-        methodName: 'blur',
-        methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([
-          kSize
-        ]),
-        getOptionalArgsMap: () => ([
-          ['anchor', new cv.Point(1, 1)],
-          ['borderType', cv.BORDER_CONSTANT]
-        ]),
-        expectOutput
-      });
-    });
-
-    describe('gaussianBlur', () => {
-      const kSize = new cv.Size(3, 3);
-      const sigmaX = 1.2;
-
-      generateAPITests({
-        getDut: () => rgbMat.copy(),
-        methodName: 'gaussianBlur',
-        methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([
-          kSize,
-          sigmaX
-        ]),
-        getOptionalArgsMap: () => ([
-          ['sigmaY', 1.2],
-          ['borderType', cv.BORDER_CONSTANT]
-        ]),
-        expectOutput
-      });
-    });
-
-    describe('medianBlur', () => {
-      const kSize = 3;
-
-      generateAPITests({
-        getDut: () => rgbMat.copy(),
-        methodName: 'medianBlur',
-        methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([
-          kSize
-        ]),
-        expectOutput
-      });
-    });
-  });
-
   describe('thresholding', () => {
     const mat = new cv.Mat([
       [255, 255, 255],
@@ -1485,30 +1426,6 @@ module.exports = (getTestImg) => {
           ['borderType', borderType]
         ]),
         expectOutput: makeExpectOutput(cv32fc6)
-      });
-    });
-
-    describe('goodFeaturesToTrack', () => {
-      generateAPITests({
-        getDut,
-        methodName: 'goodFeaturesToTrack',
-        methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([
-          20, 0.04, 1
-        ]),
-        getOptionalArgsMap: () => ([
-          ['mask', new cv.Mat(512, 512, cv.CV_U8)],
-          ['blockSize', 3],
-          ['gradientSize', 3],
-          ['useHarrisDetector', false],
-          ['harrisK', 0.04]
-        ]),
-        expectOutput: (out) => {
-          expect(out).to.be.instanceOf(Array);
-          expect(out.length).to.be.equal(20);
-          expect(out[0]).to.have.property('x');
-          expect(out[0]).to.have.property('y');
-        }
       });
     });
 

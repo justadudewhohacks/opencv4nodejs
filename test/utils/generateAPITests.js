@@ -9,33 +9,53 @@ const {
   _funcShouldRequireArgs: funcShouldRequireArgs
 } = require('./testUtils');
 
-const getEmptyArray = () => ([]);
-const emptyFunc = () => {};
+const {
+  emptyFunc,
+  getEmptyArray
+} = require('./commons');
 
-exports.generateAPITests = ({
-  beforeHook = null,
-  afterHook = null,
-  getDut,
-  methodName,
-  methodNameSpace,
-  getRequiredArgs = getEmptyArray,
-  getOptionalArgs: _getOptionalArgs,
-  getOptionalArgsMap = getEmptyArray,
-  expectOutput,
-  otherSyncTests = emptyFunc,
-  otherAsyncCallbackedTests = emptyFunc,
-  otherAsyncPromisedTests = emptyFunc,
-  hasAsync = true
-}) => {
+const getDefaultAPITestOpts = (opts) => Object.assign({}, {
+  getRequiredArgs: getEmptyArray,
+  getOptionalArgsMap: getEmptyArray,
+  hasAsync: true,
+  otherSyncTests: emptyFunc,
+  otherAsyncCallbackedTests: emptyFunc,
+  otherAsyncPromisedTests: emptyFunc,
+  beforeHook: null,
+  afterHook: null,
+  explicitHasRequiredArgs: false
+}, opts)
+
+exports.getDefaultAPITestOpts = getDefaultAPITestOpts
+
+exports.generateAPITests = (opts) => {
+  const {
+    getDut,
+    methodName,
+    methodNameSpace,
+    expectOutput,
+    getRequiredArgs,
+    getOptionalArgsMap,
+    hasAsync,
+    otherSyncTests,
+    otherAsyncCallbackedTests,
+    otherAsyncPromisedTests,
+    beforeHook,
+    afterHook,
+    explicitHasRequiredArgs
+  } = getDefaultAPITestOpts(opts)
+
   const methodNameAsync = `${methodName}Async`;
-  const getOptionalArgs = _getOptionalArgs || (() => getOptionalArgsMap().map(kv => kv[1]));
+  const getOptionalArgs = opts.getOptionalArgs || (() => getOptionalArgsMap().map(kv => kv[1]));
   const getOptionalArgsObject = () => {
     const optionalArgsObject = {};
     getOptionalArgsMap().forEach((kv) => { optionalArgsObject[kv[0]] = kv[1]; });
     return optionalArgsObject;
   };
 
-  const hasRequiredArgs = !!getRequiredArgs().length;
+  // use explicitHasRequiredArgs if getRequiredArgs would throw because args
+  // may be initialized in a before statement and are undefined during test creation
+  const hasRequiredArgs = explicitHasRequiredArgs || !!getRequiredArgs().length;
   const hasOptArgs = !!getOptionalArgs().length;
   const hasOptArgsObject = getOptionalArgs().length > 1;
 

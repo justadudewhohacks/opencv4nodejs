@@ -2,6 +2,7 @@
 #include "MatImgproc.h"
 #include "MatCalib3d.h"
 #include "MatBindings.h"
+#include "coreBindings.h"
 
 #ifdef HAVE_XIMGPROC
 #include "MatXimgproc.h"
@@ -54,20 +55,6 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "convertTo", ConvertTo);
   Nan::SetPrototypeMethod(ctor, "convertToAsync", ConvertToAsync);
   Nan::SetPrototypeMethod(ctor, "norm", Norm);
-  Nan::SetPrototypeMethod(ctor, "normalize", Normalize);
-  Nan::SetPrototypeMethod(ctor, "normalizeAsync", NormalizeAsync);
-  Nan::SetPrototypeMethod(ctor, "split", SplitChannels);
-  Nan::SetPrototypeMethod(ctor, "splitAsync", SplitChannelsAsync);
-  Nan::SetPrototypeMethod(ctor, "splitChannels", SplitChannels);
-  Nan::SetPrototypeMethod(ctor, "splitChannelsAsync", SplitChannelsAsync);
-  Nan::SetPrototypeMethod(ctor, "addWeighted", AddWeighted);
-  Nan::SetPrototypeMethod(ctor, "addWeightedAsync", AddWeightedAsync);
-  Nan::SetPrototypeMethod(ctor, "minMaxLoc", MinMaxLoc);
-  Nan::SetPrototypeMethod(ctor, "minMaxLocAsync", MinMaxLocAsync);
-  Nan::SetPrototypeMethod(ctor, "findNonZero", FindNonZero);
-  Nan::SetPrototypeMethod(ctor, "findNonZeroAsync", FindNonZeroAsync);
-  Nan::SetPrototypeMethod(ctor, "countNonZero", CountNonZero);
-  Nan::SetPrototypeMethod(ctor, "countNonZeroAsync", CountNonZeroAsync);
   Nan::SetPrototypeMethod(ctor, "padToSquare", PadToSquare);
   Nan::SetPrototypeMethod(ctor, "padToSquareAsync", PadToSquareAsync);
   Nan::SetPrototypeMethod(ctor, "dct", Dct);
@@ -78,32 +65,14 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "dftAsync", DftAsync);
   Nan::SetPrototypeMethod(ctor, "idft", Idft);
   Nan::SetPrototypeMethod(ctor, "idftAsync", IdftAsync);
-  Nan::SetPrototypeMethod(ctor, "mulSpectrums", MulSpectrums);
-  Nan::SetPrototypeMethod(ctor, "mulSpectrumsAsync", MulSpectrumsAsync);
-  Nan::SetPrototypeMethod(ctor, "transform", Transform);
-  Nan::SetPrototypeMethod(ctor, "transformAsync", TransformAsync);
-  Nan::SetPrototypeMethod(ctor, "perspectiveTransform", PerspectiveTransform);
-  Nan::SetPrototypeMethod(ctor, "perspectiveTransformAsync", PerspectiveTransformAsync);
+  Nan::SetPrototypeMethod(ctor, "normalize", Normalize);
+  Nan::SetPrototypeMethod(ctor, "normalizeAsync", NormalizeAsync);
   Nan::SetPrototypeMethod(ctor, "flip", Flip);
   Nan::SetPrototypeMethod(ctor, "flipAsync", FlipAsync);
-  Nan::SetPrototypeMethod(ctor, "convertScaleAbs", ConvertScaleAbs);
-  Nan::SetPrototypeMethod(ctor, "convertScaleAbsAsync", ConvertScaleAbsAsync);
-  Nan::SetPrototypeMethod(ctor, "sum", Sum);
-  Nan::SetPrototypeMethod(ctor, "sumAsync", SumAsync);
-  Nan::SetPrototypeMethod(ctor, "goodFeaturesToTrack", GoodFeaturesToTrack);
-  Nan::SetPrototypeMethod(ctor, "goodFeaturesToTrackAsync", GoodFeaturesToTrackAsync);
-  Nan::SetPrototypeMethod(ctor, "mean", Mean);
-  Nan::SetPrototypeMethod(ctor, "meanAsync", MeanAsync);
-  Nan::SetPrototypeMethod(ctor, "meanStdDev", MeanStdDev);
-  Nan::SetPrototypeMethod(ctor, "meanStdDevAsync", MeanStdDevAsync);
   Nan::SetPrototypeMethod(ctor, "copyMakeBorder", CopyMakeBorder);
   Nan::SetPrototypeMethod(ctor, "copyMakeBorderAsync", CopyMakeBorderAsync);
-  Nan::SetPrototypeMethod(ctor, "reduce", Reduce);
-  Nan::SetPrototypeMethod(ctor, "reduceAsync", ReduceAsync);
-  Nan::SetPrototypeMethod(ctor, "eigen", Eigen);
-  Nan::SetPrototypeMethod(ctor, "eigenAsync", EigenAsync);
-  Nan::SetPrototypeMethod(ctor, "solve", Solve);
-  Nan::SetPrototypeMethod(ctor, "solveAsync", SolveAsync);
+  Nan::SetPrototypeMethod(ctor, "splitChannels", Split);
+  Nan::SetPrototypeMethod(ctor, "splitChannelsAsync", Split);
 
 #if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
@@ -111,6 +80,37 @@ NAN_MODULE_INIT(Mat::Init) {
 #endif
 
   Nan::SetPrototypeMethod(ctor, "release", Release);
+
+  Nan::SetPrototypeMethod(ctor, "addWeighted", AddWeighted);
+  Nan::SetPrototypeMethod(ctor, "addWeightedAsync", AddWeightedAsync);
+  Nan::SetPrototypeMethod(ctor, "minMaxLoc", MinMaxLoc);
+  Nan::SetPrototypeMethod(ctor, "minMaxLocAsync", MinMaxLocAsync);
+  Nan::SetPrototypeMethod(ctor, "findNonZero", FindNonZero);
+  Nan::SetPrototypeMethod(ctor, "findNonZeroAsync", FindNonZeroAsync);
+  Nan::SetPrototypeMethod(ctor, "countNonZero", CountNonZero);
+  Nan::SetPrototypeMethod(ctor, "countNonZeroAsync", CountNonZeroAsync);
+  Nan::SetPrototypeMethod(ctor, "split", Split);
+  Nan::SetPrototypeMethod(ctor, "splitAsync", SplitAsync);
+  Nan::SetPrototypeMethod(ctor, "mulSpectrums", MulSpectrums);
+  Nan::SetPrototypeMethod(ctor, "mulSpectrumsAsync", MulSpectrumsAsync);
+  Nan::SetPrototypeMethod(ctor, "transform", Transform);
+  Nan::SetPrototypeMethod(ctor, "transformAsync", TransformAsync);
+  Nan::SetPrototypeMethod(ctor, "perspectiveTransform", PerspectiveTransform);
+  Nan::SetPrototypeMethod(ctor, "perspectiveTransformAsync", PerspectiveTransformAsync);
+  Nan::SetPrototypeMethod(ctor, "convertScaleAbs", ConvertScaleAbs);
+  Nan::SetPrototypeMethod(ctor, "convertScaleAbsAsync", ConvertScaleAbsAsync);
+  Nan::SetPrototypeMethod(ctor, "sum", Sum);
+  Nan::SetPrototypeMethod(ctor, "sumAsync", SumAsync);
+  Nan::SetPrototypeMethod(ctor, "mean", Mean);
+  Nan::SetPrototypeMethod(ctor, "meanAsync", MeanAsync);
+  Nan::SetPrototypeMethod(ctor, "meanStdDev", MeanStdDev);
+  Nan::SetPrototypeMethod(ctor, "meanStdDevAsync", MeanStdDevAsync);
+  Nan::SetPrototypeMethod(ctor, "reduce", Reduce);
+  Nan::SetPrototypeMethod(ctor, "reduceAsync", ReduceAsync);
+  Nan::SetPrototypeMethod(ctor, "eigen", Eigen);
+  Nan::SetPrototypeMethod(ctor, "eigenAsync", EigenAsync);
+  Nan::SetPrototypeMethod(ctor, "solve", Solve);
+  Nan::SetPrototypeMethod(ctor, "solveAsync", SolveAsync);
 
 
   FF_PROTO_SET_MAT_OPERATIONS(ctor);
@@ -400,14 +400,6 @@ NAN_METHOD(Mat::Norm) {
   info.GetReturnValue().Set(norm);
 }
 
-NAN_METHOD(Mat::Normalize) {
-	Mat::syncBinding<MatBindings::Normalize>("Normalize", info);
-}
-
-NAN_METHOD(Mat::NormalizeAsync) {
-	Mat::asyncBinding<MatBindings::Normalize>("Normalize", info);
-}
-
 NAN_METHOD(Mat::Row) {
 	FF::TryCatch tryCatch("Mat::Row");
   if (!info[0]->IsNumber()) {
@@ -506,46 +498,6 @@ NAN_METHOD(Mat::ConvertToAsync) {
 	Mat::asyncBinding<MatBindings::ConvertTo>("ConvertTo", info);
 }
 
-NAN_METHOD(Mat::SplitChannels) {
-	Mat::syncBinding<MatBindings::SplitChannels>("SplitChannels", info);
-}
-
-NAN_METHOD(Mat::SplitChannelsAsync) {
-	Mat::asyncBinding<MatBindings::SplitChannels>("SplitChannels", info);
-}
-
-NAN_METHOD(Mat::AddWeighted) {
-	Mat::syncBinding<MatBindings::AddWeighted>("AddWeighted", info);
-}
-
-NAN_METHOD(Mat::AddWeightedAsync) {
-	Mat::asyncBinding<MatBindings::AddWeighted>("AddWeighted", info);
-}
-
-NAN_METHOD(Mat::MinMaxLoc) {
-	Mat::syncBinding<MatBindings::MinMaxLoc>("MinMaxLoc", info);
-}
-
-NAN_METHOD(Mat::MinMaxLocAsync) {
-	Mat::asyncBinding<MatBindings::MinMaxLoc>("MinMaxLoc", info);
-}
-
-NAN_METHOD(Mat::FindNonZero) {
-	Mat::syncBinding<MatBindings::FindNonZero>("FindNonZero", info);
-}
-
-NAN_METHOD(Mat::FindNonZeroAsync) {
-	Mat::asyncBinding<MatBindings::FindNonZero>("FindNonZero", info);
-}
-
-NAN_METHOD(Mat::CountNonZero) {
-	Mat::syncBinding<MatBindings::CountNonZero>("CountNonZero", info);
-}
-
-NAN_METHOD(Mat::CountNonZeroAsync) {
-	Mat::asyncBinding<MatBindings::CountNonZero>("CountNonZero", info);
-}
-
 NAN_METHOD(Mat::PadToSquare) {
 	Mat::syncBinding<MatBindings::PadToSquare>("PadToSquare", info);
 }
@@ -618,54 +570,6 @@ NAN_METHOD(Mat::IdftAsync) {
   );
 }
 
-NAN_METHOD(Mat::MulSpectrums) {
-  FF::executeSyncBinding(
-    std::make_shared<MatBindings::MulSpectrumsWorker>(Mat::unwrapSelf(info)),
-    "Mat::MulSpectrums",
-    info
-  );
-}
-
-NAN_METHOD(Mat::MulSpectrumsAsync) {
-  FF::executeAsyncBinding(
-    std::make_shared<MatBindings::MulSpectrumsWorker>(Mat::unwrapSelf(info)),
-    "Mat::MulSpectrumsAsync",
-    info
-  );
-}
-
-NAN_METHOD(Mat::Transform) {
-  FF::executeSyncBinding(
-    std::make_shared<MatBindings::TransformWorker>(Mat::unwrapSelf(info)),
-    "Mat::Transform",
-    info
-  );
-}
-
-NAN_METHOD(Mat::TransformAsync) {
-  FF::executeAsyncBinding(
-    std::make_shared<MatBindings::TransformWorker>(Mat::unwrapSelf(info)),
-    "Mat::TransformAsync",
-    info
-  );
-}
-
-NAN_METHOD(Mat::PerspectiveTransform) {
-  FF::executeSyncBinding(
-    std::make_shared<MatBindings::PerspectiveTransformWorker>(Mat::unwrapSelf(info)),
-    "Mat::PerspectiveTransform",
-    info
-  );
-}
-
-NAN_METHOD(Mat::PerspectiveTransformAsync) {
-  FF::executeAsyncBinding(
-    std::make_shared<MatBindings::PerspectiveTransformWorker>(Mat::unwrapSelf(info)),
-    "Mat::PerspectiveTransformAsync",
-    info
-  );
-}
-
 NAN_METHOD(Mat::Flip) {
   FF::executeSyncBinding(
     std::make_shared<MatBindings::FlipWorker>(Mat::unwrapSelf(info)),
@@ -681,47 +585,6 @@ NAN_METHOD(Mat::FlipAsync) {
     info
   );
 }
-
-NAN_METHOD(Mat::Sum) {
-	Mat::syncBinding<MatBindings::Sum>("Sum", info);
-}
-
-NAN_METHOD(Mat::SumAsync) {
-	Mat::asyncBinding<MatBindings::Sum>("Sum", info);
-}
-
-NAN_METHOD(Mat::ConvertScaleAbs) {
-	Mat::syncBinding<MatBindings::ConvertScaleAbs>("ConvertScaleAbs", info);
-}
-
-NAN_METHOD(Mat::ConvertScaleAbsAsync) {
-	Mat::asyncBinding<MatBindings::ConvertScaleAbs>("ConvertScaleAbs", info);
-}
-
-NAN_METHOD(Mat::GoodFeaturesToTrack) {
-	Mat::syncBinding<MatBindings::GoodFeaturesToTrack>("GoodFeaturesToTrack", info);
-}
-
-NAN_METHOD(Mat::GoodFeaturesToTrackAsync) {
-	Mat::asyncBinding<MatBindings::GoodFeaturesToTrack>("GoodFeaturesToTrack", info);
-}
-
-NAN_METHOD(Mat::Mean) {
-	Mat::syncBinding<MatBindings::Mean>("Mean", info);
-}
-
-NAN_METHOD(Mat::MeanAsync) {
-	Mat::asyncBinding<MatBindings::Mean>("Mean", info);
-}
-
-NAN_METHOD(Mat::MeanStdDev) {
-	Mat::syncBinding<MatBindings::MeanStdDev>("MeanStdDev", info);
-}
-
-NAN_METHOD(Mat::MeanStdDevAsync) {
-	Mat::asyncBinding<MatBindings::MeanStdDev>("MeanStdDev", info);
-}
-
 NAN_METHOD(Mat::CopyMakeBorder) {
 	FF::executeSyncBinding(
 		std::make_shared<MatBindings::CopyMakeBorderWorker>(Mat::unwrapSelf(info)),
@@ -736,30 +599,6 @@ NAN_METHOD(Mat::CopyMakeBorderAsync) {
 		"Mat::CopyMakeBorderAsync",
 		info
 	);
-}
-
-NAN_METHOD(Mat::Reduce) {
-	Mat::syncBinding<MatBindings::Reduce>("Reduce", info);
-}
-
-NAN_METHOD(Mat::ReduceAsync) {
-	Mat::asyncBinding<MatBindings::Reduce>("Reduce", info);
-}
-
-NAN_METHOD(Mat::Eigen) {
-	Mat::syncBinding<MatBindings::Eigen>("Eigen", info);
-}
-
-NAN_METHOD(Mat::EigenAsync) {
-	Mat::asyncBinding<MatBindings::Eigen>("Eigen", info);
-}
-
-NAN_METHOD(Mat::Solve) {
-	Mat::syncBinding<MatBindings::Solve>("Solve", info);
-}
-
-NAN_METHOD(Mat::SolveAsync) {
-	Mat::asyncBinding<MatBindings::Solve>("Solve", info);
 }
 
 #if CV_VERSION_GREATER_EQUAL(3, 2, 0)
@@ -779,3 +618,131 @@ NAN_METHOD(Mat::RotateAsync) {
   );
 }
 #endif
+
+NAN_METHOD(Mat::AddWeighted) {
+	Mat::syncBinding<CoreBindings::AddWeighted>("AddWeighted", info);
+}
+
+NAN_METHOD(Mat::AddWeightedAsync) {
+	Mat::asyncBinding<CoreBindings::AddWeighted>("AddWeighted", info);
+}
+
+NAN_METHOD(Mat::MinMaxLoc) {
+	Mat::syncBinding<CoreBindings::MinMaxLoc>("MinMaxLoc", info);
+}
+
+NAN_METHOD(Mat::MinMaxLocAsync) {
+	Mat::asyncBinding<CoreBindings::MinMaxLoc>("MinMaxLoc", info);
+}
+
+NAN_METHOD(Mat::FindNonZero) {
+	Mat::syncBinding<CoreBindings::FindNonZero>("FindNonZero", info);
+}
+
+NAN_METHOD(Mat::FindNonZeroAsync) {
+	Mat::asyncBinding<CoreBindings::FindNonZero>("FindNonZero", info);
+}
+
+NAN_METHOD(Mat::CountNonZero) {
+	Mat::syncBinding<CoreBindings::CountNonZero>("CountNonZero", info);
+}
+
+NAN_METHOD(Mat::CountNonZeroAsync) {
+	Mat::asyncBinding<CoreBindings::CountNonZero>("CountNonZero", info);
+}
+
+NAN_METHOD(Mat::Normalize) {
+	Mat::syncBinding<CoreBindings::Normalize>("Normalize", info);
+}
+
+NAN_METHOD(Mat::NormalizeAsync) {
+	Mat::asyncBinding<CoreBindings::Normalize>("Normalize", info);
+}
+
+NAN_METHOD(Mat::Split) {
+	Mat::syncBinding<CoreBindings::Split>("Split", info);
+}
+
+NAN_METHOD(Mat::SplitAsync) {
+	Mat::asyncBinding<CoreBindings::Split>("Split", info);
+}
+
+NAN_METHOD(Mat::MulSpectrums) {
+	Mat::syncBinding<CoreBindings::MulSpectrums>("MulSpectrums", info);
+}
+
+NAN_METHOD(Mat::MulSpectrumsAsync) {
+	Mat::asyncBinding<CoreBindings::MulSpectrums>("MulSpectrums", info);
+}
+
+NAN_METHOD(Mat::Transform) {
+	Mat::syncBinding<CoreBindings::Transform>("Transform", info);
+}
+
+NAN_METHOD(Mat::TransformAsync) {
+	Mat::asyncBinding<CoreBindings::Transform>("Transform", info);
+}
+
+NAN_METHOD(Mat::PerspectiveTransform) {
+	Mat::syncBinding<CoreBindings::PerspectiveTransform>("PerspectiveTransform", info);
+}
+
+NAN_METHOD(Mat::PerspectiveTransformAsync) {
+	Mat::asyncBinding<CoreBindings::PerspectiveTransform>("PerspectiveTransform", info);
+}
+
+NAN_METHOD(Mat::Sum) {
+	Mat::syncBinding<CoreBindings::Sum>("Sum", info);
+}
+
+NAN_METHOD(Mat::SumAsync) {
+	Mat::asyncBinding<CoreBindings::Sum>("Sum", info);
+}
+
+NAN_METHOD(Mat::ConvertScaleAbs) {
+	Mat::syncBinding<CoreBindings::ConvertScaleAbs>("ConvertScaleAbs", info);
+}
+
+NAN_METHOD(Mat::ConvertScaleAbsAsync) {
+	Mat::asyncBinding<CoreBindings::ConvertScaleAbs>("ConvertScaleAbs", info);
+}
+
+NAN_METHOD(Mat::Mean) {
+	Mat::syncBinding<CoreBindings::Mean>("Mean", info);
+}
+
+NAN_METHOD(Mat::MeanAsync) {
+	Mat::asyncBinding<CoreBindings::Mean>("Mean", info);
+}
+
+NAN_METHOD(Mat::MeanStdDev) {
+	Mat::syncBinding<CoreBindings::MeanStdDev>("MeanStdDev", info);
+}
+
+NAN_METHOD(Mat::MeanStdDevAsync) {
+	Mat::asyncBinding<CoreBindings::MeanStdDev>("MeanStdDev", info);
+}
+
+NAN_METHOD(Mat::Reduce) {
+	Mat::syncBinding<CoreBindings::Reduce>("Reduce", info);
+}
+
+NAN_METHOD(Mat::ReduceAsync) {
+	Mat::asyncBinding<CoreBindings::Reduce>("Reduce", info);
+}
+
+NAN_METHOD(Mat::Eigen) {
+	Mat::syncBinding<CoreBindings::Eigen>("Eigen", info);
+}
+
+NAN_METHOD(Mat::EigenAsync) {
+	Mat::asyncBinding<CoreBindings::Eigen>("Eigen", info);
+}
+
+NAN_METHOD(Mat::Solve) {
+	Mat::syncBinding<CoreBindings::Solve>("Solve", info);
+}
+
+NAN_METHOD(Mat::SolveAsync) {
+	Mat::asyncBinding<CoreBindings::Solve>("Solve", info);
+}

@@ -43,12 +43,6 @@ public:
   static NAN_METHOD(DistanceTransformAsync);
   static NAN_METHOD(DistanceTransformWithLabels);
   static NAN_METHOD(DistanceTransformWithLabelsAsync);
-  static NAN_METHOD(Blur);
-  static NAN_METHOD(BlurAsync);
-  static NAN_METHOD(GaussianBlur);
-  static NAN_METHOD(GaussianBlurAsync);
-  static NAN_METHOD(MedianBlur);
-  static NAN_METHOD(MedianBlurAsync);
   static NAN_METHOD(ConnectedComponents);
   static NAN_METHOD(ConnectedComponentsAsync);
   static NAN_METHOD(ConnectedComponentsWithStats);
@@ -122,6 +116,14 @@ public:
   static NAN_METHOD(Undistort);
   static NAN_METHOD(UndistortAsync);
 #endif
+  static NAN_METHOD(GoodFeaturesToTrack);
+  static NAN_METHOD(GoodFeaturesToTrackAsync);
+  static NAN_METHOD(Blur);
+  static NAN_METHOD(BlurAsync);
+  static NAN_METHOD(GaussianBlur);
+  static NAN_METHOD(GaussianBlurAsync);
+  static NAN_METHOD(MedianBlur);
+  static NAN_METHOD(MedianBlurAsync);
 };
 
 #endif

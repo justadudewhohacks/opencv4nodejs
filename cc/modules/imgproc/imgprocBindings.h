@@ -122,7 +122,7 @@ namespace ImgprocBindings {
   // since 4.0.0 cv::undistortPoints has been moved from imgproc to calib3d
   class UndistortPoints : public CvBinding {
   public:
-	  UndistortPoints() {
+	  void setup() {
 		  auto srcPoints = req<Point2::ArrayWithCastConverter<cv::Point2f>>();
 		  auto cameraMatrix = req<Mat::Converter>();
 		  auto distCoeffs = req<Mat::Converter>();
@@ -135,6 +135,75 @@ namespace ImgprocBindings {
   };
 #endif
 
+  class GoodFeaturesToTrack : public CvClassMethodBinding<Mat> {
+  public:
+	  void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+		  auto maxCorners = req<FF::IntConverter>();
+		  auto qualityLevel = req<FF::DoubleConverter>();
+		  auto minDistance = req<FF::DoubleConverter>();
+		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+		  auto blockSize = opt<FF::IntConverter>("blockSize", 3);
+		  auto gradientSize = opt<FF::IntConverter>("gradientSize", 3);
+		  auto useHarrisDetector = opt<FF::BoolConverter>("useHarrisDetector", false);
+		  auto harrisK = opt<FF::DoubleConverter>("harrisK", 0.04);
+		  auto corners = ret<Point2::ArrayWithCastConverter<cv::Point2f>>("corners");
+
+		  executeBinding = [=]() {
+			  cv::goodFeaturesToTrack(
+				  self->ref(), corners->ref(), maxCorners->ref(), qualityLevel->ref(), minDistance->ref(), mask->ref(), blockSize->ref(),
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
+				  gradientSize->ref(),
+#endif
+				  useHarrisDetector->ref(), harrisK->ref()
+			  );
+		  };
+	  };
+  };
+
+  class Blur : public CvClassMethodBinding<Mat> {
+  public:
+	  void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+		  auto kSize = req<Size::Converter>();
+		  auto anchor = opt<Point2::Converter>("anchor", cv::Point2d());
+		  auto borderType = opt<FF::IntConverter>("borderType", cv::BORDER_CONSTANT);
+		  auto blurMat = ret<Mat::Converter>("blurMat");
+
+		  executeBinding = [=]() {
+			  cv::blur(self->ref(), blurMat->ref(), kSize->ref(), anchor->ref(), borderType->ref());
+		  };
+	  };
+
+	  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return FF::isArgObject(info, 1) && !Point2::hasInstance(info[1]);
+	  }
+  };
+
+  class GaussianBlur : public CvClassMethodBinding<Mat> {
+  public:
+	  void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+		  auto kSize = req<Size::Converter>();
+		  auto sigmaX = req<FF::DoubleConverter>();
+		  auto sigmaY = opt<FF::DoubleConverter>("sigmaY", 0);
+		  auto borderType = opt<FF::IntConverter>("borderType", cv::BORDER_CONSTANT);
+		  auto blurMat = ret<Mat::Converter>("blurMat");
+
+		  executeBinding = [=]() {
+			  cv::GaussianBlur(self->ref(), blurMat->ref(), kSize->ref(), sigmaX->ref(), sigmaY->ref(), borderType->ref());
+		  };
+	  };
+  };
+
+  class MedianBlur : public CvClassMethodBinding<Mat> {
+  public:
+	  void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+		  auto kSize = req<FF::IntConverter>();
+		  auto blurMat = ret<Mat::Converter>("blurMat");
+
+		  executeBinding = [=]() {
+			  cv::medianBlur(self->ref(), blurMat->ref(), kSize->ref());
+		  };
+	  };
+  };
 }
 
 #endif

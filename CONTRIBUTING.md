@@ -13,13 +13,17 @@ The API is designed such that
 
 2: A function, which takes more than a single parameter with default values, can conveniently be invoked by passing a JSON object with named parameters in substitution of the optional parameters.
 
-3: If the first argument of a function corresponds to one of the OpenCV classes, the function binding should become a class method of the wrapped class, to allow chaining of function calls such as: `mat.resizeToMax(500).toGray().mean()`.
+3: If the first argument of a function corresponds to one of the OpenCV classes (usually cv::Mat), the function binding should be exported as a global cv method as well as a class method of the wrapped class, to allow chaining of function calls such as: `mat.resizeToMax(500).toGray().mean()`.
 
 For example consider the following function signature from the official OpenCV 3 docs:
 
 ``` c++
 void GaussianBlur(InputArray src, OutputArray dst, Size ksize, double sigmaX, double sigmaY=0, int borderType=BORDER_DEFAULT)
 ```
+
+cv::InputArray are usually corresponding to cv::Mat, but sometimes they can also be a std::vector of Points or Vectors. All OutputArrays are converted to return values in the binding. If a function has multiple return values, they are returned as a JSON object containing the return values as key value pairs.
+
+Passing optional arguments as named parameters shall provide the convenience of being able to pass single optional parameters without having to pass every other optional parameter.
 
 The function should be invokable in the following ways:
 
@@ -36,6 +40,22 @@ const borderType = cv.BORDER_CONSTANT
 
 let dst
 
+/* invocation on the global cv object: */
+
+// with required arguments
+dst = cv.gaussianBlur(mat, size, sigmaX)
+
+// with optional arguments
+dst = cv.gaussianBlur(mat, size, sigmaX, sigmaY)
+dst = cv.gaussianBlur(mat, size, sigmaX, sigmaY, borderType)
+
+// with named optional arguments as JSON object
+dst = cv.gaussianBlur(mat, size, sigmaX, { sigmaY: 1.2 })
+dst = cv.gaussianBlur(mat, size, sigmaX, { borderType: cv.BORDER_CONSTANT })
+dst = cv.gaussianBlur(mat, size, sigmaX, { sigmaY: 1.2, borderType: cv.BORDER_CONSTANT })
+
+/* invocation as a class method: */
+
 // with required arguments
 dst = mat.gaussianBlur(size, sigmaX)
 
@@ -49,8 +69,6 @@ dst = mat.gaussianBlur(size, sigmaX, { borderType: cv.BORDER_CONSTANT })
 dst = mat.gaussianBlur(size, sigmaX, { sigmaY: 1.2, borderType: cv.BORDER_CONSTANT })
 ```
 
-Passing optional arguments as named parameters shall provide the convenience of being able to pass single optional parameters without having to pass every other optional parameter.
-
 ## Guide to Adding New Function Bindings
 
 Adding a new nodejs binding to an OpenCV function is done in 3 simple steps:
@@ -61,16 +79,16 @@ Adding a new nodejs binding to an OpenCV function is done in 3 simple steps:
 
 ### 1. Add the Function Binding
 
-Let's consider the GaussianBlur example. Since the first argument is a cv::Mat, we are going to make this a class method binding. Furthermore, GaussianBlur is implemented in the imgproc package of OpenCV (as we have to include `#include <opencv2/imgproc.hpp>` to use this method). Therefore we want to implement the binding in MatImgprocBindings.h:
+Let's consider the GaussianBlur example. Since the first argument is a cv::Mat, we are going to make this a class method binding. Furthermore, GaussianBlur is implemented in the imgproc package of OpenCV (as we have to include `#include <opencv2/imgproc.hpp>` to use this method). Therefore we want to implement the binding in imgprocBindings.h:
 
 ``` c++
-namespace MatImgprocBindings {
+namespace ImgprocBindings {
 
   ...
 
-  class GaussianBlur : public CvBinding {
+  class GaussianBlur : public CvClassMethodBinding<Mat> {
   public:
-    GaussianBlur(cv::Mat self) {
+    void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
       // required parameters
       auto kSize = req<Size::Converter>();
       auto sigmaX = req<FF::DoubleConverter>();
@@ -91,7 +109,44 @@ namespace MatImgprocBindings {
 }
 ```
 
-To expose the synchronous and asynchronous bindings for GaussianBlur we first declare the class methods in MatImgproc.h:
+To expose the synchronous and asynchronous bindings for GaussianBlur we first declare the global methods in Imgproc.h:
+
+``` c++
+class Imgproc {
+
+  ...
+
+  static NAN_METHOD(GaussianBlur);
+  static NAN_METHOD(GaussianBlurAsync);
+
+}
+```
+
+And then expose the bindings in Imgproc.cc:
+
+``` c++
+// in the init hook, we are telling the package to expose the
+// global function bindings to the module object (target)
+NAN_MODULE_INIT(Imgproc::Init) {
+
+  ...
+
+  Nan::SetMethod(target, "gaussianBlur", GaussianBlur);
+  Nan::SetMethod(target, "gaussianBlurAsync", GaussianBlurAsync);
+}
+
+// synchronous binding
+NAN_METHOD(Imgproc::GaussianBlur) {
+  FF::SyncBinding<ImgprocBindings::GaussianBlur>("Imgproc", "GaussianBlur", info);
+}
+
+// asynchronous binding
+NAN_METHOD(Imgproc::GaussianBlurAsync) {
+  FF::AsyncBinding<ImgprocBindings::GaussianBlur>("Imgproc", "GaussianBlur", info);
+}
+```
+
+We repeat this procedure for the class method bindings and declare them in MatImgproc.h
 
 ``` c++
 class MatImgproc {
@@ -104,7 +159,7 @@ class MatImgproc {
 }
 ```
 
-And then add the bindings to MatImgproc.cc:
+And then expose the bindings in MatImgproc.cc:
 
 ``` c++
 // in the init hook, we are telling the package to expose those bindings on the
@@ -119,12 +174,12 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 
 // synchronous binding
 NAN_METHOD(MatImgproc::GaussianBlur) {
-  Mat::SyncBinding<MatImgprocBindings::GaussianBlur>("GaussianBlur", info);
+  Mat::SyncBinding<ImgprocBindings::GaussianBlur>("GaussianBlur", info);
 }
 
 // asynchronous binding
 NAN_METHOD(MatImgproc::GaussianBlurAsync) {
-  Mat::AsyncBinding<MatImgprocBindings::GaussianBlur>("GaussianBlur", info);
+  Mat::AsyncBinding<ImgprocBindings::GaussianBlur>("GaussianBlur", info);
 }
 ```
 
@@ -132,7 +187,7 @@ NAN_METHOD(MatImgproc::GaussianBlurAsync) {
 
 We test the bindings directly from JS with a classic mocha + chai setup. The purpose of unit testing is not to ensure correct behaviour of OpenCV function calls as OpenCV functionality is tested and none of our business. However, we want to ensure that our bindings can be called without crashing, that all parameters are passed and objects unwrapped correctly and that the function call returns what we expect it to.
 
-You can use generateAPITests to easily generate default tests for a function binding that is implemented sync and async. This will generate the tests which ensure that the synchronous as well as the callbacked and promisified async bindings are called correctly. However, you are welcome to write additional tests.
+You can use generateAPITests to easily generate default tests for a function binding that is implemented sync and async. This will generate the tests which ensure that the synchronous as well as the callbacked and promisified async bindings are called correctly. However, you are welcome to write additional tests. For the gaussianBlur example we use generateClassMethodTests instead of generateAPITests, which will generate tests for the global method binding `cv.gaussianBlur(mat, ...)` as well as the class method binding `mat.gaussianBlur(...)`.
 
 For the gaussianBlur example generating unit tests can by adding the following to imgprocTests.js located in test/tests/core/Mat:
 
@@ -153,10 +208,11 @@ describe('gaussianBlur', () => {
   const kSize = new cv.Size(3, 3);
   const sigmaX = 1.2;
 
-  generateAPITests({
-    getDut: () => rgbMat,
+  generateClassMethodTests({
+    getClassInstance: () => mat,
     methodName: 'gaussianBlur',
-    methodNameSpace: 'Mat',
+    classNameSpace: 'Mat',
+    methodNameSpace: 'Imgproc',
     getRequiredArgs: () => ([
       kSize,
       sigmaX
@@ -172,7 +228,7 @@ describe('gaussianBlur', () => {
 
 ### 3. Adding the Type Declaration
 
-All type declarations are located in lib/typings. We simply add the type information of the signature of the function binding we just implemented to Mat.d.ts as follows:
+All type declarations are located in lib/typings. We simply add the type information of the signature of the function binding we just implemented to Mat.d.ts:
 
 ``` typescript
 export class Mat {
@@ -182,6 +238,13 @@ export class Mat {
   gaussianBlur(kSize: Size, sigmaX: number, sigmaY?: number, borderType?: number): Mat;
   gaussianBlurAsync(kSize: Size, sigmaX: number, sigmaY?: number, borderType?: number): Promise<Mat>;
 }
+```
+
+And we add the typings for the global function binding to cv.d.ts:
+
+``` typescript
+export function gaussianBlur(mat: Mat, kSize: Size, sigmaX: number, sigmaY?: number, borderType?: number): Mat;
+export function gaussianBlurAsync(mat: Mat, kSize: Size, sigmaX: number, sigmaY?: number, borderType?: number): Promise<Mat>;
 ```
 
 And that's it! You can now open a Pull Request, which will be built on the CI.

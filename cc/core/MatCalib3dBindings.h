@@ -812,7 +812,7 @@ namespace MatCalib3dBindings {
   // since 4.0.0 cv::undistort has been moved from imgproc to calib3d
   class Undistort : public CvBinding {
   public:
-	  Undistort(cv::Mat self) {
+	  void setup(cv::Mat self) {
 		  auto cameraMatrix = req<Mat::Converter>();
 		  auto distCoeffs = req<Mat::Converter>();
 		  auto undistortedMat = ret<Mat::Converter>("undistortedMat");

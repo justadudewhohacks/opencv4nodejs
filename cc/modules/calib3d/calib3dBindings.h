@@ -888,7 +888,7 @@ namespace Calib3dBindings {
   // since 4.0.0 cv::undistortPoints has been moved from imgproc to calib3d
   class UndistortPoints : public CvBinding {
   public:
-	  UndistortPoints() {
+	  void setup() {
 		  auto srcPoints = req<Point2::ArrayWithCastConverter<cv::Point2f>>();
 		  auto cameraMatrix = req<Mat::Converter>();
 		  auto distCoeffs = req<Mat::Converter>();

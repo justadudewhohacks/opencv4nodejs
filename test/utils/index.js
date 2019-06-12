@@ -1,6 +1,7 @@
 const testUtils = require('./testUtils');
 const matTestUtils = require('./matTestUtils');
-const defaultTests = require('./defaultTests');
+const generateAPITests = require('./generateAPITests');
+const generateClassMethodTests = require('./generateClassMethodTests');
 const cv = global.dut;
 
 const getNodeMajorVersion = () => parseInt(process.version.split('.')[0].slice(1))
@@ -16,6 +17,7 @@ module.exports = Object.assign(
   {},
   testUtils,
   matTestUtils,
-  defaultTests,
+  generateAPITests,
+  generateClassMethodTests,
   { getNodeMajorVersion, cvVersionGreaterEqual, cvVersionLowerThan, cvVersionEqual }
 );

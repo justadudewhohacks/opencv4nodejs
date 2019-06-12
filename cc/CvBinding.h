@@ -32,4 +32,18 @@ protected:
 	std::function<void(void)> executeBinding = [](){};
 };
 
+template<class TClass>
+class CvClassMethodBinding : public CvBinding {
+public:
+	void setup() {
+		createBinding(req<typename TClass::Converter>());
+	}
+
+	void setup(typename TClass::Converter::Type self) {
+		createBinding(std::make_shared<FF::Value<typename TClass::Converter::Type>>(self));
+	}
+
+	virtual void createBinding(std::shared_ptr<FF::Value<typename TClass::Converter::Type>> self) = 0;
+};
+
 #endif
