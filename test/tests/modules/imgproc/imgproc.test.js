@@ -3,6 +3,7 @@ const {
   assertError,
   assertPropsWithValue,
   assertMetaData,
+  dangerousDeepEquals,
   funcShouldRequireArgs,
   readTestImage,
   generateAPITests,
@@ -12,6 +13,14 @@ const {
 const { expect } = require('chai');
 const contourTests = require('./contourTests');
 const colormapTests = require('./colormapTests');
+
+const rgbMatData = [
+  Array(5).fill([255, 125, 0]),
+  Array(5).fill([0, 0, 0]),
+  Array(5).fill([125, 75, 125]),
+  Array(5).fill([75, 255, 75])
+];
+const rgbMat = new cv.Mat(rgbMatData, cv.CV_8UC3);
 
 describe('imgproc', () => {
   let testImg;
@@ -45,6 +54,68 @@ describe('imgproc', () => {
         expect(out[0]).to.have.property('x');
         expect(out[0]).to.have.property('y');
       }
+    });
+  });
+
+  describe('smoothing', () => {
+    const expectOutput = (blurred) => {
+      assertMetaData(blurred)(rgbMat.rows, rgbMat.cols, rgbMat.type);
+      expect(dangerousDeepEquals(blurred.getDataAsArray(), rgbMat.getDataAsArray())).to.be.false;
+    };
+
+    describe('blur', () => {
+      const kSize = new cv.Size(3, 3);
+
+      generateClassMethodTests({
+        getClassInstance: () => rgbMat.copy(),
+        methodName: 'blur',
+        classNameSpace: 'Mat',
+        methodNameSpace: 'Imgproc',
+        getRequiredArgs: () => ([
+          kSize
+        ]),
+        getOptionalArgsMap: () => ([
+          ['anchor', new cv.Point(1, 1)],
+          ['borderType', cv.BORDER_CONSTANT]
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('gaussianBlur', () => {
+      const kSize = new cv.Size(3, 3);
+      const sigmaX = 1.2;
+
+      generateClassMethodTests({
+        getClassInstance: () => rgbMat.copy(),
+        methodName: 'gaussianBlur',
+        classNameSpace: 'Mat',
+        methodNameSpace: 'Imgproc',
+        getRequiredArgs: () => ([
+          kSize,
+          sigmaX
+        ]),
+        getOptionalArgsMap: () => ([
+          ['sigmaY', 1.2],
+          ['borderType', cv.BORDER_CONSTANT]
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('medianBlur', () => {
+      const kSize = 3;
+
+      generateClassMethodTests({
+        getClassInstance: () => rgbMat.copy(),
+        methodName: 'medianBlur',
+        classNameSpace: 'Mat',
+        methodNameSpace: 'Imgproc',
+        getRequiredArgs: () => ([
+          kSize
+        ]),
+        expectOutput
+      });
     });
   });
 

@@ -41,6 +41,13 @@ NAN_MODULE_INIT(Imgproc::Init) {
 #endif
   Nan::SetMethod(target, "goodFeaturesToTrack", GoodFeaturesToTrack);
   Nan::SetMethod(target, "goodFeaturesToTrackAsync", GoodFeaturesToTrackAsync);
+  Nan::SetMethod(target, "blur", Blur);
+  Nan::SetMethod(target, "blurAsync", BlurAsync);
+  Nan::SetMethod(target, "gaussianBlur", GaussianBlur);
+  Nan::SetMethod(target, "gaussianBlurAsync", GaussianBlurAsync);
+  Nan::SetMethod(target, "medianBlur", MedianBlur);
+  Nan::SetMethod(target, "medianBlurAsync", MedianBlurAsync);
+
 
   Moments::Init(target);
   Contour::Init(target);
@@ -352,4 +359,28 @@ NAN_METHOD(Imgproc::GoodFeaturesToTrack) {
 
 NAN_METHOD(Imgproc::GoodFeaturesToTrackAsync) {
 	FF::asyncBinding<ImgprocBindings::GoodFeaturesToTrack>("Imgproc", "GoodFeaturesToTrack", info);
+}
+
+NAN_METHOD(Imgproc::Blur) {
+	FF::syncBinding<ImgprocBindings::Blur>("Imgproc", "Blur", info);
+}
+
+NAN_METHOD(Imgproc::BlurAsync) {
+	FF::asyncBinding<ImgprocBindings::Blur>("Imgproc", "Blur", info);
+}
+
+NAN_METHOD(Imgproc::GaussianBlur) {
+	FF::syncBinding<ImgprocBindings::GaussianBlur>("Imgproc", "GaussianBlur", info);
+}
+
+NAN_METHOD(Imgproc::GaussianBlurAsync) {
+	FF::asyncBinding<ImgprocBindings::GaussianBlur>("Imgproc", "GaussianBlur", info);
+}
+
+NAN_METHOD(Imgproc::MedianBlur) {
+	FF::syncBinding<ImgprocBindings::MedianBlur>("Imgproc", "MedianBlur", info);
+}
+
+NAN_METHOD(Imgproc::MedianBlurAsync) {
+	FF::asyncBinding<ImgprocBindings::MedianBlur>("Imgproc", "MedianBlur", info);
 }

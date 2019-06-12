@@ -35,6 +35,12 @@ public:
 #endif
   static NAN_METHOD(GoodFeaturesToTrack);
   static NAN_METHOD(GoodFeaturesToTrackAsync);
+  static NAN_METHOD(Blur);
+  static NAN_METHOD(BlurAsync);
+  static NAN_METHOD(GaussianBlur);
+  static NAN_METHOD(GaussianBlurAsync);
+  static NAN_METHOD(MedianBlur);
+  static NAN_METHOD(MedianBlurAsync);
 };
 
 #endif

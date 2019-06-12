@@ -160,6 +160,50 @@ namespace ImgprocBindings {
 	  };
   };
 
+  class Blur : public CvClassMethodBinding<Mat> {
+  public:
+	  void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+		  auto kSize = req<Size::Converter>();
+		  auto anchor = opt<Point2::Converter>("anchor", cv::Point2d());
+		  auto borderType = opt<FF::IntConverter>("borderType", cv::BORDER_CONSTANT);
+		  auto blurMat = ret<Mat::Converter>("blurMat");
+
+		  executeBinding = [=]() {
+			  cv::blur(self->ref(), blurMat->ref(), kSize->ref(), anchor->ref(), borderType->ref());
+		  };
+	  };
+
+	  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return FF::isArgObject(info, 1) && !Point2::hasInstance(info[1]);
+	  }
+  };
+
+  class GaussianBlur : public CvClassMethodBinding<Mat> {
+  public:
+	  void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+		  auto kSize = req<Size::Converter>();
+		  auto sigmaX = req<FF::DoubleConverter>();
+		  auto sigmaY = opt<FF::DoubleConverter>("sigmaY", 0);
+		  auto borderType = opt<FF::IntConverter>("borderType", cv::BORDER_CONSTANT);
+		  auto blurMat = ret<Mat::Converter>("blurMat");
+
+		  executeBinding = [=]() {
+			  cv::GaussianBlur(self->ref(), blurMat->ref(), kSize->ref(), sigmaX->ref(), sigmaY->ref(), borderType->ref());
+		  };
+	  };
+  };
+
+  class MedianBlur : public CvClassMethodBinding<Mat> {
+  public:
+	  void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+		  auto kSize = req<FF::IntConverter>();
+		  auto blurMat = ret<Mat::Converter>("blurMat");
+
+		  executeBinding = [=]() {
+			  cv::medianBlur(self->ref(), blurMat->ref(), kSize->ref());
+		  };
+	  };
+  };
 }
 
 #endif

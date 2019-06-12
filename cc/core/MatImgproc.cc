@@ -33,12 +33,6 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "distanceTransformAsync", DistanceTransformAsync);
   Nan::SetPrototypeMethod(ctor, "distanceTransformWithLabels", DistanceTransformWithLabels);
   Nan::SetPrototypeMethod(ctor, "distanceTransformWithLabelsAsync", DistanceTransformWithLabelsAsync);
-  Nan::SetPrototypeMethod(ctor, "blur", Blur);
-  Nan::SetPrototypeMethod(ctor, "blurAsync", BlurAsync);
-  Nan::SetPrototypeMethod(ctor, "gaussianBlur", GaussianBlur);
-  Nan::SetPrototypeMethod(ctor, "gaussianBlurAsync", GaussianBlurAsync);
-  Nan::SetPrototypeMethod(ctor, "medianBlur", MedianBlur);
-  Nan::SetPrototypeMethod(ctor, "medianBlurAsync", MedianBlurAsync);
   Nan::SetPrototypeMethod(ctor, "connectedComponents", ConnectedComponents);
   Nan::SetPrototypeMethod(ctor, "connectedComponentsAsync", ConnectedComponentsAsync);
   Nan::SetPrototypeMethod(ctor, "connectedComponentsWithStats", ConnectedComponentsWithStats);
@@ -116,6 +110,12 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 #endif
   Nan::SetPrototypeMethod(ctor, "goodFeaturesToTrack", GoodFeaturesToTrack);
   Nan::SetPrototypeMethod(ctor, "goodFeaturesToTrackAsync", GoodFeaturesToTrackAsync);
+  Nan::SetPrototypeMethod(ctor, "blur", Blur);
+  Nan::SetPrototypeMethod(ctor, "blurAsync", BlurAsync);
+  Nan::SetPrototypeMethod(ctor, "gaussianBlur", GaussianBlur);
+  Nan::SetPrototypeMethod(ctor, "gaussianBlurAsync", GaussianBlurAsync);
+  Nan::SetPrototypeMethod(ctor, "medianBlur", MedianBlur);
+  Nan::SetPrototypeMethod(ctor, "medianBlurAsync", MedianBlurAsync);
 };
 
 NAN_METHOD(MatImgproc::DrawContours) {
@@ -372,30 +372,6 @@ NAN_METHOD(MatImgproc::DistanceTransformWithLabelsAsync) {
     "Mat::DistanceTransformWithLabelsAsync",
     info
   );
-}
-
-NAN_METHOD(MatImgproc::Blur) {
-	Mat::syncBinding<MatImgprocBindings::Blur>("Blur", info);
-}
-
-NAN_METHOD(MatImgproc::BlurAsync) {
-	Mat::asyncBinding<MatImgprocBindings::Blur>("Blur", info);
-}
-
-NAN_METHOD(MatImgproc::GaussianBlur) {
-	Mat::syncBinding<MatImgprocBindings::GaussianBlur>("GaussianBlur", info);
-}
-
-NAN_METHOD(MatImgproc::GaussianBlurAsync) {
-	Mat::asyncBinding<MatImgprocBindings::GaussianBlur>("GaussianBlur", info);
-}
-
-NAN_METHOD(MatImgproc::MedianBlur) {
-	Mat::syncBinding<MatImgprocBindings::MedianBlur>("MedianBlur", info);
-}
-
-NAN_METHOD(MatImgproc::MedianBlurAsync) {
-	Mat::asyncBinding<MatImgprocBindings::MedianBlur>("MedianBlur", info);
 }
 
 NAN_METHOD(MatImgproc::ConnectedComponents) {
@@ -968,3 +944,26 @@ NAN_METHOD(MatImgproc::GoodFeaturesToTrackAsync) {
 	Mat::asyncBinding<ImgprocBindings::GoodFeaturesToTrack>("GoodFeaturesToTrack", info);
 }
 
+NAN_METHOD(MatImgproc::Blur) {
+	Mat::syncBinding<ImgprocBindings::Blur>("Blur", info);
+}
+
+NAN_METHOD(MatImgproc::BlurAsync) {
+	Mat::asyncBinding<ImgprocBindings::Blur>("Blur", info);
+}
+
+NAN_METHOD(MatImgproc::GaussianBlur) {
+	Mat::syncBinding<ImgprocBindings::GaussianBlur>("GaussianBlur", info);
+}
+
+NAN_METHOD(MatImgproc::GaussianBlurAsync) {
+	Mat::asyncBinding<ImgprocBindings::GaussianBlur>("GaussianBlur", info);
+}
+
+NAN_METHOD(MatImgproc::MedianBlur) {
+	Mat::syncBinding<ImgprocBindings::MedianBlur>("MedianBlur", info);
+}
+
+NAN_METHOD(MatImgproc::MedianBlurAsync) {
+	Mat::asyncBinding<ImgprocBindings::MedianBlur>("MedianBlur", info);
+}
