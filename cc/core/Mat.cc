@@ -2,7 +2,7 @@
 #include "MatImgproc.h"
 #include "MatCalib3d.h"
 #include "MatBindings.h"
-#include "CoreBindings.h"
+#include "coreBindings.h"
 
 #ifdef HAVE_XIMGPROC
 #include "MatXimgproc.h"
