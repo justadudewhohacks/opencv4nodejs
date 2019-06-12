@@ -36,7 +36,7 @@ template<class TClass>
 class CvClassMethodBinding : public CvBinding {
 public:
 	void setup() {
-		createBinding(req<TClass::Converter>());
+		createBinding(req<typename TClass::Converter>());
 	}
 
 	void setup(typename TClass::Converter::Type self) {
