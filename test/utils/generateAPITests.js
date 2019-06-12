@@ -23,6 +23,7 @@ const getDefaultAPITestOpts = (opts) => ({
   otherAsyncPromisedTests: emptyFunc,
   beforeHook: null,
   afterHook: null,
+  explicitHasRequiredArgs: false,
   ...opts
 })
 
@@ -41,7 +42,8 @@ exports.generateAPITests = (opts) => {
     otherAsyncCallbackedTests,
     otherAsyncPromisedTests,
     beforeHook,
-    afterHook
+    afterHook,
+    explicitHasRequiredArgs
   } = getDefaultAPITestOpts(opts)
 
   const methodNameAsync = `${methodName}Async`;
@@ -52,7 +54,9 @@ exports.generateAPITests = (opts) => {
     return optionalArgsObject;
   };
 
-  const hasRequiredArgs = !!getRequiredArgs().length;
+  // use explicitHasRequiredArgs if getRequiredArgs would throw because args
+  // may be initialized in a before statement and are undefined during test creation
+  const hasRequiredArgs = explicitHasRequiredArgs || !!getRequiredArgs().length;
   const hasOptArgs = !!getOptionalArgs().length;
   const hasOptArgsObject = getOptionalArgs().length > 1;
 

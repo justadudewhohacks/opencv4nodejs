@@ -91,6 +91,174 @@ namespace CoreBindings {
 		};
 	};
 
+	class Split : public CvClassMethodBinding<Mat> {
+	public:
+		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+			auto mv = ret<Mat::ArrayConverter>("mv");
+
+			executeBinding = [=]() {
+				cv::split(self->ref(), mv->ref());
+			};
+		};
+	};
+
+	class MulSpectrums : public CvClassMethodBinding<Mat> {
+	public:
+		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+			auto mat2 = req<Mat::Converter>();
+			auto flags = req<FF::IntConverter>();
+			auto conjB = opt<FF::BoolConverter>("conjB", false);
+			auto dst = ret<Mat::Converter>("dst");
+
+			executeBinding = [=]() {
+				cv::mulSpectrums(self->ref(), mat2->ref(), dst->ref(), flags->ref(), conjB->ref());
+			};
+		};
+	};
+
+	class Transform : public CvClassMethodBinding<Mat> {
+	public:
+		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+			auto m = req<Mat::Converter>();
+			auto dst = ret<Mat::Converter>("dst");
+
+			executeBinding = [=]() {
+				cv::transform(self->ref(), dst->ref(), m->ref());
+			};
+		};
+	};
+
+	class PerspectiveTransform : public CvClassMethodBinding<Mat> {
+	public:
+		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+			auto m = req<Mat::Converter>();
+			auto dst = ret<Mat::Converter>("dst");
+
+			executeBinding = [=]() {
+				cv::perspectiveTransform(self->ref(), dst->ref(), m->ref());
+			};
+		};
+	};
+
+	class Sum : public CvClassMethodBinding<Mat> {
+	public:
+		std::shared_ptr<FF::Value<cv::Mat>> self;
+		cv::Scalar sum;
+		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+			this->self = self;
+			executeBinding = [=]() {
+				sum = cv::sum(self->ref());
+			};
+		};
+
+		v8::Local<v8::Value> getReturnValue() {
+			switch (self->ref().channels()) {
+			case 1:
+				return FF::DoubleConverter::wrap(sum[0]);
+			case 2:
+				return Vec2::Converter::wrap(cv::Vec2f(sum[0], sum[1]));
+			case 3:
+				return Vec3::Converter::wrap(cv::Vec3f(sum[0], sum[1], sum[2]));
+			case 4:
+				return Vec4::Converter::wrap(cv::Vec4f(sum));
+			default:
+				return Nan::Undefined();
+			}
+		}
+	};
+
+	class ConvertScaleAbs : public CvClassMethodBinding<Mat> {
+	public:
+		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+			auto alpha = opt<FF::DoubleConverter>("alpha", 1);
+			auto beta = opt<FF::DoubleConverter>("beta", 0);
+			auto dst = ret<Mat::Converter>("dst");
+
+			executeBinding = [=]() {
+				cv::convertScaleAbs(self->ref(), dst->ref(), alpha->ref(), beta->ref());
+			};
+		};
+	};
+
+	class Mean : public CvClassMethodBinding<Mat> {
+	public:
+		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+			auto mean = ret<Vec4::Converter>("mean");
+
+			executeBinding = [=]() {
+				mean->ref() = cv::mean(self->ref(), mask->ref());
+			};
+		};
+	};
+
+	class MeanStdDev : public CvClassMethodBinding<Mat> {
+	public:
+		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+			auto mean = ret<Mat::Converter>("mean");
+			auto stddev = ret<Mat::Converter>("stddev");
+
+			executeBinding = [=]() {
+				cv::meanStdDev(self->ref(), mean->ref(), stddev->ref(), mask->ref());
+			};
+		};
+	};
+
+	class Reduce : public CvClassMethodBinding<Mat> {
+	public:
+		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+			auto dim = req<FF::IntConverter>();
+			auto rtype = req<FF::IntConverter>();
+			auto dtype = opt<FF::IntConverter>("dtype", -1);
+			auto result = ret<Mat::Converter>("result");
+
+			executeBinding = [=]() {
+				cv::reduce(self->ref(), result->ref(), dim->ref(), rtype->ref(), dtype->ref());
+			};
+		};
+	};
+
+	class Eigen : public CvClassMethodBinding<Mat> {
+	public:
+		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+			auto eigenvalues = ret<Mat::Converter>("eigenvalues");
+
+			executeBinding = [=]() {
+				cv::eigen(self->ref(), eigenvalues->ref());
+			};
+		};
+	};
+
+	class Solve : public CvClassMethodBinding<Mat> {
+	public:
+		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+			auto mat2 = req<Mat::Converter>();
+			auto flags = opt<FF::IntConverter>("flags", 0);
+			auto dst = ret<Mat::Converter>("dst");
+
+			executeBinding = [=]() {
+				cv::solve(self->ref(), mat2->ref(), dst->ref(), flags->ref());
+			};
+		};
+	};
+
+	class Normalize : public CvClassMethodBinding<Mat> {
+	public:
+		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+			auto alpha = opt<FF::DoubleConverter>("alpha", 1);
+			auto beta = opt<FF::DoubleConverter>("beta", 0);
+			auto normType = opt<FF::IntConverter>("normType", cv::NORM_L2);
+			auto dtype = opt<FF::IntConverter>("dtype", -1);
+			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+			auto dst = ret<Mat::Converter>("dst");
+
+			executeBinding = [=]() {
+				cv::normalize(self->ref(), dst->ref(), alpha->ref(), beta->ref(), normType->ref(), dtype->ref(), mask->ref());
+			};
+		};
+	};
+
 }
 
 #endif

@@ -1,5 +1,6 @@
 #include "MatImgproc.h"
 #include "MatImgprocBindings.h"
+#include "imgproc/imgprocBindings.h"
 
 void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "rescale", Rescale);
@@ -113,6 +114,8 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "undistort", Undistort);
   Nan::SetPrototypeMethod(ctor, "undistortAsync", UndistortAsync);
 #endif
+  Nan::SetPrototypeMethod(ctor, "goodFeaturesToTrack", GoodFeaturesToTrack);
+  Nan::SetPrototypeMethod(ctor, "goodFeaturesToTrackAsync", GoodFeaturesToTrackAsync);
 };
 
 NAN_METHOD(MatImgproc::DrawContours) {
@@ -956,4 +959,12 @@ NAN_METHOD(MatImgproc::UndistortAsync) {
 	Mat::asyncBinding<MatImgprocBindings::Undistort>("Undistort", info);
 }
 #endif
+
+NAN_METHOD(MatImgproc::GoodFeaturesToTrack) {
+	Mat::syncBinding<ImgprocBindings::GoodFeaturesToTrack>("GoodFeaturesToTrack", info);
+}
+
+NAN_METHOD(MatImgproc::GoodFeaturesToTrackAsync) {
+	Mat::asyncBinding<ImgprocBindings::GoodFeaturesToTrack>("GoodFeaturesToTrack", info);
+}
 

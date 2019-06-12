@@ -33,6 +33,8 @@ public:
   static NAN_METHOD(UndistortPoints);
   static NAN_METHOD(UndistortPointsAsync);
 #endif
+  static NAN_METHOD(GoodFeaturesToTrack);
+  static NAN_METHOD(GoodFeaturesToTrackAsync);
 };
 
 #endif

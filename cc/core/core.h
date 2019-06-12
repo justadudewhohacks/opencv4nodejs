@@ -34,8 +34,30 @@ public:
 	static NAN_METHOD(FindNonZeroAsync);
 	static NAN_METHOD(CountNonZero);
 	static NAN_METHOD(CountNonZeroAsync);
-	static NAN_METHOD(PadToSquare);
-	static NAN_METHOD(PadToSquareAsync);
+	static NAN_METHOD(Normalize);
+	static NAN_METHOD(NormalizeAsync);
+	static NAN_METHOD(Split);
+	static NAN_METHOD(SplitAsync);
+	static NAN_METHOD(MulSpectrums);
+	static NAN_METHOD(MulSpectrumsAsync);
+	static NAN_METHOD(Transform);
+	static NAN_METHOD(TransformAsync);
+	static NAN_METHOD(PerspectiveTransform);
+	static NAN_METHOD(PerspectiveTransformAsync);
+	static NAN_METHOD(Sum);
+	static NAN_METHOD(SumAsync);
+	static NAN_METHOD(ConvertScaleAbs);
+	static NAN_METHOD(ConvertScaleAbsAsync);
+	static NAN_METHOD(Mean);
+	static NAN_METHOD(MeanAsync);
+	static NAN_METHOD(MeanStdDev);
+	static NAN_METHOD(MeanStdDevAsync);
+	static NAN_METHOD(Reduce);
+	static NAN_METHOD(ReduceAsync);
+	static NAN_METHOD(Eigen);
+	static NAN_METHOD(EigenAsync);
+	static NAN_METHOD(Solve);
+	static NAN_METHOD(SolveAsync);
 };
 
 #endif

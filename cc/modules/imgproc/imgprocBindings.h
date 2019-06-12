@@ -135,6 +135,31 @@ namespace ImgprocBindings {
   };
 #endif
 
+  class GoodFeaturesToTrack : public CvClassMethodBinding<Mat> {
+  public:
+	  void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+		  auto maxCorners = req<FF::IntConverter>();
+		  auto qualityLevel = req<FF::DoubleConverter>();
+		  auto minDistance = req<FF::DoubleConverter>();
+		  auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+		  auto blockSize = opt<FF::IntConverter>("blockSize", 3);
+		  auto gradientSize = opt<FF::IntConverter>("gradientSize", 3);
+		  auto useHarrisDetector = opt<FF::BoolConverter>("useHarrisDetector", false);
+		  auto harrisK = opt<FF::DoubleConverter>("harrisK", 0.04);
+		  auto corners = ret<Point2::ArrayWithCastConverter<cv::Point2f>>("corners");
+
+		  executeBinding = [=]() {
+			  cv::goodFeaturesToTrack(
+				  self->ref(), corners->ref(), maxCorners->ref(), qualityLevel->ref(), minDistance->ref(), mask->ref(), blockSize->ref(),
+#if CV_VERSION_GREATER_EQUAL(3, 4, 0)
+				  gradientSize->ref(),
+#endif
+				  useHarrisDetector->ref(), harrisK->ref()
+			  );
+		  };
+	  };
+  };
+
 }
 
 #endif

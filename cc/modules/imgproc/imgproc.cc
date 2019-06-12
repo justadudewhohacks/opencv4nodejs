@@ -39,6 +39,9 @@ NAN_MODULE_INIT(Imgproc::Init) {
   Nan::SetMethod(target, "undistortPoints", UndistortPoints);
   Nan::SetMethod(target, "undistortPointsAsync", UndistortPointsAsync);
 #endif
+  Nan::SetMethod(target, "goodFeaturesToTrack", GoodFeaturesToTrack);
+  Nan::SetMethod(target, "goodFeaturesToTrackAsync", GoodFeaturesToTrackAsync);
+
   Moments::Init(target);
   Contour::Init(target);
 };
@@ -342,3 +345,11 @@ NAN_METHOD(Imgproc::UndistortPointsAsync) {
 	FF::asyncBinding<ImgprocBindings::UndistortPoints>("Imgproc", "UndistortPoints", info);
 }
 #endif
+
+NAN_METHOD(Imgproc::GoodFeaturesToTrack) {
+	FF::syncBinding<ImgprocBindings::GoodFeaturesToTrack>("Imgproc", "GoodFeaturesToTrack", info);
+}
+
+NAN_METHOD(Imgproc::GoodFeaturesToTrackAsync) {
+	FF::asyncBinding<ImgprocBindings::GoodFeaturesToTrack>("Imgproc", "GoodFeaturesToTrack", info);
+}

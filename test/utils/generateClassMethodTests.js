@@ -19,7 +19,8 @@ exports.generateClassMethodTests = (opts) => {
   describe(`${methodNameSpace}::${methodName}`, () => {
     generateAPITests(Object.assign({}, opts, {
       getDut: () => global.dut,
-      getRequiredArgs: () => [getClassInstance(), ...getRequiredArgs()]
+      getRequiredArgs: () => [getClassInstance(), ...getRequiredArgs()],
+      explicitHasRequiredArgs: true
     }))
   })
 
