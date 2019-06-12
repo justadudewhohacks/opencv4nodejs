@@ -14,7 +14,7 @@ const {
   getEmptyArray
 } = require('./commons');
 
-const getDefaultAPITestOpts = (opts) => ({
+const getDefaultAPITestOpts = (opts) => Object.assign({}, {
   getRequiredArgs: getEmptyArray,
   getOptionalArgsMap: getEmptyArray,
   hasAsync: true,
@@ -23,9 +23,8 @@ const getDefaultAPITestOpts = (opts) => ({
   otherAsyncPromisedTests: emptyFunc,
   beforeHook: null,
   afterHook: null,
-  explicitHasRequiredArgs: false,
-  ...opts
-})
+  explicitHasRequiredArgs: false
+}, opts)
 
 exports.getDefaultAPITestOpts = getDefaultAPITestOpts
 
