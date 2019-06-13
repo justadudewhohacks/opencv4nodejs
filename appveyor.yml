@@ -24,25 +24,25 @@ environment:
   matrix:
     - nodejs_version: 12
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      OPENCV_VERSION: OPENCV4_LATEST
+      OPENCV_VERSION: "%OPENCV4_LATEST%"
     - nodejs_version: 12
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: OPENCV3_LATEST
+      OPENCV_VERSION: "%OPENCV3_LATEST%"
     - nodejs_version: 12
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: OPENCV4_LATEST
+      OPENCV_VERSION: "%OPENCV4_LATEST%"
     - nodejs_version: 11
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: OPENCV4_LATEST
+      OPENCV_VERSION: "%OPENCV4_LATEST%"
     - nodejs_version: 10
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: OPENCV4_LATEST
+      OPENCV_VERSION: "%OPENCV4_LATEST%"
     - nodejs_version: 8
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: OPENCV4_LATEST
+      OPENCV_VERSION: "%OPENCV4_LATEST%"
     - nodejs_version: 6
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: OPENCV4_LATEST
+      OPENCV_VERSION: "%OPENCV4_LATEST%"
 
 install:
   - cmd: choco install OpenCV -y -version %OPENCV_VERSION%
