@@ -160,7 +160,7 @@ install:
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     cd ./ci/$BUILD_TASK;
-    npm run $BUILD_TASK $OPENCV_VERSION $NODE_MAJOR_VERSION;
+    npm run $BUILD_TASK $OPENCV_VERSION $TRAVIS_NODE_VERSION;
     fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     ./ci/test/script/run-test.sh;
