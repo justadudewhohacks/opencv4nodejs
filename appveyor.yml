@@ -4,10 +4,6 @@
 platform:
   - x64
 
-image:
-  - Visual Studio 2015
-  - Visual Studio 2017
-
 clone_folder: c:\projects\opencv4nodejs
 
 init:
@@ -18,47 +14,35 @@ init:
 
 # what combinations to test
 environment:
+  OPENCV3_LATEST: 3.4.6
+  OPENCV4_LATEST: 4.1.0
+  PYTHON_VERSION: 2.7
+  PYTHON: "C:\\Python27-x64"
+  # use self build
+  OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+
   matrix:
-
-    # TODO node 12: fix me once available
-
-    # node 12
-    #- nodejs_version: 12
-    #  PYTHON: "C:\\Python27-x64"
-    #  PYTHON_VERSION: "2.7"
-    #  opencv_version: 3.4.6
-      # use self build
-    #  OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
-
-    # node 11
+    - nodejs_version: 12
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      OPENCV_VERSION: %OPENCV4_LATEST%
+    - nodejs_version: 12
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      OPENCV_VERSION: %OPENCV3_LATEST%
+    - nodejs_version: 12
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      OPENCV_VERSION: %OPENCV4_LATEST%
     - nodejs_version: 11
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7"
-      opencv_version: 3.4.6
-      # use self build
-      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
-    # node 10
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      OPENCV_VERSION: %OPENCV4_LATEST%
     - nodejs_version: 10
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7"
-      opencv_version: 3.4.6
-      # use self build
-      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
-    # node 8
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      OPENCV_VERSION: %OPENCV4_LATEST%
     - nodejs_version: 8
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7"
-      opencv_version: 3.4.6
-      # use self build
-      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
-    # node 6
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      OPENCV_VERSION: %OPENCV4_LATEST%
     - nodejs_version: 6
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7"
-      opencv_version: 3.4.6
-      # use self build
-      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
-
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      OPENCV_VERSION: %OPENCV4_LATEST%
 
 install:
   - cmd: choco install OpenCV -y -version %OPENCV_VERSION%
