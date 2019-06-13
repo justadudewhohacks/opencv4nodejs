@@ -146,7 +146,9 @@ matrix:
         - OPENCV_VERSION=4
 
 before_install:
-  - chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+    chmod +x ./ci/$BUILD_TASK/$BUILD_TASK.sh;
+    fi
 
 install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
@@ -163,7 +165,7 @@ script:
     npm run $BUILD_TASK $OPENCV_VERSION $TRAVIS_NODE_VERSION;
     fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    ./ci/test/script/run-test.sh;
+    sh ./ci/test/script/run-test.sh;
     fi
 
 after_success:
