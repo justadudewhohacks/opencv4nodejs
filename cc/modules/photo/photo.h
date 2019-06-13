@@ -3,7 +3,6 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/photo.hpp>
 #include <opencv2/highgui.hpp>
-#include <opencv2/videostab.hpp>
 
 #ifndef __FF_PHOTO_H__
 #define __FF_PHOTO_H__
