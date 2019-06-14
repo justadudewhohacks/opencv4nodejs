@@ -4,7 +4,7 @@ const trackerParamTests = require('./trackerParamTests');
 const trackerTests = require('./trackerTests');
 
 describe('tracking', () => {
-  if (!cv.xmodules.tracking) {
+  if (!cv.modules.tracking) {
     it('compiled without tracking');
     return;
   }

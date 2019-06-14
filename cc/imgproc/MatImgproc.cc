@@ -1,6 +1,6 @@
 #include "MatImgproc.h"
 #include "MatImgprocBindings.h"
-#include "imgproc/imgprocBindings.h"
+#include "imgprocBindings.h"
 
 void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "rescale", Rescale);

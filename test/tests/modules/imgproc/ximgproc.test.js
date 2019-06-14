@@ -3,7 +3,7 @@ const { assertMetaData, assertPropsWithValue, funcShouldRequireArgs, readTestIma
 const { assert, expect } = require('chai');
 
 describe('ximgproc', () => {
-  if (!cv.xmodules.ximgproc) {
+  if (!cv.modules.ximgproc) {
     it('compiled without ximgproc');
     return;
   }

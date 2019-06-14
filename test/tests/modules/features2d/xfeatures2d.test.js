@@ -3,7 +3,7 @@ const { readTestImage } = global.utils;
 const detectorTests = require('./detectorTests');
 
 describe('xfeatures2d', () => {
-  if (!opencv.xmodules.xfeatures2d) {
+  if (!opencv.modules.xfeatures2d) {
     it('compiled without xfeatures2d');
     return;
   }

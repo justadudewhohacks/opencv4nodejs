@@ -8,7 +8,7 @@ const { expect } = require('chai');
 const NetTests = require('./NetTests');
 
 describe('dnn', () => {
-  if (!cv.xmodules.dnn) {
+  if (!cv.modules.dnn) {
     it('compiled without dnn');
     return;
   }

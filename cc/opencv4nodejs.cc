@@ -1,34 +1,49 @@
 #include <node.h>
 #include "ExternalMemTracking.h"
 
-#include "cvTypes/cvTypes.h"
 #include "core/core.h"
-#include "modules/io/io.h"
-#include "modules/video/video.h"
-#include "modules/photo/photo.h"
-#include "modules/calib3d/calib3d.h"
-#include "modules/imgproc/imgproc.h"
-#include "modules/features2d/features2d.h"
-#include "modules/objdetect/objdetect.h"
-#include "modules/machinelearning/machinelearning.h"
+#include "cvTypes/cvTypes.h"
+#ifdef HAVE_HIGHGUI
+#include "io/io.h"
+#endif
+#ifdef HAVE_CALIB3D
+#include "calib3d/calib3d.h"
+#endif
+#ifdef HAVE_IMGPROC
+#include "imgproc/imgproc.h"
+#endif
+#ifdef HAVE_VIDEO
+#include "video/video.h"
+#endif
+#ifdef HAVE_PHOTO
+#include "photo/photo.h"
+#endif
+#ifdef HAVE_FEATURES2D
+#include "features2d/features2d.h"
+#endif
+#ifdef HAVE_OBJDETECT
+#include "objdetect/objdetect.h"
+#endif
+#ifdef HAVE_ML
+#include "machinelearning/machinelearning.h"
+#endif
 #ifdef HAVE_TRACKING
-#include "modules/tracking/tracking.h"
-#endif // HAVE_TRACKING
+#include "tracking/tracking.h"
+#endif
 #ifdef HAVE_XIMGPROC
-#include "modules/ximgproc/ximgproc.h"
-#endif // HAVE_XIMGPROC
+#include "ximgproc/ximgproc.h"
+#endif
 #ifdef HAVE_XFEATURES2D
-#include "modules/xfeatures2d/xfeatures2d.h"
-#endif // HAVE_XFEATURES2D
+#include "xfeatures2d/xfeatures2d.h"
+#endif
 #ifdef HAVE_TEXT
-#include "modules/text/text.h"
-#endif // HAVE_TEXT
+#include "text/text.h"
+#endif
 #ifdef HAVE_FACE
-#include "modules/face/face.h"
-#endif // HAVE_FACE
-
-#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
-#include "modules/dnn/dnn.h"
+#include "face/face.h"
+#endif
+#if HAVE_DNN
+#include "dnn/dnn.h"
 #endif
 
 int customCvErrorHandler(int status, const char* func_name, const char* err_msg, const char* file_name, int line, void* userdata) {
@@ -48,7 +63,7 @@ void init(v8::Local<v8::Object> target) {
 
 	// override cv error handler to prevent printing cv errors and throw std::exception
 	// instead, which can be catched and forwarded to node process
-  cv::redirectError(customCvErrorHandler);
+	cv::redirectError(customCvErrorHandler);
 
 
 	v8::Local<v8::Object> version = Nan::New<v8::Object>();
@@ -57,44 +72,59 @@ void init(v8::Local<v8::Object> target) {
 	Nan::Set(version, FF::newString("revision"), Nan::New(CV_VERSION_REVISION));
 	Nan::Set(target, FF::newString("version"), version);
 
-	v8::Local<v8::Object> xmodules = Nan::New<v8::Object>();
-	Nan::Set(target, FF::newString("xmodules"), xmodules);
+	v8::Local<v8::Object> modules = Nan::New<v8::Object>();
+	Nan::Set(target, FF::newString("modules"), modules);
 
 	CvTypes::Init(target);
 	Core::Init(target);
-  Io::Init(target);
+#if HAVE_HIGHGUI
+	Io::Init(target);
+#endif
+#if HAVE_VIDEO
 	Video::Init(target);
-  Photo::Init(target);
-  Calib3d::Init(target);
-  Imgproc::Init(target);
-  Features2d::Init(target);
-  Objdetect::Init(target);
+#endif
+#if HAVE_PHOTO
+	Photo::Init(target);
+#endif
+#if HAVE_CALIB3D
+	Calib3d::Init(target);
+#endif
+#if HAVE_IMGPROC
+	Imgproc::Init(target);
+#endif
+#if HAVE_FEATURES2D
+	Features2d::Init(target);
+#endif
+#if HAVE_ML
+	Objdetect::Init(target);
+#endif
+#if HAVE_ML
 	MachineLearning::Init(target);
-#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
-	Nan::Set(xmodules, FF::newString("dnn"), Nan::New(true));
+#endif
+#if HAVE_DNN
+	Nan::Set(modules, FF::newString("dnn"), Nan::New(true));
 	Dnn::Init(target);
 #endif
 #ifdef HAVE_TRACKING
-	Nan::Set(xmodules, FF::newString("tracking"), Nan::New(true));
+	Nan::Set(modules, FF::newString("tracking"), Nan::New(true));
 	Tracking::Init(target);
 #endif // HAVE_TRACKING
 #ifdef HAVE_XIMGPROC
-	Nan::Set(xmodules, FF::newString("ximgproc"), Nan::New(true));
+	Nan::Set(modules, FF::newString("ximgproc"), Nan::New(true));
 	XImgproc::Init(target);
 #endif // HAVE_XIMGPROC
 #ifdef HAVE_XFEATURES2D
-	Nan::Set(xmodules, FF::newString("xfeatures2d"), Nan::New(true));
+	Nan::Set(modules, FF::newString("xfeatures2d"), Nan::New(true));
 	XFeatures2d::Init(target);
 #endif // HAVE_XFEATURES2D
 #ifdef HAVE_TEXT
-	Nan::Set(xmodules, FF::newString("text"), Nan::New(true));
+	Nan::Set(modules, FF::newString("text"), Nan::New(true));
 	Text::Init(target);
 #endif // HAVE_TEXT
 #ifdef HAVE_FACE
-	Nan::Set(xmodules, FF::newString("face"), Nan::New(true));
+	Nan::Set(modules, FF::newString("face"), Nan::New(true));
 	Face::Init(target);
 #endif // HAVE_FACE
-
 };
 
 NODE_MODULE(opencv4nodejs, init)

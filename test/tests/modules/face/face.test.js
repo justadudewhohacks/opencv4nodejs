@@ -5,7 +5,7 @@ const facemarkTests = require('./facemarkTests');
 const facemarkStructsTests = require('./facemarkStructsTests');
 
 describe('face', () => {
-  if (!cv.xmodules.face) {
+  if (!cv.modules.face) {
     it('compiled without face');
     return;
   }

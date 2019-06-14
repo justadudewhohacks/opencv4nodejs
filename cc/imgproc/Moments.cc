@@ -1,5 +1,5 @@
 #include "Moments.h"
-#include "opencv2/imgproc.hpp"
+#include <opencv2/imgproc.hpp>
 
 Nan::Persistent<v8::FunctionTemplate> Moments::constructor;
 

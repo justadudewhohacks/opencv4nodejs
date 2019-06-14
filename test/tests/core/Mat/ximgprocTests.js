@@ -7,7 +7,7 @@ const {
 
 module.exports = () => {
     describe('guidedFilter', () => {
-        if (!cv.xmodules.ximgproc) {
+        if (!cv.modules.ximgproc) {
             it('compiled without ximgproc');
             return;
         }

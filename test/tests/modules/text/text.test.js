@@ -11,7 +11,7 @@ const OCRHMMClassifierTests = require('./OCRHMMClassifierTests');
 const OCRHMMDecoderTests = require('./OCRHMMDecoderTests');
 
 describe('text', () => {
-  if (!cv.xmodules.text) {
+  if (!cv.modules.text) {
     it('compiled without text');
     return;
   }
