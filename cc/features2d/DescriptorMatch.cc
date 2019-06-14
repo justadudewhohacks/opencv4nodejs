@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "DescriptorMatch.h"
 
 Nan::Persistent<v8::FunctionTemplate> DescriptorMatch::constructor;
@@ -34,3 +38,5 @@ NAN_METHOD(DescriptorMatch::New) {
 	self->Wrap(info.Holder());
   info.GetReturnValue().Set(info.Holder());
 }
+
+#endif

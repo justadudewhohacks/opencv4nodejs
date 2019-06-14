@@ -1,4 +1,6 @@
-#ifdef HAVE_XIMGPROC
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_XIMGPROC
 
 #include "ximgproc.h"
 #include "SuperpixelSEEDS.h"
@@ -18,4 +20,4 @@ NAN_MODULE_INIT(XImgproc::Init) {
 #endif
 }
 
-#endif // HAVE_XIMGPROC
+#endif // HAVE_OPENCV_XIMGPROC

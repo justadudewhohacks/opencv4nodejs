@@ -1,4 +1,6 @@
-#ifdef HAVE_FACE
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FACE
 
 #include "LBPHFaceRecognizer.h"
 #include "FaceRecognizerBindings.h"
@@ -70,4 +72,4 @@ NAN_METHOD(LBPHFaceRecognizer::New) {
 	info.GetReturnValue().Set(info.Holder());
 };
 
-#endif // HAVE_FACE
+#endif // HAVE_OPENCV_FACE

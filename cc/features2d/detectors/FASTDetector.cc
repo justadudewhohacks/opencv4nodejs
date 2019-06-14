@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "FASTDetector.h"
 
 Nan::Persistent<v8::FunctionTemplate> FASTDetector::constructor;
@@ -24,3 +28,5 @@ NAN_MODULE_INIT(FASTDetector::Init) {
 NAN_METHOD(FASTDetector::New) {
 	NewBinding().construct(info);
 }
+
+#endif

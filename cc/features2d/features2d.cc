@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "features2d.h"
 #include "KeyPoint.h"
 #include "KeyPointMatch.h"
@@ -110,3 +114,5 @@ NAN_METHOD(Features2d::DrawMatches) {
 	cv::drawMatches(img1, kps1, img2, kps2, dMatches, drawMat);
 	info.GetReturnValue().Set(Mat::Converter::wrap(drawMat));
 }
+
+#endif

@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "AGASTDetector.h"
 
 Nan::Persistent<v8::FunctionTemplate> AGASTDetector::constructor;
@@ -56,3 +60,5 @@ public:
 NAN_METHOD(AGASTDetector::New) {
 	NewBinding().construct(info);
 }
+
+#endif

@@ -1,4 +1,6 @@
-#ifdef HAVE_XFEATURES2D
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_XFEATURES2D
 
 #include "SIFTDetector.h"
 
@@ -27,4 +29,4 @@ NAN_METHOD(SIFTDetector::New) {
 	constructorBinding<Constructor>(info);
 }
 
-#endif // HAVE_XFEATURES2D
+#endif // HAVE_OPENCV_XFEATURES2D

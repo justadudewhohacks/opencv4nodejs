@@ -1,4 +1,6 @@
-#ifdef HAVE_FACE
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FACE
 
 #include "EigenFaceRecognizer.h"
 #include "FaceRecognizerBindings.h"

@@ -1,7 +1,13 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_PHOTO
+
 #include "photo.h"
 #include "photoBindings.h"
+#include "photoConstants.h"
 
 NAN_MODULE_INIT(Photo::Init) {
+	PhotoConstants::Init(target);
 	Nan::SetMethod(target, "fastNlMeansDenoisingColored", FastNlMeansDenoisingColored);
 	Nan::SetMethod(target, "fastNlMeansDenoisingColoredAsync", FastNlMeansDenoisingColoredAsync);
 	Nan::SetMethod(target, "inpaint", Inpaint);
@@ -39,3 +45,5 @@ NAN_METHOD(Photo::InpaintAsync) {
     info
   );
 }
+
+#endif

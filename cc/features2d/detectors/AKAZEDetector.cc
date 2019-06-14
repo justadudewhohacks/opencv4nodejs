@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "AKAZEDetector.h"
 
 Nan::Persistent<v8::FunctionTemplate> AKAZEDetector::constructor;
@@ -28,3 +32,5 @@ NAN_MODULE_INIT(AKAZEDetector::Init) {
 NAN_METHOD(AKAZEDetector::New) {
 	NewBinding().construct(info);
 }
+
+#endif

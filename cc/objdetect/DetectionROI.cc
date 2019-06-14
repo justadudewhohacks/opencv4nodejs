@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_OBJDETECT
+
 #include "DetectionROI.h"
 
 Nan::Persistent<v8::FunctionTemplate> DetectionROI::constructor;
@@ -24,3 +28,5 @@ NAN_METHOD(DetectionROI::New) {
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };
+
+#endif

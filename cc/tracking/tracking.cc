@@ -1,4 +1,6 @@
-#ifdef HAVE_TRACKING
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_TRACKING
 
 #include "tracking.h"
 #include "./Trackers/TrackerBoosting.h"

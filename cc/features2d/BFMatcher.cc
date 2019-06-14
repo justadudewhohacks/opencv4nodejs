@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "BFMatcher.h"
 #include "BFMatcherBindings.h"
 
@@ -75,3 +79,5 @@ NAN_METHOD(BFMatcher::knnMatchAsync) {
     info
   );
 }
+
+#endif

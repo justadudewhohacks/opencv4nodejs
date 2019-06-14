@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_CALIB3D
+
 #include "MatCalib3d.h"
 #include "MatCalib3dBindings.h"
 
@@ -382,4 +386,6 @@ NAN_METHOD(MatCalib3d::Undistort) {
 NAN_METHOD(MatCalib3d::UndistortAsync) {
 	Mat::asyncBinding<MatCalib3dBindings::Undistort>("Undistort", info);
 }
+#endif
+
 #endif

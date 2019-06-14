@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "ORBDetector.h"
 
 Nan::Persistent<v8::FunctionTemplate> ORBDetector::constructor;
@@ -30,3 +34,5 @@ NAN_MODULE_INIT(ORBDetector::Init) {
 NAN_METHOD(ORBDetector::New) {
 	NewBinding().construct(info);
 }
+
+#endif

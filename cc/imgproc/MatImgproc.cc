@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_IMGPROC
+
 #include "MatImgproc.h"
 #include "MatImgprocBindings.h"
 #include "imgprocBindings.h"
@@ -967,3 +971,5 @@ NAN_METHOD(MatImgproc::MedianBlur) {
 NAN_METHOD(MatImgproc::MedianBlurAsync) {
 	Mat::asyncBinding<ImgprocBindings::MedianBlur>("MedianBlur", info);
 }
+
+#endif

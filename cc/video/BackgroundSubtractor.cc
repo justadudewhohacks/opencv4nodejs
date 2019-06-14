@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_VIDEO
+
 #include "BackgroundSubtractor.h"
 #include "Mat.h"
 
@@ -20,3 +24,5 @@ NAN_METHOD(BackgroundSubtractor::Apply) {
 	self->getSubtractor()->apply(frame, self->fgMask, learningRate);
 	info.GetReturnValue().Set(Mat::Converter::wrap(self->fgMask));
 }
+
+#endif

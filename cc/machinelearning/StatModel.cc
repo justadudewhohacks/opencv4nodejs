@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_ML
+
 #include "StatModel.h"
 #include "Mat.h"
 
@@ -20,3 +24,5 @@ NAN_METHOD(StatModel::New) {
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };
+
+#endif

@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_ML
+
 #include "TrainData.h"
 #include "Mat.h"
 
@@ -40,3 +44,5 @@ NAN_METHOD(TrainData::New) {
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };
+
+#endif

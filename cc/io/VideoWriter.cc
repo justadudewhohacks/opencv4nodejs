@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_HIGHGUI
+
 #include "VideoWriter.h"
 #include "VideoWriterBindings.h"
 
@@ -93,3 +97,5 @@ NAN_METHOD(VideoWriter::WriteAsync) {
     info
   );
 }
+
+#endif

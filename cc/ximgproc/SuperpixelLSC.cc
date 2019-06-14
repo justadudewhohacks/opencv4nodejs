@@ -1,4 +1,6 @@
-#ifdef HAVE_XIMGPROC
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_XIMGPROC
 
 #include "SuperpixelLSC.h"
 
@@ -64,4 +66,4 @@ NAN_METHOD(SuperpixelLSC::Iterate) {
 
 #endif
 
-#endif // HAVE_XIMGPROC
+#endif // HAVE_OPENCV_XIMGPROC

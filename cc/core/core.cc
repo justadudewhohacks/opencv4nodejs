@@ -1,7 +1,11 @@
 #include "core.h"
 #include "coreBindings.h"
+#include "coreConstants.h"
+#include "matTypes.h"
 
 NAN_MODULE_INIT(Core::Init) {
+	initMatTypes(target);
+  CoreConstants::Init(target);
   Mat::Init(target);
   Point::Init(target);
   Vec::Init(target);
@@ -143,11 +147,11 @@ NAN_METHOD(Core::Kmeans) {
 	  return tryCatch.throwError("expected arg 0 to be an array");
   }
   v8::Local<v8::Array> jsData = v8::Local<v8::Array>::Cast(info[0]);
-  
+
   if (jsData->Length() < 1) {
 	  return tryCatch.throwError("expected data to contain at least 1 element");
   }
-  
+
   v8::Local<v8::Value> data0 = Nan::Get(jsData, 0).ToLocalChecked();
   bool isPoint2 = Point2::hasInstance(data0);
 
@@ -170,14 +174,14 @@ NAN_METHOD(Core::Kmeans) {
 
   std::vector<int> labels;
   cv::Mat centersMat;
-  
+
   if (isPoint2) {
     cv::kmeans(pts2d, k, labels, termCriteria, attempts, flags, centersMat);
   }
   else {
     cv::kmeans(pts3d, k, labels, termCriteria, attempts, flags, centersMat);
   }
-  
+
   v8::Local<v8::Object> ret = Nan::New<v8::Object>();
   Nan::Set(ret, FF::newString("labels"), FF::IntArrayConverter::wrap(labels));
 
@@ -194,8 +198,8 @@ NAN_METHOD(Core::Kmeans) {
       centers.push_back(cv::Point3f(centersMat.at<float>(i, 0), centersMat.at<float>(i, 1), centersMat.at<float>(i, 2)));
     }
 	Nan::Set(ret, FF::newString("centers"), Point3::ArrayWithCastConverter<cv::Point3f>::wrap(centers));
-  } 
-  
+  }
+
   info.GetReturnValue().Set(ret);
 }
 

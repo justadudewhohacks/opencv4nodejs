@@ -2,8 +2,8 @@
 #include <opencv2/core.hpp>
 #include <opencv2/ml.hpp>
 
-#ifndef __FF_MACHINELEARNING_H__
-#define __FF_MACHINELEARNING_H__
+#ifndef __FF_MACHINE_LEARNING_H__
+#define __FF_MACHINE_LEARNING_H__
 
 class MachineLearning {
 public:

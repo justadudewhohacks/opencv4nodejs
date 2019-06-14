@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "FeatureDetector.h"
 #include "FeatureDetectorBindings.h"
 
@@ -39,3 +43,5 @@ NAN_METHOD(FeatureDetector::ComputeAsync) {
     info
   );
 }
+
+#endif

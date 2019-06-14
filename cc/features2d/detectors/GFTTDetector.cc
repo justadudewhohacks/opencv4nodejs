@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "GFTTDetector.h"
 
 Nan::Persistent<v8::FunctionTemplate> GFTTDetector::constructor;
@@ -35,3 +39,5 @@ NAN_METHOD(GFTTDetector::New) {
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }
+
+#endif

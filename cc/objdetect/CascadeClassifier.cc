@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_OBJDETECT
+
 #include "CascadeClassifier.h"
 #include "CascadeClassifierBindings.h"
 
@@ -86,3 +90,5 @@ NAN_METHOD(CascadeClassifier::DetectMultiScaleWithRejectLevelsGpu) {
     info
   );
 }
+
+#endif

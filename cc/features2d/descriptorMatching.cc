@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "descriptorMatching.h"
 
 NAN_MODULE_INIT(DescriptorMatching::Init) {
@@ -156,3 +160,5 @@ void DescriptorMatching::matchAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::string 
 		info
 	);
 }
+
+#endif

@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "KeyPoint.h"
 
 Nan::Persistent<v8::FunctionTemplate> KeyPoint::constructor;
@@ -28,7 +32,7 @@ NAN_METHOD(KeyPoint::New) {
 
 	if (info.Length() > 0) {
 		cv::Point2d pt;
-		double size, angle, response; 
+		double size, angle, response;
 		int octave, classId;
 		if (
 			Point2::Converter::arg(0, &pt, info) ||
@@ -46,3 +50,5 @@ NAN_METHOD(KeyPoint::New) {
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }
+
+#endif

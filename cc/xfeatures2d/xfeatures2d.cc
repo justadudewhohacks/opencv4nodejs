@@ -1,4 +1,6 @@
-#ifdef HAVE_XFEATURES2D
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_XFEATURES2D
 
 #include "xfeatures2d.h"
 #include "SIFTDetector.h"
@@ -9,4 +11,4 @@ NAN_MODULE_INIT(XFeatures2d::Init) {
 	SURFDetector::Init(target);
 };
 
-#endif // HAVE_XFEATURES2D
+#endif // HAVE_OPENCV_XFEATURES2D

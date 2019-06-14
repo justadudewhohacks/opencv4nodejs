@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "SimpleBlobDetector.h"
 #include "SimpleBlobDetectorParams.h"
 
@@ -30,3 +34,5 @@ NAN_METHOD(SimpleBlobDetector::New) {
 	self->detector = cv::SimpleBlobDetector::create(params);
   info.GetReturnValue().Set(info.Holder());
 }
+
+#endif

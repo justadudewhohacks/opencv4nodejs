@@ -1,7 +1,13 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_HIGHGUI
+
 #include "io.h"
 #include "ioBindings.h"
+#include "ioConstants.h"
 
 NAN_MODULE_INIT(Io::Init) {
+  IoConstants::Init(target);
   VideoCapture::Init(target);
   VideoWriter::Init(target);
 
@@ -224,3 +230,5 @@ NAN_METHOD(Io::ImencodeAsync) {
     info
   );
 }
+
+#endif

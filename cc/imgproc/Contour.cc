@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_IMGPROC
+
 #include "Contour.h"
 #include "ContourBindings.h"
 #include "Mat.h"
@@ -256,3 +260,5 @@ NAN_METHOD(Contour::FitEllipse) {
 NAN_METHOD(Contour::_Moments) {
 	info.GetReturnValue().Set(Moments::Converter::wrap(cv::moments(Contour::unwrapSelf(info))));
 }
+
+#endif

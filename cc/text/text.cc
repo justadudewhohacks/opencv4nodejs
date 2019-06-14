@@ -1,4 +1,6 @@
-#ifdef HAVE_TEXT
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_TEXT
 
 #include "text.h"
 #include "textBindings.h"

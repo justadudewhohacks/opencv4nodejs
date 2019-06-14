@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_IMGPROC
+
 #include "Moments.h"
 #include <opencv2/imgproc.hpp>
 
@@ -51,3 +55,5 @@ NAN_METHOD(Moments::HuMoments) {
 	cv::HuMoments(Moments::unwrapThis(info)->self, huMoments);
 	info.GetReturnValue().Set(FF::DoubleArrayConverter::wrap(huMoments));
 }
+
+#endif

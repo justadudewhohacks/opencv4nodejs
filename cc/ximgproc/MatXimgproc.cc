@@ -1,4 +1,6 @@
-#ifdef HAVE_XIMGPROC
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_XIMGPROC
 
 #include "MatXimgproc.h"
 #include "MatXimgprocBindings.h"
@@ -24,4 +26,4 @@ NAN_METHOD(MatXimgproc::GuidedFilterAsync) {
   );
 }
 
-#endif // HAVE_XIMGPROC
+#endif // HAVE_OPENCV_XIMGPROC

@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_ML
+
 #include "SVM.h"
 #include "SVMBindings.h"
 
@@ -276,3 +280,5 @@ NAN_METHOD(SVM::TrainAutoAsync) {
     info
   );
 }
+
+#endif

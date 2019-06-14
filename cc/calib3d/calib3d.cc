@@ -1,6 +1,12 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_CALIB3D
+
 #include "calib3d.h"
+#include "calib3dConstants.h"
 
 NAN_MODULE_INIT(Calib3d::Init) {
+	Calib3dConstants::Init(target);
   Nan::SetMethod(target, "findHomography", FindHomography);
   Nan::SetMethod(target, "findHomographyAsync", FindHomographyAsync);
   Nan::SetMethod(target, "composeRT", ComposeRT);
@@ -392,4 +398,6 @@ NAN_METHOD(Calib3d::UndistortPoints) {
 NAN_METHOD(Calib3d::UndistortPointsAsync) {
 	FF::asyncBinding<Calib3dBindings::UndistortPoints>("Calib3d", "UndistortPoints", info);
 }
+#endif
+
 #endif

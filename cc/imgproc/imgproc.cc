@@ -1,5 +1,10 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_IMGPROC
+
 #include "imgproc.h"
 #include "imgprocBindings.h"
+#include "imgprocConstants.h"
 
 #define FF_DEFINE_CALC_HIST(name, n, constRangesArray)                                                        \
   cv::MatND name(cv::Mat img, cv::Mat mask, int channels[], int histSize[], std::vector<float*> rangesVec) {  \
@@ -20,6 +25,7 @@ FF_DEFINE_CALC_HIST(calcHist3, 3, FF_HIST_RANGE_3);
 FF_DEFINE_CALC_HIST(calcHist4, 4, FF_HIST_RANGE_4);
 
 NAN_MODULE_INIT(Imgproc::Init) {
+	ImgprocConstants::Init(target);
   Nan::SetMethod(target, "getStructuringElement", GetStructuringElement);
   Nan::SetMethod(target, "getRotationMatrix2D", GetRotationMatrix2D);
   Nan::SetMethod(target, "calcHist", CalcHist);
@@ -384,3 +390,5 @@ NAN_METHOD(Imgproc::MedianBlur) {
 NAN_METHOD(Imgproc::MedianBlurAsync) {
 	FF::asyncBinding<ImgprocBindings::MedianBlur>("Imgproc", "MedianBlur", info);
 }
+
+#endif

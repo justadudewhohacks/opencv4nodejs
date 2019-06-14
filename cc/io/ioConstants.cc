@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_HIGHGUI
+
 #include "videoCaptureProps.h"
 
 using namespace cv;
@@ -91,3 +95,5 @@ void VideoCaptureProps::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(target, VIDEOWRITER_PROP_NSTRIPES);
 #endif
 }
+
+#endif

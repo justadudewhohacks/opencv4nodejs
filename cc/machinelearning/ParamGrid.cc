@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_ML
+
 #include "ParamGrid.h"
 
 Nan::Persistent<v8::FunctionTemplate> ParamGrid::constructor;
@@ -42,3 +46,5 @@ NAN_METHOD(ParamGrid::New) {
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };
+
+#endif

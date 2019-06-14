@@ -1,10 +1,12 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_DNN
+
 #include "opencv2/core.hpp"
 #include "macros.h"
 
-#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
-
 // cv 3.3+ should have dnn by default
-//#ifdef HAVE_DNN
+//#ifdef HAVE_OPENCV_DNN
 
 #include "dnn.h"
 #include "dnnBindings.h"

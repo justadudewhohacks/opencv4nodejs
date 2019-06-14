@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "SimpleBlobDetectorParams.h"
 
 Nan::Persistent<v8::FunctionTemplate> SimpleBlobDetectorParams::constructor;
@@ -42,3 +46,5 @@ NAN_METHOD(SimpleBlobDetectorParams::New) {
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };
+
+#endif

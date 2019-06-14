@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "MSERDetector.h"
 #include "Rect.h"
 #include "Point.h"
@@ -101,3 +105,5 @@ NAN_METHOD(MSERDetector::DetectRegionsAsync) {
 		info
 	);
 }
+
+#endif

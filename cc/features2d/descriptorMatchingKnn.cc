@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "descriptorMatchingKnn.h"
 
 NAN_MODULE_INIT(DescriptorMatchingKnn::Init) {
@@ -158,3 +162,5 @@ void DescriptorMatchingKnn::matchKnnAsync(Nan::NAN_METHOD_ARGS_TYPE info, std::s
 		info
 	);
 }
+
+#endif

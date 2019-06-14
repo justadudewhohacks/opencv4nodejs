@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_OBJDETECT
+
 #include "HOGDescriptor.h"
 #include "HOGDescriptorBindings.h"
 
@@ -210,3 +214,5 @@ NAN_METHOD(HOGDescriptor::GroupRectanglesAsync) {
     info
   );
 }
+
+#endif

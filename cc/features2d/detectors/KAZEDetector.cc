@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "KAZEDetector.h"
 
 Nan::Persistent<v8::FunctionTemplate> KAZEDetector::constructor;
@@ -27,3 +31,5 @@ NAN_MODULE_INIT(KAZEDetector::Init) {
 NAN_METHOD(KAZEDetector::New) {
 	NewBinding().construct(info);
 }
+
+#endif

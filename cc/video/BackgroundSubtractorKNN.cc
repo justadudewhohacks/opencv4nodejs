@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_VIDEO
+
 #include "BackgroundSubtractorKNN.h"
 
 Nan::Persistent<v8::FunctionTemplate> BackgroundSubtractorKNN::constructor;
@@ -32,3 +36,5 @@ NAN_METHOD(BackgroundSubtractorKNN::New) {
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 }
+
+#endif

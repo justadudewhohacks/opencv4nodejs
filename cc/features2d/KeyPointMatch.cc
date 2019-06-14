@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_FEATURES2D
+
 #include "KeyPointMatch.h"
 
 Nan::Persistent<v8::FunctionTemplate> KeyPointMatch::constructor;
@@ -51,3 +55,5 @@ void KeyPointMatch::setNativeProps(KeyPoint* kpFrom, KeyPoint* kpTo, float dista
   this->kpTo.Reset(kpTo->persistent());
   this->distance = distance;
 }
+
+#endif

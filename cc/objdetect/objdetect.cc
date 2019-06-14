@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_OBJDETECT
+
 #include "objdetect.h"
 #include "CascadeClassifier.h"
 #include "HOGDescriptor.h"
@@ -8,3 +12,5 @@ NAN_MODULE_INIT(Objdetect::Init) {
 	HOGDescriptor::Init(target);
 	DetectionROI::Init(target);
 };
+
+#endif

@@ -1,10 +1,8 @@
 #include "macros.h"
-#include <opencv2/core.hpp>
-#include <opencv2/imgproc.hpp>
 #include <opencv2/photo.hpp>
 
-#ifndef __FF_PHOTOCONSTANTS_H__
-#define __FF_PHOTOCONSTANTS_H__
+#ifndef __FF_PHOTO_CONSTANTS_H__
+#define __FF_PHOTO_CONSTANTS_H__
 
 class PhotoConstants {
 public:

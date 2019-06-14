@@ -1,4 +1,6 @@
-#ifdef HAVE_XIMGPROC
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_XIMGPROC
 
 #include "SuperpixelSEEDS.h"
 
@@ -73,4 +75,4 @@ NAN_METHOD(SuperpixelSEEDS::Iterate) {
 	self->self->getLabelContourMask(self->labelContourMask);
 }
 
-#endif // HAVE_XIMGPROC
+#endif // HAVE_OPENCV_XIMGPROC

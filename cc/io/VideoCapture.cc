@@ -1,3 +1,7 @@
+#include "opencv_modules.h"
+
+#ifdef HAVE_OPENCV_HIGHGUI
+
 #include "VideoCapture.h"
 #include "VideoCaptureBindings.h"
 
@@ -102,3 +106,5 @@ NAN_METHOD(VideoCapture::SetAsync) {
     info
   );
 }
+
+#endif
