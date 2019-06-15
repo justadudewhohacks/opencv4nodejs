@@ -1,12 +1,12 @@
 #include "opencv_modules.h"
 
-#ifdef HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_IO
 
-#include "videoCaptureProps.h"
+#include "ioConstants.h"
 
 using namespace cv;
 
-void VideoCaptureProps::Init(v8::Local<v8::Object> target) {
+void IoConstants::Init(v8::Local<v8::Object> target) {
 	FF_SET_CV_CONSTANT(target, CAP_PROP_POS_MSEC);
 	FF_SET_CV_CONSTANT(target, CAP_PROP_POS_FRAMES);
 	FF_SET_CV_CONSTANT(target, CAP_PROP_POS_AVI_RATIO);

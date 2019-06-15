@@ -18,7 +18,7 @@
 #ifdef HAVE_OPENCV_IMGPROC
 #include "imgproc/imgproc.h"
 #endif
-#ifdef HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_IO
 #include "io/io.h"
 #endif
 #ifdef HAVE_OPENCV_ML
@@ -97,7 +97,7 @@ void init(v8::Local<v8::Object> target) {
 	Nan::Set(modules, FF::newString("imgproc"), Nan::New(true));
 	Imgproc::Init(target);
 #endif
-#ifdef HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_IO
 	Nan::Set(modules, FF::newString("io"), Nan::New(true));
 	Io::Init(target);
 #endif

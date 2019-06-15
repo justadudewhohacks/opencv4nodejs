@@ -1,6 +1,6 @@
 #include "opencv_modules.h"
 
-#ifdef HAVE_OPENCV_HIGHGUI
+#ifdef HAVE_IO
 
 #include "io.h"
 #include "ioBindings.h"

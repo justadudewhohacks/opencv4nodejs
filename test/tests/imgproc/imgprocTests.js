@@ -1,44 +1,32 @@
-const cv = global.dut;
-const {
-  assertError,
-  assertPropsWithValue,
-  assertMetaData,
-  dangerousDeepEquals,
-  funcShouldRequireArgs,
-  readTestImage,
-  generateAPITests,
-  generateClassMethodTests,
-  expectToBeVec4
-} = global.utils;
 const { expect } = require('chai');
-const contourTests = require('./contourTests');
-const colormapTests = require('./colormapTests');
-const MatImgprocTests = require('./MatImgprocTests');
 
-const rgbMatData = [
-  Array(5).fill([255, 125, 0]),
-  Array(5).fill([0, 0, 0]),
-  Array(5).fill([125, 75, 125]),
-  Array(5).fill([75, 255, 75])
-];
-const rgbMat = new cv.Mat(rgbMatData, cv.CV_8UC3);
+module.exports = ({ cv, utils, getTestImg }) => {
 
-describe('imgproc', () => {
+  const {
+    assertError,
+    assertPropsWithValue,
+    assertMetaData,
+    dangerousDeepEquals,
+    funcShouldRequireArgs,
+    readTestImage,
+    generateAPITests,
+    generateClassMethodTests,
+    expectToBeVec4,
+    cvVersionLowerThan,
+    cvVersionGreaterEqual
+  } = utils;
 
-  MatImgprocTests();
-
-  let testImg;
-
-  before(() => {
-    testImg = readTestImage().resizeToMax(250);
-  });
-
-  contourTests();
-  colormapTests();
+  const rgbMatData = [
+    Array(5).fill([255, 125, 0]),
+    Array(5).fill([0, 0, 0]),
+    Array(5).fill([125, 75, 125]),
+    Array(5).fill([75, 255, 75])
+  ];
+  const rgbMat = new cv.Mat(rgbMatData, cv.CV_8UC3);
 
   describe('goodFeaturesToTrack', () => {
     generateClassMethodTests({
-      getClassInstance: () => testImg.bgrToGray(),
+      getClassInstance: () => getTestImg().bgrToGray(),
       methodName: 'goodFeaturesToTrack',
       classNameSpace: 'Mat',
       methodNameSpace: 'Imgproc',
@@ -165,7 +153,7 @@ describe('imgproc', () => {
           ranges: [0, 256]
         }
       ];
-      const hist1D = cv.calcHist(testImg, histAxes);
+      const hist1D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist1D)({ rows: 8, cols: 1, dims: 2 });
     });
 
@@ -182,12 +170,12 @@ describe('imgproc', () => {
           ranges: [0, 256]
         }
       ];
-      const hist2D = cv.calcHist(testImg, histAxes);
+      const hist2D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist2D)({ rows: 8, cols: 32, dims: 2 });
     });
 
     // TODO causes sigsegv on 3.0.0 and 3.1.0
-    (global.utils.cvVersionLowerThan(3, 2, 0) ? it.skip : it)('should return 3 dimensional hist', () => {
+    (cvVersionLowerThan(3, 2, 0) ? it.skip : it)('should return 3 dimensional hist', () => {
       const histAxes = [
         {
           channel: 0,
@@ -205,7 +193,7 @@ describe('imgproc', () => {
           ranges: [0, 256]
         }
       ];
-      const hist3D = cv.calcHist(testImg, histAxes);
+      const hist3D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist3D)({ dims: 3 });
     });
   });
@@ -261,7 +249,7 @@ describe('imgproc', () => {
     });
   });
 
-  (global.utils.cvVersionLowerThan(3, 2, 0) ? describe.skip : describe)('canny', () => {
+  (cvVersionLowerThan(3, 2, 0) ? describe.skip : describe)('canny', () => {
     const th1 = 2.8;
     const th2 = 0.8;
     const L2gradient = true;
@@ -321,35 +309,92 @@ describe('imgproc', () => {
       });
     });
 
-    describe('undistortPoints', () => {
-      const cameraMatrix = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);
-      //const newCameraMatrix = new cv.Mat([[0.5, 0, 10],[0, 0.5, 10],[0, 0, 1]], cv.CV_32F);
-      const distCoeffs = new cv.Mat([[0.1, 0.1, 1, 1]], cv.CV_32F);
-      const srcPoints = [
-        [5,5], [5, 10], [5, 15]
-      ].map(p => new cv.Point(p[0], p[1]));
-      const expectedDestPoints = [
-        [9.522233963012695, 9.522233963012695],
-        [9.128815650939941, 9.661333084106445],
-        [9.76507568359375, 9.841306686401367]
-      ].map(p => new cv.Point(p[0], p[1]));
+    if (!cvVersionGreaterEqual(4, 0, 0)) {
+      describe('undistortPoints', () => {
+        const cameraMatrix = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);
+        //const newCameraMatrix = new cv.Mat([[0.5, 0, 10],[0, 0.5, 10],[0, 0, 1]], cv.CV_32F);
+        const distCoeffs = new cv.Mat([[0.1, 0.1, 1, 1]], cv.CV_32F);
+        const srcPoints = [
+          [5,5], [5, 10], [5, 15]
+        ].map(p => new cv.Point(p[0], p[1]));
+        const expectedDestPoints = [
+          [9.522233963012695, 9.522233963012695],
+          [9.128815650939941, 9.661333084106445],
+          [9.76507568359375, 9.841306686401367]
+        ].map(p => new cv.Point(p[0], p[1]));
 
-      generateAPITests({
-        getDut: () => cv,
-        methodName: 'undistortPoints',
-        getRequiredArgs: () => ([
-          srcPoints,
-          cameraMatrix,
-          distCoeffs
-        ]),
-        expectOutput: destPoints => {
-          expect(destPoints.length).to.equal(expectedDestPoints.length);
-          for(var i = 0; i < destPoints.length; i++){
-            expect(destPoints[i].x).to.be.closeTo(expectedDestPoints[i].x, 0.001)
-            expect(destPoints[i].y).to.be.closeTo(expectedDestPoints[i].y, 0.001)
+        generateAPITests({
+          getDut: () => cv,
+          methodName: 'undistortPoints',
+          getRequiredArgs: () => ([
+            srcPoints,
+            cameraMatrix,
+            distCoeffs
+          ]),
+          expectOutput: destPoints => {
+            expect(destPoints.length).to.equal(expectedDestPoints.length);
+            for(var i = 0; i < destPoints.length; i++){
+              expect(destPoints[i].x).to.be.closeTo(expectedDestPoints[i].x, 0.001)
+              expect(destPoints[i].y).to.be.closeTo(expectedDestPoints[i].y, 0.001)
+            }
           }
-        }
+        });
+      });
+    };
+  });
+
+  describe('applyColorMap', () => {
+    it('should have all colormap types in the "cv" object', () => {
+      const COLORMAP_TYPE_NAMES = [
+        'COLORMAP_AUTUMN',
+        'COLORMAP_BONE',
+        'COLORMAP_JET',
+        'COLORMAP_WINTER',
+        'COLORMAP_RAINBOW',
+        'COLORMAP_OCEAN',
+        'COLORMAP_SUMMER',
+        'COLORMAP_SPRING',
+        'COLORMAP_COOL',
+        'COLORMAP_HSV',
+        'COLORMAP_PINK',
+        'COLORMAP_HOT',
+        'COLORMAP_PARULA',
+      ];
+
+      COLORMAP_TYPE_NAMES.forEach((name) => {
+        expect(typeof cv[name]).to.be.equal('number');
       });
     });
+
+    describe('should process an image with a type of colormap integer', () => {
+      generateAPITests({
+        getDut: () => cv,
+        methodName: 'applyColorMap',
+        getRequiredArgs: () => ([
+          new cv.Mat([[0, 1, 100]], cv.CV_8UC1),
+          cv.COLORMAP_HOT,
+        ]),
+        expectOutput: res => {
+          return expect(res).to.be.instanceOf(cv.Mat)
+        },
+      });
+    });
+
+    if (cvVersionGreaterEqual(3, 3, 0)) {
+      describe('should process an image with a customized colormap', () => {
+        generateAPITests({
+          getDut: () => cv,
+          methodName: 'applyColorMap',
+          getRequiredArgs: () => ([
+            new cv.Mat([[0, 1, 100]], cv.CV_8UC1),
+            new cv.Mat(256, 1, cv.CV_8UC3),
+          ]),
+          expectOutput: res => {
+            return expect(res).to.be.instanceOf(cv.Mat)
+          },
+        });
+      });
+    }
   });
-});
+
+};

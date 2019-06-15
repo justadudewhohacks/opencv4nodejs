@@ -1,8 +1,13 @@
-const cv = global.dut;
-const { generateAPITests } = global.utils;
 const { expect } = require('chai');
 
-module.exports = () => {
+module.exports = ({ cv, utils }) => {
+
+  const {
+    generateAPITests,
+    cvVersionLowerThan,
+    cvVersionGreaterEqual
+  } = utils;
+
   // apparently cv version minor < 2 does not consider image borders
   const contoursData = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -146,7 +151,7 @@ module.exports = () => {
         const defects = convexityDefectsContours[0].convexityDefects(hullIndices);
 
         // TODO figure out whats wrong with defects in 3.0, 3.1
-        if (global.utils.cvVersionGreaterEqual(3, 2, 0)) {
+        if (cvVersionGreaterEqual(3, 2, 0)) {
           expect(defects).to.be.an('array').lengthOf(2);
         }
         defects.forEach((vec4) => {
@@ -199,7 +204,7 @@ module.exports = () => {
 
     // TODO min 5 points inputs cv exception
     describe('fitEllipse', () => {
-      (global.utils.cvVersionLowerThan(3, 2, 0) ? it.skip : it)('should return fitEllipse', () => {
+      (cvVersionLowerThan(3, 2, 0) ? it.skip : it)('should return fitEllipse', () => {
         expect(rightBottomContour.fitEllipse()).to.be.instanceOf(cv.RotatedRect);
       });
     });
@@ -219,7 +224,7 @@ module.exports = () => {
     });
 
     describe('matchShapes', () => {
-      const method = global.utils.cvVersionGreaterEqual(4, 0, 0) ? cv.CONTOURS_MATCH_I1 : cv.CV_CONTOURS_MATCH_I1;
+      const method = cvVersionGreaterEqual(4, 0, 0) ? cv.CONTOURS_MATCH_I1 : cv.CV_CONTOURS_MATCH_I1;
       it('should return zero for same shapes', () => {
         const similarity = leftmostContour.matchShapes(leftmostContour, method);
         expect(similarity).to.equal(0);

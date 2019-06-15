@@ -1,28 +1,29 @@
-const cv = global.dut;
-
-const {
-  generateAPITests,
-  asyncFuncShouldRequireArgs,
-  _funcShouldRequireArgs,
-  assertMetaData,
-  assertDataDeepEquals,
-  assertMatValueEquals,
-  dangerousDeepEquals,
-  expectToBeVec2,
-  isZeroMat,
-  isUniformMat
-} = global.utils;
 const { expect } = require('chai');
 
-const rgbMatData = [
-  Array(5).fill([255, 125, 0]),
-  Array(5).fill([0, 0, 0]),
-  Array(5).fill([125, 75, 125]),
-  Array(5).fill([75, 255, 75])
-];
-const rgbMat = new cv.Mat(rgbMatData, cv.CV_8UC3);
+module.exports = ({ cv, utils, getTestImg }) => {
 
-module.exports = (getTestImg) => {
+  const {
+    generateAPITests,
+    asyncFuncShouldRequireArgs,
+    _funcShouldRequireArgs,
+    assertMetaData,
+    assertDataDeepEquals,
+    assertMatValueEquals,
+    dangerousDeepEquals,
+    expectToBeVec2,
+    isZeroMat,
+    isUniformMat,
+    cvVersionGreaterEqual
+  } = utils;
+
+  const rgbMatData = [
+    Array(5).fill([255, 125, 0]),
+    Array(5).fill([0, 0, 0]),
+    Array(5).fill([125, 75, 125]),
+    Array(5).fill([75, 255, 75])
+  ];
+  const rgbMat = new cv.Mat(rgbMatData, cv.CV_8UC3);
+
   describe('resizing', () => {
     describe('rescale', () => {
       const mat = new cv.Mat(16, 16, cv.CV_8UC3);
@@ -1447,7 +1448,7 @@ module.exports = (getTestImg) => {
     });
   });
 
-  if (!global.cvVersionGreaterEqual(4, 0, 0)) {
+  if (!cvVersionGreaterEqual(4, 0, 0)) {
     describe('undistort', () => {
       const cameraMatrix = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);
       const distCoeffs = new cv.Mat([[0.1, 0.1, 1, 1]], cv.CV_32F);

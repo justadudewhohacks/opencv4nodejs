@@ -1,26 +1,29 @@
-const cv = global.dut;
-const {
-  assertMetaData,
-  generateAPITests,
-  expectToBeVec2,
-  expectToBeVec3,
-  expectToBeVec4
-} = global.utils;
 const { expect } = require('chai');
 
-const imagePoints = [
-  new cv.Point(0, 0),
-  new cv.Point(0.5, 0.5),
-  new cv.Point(1.0, 1.0),
-  new cv.Point(1.0, 0.5),
-  new cv.Point(100, 100),
-  new cv.Point(100.5, 100.5),
-  new cv.Point(101.0, 101.0),
-  new cv.Point(101.0, 100.5)
-];
-const distCoefficients = [0, 0.5, 1.0, 1.0];
+module.exports = ({ cv, utils }) => {
 
-module.exports = () => {
+  const {
+    assertMetaData,
+    generateAPITests,
+    expectToBeVec2,
+    expectToBeVec3,
+    expectToBeVec4,
+    cvVersionLowerThan,
+    cvVersionGreaterEqual
+  } = utils;
+
+  const imagePoints = [
+    new cv.Point(0, 0),
+    new cv.Point(0.5, 0.5),
+    new cv.Point(1.0, 1.0),
+    new cv.Point(1.0, 0.5),
+    new cv.Point(100, 100),
+    new cv.Point(100.5, 100.5),
+    new cv.Point(101.0, 101.0),
+    new cv.Point(101.0, 100.5)
+  ];
+  const distCoefficients = [0, 0.5, 1.0, 1.0];
+
   describe('rodrigues', () => {
     const expectOutput = (res) => {
       expect(res).to.have.property('dst').to.be.instanceOf(cv.Mat);
@@ -251,7 +254,7 @@ module.exports = () => {
     });
 
     // TODO: figure out why rectify3Collinear is failing with docker and 3.4.3+
-    ((!process.env.DOCKER_BUILD && !process.env.BINDINGS_DEBUG && global.utils.cvVersionLowerThan(3, 3, 0)) ? describe : describe.skip)('rectify3Collinear', () => {
+    ((!process.env.DOCKER_BUILD && !process.env.BINDINGS_DEBUG && cvVersionLowerThan(3, 3, 0)) ? describe : describe.skip)('rectify3Collinear', () => {
       const alpha = 0;
       const flags = cv.CALIB_ZERO_DISPARITY;
 
@@ -472,7 +475,7 @@ module.exports = () => {
     });
   });
 
-  (global.utils.cvVersionLowerThan(3, 1, 0) ? describe.skip : describe)('findEssentialMat', () => {
+  (cvVersionLowerThan(3, 1, 0) ? describe.skip : describe)('findEssentialMat', () => {
     const expectOutput = (res) => {
       expect(res).to.have.property('E').to.be.instanceOf(cv.Mat);
       assertMetaData(res.E)(3, 3, cv.CV_64F);
@@ -496,7 +499,7 @@ module.exports = () => {
     });
   });
 
-  (global.utils.cvVersionLowerThan(3, 1, 0) ? describe.skip : describe)('recoverPose', () => {
+  (cvVersionLowerThan(3, 1, 0) ? describe.skip : describe)('recoverPose', () => {
     const expectOutput = (res) => {
       expect(res).to.have.property('returnValue').to.be.a('Number');
       expect(res).to.have.property('R').to.be.instanceOf(cv.Mat);
@@ -523,7 +526,7 @@ module.exports = () => {
     });
   });
 
-  if (global.cvVersionGreaterEqual(4, 0, 0)) {
+  if (cvVersionGreaterEqual(4, 0, 0)) {
     describe('undistort', () => {
       const cameraMatrix = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);
       const distCoeffs = new cv.Mat([[0.1, 0.1, 1, 1]], cv.CV_32F);
