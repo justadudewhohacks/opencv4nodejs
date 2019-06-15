@@ -13,6 +13,7 @@ const {
 const { expect } = require('chai');
 const contourTests = require('./contourTests');
 const colormapTests = require('./colormapTests');
+const MatImgprocTests = require('./MatImgprocTests');
 
 const rgbMatData = [
   Array(5).fill([255, 125, 0]),
@@ -23,6 +24,9 @@ const rgbMatData = [
 const rgbMat = new cv.Mat(rgbMatData, cv.CV_8UC3);
 
 describe('imgproc', () => {
+
+  MatImgprocTests();
+
   let testImg;
 
   before(() => {

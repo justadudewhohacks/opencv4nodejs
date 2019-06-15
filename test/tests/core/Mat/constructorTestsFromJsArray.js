@@ -1,21 +1,26 @@
-const cv = global.dut;
 const { assert } = require('chai');
-const { assertDataDeepEquals, assertDataAlmostDeepEquals, assertMetaData } = global.utils;
-const { getExampleMatData } = require('./exampleData');
+const getExampleMatData = require('./getExampleMatData');
 
-const createAndAssertMatDataEquals = (type) => {
-  const matData = getExampleMatData(type);
-  const mat = new cv.Mat(matData, type);
+module.exports = function ({ cv, utils }) {
 
-  assertMetaData(mat)(4, 3, type);
-  if ([cv.CV_32FC1, cv.CV_32FC2, cv.CV_32FC3, cv.CV_32FC4].some(matType => matType === type)) {
-    assertDataAlmostDeepEquals(matData, mat.getDataAsArray());
-  } else {
-    assertDataDeepEquals(matData, mat.getDataAsArray());
-  }
-};
+  const {
+    assertDataDeepEquals,
+    assertDataAlmostDeepEquals,
+    assertMetaData
+  } = utils;
 
-module.exports = () =>
+  const createAndAssertMatDataEquals = (type) => {
+    const matData = getExampleMatData(cv, type);
+    const mat = new cv.Mat(matData, type);
+
+    assertMetaData(mat)(4, 3, type);
+    if ([cv.CV_32FC1, cv.CV_32FC2, cv.CV_32FC3, cv.CV_32FC4].some(matType => matType === type)) {
+      assertDataAlmostDeepEquals(matData, mat.getDataAsArray());
+    } else {
+      assertDataDeepEquals(matData, mat.getDataAsArray());
+    }
+  };
+
   describe('constructor from js array', () => {
     it('should throw column must be an array', () => {
       let errMsg = '';
@@ -171,3 +176,5 @@ module.exports = () =>
       createAndAssertMatDataEquals(cv.CV_64FC4);
     });
   });
+
+};

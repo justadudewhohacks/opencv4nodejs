@@ -1,8 +1,7 @@
-const cv = global.dut;
 const { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
   intMin, floatMin, floatMax, doubleMin, doubleMax } = require('./typeRanges');
 
-exports.getExampleMatData = (type) => {
+module.exports = function(cv, type) {
   switch (type) {
     case cv.CV_8UC1: {
       return ([

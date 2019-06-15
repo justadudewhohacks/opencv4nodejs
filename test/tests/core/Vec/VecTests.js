@@ -1,16 +1,12 @@
-const { Vec } = global.dut;
-const { assertError } = global.utils;
 const { expect } = require('chai');
-const constructorTests = require('./constructorTests');
-const operatorTests = require('./operatorTests');
 
-describe('Vec', () => {
-  constructorTests();
-  operatorTests();
+module.exports = function ({ cv, utils }) {
+
+  const { assertError } = utils;
 
   describe('at', () => {
     describe('Vec2', () => {
-      const vec2 = new Vec(10, 20);
+      const vec2 = new cv.Vec(10, 20);
       it('should throw index out of bounds', () => {
         assertError(() => vec2.at(-1), 'Index out of bounds: Vec2 at index -1');
         assertError(() => vec2.at(2), 'Index out of bounds: Vec2 at index 2');
@@ -22,7 +18,7 @@ describe('Vec', () => {
       });
     });
     describe('Vec3', () => {
-      const vec3 = new Vec(10, 20, 30);
+      const vec3 = new cv.Vec(10, 20, 30);
       it('should throw index out of bounds', () => {
         assertError(() => vec3.at(-1), 'Index out of bounds: Vec3 at index -1');
         assertError(() => vec3.at(3), 'Index out of bounds: Vec3 at index 3');
@@ -36,7 +32,7 @@ describe('Vec', () => {
     });
 
     describe('Vec4', () => {
-      const vec4 = new Vec(5, 10, 20, 30);
+      const vec4 = new cv.Vec(5, 10, 20, 30);
       it('should throw index out of bounds', () => {
         assertError(() => vec4.at(-1), 'Index out of bounds: Vec4 at index -1');
         assertError(() => vec4.at(4), 'Index out of bounds: Vec4 at index 4');
@@ -50,4 +46,5 @@ describe('Vec', () => {
       });
     });
   });
-});
+
+};

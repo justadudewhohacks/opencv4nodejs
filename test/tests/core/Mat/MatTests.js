@@ -1,53 +1,34 @@
-const cv = global.dut;
-const {
-  generateAPITests,
-  assertError,
-  assertPropsWithValue,
-  assertMetaData,
-  assertDataDeepEquals,
-  readTestImage,
-  MatValuesComparator,
-  isZeroMat
-} = global.utils;
 const { expect } = require('chai');
-const accessorTests = require('./accessorTests');
-const constructorTestsFromJsArray = require('./constructorTestsFromJsArray');
-const constructorTestsFromFillVector = require('./constructorTestsFromFillVector');
-const operatorTests = require('./operatorTests');
-const imgprocTests = require('./imgprocTests');
-const ximgprocTests = require('./ximgprocTests');
-const calib3dTests = require('./calib3dTests');
 const { doubleMin, doubleMax } = require('./typeRanges');
 
-const srcMatData = [
-  [doubleMin, doubleMax, 0],
-  [doubleMax, 0, -doubleMax],
-  [-doubleMax, 0, doubleMin],
-  [doubleMin, -doubleMax, 0]
-];
-const srcMat = new cv.Mat(srcMatData, cv.CV_64F);
-const copyMask = new cv.Mat([
-  [0, 0, 0],
-  [1, 1, 1],
-  [0, 0, 0],
-  [1, 1, 1]
-], cv.CV_8U);
+module.exports = function ({ cv, utils, getTestImg }) {
 
-describe('Mat', () => {
-  let testImg;
-  const getTestImg = () => testImg;
-  before(() => {
-    testImg = readTestImage();
-  });
+  const {
+    generateAPITests,
+    assertError,
+    assertPropsWithValue,
+    assertMetaData,
+    assertDataDeepEquals,
+    readTestImage,
+    MatValuesComparator,
+    isZeroMat,
+    cvVersionGreaterEqual,
+    cvVersionLowerThan
+  } = utils
 
-  constructorTestsFromJsArray();
-  constructorTestsFromFillVector();
-  operatorTests();
-  accessorTests();
-
-  describe('imgproc methods', () => imgprocTests(getTestImg));
-  describe('ximgproc methods', () => ximgprocTests());
-  describe('calib3d methods', () => calib3dTests());
+  const srcMatData = [
+    [doubleMin, doubleMax, 0],
+    [doubleMax, 0, -doubleMax],
+    [-doubleMax, 0, doubleMin],
+    [doubleMin, -doubleMax, 0]
+  ];
+  const srcMat = new cv.Mat(srcMatData, cv.CV_64F);
+  const copyMask = new cv.Mat([
+    [0, 0, 0],
+    [1, 1, 1],
+    [0, 0, 0],
+    [1, 1, 1]
+  ], cv.CV_8U);
 
   describe('constructor from channels', () => {
     const matEmpty8U = new cv.Mat(4, 3, cv.CV_8U);
@@ -196,7 +177,7 @@ describe('Mat', () => {
     });
 
     // TODO figure out whats wrong with 3.3.0+
-    (global.utils.cvVersionGreaterEqual(3, 3, 0) ? it.skip : it)('should normalize range of CV_64F', () => {
+    (cvVersionGreaterEqual(3, 3, 0) ? it.skip : it)('should normalize range of CV_64F', () => {
       const mat = new cv.Mat([
         [0.5, 1000.12345, 1000],
         [-1000.12345, 123.456, -123.456]
@@ -464,7 +445,7 @@ describe('Mat', () => {
     });
   });
 
-  (global.utils.cvVersionLowerThan(3, 2, 0) ? describe.skip : describe)('rotate', () => {
+  (cvVersionLowerThan(3, 2, 0) ? describe.skip : describe)('rotate', () => {
     const src = new cv.Mat([
       [1, 0, 0],
       [1, 0, 0],
@@ -615,17 +596,4 @@ describe('Mat', () => {
     });
   });
 
-  describe('undistort', () => {
-    const cameraMatrix = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);
-    const distCoeffs = new cv.Mat([[0.1, 0.1, 1, 1]], cv.CV_32F);
-    generateAPITests({
-      getDut: () => new cv.Mat(20, 20, cv.CV_8U, 0.5),
-      methodName: 'undistort',
-      methodNameSpace: 'Mat',
-      getRequiredArgs: () => ([cameraMatrix, distCoeffs]),
-      expectOutput: (res, _, args) => {
-        expect(res).to.be.instanceOf(cv.Mat);
-      }
-    });
-  });
-});
+};

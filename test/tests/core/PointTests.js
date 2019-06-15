@@ -1,24 +1,28 @@
-const { Point } = global.dut;
-const { assertError, assertPropsWithValue } = global.utils;
 const { expect } = require('chai');
 
-const OperatorRequiresArg = pt => (func, isScalar) => {
-  it('should throw if no args', () => {
-    assertError(
-      () => pt[func].bind(pt)(),
-      `expected arg to be ${isScalar ? 'a Scalar' : 'an instance of Point'}`
-    );
-  });
-};
+module.exports = function ({ cv, utils }) {
 
-describe('Point', () => {
+  const {
+    assertError,
+    assertPropsWithValue
+  } = utils;
+
+  const OperatorRequiresArg = pt => (func, isScalar) => {
+    it('should throw if no args', () => {
+      assertError(
+        () => pt[func].bind(pt)(),
+        `expected arg to be ${isScalar ? 'a Scalar' : 'an instance of Point'}`
+      );
+    });
+  };
+
   describe('constructor', () => {
     it('should throw if args empty', () => {
-      assertError(() => new Point(), 'expected arguments');
+      assertError(() => new cv.Point(), 'expected arguments');
     });
 
     it('should throw if insufficient args', () => {
-      assertError(() => new Point(0), 'expected arguments');
+      assertError(() => new cv.Point(0), 'expected arguments');
     });
 
     describe('Point2', () => {
@@ -26,30 +30,30 @@ describe('Point', () => {
         it('should have int positions', () => {
           const x = 100;
           const y = 200;
-          assertPropsWithValue(new Point(x, y))({ x, y });
+          assertPropsWithValue(new cv.Point(x, y))({ x, y });
         });
 
         it('should have double positions', () => {
           const x = 100.12345;
           const y = 200.89764;
-          assertPropsWithValue(new Point(x, y))({ x, y });
+          assertPropsWithValue(new cv.Point(x, y))({ x, y });
         });
 
         it('should have negative int positions', () => {
           const x = -100;
           const y = -200;
-          assertPropsWithValue(new Point(x, y))({ x, y });
+          assertPropsWithValue(new cv.Point(x, y))({ x, y });
         });
 
         it('should have negative double positions', () => {
           const x = -100.12345;
           const y = -200.89764;
-          assertPropsWithValue(new Point(x, y))({ x, y });
+          assertPropsWithValue(new cv.Point(x, y))({ x, y });
         });
       });
 
       describe('at', () => {
-        const pt2 = new Point(10, 20);
+        const pt2 = new cv.Point(10, 20);
         it('should throw index out of bounds', () => {
           assertError(() => pt2.at(-1), 'Index out of bounds: Point2 at index -1');
           assertError(() => pt2.at(2), 'Index out of bounds: Point2 at index 2');
@@ -62,8 +66,8 @@ describe('Point', () => {
       });
 
       describe('operators', () => {
-        const pt0 = new Point(1, 1);
-        const pt1 = new Point(2, 3);
+        const pt0 = new cv.Point(1, 1);
+        const pt1 = new cv.Point(2, 3);
         const operatorRequiresArg = OperatorRequiresArg(pt0);
 
         describe('add', () => {
@@ -100,7 +104,7 @@ describe('Point', () => {
 
         describe('norm', () => {
           it('should return magnitude', () => {
-            expect(new Point(Math.sqrt(8), Math.sqrt(8)).norm()).to.equal(4);
+            expect(new cv.Point(Math.sqrt(8), Math.sqrt(8)).norm()).to.equal(4);
           });
         });
       });
@@ -112,14 +116,14 @@ describe('Point', () => {
           const x = 100;
           const y = 200;
           const z = 300;
-          assertPropsWithValue(new Point(x, y, z))({ x, y, z });
+          assertPropsWithValue(new cv.Point(x, y, z))({ x, y, z });
         });
 
         it('should have double positions', () => {
           const x = 100.12345;
           const y = 200.89764;
           const z = 300.034;
-          assertPropsWithValue(new Point(x, y, z))({ x, y, z });
+          assertPropsWithValue(new cv.Point(x, y, z))({ x, y, z });
         });
 
         it('should have negative int positions', () => {
@@ -127,7 +131,7 @@ describe('Point', () => {
             const x = -100;
             const y = -200;
             const z = -300;
-            assertPropsWithValue(new Point(x, y, z))({ x, y, z });
+            assertPropsWithValue(new cv.Point(x, y, z))({ x, y, z });
           });
         });
 
@@ -135,12 +139,12 @@ describe('Point', () => {
           const x = -100.12345;
           const y = -200.89764;
           const z = -300.034;
-          assertPropsWithValue(new Point(x, y, z))({ x, y, z });
+          assertPropsWithValue(new cv.Point(x, y, z))({ x, y, z });
         });
       });
 
       describe('at', () => {
-        const pt3 = new Point(10, 20, 30);
+        const pt3 = new cv.Point(10, 20, 30);
         it('should throw index out of bounds', () => {
           assertError(() => pt3.at(-1), 'Index out of bounds: Point3 at index -1');
           assertError(() => pt3.at(3), 'Index out of bounds: Point3 at index 3');
@@ -154,8 +158,8 @@ describe('Point', () => {
       });
 
       describe('operators', () => {
-        const pt0 = new Point(1, 1, 1);
-        const pt1 = new Point(2, 3, 4);
+        const pt0 = new cv.Point(1, 1, 1);
+        const pt1 = new cv.Point(2, 3, 4);
         const operatorRequiresArg = OperatorRequiresArg(pt0);
         describe('add', () => {
           operatorRequiresArg('add');
@@ -191,10 +195,11 @@ describe('Point', () => {
 
         describe('norm', () => {
           it('should return magnitude', () => {
-            expect(new Point(Math.sqrt(4), Math.sqrt(4), Math.sqrt(8)).norm()).to.equal(4);
+            expect(new cv.Point(Math.sqrt(4), Math.sqrt(4), Math.sqrt(8)).norm()).to.equal(4);
           });
         });
       });
     });
   });
-});
+
+};

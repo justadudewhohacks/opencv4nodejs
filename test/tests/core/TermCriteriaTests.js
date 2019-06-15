@@ -1,8 +1,11 @@
-const cv = global.dut;
-const { assertPropsWithValue } = global.utils;
 const { expect } = require('chai');
 
-describe('TermCriteria', () => {
+module.exports = function ({ cv, utils }) {
+
+  const {
+    assertPropsWithValue
+  } = utils;
+
   describe('constructor', () => {
     it('has default constructor', () => {
       expect(() => new cv.TermCriteria()).to.not.throw();
@@ -16,4 +19,5 @@ describe('TermCriteria', () => {
       assertPropsWithValue(termCriteria)({ type, maxCount, epsilon });
     });
   });
-});
+
+};

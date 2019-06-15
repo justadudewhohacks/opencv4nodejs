@@ -7,6 +7,7 @@ const {
   expectToBeVec3
 } = global.utils;
 const { assert, expect } = require('chai');
+const MatCalib3dTests = require('./MatCalib3dTests');
 
 const objectPoints = [
   new cv.Point(0, 0, 0),
@@ -31,6 +32,9 @@ const imagePoints = [
 const distCoefficients = [0, 0.5, 1.0, 1.0];
 
 describe('calib3d', () => {
+
+  MatCalib3dTests();
+
   describe('findHomography', () => {
     const srcPointsJson = [{ x: 100, y: 100 }, { x: 100, y: -100 }, { x: -100, y: 100 }, { x: -100, y: -100 }];
     const srcPoints = srcPointsJson.map(pt => new cv.Point(pt.x, pt.y))

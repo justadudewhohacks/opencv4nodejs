@@ -1,4 +1,3 @@
-const cv = global.dut;
 const { assert } = require('chai');
 const { assertPropsWithValue } = require('./testUtils');
 
@@ -38,26 +37,22 @@ const assertMatValueAlmostEquals = AssertMatValueEquals(
   (v0, v1) => (!v0 && !v1) || (((v0 - 0.0001) < v1) && (v1 < (v0 + 0.0001)))
 );
 
-exports.generateIts = (msg, testFunc, exclusions = new Set()) =>
+const generateItsFactory = (cv) => (msg, testFunc, exclusions = new Set()) =>
   matTypeNames.filter(type => !exclusions.has(type)).forEach((type) => {
     it(`${type} ${msg}`, () => testFunc(cv[type]));
   });
 
-exports.dangerousDeepEquals = dangerousDeepEquals;
-
-exports.assertMatValueEquals = AssertMatValueEquals((v0, v1) => v0 === v1);
-
-exports.assertMatValueAlmostEquals = assertMatValueAlmostEquals;
+const assertMatValueEquals = AssertMatValueEquals((v0, v1) => v0 === v1);
 
 /* compare float values differently as there will be slight precision loss */
-exports.assertDataAlmostDeepEquals = (data0, data1) =>
+const assertDataAlmostDeepEquals = (data0, data1) =>
   data0.forEach((row, r) => row.forEach((val, c) => assertMatValueAlmostEquals(val, data1[r][c])));
 
-exports.assertDataDeepEquals = (data0, data1) => {
+const assertDataDeepEquals = (data0, data1) => {
   assert(dangerousDeepEquals(data0, data1), 'mat data not equal');
 };
 
-exports.MatValuesComparator = (mat0, mat1) => (cmpFunc) => {
+const MatValuesComparator = (mat0, mat1) => (cmpFunc) => {
   assert(mat0.rows === mat1.rows, 'mat rows mismatch');
   assert(mat0.cols === mat1.cols, 'mat cols mismatch');
   for (let r = 0; r < mat0.rows; r += 1) {
@@ -74,11 +69,9 @@ const isUniformMat = (mat, matVal) => {
   return mat.getDataAsArray().every(r => r.every(vec => vec.every(val => val === matVal)));
 };
 
-exports.isUniformMat = isUniformMat;
+const isZeroMat = mat => isUniformMat(mat, 0);
 
-exports.isZeroMat = mat => isUniformMat(mat, 0);
-
-exports.assertMetaData = mat => (arg0, cols, type) => {
+const assertMetaData = mat => (arg0, cols, type) => {
   let propsWithValues = {
     rows: arg0, cols, type
   };
@@ -92,3 +85,18 @@ exports.assertMetaData = mat => (arg0, cols, type) => {
   }
   assertPropsWithValue(mat)(propsWithValues);
 };
+
+module.exports = function(cv) {
+  return {
+    assertDataDeepEquals,
+    assertDataAlmostDeepEquals,
+    assertMatValueAlmostEquals,
+    assertMatValueEquals,
+    assertMetaData,
+    dangerousDeepEquals,
+    generateIts: generateItsFactory(cv),
+    isZeroMat,
+    isUniformMat,
+    MatValuesComparator
+  }
+}

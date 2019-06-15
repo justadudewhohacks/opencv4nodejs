@@ -1,8 +1,9 @@
-const cv = global.dut;
-const { generateAPITests } = global.utils;
 const { expect } = require('chai');
 
-describe('Rect', () => {
+module.exports = function ({ cv, utils }) {
+
+  const { generateAPITests } = utils;
+
   describe('constructor', () => {
     it('can be created', () => {
       const x = 10;
@@ -175,4 +176,5 @@ describe('Rect', () => {
       });
     });
   });
-});
+
+};

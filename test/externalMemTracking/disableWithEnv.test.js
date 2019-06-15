@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const requireCv = require('../dut');
+const requireCv = require('../requireCv');
 
 describe('External Memory Tracking', () => {
   it('should be disabled if OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING is set', () => {

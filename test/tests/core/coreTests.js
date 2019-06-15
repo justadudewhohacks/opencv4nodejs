@@ -1,15 +1,3 @@
-const cv = global.dut;
-const {
-  funcShouldRequireArgs,
-  generateAPITests,
-  generateClassMethodTests,
-  assertMetaData,
-  assertPropsWithValue,
-  assertDataDeepEquals,
-  expectToBeVec2,
-  expectToBeVec3,
-  expectToBeVec4
-} = global.utils;
 const { expect } = require('chai');
 
 let asyncHooks = null
@@ -20,34 +8,48 @@ try {
   //
 }
 
-const partitionTests = (createInstance) => {
-  it('should return labels and numLabels', () => {
-    const { labels, numLabels } = cv.partition([createInstance(), createInstance()], () => true);
+module.exports = function ({ cv, utils }) {
 
-    expect(labels).to.be.an('array').lengthOf(2);
-    expect(numLabels).be.a('number');
-  });
+  const {
+    funcShouldRequireArgs,
+    generateAPITests,
+    generateClassMethodTests,
+    assertMetaData,
+    assertPropsWithValue,
+    assertDataDeepEquals,
+    expectToBeVec2,
+    expectToBeVec3,
+    expectToBeVec4,
+    getNodeMajorVersion
+  } = utils;
 
-  it('should assign every point to same cluster', () => {
-    const num = 5;
-    const instances = Array(num).fill(0).map(() => createInstance());
-    const { labels, numLabels } = cv.partition(instances, () => true);
+  const partitionTests = (createInstance) => {
+    it('should return labels and numLabels', () => {
+      const { labels, numLabels } = cv.partition([createInstance(), createInstance()], () => true);
 
-    expect(numLabels).to.equal(1);
-    expect(new Set(labels).size).to.equal(1);
-  });
+      expect(labels).to.be.an('array').lengthOf(2);
+      expect(numLabels).be.a('number');
+    });
 
-  it('should assign every point to different cluster', () => {
-    const num = 5;
-    const instances = Array(num).fill(0).map(() => createInstance());
-    const { labels, numLabels } = cv.partition(instances, () => false);
+    it('should assign every point to same cluster', () => {
+      const num = 5;
+      const instances = Array(num).fill(0).map(() => createInstance());
+      const { labels, numLabels } = cv.partition(instances, () => true);
 
-    expect(numLabels).to.equal(num);
-    expect(new Set(labels).size).to.equal(num);
-  });
-};
+      expect(numLabels).to.equal(1);
+      expect(new Set(labels).size).to.equal(1);
+    });
 
-describe('core', () => {
+    it('should assign every point to different cluster', () => {
+      const num = 5;
+      const instances = Array(num).fill(0).map(() => createInstance());
+      const { labels, numLabels } = cv.partition(instances, () => false);
+
+      expect(numLabels).to.equal(num);
+      expect(new Set(labels).size).to.equal(num);
+    });
+  };
+
   describe('getBuildInformation', () => {
     generateAPITests({
       getDut: () => cv,
@@ -256,7 +258,7 @@ describe('core', () => {
     });
   });
 
-  if (asyncHooks && global.utils.getNodeMajorVersion() > 8) {
+  if (asyncHooks && getNodeMajorVersion() > 8) {
     describe('async_hooks', () => {
       it('should trigger `init` callback in async_hooks', () => {
         let typeFound = false
@@ -757,4 +759,4 @@ describe('core', () => {
     describe('Solve y = x equation on Id = X Id', makeTest([[1, 2],[3, 4]], [[5, 6],[7, 8]], cv.DECOMP_LU, [[-3, -4],[4, 5]]));
   });
 
-});
+};

@@ -11,7 +11,6 @@ const {
   clearTmpData,
   getTmpDataFilePath,
   fileExists,
-  readTestImage,
   generateAPITests
 } = global.utils;
 
@@ -30,8 +29,8 @@ describe('io', () => {
   const getGotBase64Buf = () => gotBase64Buf;
 
   before(() => {
-    lenna = readTestImage();
-    got = readTestImage(false);
+    lenna = cv.imread(getTestImagePath(true));
+    got = cv.imread(getTestImagePath(false));
     lennaBase64Buf = Buffer.from(JSON.parse(fs.readFileSync(path.join(__dirname, 'data/lennaBase64.json'))).data, 'base64');
     gotBase64Buf = Buffer.from(JSON.parse(fs.readFileSync(path.join(__dirname, 'data/gotBase64.json'))).data, 'base64');
   });

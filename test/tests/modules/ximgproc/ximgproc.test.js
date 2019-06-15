@@ -1,12 +1,15 @@
 const cv = global.dut;
 const { assertMetaData, assertPropsWithValue, funcShouldRequireArgs, readTestImage } = global.utils;
 const { assert, expect } = require('chai');
+const MatXImgprocTests = require('./MatXImgprocTests');
 
 describe('ximgproc', () => {
   if (!cv.modules.ximgproc) {
     it('compiled without ximgproc');
     return;
   }
+
+  MatXImgprocTests();
 
   let testImg;
 
