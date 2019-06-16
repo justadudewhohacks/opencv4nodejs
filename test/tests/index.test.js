@@ -5,6 +5,10 @@ const coreTestSuite = require('./core')
 const imgprocTestSuite = require('./imgproc')
 const calib3dTestSuite = require('./calib3d')
 const features2dTestSuite = require('./features2d')
+const ioTestSuite = require('./io')
+const dnnTestSuite = require('./dnn')
+const machinelearningTestSuite = require('./machinelearning')
+const faceTestSuite = require('./face')
 
 describe('cv', () => {
 
@@ -40,6 +44,22 @@ describe('cv', () => {
 
   if (cv.modules.features2d) {
     describe('features2d', () => features2dTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.io) {
+    describe('io', () => ioTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.dnn) {
+    describe('dnn', () => dnnTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.machinelearning) {
+    describe('machinelearning', () => machinelearningTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.face) {
+    describe('face', () => faceTestSuite({ cv, utils, getTestImg }));
   }
 
 })

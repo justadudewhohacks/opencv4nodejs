@@ -1,25 +1,13 @@
-const cv = global.dut;
-const {
-  readTestImage,
-  generateAPITests,
-  assertMetaData
-} = global.utils;
 const { expect } = require('chai');
-const NetTests = require('./NetTests');
 
-describe('dnn', () => {
-  if (!cv.modules.dnn) {
-    it('compiled without dnn');
-    return;
-  }
+module.exports = ({ cv, utils, getTestImg }) => {
 
-  let testImg;
-
-  before(() => {
-    testImg = readTestImage().resizeToMax(250);
-  });
-
-  NetTests(() => testImg);
+  const {
+    readTestImage,
+    generateAPITests,
+    assertMetaData,
+    cvVersionGreaterEqual
+  } = utils;
 
   describe('blobFromImage', () => {
     const expectOutput = (res) => {
@@ -39,8 +27,9 @@ describe('dnn', () => {
         getDut: () => cv,
         methodName: 'blobFromImage',
         getRequiredArgs: () => ([
-          testImg
+          getTestImg().resizeToMax(250)
         ]),
+        explicitHasRequiredArgs: true,
         getOptionalArgsMap: () => ([
           ['scalefactor', 0.8],
           ['size', new cv.Size(3, 3)],
@@ -56,8 +45,9 @@ describe('dnn', () => {
         getDut: () => cv,
         methodName: 'blobFromImages',
         getRequiredArgs: () => ([
-          [testImg, testImg]
+          [getTestImg().resizeToMax(250), getTestImg().resizeToMax(250)]
         ]),
+        explicitHasRequiredArgs: true,
         getOptionalArgsMap,
         expectOutput
       });
@@ -68,8 +58,9 @@ describe('dnn', () => {
         getDut: () => cv,
         methodName: 'blobFromImage',
         getRequiredArgs: () => ([
-          testImg
+          getTestImg().resizeToMax(250)
         ]),
+        explicitHasRequiredArgs: true,
         getOptionalArgsMap: () => ([
           ['scalefactor', 0.8],
           ['size', new cv.Size(3, 3)],
@@ -83,7 +74,7 @@ describe('dnn', () => {
     });
   });
 
-  if (global.utils.cvVersionGreaterEqual(3, 4, 0)) {
+  if (cvVersionGreaterEqual(3, 4, 0)) {
     describe('NMSBoxes', () => {
       generateAPITests({
         getDut: () => cv,
@@ -102,4 +93,5 @@ describe('dnn', () => {
       });
     });
   }
-});
+
+};

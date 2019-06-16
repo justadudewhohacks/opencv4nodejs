@@ -1,12 +1,11 @@
-const { generateAPITests, clearTmpData, getTmpDataFilePath } = global.utils;
 const { expect } = require('chai');
 
-module.exports = (getTestImg, args, values, Recognizer) => {
-  let testImg;
-
-  before(() => {
-    testImg = getTestImg().bgrToGray();
-  });
+module.exports = ({ cv, utils, getTestImg }) => (args, values, Recognizer) => {
+  const {
+    generateAPITests,
+    clearTmpData,
+    getTmpDataFilePath
+  } = utils;
 
   describe('constructor', () => {
     const props = {};
@@ -34,9 +33,10 @@ module.exports = (getTestImg, args, values, Recognizer) => {
       methodName: 'train',
       methodNameSpace: 'FaceRecognizer',
       getRequiredArgs: () => ([
-        [testImg, testImg],
+        [getTestImg().bgrToGray(), getTestImg().bgrToGray()],
         [1, 2]
       ]),
+      explicitHasRequiredArgs: true,
       expectOutput
     });
   });
@@ -46,7 +46,7 @@ module.exports = (getTestImg, args, values, Recognizer) => {
 
     before(() => {
       recognizer = new Recognizer();
-      recognizer.train([testImg, testImg], [1, 2]);
+      recognizer.train([getTestImg().bgrToGray(), getTestImg().bgrToGray()], [1, 2]);
     });
 
     describe('predict', () => {
@@ -60,8 +60,9 @@ module.exports = (getTestImg, args, values, Recognizer) => {
         methodName: 'predict',
         methodNameSpace: 'FaceRecognizer',
         getRequiredArgs: () => ([
-          testImg
+          getTestImg().bgrToGray()
         ]),
+        explicitHasRequiredArgs: true,
         expectOutput
       });
     });

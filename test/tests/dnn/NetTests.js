@@ -1,12 +1,10 @@
-const cv = global.dut;
-const { generateAPITests } = global.utils;
 const { expect } = require('chai');
 
-module.exports = (getTestImg) => {
-  let blob;
-  before(() => {
-    blob = cv.blobFromImage(getTestImg());
-  });
+module.exports = ({ cv, utils, getTestImg }) => {
+
+  const {
+    generateAPITests
+  } = utils;
 
   describe('setInput', () => {
     const expectOutput = () => {
@@ -18,8 +16,9 @@ module.exports = (getTestImg) => {
       methodName: 'setInput',
       methodNameSpace: 'Net',
       getRequiredArgs: () => ([
-        blob
+        cv.blobFromImage(getTestImg())
       ]),
+      explicitHasRequiredArgs: true,
       expectOutput
     });
   });
