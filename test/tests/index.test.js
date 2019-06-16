@@ -4,6 +4,7 @@ const utils = require('../utils')(cv);
 const coreTestSuite = require('./core')
 const imgprocTestSuite = require('./imgproc')
 const calib3dTestSuite = require('./calib3d')
+const features2dTestSuite = require('./features2d')
 
 describe('cv', () => {
 
@@ -35,6 +36,10 @@ describe('cv', () => {
 
   if (cv.modules.calib3d) {
     describe('calib3d', () => calib3dTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.features2d) {
+    describe('features2d', () => features2dTestSuite({ cv, utils, getTestImg }));
   }
 
 })
