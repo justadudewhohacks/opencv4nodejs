@@ -51,22 +51,22 @@ matrix:
     - os: linux
       node_js: $LATEST_STABLE_NODEJS_VERSION
       env:
-        - OPENCV_VERSION=4.1.0-contrib-core
+        - OPENCV_VERSION=4.1.0-core
           BUILD_TASK=test
     - os: linux
       node_js: $LATEST_STABLE_NODEJS_VERSION
       env:
-        - OPENCV_VERSION=4.1.0-contrib-imgproc
+        - OPENCV_VERSION=4.1.0-imgproc
           BUILD_TASK=test
     - os: linux
       node_js: $LATEST_STABLE_NODEJS_VERSION
       env:
-        - OPENCV_VERSION=4.1.0-contrib-calib3d
+        - OPENCV_VERSION=4.1.0-calib3d
           BUILD_TASK=test
     - os: linux
       node_js: $LATEST_STABLE_NODEJS_VERSION
       env:
-        - OPENCV_VERSION=4.1.0-contrib-dnn
+        - OPENCV_VERSION=4.1.0-dnn
           BUILD_TASK=test
 
     # OpenCV 3.X without contrib

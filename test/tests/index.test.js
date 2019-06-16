@@ -1,5 +1,6 @@
 const cv = require('../requireCv')();
 const utils = require('../utils')(cv);
+const { expect } = require('chai');
 
 const coreTestSuite = require('./core')
 const imgprocTestSuite = require('./imgproc')
@@ -42,6 +43,17 @@ describe('cv', () => {
     testImg = utils.readTestImage();
     peoplesTestImg = utils.readPeoplesTestImage();
   });
+
+  if (!process.env.TEST_MODULE_LIST) {
+    it('all modules should be built', () => {
+      const modules = [
+        'core', 'imgproc',  'calib3d', 'features2d', 'io',
+        'dnn', 'ml', 'face', 'objdetect', 'photo', 'text',
+        'tracking', 'video', 'xfeatures2d', 'ximgproc'
+      ]
+      modules.forEach(m => expect(cv.modules).to.have.property(m));
+    })
+  }
 
   if (cv.modules.core) {
     describe('core', () => coreTestSuite({ cv, utils, getTestImg }));
