@@ -64,7 +64,6 @@ module.exports = ({ cv, utils, getTestImg }) => (Facemark, FacemarkParams) => {
         methodName: 'getFaces',
         methodNameSpace: 'Facemark',
         getRequiredArgs: () => [getTestImg().bgrToGray()],
-        explicitHasRequiredArgs: true,
         hasAsync: false,
         expectOutput
       });
@@ -98,7 +97,6 @@ module.exports = ({ cv, utils, getTestImg }) => (Facemark, FacemarkParams) => {
         methodName: 'addTrainingSample',
         methodNameSpace: 'Facemark',
         getRequiredArgs: () => [getTestImg().bgrToGray(), landmarks],
-        explicitHasRequiredArgs: true,
         expectOutput: () => {}
       });
     });
@@ -123,7 +121,6 @@ module.exports = ({ cv, utils, getTestImg }) => (Facemark, FacemarkParams) => {
         methodName: 'fit',
         methodNameSpace: 'Facemark',
         getRequiredArgs: () => [getTestImg().bgrToGray(), faces],
-        explicitHasRequiredArgs: true,
         expectOutput
       });
     });

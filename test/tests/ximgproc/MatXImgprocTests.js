@@ -1,11 +1,11 @@
-const cv = global.dut;
+module.exports = ({ cv, utils }) => {
 
-const {
-    generateAPITests,
-    assertMetaData,
-} = global.utils;
+    const {
+        generateAPITests,
+        assertMetaData,
+    } = utils;
 
-module.exports = () => {
+
     describe('guidedFilter', () => {
         if (!cv.modules.ximgproc) {
             it('compiled without ximgproc');
@@ -27,9 +27,7 @@ module.exports = () => {
                 radius,
                 eps
             ]),
-            getOptionalArgs: () => ([
-                ddepth
-            ]),
+            getOptionalArg: () => ddepth,
             expectOutput: (res) => {
                 assertMetaData(res)(100, 100, cv.CV_8UC3);
             }

@@ -18,7 +18,6 @@ module.exports = ({ cv, utils, getTestImg }) => {
       getRequiredArgs: () => ([
         cv.blobFromImage(getTestImg())
       ]),
-      explicitHasRequiredArgs: true,
       expectOutput
     });
   });

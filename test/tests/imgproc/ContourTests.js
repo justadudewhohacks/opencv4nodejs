@@ -53,9 +53,7 @@ module.exports = ({ cv, utils }) => {
         mode,
         findContoursMethod
       ]),
-      getOptionalArgs: () => ([
-        offset
-      ]),
+      getOptionalArg: () => offset,
       expectOutput
     });
   });

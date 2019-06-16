@@ -24,7 +24,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
       values: [50, false, TYPE_CUSTOM]
     };
     const Detector = cv.AGASTDetector;
-    detectorTests(getTestImg, defaults, customProps, Detector, false);
+    detectorTests(defaults, customProps, Detector, false);
   });
 
   describe('AKAZEDetector', () => {
@@ -47,7 +47,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
       values: [DESCRIPTOR_TYPE_CUSTOM, 8, 8, 2 * 0.0010000000474974513, 6, 1, DIFFUSIVITY_CUSTOM]
     };
     const Detector = cv.AKAZEDetector;
-    detectorTests(getTestImg, defaults, customProps, Detector);
+    detectorTests(defaults, customProps, Detector);
   });
 
   describe('BRISKDetector', () => {
@@ -61,7 +61,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
       values: [50, 6, 2.4]
     };
     const Detector = cv.BRISKDetector;
-    detectorTests(getTestImg, defaults, customProps, Detector);
+    detectorTests(defaults, customProps, Detector);
   });
 
   describe('FASTDetector', () => {
@@ -78,7 +78,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
       values: [20, false, TYPE_CUSTOM]
     };
     const Detector = cv.FASTDetector;
-    detectorTests(getTestImg, defaults, customProps, Detector, false);
+    detectorTests(defaults, customProps, Detector, false);
   });
 
   describe('GFTTDetector', () => {
@@ -95,7 +95,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
       values: [2000, 0.04, 2, 6, true, 0.16]
     };
     const Detector = cv.GFTTDetector;
-    detectorTests(getTestImg, defaults, customProps, Detector, false);
+    detectorTests(defaults, customProps, Detector, false);
   });
 
   describe('KAZEDetector', () => {
@@ -115,7 +115,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
       values: [true, true, 0.0020000000949949026, 8, 8, DIFFUSIVITY_CUSTOM]
     };
     const Detector = cv.KAZEDetector;
-    detectorTests(getTestImg, defaults, customProps, Detector);
+    detectorTests(defaults, customProps, Detector);
   });
 
   describe('MSERDetector', () => {
@@ -135,7 +135,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
       values: [10, 120, 28800, 0.75, 0.4, 400, 2.02, 0.006, 10]
     };
     const Detector = cv.MSERDetector;
-    detectorTests(getTestImg, defaults, customProps, Detector, false);
+    detectorTests(defaults, customProps, Detector, false);
   });
 
   describe('ORBDetector', () => {
@@ -157,12 +157,12 @@ module.exports = ({ cv, utils, getTestImg }) => {
       values: [1000, 2 * 1.2000000476837158, 16, 62, 2, 3, SCORE_TYPE_CUSTOM, 62, 40]
     };
     const Detector = cv.ORBDetector;
-    detectorTests(getTestImg, defaults, customProps, Detector);
+    detectorTests(defaults, customProps, Detector);
   });
 
   describe('SimpleBlobDetector', () => {
     const Detector = new cv.SimpleBlobDetector(new cv.SimpleBlobDetectorParams());
-    detectorTests(getTestImg, null, null, Detector, false);
+    detectorTests(null, null, Detector, false);
   });
 
   describe('drawing', () => {

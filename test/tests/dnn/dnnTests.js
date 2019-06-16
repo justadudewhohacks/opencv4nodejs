@@ -29,7 +29,6 @@ module.exports = ({ cv, utils, getTestImg }) => {
         getRequiredArgs: () => ([
           getTestImg().resizeToMax(250)
         ]),
-        explicitHasRequiredArgs: true,
         getOptionalArgsMap: () => ([
           ['scalefactor', 0.8],
           ['size', new cv.Size(3, 3)],
@@ -47,7 +46,6 @@ module.exports = ({ cv, utils, getTestImg }) => {
         getRequiredArgs: () => ([
           [getTestImg().resizeToMax(250), getTestImg().resizeToMax(250)]
         ]),
-        explicitHasRequiredArgs: true,
         getOptionalArgsMap,
         expectOutput
       });
@@ -60,7 +58,6 @@ module.exports = ({ cv, utils, getTestImg }) => {
         getRequiredArgs: () => ([
           getTestImg().resizeToMax(250)
         ]),
-        explicitHasRequiredArgs: true,
         getOptionalArgsMap: () => ([
           ['scalefactor', 0.8],
           ['size', new cv.Size(3, 3)],

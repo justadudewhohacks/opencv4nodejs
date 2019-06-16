@@ -1,23 +1,13 @@
-const cv = global.dut;
-const {
-  assertMetaData,
-  generateAPITests
-} = global.utils;
-
 const path = require('path');
 const { expect } = require('chai');
 
-const OCRHMMClassifierTests = require('./OCRHMMClassifierTests');
-const OCRHMMDecoderTests = require('./OCRHMMDecoderTests');
+module.exports = function ({ cv, utils }) {
 
-describe('text', () => {
-  if (!cv.modules.text) {
-    it('compiled without text');
-    return;
-  }
-
-  OCRHMMClassifierTests();
-  OCRHMMDecoderTests();
+  const {
+    assertMetaData,
+    generateAPITests,
+    cvVersionGreaterEqual
+  } = utils;
 
   describe('loadOCRHMMClassifierNM', () => {
     generateAPITests({
@@ -32,7 +22,7 @@ describe('text', () => {
     });
   });
 
-  if (global.utils.cvVersionGreaterEqual(3, 1, 0)) {
+  if (cvVersionGreaterEqual(3, 1, 0)) {
     describe('loadOCRHMMClassifierCNN', () => {
       generateAPITests({
         getDut: () => cv,
@@ -64,4 +54,5 @@ describe('text', () => {
       });
     });
   }
-});
+
+};

@@ -11,6 +11,6 @@ module.exports = function(cv) {
     getTestImagePath,
     getTestVideoPath,
     readTestImage: () => new cv.Mat(fs.readFileSync(path.resolve(__dirname, './Lenna.data')), 512, 512, cv.CV_8UC3),
-    readPeoplesImage: () => cv.imread('../data/people.jpeg')
+    readPeoplesTestImage: () => new cv.Mat(fs.readFileSync(path.resolve(__dirname, './people.data')), 360, 640, cv.CV_8UC3)
   };
 };

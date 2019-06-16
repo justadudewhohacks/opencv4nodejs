@@ -90,9 +90,7 @@ module.exports = function ({ cv, utils, getTestImg }) {
       getDut: () => srcMat,
       methodName: 'copy',
       methodNameSpace: 'Mat',
-      getOptionalArgs: () => ([
-        copyMask
-      ]),
+      getOptionalArg: () => copyMask,
       expectOutput
     });
   });
@@ -109,9 +107,7 @@ module.exports = function ({ cv, utils, getTestImg }) {
       getRequiredArgs: () => ([
         new cv.Mat()
       ]),
-      getOptionalArgs: () => ([
-        copyMask
-      ]),
+      getOptionalArg: () => copyMask,
       expectOutput
     });
   });
@@ -314,10 +310,7 @@ module.exports = function ({ cv, utils, getTestImg }) {
         getDut: () => dtMat,
         methodName: 'dct',
         methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([]),
-        getOptionalArgs: () => ([
-          flags
-        ]),
+        getOptionalArg: () => flags,
         expectOutput
       });
     });
@@ -327,10 +320,7 @@ module.exports = function ({ cv, utils, getTestImg }) {
         getDut: () => dtMat,
         methodName: 'idct',
         methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([]),
-        getOptionalArgs: () => ([
-          flags
-        ]),
+        getOptionalArg: () => flags,
         expectOutput
       });
     });
@@ -340,7 +330,6 @@ module.exports = function ({ cv, utils, getTestImg }) {
         getDut: () => dtMat,
         methodName: 'dft',
         methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([]),
         getOptionalArgsMap: () => ([
           ['flags', flags],
           ['nonZeroRows', 0]
@@ -354,7 +343,6 @@ module.exports = function ({ cv, utils, getTestImg }) {
         getDut: () => dtMat,
         methodName: 'idft',
         methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([]),
         getOptionalArgsMap: () => ([
           ['flags', flags],
           ['nonZeroRows', 0]
@@ -378,7 +366,7 @@ module.exports = function ({ cv, utils, getTestImg }) {
 
       generateAPITests({
         getDut: () => mat,
-        getOptionalArgs: () => [new cv.Vec(255, 255, 255)],
+        getOptionalArg: () => new cv.Vec(255, 255, 255),
         methodName: 'padToSquare',
         methodNameSpace: 'Mat',
         expectOutput
@@ -394,7 +382,7 @@ module.exports = function ({ cv, utils, getTestImg }) {
 
       generateAPITests({
         getDut: () => mat,
-        getOptionalArgs: () => [new cv.Vec(255, 255, 255)],
+        getOptionalArg: () => new cv.Vec(255, 255, 255),
         methodName: 'padToSquare',
         methodNameSpace: 'Mat',
         expectOutput
@@ -410,7 +398,7 @@ module.exports = function ({ cv, utils, getTestImg }) {
 
       generateAPITests({
         getDut: () => mat,
-        getOptionalArgs: () => [new cv.Vec(255, 255, 255)],
+        getOptionalArg: () => new cv.Vec(255, 255, 255),
         methodName: 'padToSquare',
         methodNameSpace: 'Mat',
         expectOutput
@@ -529,9 +517,7 @@ module.exports = function ({ cv, utils, getTestImg }) {
       getDut,
       methodName: 'popBack',
       methodNameSpace: 'Mat',
-      getOptionalArgs: () => ([
-        numRowsToPop
-      ]),
+      getOptionalArg: () => numRowsToPop,
       expectOutput
     });
   });

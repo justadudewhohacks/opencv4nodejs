@@ -39,9 +39,7 @@ module.exports = function ({ cv, utils }) {
       getRequiredArgs: () => ([
         getTestImagePath()
       ]),
-      getOptionalArgs: () => ([
-        flags
-      ]),
+      getOptionalArg: () => flags,
       expectOutput: (img) => {
         expect(img).to.be.instanceOf(cv.Mat);
         assertMetaData(img)(512, 512, cv.CV_8UC3);
@@ -61,9 +59,7 @@ module.exports = function ({ cv, utils }) {
         file,
         lenna
       ]),
-      getOptionalArgs: () => ([
-        flags
-      ]),
+      getOptionalArg: () => flags,
       expectOutput: () => {
         expect(fileExists(file)).to.be.true;
       }
@@ -83,9 +79,7 @@ module.exports = function ({ cv, utils }) {
           ext,
           lenna
         ]),
-        getOptionalArgs: () => ([
-          flags
-        ]),
+        getOptionalArg: () => flags,
         expectOutput: (enc) => {
           expect(enc.slice(0, pngPrefixLength)).to.deep.equal(getLennaBase64Buf().slice(0, pngPrefixLength));
         }
@@ -104,9 +98,7 @@ module.exports = function ({ cv, utils }) {
           ext,
           got
         ]),
-        getOptionalArgs: () => ([
-          flags
-        ]),
+        getOptionalArg: () => flags,
         expectOutput: (enc) => {
           expect(enc.slice(0, jpgPrefixLength)).to.deep.equal(getGotBase64Buf().slice(0, jpgPrefixLength));
         }

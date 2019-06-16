@@ -1,12 +1,13 @@
-const cv = global.dut;
-const {
-  generateAPITests,
-  funcShouldRequireArgs,
-  readTestImage
-} = global.utils;
 const { expect } = require('chai');
 
-module.exports = () => {
+module.exports = function ({ cv, utils, getTestImg }) {
+
+  const {
+    generateAPITests,
+    funcShouldRequireArgs,
+    cvVersionEqual
+  } = utils;
+
   describe('CascadeClassifier', () => {
     const xmlHaarFile = cv.HAAR_FRONTALFACE_DEFAULT;
 
@@ -41,16 +42,9 @@ module.exports = () => {
     });
 
     describe('detect', () => {
-      let cc;
-      let testImg;
-
-      before(() => {
-        cc = new cv.CascadeClassifier(xmlHaarFile);
-        testImg = readTestImage();
-      });
 
       const getRequiredArgs = () => ([
-        testImg
+        getTestImg()
       ]);
       const getOptionalArgsMap = () => ([
         ['scaleFactor', 1.2],
@@ -70,7 +64,7 @@ module.exports = () => {
         };
 
         generateAPITests({
-          getDut: () => cc,
+          getDut: () => new cv.CascadeClassifier(xmlHaarFile),
           methodName: 'detectMultiScale',
           methodNameSpace: 'CascadeClassifier',
           getRequiredArgs,
@@ -79,7 +73,7 @@ module.exports = () => {
         });
       });
 
-      (global.utils.cvVersionEqual(3, 1, 0) ? describe.skip : describe)('detectMultiScaleWithRejectLevels', () => {
+      (cvVersionEqual(3, 1, 0) ? describe.skip : describe)('detectMultiScaleWithRejectLevels', () => {
         const expectOutput = (ret) => {
           expect(ret).to.have.property('objects').to.be.an('array');
           expect(ret).to.have.property('rejectLevels').to.be.an('array');
@@ -91,7 +85,7 @@ module.exports = () => {
         };
 
         generateAPITests({
-          getDut: () => cc,
+          getDut: () => new cv.CascadeClassifier(xmlHaarFile),
           methodName: 'detectMultiScaleWithRejectLevels',
           methodNameSpace: 'CascadeClassifier',
           getRequiredArgs,

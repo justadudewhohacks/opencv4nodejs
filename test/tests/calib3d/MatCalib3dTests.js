@@ -124,9 +124,7 @@ module.exports = ({ cv, utils }) => {
       getRequiredArgs: () => ([
         patternSize
       ]),
-      getOptionalArgs: () => ([
-        flags
-      ]),
+      getOptionalArg: () => flags,
       expectOutput
     });
   });
@@ -418,9 +416,7 @@ module.exports = ({ cv, utils }) => {
         minDisparity,
         numberOfDisparities
       ]),
-      getOptionalArgs: () => ([
-        disp12MaxDisp
-      ]),
+      getOptionalArg: () => disp12MaxDisp,
       expectOutput
     });
   });

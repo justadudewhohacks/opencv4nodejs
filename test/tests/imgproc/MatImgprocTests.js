@@ -536,9 +536,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
           distanceType,
           maskSize
         ]),
-        getOptionalArgs: () => ([
-          dstType
-        ]),
+        getOptionalArg: () => dstType,
         expectOutput
       });
     });
@@ -561,9 +559,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
           distanceType,
           maskSize
         ]),
-        getOptionalArgs: () => ([
-          distLabelType
-        ]),
+        getOptionalArg: () => distLabelType,
         expectOutput
       });
     });
@@ -743,9 +739,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
           getFgdModel(),
           iterCount
         ]),
-        getOptionalArgs: () => ([
-          mode
-        ]),
+        getOptionalArg: () => mode,
         expectOutput
       });
     });
@@ -798,9 +792,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
       getDut: () => grayImg,
       methodName: 'moments',
       methodNameSpace: 'Mat',
-      getOptionalArgs: () => ([
-        isBinaryImg
-      ]),
+      getOptionalArg: () => isBinaryImg,
       expectOutput: res => expect(res).to.be.instanceOf(cv.Moments)
     });
   });
@@ -990,7 +982,6 @@ module.exports = ({ cv, utils, getTestImg }) => {
         getDut: () => img,
         methodName: 'pyrDown',
         methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([]),
         getOptionalArgsMap: () => ([
           ['size', sizeDown],
           ['borderType', cv.BORDER_REFLECT]
@@ -1004,7 +995,6 @@ module.exports = ({ cv, utils, getTestImg }) => {
         getDut: () => img,
         methodName: 'pyrUp',
         methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([]),
         getOptionalArgsMap: () => ([
           ['size', sizeUp],
           ['borderType', cv.BORDER_DEFAULT]
@@ -1033,9 +1023,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
         getRequiredArgs: () => ([
           maxlevel
         ]),
-        getOptionalArgs: () => ([
-          borderType
-        ]),
+        getOptionalArg: () => borderType,
         expectOutput
       });
     });
@@ -1260,9 +1248,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
           sigmaColor,
           sigmaSpace
         ]),
-        getOptionalArgs: () => ([
-          borderType
-        ]),
+        getOptionalArg: () => borderType,
         expectOutput: (res) => {
           assertMetaData(res)(100, 100, cv.CV_8U);
         }
@@ -1369,9 +1355,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
           ksize,
           k
         ]),
-        getOptionalArgs: () => ([
-          borderType
-        ]),
+        getOptionalArg: () => borderType,
         expectOutput: makeExpectOutput(cv.CV_32F)
       });
     });

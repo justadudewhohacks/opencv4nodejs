@@ -9,25 +9,38 @@ const ioTestSuite = require('./io')
 const dnnTestSuite = require('./dnn')
 const machinelearningTestSuite = require('./machinelearning')
 const faceTestSuite = require('./face')
+const objdetectTestSuite = require('./objdetect')
+const photoTestSuite = require('./photo')
+const textTestSuite = require('./text')
+const trackingTestSuite = require('./tracking')
+const videoTestSuite = require('./video')
+const xfeatures2dTestSuite = require('./xfeatures2d')
+const ximgprocTestSuite = require('./ximgproc')
 
 describe('cv', () => {
-
-  const {
-    readTestImage
-  } = utils
 
   console.log(cv.modules)
 
   let testImg = null;
+  let peoplesTestImg = null;
+
   const getTestImg = () => {
     if (testImg === null) {
       throw new Error('getTestImg not defined, before hook not called yet');
-
     }
     return testImg;
   };
+
+  const getPeoplesTestImg = () => {
+    if (peoplesTestImg === null) {
+      throw new Error('getPeoplesTestImg not defined, before hook not called yet');
+    }
+    return peoplesTestImg;
+  };
+
   before(() => {
     testImg = utils.readTestImage();
+    peoplesTestImg = utils.readPeoplesTestImage();
   });
 
   if (cv.modules.core) {
@@ -60,6 +73,34 @@ describe('cv', () => {
 
   if (cv.modules.face) {
     describe('face', () => faceTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.objdetect) {
+    describe('objdetect', () => objdetectTestSuite({ cv, utils, getTestImg, getPeoplesTestImg }));
+  }
+
+  if (cv.modules.photo) {
+    describe('photo', () => photoTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.text) {
+    describe('text', () => textTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.tracking) {
+    describe('tracking', () => trackingTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.video) {
+    describe('video', () => videoTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.xfeatures2d) {
+    describe('xfeatures2d', () => xfeatures2dTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.ximgproc) {
+    describe('ximgproc', () => ximgprocTestSuite({ cv, utils, getTestImg }));
   }
 
 })

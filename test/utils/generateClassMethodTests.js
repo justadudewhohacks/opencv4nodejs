@@ -19,8 +19,7 @@ const generateClassMethodTestsFactory = (cv) => (opts) => {
   describe(`${methodNameSpace}::${methodName}`, () => {
     generateAPITests(Object.assign({}, opts, {
       getDut: () => cv,
-      getRequiredArgs: () => [getClassInstance(), ...getRequiredArgs()],
-      explicitHasRequiredArgs: true
+      getRequiredArgs: () => [getClassInstance()].concat(getRequiredArgs ? getRequiredArgs() : [])
     }))
   })
 

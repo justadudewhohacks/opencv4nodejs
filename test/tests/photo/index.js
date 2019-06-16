@@ -1,15 +1,15 @@
-const cv = global.dut;
-const {
-  assertError,
-  assertPropsWithValue,
-  assertMetaData,
-  funcShouldRequireArgs,
-  readTestImage,
-  generateAPITests
-} = global.utils;
 const { expect } = require('chai');
 
-describe('photo', () => {
+module.exports = function ({ cv, utils }) {
+
+  const {
+    assertError,
+    assertPropsWithValue,
+    assertMetaData,
+    funcShouldRequireArgs,
+    readTestImage,
+    generateAPITests
+  } = utils;
 
   describe('inpaint', () => {
 
@@ -60,4 +60,5 @@ describe('photo', () => {
         }).catch(done);
     });
   })
-});
+
+};

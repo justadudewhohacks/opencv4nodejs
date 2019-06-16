@@ -1,21 +1,13 @@
-const cv = global.dut;
-const { assertMetaData, assertPropsWithValue, funcShouldRequireArgs, readTestImage } = global.utils;
 const { assert, expect } = require('chai');
-const MatXImgprocTests = require('./MatXImgprocTests');
 
-describe('ximgproc', () => {
-  if (!cv.modules.ximgproc) {
-    it('compiled without ximgproc');
-    return;
-  }
+module.exports = ({ cv, utils, getTestImg }) => {
 
-  MatXImgprocTests();
-
-  let testImg;
-
-  before(() => {
-    testImg = readTestImage().resizeToMax(250);
-  });
+  const {
+    assertMetaData,
+    assertPropsWithValue,
+    funcShouldRequireArgs,
+    cvVersionGreaterEqual
+  } = utils;
 
   describe('SuperpixelSEEDS', () => {
     const num_superpixels = 100;
@@ -27,9 +19,11 @@ describe('ximgproc', () => {
       });
 
       it('should be constructable with required args', () => {
-        const superpixelSeeds = new cv.SuperpixelSEEDS(testImg, num_superpixels, num_levels);
+        const superpixelSeeds = new cv.SuperpixelSEEDS(getTestImg().resizeToMax(250), num_superpixels, num_levels);
         expect(superpixelSeeds).to.have.property('image').instanceOf(cv.Mat);
-        assertMetaData(testImg)(superpixelSeeds.image);
+        assertMetaData(superpixelSeeds.image)({
+          rows: 250, cols: 250, type: cv.CV_8UC3
+        });
         assertPropsWithValue(superpixelSeeds)({
           num_superpixels,
           num_levels
@@ -40,17 +34,17 @@ describe('ximgproc', () => {
     // TODO: FIX ME
     describe('iterate', () => {
       it('should iterate with default values', () => {
-        const superpixelSeeds = new cv.SuperpixelSEEDS(testImg, num_superpixels, num_levels);
+        const superpixelSeeds = new cv.SuperpixelSEEDS(getTestImg().resizeToMax(250), num_superpixels, num_levels);
         superpixelSeeds.iterate();
         assert(superpixelSeeds.numCalculatedSuperpixels > 0, 'no superpixels calculated');
         assertPropsWithValue(superpixelSeeds.labels)({
-          rows: testImg.rows, cols: testImg.cols, type: cv.CV_32S
+          rows: 250, cols: 250, type: cv.CV_32S
         });
       });
     });
   });
 
-  if (global.utils.cvVersionGreaterEqual(3, 1, 0)) {
+  if (cvVersionGreaterEqual(3, 1, 0)) {
     describe('SuperpixelSLIC', () => {
       const algorithm = cv.SLICO;
 
@@ -60,9 +54,11 @@ describe('ximgproc', () => {
         });
 
         it('should be constructable with required args', () => {
-          const superpixel = new cv.SuperpixelSLIC(testImg, algorithm);
+          const superpixel = new cv.SuperpixelSLIC(getTestImg().resizeToMax(250), algorithm);
           expect(superpixel).to.have.property('image').instanceOf(cv.Mat);
-          assertMetaData(testImg)(superpixel.image);
+          assertMetaData(superpixel.image)({
+            rows: 250, cols: 250, type: cv.CV_8UC3
+          });
           assertPropsWithValue(superpixel)({
             algorithm
           });
@@ -71,11 +67,11 @@ describe('ximgproc', () => {
 
       describe('iterate', () => {
         it('should iterate with default values', () => {
-          const superpixel = new cv.SuperpixelSLIC(testImg, algorithm);
+          const superpixel = new cv.SuperpixelSLIC(getTestImg().resizeToMax(250), algorithm);
           superpixel.iterate();
           assert(superpixel.numCalculatedSuperpixels > 0, 'no superpixels calculated');
           assertPropsWithValue(superpixel.labels)({
-            rows: testImg.rows, cols: testImg.cols, type: cv.CV_32S
+            rows: 250, cols: 250, type: cv.CV_32S
           });
         });
       });
@@ -89,22 +85,25 @@ describe('ximgproc', () => {
         });
 
         it('should be constructable with required args', () => {
-          const superpixel = new cv.SuperpixelLSC(testImg);
+          const superpixel = new cv.SuperpixelLSC(getTestImg().resizeToMax(250));
           expect(superpixel).to.have.property('image').instanceOf(cv.Mat);
-          assertMetaData(testImg)(superpixel.image);
+          assertMetaData(superpixel.image)({
+            rows: 250, cols: 250, type: cv.CV_8UC3
+          });
         });
       });
 
       describe('iterate', () => {
         it('should iterate with default values', () => {
-          const superpixel = new cv.SuperpixelLSC(testImg);
+          const superpixel = new cv.SuperpixelLSC(getTestImg().resizeToMax(250));
           superpixel.iterate();
           assert(superpixel.numCalculatedSuperpixels > 0, 'no superpixels calculated');
           assertPropsWithValue(superpixel.labels)({
-            rows: testImg.rows, cols: testImg.cols, type: cv.CV_32S
+            rows: 250, cols: 250, type: cv.CV_32S
           });
         });
       });
     });
   }
-});
+
+};

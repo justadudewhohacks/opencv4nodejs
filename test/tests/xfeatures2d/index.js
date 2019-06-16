@@ -1,18 +1,7 @@
-const opencv = global.dut;
-const { readTestImage } = global.utils;
-const detectorTests = require('./detectorTests');
+const detectorTestsFactory = require('../features2d/detectorTests');
 
-describe('xfeatures2d', () => {
-  if (!opencv.modules.xfeatures2d) {
-    it('compiled without xfeatures2d');
-    return;
-  }
-
-  let testImg;
-  before(() => {
-    testImg = readTestImage().resizeToMax(250);
-  });
-
+module.exports = function ({ cv, utils, getTestImg }) {
+  const detectorTests = detectorTestsFactory({ cv, utils, getTestImg: () => getTestImg().resizeToMax(250) })
   describe('SIFTDetector', () => {
     const defaults = {
       sigma: 1.6,
@@ -25,8 +14,8 @@ describe('xfeatures2d', () => {
       args: ['nFeatures', 'nOctaveLayers', 'contrastThreshold', 'edgeThreshold', 'sigma'],
       values: [500, 6, 0.16, 20, 3.2]
     };
-    const Detector = opencv.SIFTDetector;
-    detectorTests(() => testImg, defaults, customProps, Detector);
+    const Detector = cv.SIFTDetector;
+    detectorTests(defaults, customProps, Detector);
   });
 
   describe('SURFDetector', () => {
@@ -41,7 +30,8 @@ describe('xfeatures2d', () => {
       args: ['hessianThreshold', 'nOctaves', 'nOctaveLayers', 'extended', 'upright'],
       values: [1000, 8, 6, true, true]
     };
-    const Detector = opencv.SURFDetector;
-    detectorTests(() => testImg, defaults, customProps, Detector);
+    const Detector = cv.SURFDetector;
+    detectorTests(defaults, customProps, Detector);
   });
-});
+
+};

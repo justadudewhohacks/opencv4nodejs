@@ -103,9 +103,7 @@ module.exports = ({ cv, utils }) => {
           getRequiredArgs: () => ([
             trainData
           ]),
-          getOptionalArgs: () => ([
-            cv.statModel.RAW_OUTPUT
-          ]),
+          getOptionalArg: () => cv.statModel.RAW_OUTPUT,
           expectOutput
         });
       });

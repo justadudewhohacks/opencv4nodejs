@@ -169,9 +169,7 @@ module.exports = function ({ cv, utils }) {
       getRequiredArgs: () => ([
         x, y
       ]),
-      getOptionalArgs: () => ([
-        angleInDegrees
-      ]),
+      getOptionalArg: () => angleInDegrees,
       expectOutput
     });
   });
@@ -194,9 +192,7 @@ module.exports = function ({ cv, utils }) {
       getRequiredArgs: () => ([
         magnitude, angle
       ]),
-      getOptionalArgs: () => ([
-        angleInDegrees
-      ]),
+      getOptionalArg: () => angleInDegrees,
       expectOutput
     });
   });
@@ -350,9 +346,7 @@ module.exports = function ({ cv, utils }) {
       methodName: 'minMaxLoc',
       classNameSpace: 'Mat',
       methodNameSpace: 'Core',
-      getOptionalArgs: () => ([
-        mask
-      ]),
+      getOptionalArg: () => mask,
       expectOutput
     });
   });
@@ -588,9 +582,7 @@ module.exports = function ({ cv, utils }) {
         methodName: 'mean',
         classNameSpace: 'Mat',
         methodNameSpace: 'Core',
-        getOptionalArgs: () => ([
-          mask
-        ]),
+        getOptionalArg: () => mask,
         expectOutput: (res) => {
           expect(res.at(0)).to.eq(0.75);
         }
@@ -607,9 +599,7 @@ module.exports = function ({ cv, utils }) {
         methodName: 'mean',
         classNameSpace: 'Mat',
         methodNameSpace: 'Core',
-        getOptionalArgs: () => ([
-          mask
-        ]),
+        getOptionalArg: () => mask,
         expectOutput: (res) => {
           expect(res.at(0)).to.eq(0.75);
           expect(res.at(1)).to.eq(1);
@@ -627,9 +617,7 @@ module.exports = function ({ cv, utils }) {
         methodName: 'mean',
         classNameSpace: 'Mat',
         methodNameSpace: 'Core',
-        getOptionalArgs: () => ([
-          mask
-        ]),
+        getOptionalArg: () => mask,
         expectOutput: (res) => {
           expect(res.at(0)).to.eq(0.75);
           expect(res.at(1)).to.eq(1);
@@ -648,9 +636,7 @@ module.exports = function ({ cv, utils }) {
         methodName: 'mean',
         classNameSpace: 'Mat',
         methodNameSpace: 'Core',
-        getOptionalArgs: () => ([
-          mask
-        ]),
+        getOptionalArg: () => mask,
         expectOutput: (res) => {
           expect(res.at(0)).to.eq(0.75);
           expect(res.at(1)).to.eq(1);
@@ -668,9 +654,7 @@ module.exports = function ({ cv, utils }) {
       methodName: 'meanStdDev',
       classNameSpace: 'Mat',
       methodNameSpace: 'Core',
-      getOptionalArgs: () => ([
-        mask
-      ]),
+      getOptionalArg: () => mask,
       expectOutput: (res) => {
         expect(res).to.have.property('mean').to.be.instanceOf(cv.Mat);
         expect(res).to.have.property('stddev').to.be.instanceOf(cv.Mat);

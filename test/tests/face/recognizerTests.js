@@ -36,7 +36,6 @@ module.exports = ({ cv, utils, getTestImg }) => (args, values, Recognizer) => {
         [getTestImg().bgrToGray(), getTestImg().bgrToGray()],
         [1, 2]
       ]),
-      explicitHasRequiredArgs: true,
       expectOutput
     });
   });
@@ -62,7 +61,6 @@ module.exports = ({ cv, utils, getTestImg }) => (args, values, Recognizer) => {
         getRequiredArgs: () => ([
           getTestImg().bgrToGray()
         ]),
-        explicitHasRequiredArgs: true,
         expectOutput
       });
     });

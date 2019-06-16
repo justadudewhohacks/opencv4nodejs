@@ -1,13 +1,13 @@
 const { assert, expect } = require('chai');
 
-module.exports = function({ cv, utils }) {
+module.exports = function({ cv, utils, getTestImg }) {
 
   const {
     assertPropsWithValue,
     generateAPITests
   } = utils;
 
-  return (getTestImg, defaults, customProps, Detector, implementsCompute = true) => {
+  return (defaults, customProps, Detector, implementsCompute = true) => {
 
     const getDut = () => (typeof Detector === 'function' ? new Detector() : Detector);
 
@@ -61,7 +61,6 @@ module.exports = function({ cv, utils }) {
         getRequiredArgs: () => ([
           getTestImg()
         ]),
-        explicitHasRequiredArgs: true,
         expectOutput: (keyPoints) => {
           expect(keyPoints).to.be.a('array');
           assert(keyPoints.length > 0, 'no KeyPoints detected');
@@ -86,7 +85,6 @@ module.exports = function({ cv, utils }) {
             getTestImg(),
             keyPoints
           ]),
-          explicitHasRequiredArgs: true,
           expectOutput: (desc) => {
             assertPropsWithValue(desc)({ rows: keyPoints.length });
           }
