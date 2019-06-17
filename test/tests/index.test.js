@@ -51,17 +51,19 @@ describe('cv', () => {
     peoplesTestImg = utils.readPeoplesTestImage();
   });
 
+  let builtModules = modules.concat(xmodules)
+  if (process.env.APPVEYOR_BUILD) {
+    // OpenCV installed via choco does not include contrib modules
+    builtModules = modules
+  }
+  if (process.env.TEST_MODULE_LIST) {
+    builtModules = process.env.TEST_MODULE_LIST.split(',')
+  }
+
+  console.log('compiled with the following modules:', cv.modules)
+  console.log('expected modules to be built:', builtModules)
+
   it('all modules should be built', () => {
-    let builtModules = modules.concat(xmodules)
-    if (process.env.APPVEYOR_BUILD) {
-      // OpenCV installed via choco does not include contrib modules
-      builtModules = modules
-    }
-    if (process.env.TEST_MODULE_LIST) {
-      builtModules = process.env.TEST_MODULE_LIST.split(',')
-    }
-    console.log('compiled with the following modules:', cv.modules)
-    console.log('expected modules to be built:', builtModules)
 
     builtModules.forEach(m => expect(cv.modules).to.have.property(m));
   })
