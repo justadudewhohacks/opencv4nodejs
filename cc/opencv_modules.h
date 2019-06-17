@@ -4,15 +4,17 @@
 
 #include <opencv2/opencv_modules.hpp>
 
+// we do not support DNN module for OpenCV 3.2 and lower
+#if CV_VERSION_LOWER_THAN(3, 3, 0)
+#undef HAVE_OPENCV_DNN
+#endif
+
 #else
 // OpenCV < 3.2.0 does not contain opencv_modules.hpp,
 // thus we include the modules based on which libraries
 // are found in OPENCV_LIB_DIR
 #ifdef OPENCV4NODEJS_FOUND_LIBRARY_CALIB3D
 #define HAVE_OPENCV_CALIB3D
-#endif
-#ifdef OPENCV4NODEJS_FOUND_LIBRARY_DNN
-#define HAVE_OPENCV_DNN
 #endif
 #ifdef OPENCV4NODEJS_FOUND_LIBRARY_FACE
 #define HAVE_OPENCV_FACE
