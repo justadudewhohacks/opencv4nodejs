@@ -1,3 +1,4 @@
+#include "opencv_modules.h"
 #include "Mat.h"
 #include "MatBindings.h"
 #include "coreBindings.h"

@@ -59,12 +59,15 @@ describe('cv', () => {
   if (process.env.TEST_MODULE_LIST) {
     builtModules = process.env.TEST_MODULE_LIST.split(',')
   }
+  // dnn module for OpenCV 3.2 and lower not supported
+  if (cvVersionLowerThan(3, 3, 0)) {
+    builtModules = builtModules.filter(m => m !== 'dnn')
+  }
 
   console.log('compiled with the following modules:', cv.modules)
   console.log('expected modules to be built:', builtModules)
 
   it('all modules should be built', () => {
-
     builtModules.forEach(m => expect(cv.modules).to.have.property(m));
   })
 
