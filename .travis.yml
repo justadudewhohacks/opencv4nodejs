@@ -53,21 +53,25 @@ matrix:
       env:
         - OPENCV_VERSION=4.1.0-core
           BUILD_TASK=test
+          TEST_MODULE_LIST=core
     - os: linux
       node_js: $LATEST_STABLE_NODEJS_VERSION
       env:
         - OPENCV_VERSION=4.1.0-imgproc
           BUILD_TASK=test
+          TEST_MODULE_LIST=imgproc
     - os: linux
       node_js: $LATEST_STABLE_NODEJS_VERSION
       env:
         - OPENCV_VERSION=4.1.0-calib3d
           BUILD_TASK=test
+          TEST_MODULE_LIST=calib3d
     - os: linux
       node_js: $LATEST_STABLE_NODEJS_VERSION
       env:
         - OPENCV_VERSION=4.1.0-dnn
           BUILD_TASK=test
+          TEST_MODULE_LIST=dnn
 
     # OpenCV 3.X without contrib
     - os: linux

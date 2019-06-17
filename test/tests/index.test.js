@@ -18,9 +18,16 @@ const videoTestSuite = require('./video')
 const xfeatures2dTestSuite = require('./xfeatures2d')
 const ximgprocTestSuite = require('./ximgproc')
 
-describe('cv', () => {
+const modules = [
+  'core', 'imgproc',  'calib3d', 'features2d', 'io',
+  'dnn', 'ml', 'objdetect', 'photo', 'video'
+]
 
-  console.log(cv.modules)
+const xmodules = [
+  'face', 'text', 'tracking', 'xfeatures2d', 'ximgproc'
+]
+
+describe('cv', () => {
 
   let testImg = null;
   let peoplesTestImg = null;
@@ -44,16 +51,20 @@ describe('cv', () => {
     peoplesTestImg = utils.readPeoplesTestImage();
   });
 
-  if (!process.env.TEST_MODULE_LIST) {
-    it('all modules should be built', () => {
-      const modules = [
-        'core', 'imgproc',  'calib3d', 'features2d', 'io',
-        'dnn', 'ml', 'face', 'objdetect', 'photo', 'text',
-        'tracking', 'video', 'xfeatures2d', 'ximgproc'
-      ]
-      modules.forEach(m => expect(cv.modules).to.have.property(m));
-    })
-  }
+  it('all modules should be built', () => {
+    let builtModules = modules.concat(xmodules)
+    if (process.env.APPVEYOR_BUILD) {
+      // OpenCV installed via choco does not include contrib modules
+      builtModules = modules
+    }
+    if (process.env.TEST_MODULE_LIST) {
+      builtModules = process.env.TEST_MODULE_LIST.split(',')
+    }
+    console.log('compiled with the following modules:', cv.modules)
+    console.log('expected modules to be built:', builtModules)
+
+    builtModules.forEach(m => expect(cv.modules).to.have.property(m));
+  })
 
   if (cv.modules.core) {
     describe('core', () => coreTestSuite({ cv, utils, getTestImg }));
@@ -83,10 +94,6 @@ describe('cv', () => {
     describe('machinelearning', () => machinelearningTestSuite({ cv, utils, getTestImg }));
   }
 
-  if (cv.modules.face) {
-    describe('face', () => faceTestSuite({ cv, utils, getTestImg }));
-  }
-
   if (cv.modules.objdetect) {
     describe('objdetect', () => objdetectTestSuite({ cv, utils, getTestImg, getPeoplesTestImg }));
   }
@@ -95,16 +102,20 @@ describe('cv', () => {
     describe('photo', () => photoTestSuite({ cv, utils, getTestImg }));
   }
 
+  if (cv.modules.video) {
+    describe('video', () => videoTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.face) {
+    describe('face', () => faceTestSuite({ cv, utils, getTestImg }));
+  }
+
   if (cv.modules.text) {
     describe('text', () => textTestSuite({ cv, utils, getTestImg }));
   }
 
   if (cv.modules.tracking) {
     describe('tracking', () => trackingTestSuite({ cv, utils, getTestImg }));
-  }
-
-  if (cv.modules.video) {
-    describe('video', () => videoTestSuite({ cv, utils, getTestImg }));
   }
 
   if (cv.modules.xfeatures2d) {

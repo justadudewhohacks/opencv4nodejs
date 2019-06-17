@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "scripts": {
     "test": "mocha --timeout 30000 ./tests/index.test.js",
-    "test-appveyor": "mocha --timeout 30000 ./tests/index.test.js",
+    "test-appveyor": "set APPVEYOR_BUILD=true && mocha --timeout 30000 ./tests/index.test.js",
     "test-docker": "DOCKER_BUILD=true mocha --timeout 60000 ./tests/index.test.js",
     "test-externalMemTrackingOther": "mocha --timeout 30000 ./externalMemTracking/other/index.test.js",
     "test-externalMemTracking-testDisableWithEnv": "mocha ./externalMemTracking/disableWithEnv.test.js",
