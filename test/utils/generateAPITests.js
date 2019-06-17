@@ -15,15 +15,12 @@ const {
 } = require('./commons');
 
 const getDefaultAPITestOpts = (opts) => Object.assign({}, {
-  getRequiredArgs: getEmptyArray,
-  getOptionalArgsMap: getEmptyArray,
   hasAsync: true,
   otherSyncTests: emptyFunc,
   otherAsyncCallbackedTests: emptyFunc,
   otherAsyncPromisedTests: emptyFunc,
   beforeHook: null,
-  afterHook: null,
-  explicitHasRequiredArgs: false
+  afterHook: null
 }, opts)
 
 exports.getDefaultAPITestOpts = getDefaultAPITestOpts
@@ -34,30 +31,32 @@ exports.generateAPITests = (opts) => {
     methodName,
     methodNameSpace,
     expectOutput,
-    getRequiredArgs,
+    getOptionalArg,
     getOptionalArgsMap,
     hasAsync,
     otherSyncTests,
     otherAsyncCallbackedTests,
     otherAsyncPromisedTests,
     beforeHook,
-    afterHook,
-    explicitHasRequiredArgs
+    afterHook
   } = getDefaultAPITestOpts(opts)
 
   const methodNameAsync = `${methodName}Async`;
-  const getOptionalArgs = opts.getOptionalArgs || (() => getOptionalArgsMap().map(kv => kv[1]));
+  const getRequiredArgs = opts.getRequiredArgs || getEmptyArray;
+  const getOptionalArgs = getOptionalArg
+    ? () => [getOptionalArg()]
+    : (getOptionalArgsMap
+      ? () => getOptionalArgsMap().map(kv => kv[1])
+      : getEmptyArray
+    );
   const getOptionalArgsObject = () => {
     const optionalArgsObject = {};
     getOptionalArgsMap().forEach((kv) => { optionalArgsObject[kv[0]] = kv[1]; });
     return optionalArgsObject;
   };
-
-  // use explicitHasRequiredArgs if getRequiredArgs would throw because args
-  // may be initialized in a before statement and are undefined during test creation
-  const hasRequiredArgs = explicitHasRequiredArgs || !!getRequiredArgs().length;
-  const hasOptArgs = !!getOptionalArgs().length;
-  const hasOptArgsObject = getOptionalArgs().length > 1;
+  const hasRequiredArgs = !!opts.getRequiredArgs;
+  const hasOptArgs = !!getOptionalArg || !!getOptionalArgsMap;
+  const hasOptArgsObject = !!getOptionalArgsMap;
 
   const expectAsyncOutput = (done, dut, args, res) => {
     try {

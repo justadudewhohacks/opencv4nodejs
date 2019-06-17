@@ -1,6 +1,6 @@
 const { generateAPITests, getDefaultAPITestOpts } = require('./generateAPITests');
 
-exports.generateClassMethodTests = (opts) => {
+const generateClassMethodTestsFactory = (cv) => (opts) => {
   const {
     getClassInstance,
     classNameSpace,
@@ -18,10 +18,11 @@ exports.generateClassMethodTests = (opts) => {
 
   describe(`${methodNameSpace}::${methodName}`, () => {
     generateAPITests(Object.assign({}, opts, {
-      getDut: () => global.dut,
-      getRequiredArgs: () => [getClassInstance(), ...getRequiredArgs()],
-      explicitHasRequiredArgs: true
+      getDut: () => cv,
+      getRequiredArgs: () => [getClassInstance()].concat(getRequiredArgs ? getRequiredArgs() : [])
     }))
   })
 
 }
+
+module.exports = generateClassMethodTestsFactory;

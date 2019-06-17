@@ -1,24 +1,28 @@
-const cv = global.dut;
-const { assertDataDeepEquals, assertDataAlmostDeepEquals, assertMetaData } = global.utils;
 const { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
   intMin, floatMin, floatMax, doubleMin, doubleMax } = require('./typeRanges');
 
-const rows = 4;
-const cols = 3;
-const matDataFromValue = val => Array(rows).fill(Array(cols).fill(val));
-const createAndAssertMatFilled = (type, value) => {
-  const mat = new cv.Mat(rows, cols, type, value);
+module.exports = function ({ cv, utils }) {
 
-  assertMetaData(mat)(rows, cols, type);
-  if ([cv.CV_32FC1, cv.CV_32FC2, cv.CV_32FC3, cv.CV_32FC4].some(matType => matType === type)) {
-    assertDataAlmostDeepEquals(matDataFromValue(value), mat.getDataAsArray());
-  } else {
-    assertDataDeepEquals(matDataFromValue(value), mat.getDataAsArray());
-  }
-};
+  const {
+    assertDataDeepEquals,
+    assertDataAlmostDeepEquals,
+    assertMetaData
+  } = utils;
 
+  const rows = 4;
+  const cols = 3;
+  const matDataFromValue = val => Array(rows).fill(Array(cols).fill(val));
+  const createAndAssertMatFilled = (type, value) => {
+    const mat = new cv.Mat(rows, cols, type, value);
 
-module.exports = () =>
+    assertMetaData(mat)(rows, cols, type);
+    if ([cv.CV_32FC1, cv.CV_32FC2, cv.CV_32FC3, cv.CV_32FC4].some(matType => matType === type)) {
+      assertDataAlmostDeepEquals(matDataFromValue(value), mat.getDataAsArray());
+    } else {
+      assertDataDeepEquals(matDataFromValue(value), mat.getDataAsArray());
+    }
+  };
+
   describe('constructor fill with value', () => {
     it('should initialize CV_8UC1 with correct data', () => {
       createAndAssertMatFilled(cv.CV_8UC1, ucharMax);
@@ -145,3 +149,5 @@ module.exports = () =>
       createAndAssertMatFilled(cv.CV_64FC4, [doubleMax, doubleMin, -doubleMax, -doubleMin]);
     });
   });
+
+};

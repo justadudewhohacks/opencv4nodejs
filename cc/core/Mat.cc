@@ -1,12 +1,17 @@
+#include "opencv_modules.h"
 #include "Mat.h"
-#include "MatImgproc.h"
-#include "MatCalib3d.h"
 #include "MatBindings.h"
 #include "coreBindings.h"
 
-#ifdef HAVE_XIMGPROC
-#include "MatXimgproc.h"
-#endif // HAVE_XIMGPROC
+#ifdef HAVE_OPENCV_CALIB3D
+#include "../calib3d/MatCalib3d.h"
+#endif
+#ifdef HAVE_OPENCV_IMGPROC
+#include "../imgproc/MatImgproc.h"
+#endif
+#ifdef HAVE_OPENCV_XIMGPROC
+#include "../ximgproc/MatXimgproc.h"
+#endif
 
 Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
 
@@ -115,11 +120,15 @@ NAN_MODULE_INIT(Mat::Init) {
 
   FF_PROTO_SET_MAT_OPERATIONS(ctor);
 
-  MatImgproc::Init(ctor);
+#ifdef HAVE_OPENCV_CALIB3D
   MatCalib3d::Init(ctor);
-  #ifdef HAVE_XIMGPROC
+#endif
+#ifdef HAVE_OPENCV_IMGPROC
+  MatImgproc::Init(ctor);
+#endif
+  #ifdef HAVE_OPENCV_XIMGPROC
   MatXimgproc::Init(ctor);
-  #endif // HAVE_XIMGPROC
+  #endif
 
   Nan::Set(target,Nan::New("Mat").ToLocalChecked(), FF::getFunction(ctor));
 };

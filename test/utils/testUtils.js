@@ -1,8 +1,6 @@
 const { assert, expect } = require('chai');
 const fs = require('fs');
 
-const cv = global.dut;
-
 const assertError = (func, msg) => {
   let errMsg = '';
   try {
@@ -77,17 +75,6 @@ exports._asyncFuncShouldRequireArgs = (func) => {
 
 exports.expectFloat = (val, expected) =>
   expect(val).to.be.a('number').above(expected - 0.01).below(expected + 0.01);
-
-const getTestImagePath = (isPng = true) =>
-  (isPng ? '../data/Lenna.png' : '../data/got.jpg');
-
-exports.getTestImagePath = getTestImagePath;
-
-exports.readTestImage = (isPng = true) => cv.imread(getTestImagePath(isPng));
-
-exports.readPeoplesImage = () => cv.imread('../data/people.jpeg');
-
-exports.getTestVideoPath = () => '../data/traffic.mp4';
 
 const tmpdataDir = './tmpdata';
 

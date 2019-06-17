@@ -1,24 +1,25 @@
-const cv = global.dut;
-const {
-  assertError,
-  assertDataDeepEquals,
-  assertMetaData
-} = global.utils;
 const { expect } = require('chai');
 
-const operatorRequiresArg = (func, isScalar) => {
-  it('should throw if no args', () => {
-    assertError(
-      () => {
-        const mat = new cv.Mat();
-        return mat[func].bind(mat)();
-      },
-      `expected arg to be ${isScalar ? 'a Scalar' : 'an instance of Mat'}`
-    );
-  });
-};
+module.exports = function ({ cv, utils }) {
 
-module.exports = () => {
+  const {
+    assertError,
+    assertDataDeepEquals,
+    assertMetaData
+  } = utils;
+
+  const operatorRequiresArg = (func, isScalar) => {
+    it('should throw if no args', () => {
+      assertError(
+        () => {
+          const mat = new cv.Mat();
+          return mat[func].bind(mat)();
+        },
+        `expected arg to be ${isScalar ? 'a Scalar' : 'an instance of Mat'}`
+      );
+    });
+  };
+
   describe('add', () => {
     operatorRequiresArg('add');
 
@@ -352,7 +353,7 @@ module.exports = () => {
       assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
-  
+
   describe('matMul', () => {
     operatorRequiresArg('matMul');
 
@@ -374,4 +375,5 @@ module.exports = () => {
       assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
+
 };

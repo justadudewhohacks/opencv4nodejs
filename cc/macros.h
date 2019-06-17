@@ -1,4 +1,5 @@
 #include "NativeNodeUtils.h"
+#include <opencv2/core.hpp>
 
 #ifndef __FF_MACROS_H__
 #define __FF_MACROS_H__

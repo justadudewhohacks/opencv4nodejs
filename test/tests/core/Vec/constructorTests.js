@@ -1,39 +1,42 @@
-const { Vec } = global.dut;
-const { assertError, assertPropsWithValue } = global.utils;
+module.exports = function ({ cv, utils }) {
 
-module.exports = () => {
+  const {
+    assertError,
+    assertPropsWithValue
+  } = utils;
+
   describe('constructor', () => {
     it('should throw if args empty', () => {
-      assertError(() => new Vec(), 'expected arguments');
+      assertError(() => new cv.Vec(), 'expected arguments');
     });
 
     it('should throw if insufficient args', () => {
-      assertError(() => new Vec(0), 'expected arguments');
+      assertError(() => new cv.Vec(0), 'expected arguments');
     });
 
     describe('Vec2', () => {
       it('should have int positions', () => {
         const x = 100;
         const y = 200;
-        assertPropsWithValue(new Vec(x, y))({ x, y });
+        assertPropsWithValue(new cv.Vec(x, y))({ x, y });
       });
 
       it('should have double positions', () => {
         const x = 100.12345;
         const y = 200.89764;
-        assertPropsWithValue(new Vec(x, y))({ x, y });
+        assertPropsWithValue(new cv.Vec(x, y))({ x, y });
       });
 
       it('should have negative int positions', () => {
         const x = -100;
         const y = -200;
-        assertPropsWithValue(new Vec(x, y))({ x, y });
+        assertPropsWithValue(new cv.Vec(x, y))({ x, y });
       });
 
       it('should have negative double positions', () => {
         const x = -100.12345;
         const y = -200.89764;
-        assertPropsWithValue(new Vec(x, y))({ x, y });
+        assertPropsWithValue(new cv.Vec(x, y))({ x, y });
       });
     });
 
@@ -42,14 +45,14 @@ module.exports = () => {
         const x = 100;
         const y = 200;
         const z = 300;
-        assertPropsWithValue(new Vec(x, y, z))({ x, y, z });
+        assertPropsWithValue(new cv.Vec(x, y, z))({ x, y, z });
       });
 
       it('should have double positions', () => {
         const x = 100.12345;
         const y = 200.89764;
         const z = 300.034;
-        assertPropsWithValue(new Vec(x, y, z))({ x, y, z });
+        assertPropsWithValue(new cv.Vec(x, y, z))({ x, y, z });
       });
 
       it('should have negative int positions', () => {
@@ -57,7 +60,7 @@ module.exports = () => {
           const x = -100;
           const y = -200;
           const z = -300;
-          assertPropsWithValue(new Vec(x, y, z))({ x, y, z });
+          assertPropsWithValue(new cv.Vec(x, y, z))({ x, y, z });
         });
       });
 
@@ -65,7 +68,7 @@ module.exports = () => {
         const x = -100.12345;
         const y = -200.89764;
         const z = -300.034;
-        assertPropsWithValue(new Vec(x, y, z))({ x, y, z });
+        assertPropsWithValue(new cv.Vec(x, y, z))({ x, y, z });
       });
     });
 
@@ -75,7 +78,7 @@ module.exports = () => {
         const x = 100;
         const y = 200;
         const z = 300;
-        assertPropsWithValue(new Vec(w, x, y, z))({ w, x, y, z });
+        assertPropsWithValue(new cv.Vec(w, x, y, z))({ w, x, y, z });
       });
 
       it('should have double positions', () => {
@@ -83,7 +86,7 @@ module.exports = () => {
         const x = 100.12345;
         const y = 200.89764;
         const z = 300.034;
-        assertPropsWithValue(new Vec(w, x, y, z))({ w, x, y, z });
+        assertPropsWithValue(new cv.Vec(w, x, y, z))({ w, x, y, z });
       });
 
       it('should have negative int positions', () => {
@@ -92,7 +95,7 @@ module.exports = () => {
           const x = -100;
           const y = -200;
           const z = -300;
-          assertPropsWithValue(new Vec(w, x, y, z))({ w, x, y, z });
+          assertPropsWithValue(new cv.Vec(w, x, y, z))({ w, x, y, z });
         });
       });
 
@@ -101,7 +104,7 @@ module.exports = () => {
         const x = -100.12345;
         const y = -200.89764;
         const z = -300.034;
-        assertPropsWithValue(new Vec(w, x, y, z))({ w, x, y, z });
+        assertPropsWithValue(new cv.Vec(w, x, y, z))({ w, x, y, z });
       });
     });
   });
