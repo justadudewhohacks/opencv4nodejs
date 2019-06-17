@@ -79,14 +79,14 @@ matrix:
       env:
         - OPENCV_VERSION=$OPENCV3_LATEST
           BUILD_TASK=test
-          TEST_MODULE_LIST="core,calib3d,dnn,features2d,imgproc,io,ml,objdetect,photo,video"
+          TEST_MODULE_LIST=core,calib3d,dnn,features2d,imgproc,io,ml,objdetect,photo,video
     # OpenCV 4.X without contrib
     - os: linux
       node_js: $LATEST_STABLE_NODEJS_VERSION
       env:
         - OPENCV_VERSION=$OPENCV4_LATEST
           BUILD_TASK=test
-          TEST_MODULE_LIST="core,calib3d,dnn,features2d,imgproc,io,ml,objdetect,photo,video"
+          TEST_MODULE_LIST=core,calib3d,dnn,features2d,imgproc,io,ml,objdetect,photo,video
     # OpenCV 3.X contrib world
     - os: linux
       node_js: $LATEST_STABLE_NODEJS_VERSION
@@ -162,12 +162,12 @@ matrix:
           BUILD_TASK=cover
 
     # osx opencv@3
+    # apparently opencv@3 brew package does not include opencv text modules
     - os: osx
       node_js: $LATEST_STABLE_NODEJS_VERSION
       env:
         - OPENCV_VERSION=3
-        # apparently opencv@3 brew package does not include opencv text module
-          TEST_MODULE_LIST="core,calib3d,dnn,features2d,imgproc,io,ml,objdetect,photo,video,face,tracking,xfeatures2d,ximgproc"
+          TEST_MODULE_LIST=core,calib3d,dnn,features2d,imgproc,io,ml,objdetect,photo,video,face,tracking,xfeatures2d,ximgproc
 
     # osx opencv@4
     - os: osx
