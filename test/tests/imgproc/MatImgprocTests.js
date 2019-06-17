@@ -1432,6 +1432,61 @@ module.exports = ({ cv, utils, getTestImg }) => {
     });
   });
 
+  describe('inRange', () => {
+    const expectOutput = (inRangeMat) => {
+      assertMetaData(inRangeMat)(2, 3, cv.CV_8U);
+      assertDataDeepEquals(
+        [
+          [255, 255, 255],
+          [0, 0, 255]
+        ],
+        inRangeMat.getDataAsArray()
+      );
+    };
+
+    describe('C1', () => {
+      const mat = new cv.Mat([
+        [255, 255, 255],
+        [0, 100, 101]
+      ], cv.CV_8U);
+
+      const lower = 101;
+      const upper = 255;
+
+      generateAPITests({
+        getDut: () => mat,
+        methodName: 'inRange',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          lower,
+          upper
+        ]),
+        expectOutput
+      });
+    });
+
+    describe('C3', () => {
+      const mat = new cv.Mat([
+        [[255, 255, 255], [255, 255, 255], [255, 255, 255]],
+        [[0, 0, 0], [100, 100, 100], [101, 101, 101]]
+      ], cv.CV_8UC3);
+
+      const lower = new cv.Vec(101, 101, 101);
+      const upper = new cv.Vec(255, 255, 255);
+
+      generateAPITests({
+        getDut: () => mat,
+        methodName: 'inRange',
+        methodNameSpace: 'Mat',
+        getRequiredArgs: () => ([
+          lower,
+          upper
+        ]),
+        expectOutput
+      });
+    });
+  });
+
   if (!cvVersionGreaterEqual(4, 0, 0)) {
     describe('undistort', () => {
       const cameraMatrix = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);

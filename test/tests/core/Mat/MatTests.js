@@ -236,61 +236,6 @@ module.exports = function ({ cv, utils, getTestImg }) {
     });
   });
 
-  describe('inRange', () => {
-    const expectOutput = (inRangeMat) => {
-      assertMetaData(inRangeMat)(2, 3, cv.CV_8U);
-      assertDataDeepEquals(
-        [
-          [255, 255, 255],
-          [0, 0, 255]
-        ],
-        inRangeMat.getDataAsArray()
-      );
-    };
-
-    describe('C1', () => {
-      const mat = new cv.Mat([
-        [255, 255, 255],
-        [0, 100, 101]
-      ], cv.CV_8U);
-
-      const lower = 101;
-      const upper = 255;
-
-      generateAPITests({
-        getDut: () => mat,
-        methodName: 'inRange',
-        methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([
-          lower,
-          upper
-        ]),
-        expectOutput
-      });
-    });
-
-    describe('C3', () => {
-      const mat = new cv.Mat([
-        [[255, 255, 255], [255, 255, 255], [255, 255, 255]],
-        [[0, 0, 0], [100, 100, 100], [101, 101, 101]]
-      ], cv.CV_8UC3);
-
-      const lower = new cv.Vec(101, 101, 101);
-      const upper = new cv.Vec(255, 255, 255);
-
-      generateAPITests({
-        getDut: () => mat,
-        methodName: 'inRange',
-        methodNameSpace: 'Mat',
-        getRequiredArgs: () => ([
-          lower,
-          upper
-        ]),
-        expectOutput
-      });
-    });
-  });
-
   describe('discrete transform', () => {
     const dtMat = new cv.Mat([
       [0.9, 0.9, 0, 0],
@@ -573,7 +518,7 @@ module.exports = function ({ cv, utils, getTestImg }) {
   describe('checking of non-instance arguments', () => {
     it('should throw errors with correct error '
         + 'messages with non-instance arguments', () => {
-      const img = getTestImg().bgrToGray();
+      const img = getTestImg();
 
       assertError(
         () => img.getRegion(0, 1, 2, 3),
