@@ -60,7 +60,7 @@ describe('cv', () => {
     builtModules = process.env.TEST_MODULE_LIST.split(',')
   }
   // dnn module for OpenCV 3.2 and lower not supported
-  if (cvVersionLowerThan(3, 3, 0)) {
+  if (utils.cvVersionLowerThan(3, 3, 0)) {
     builtModules = builtModules.filter(m => m !== 'dnn')
   }
 
