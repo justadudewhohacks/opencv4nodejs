@@ -38,7 +38,14 @@ NAN_METHOD(Tracker::Update) {
 	}
 
 	cv::Rect2d rect;
-	bool ret = Tracker::unwrapThis(info)->getTracker()->update(image, rect);
+	bool ret = false;
+	
+	try {
+		ret = Tracker::unwrapThis(info)->getTracker()->update(image, rect);
+	}
+	catch (std::exception &e) {
+		return tryCatch.throwError(e.what());
+	}
 
 	if (ret) {
 		info.GetReturnValue().Set(Rect::Converter::wrap(rect));
