@@ -102,7 +102,7 @@ Native node modules are built via node-gyp, which already comes with npm by defa
 
 **Important note:** node-gyp won't handle whitespaces properly, thus make sure, that the path to your project directory does **not contain any whitespaces**. Installing opencv4nodejs under "C:\Program Files\some_dir" or similar will not work and will fail with: "fatal error C1083: Cannot open include file: 'opencv2/core.hpp'"!**
 
-On windows you will furthremore need Windows Build Tools to compile OpenCV and opencv4nodejs. If you don't have Visual Studio or Windows Build Tools installed, you can easily install the VS2015 build tools:
+On Windows you will furthermore need Windows Build Tools to compile OpenCV and opencv4nodejs. If you don't have Visual Studio or Windows Build Tools installed, you can easily install the VS2015 build tools:
 
 ``` bash
 npm install --global windows-build-tools
@@ -156,7 +156,7 @@ Under Linux we have to build OpenCV from source manually or using the auto build
 
 ## Installing OpenCV via Auto Build Script
 
-The auto build script comes in form of the [opencv-build](https://github.com/justadudewhohacks/npm-opencv-build), which will run by default when installing opencv4nodejs. The script requires you to have git and a recent version of cmake installed.
+The auto build script comes in form of the [opencv-build](https://github.com/justadudewhohacks/npm-opencv-build) npm package, which will run by default when installing opencv4nodejs. The script requires you to have git and a recent version of cmake installed.
 
 ### Auto Build Flags
 
