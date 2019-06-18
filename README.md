@@ -3,7 +3,6 @@ opencv4nodejs
 
 ![opencv4nodejs](https://user-images.githubusercontent.com/31125521/37272906-67187fdc-25d8-11e8-9704-40e9e94c1e80.jpg)
 
-
 [![Build Status](https://travis-ci.org/justadudewhohacks/opencv4nodejs.svg?branch=master)](http://travis-ci.org/justadudewhohacks/opencv4nodejs)
 [![Build status](https://ci.appveyor.com/api/projects/status/cv3o65nrosh1udbb/branch/master?svg=true)](https://ci.appveyor.com/project/justadudewhohacks/opencv4nodejs/branch/master)
 [![Coverage](https://codecov.io/github/justadudewhohacks/opencv4nodejs/coverage.svg?branch=master)](https://codecov.io/gh/justadudewhohacks/opencv4nodejs)
@@ -11,9 +10,9 @@ opencv4nodejs
 [![node version](https://img.shields.io/badge/node.js-%3E=_6-green.svg?style=flat)](http://nodejs.org/download/)
 [![Slack](https://slack.bri.im/badge.svg)](https://slack.bri.im/)
 
-**By its nature, JavaScript lacks the performance to implement Computer Vision tasks efficiently. Therefore this package brings the performance of the native OpenCV library to your Node.js application. This project targets OpenCV 3 and provides an asynchronous as well as an synchronous API.**
+**opencv4nodejs allows you to use the native OpenCV library in nodejs. Besides a synchronous API the package provides an asynchronous API, which allows you to build non-blocking and multithreaded computer vision tasks. opencv4nodejs supports OpenCV 3 and OpenCV 4.**
 
-**The ultimate goal of this project is to provide a comprehensive collection of Node.js bindings to the API of OpenCV and the OpenCV-contrib modules. An overview of available bindings can be found in the [API Documentation](https://justadudewhohacks.github.io/opencv4nodejs). Furthermore, contribution is highly appreciated. If you want to get involved you can have a look at the <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b>.**
+**The ultimate goal of this project is to provide a comprehensive collection of nodejs bindings to the API of OpenCV and the OpenCV-contrib modules. To get an overview of the currently implemented bindings, have a look at the [type declarations](https://github.com/justadudewhohacks/opencv4nodejs/tree/master/lib/typings) of this package. Furthermore, contribution is highly appreciated. If you want to add missing bindings check out the <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b>.**
 
 * **[Examples](#examples)**
 * **[How to install](#how-to-install)**
@@ -24,7 +23,6 @@ opencv4nodejs
 * **[Async API](#async-api)**
 * **[With TypeScript](#with-typescript)**
 * **[External Memory Tracking (v4.0.0)](#external-mem-tracking)**
-* **[Available Modules](#available-modules)**
 
 <a name="examples"></a>
 
@@ -96,40 +94,44 @@ Check out <a href="https://medium.com/@muehler.v/machine-learning-with-opencv-an
 
 # How to install
 
+``` bash
+npm install --save opencv4nodejs
+```
+
+Native node modules are built via node-gyp, which already comes with npm by default. However, node-gyp requires you to have python installed. If you are running into node-gyp specific issues have a look at known issues with [node-gyp](https://github.com/nodejs/node-gyp) first.
+
 **Important note:** node-gyp won't handle whitespaces properly, thus make sure, that the path to your project directory does **not contain any whitespaces**. Installing opencv4nodejs under "C:\Program Files\some_dir" or similar will not work and will fail with: "fatal error C1083: Cannot open include file: 'opencv2/core.hpp'"!**
 
-## Requirements
-- cmake (unless you are using a prebuilt OpenCV release)
+On windows you will furthremore need Windows Build Tools to compile OpenCV and opencv4nodejs. If you don't have Visual Studio or Windows Build Tools installed, you can easily install the VS2015 build tools:
 
-### On Windows
-On windows you will need Windows Build Tools to compile OpenCV and opencv4nodejs. If you don't have Visual Studio or Windows Build Tools installed, you can easily install the VS2015 build tools:
 ``` bash
 npm install --global windows-build-tools
 ```
 
-## Auto build
-If you do not want to set up OpenCV on your own you can simply let this package auto install OpenCV 3.4 + <a href="https://github.com/opencv/opencv_contrib"><b>OpenCV contrib 3.4</b></a> (might take some time):
+## Installing OpenCV Manually
+
+Setting up OpenCV on your own will require you to set an environment variable to prevent the auto build script to run:
+
 ``` bash
-$ npm install --save opencv4nodejs
+# linux and osx:
+export OPENCV4NODEJS_DISABLE_AUTOBUILD=1
+# on windows:
+set OPENCV4NODEJS_DISABLE_AUTOBUILD=1
 ```
 
-### Auto build flags
+### Windows
 
-You can customize the autobuild flags using *OPENCV4NODEJS_AUTOBUILD_FLAGS="<flags>"*.
-Flags must be space-separated.
+You can install any of the OpenCV 3 or OpenCV 4 <a href="https://github.com/opencv/opencv/releases/"><b>releases</b></a> manually or via the [Chocolatey](https://chocolatey.org/) package manager:
 
-This is an advanced customization and you should have knowledge regarding the OpenCV compilation flags.
+``` bash
+# to install OpenCV 4.1.0
+choco install OpenCV -y -version 4.1.0
+```
 
-For example `export OPENCV4NODEJS_AUTOBUILD_FLAGS="-DBUILD_LIST=dnn"` will build only modules required for `dnn` and reduced the size of the opencv package. Flags added by default are listed [here](https://github.com/justadudewhohacks/npm-opencv-build/blob/master/src/constants.ts#L44-L82)
+Note, this will come without contrib modules. To install OpenCV under windows with contrib modules you have to build the library from source or you can use the auto build script.
 
-## Manual build
-Setting up OpenCV on your own will require you to set an environment variable: *OPENCV4NODEJS_DISABLE_AUTOBUILD=1*.
-
-You can either install any of the OpenCV 3+ <a href="https://github.com/opencv/opencv/releases/"><b>releases</b></a> (note, this will come without contrib) or build OpenCV with or without <a href="https://github.com/opencv/opencv_contrib"><b>OpenCV contrib</b></a> from source on your own. On Linux and MacOSX the library should be installed under *usr/local* (which is the default).
-
-### On Windows
-If you choose to set up OpenCV on your own you have to set the following environment variables before installing opencv4nodejs:
-- *OPENCV_INCLUDE_DIR* pointing to the directory with the subfolders *opencv* and *opencv2* containing the header files
+Before installing opencv4nodejs with an own installation of OpenCV you need to expose the following environment variables:
+- *OPENCV_INCLUDE_DIR* pointing to the directory with the subfolder *opencv2* containing the header files
 - *OPENCV_LIB_DIR* pointing to the lib directory containing the OpenCV .lib files
 
 Also you will need to add the OpenCV binaries to your system path:
@@ -138,7 +140,39 @@ Also you will need to add the OpenCV binaries to your system path:
 
 Note: Restart your current console session after making changes to your environment.
 
-If you are running into issues also check the requirements for node-gyp specific to your OS: https://github.com/nodejs/node-gyp.
+### MacOSX
+
+Under OSX we can simply install OpenCV via brew:
+
+``` bash
+brew update
+brew install opencv@4
+brew link --force opencv@4
+```
+
+### Linux
+
+Under Linux we have to build OpenCV from source manually or using the auto build script.
+
+## Installing OpenCV via Auto Build Script
+
+The auto build script comes in form of the [opencv-build](https://github.com/justadudewhohacks/npm-opencv-build), which will run by default when installing opencv4nodejs. The script requires you to have git and a recent version of cmake installed.
+
+### Auto Build Flags
+
+You can customize the autobuild flags using *OPENCV4NODEJS_AUTOBUILD_FLAGS=<flags>*.
+Flags must be space-separated.
+
+This is an advanced customization and you should have knowledge regarding the OpenCV compilation flags. Flags added by default are listed [here](https://github.com/justadudewhohacks/npm-opencv-build/blob/master/src/constants.ts#L44-L82).
+
+### Installing a Specific Version of OpenCV
+
+You can specify the Version of OpenCV you want to install via the script by setting an environment variable:
+`export OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.1.0`
+
+### Installing only a Subset of OpenCV modules
+
+If you only want to build a subset of the OpenCV modules you can pass the *-DBUILD_LIST* cmake flag via the *OPENCV4NODEJS_AUTOBUILD_FLAGS* environment variable. For example `export OPENCV4NODEJS_AUTOBUILD_FLAGS=-DBUILD_LIST=dnn` will build only modules required for `dnn` and reduces the size and compilation time of the OpenCV package.
 
 <a name="usage-with-docker"></a>
 
@@ -494,25 +528,3 @@ Or directly in your code:
 process.env.OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING = 1
 const cv = require('opencv4nodejs')
 ```
-
-<a name="available-modules"></a>
-
-# Available Modules
-
-### <a href="https://justadudewhohacks.github.io/opencv4nodejs"><b>API doc overview</b></a>
-
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/Mat#Mat"><b>core</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/VideoCapture#VideoCapture"><b>io</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/Contour#Contour"><b>imgproc</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/SuperpixelLSC#SuperpixelLSC"><b>ximgproc</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/CascadeClassifier#CascadeClassifier"><b>objdetect</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/SVM#SVM"><b>machinelearning</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/Net#Net"><b>deepneuralnetworks</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/BackgroundSubtractorKNN#BackgroundSubtractorKNN"><b>video</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/cv#calibrateCamera"><b>calib3d</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/cv#fastNlMeansDenoisingColored"><b>photo</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/AGASTDetector#AGASTDetector"><b>features2d</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/SIFTDetector#SIFTDetector"><b>xfeatures2d</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/MultiTracker#MultiTracker"><b>tracking</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/OCRHMMClassifier#OCRHMMClassifier"><b>text</b></a>
-* <a href="https://justadudewhohacks.github.io/opencv4nodejs/docs/EigenFaceRecognizer#EigenFaceRecognizer"><b>face</b></a>
