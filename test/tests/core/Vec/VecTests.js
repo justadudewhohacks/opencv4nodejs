@@ -54,12 +54,12 @@ module.exports = function ({ cv, utils }) {
       });
 
       it('should return values from indices', () => {
-        expect(vec4.at(0)).to.equal(5);
-        expect(vec4.at(1)).to.equal(10);
-        expect(vec4.at(2)).to.equal(20);
-        expect(vec4.at(3)).to.equal(30);
-        expect(vec4.at(4)).to.equal(40);
-        expect(vec4.at(5)).to.equal(50);
+        expect(vec6.at(0)).to.equal(5);
+        expect(vec6.at(1)).to.equal(10);
+        expect(vec6.at(2)).to.equal(20);
+        expect(vec6.at(3)).to.equal(30);
+        expect(vec6.at(4)).to.equal(40);
+        expect(vec6.at(5)).to.equal(50);
       });
     });
   });
