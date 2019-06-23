@@ -14,6 +14,11 @@ module.exports = function ({ cv, utils }) {
       assertError(() => new cv.Vec(0), 'expected arguments');
     });
 
+    it('should throw for trying to insantiate invalid vec5', () => {
+      assertError(() => new cv.Vec(5, 10, 20, 30, 40), 'Vec::New - expected arguments (u, v), (w), x, y, (z)');
+    });
+  });
+
     describe('Vec2', () => {
       it('should have int positions', () => {
         const x = 100;
