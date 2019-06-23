@@ -3,8 +3,8 @@
 #include "NativeNodeUtils.h"
 #include "macros.h"
 
-#ifndef __FF_Vec6_H__
-#define __FF_Vec6_H__
+#ifndef __FF_VEC6_H__
+#define __FF_VEC6_H__
 
 class Vec6 : public FF::ObjectWrap<Vec6, cv::Vec6d> {
 public:

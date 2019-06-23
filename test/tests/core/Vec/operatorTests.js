@@ -355,25 +355,25 @@ module.exports = function ({ cv, utils }) {
         operatorRequiresArg('absdiff');
 
         it('apply absdiff to matrices', () => {
-          assertPropsWithValue(new cv.Vec(0, 100, 50, 25, 150, 10).absdiff(new cv.Vec(50, 25, 75, 25, 50, 20)))({ u: 50, v: 75, w: 25, x: 0, y: 50, z: 10 });
+          assertPropsWithValue(new cv.Vec(0, 100, 50, 25, 150, 10).absdiff(new cv.Vec(50, 25, 75, 25, 50, 20)))({ u: 50, v: 75, w: 25, x: 0, y: 100, z: 10 });
         });
       });
 
       describe('exp', () => {
         it('apply exp to vector', () => {
-          assertPropsWithValue(new cv.Vec(Math.log(1), Math.log(4), 0, Math.log(0), Math.log(3), Math.log(2)).exp())({ u: 1, v: 4, w: 1, x: 0, y: 3, z: 2 });
+          assertPropsWithValue(new cv.Vec(Math.log(1), Math.log(4), 0, Math.log(0), Math.log(4), Math.log(4)).exp())({ u: 1, v: 4, w: 1, x: 0, y: 4, z: 4 });
         });
       });
 
       describe('sqrt', () => {
         it('apply sqrt to vector', () => {
-          assertPropsWithValue(new cv.Vec(0, 4, 16, 64, 255, 510).sqrt())({ u: 0, v: 2, w: 4, x: 8, y: 16, z: 32 });
+          assertPropsWithValue(new cv.Vec(0, 4, 16, 64, 256, 1024).sqrt())({ u: 0, v: 2, w: 4, x: 8, y: 16, z: 32 });
         });
       });
 
       describe('norm', () => {
         it('should return magnitude', () => {
-          expect(new cv.Vec(Math.sqrt(4), Math.sqrt(4), Math.sqrt(4), Math.sqrt(4), Math.sqrt(4), Math.sqrt(4)).norm()).to.equal(4);
+          expect(new cv.Vec(Math.sqrt(8), Math.sqrt(8), Math.sqrt(8), Math.sqrt(8), Math.sqrt(16), Math.sqrt(16)).norm()).to.equal(8);
         });
       });
     });

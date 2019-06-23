@@ -44,8 +44,8 @@ NAN_MODULE_INIT(Vec::Init) {
 	Vec6::constructor.Reset(vec6Ctor);
 	vec6Ctor->InstanceTemplate()->SetInternalFieldCount(1);
 	vec6Ctor->SetClassName(Nan::New("Vec6").ToLocalChecked());
-	Nan::SetAccessor(vec6Ctor->InstanceTemplate(), Nan::New("u").ToLocalChecked(), Vec6::w_getter);
-	Nan::SetAccessor(vec6Ctor->InstanceTemplate(), Nan::New("v").ToLocalChecked(), Vec6::w_getter);
+	Nan::SetAccessor(vec6Ctor->InstanceTemplate(), Nan::New("u").ToLocalChecked(), Vec6::u_getter);
+	Nan::SetAccessor(vec6Ctor->InstanceTemplate(), Nan::New("v").ToLocalChecked(), Vec6::v_getter);
 	Nan::SetAccessor(vec6Ctor->InstanceTemplate(), Nan::New("w").ToLocalChecked(), Vec6::w_getter);
 	Nan::SetAccessor(vec6Ctor->InstanceTemplate(), Nan::New("x").ToLocalChecked(), Vec6::x_getter);
 	Nan::SetAccessor(vec6Ctor->InstanceTemplate(), Nan::New("y").ToLocalChecked(), Vec6::y_getter);
