@@ -82,6 +82,10 @@ module.exports = function ({ cv, utils }) {
       partitionTests(() => new cv.Vec(0, 0, 0, 0));
     });
 
+    describe('Vec6 input', () => {
+      partitionTests(() => new cv.Vec(0, 0, 0, 0, 0, 0));
+    });
+
     describe('Mat input', () => {
       partitionTests(() => new cv.Mat());
     });

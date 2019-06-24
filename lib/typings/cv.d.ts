@@ -3,6 +3,7 @@ import { Size } from './Size.d';
 import { Vec2 } from './Vec2.d';
 import { Vec3 } from './Vec3.d';
 import { Vec4 } from './Vec4.d';
+import { Vec6 } from './Vec6.d';
 import { Point2 } from './Point2.d';
 import { Point3 } from './Point3.d';
 import { KeyPoint } from './KeyPoint.d';
@@ -139,6 +140,7 @@ export function partition(data: Point3[], predicate: (pt1: Point3, pt2: Point3) 
 export function partition(data: Vec2[], predicate: (vec1: Vec2, vec2: Vec2) => boolean): { labels: number[], numLabels: number };
 export function partition(data: Vec3[], predicate: (vec1: Vec3, vec2: Vec3) => boolean): { labels: number[], numLabels: number };
 export function partition(data: Vec4[], predicate: (vec1: Vec4, vec2: Vec4) => boolean): { labels: number[], numLabels: number };
+export function partition(data: Vec6[], predicate: (vec1: Vec6, vec2: Vec6) => boolean): { labels: number[], numLabels: number };
 export function partition(data: Mat[], predicate: (mat1: Mat, mat2: Mat) => boolean): { labels: number[], numLabels: number };
 export function perspectiveTransform(mat: Mat, m: Mat): Mat;
 export function perspectiveTransformAsync(mat: Mat, m: Mat): Promise<Mat>;
