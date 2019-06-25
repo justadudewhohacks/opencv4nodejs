@@ -45,6 +45,23 @@ module.exports = function ({ cv, utils }) {
         expect(vec4.at(3)).to.equal(30);
       });
     });
+
+    describe('Vec6', () => {
+      const vec6 = new cv.Vec(5, 10, 20, 30, 40, 50);
+      it('should throw index out of bounds', () => {
+        assertError(() => vec6.at(-1), 'Index out of bounds: Vec6 at index -1');
+        assertError(() => vec6.at(6), 'Index out of bounds: Vec6 at index 6');
+      });
+
+      it('should return values from indices', () => {
+        expect(vec6.at(0)).to.equal(5);
+        expect(vec6.at(1)).to.equal(10);
+        expect(vec6.at(2)).to.equal(20);
+        expect(vec6.at(3)).to.equal(30);
+        expect(vec6.at(4)).to.equal(40);
+        expect(vec6.at(5)).to.equal(50);
+      });
+    });
   });
 
 };

@@ -6,6 +6,7 @@ export * from './typings/Vec.d';
 export * from './typings/Vec2.d';
 export * from './typings/Vec3.d';
 export * from './typings/Vec4.d';
+export * from './typings/Vec6.d';
 export * from './typings/Point.d';
 export * from './typings/Point2.d';
 export * from './typings/Point3.d';

@@ -127,6 +127,13 @@ NAN_METHOD(Core::Partition) {
 	}
     numLabels = cv::partition(pts, labels, predicateFactory<Vec4, cv::Vec4d>(cb));
   }
+  else if (Vec6::hasInstance(data0)) {
+	std::vector<cv::Vec6d> pts;
+	if (Vec6::ArrayConverter::arg(0, &pts, info)) {
+		return tryCatch.reThrow();
+	}
+    numLabels = cv::partition(pts, labels, predicateFactory<Vec6, cv::Vec6d>(cb));
+  }
   else if (Mat::hasInstance(data0)) {
     std::vector<cv::Mat> mats;
 	if (Mat::ArrayConverter::arg(0, &mats, info)) {
