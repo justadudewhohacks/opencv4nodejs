@@ -133,6 +133,7 @@ export function medianBlur(mat: Mat, kSize: number): Mat;
 export function medianBlurAsync(mat: Mat, kSize: number): Promise<Mat>;
 export function minMaxLoc(mat: Mat, mask?: Mat): { minVal: number, maxVal: number, minLoc: Point2, maxLoc: Point2 };
 export function minMaxLocAsync(mat: Mat, mask?: Mat): Promise<{ minVal: number, maxVal: number, minLoc: Point2, maxLoc: Point2 }>;
+export function moveWindow(winName: string, x: number, y: number): void;
 export function mulSpectrums(mat: Mat, mat2: Mat, dftRows?: boolean, conjB?: boolean): Mat;
 export function mulSpectrumsAsync(mat: Mat, mat2: Mat, dftRows?: boolean, conjB?: boolean): Promise<Mat>;
 export function partition(data: Point2[], predicate: (pt1: Point2, pt2: Point2) => boolean): { labels: number[], numLabels: number };
