@@ -86,7 +86,40 @@ namespace PhotoBindings {
       return Mat::Converter::wrap(dst);
     }
   };
-  
+
+  struct SeamlessCloningWorker : public CatchCvExceptionWorker {
+  public:
+    // required function arguments
+    cv::Mat src;
+    cv::Mat dst;
+    cv::Mat mask;
+    cv::Point2d p;
+    int flags;
+
+    // return value
+    cv::Mat blend;
+
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        Mat::Converter::arg(0, &src, info) ||
+        Mat::Converter::arg(1, &dst, info) ||
+        Mat::Converter::arg(2, &mask, info) ||
+        Point2::Converter::arg(3, &p, info) ||
+        FF::IntConverter::arg(4, &flags, info)
+      );
+    }
+
+    std::string executeCatchCvExceptionWorker() {
+      cv::seamlessClone(
+        src, dst, mask, p, blend, flags
+      );
+      return "";
+    }
+
+    v8::Local<v8::Value> getReturnValue() {
+      return Mat::Converter::wrap(blend);
+    }
+  };
 
 }
 

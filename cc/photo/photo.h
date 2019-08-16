@@ -14,6 +14,8 @@ public:
 	static NAN_METHOD(FastNlMeansDenoisingColoredAsync);
 	static NAN_METHOD(Inpaint);
 	static NAN_METHOD(InpaintAsync);
+	static NAN_METHOD(SeamlessClone);
+	static NAN_METHOD(SeamlessCloneAsync);
 };
 
 #endif

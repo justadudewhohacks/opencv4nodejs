@@ -59,6 +59,38 @@ module.exports = function ({ cv, utils }) {
           done();
         }).catch(done);
     });
-  })
+  });
+
+  describe('seamlessClone', () => {
+
+    it('should have constants', () => {
+      expect(isNaN(cv.NORMAL_CLONE)).to.be.equal(false);
+      expect(isNaN(cv.MIXED_CLONE)).to.be.equal(false);
+      expect(isNaN(cv.MONOCHROME_TRANSFER)).to.be.equal(false);
+    });
+
+    const src = new cv.Mat(5, 5, cv.CV_8UC3, [128, 128, 128]);
+    const dest = new cv.Mat(10, 10, cv.CV_8UC3, [32, 32, 32]);
+    const mask = new cv.Mat(10, 10, cv.CV8U, 255);
+    const center = new cv.Point(5, 5);
+    const cloneType = cv.NORMAL_CLONE;
+
+    const expectOutput = (res) => {
+      assertMetaData(res)(dest.rows, dest.cols, cv.CV_8UC3);
+    };
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'seamlessClone',
+      getRequiredArgs: () => ([
+        src,
+        dest,
+        mask,
+        center,
+        cloneType
+      ]),
+      expectOutput
+    });
+  });
 
 };
