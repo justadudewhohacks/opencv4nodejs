@@ -71,8 +71,8 @@ module.exports = function ({ cv, utils }) {
 
     const src = new cv.Mat(5, 5, cv.CV_8UC3, [128, 128, 128]);
     const dest = new cv.Mat(10, 10, cv.CV_8UC3, [32, 32, 32]);
-    const mask = new cv.Mat(10, 10, cv.CV8U, 255);
-    const center = new cv.Point(5, 5);
+    const mask = new cv.Mat(5, 5, cv.CV_8UC3, [255, 255, 255]);
+    const center = new cv.Point2(5, 5);
     const cloneType = cv.NORMAL_CLONE;
 
     const expectOutput = (res) => {
