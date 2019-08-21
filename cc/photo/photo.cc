@@ -49,19 +49,11 @@ NAN_METHOD(Photo::InpaintAsync) {
 }
 
 NAN_METHOD(Photo::SeamlessClone) {
-  FF::executeSyncBinding(
-    std::make_shared<PhotoBindings::SeamlessCloningWorker>(),
-    "Photo::SeamlessClone",
-    info
-  );
+  FF::syncBinding<PhotoBindings::SeamlessClone>("Photo", "SeamlessClone", info);
 }
 
 NAN_METHOD(Photo::SeamlessCloneAsync) {
-  FF::executeAsyncBinding(
-    std::make_shared<PhotoBindings::SeamlessCloningWorker>(),
-    "Photo::SeamlessCloneAsync",
-    info
-  );
+  FF::asyncBinding<PhotoBindings::SeamlessClone>("Photo", "SeamlessClone", info);
 }
 
 #endif

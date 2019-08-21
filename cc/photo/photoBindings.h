@@ -1,3 +1,4 @@
+#include "CvBinding.h"
 #include "photo.h"
 
 #ifndef __FF_PHOTOBINDINGS_H_
@@ -87,38 +88,19 @@ namespace PhotoBindings {
     }
   };
 
-  struct SeamlessCloningWorker : public CatchCvExceptionWorker {
+  class SeamlessClone : public CvClassMethodBinding<Mat> {
   public:
-    // required function arguments
-    cv::Mat src;
-    cv::Mat dst;
-    cv::Mat mask;
-    cv::Point2d p;
-    int flags;
+    void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+      auto dst = req<Mat::Converter>();
+      auto mask = req<Mat::Converter>();
+      auto p = req<Point2::Converter>();
+      auto flags = req<FF::IntConverter>();
+      auto blend = ret<Mat::Converter>("blend");
 
-    // return value
-    cv::Mat blend;
-
-    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        Mat::Converter::arg(0, &src, info) ||
-        Mat::Converter::arg(1, &dst, info) ||
-        Mat::Converter::arg(2, &mask, info) ||
-        Point2::Converter::arg(3, &p, info) ||
-        FF::IntConverter::arg(4, &flags, info)
-      );
-    }
-
-    std::string executeCatchCvExceptionWorker() {
-      cv::seamlessClone(
-        src, dst, mask, p, blend, flags
-      );
-      return "";
-    }
-
-    v8::Local<v8::Value> getReturnValue() {
-      return Mat::Converter::wrap(blend);
-    }
+      executeBinding = [=]() {
+        cv::seamlessClone(self->ref(), dst->ref(), mask->ref(), p->ref(), blend->ref(), flags->ref());
+      };
+    };
   };
 
 }
