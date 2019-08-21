@@ -8,7 +8,7 @@ module.exports = function ({ cv, utils }) {
     assertMetaData,
     funcShouldRequireArgs,
     readTestImage,
-    generateAPITests
+    generateClassMethodTests
   } = utils;
 
   describe('inpaint', () => {
@@ -79,11 +79,12 @@ module.exports = function ({ cv, utils }) {
       assertMetaData(res)(dest.rows, dest.cols, cv.CV_8UC3);
     };
 
-    generateAPITests({
-      getDut: () => cv,
+    generateClassMethodTests({
+      getClassInstance: () => src,
       methodName: 'seamlessClone',
+      classNameSpace: 'Mat',
+      methodNameSpace: 'Photo',
       getRequiredArgs: () => ([
-        src,
         dest,
         mask,
         center,
