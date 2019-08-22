@@ -41,6 +41,7 @@
 			"cc/io/VideoWriter.cc",
 			"cc/photo/photo.cc",
 			"cc/photo/photoConstants.cc",
+			"cc/photo/MatPhoto.cc",
 			"cc/video/video.cc",
 			"cc/video/BackgroundSubtractor.cc",
 			"cc/video/BackgroundSubtractorMOG2.cc",

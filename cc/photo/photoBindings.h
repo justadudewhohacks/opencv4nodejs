@@ -1,3 +1,4 @@
+#include "CvBinding.h"
 #include "photo.h"
 
 #ifndef __FF_PHOTOBINDINGS_H_
@@ -86,7 +87,21 @@ namespace PhotoBindings {
       return Mat::Converter::wrap(dst);
     }
   };
-  
+
+  class SeamlessClone : public CvClassMethodBinding<Mat> {
+  public:
+    void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+      auto dst = req<Mat::Converter>();
+      auto mask = req<Mat::Converter>();
+      auto p = req<Point2::Converter>();
+      auto flags = req<FF::IntConverter>();
+      auto blend = ret<Mat::Converter>("blend");
+
+      executeBinding = [=]() {
+        cv::seamlessClone(self->ref(), dst->ref(), mask->ref(), p->ref(), blend->ref(), flags->ref());
+      };
+    };
+  };
 
 }
 

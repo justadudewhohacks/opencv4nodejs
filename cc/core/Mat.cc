@@ -9,6 +9,9 @@
 #ifdef HAVE_OPENCV_IMGPROC
 #include "../imgproc/MatImgproc.h"
 #endif
+#ifdef HAVE_OPENCV_PHOTO
+#include "../photo/MatPhoto.h"
+#endif
 #ifdef HAVE_OPENCV_XIMGPROC
 #include "../ximgproc/MatXimgproc.h"
 #endif
@@ -126,6 +129,9 @@ NAN_MODULE_INIT(Mat::Init) {
 #ifdef HAVE_OPENCV_IMGPROC
   MatImgproc::Init(ctor);
 #endif
+  #ifdef HAVE_OPENCV_PHOTO
+    MatPhoto::Init(ctor);
+  #endif
   #ifdef HAVE_OPENCV_XIMGPROC
   MatXimgproc::Init(ctor);
   #endif

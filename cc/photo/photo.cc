@@ -12,6 +12,8 @@ NAN_MODULE_INIT(Photo::Init) {
 	Nan::SetMethod(target, "fastNlMeansDenoisingColoredAsync", FastNlMeansDenoisingColoredAsync);
 	Nan::SetMethod(target, "inpaint", Inpaint);
 	Nan::SetMethod(target, "inpaintAsync", InpaintAsync);
+	Nan::SetMethod(target, "seamlessClone", SeamlessClone);
+	Nan::SetMethod(target, "seamlessCloneAsync", SeamlessCloneAsync);
 };
 
 NAN_METHOD(Photo::FastNlMeansDenoisingColored) {
@@ -44,6 +46,14 @@ NAN_METHOD(Photo::InpaintAsync) {
     "Photo::InpaintAsync",
     info
   );
+}
+
+NAN_METHOD(Photo::SeamlessClone) {
+  FF::syncBinding<PhotoBindings::SeamlessClone>("Photo", "SeamlessClone", info);
+}
+
+NAN_METHOD(Photo::SeamlessCloneAsync) {
+  FF::asyncBinding<PhotoBindings::SeamlessClone>("Photo", "SeamlessClone", info);
 }
 
 #endif

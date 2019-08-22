@@ -163,6 +163,8 @@ export function reduce(mat: Mat, dim: number, rtype: number, dtype?: number): Ma
 export function reduceAsync(mat: Mat, dim: number, rtype: number, dtype?: number): Promise<Mat>;
 export function sampsonDistance(pt1: Vec2, pt2: Vec2, F: Mat): number;
 export function sampsonDistanceAsync(pt1: Vec2, pt2: Vec2, F: Mat): Promise<number>;
+export function seamlessClone(src: Mat, dst: Mat, mask: Mat, p: Point2, flags: number): Mat;
+export function seamlessCloneAsync(src: Mat, dst: Mat, mask: Mat, p: Point2, flags: number): Promise<Mat>;
 export function solve(mat: Mat, mat2: Mat, flags?: number): Mat;
 export function solveAsync(mat: Mat, mat2: Mat, flags?: number): Promise<Mat>;
 export function solveP3P(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], flags?: number): { returnValue: boolean, rvecs: Mat[], tvecs: Mat[] };

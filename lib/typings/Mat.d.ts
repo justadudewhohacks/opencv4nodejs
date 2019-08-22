@@ -263,6 +263,8 @@ export class Mat {
   rqDecomp3x3Async(): Promise<{ returnValue: Vec3, mtxR: Mat, mtxQ: Mat, Qx: Mat, Qy: Mat, Qz: Mat }>;
   scharr(ddepth: number, dx: number, dy: number, scale?: number, delta?: number, borderType?: number): Mat;
   scharrAsync(ddepth: number, dx: number, dy: number, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
+  seamlessClone(dst: Mat, mask: Mat, p: Point2, flags: number): Mat;
+  seamlessCloneAsync(dst: Mat, mask: Mat, p: Point2, flags: number): Promise<Mat>;
   sepFilter2D(ddepth: number, kernelX: Mat, kernelY: Mat, anchor?: Point2, delta?: number, borderType?: number): Mat;
   sepFilter2DAsync(ddepth: number, kernelX: Mat, kernelY: Mat, anchor?: Point2, delta?: number, borderType?: number): Promise<Mat>;
   set(row: number, col: number, value: number): void;
