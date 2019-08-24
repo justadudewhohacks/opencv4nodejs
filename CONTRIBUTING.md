@@ -137,12 +137,12 @@ NAN_MODULE_INIT(Imgproc::Init) {
 
 // synchronous binding
 NAN_METHOD(Imgproc::GaussianBlur) {
-  FF::SyncBinding<ImgprocBindings::GaussianBlur>("Imgproc", "GaussianBlur", info);
+  FF::syncBinding<ImgprocBindings::GaussianBlur>("Imgproc", "GaussianBlur", info);
 }
 
 // asynchronous binding
 NAN_METHOD(Imgproc::GaussianBlurAsync) {
-  FF::AsyncBinding<ImgprocBindings::GaussianBlur>("Imgproc", "GaussianBlur", info);
+  FF::syncBinding<ImgprocBindings::GaussianBlur>("Imgproc", "GaussianBlur", info);
 }
 ```
 
@@ -174,12 +174,12 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
 
 // synchronous binding
 NAN_METHOD(MatImgproc::GaussianBlur) {
-  Mat::SyncBinding<ImgprocBindings::GaussianBlur>("GaussianBlur", info);
+  Mat::syncBinding<ImgprocBindings::GaussianBlur>("GaussianBlur", info);
 }
 
 // asynchronous binding
 NAN_METHOD(MatImgproc::GaussianBlurAsync) {
-  Mat::AsyncBinding<ImgprocBindings::GaussianBlur>("GaussianBlur", info);
+  Mat::asyncBinding<ImgprocBindings::GaussianBlur>("GaussianBlur", info);
 }
 ```
 
