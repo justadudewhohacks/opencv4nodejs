@@ -94,8 +94,17 @@ Check out <a href="https://medium.com/@muehler.v/machine-learning-with-opencv-an
 
 # How to install
 
+## With OpenCV already installed on your system
+
 ``` bash
-npm install --save opencv4nodejs
+npm install opencv4nodejs
+```
+
+## Automatically build OpenCV as a peer dependency
+
+``` bash
+npm install opencv-build
+npm install opencv4nodejs
 ```
 
 Native node modules are built via node-gyp, which already comes with npm by default. However, node-gyp requires you to have python installed. If you are running into node-gyp specific issues have a look at known issues with [node-gyp](https://github.com/nodejs/node-gyp) first.
@@ -106,17 +115,6 @@ On Windows you will furthermore need Windows Build Tools to compile OpenCV and o
 
 ``` bash
 npm install --global windows-build-tools
-```
-
-## Installing OpenCV Manually
-
-Setting up OpenCV on your own will require you to set an environment variable to prevent the auto build script to run:
-
-``` bash
-# linux and osx:
-export OPENCV4NODEJS_DISABLE_AUTOBUILD=1
-# on windows:
-set OPENCV4NODEJS_DISABLE_AUTOBUILD=1
 ```
 
 ### Windows

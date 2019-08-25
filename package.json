@@ -39,8 +39,7 @@
   "gypfile": true,
   "dependencies": {
     "nan": "^2.14.0",
-    "native-node-utils": "^0.2.7",
-    "opencv-build": "^0.1.5"
+    "native-node-utils": "^0.2.7"
   },
   "optionalDependencies": {
     "@types/node": ">6"
