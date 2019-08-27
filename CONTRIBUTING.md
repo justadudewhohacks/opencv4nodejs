@@ -142,7 +142,7 @@ NAN_METHOD(Imgproc::GaussianBlur) {
 
 // asynchronous binding
 NAN_METHOD(Imgproc::GaussianBlurAsync) {
-  FF::syncBinding<ImgprocBindings::GaussianBlur>("Imgproc", "GaussianBlur", info);
+  FF::asyncBinding<ImgprocBindings::GaussianBlur>("Imgproc", "GaussianBlur", info);
 }
 ```
 
