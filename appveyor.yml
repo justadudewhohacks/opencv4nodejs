@@ -51,9 +51,9 @@ environment:
 install:
   - cmd: choco install OpenCV -y -version %OPENCV_VERSION%
   - if not "%BUILD_TASK%" == "ENVS" (
-      SET OPENCV_INCLUDE_DIR=c:\tools\opencv\build\include
-      SET OPENCV_LIB_DIR=c:\tools\opencv\build\x64\vc14\lib
-      SET OPENCV_BIN_DIR=c:\tools\opencv\build\x64\vc14\bin
+      SET OPENCV_INCLUDE_DIR=c:\tools\opencv\build\include &&
+      SET OPENCV_LIB_DIR=c:\tools\opencv\build\x64\vc14\lib &&
+      SET OPENCV_BIN_DIR=c:\tools\opencv\build\x64\vc14\bin &&
       SET PATH=%PATH%;%OPENCV_BIN_DIR%;
     )
   - ps: Install-Product node $env:nodejs_version x64
@@ -67,12 +67,12 @@ build: off
 test_script:
   - node --version
   - if "%BUILD_TASK%" == "ENVS" (
-      cd .\ci\envs
-      npm install
+      cd .\ci\envs &&
+      npm install &&
       npm test
     ) else (
-      cd c:\projects\opencv4nodejs\test
-      npm install
-      npm run test-appveyor
+      cd c:\projects\opencv4nodejs\test &&
+      npm install &&
+      npm run test-appveyor &&
       npm run test-externalMemTracking
     )
