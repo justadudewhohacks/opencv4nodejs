@@ -70,7 +70,7 @@ test_script:
       cd .\ci\envs
       npm install
       npm test
-    ) else ( \
+    ) else (
       cd c:\projects\opencv4nodejs\test
       npm install
       npm run test-appveyor
