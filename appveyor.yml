@@ -56,9 +56,6 @@ install:
   - if not "%BUILD_TASK%" == "ENVS" SET PATH=%PATH%;%OPENCV_BIN_DIR%;
   - ps: Install-Product node $env:nodejs_version x64
   - node --version
-  - npm install -g node-gyp
-  - cd c:\projects\opencv4nodejs
-  - npm install
 
 build: off
 
@@ -69,6 +66,8 @@ test_script:
       npm install &&
       npm test
     ) else (
+      cd c:\projects\opencv4nodejs &&
+      npm install &&
       cd c:\projects\opencv4nodejs\test &&
       npm install &&
       npm run test-appveyor &&

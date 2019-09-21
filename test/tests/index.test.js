@@ -70,13 +70,16 @@ describe('cv', () => {
   console.log('OPENCV_VERSION:', process.env.OPENCV_VERSION)
   console.log('TEST_MODULE_LIST:', process.env.TEST_MODULE_LIST)
   console.log('APPVEYOR_BUILD:', process.env.APPVEYOR_BUILD)
+  console.log('process.platform:', process.platform)
   console.log()
   console.log('OpenCV version is:', opencvVersionString)
   console.log('compiled with the following modules:', cv.modules)
   console.log('expected modules to be built:', builtModules)
 
   it('OpenCV version should match', () => {
-    expect((process.env.OPENCV_VERSION || '').substr(0, 5)).to.equal(opencvVersionString)
+    expect((process.env.OPENCV_VERSION || '').substr(0, 5)).to.equal(
+      process.platform === 'osx' ? `${cv.version.major}` : opencvVersionString
+    )
   })
 
   it('all modules should be built', () => {

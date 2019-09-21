@@ -77,7 +77,8 @@ process.env['OPENCV4NODEJS_DEFINES'] = defines.join('\n')
 process.env['OPENCV4NODEJS_INCLUDES'] = includes.join('\n')
 process.env['OPENCV4NODEJS_LIBRARIES'] = libs.join('\n')
 
-const child = child_process.exec('node-gyp rebuild --jobs max', {}, function(err, stdout, stderr) {
+const flags = process.env.BINDINGS_DEBUG ? '--jobs max --debug' : '--jobs max'
+const child = child_process.exec('node-gyp rebuild ' + flags, {}, function(err, stdout, stderr) {
   const _err = err || stderr
   if (_err) log.error(_err)
 })
