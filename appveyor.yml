@@ -50,12 +50,10 @@ environment:
 
 install:
   - cmd: choco install OpenCV -y -version %OPENCV_VERSION%
-  - if not "%BUILD_TASK%" == "ENVS" (
-      SET OPENCV_INCLUDE_DIR="c:\tools\opencv\build\include" &&
-      SET OPENCV_LIB_DIR="c:\tools\opencv\build\x64\vc14\lib" &&
-      SET OPENCV_BIN_DIR="c:\tools\opencv\build\x64\vc14\bin" &&
-      SET PATH="%PATH%;%OPENCV_BIN_DIR%;"
-    )
+  - if not "%BUILD_TASK%" == "ENVS" SET OPENCV_INCLUDE_DIR=c:\tools\opencv\build\include
+  - if not "%BUILD_TASK%" == "ENVS" SET OPENCV_LIB_DIR=c:\tools\opencv\build\x64\vc14\lib
+  - if not "%BUILD_TASK%" == "ENVS" SET OPENCV_BIN_DIR=c:\tools\opencv\build\x64\vc14\bin
+  - if not "%BUILD_TASK%" == "ENVS" SET PATH=%PATH%;%OPENCV_BIN_DIR%;
   - ps: Install-Product node $env:nodejs_version x64
   - node --version
   - npm install -g node-gyp

@@ -76,7 +76,7 @@ describe('cv', () => {
   console.log('expected modules to be built:', builtModules)
 
   it('OpenCV version should match', () => {
-    expect(process.env.OPENCV_VERSION).to.equal(opencvVersionString)
+    expect((process.env.OPENCV_VERSION || '').substr(0, 5)).to.equal(opencvVersionString)
   })
 
   it('all modules should be built', () => {
