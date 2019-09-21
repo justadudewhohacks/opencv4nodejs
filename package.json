@@ -34,7 +34,7 @@
     "build": "node-gyp configure build --jobs max",
     "rebuild": "node-gyp rebuild --jobs max",
     "clean": "node-gyp clean",
-    "build-debug": "set BINDINGS_DEBUG=1 && node ./install/install.js"
+    "build-debug": "BINDINGS_DEBUG=true && node ./install/install.js"
   },
   "gypfile": true,
   "dependencies": {

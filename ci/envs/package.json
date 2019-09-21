@@ -3,7 +3,7 @@
     "test": "node ./test.js"
   },
   "dependencies": {
-    "opencv4nodejs": "../"
+    "opencv4nodejs": "../../"
   },
   "opencv4nodejs": {
     "disableAutoBuild": 1,

@@ -78,7 +78,8 @@ describe('cv', () => {
 
   it('OpenCV version should match', () => {
     expect((process.env.OPENCV_VERSION || '').substr(0, 5)).to.equal(
-      process.platform === 'osx' ? `${cv.version.major}` : opencvVersionString
+      // on osx latest opencv package for major version is installed via brew
+      process.platform === 'darwin' ? `${cv.version.major}` : opencvVersionString
     )
   })
 
