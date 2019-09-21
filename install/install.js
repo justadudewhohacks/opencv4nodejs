@@ -14,7 +14,7 @@ function getDefaultIncludeDirs() {
   if (opencvBuild.isWin()) {
     throw new Error('OPENCV_INCLUDE_DIR has to be defined on windows when auto build is disabled')
   }
-  return [defaultLibDir, defaultIncludeDirOpenCV4]
+  return [defaultIncludeDir, defaultIncludeDirOpenCV4]
 }
 
 function getDefaultLibDir() {
@@ -68,10 +68,10 @@ log.info('install', 'setting the following defines:')
 defines.forEach(def => log.info('defines', def))
 console.log()
 log.info('install', 'setting the following includes:')
-includes.forEach(def => log.info('includes', def))
+includes.forEach(inc => log.info('includes', inc))
 console.log()
 log.info('install', 'setting the following libs:')
-libs.forEach(def => log.info('libs', def))
+libs.forEach(lib => log.info('libs', lib))
 
 process.env['OPENCV4NODEJS_DEFINES'] = defines.join('\n')
 process.env['OPENCV4NODEJS_INCLUDES'] = includes.join('\n')
