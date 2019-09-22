@@ -1,5 +1,5 @@
-const cv = require('opencv4nodejs')
+process.env.OPENCV4NODES_DEBUG_REQUIRE = true
 
-if (!cv) {
+if (!require('opencv4nodejs')) {
   throw new Error('failed to require opencv4nodejs')
 }
