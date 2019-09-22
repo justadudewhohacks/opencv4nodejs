@@ -4,6 +4,7 @@ ci/coverage-report
 !package.json
 !binding.gyp
 !lib
+!install
 !test
 !cc
 !data/got.jpg

@@ -199,7 +199,7 @@ script:
     fi
 
 after_success:
-  - if [ $BUILD_TASK = 'cover' ]; then
+  - if [ "$BUILD_TASK" == "cover" ]; then
     npm install;
     npm run codecov -- -t $CODECOV_TOKEN;
     fi

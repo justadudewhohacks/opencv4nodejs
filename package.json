@@ -29,18 +29,19 @@
   "main": "./lib/opencv4nodejs.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "install": "node-gyp rebuild --jobs max",
+    "install": "node ./install/install.js",
     "configure": "node-gyp configure",
     "build": "node-gyp configure build --jobs max",
     "rebuild": "node-gyp rebuild --jobs max",
     "clean": "node-gyp clean",
-    "build-debug": "node-gyp rebuild --debug --jobs max"
+    "build-debug": "BINDINGS_DEBUG=true node ./install/install.js"
   },
   "gypfile": true,
   "dependencies": {
     "nan": "^2.14.0",
     "native-node-utils": "^0.2.7",
-    "opencv-build": "^0.1.5"
+    "npmlog": "^4.1.2",
+    "opencv-build": "^0.1.9"
   },
   "optionalDependencies": {
     "@types/node": ">6"

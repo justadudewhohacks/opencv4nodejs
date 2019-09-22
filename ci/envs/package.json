@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "test": "node ./test.js"
+  },
+  "dependencies": {
+    "opencv4nodejs": "../../"
+  },
+  "opencv4nodejs": {
+    "disableAutoBuild": 1,
+    "opencvIncludeDir": "C:\\tools\\opencv\\build\\include",
+    "opencvLibDir": "C:\\tools\\opencv\\build\\x64\\vc14\\lib",
+    "opencvBinDir": "C:\\tools\\opencv\\build\\x64\\vc14\\bin"
+  }
+}
