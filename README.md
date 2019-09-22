@@ -174,9 +174,40 @@ You can specify the Version of OpenCV you want to install via the script by sett
 
 If you only want to build a subset of the OpenCV modules you can pass the *-DBUILD_LIST* cmake flag via the *OPENCV4NODEJS_AUTOBUILD_FLAGS* environment variable. For example `export OPENCV4NODEJS_AUTOBUILD_FLAGS=-DBUILD_LIST=dnn` will build only modules required for `dnn` and reduces the size and compilation time of the OpenCV package.
 
+## Configuring Environments via package.json
+
+It's possible to specify build environment variables by inserting them into the `package.json` as follows:
+
+```json
+{
+  "name": "my-project",
+  "version": "0.0.0",
+  "dependencies": {
+    "opencv4nodejs": "^X.X.X"
+  },
+  "opencv4nodejs": {
+    "disableAutoBuild": 1,
+    "opencvIncludeDir": "C:\\tools\\opencv\\build\\include",
+    "opencvLibDir": "C:\\tools\\opencv\\build\\x64\\vc14\\lib",
+    "opencvBinDir": "C:\\tools\\opencv\\build\\x64\\vc14\\bin"
+  }
+}
+```
+
+The following environment variables can be passed:
+
+- autoBuildBuildCuda
+- autoBuildFlags
+- autoBuildOpencvVersion
+- autoBuildWithoutContrib
+- disableAutoBuild
+- opencvIncludeDir
+- opencvLibDir
+- opencvBinDir
+
 <a name="usage-with-docker"></a>
 
-## Usage with Docker
+# Usage with Docker
 
 ### [opencv-express](https://github.com/justadudewhohacks/opencv-express) - example for opencv4nodejs with express.js and docker
 
@@ -192,7 +223,7 @@ Different OpenCV 3.x base images can be found here: https://hub.docker.com/r/jus
 
 <a name="usage-with-electron"></a>
 
-## Usage with Electron
+# Usage with Electron
 
 ### [opencv-electron](https://github.com/justadudewhohacks/opencv-electron) - example for opencv4nodejs with electron
 
@@ -213,7 +244,7 @@ const cv = require('opencv4nodejs');
 
 <a name="usage-with-nwjs"></a>
 
-## Usage with NW.js
+# Usage with NW.js
 
 Any native modules, including opencv4nodejs, must be recompiled to be used with [NW.js](https://nwjs.io/). Instructions on how to do this are available in the **[Use Native Modules](http://docs.nwjs.io/en/latest/For%20Users/Advanced/Use%20Native%20Node%20Modules/)** section of the the NW.js documentation.
 
