@@ -397,4 +397,186 @@ module.exports = ({ cv, utils, getTestImg }) => {
     }
   });
 
+  describe('accumulate', () => {
+    const srcData = [
+      [[1, 2, 3], [4, 5, 6]],
+      [[7, 8, 9], [10, 11, 12]]
+    ]
+    const dstData = [
+      [[1, 1, 1], [1, 1, 1]],
+      [[1, 1, 1], [1, 1, 1]]
+    ]
+    const maskData = [
+      [255, 0],
+      [0, 255]
+    ]
+    const expectedData = [
+      [[2, 3, 4], [1, 1, 1]],
+      [[1, 1, 1], [11, 12, 13]]
+    ]
+    const src = new cv.Mat(srcData, cv.CV_8UC3)
+    let dst
+    const mask = new cv.Mat(maskData, cv.CV_8UC1)
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'accumulate',
+      beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
+      getRequiredArgs: () => ([
+        src,
+        dst,
+        mask
+      ]),
+      expectOutput: () => {
+        channelIndices = ['x', 'y', 'z']
+        for (let row = 0; row < dst.rows; row++) {
+          for (let col = 0; col < dst.cols; col++) {
+            for (let channel = 0; channel < dst.channels; channel++) {
+              expect(dst.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
+            }
+          }
+        }
+      }
+    });
+  });
+
+  describe('accumulateProduct', () => {
+    const srcData1 = [
+      [[1, 2, 3], [4, 5, 6]],
+      [[7, 8, 9], [10, 11, 12]]
+    ]
+    const srcData2 = [
+      [[2, 2, 2], [2, 2, 2]],
+      [[2, 2, 2], [2, 2, 2]]
+    ]
+    const dstData = [
+      [[1, 1, 1], [1, 1, 1]],
+      [[1, 1, 1], [1, 1, 1]]
+    ]
+    const maskData = [
+      [255, 0],
+      [0, 255]
+    ]
+    const expectedData = [
+      [[3, 5, 7], [1, 1, 1]],
+      [[1, 1, 1], [21, 23, 25]]
+    ]
+  
+    const src1 = new cv.Mat(srcData1, cv.CV_8UC3)
+    const src2 = new cv.Mat(srcData2, cv.CV_8UC3)
+    let dst
+    const mask = new cv.Mat(maskData, cv.CV_8UC1)
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'accumulateProduct',
+      beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
+      getRequiredArgs: () => ([
+        src1,
+        src2,
+        dst,
+        mask
+      ]),
+      expectOutput: () => {
+        channelIndices = ['x', 'y', 'z']
+        for (let row = 0; row < dst.rows; row++) {
+          for (let col = 0; col < dst.cols; col++) {
+            for (let channel = 0; channel < dst.channels; channel++) {
+              expect(dst.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
+            }
+          }
+        }
+      }
+    });
+  });
+
+  describe('accumulateSquare', () => {
+    const srcData = [
+      [[1, 2, 3], [4, 5, 6]],
+      [[7, 8, 9], [10, 11, 12]]
+    ]
+    const dstData = [
+      [[1, 1, 1], [1, 1, 1]],
+      [[1, 1, 1], [1, 1, 1]]
+    ]
+    const maskData = [
+      [255, 0],
+      [0, 255]
+    ]
+    const expectedData = [
+      [[2, 5, 10], [1, 1, 1]],
+      [[1, 1, 1], [101, 122, 145]]
+    ]
+  
+    const src = new cv.Mat(srcData, cv.CV_8UC3)
+    let dst
+    const mask = new cv.Mat(maskData, cv.CV_8UC1)
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'accumulateSquare',
+      beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
+      getRequiredArgs: () => ([
+        src,
+        dst,
+        mask
+      ]),
+      expectOutput: () => {
+        channelIndices = ['x', 'y', 'z']
+        for (let row = 0; row < dst.rows; row++) {
+          for (let col = 0; col < dst.cols; col++) {
+            for (let channel = 0; channel < dst.channels; channel++) {
+              expect(dst.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
+            }
+          }
+        }
+      }
+    });
+  });
+
+  describe('accumulateWeighted', () => {
+    const srcData = [
+      [[1, 2, 3], [4, 5, 6]],
+      [[7, 8, 9], [10, 11, 12]]
+    ]
+    const dstData = [
+      [[1, 1, 1], [1, 1, 1]],
+      [[1, 1, 1], [1, 1, 1]]
+    ]
+    const alpha = 0.7
+    const maskData = [
+      [255, 0],
+      [0, 255]
+    ]
+    const expectedData = [
+      [[(1 - alpha) * 1 + alpha * 1, (1 - alpha) * 1 + alpha * 2, (1 - alpha) * 1 + alpha * 3], [1, 1, 1]],
+      [[1, 1, 1], [(1 - alpha) * 1 + alpha * 10, (1 - alpha) * 1 + alpha * 11, (1 - alpha) * 1 + alpha * 12]]
+    ]
+  
+    const src = new cv.Mat(srcData, cv.CV_8UC3)
+    let dst
+    const mask = new cv.Mat(maskData, cv.CV_8UC1)
+
+    generateAPITests({
+      getDut: () => cv,
+      methodName: 'accumulateWeighted',
+      beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
+      getRequiredArgs: () => ([
+        src,
+        dst,
+        alpha,
+        mask
+      ]),
+      expectOutput: () => {
+        channelIndices = ['x', 'y', 'z']
+        for (let row = 0; row < dst.rows; row++) {
+          for (let col = 0; col < dst.cols; col++) {
+            for (let channel = 0; channel < dst.channels; channel++) {
+              expect(dst.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
+            }
+          }
+        }
+      }
+    });
+  });
 };

@@ -204,6 +204,60 @@ namespace ImgprocBindings {
 		  };
 	  };
   };
+
+	class Accumulate : public CvBinding {
+	public:
+		void setup() {
+			auto src = req<Mat::Converter>();
+			auto dst = req<Mat::Converter>();
+			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+
+			executeBinding = [=]() {
+				cv::accumulate(src->ref(), dst->ref(), mask->ref());
+			};
+		};
+	};
+
+	class AccumulateProduct : public CvBinding {
+	public:
+		void setup() {
+			auto src1 = req<Mat::Converter>();
+			auto src2 = req<Mat::Converter>();
+			auto dst = req<Mat::Converter>();
+			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+
+			executeBinding = [=]() {
+				cv::accumulateProduct(src1->ref(), src2->ref(), dst->ref(), mask->ref());
+			};
+		};
+	};
+
+	class AccumulateSquare : public CvBinding {
+	public:
+		void setup() {
+			auto src = req<Mat::Converter>();
+			auto dst = req<Mat::Converter>();
+			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+
+			executeBinding = [=]() {
+				cv::accumulateSquare(src->ref(), dst->ref(), mask->ref());
+			};
+		};
+	};
+
+	class AccumulateWeighted : public CvBinding {
+	public:
+		void setup() {
+			auto src = req<Mat::Converter>();
+			auto dst = req<Mat::Converter>();
+			auto alpha = req<FF::DoubleConverter>();
+			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+
+			executeBinding = [=]() {
+				cv::accumulateWeighted(src->ref(), dst->ref(), alpha->ref(), mask->ref());
+			};
+		};
+	};
 }
 
 #endif

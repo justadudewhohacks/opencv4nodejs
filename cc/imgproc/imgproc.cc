@@ -53,6 +53,14 @@ NAN_MODULE_INIT(Imgproc::Init) {
   Nan::SetMethod(target, "gaussianBlurAsync", GaussianBlurAsync);
   Nan::SetMethod(target, "medianBlur", MedianBlur);
   Nan::SetMethod(target, "medianBlurAsync", MedianBlurAsync);
+  Nan::SetMethod(target, "accumulate", Accumulate);
+  Nan::SetMethod(target, "accumulateAsync", AccumulateAsync);
+  Nan::SetMethod(target, "accumulateProduct", AccumulateProduct);
+  Nan::SetMethod(target, "accumulateProductAsync", AccumulateProductAsync);
+  Nan::SetMethod(target, "accumulateSquare", AccumulateSquare);
+  Nan::SetMethod(target, "accumulateSquareAsync", AccumulateSquareAsync);
+  Nan::SetMethod(target, "accumulateWeighted", AccumulateWeighted);
+  Nan::SetMethod(target, "accumulateWeightedAsync", AccumulateWeightedAsync);
 
 
   Moments::Init(target);
@@ -389,6 +397,38 @@ NAN_METHOD(Imgproc::MedianBlur) {
 
 NAN_METHOD(Imgproc::MedianBlurAsync) {
 	FF::asyncBinding<ImgprocBindings::MedianBlur>("Imgproc", "MedianBlur", info);
+}
+
+NAN_METHOD(Imgproc::Accumulate) {
+  FF::syncBinding<ImgprocBindings::Accumulate>("Imgproc", "Accumulate", info);
+}
+
+NAN_METHOD(Imgproc::AccumulateAsync) {
+  FF::asyncBinding<ImgprocBindings::Accumulate>("Imgproc", "Accumulate", info);
+}
+
+NAN_METHOD(Imgproc::AccumulateProduct) {
+  FF::syncBinding<ImgprocBindings::AccumulateProduct>("Imgproc", "AccumulateProduct", info);
+}
+
+NAN_METHOD(Imgproc::AccumulateProductAsync) {
+  FF::asyncBinding<ImgprocBindings::AccumulateProduct>("Imgproc", "AccumulateProduct", info);
+}
+
+NAN_METHOD(Imgproc::AccumulateSquare) {
+  FF::syncBinding<ImgprocBindings::AccumulateSquare>("Imgproc", "AccumulateSquare", info);
+}
+
+NAN_METHOD(Imgproc::AccumulateSquareAsync) {
+  FF::asyncBinding<ImgprocBindings::AccumulateSquare>("Imgproc", "AccumulateSquare", info);
+}
+
+NAN_METHOD(Imgproc::AccumulateWeighted) {
+  FF::syncBinding<ImgprocBindings::AccumulateWeighted>("Imgproc", "AccumulateWeighted", info);
+}
+
+NAN_METHOD(Imgproc::AccumulateWeightedAsync) {
+  FF::asyncBinding<ImgprocBindings::AccumulateWeighted>("Imgproc", "AccumulateWeighted", info);
 }
 
 #endif
