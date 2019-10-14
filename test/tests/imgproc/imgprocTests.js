@@ -421,18 +421,20 @@ module.exports = ({ cv, utils, getTestImg }) => {
     generateAPITests({
       getDut: () => cv,
       methodName: 'accumulate',
+      classNameSpace: 'Mat',
+      methodNameSpace: 'Imgproc',
       beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
       getRequiredArgs: () => ([
-        src,
         dst,
+        src,
         mask
       ]),
-      expectOutput: () => {
+      expectOutput: res => {
         channelIndices = ['x', 'y', 'z']
-        for (let row = 0; row < dst.rows; row++) {
-          for (let col = 0; col < dst.cols; col++) {
-            for (let channel = 0; channel < dst.channels; channel++) {
-              expect(dst.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
+        for (let row = 0; row < res.rows; row++) {
+          for (let col = 0; col < res.cols; col++) {
+            for (let channel = 0; channel < res.channels; channel++) {
+              expect(res.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
             }
           }
         }
@@ -470,19 +472,21 @@ module.exports = ({ cv, utils, getTestImg }) => {
     generateAPITests({
       getDut: () => cv,
       methodName: 'accumulateProduct',
+      classNameSpace: 'Mat',
+      methodNameSpace: 'Imgproc',
       beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
       getRequiredArgs: () => ([
+        dst,
         src1,
         src2,
-        dst,
         mask
       ]),
-      expectOutput: () => {
+      expectOutput: res => {
         channelIndices = ['x', 'y', 'z']
-        for (let row = 0; row < dst.rows; row++) {
-          for (let col = 0; col < dst.cols; col++) {
-            for (let channel = 0; channel < dst.channels; channel++) {
-              expect(dst.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
+        for (let row = 0; row < res.rows; row++) {
+          for (let col = 0; col < res.cols; col++) {
+            for (let channel = 0; channel < res.channels; channel++) {
+              expect(res.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
             }
           }
         }
@@ -515,18 +519,20 @@ module.exports = ({ cv, utils, getTestImg }) => {
     generateAPITests({
       getDut: () => cv,
       methodName: 'accumulateSquare',
+      classNameSpace: 'Mat',
+      methodNameSpace: 'Imgproc',
       beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
       getRequiredArgs: () => ([
-        src,
         dst,
+        src,
         mask
       ]),
-      expectOutput: () => {
+      expectOutput: res => {
         channelIndices = ['x', 'y', 'z']
-        for (let row = 0; row < dst.rows; row++) {
-          for (let col = 0; col < dst.cols; col++) {
-            for (let channel = 0; channel < dst.channels; channel++) {
-              expect(dst.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
+        for (let row = 0; row < res.rows; row++) {
+          for (let col = 0; col < res.cols; col++) {
+            for (let channel = 0; channel < res.channels; channel++) {
+              expect(res.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
             }
           }
         }
@@ -560,19 +566,21 @@ module.exports = ({ cv, utils, getTestImg }) => {
     generateAPITests({
       getDut: () => cv,
       methodName: 'accumulateWeighted',
+      classNameSpace: 'Mat',
+      methodNameSpace: 'Imgproc',
       beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
       getRequiredArgs: () => ([
-        src,
         dst,
+        src,
         alpha,
         mask
       ]),
-      expectOutput: () => {
+      expectOutput: res => {
         channelIndices = ['x', 'y', 'z']
-        for (let row = 0; row < dst.rows; row++) {
-          for (let col = 0; col < dst.cols; col++) {
-            for (let channel = 0; channel < dst.channels; channel++) {
-              expect(dst.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
+        for (let row = 0; row < res.rows; row++) {
+          for (let col = 0; col < res.cols; col++) {
+            for (let channel = 0; channel < res.channels; channel++) {
+              expect(res.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
             }
           }
         }

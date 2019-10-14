@@ -120,6 +120,14 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "gaussianBlurAsync", GaussianBlurAsync);
   Nan::SetPrototypeMethod(ctor, "medianBlur", MedianBlur);
   Nan::SetPrototypeMethod(ctor, "medianBlurAsync", MedianBlurAsync);
+  Nan::SetPrototypeMethod(ctor, "accumulate", Accumulate);
+  Nan::SetPrototypeMethod(ctor, "accumulateAsync", AccumulateAsync);
+  Nan::SetPrototypeMethod(ctor, "accumulateProduct", AccumulateProduct);
+  Nan::SetPrototypeMethod(ctor, "accumulateProductAsync", AccumulateProductAsync);
+  Nan::SetPrototypeMethod(ctor, "accumulateSquare", AccumulateSquare);
+  Nan::SetPrototypeMethod(ctor, "accumulateSquareAsync", AccumulateSquareAsync);
+  Nan::SetPrototypeMethod(ctor, "accumulateWeighted", AccumulateWeighted);
+  Nan::SetPrototypeMethod(ctor, "accumulateWeightedAsync", AccumulateWeightedAsync);
 };
 
 NAN_METHOD(MatImgproc::DrawContours) {
@@ -970,6 +978,38 @@ NAN_METHOD(MatImgproc::MedianBlur) {
 
 NAN_METHOD(MatImgproc::MedianBlurAsync) {
 	Mat::asyncBinding<ImgprocBindings::MedianBlur>("MedianBlur", info);
+}
+
+NAN_METHOD(MatImgproc::Accumulate) {
+  Mat::syncBinding<ImgprocBindings::Accumulate>("Accumulate", info);
+}
+
+NAN_METHOD(MatImgproc::AccumulateAsync) {
+  Mat::asyncBinding<ImgprocBindings::Accumulate>("Accumulate", info);
+}
+
+NAN_METHOD(MatImgproc::AccumulateProduct) {
+  Mat::syncBinding<ImgprocBindings::AccumulateProduct>("AccumulateProduct", info);
+}
+
+NAN_METHOD(MatImgproc::AccumulateProductAsync) {
+  Mat::asyncBinding<ImgprocBindings::AccumulateProduct>("AccumulateProduct", info);
+}
+
+NAN_METHOD(MatImgproc::AccumulateSquare) {
+  Mat::syncBinding<ImgprocBindings::AccumulateSquare>("AccumulateSquare", info);
+}
+
+NAN_METHOD(MatImgproc::AccumulateSquareAsync) {
+  Mat::asyncBinding<ImgprocBindings::AccumulateSquare>("AccumulateSquare", info);
+}
+
+NAN_METHOD(MatImgproc::AccumulateWeighted) {
+  Mat::syncBinding<ImgprocBindings::AccumulateWeighted>("AccumulateWeighted", info);
+}
+
+NAN_METHOD(MatImgproc::AccumulateWeightedAsync) {
+  Mat::asyncBinding<ImgprocBindings::AccumulateWeighted>("AccumulateWeighted", info);
 }
 
 #endif
