@@ -204,6 +204,71 @@ namespace ImgprocBindings {
 		  };
 	  };
   };
+
+	class Accumulate : public CvBinding {
+	public:		
+		void setup() {
+			auto src = req<Mat::Converter>();
+			auto dst = req<Mat::Converter>();
+			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+			executeBinding = [=]() {
+				auto depth = dst->ref().depth();
+				if (depth != CV_32F && depth != CV_64F)
+					throw std::runtime_error("dst must has a depth of CV_32F or CV_64F");
+				cv::accumulate(src->ref(), dst->ref(), mask->ref());
+			};
+		};
+	};
+
+	class AccumulateProduct : public CvBinding {
+	public:
+		void setup() {
+			auto src1 = req<Mat::Converter>();
+			auto src2 = req<Mat::Converter>();
+			auto dst = req<Mat::Converter>();
+			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+
+			executeBinding = [=]() {
+				auto depth = dst->ref().depth();
+				if (depth != CV_32F && depth != CV_64F)
+					throw std::runtime_error("dst must has a depth of CV_32F or CV_64F");
+				cv::accumulateProduct(src1->ref(), src2->ref(), dst->ref(), mask->ref());
+			};
+		};
+	};
+
+	class AccumulateSquare : public CvBinding {
+	public:
+		void setup() {
+			auto src = req<Mat::Converter>();
+			auto dst = req<Mat::Converter>();
+			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+
+			executeBinding = [=]() {
+				auto depth = dst->ref().depth();
+				if (depth != CV_32F && depth != CV_64F)
+					throw std::runtime_error("dst must has a depth of CV_32F or CV_64F");
+				cv::accumulateSquare(src->ref(), dst->ref(), mask->ref());
+			};
+		};
+	};
+
+	class AccumulateWeighted : public CvBinding {
+	public:
+		void setup() {
+			auto src = req<Mat::Converter>();
+			auto dst = req<Mat::Converter>();
+			auto alpha = req<FF::DoubleConverter>();
+			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+
+			executeBinding = [=]() {
+				auto depth = dst->ref().depth();
+				if (depth != CV_32F && depth != CV_64F)
+					throw std::runtime_error("dst must has a depth of CV_32F or CV_64F");
+				cv::accumulateWeighted(src->ref(), dst->ref(), alpha->ref(), mask->ref());
+			};
+		};
+	};
 }
 
 #endif

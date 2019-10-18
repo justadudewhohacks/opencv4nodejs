@@ -35,6 +35,14 @@ export class Mat {
   constructor(data: Buffer, rows: number, cols: number, type?: number);
   abs(): Mat;
   absdiff(otherMat: Mat): Mat;
+  accumulate(src: Mat, mask?: Mat): Mat;
+  accumulateAsync(src: Mat, mask?: Mat): Promise<Mat>;
+  accumulateProduct(src1: Mat, src2: Mat, mask?: Mat): Mat;
+  accumulateProductAsync(src1: Mat, src2:Mat, mask?: Mat): Promise<Mat>;
+  accumulateSquare(src: Mat, mask?: Mat): Mat;
+  accumulateSquareAsync(src: Mat, mask?: Mat): Promise<Mat>;
+  accumulateWeighted(src: Mat, alpha: number, mask?: Mat): Mat;
+  accumulateWeightedAsync(src: Mat, alpha: number, mask?: Mat): Promise<Mat>;
   adaptiveThreshold(maxVal: number, adaptiveMethod: number, thresholdType: number, blockSize: number, C: number): Mat;
   adaptiveThresholdAsync(maxVal: number, adaptiveMethod: number, thresholdType: number, blockSize: number, C: number): Promise<Mat>;
   add(otherMat: Mat): Mat;
