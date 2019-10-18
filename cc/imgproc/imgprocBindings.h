@@ -205,92 +205,68 @@ namespace ImgprocBindings {
 	  };
   };
 
-	class Accumulate : public CvClassMethodBinding<Mat> {
-	public:
-		cv::Mat dst;
-		
-		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+	class Accumulate : public CvBinding {
+	public:		
+		void setup() {
 			auto src = req<Mat::Converter>();
+			auto dst = req<Mat::Converter>();
 			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 			executeBinding = [=]() {
-				auto depth = self->ref().depth();
+				auto depth = dst->ref().depth();
 				if (depth != CV_32F && depth != CV_64F)
-					throw std::runtime_error("dst must have a depth of CV_32F or CV_64F - mat depth:" + std::to_string(depth));
-				cv::accumulate(src->ref(), self->ref(), mask->ref());
-				dst = self->ref();
+					throw std::runtime_error("dst must has a depth of CV_32F or CV_64F");
+				cv::accumulate(src->ref(), dst->ref(), mask->ref());
 			};
-		};
-
-		v8::Local<v8::Value> getReturnValue() {
-			return Mat::Converter::wrap(dst);
 		};
 	};
 
-	class AccumulateProduct : public CvClassMethodBinding<Mat> {
+	class AccumulateProduct : public CvBinding {
 	public:
-		cv::Mat dst;
-
-		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+		void setup() {
 			auto src1 = req<Mat::Converter>();
 			auto src2 = req<Mat::Converter>();
+			auto dst = req<Mat::Converter>();
 			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 
 			executeBinding = [=]() {
-				auto depth = self->ref().depth();
+				auto depth = dst->ref().depth();
 				if (depth != CV_32F && depth != CV_64F)
-					throw std::runtime_error("dst must have a depth of CV_32F or CV_64F - mat depth:" + std::to_string(depth));
-				cv::accumulateProduct(src1->ref(), src2->ref(), self->ref(), mask->ref());
-				dst = self->ref();
+					throw std::runtime_error("dst must has a depth of CV_32F or CV_64F");
+				cv::accumulateProduct(src1->ref(), src2->ref(), dst->ref(), mask->ref());
 			};
-		};
-
-		v8::Local<v8::Value> getReturnValue() {
-			return Mat::Converter::wrap(dst);
 		};
 	};
 
-	class AccumulateSquare : public CvClassMethodBinding<Mat> {
+	class AccumulateSquare : public CvBinding {
 	public:
-		cv::Mat dst;
-
-		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+		void setup() {
 			auto src = req<Mat::Converter>();
+			auto dst = req<Mat::Converter>();
 			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 
 			executeBinding = [=]() {
-				auto depth = self->ref().depth();
+				auto depth = dst->ref().depth();
 				if (depth != CV_32F && depth != CV_64F)
-					throw std::runtime_error("dst must have a depth of CV_32F or CV_64F - mat depth:" + std::to_string(depth));
-				cv::accumulateSquare(src->ref(), self->ref(), mask->ref());
-				dst = self->ref();
+					throw std::runtime_error("dst must has a depth of CV_32F or CV_64F");
+				cv::accumulateSquare(src->ref(), dst->ref(), mask->ref());
 			};
-		};
-
-		v8::Local<v8::Value> getReturnValue() {
-			return Mat::Converter::wrap(dst);
 		};
 	};
 
-	class AccumulateWeighted : public CvClassMethodBinding<Mat> {
+	class AccumulateWeighted : public CvBinding {
 	public:
-		cv::Mat dst;
-
-		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {
+		void setup() {
 			auto src = req<Mat::Converter>();
+			auto dst = req<Mat::Converter>();
 			auto alpha = req<FF::DoubleConverter>();
 			auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
 
 			executeBinding = [=]() {
-				auto depth = self->ref().depth();
+				auto depth = dst->ref().depth();
 				if (depth != CV_32F && depth != CV_64F)
-					throw std::runtime_error("dst must have a depth of CV_32F or CV_64F - mat depth:" + std::to_string(depth));
-				cv::accumulateWeighted(src->ref(), self->ref(), alpha->ref(), mask->ref());
-				dst = self->ref();
+					throw std::runtime_error("dst must has a depth of CV_32F or CV_64F");
+				cv::accumulateWeighted(src->ref(), dst->ref(), alpha->ref(), mask->ref());
 			};
-		};
-
-		v8::Local<v8::Value> getReturnValue() {
-			return Mat::Converter::wrap(dst);
 		};
 	};
 }

@@ -124,14 +124,6 @@ public:
   static NAN_METHOD(GaussianBlurAsync);
   static NAN_METHOD(MedianBlur);
   static NAN_METHOD(MedianBlurAsync);
-  static NAN_METHOD(Accumulate);
-  static NAN_METHOD(AccumulateAsync);
-  static NAN_METHOD(AccumulateProduct);
-  static NAN_METHOD(AccumulateProductAsync);
-  static NAN_METHOD(AccumulateSquare);
-  static NAN_METHOD(AccumulateSquareAsync);
-  static NAN_METHOD(AccumulateWeighted);
-  static NAN_METHOD(AccumulateWeightedAsync);
 };
 
 #endif

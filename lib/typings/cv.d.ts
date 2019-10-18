@@ -19,14 +19,14 @@ export interface HistAxes {
   ranges: number[];
 }
 
-export function accumulate(dst: Mat, src: Mat, mask?: Mat): Mat;
-export function accumulateAsync(dst: Mat, src: Mat, mask?: Mat): Promise<Mat>;
-export function accumulateProduct(dst: Mat, src1: Mat, src2: Mat, mask?: Mat): Mat;
-export function accumulateProductAsync(dst: Mat, src1: Mat, src2:Mat, mask?: Mat): Promise<Mat>;
-export function accumulateSquare(dst: Mat, src: Mat, mask?: Mat): Mat;
-export function accumulateSquareAsync(dst: Mat, src: Mat, mask?: Mat): Promise<Mat>;
-export function accumulateWeighted(dst: Mat, src: Mat, alpha: number, mask?: Mat): Mat;
-export function accumulateWeightedAsync(dst: Mat, src: Mat, alpha: number, mask?: Mat): Promise<Mat>;
+export function accumulate(src: Mat, dst: Mat, mask?: Mat): void;
+export function accumulateAsync(src: Mat, dst: Mat, mask?: Mat): Promise<void>;
+export function accumulateProduct(src1: Mat, src2: Mat, dst: Mat, mask?: Mat): void;
+export function accumulateProductAsync(src1: Mat, src2: Mat, dst:Mat, mask?: Mat): Promise<void>;
+export function accumulateSquare(src: Mat, dst: Mat, mask?: Mat): void;
+export function accumulateSquareAsync(src: Mat, dst: Mat, mask?: Mat): Promise<void>;
+export function accumulateWeighted(src: Mat, dst: Mat, alpha: number, mask?: Mat): void;
+export function accumulateWeightedAsync(src: Mat, dst: Mat, alpha: number, mask?: Mat): Promise<void>;
 export function addWeighted(mat: Mat, alpha: number, mat2: Mat, beta: number, gamma: number, dtype?: number): Mat;
 export function addWeightedAsync(mat: Mat, alpha: number, mat2: Mat, beta: number, gamma: number, dtype?: number): Promise<Mat>;
 export function applyColorMap(src: Mat, colormap: number | Mat): Mat;

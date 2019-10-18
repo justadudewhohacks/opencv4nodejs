@@ -415,26 +415,30 @@ module.exports = ({ cv, utils, getTestImg }) => {
       [[1, 1, 1], [11, 12, 13]]
     ]
     const src = new cv.Mat(srcData, cv.CV_8UC3)
+    const dstDepth8 = new cv.Mat(dstData, cv.CV_8UC3)
     let dst
     const mask = new cv.Mat(maskData, cv.CV_8UC1)
+    
+    it('should throw if dst has not a depth of CV_32F or CV_64F', () => {
+      expect(() => cv.accumulate(src, dstDepth8)).to.throw('Imgproc::Accumulate - dst must has a depth of CV_32F or CV_64F');
+    });
 
     generateAPITests({
       getDut: () => cv,
       methodName: 'accumulate',
-      classNameSpace: 'Mat',
       methodNameSpace: 'Imgproc',
       beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
       getRequiredArgs: () => ([
-        dst,
         src,
+        dst,
         mask
       ]),
-      expectOutput: res => {
+      expectOutput: () => {
         channelIndices = ['x', 'y', 'z']
-        for (let row = 0; row < res.rows; row++) {
-          for (let col = 0; col < res.cols; col++) {
-            for (let channel = 0; channel < res.channels; channel++) {
-              expect(res.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
+        for (let row = 0; row < dst.rows; row++) {
+          for (let col = 0; col < dst.cols; col++) {
+            for (let channel = 0; channel < dst.channels; channel++) {
+              expect(dst.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
             }
           }
         }
@@ -467,26 +471,30 @@ module.exports = ({ cv, utils, getTestImg }) => {
     const src1 = new cv.Mat(srcData1, cv.CV_8UC3)
     const src2 = new cv.Mat(srcData2, cv.CV_8UC3)
     let dst
+    const dstDepth8 = new cv.Mat(dstData, cv.CV_8UC3)
     const mask = new cv.Mat(maskData, cv.CV_8UC1)
+
+    it('should throw if dst has not a depth of CV_32F or CV_64F', () => {
+      expect(() => cv.accumulateProduct(src1, src2, dstDepth8)).to.throw('Imgproc::AccumulateProduct - dst must has a depth of CV_32F or CV_64F');
+    });
 
     generateAPITests({
       getDut: () => cv,
       methodName: 'accumulateProduct',
-      classNameSpace: 'Mat',
       methodNameSpace: 'Imgproc',
       beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
       getRequiredArgs: () => ([
-        dst,
         src1,
         src2,
+        dst,
         mask
       ]),
-      expectOutput: res => {
+      expectOutput: () => {
         channelIndices = ['x', 'y', 'z']
-        for (let row = 0; row < res.rows; row++) {
-          for (let col = 0; col < res.cols; col++) {
-            for (let channel = 0; channel < res.channels; channel++) {
-              expect(res.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
+        for (let row = 0; row < dst.rows; row++) {
+          for (let col = 0; col < dst.cols; col++) {
+            for (let channel = 0; channel < dst.channels; channel++) {
+              expect(dst.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
             }
           }
         }
@@ -514,25 +522,29 @@ module.exports = ({ cv, utils, getTestImg }) => {
   
     const src = new cv.Mat(srcData, cv.CV_8UC3)
     let dst
+    const dstDepth8 = new cv.Mat(dstData, cv.CV_8UC3)
     const mask = new cv.Mat(maskData, cv.CV_8UC1)
+
+    it('should throw if dst has not a depth of CV_32F or CV_64F', () => {
+      expect(() => cv.accumulateSquare(src, dstDepth8)).to.throw('Imgproc::AccumulateSquare - dst must has a depth of CV_32F or CV_64F');
+    });    
 
     generateAPITests({
       getDut: () => cv,
       methodName: 'accumulateSquare',
-      classNameSpace: 'Mat',
       methodNameSpace: 'Imgproc',
       beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
       getRequiredArgs: () => ([
-        dst,
         src,
+        dst,
         mask
       ]),
-      expectOutput: res => {
+      expectOutput: () => {
         channelIndices = ['x', 'y', 'z']
-        for (let row = 0; row < res.rows; row++) {
-          for (let col = 0; col < res.cols; col++) {
-            for (let channel = 0; channel < res.channels; channel++) {
-              expect(res.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
+        for (let row = 0; row < dst.rows; row++) {
+          for (let col = 0; col < dst.cols; col++) {
+            for (let channel = 0; channel < dst.channels; channel++) {
+              expect(dst.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
             }
           }
         }
@@ -561,26 +573,30 @@ module.exports = ({ cv, utils, getTestImg }) => {
   
     const src = new cv.Mat(srcData, cv.CV_8UC3)
     let dst
+    const dstDepth8 = new cv.Mat(dstData, cv.CV_8UC3)
     const mask = new cv.Mat(maskData, cv.CV_8UC1)
+
+    it('should throw if dst has not a depth of CV_32F or CV_64F', () => {
+      expect(() => cv.accumulateWeighted(src, dstDepth8, alpha)).to.throw('Imgproc::AccumulateWeighted - dst must has a depth of CV_32F or CV_64F');
+    });    
 
     generateAPITests({
       getDut: () => cv,
       methodName: 'accumulateWeighted',
-      classNameSpace: 'Mat',
       methodNameSpace: 'Imgproc',
       beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
       getRequiredArgs: () => ([
-        dst,
         src,
+        dst,
         alpha,
         mask
       ]),
-      expectOutput: res => {
+      expectOutput: () => {
         channelIndices = ['x', 'y', 'z']
-        for (let row = 0; row < res.rows; row++) {
-          for (let col = 0; col < res.cols; col++) {
-            for (let channel = 0; channel < res.channels; channel++) {
-              expect(res.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
+        for (let row = 0; row < dst.rows; row++) {
+          for (let col = 0; col < dst.cols; col++) {
+            for (let channel = 0; channel < dst.channels; channel++) {
+              expect(dst.at(row, col)[channelIndices[channel]]).to.be.closeTo(expectedData[row][col][channel], 1e-5);
             }
           }
         }
