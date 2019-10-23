@@ -145,6 +145,10 @@ module.exports = ({ cv, utils, getTestImg }) => {
       expect(() => cv.calcHist()).to.throw('Imgproc::CalcHist - Error: expected argument 0 to be of type');
     });
 
+    it('should throw if no HistAxes arg', () => {
+      expect(() => cv.calcHist(getTestImg())).to.throw('Imgproc::CalcHist - Error: expected argument 1 to be of type array of HistAxes');
+    });
+
     it('should return 1 dimensional hist', () => {
       const histAxes = [
         {
