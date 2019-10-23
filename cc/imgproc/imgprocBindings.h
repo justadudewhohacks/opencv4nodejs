@@ -330,21 +330,18 @@ namespace ImgprocBindings {
   typedef FF::ArrayConverterTemplate<HistAxesConverterImpl> ArrayHistAxesConverter;
 
   class CalcHist : public CvBinding {
-  private:
-    cv::MatND hist;
   public:
-    v8::Local<v8::Value> getReturnValue(){
-      return Mat::Converter::wrap(hist);
-    }
-
     void setup() {
 
       auto src = req<Mat::Converter>();
       auto jsHistAxes = req<ArrayHistAxesConverter>();
       auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+      auto retHist = ret<Mat::Converter>("hist");
 
       executeBinding = [=]() {
         auto histAxes = jsHistAxes->ref();
+        auto img = src->ref();
+        cv::MatND hist;
 
         const int dims = histAxes.size();
 
@@ -360,8 +357,6 @@ namespace ImgprocBindings {
           channels[i] = entry.channel;
           bins[i] = entry.bins;
         }
-
-        auto img = src->ref();
 
         cv::calcHist(
             &img,
@@ -387,6 +382,8 @@ namespace ImgprocBindings {
         if (outputType != hist.type()) {
           hist.convertTo(hist, outputType);
         }
+
+        retHist->ref() = hist;
       };
     }
   };
