@@ -230,6 +230,7 @@ export class Mat {
   norm(src2: Mat, normType?: number, mask?: Mat): number;
   norm(normType?: number, mask?: Mat): number;
   normalize(alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat): Mat;
+  normalizeAsync(alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat): Promise<Mat>;
   or(otherMat: Mat): Mat;
   padToSquare(color: Vec3): Mat;
   perspectiveTransform(m: Mat): Mat;
