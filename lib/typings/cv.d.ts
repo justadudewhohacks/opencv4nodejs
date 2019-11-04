@@ -13,10 +13,12 @@ import { TermCriteria } from './TermCriteria.d';
 import { OCRHMMClassifier } from './OCRHMMClassifier.d';
 import { Net } from './Net.d';
 
-export interface HistAxes {
+export class HistAxes {
   channel: number;
   bins: number;
   ranges: number[];
+
+  constructor(opts: { channel: number, bins: number, ranges: [number, number] });
 }
 
 export function accumulate(src: Mat, dst: Mat, mask?: Mat): void;

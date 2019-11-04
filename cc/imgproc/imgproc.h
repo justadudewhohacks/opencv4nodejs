@@ -6,6 +6,7 @@
 #include "Mat.h"
 #include "Contour.h"
 #include "Moments.h"
+#include "HistAxes.h"
 
 #ifndef __FF_IMGPROC_H__
 #define __FF_IMGPROC_H__

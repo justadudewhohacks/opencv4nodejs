@@ -5,6 +5,7 @@
 #include "Rect.h"
 #include "RotatedRect.h"
 #include "TermCriteria.h"
+#include "HistAxes.h"
 #include "macros.h"
 #include <opencv2/core.hpp>
 

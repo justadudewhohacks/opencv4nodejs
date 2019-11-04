@@ -206,7 +206,7 @@ namespace ImgprocBindings {
   };
 
 	class Accumulate : public CvBinding {
-	public:		
+	public:
 		void setup() {
 			auto src = req<Mat::Converter>();
 			auto dst = req<Mat::Converter>();
@@ -270,71 +270,12 @@ namespace ImgprocBindings {
 		};
 	};
 
-  typedef struct HistAxes {
-    float range[2];
-    int channel;
-    int bins;
-  } HistAxes;
-
-  class HistAxesConverterImpl : public FF::UnwrapperBase<HistAxesConverterImpl, HistAxes> {
-  public:
-
-    typedef HistAxes Type;
-
-    static std::string getTypeName() {
-      return std::string("HistAxes");
-    }
-
-    static bool assertType(v8::Local<v8::Value> jsVal) {
-      if (!jsVal->IsObject()) return false;
-
-      auto jsObj = Nan::To<v8::Object>(jsVal).ToLocalChecked();
-
-      if (!FF::hasOwnProperty(jsObj, "ranges")) return false;
-
-      auto jsRangesVal = Nan::Get(jsObj, Nan::New("ranges").ToLocalChecked()).ToLocalChecked();
-      if (!jsRangesVal->IsArray()) return false;
-      auto jsRanges = v8::Local<v8::Array>::Cast(jsRangesVal);
-      if (jsRanges->Length() != 2) return false;
-
-      return (
-          Nan::Get(jsObj, Nan::New("channel").ToLocalChecked()).ToLocalChecked()->IsNumber() ||
-          Nan::Get(jsObj, Nan::New("bins").ToLocalChecked()).ToLocalChecked()->IsNumber()
-      );
-    }
-
-    static HistAxes unwrapUnchecked(v8::Local<v8::Value> jsVal) {
-      FF::TryCatch tryCatch("Imgproc::CalcHist");
-      HistAxes ret;
-      auto jsAxis = Nan::To<v8::Object>(jsVal).ToLocalChecked();
-
-      v8::Local<v8::Value> jsRangesVal = Nan::Get(jsAxis, Nan::New("ranges").ToLocalChecked()).ToLocalChecked();
-      v8::Local<v8::Array> jsRanges = v8::Local<v8::Array>::Cast(jsRangesVal);
-
-      ret.range[0] = FF::DoubleConverter::unwrapUnchecked(Nan::Get(jsRanges, 0).ToLocalChecked());
-      ret.range[1] = FF::DoubleConverter::unwrapUnchecked(Nan::Get(jsRanges, 1).ToLocalChecked());
-      FF::IntConverter::prop(&ret.channel, "channel", jsAxis);
-      FF::IntConverter::prop(&ret.bins, "bins", jsAxis);
-      return ret;
-    }
-
-    static v8::Local<v8::Value> wrap(HistAxes val) {
-      v8::Local<v8::Object> ret = Nan::New<v8::Object>();
-      Nan::Set(ret, FF::newString("bins"), FF::IntConverter::wrap(val.bins));
-      Nan::Set(ret, FF::newString("channel"), FF::IntConverter::wrap(val.channel));
-      Nan::Set(ret, FF::newString("ranges"), FF::FloatArrayConverter::wrap({val.range[0], val.range[1]}));
-
-      return ret;
-    }
-  };
-  typedef FF::ArrayConverterTemplate<HistAxesConverterImpl> ArrayHistAxesConverter;
-
   class CalcHist : public CvBinding {
   public:
     void setup() {
 
       auto src = req<Mat::Converter>();
-      auto jsHistAxes = req<ArrayHistAxesConverter>();
+      auto jsHistAxes = req<HistAxes::ArrayConverter>();
       auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
       auto retHist = ret<Mat::Converter>("hist");
 

@@ -20,6 +20,7 @@
 			"cc/ExternalMemTracking.cc",
 			"cc/core/core.cc",
 			"cc/core/coreConstants.cc",
+			"cc/core/HistAxes.cc",
 			"cc/core/Mat.cc",
 			"cc/core/Point.cc",
 			"cc/core/Vec.cc",
