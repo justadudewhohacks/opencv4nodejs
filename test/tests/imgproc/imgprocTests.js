@@ -188,6 +188,18 @@ module.exports = ({ cv, utils, getTestImg }) => {
       expect(() => cv.calcHist(getTestImg())).to.throw('Imgproc::CalcHist - Error: expected argument 1 to be of type array of HistAxes');
     });
 
+    it('should return when using the deprecated API', () => {
+      const histAxes = [
+        {
+          channel: 0,
+          bins: 8,
+          ranges: [0, 256]
+        }
+      ];
+      const hist1D = cv.calcHist(getTestImg(), histAxes);
+      assertPropsWithValue(hist1D)({ rows: 8, cols: 1, dims: 2 });
+    });
+
     it('should return 1 dimensional hist', () => {
       const histAxes = [
         {

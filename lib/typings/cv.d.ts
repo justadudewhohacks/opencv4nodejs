@@ -39,6 +39,8 @@ export function blobFromImagesAsync(image: Mat[], scaleFactor?: number, size?: S
 export function blur(mat: Mat, kSize: Size, anchor?: Point2, borderType?: number): Mat;
 export function blurAsync(mat: Mat, kSize: Size, anchor?: Point2, borderType?: number): Promise<Mat>;
 export function NMSBoxes(bboxes: Rect[], scores: number[], scoreThreshold: number, nmsThreshold: number): number[];
+/** @deprecated */
+export function calcHist(img: Mat, histAxes: { channel: number, bins: number, ranges: [number, number] }[], mask?: Mat): Mat;
 export function calcHist(img: Mat, histAxes: HistAxes[], mask?: Mat): Mat;
 export function calcHistAsync(img: Mat, histAxes: HistAxes[], mask?: Mat): Promise<Mat>;
 export function calibrateCamera(objectPoints: Point3[], imagePoints: Point2[], imageSize: Size, cameraMatrix: Mat, distCoeffs: number[], flags?: number, criteria?: TermCriteria): { returnValue: number, rvecs: Vec3[], tvecs: Vec3[], distCoeffs: number[] };
