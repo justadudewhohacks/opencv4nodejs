@@ -140,9 +140,64 @@ module.exports = ({ cv, utils, getTestImg }) => {
     });
   });
 
+  describe('HistAxes', () => {
+    it('should throw if no args', () => {
+      expect(() => new cv.HistAxes()).to.throw('HistAxes::New - expected one argument');
+    });
+    it('should throw if incomplete args', () => {
+      expect(() => new cv.HistAxes({})).to.throw('HistAxes::New - expected object to have ranges');
+      expect(() => new cv.HistAxes({ranges: []})).to.throw('HistAxes::New - expected object to have bins');
+      expect(() => new cv.HistAxes({ranges: [], bins: 0})).to.throw('HistAxes::New - expected object to have channel');
+      expect(() => new cv.HistAxes({
+        ranges: [],
+        bins: 0,
+        channel: 0
+      })).to.throw('HistAxes::New - expected ranges to be an array with 2 numbers');
+      expect(() => new cv.HistAxes({
+        ranges: [1],
+        bins: 0,
+        channel: 0
+      })).to.throw('HistAxes::New - expected ranges to be an array with 2 numbers');
+      expect(() => new cv.HistAxes({
+        ranges: [1,2,3],
+        bins: 0,
+        channel: 0
+      })).to.throw('HistAxes::New - expected ranges to be an array with 2 numbers');
+      expect(() => new cv.HistAxes({
+        ranges: [1,"2"],
+        bins: 0,
+        channel: 0
+      })).to.throw('HistAxes::New - expected ranges to be an array with 2 numbers');
+    });
+    it('should return HistAxes', () => {
+      const h = new cv.HistAxes({
+        channel: 0,
+        bins: 8,
+        ranges: [0, 256]
+      });
+      assertPropsWithValue(h)({channel: 0, bins: 8, ranges: [0, 256]});
+    });
+  });
+
   describe('calcHist', () => {
     it('should throw if no args', () => {
       expect(() => cv.calcHist()).to.throw('Imgproc::CalcHist - Error: expected argument 0 to be of type');
+    });
+
+    it('should throw if no HistAxes arg', () => {
+      expect(() => cv.calcHist(getTestImg())).to.throw('Imgproc::CalcHist - Error: expected argument 1 to be of type array of HistAxes');
+    });
+
+    it('should return when using the deprecated API', () => {
+      const histAxes = [
+        {
+          channel: 0,
+          bins: 8,
+          ranges: [0, 256]
+        }
+      ];
+      const hist1D = cv.calcHist(getTestImg(), histAxes);
+      assertPropsWithValue(hist1D)({ rows: 8, cols: 1, dims: 2 });
     });
 
     it('should return 1 dimensional hist', () => {
@@ -152,7 +207,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
           bins: 8,
           ranges: [0, 256]
         }
-      ];
+      ].map(x => new cv.HistAxes(x));
       const hist1D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist1D)({ rows: 8, cols: 1, dims: 2 });
     });
@@ -169,7 +224,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
           bins: 32,
           ranges: [0, 256]
         }
-      ];
+      ].map(x => new cv.HistAxes(x));
       const hist2D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist2D)({ rows: 8, cols: 32, dims: 2 });
     });
@@ -192,7 +247,7 @@ module.exports = ({ cv, utils, getTestImg }) => {
           bins: 8,
           ranges: [0, 256]
         }
-      ];
+      ].map(x => new cv.HistAxes(x));
       const hist3D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist3D)({ dims: 3 });
     });

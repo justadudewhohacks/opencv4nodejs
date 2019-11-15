@@ -6,29 +6,10 @@
 #include "imgprocBindings.h"
 #include "imgprocConstants.h"
 
-#define FF_DEFINE_CALC_HIST(name, n, constRangesArray)                                                        \
-  cv::MatND name(cv::Mat img, cv::Mat mask, int channels[], int histSize[], std::vector<float*> rangesVec) {  \
-    const float* ranges[] = constRangesArray;                                                                  \
-    cv::MatND hist;                                                                                            \
-    cv::calcHist(&img, 1, channels, mask, hist, n, histSize, ranges, true, false);                            \
-    return hist;                                                                                              \
-  }
-
-#define FF_HIST_RANGE_1 { rangesVec.at(0) }
-#define FF_HIST_RANGE_2 { rangesVec.at(0), rangesVec.at(1) }
-#define FF_HIST_RANGE_3 { rangesVec.at(0), rangesVec.at(1), rangesVec.at(2) }
-#define FF_HIST_RANGE_4 { rangesVec.at(0), rangesVec.at(1), rangesVec.at(2), rangesVec.at(3) }
-
-FF_DEFINE_CALC_HIST(calcHist1, 1, FF_HIST_RANGE_1);
-FF_DEFINE_CALC_HIST(calcHist2, 2, FF_HIST_RANGE_2);
-FF_DEFINE_CALC_HIST(calcHist3, 3, FF_HIST_RANGE_3);
-FF_DEFINE_CALC_HIST(calcHist4, 4, FF_HIST_RANGE_4);
-
 NAN_MODULE_INIT(Imgproc::Init) {
 	ImgprocConstants::Init(target);
   Nan::SetMethod(target, "getStructuringElement", GetStructuringElement);
   Nan::SetMethod(target, "getRotationMatrix2D", GetRotationMatrix2D);
-  Nan::SetMethod(target, "calcHist", CalcHist);
   Nan::SetMethod(target, "plot1DHist", Plot1DHist);
   Nan::SetMethod(target, "fitLine", FitLine);
   Nan::SetMethod(target, "getAffineTransform", GetAffineTransform);
@@ -61,7 +42,8 @@ NAN_MODULE_INIT(Imgproc::Init) {
   Nan::SetMethod(target, "accumulateSquareAsync", AccumulateSquareAsync);
   Nan::SetMethod(target, "accumulateWeighted", AccumulateWeighted);
   Nan::SetMethod(target, "accumulateWeightedAsync", AccumulateWeightedAsync);
-
+  Nan::SetMethod(target, "calcHist", CalcHist);
+  Nan::SetMethod(target, "calcHistAsync", CalcHistAsync);
 
   Moments::Init(target);
   Contour::Init(target);
@@ -126,85 +108,6 @@ NAN_METHOD(Imgproc::GetPerspectiveTransform) {
   }
 
   info.GetReturnValue().Set(Mat::Converter::wrap(cv::getPerspectiveTransform(srcPoints, dstPoints)));
-}
-
-NAN_METHOD(Imgproc::CalcHist) {
-	FF::TryCatch tryCatch("Imgproc::CalcHist");
-  cv::Mat img, mask = cv::noArray().getMat();
-  std::vector<std::vector<float>> _ranges;
-  if (
-	  Mat::Converter::arg(0, &img, info) ||
-	  Mat::Converter::optArg(2, &mask, info)
-	) {
-	  return tryCatch.reThrow();
-  }
-  if (!info[1]->IsArray()) {
-	  return tryCatch.throwError("expected arg 1 to be an array");
-  }
-  v8::Local<v8::Array> jsHistAxes = v8::Local<v8::Array>::Cast(info[1]);
-
-  cv::Mat inputImg = img;
-  int inputType = CV_MAKETYPE(CV_32F, img.channels());
-  if (inputType != img.type()) {
-    img.convertTo(inputImg, inputType);
-  }
-
-  int dims = jsHistAxes->Length();
-  int* channels = new int[dims];
-  int* histSize = new int[dims];
-  std::vector<float*> ranges;
-  // TODO replace old macros
-  for (int i = 0; i < dims; ++i) {
-    ranges.push_back(new float[dims]);
-    v8::Local<v8::Object> jsAxis = Nan::To<v8::Object>((Nan::Get(jsHistAxes, i).ToLocalChecked())).ToLocalChecked();
-	if (!FF::hasOwnProperty(jsAxis, "ranges")) {
-		return tryCatch.throwError("expected axis object to have ranges property");
-	}
-	v8::Local<v8::Value> jsRangesVal = Nan::Get(jsAxis, Nan::New("ranges").ToLocalChecked()).ToLocalChecked();
-	if (!jsRangesVal->IsArray()) {
-		return tryCatch.throwError("expected ranges to be an array");
-	}
-	v8::Local<v8::Array> jsRanges = v8::Local<v8::Array>::Cast(jsRangesVal);
-	if (jsRanges->Length() != 2) {
-		return tryCatch.throwError("expected ranges to be an array of length 2");
-	}
-    ranges.at(i)[0] = FF::DoubleConverter::unwrapUnchecked(Nan::Get(jsRanges, 0).ToLocalChecked());
-    ranges.at(i)[1] = FF::DoubleConverter::unwrapUnchecked(Nan::Get(jsRanges, 1).ToLocalChecked());
-    int channel, bins;
-
-	if (FF::IntConverter::prop(&channel, "channel", jsAxis) || FF::IntConverter::prop(&bins, "bins", jsAxis)) {
-		return tryCatch.reThrow();
-	}
-    channels[i] = channel;
-    histSize[i] = bins;
-  }
-
-  cv::MatND hist;
-  if (dims == 1) {
-    hist = calcHist1(inputImg, mask, channels, histSize, ranges);
-  }
-  else if (dims == 2) {
-    hist = calcHist2(inputImg, mask, channels, histSize, ranges);
-  }
-  else if (dims == 3) {
-    hist = calcHist3(inputImg, mask, channels, histSize, ranges);
-  }
-  else if (dims == 4) {
-    hist = calcHist4(inputImg, mask, channels, histSize, ranges);
-  }
-
-  for (int i = 0; i < dims; ++i) {
-    delete[] ranges.at(i);
-  }
-  delete[] channels;
-  delete[] histSize;
-
-  int outputType = CV_MAKETYPE(CV_64F, img.channels());
-  if (outputType != hist.type()) {
-    hist.convertTo(hist, outputType);
-  }
-
-  info.GetReturnValue().Set(Mat::Converter::wrap(hist));
 }
 
 NAN_METHOD(Imgproc::Plot1DHist) {
@@ -429,6 +332,14 @@ NAN_METHOD(Imgproc::AccumulateWeighted) {
 
 NAN_METHOD(Imgproc::AccumulateWeightedAsync) {
   FF::asyncBinding<ImgprocBindings::AccumulateWeighted>("Imgproc", "AccumulateWeighted", info);
+}
+
+NAN_METHOD(Imgproc::CalcHist) {
+  FF::syncBinding<ImgprocBindings::CalcHist>("Imgproc", "CalcHist", info);
+}
+
+NAN_METHOD(Imgproc::CalcHistAsync) {
+  FF::asyncBinding<ImgprocBindings::CalcHist>("Imgproc", "CalcHist", info);
 }
 
 #endif

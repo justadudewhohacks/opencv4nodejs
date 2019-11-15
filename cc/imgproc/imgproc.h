@@ -6,6 +6,7 @@
 #include "Mat.h"
 #include "Contour.h"
 #include "Moments.h"
+#include "HistAxes.h"
 
 #ifndef __FF_IMGPROC_H__
 #define __FF_IMGPROC_H__
@@ -18,7 +19,6 @@ public:
   static NAN_METHOD(GetRotationMatrix2D);
   static NAN_METHOD(GetAffineTransform);
   static NAN_METHOD(GetPerspectiveTransform);
-  static NAN_METHOD(CalcHist);
   static NAN_METHOD(Plot1DHist);
   static NAN_METHOD(FitLine);
   static NAN_METHOD(GetTextSize);
@@ -49,6 +49,8 @@ public:
   static NAN_METHOD(AccumulateSquareAsync);
   static NAN_METHOD(AccumulateWeighted);
   static NAN_METHOD(AccumulateWeightedAsync);
+  static NAN_METHOD(CalcHist);
+  static NAN_METHOD(CalcHistAsync);
 };
 
 #endif

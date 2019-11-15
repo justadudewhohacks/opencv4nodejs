@@ -206,7 +206,7 @@ namespace ImgprocBindings {
   };
 
 	class Accumulate : public CvBinding {
-	public:		
+	public:
 		void setup() {
 			auto src = req<Mat::Converter>();
 			auto dst = req<Mat::Converter>();
@@ -269,6 +269,65 @@ namespace ImgprocBindings {
 			};
 		};
 	};
+
+  class CalcHist : public CvBinding {
+  public:
+    void setup() {
+
+      auto src = req<Mat::Converter>();
+      auto jsHistAxes = req<HistAxes::ArrayConverter>();
+      auto mask = opt<Mat::Converter>("mask", cv::noArray().getMat());
+      auto retHist = ret<Mat::Converter>("hist");
+
+      executeBinding = [=]() {
+        auto histAxes = jsHistAxes->ref();
+        auto img = src->ref();
+        cv::MatND hist;
+
+        const int dims = histAxes.size();
+
+        auto **ranges = new float*[dims];
+        int *channels = new int[dims];
+        int *bins = new int[dims];
+
+        for (int i = 0; i < dims; i++) {
+          auto entry = histAxes.at(i);
+          ranges[i] = new float[2];
+          ranges[i][0] = entry.range[0];
+          ranges[i][1] = entry.range[1];
+          channels[i] = entry.channel;
+          bins[i] = entry.bins;
+        }
+
+        cv::calcHist(
+            &img,
+            1,
+            channels,
+            mask->ref(),
+            hist,
+            dims,
+            bins,
+            (const float **)(ranges),
+            true,
+            false
+        );
+
+        for (int i = 0; i < dims; ++i) {
+          delete[] ranges[i];
+        }
+        delete[] ranges;
+        delete[] channels;
+        delete[] bins;
+
+        int outputType = CV_MAKETYPE(CV_64F, img.channels());
+        if (outputType != hist.type()) {
+          hist.convertTo(hist, outputType);
+        }
+
+        retHist->ref() = hist;
+      };
+    }
+  };
 }
 
 #endif

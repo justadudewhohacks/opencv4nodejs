@@ -13,6 +13,7 @@ NAN_MODULE_INIT(Core::Init) {
   Rect::Init(target);
   RotatedRect::Init(target);
   TermCriteria::Init(target);
+  HistAxes::Init(target);
 
   Nan::SetMethod(target, "getBuildInformation", GetBuildInformation);
   Nan::SetMethod(target, "partition", Partition);
