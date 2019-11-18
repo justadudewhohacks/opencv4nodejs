@@ -80,7 +80,7 @@ process.env['OPENCV4NODEJS_LIBRARIES'] = libs.join('\n')
 const flags = process.env.BINDINGS_DEBUG ? '--jobs max --debug' : '--jobs max'
 const nodegypCmd = 'node-gyp rebuild ' + flags
 log.info('install', `spawning node gyp process: ${nodegypCmd}`)
-const child = child_process.exec(nodegypCmd, {}, function(err, stdout, stderr) {
+const child = child_process.exec(nodegypCmd, { maxBuffer: Infinity }, function(err, stdout, stderr) {
   const _err = err || stderr
   if (_err) log.error(_err)
 })
