@@ -205,6 +205,7 @@ export class Mat {
   inRangeAsync(lower: Vec3, upper: Vec3): Promise<Mat>;
   integral(sdepth?: number, sqdepth?: number): { sum: Mat, sqsum: Mat, tilted: Mat };
   integralAsync(sdepth?: number, sqdepth?: number): Promise<{ sum: Mat, sqsum: Mat, tilted: Mat }>;
+  inv(): Mat;
   laplacian(ddepth: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Mat;
   laplacianAsync(ddepth: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
   matMul(B: Mat): Mat;

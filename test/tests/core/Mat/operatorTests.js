@@ -5,6 +5,7 @@ module.exports = function ({ cv, utils }) {
   const {
     assertError,
     assertDataDeepEquals,
+    assertDataAlmostDeepEquals,
     assertMetaData
   } = utils;
 
@@ -353,7 +354,25 @@ module.exports = function ({ cv, utils }) {
       assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
+  
+  describe('inv', () => {
+    it('apply inverse to matrix', () => {
+      const mat0 = new cv.Mat([
+        [4, 7],
+        [2, 6]
+      ], cv.CV_32F);
+      const expectedResult = [
+        [0.6, -0.7],
+        [-0.2, 0.4]
+      ];
 
+      const res = mat0.inv();
+      assertMetaData(res)(2, 2, cv.CV_32F);
+      
+      assertDataAlmostDeepEquals(res.getDataAsArray(), expectedResult);
+    });
+  });
+  
   describe('matMul', () => {
     operatorRequiresArg('matMul');
 
