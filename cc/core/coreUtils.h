@@ -89,6 +89,7 @@
 	Nan::SetPrototypeMethod(ctor, "bitwiseXor", BitwiseXor);	\
 	Nan::SetPrototypeMethod(ctor, "abs", Abs);								\
 	Nan::SetPrototypeMethod(ctor, "transpose", Transpose);		\
+	Nan::SetPrototypeMethod(ctor, "inv", Inv);		\
 	Nan::SetPrototypeMethod(ctor, "determinant", Determinant);\
 	Nan::SetPrototypeMethod(ctor, "matMul", MatMul);
 
@@ -156,6 +157,9 @@
 	}																																					\
 	static NAN_METHOD(Transpose) {																						\
 		FF_SELF_OPERATOR(cv::transpose);									\
+	}																																					\
+	static NAN_METHOD(Inv) {																						\
+		FF_SELF_OPERATOR(cv::invert);									\
 	}																																					\
 	static NAN_METHOD(MatMul) {																								\
 		FF_OPERATOR(*, FF_APPLY_OPERATOR, Mat, "MatMul");					\
