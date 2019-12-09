@@ -90,7 +90,7 @@ Check out <a href="https://medium.com/@muehler.v/machine-learning-with-opencv-an
 ![plotbgr](https://user-images.githubusercontent.com/31125521/29995016-1b847970-8fdf-11e7-9316-4eb0fd550adc.jpg)
 ![plotgray](https://user-images.githubusercontent.com/31125521/29995015-1b83e06e-8fdf-11e7-8fa8-5d18326b9cd3.jpg)
 
-### Automating lights by people detection through classifiers
+### Automating lights by people detection through classifier
 
 Check out <a href="https://medium.com/softway-blog/automating-lights-with-computer-vision-nodejs-fb9b614b75b2"><b>Automating lights with Computer Vision & NodeJS</b></a>.
 
