@@ -23,7 +23,6 @@ opencv4nodejs
 * **[Async API](#async-api)**
 * **[With TypeScript](#with-typescript)**
 * **[External Memory Tracking (v4.0.0)](#external-mem-tracking)**
-* **[In a webpage through express & websockets](#in-a-web-page)**
 <a name="examples"></a>
 
 # Examples
@@ -89,6 +88,10 @@ Check out <a href="https://medium.com/@muehler.v/machine-learning-with-opencv-an
 
 ![plotbgr](https://user-images.githubusercontent.com/31125521/29995016-1b847970-8fdf-11e7-9316-4eb0fd550adc.jpg)
 ![plotgray](https://user-images.githubusercontent.com/31125521/29995015-1b83e06e-8fdf-11e7-8fa8-5d18326b9cd3.jpg)
+
+### Boiler plate for combination of opencv4nodejs, express and websockets.
+
+[opencv4nodejs-express-websockets](https://github.com/Mudassir-23/opencv4nodejs-express-websockets) - Boilerplate express app for getting started on opencv with nodejs and to live stream the video through websockets.
 
 ### Automating lights by people detection through classifier
 
@@ -565,9 +568,5 @@ Or directly in your code:
 process.env.OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING = 1
 const cv = require('opencv4nodejs')
 ```
-<a name="in-a-web-page"></a>
 
-# In a web page through express & websockets
-
-[opencv4nodejs-express-websockets](https://github.com/Mudassir-23/opencv4nodejs-express-websockets) - Boilerplate express app for getting started on opencv with nodejs and to live stream the video through websockets.
 
