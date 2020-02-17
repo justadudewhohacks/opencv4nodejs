@@ -16,6 +16,7 @@ NAN_MODULE_INIT(Io::Init) {
   Nan::SetMethod(target, "imshowWait", ImshowWait);
   Nan::SetMethod(target, "imwrite", Imwrite);
   Nan::SetMethod(target, "waitKey", WaitKey);
+  Nan::SetMethod(target, "waitKeyEx", WaitKeyEx);
   Nan::SetMethod(target, "imencode", Imencode);
   Nan::SetMethod(target, "imdecode", Imdecode);
   Nan::SetMethod(target, "moveWindow", MoveWindow);
@@ -101,6 +102,16 @@ NAN_METHOD(Io::WaitKey) {
     key = cv::waitKey(info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
   } else{
     key = cv::waitKey();
+  }
+  info.GetReturnValue().Set(Nan::New(key));
+}
+
+NAN_METHOD(Io::WaitKeyEx) {
+  int key;
+  if (info[0]->IsNumber()) {
+    key = cv::waitKeyEx(info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
+  } else{
+    key = cv::waitKeyEx();
   }
   info.GetReturnValue().Set(Nan::New(key));
 }

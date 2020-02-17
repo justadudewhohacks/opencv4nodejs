@@ -205,6 +205,7 @@ export function transformAsync(mat: Mat, m: Mat): Promise<Mat>;
 export function undistortPoints(srcPoints: Point2[], cameraMatrix: Mat, distCoeffs: Mat): Point2[];
 export function undistortPointsAsync(srcPoints: Point2[], cameraMatrix: Mat, distCoeffs: Mat): Promise<Point2[]>;
 export function waitKey(delay?: number): number;
+export function waitKeyEx(delay?: number): number;
 
 export type DrawParams = {
   thickness?: number;
