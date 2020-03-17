@@ -110,6 +110,7 @@ export function imwriteAsync(filePath: string, img: Mat, flags?: number[]): Prom
 export function initCameraMatrix2D(objectPoints: Point3[], imagePoints: Point2[], imageSize: Size, aspectRatio?: number): Mat;
 export function initCameraMatrix2DAsync(objectPoints: Point3[], imagePoints: Point2[], imageSize: Size, aspectRatio?: number): Promise<Mat>;
 export function kmeans(data: Point2[], k: number, attempts: number, termCriteria: TermCriteria, flags: number): { labels: number[], centers: Point2[] };
+export function kmeans(data: Point3[], k: number, attempts: number, termCriteria: TermCriteria, flags: number): { labels: number[], centers: Point3[] };
 export function loadOCRHMMClassifierCNN(file: string): OCRHMMClassifier;
 export function loadOCRHMMClassifierCNNAsync(file: string): Promise<OCRHMMClassifier>;
 export function loadOCRHMMClassifierNM(file: string): OCRHMMClassifier;
