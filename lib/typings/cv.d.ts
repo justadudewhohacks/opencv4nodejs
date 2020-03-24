@@ -93,6 +93,8 @@ export function getBuildInformation(): string;
 export function getPerspectiveTransform(srcPoints: Point2[], dstPoints: Point2[]): Mat;
 export function getRotationMatrix2D(center: Point2, angle: number, scale?: number): Mat;
 export function getStructuringElement(shape: number, kernelSize: Size, anchor?: Point2): Mat;
+export function getTextSize(text: string, fontFace: number, fontScale: number, thickness: number): {size: Size, baseLine: number};
+export function getTextSizeAsync(text: string, fontFace: number, fontScale: number, thickness: number): Promise<{size: Size, baseLine: number}>;
 export function getValidDisparityROI(roi1: Rect[], roi2: Rect[], minDisparity: number, numberOfDisparities: number, SADWindowSize: number): Rect;
 export function getValidDisparityROIAsync(roi1: Rect[], roi2: Rect[], minDisparity: number, numberOfDisparities: number, SADWindowSize: number): Promise<Rect>;
 export function goodFeaturesToTrack(mat: Mat, maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Point2[];
