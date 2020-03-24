@@ -244,7 +244,7 @@ export class Mat {
   push_backAsync(mat: Mat): Promise<Mat>;
   pushBack(mat: Mat): Mat;
   pushBackAsync(mat: Mat): Promise<Mat>;
-  putText(text: string, origin: Point2, fontFace: number, fontScale: number, color?: Vec3, lineType?: number, thickness?: number, bottomLeftOrigin?: boolean): void;
+  putText(text: string, origin: Point2, fontFace: number, fontScale: number, color?: Vec3, thickness?: number, lineType?: number, bottomLeftOrigin?: boolean): void;
   pyrDown(size?: Size, borderType?: number): Mat;
   pyrDownAsync(size?: Size, borderType?: number): Promise<Mat>;
   pyrUp(size?: Size, borderType?: number): Mat;
