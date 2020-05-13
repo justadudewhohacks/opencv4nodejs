@@ -16,6 +16,9 @@ NAN_MODULE_INIT(Io::Init) {
   Nan::SetMethod(target, "imshowWait", ImshowWait);
   Nan::SetMethod(target, "imwrite", Imwrite);
   Nan::SetMethod(target, "waitKey", WaitKey);
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
+  Nan::SetMethod(target, "waitKeyEx", WaitKeyEx);
+#endif
   Nan::SetMethod(target, "imencode", Imencode);
   Nan::SetMethod(target, "imdecode", Imdecode);
   Nan::SetMethod(target, "moveWindow", MoveWindow);
@@ -104,6 +107,18 @@ NAN_METHOD(Io::WaitKey) {
   }
   info.GetReturnValue().Set(Nan::New(key));
 }
+
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
+NAN_METHOD(Io::WaitKeyEx) {
+  int key;
+  if (info[0]->IsNumber()) {
+    key = cv::waitKeyEx(info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
+  } else{
+    key = cv::waitKeyEx();
+  }
+  info.GetReturnValue().Set(Nan::New(key));
+}
+#endif
 
 NAN_METHOD(Io::MoveWindow) {
 	FF::TryCatch tryCatch("Io::MoveWindow");
