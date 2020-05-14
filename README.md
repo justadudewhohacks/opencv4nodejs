@@ -159,6 +159,13 @@ brew install opencv@4
 brew link --force opencv@4
 ```
 
+The above would install opencv4, however the library references opencv2 internally. 
+Run the following command on Linux and MacOS after installation: 
+
+```bash
+ln -s /usr/local/include/opencv4/opencv2/ /usr/local/include/opencv2
+```
+
 ### Linux
 
 Under Linux we have to build OpenCV from source manually or using the auto build script.
