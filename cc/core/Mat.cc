@@ -80,7 +80,7 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "copyMakeBorder", CopyMakeBorder);
   Nan::SetPrototypeMethod(ctor, "copyMakeBorderAsync", CopyMakeBorderAsync);
   Nan::SetPrototypeMethod(ctor, "splitChannels", Split);
-  Nan::SetPrototypeMethod(ctor, "splitChannelsAsync", Split);
+  Nan::SetPrototypeMethod(ctor, "splitChannelsAsync", SplitAsync);
 
 #if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
