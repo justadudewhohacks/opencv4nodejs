@@ -60,6 +60,7 @@ void MatImgproc::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "drawFillPoly", DrawFillPoly);
   Nan::SetPrototypeMethod(ctor, "drawFillConvexPoly", DrawFillConvexPoly);
   Nan::SetPrototypeMethod(ctor, "putText", PutText);
+  Nan::SetPrototypeMethod(ctor, "putTextAsync", PutTextAsync);
   Nan::SetPrototypeMethod(ctor, "matchTemplate", MatchTemplate);
   Nan::SetPrototypeMethod(ctor, "matchTemplateAsync", MatchTemplateAsync);
   Nan::SetPrototypeMethod(ctor, "canny", Canny);
@@ -542,6 +543,14 @@ NAN_METHOD(MatImgproc::PutText) {
   FF::executeSyncBinding(
     std::make_shared<MatImgprocBindings::PutTextWorker>(Mat::unwrapSelf(info)),
     "Mat::PutText",
+    info
+  );
+}
+
+NAN_METHOD(MatImgproc::PutTextAsync) {
+  FF::executeAsyncBinding(
+    std::make_shared<MatImgprocBindings::PutTextWorker>(Mat::unwrapSelf(info)),
+    "Mat::PutTextAsync",
     info
   );
 }
