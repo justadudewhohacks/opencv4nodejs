@@ -34,7 +34,7 @@ export class Mat {
   accumulate(src: Mat, mask?: Mat): Mat;
   accumulateAsync(src: Mat, mask?: Mat): Promise<Mat>;
   accumulateProduct(src1: Mat, src2: Mat, mask?: Mat): Mat;
-  accumulateProductAsync(src1: Mat, src2:Mat, mask?: Mat): Promise<Mat>;
+  accumulateProductAsync(src1: Mat, src2: Mat, mask?: Mat): Promise<Mat>;
   accumulateSquare(src: Mat, mask?: Mat): Mat;
   accumulateSquareAsync(src: Mat, mask?: Mat): Promise<Mat>;
   accumulateWeighted(src: Mat, alpha: number, mask?: Mat): Mat;
@@ -206,7 +206,7 @@ export class Mat {
   matchTemplate(template: Mat, method: number, mask?: Mat): Mat;
   matchTemplateAsync(template: Mat, method: number, mask?: Mat): Promise<Mat>;
   mean(): Vec4;
-  meanAsync():  Promise<Vec4>;
+  meanAsync(): Promise<Vec4>;
   meanStdDev(mask?: Mat): { mean: Mat, stddev: Mat };
   meanStdDevAsync(mask?: Mat): Promise<{ mean: Mat, stddev: Mat }>;
   medianBlur(kSize: number): Mat;
