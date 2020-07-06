@@ -26,11 +26,7 @@ export class Mat {
   constructor(rows: number, cols: number, type: number);
   constructor(rows: number, cols: number, type: number, fillValue: number);
   constructor(rows: number, cols: number, type: number, fillValue: number[]);
-  constructor(rows: number, cols: number, type: number, fillValue: number[]);
-  constructor(rows: number, cols: number, type: number, fillValue: number[]);
   constructor(dataArray: number[][], type: number);
-  constructor(dataArray: number[][][], type: number);
-  constructor(dataArray: number[][][], type: number);
   constructor(dataArray: number[][][], type: number);
   constructor(data: Buffer, rows: number, cols: number, type?: number);
   abs(): Mat;
@@ -58,8 +54,6 @@ export class Mat {
   at(idx: number[]): Vec3;
   at(idx: number[]): Vec4;
   atRaw(row: number, col: number): number;
-  atRaw(row: number, col: number): number[];
-  atRaw(row: number, col: number): number[];
   atRaw(row: number, col: number): number[];
   bgrToGray(): Mat;
   bgrToGrayAsync(): Promise<Mat>;
@@ -176,8 +170,6 @@ export class Mat {
   getDataAsync(): Promise<Buffer>;
   getDataAsArray(): number[][];
   getDataAsArray(): number[][][];
-  getDataAsArray(): number[][][];
-  getDataAsArray(): number[][][];
   getOptimalNewCameraMatrix(distCoeffs: number[], imageSize: Size, alpha: number, newImageSize?: Size, centerPrincipalPoint?: boolean): { out: Mat, validPixROI: Rect };
   getOptimalNewCameraMatrixAsync(distCoeffs: number[], imageSize: Size, alpha: number, newImageSize?: Size, centerPrincipalPoint?: boolean): Promise<{ out: Mat, validPixROI: Rect }>;
   getRegion(region: Rect): Mat;
@@ -279,8 +271,6 @@ export class Mat {
   sepFilter2D(ddepth: number, kernelX: Mat, kernelY: Mat, anchor?: Point2, delta?: number, borderType?: number): Mat;
   sepFilter2DAsync(ddepth: number, kernelX: Mat, kernelY: Mat, anchor?: Point2, delta?: number, borderType?: number): Promise<Mat>;
   set(row: number, col: number, value: number): void;
-  set(row: number, col: number, value: number[]): void;
-  set(row: number, col: number, value: number[]): void;
   set(row: number, col: number, value: number[]): void;
   set(row: number, col: number, value: Vec2): void;
   set(row: number, col: number, value: Vec3): void;
