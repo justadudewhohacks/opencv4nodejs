@@ -25,6 +25,10 @@ public:
   static NAN_METHOD(GetLayerNamesAsync);
   static NAN_METHOD(GetUnconnectedOutLayers);
   static NAN_METHOD(GetUnconnectedOutLayersAsync);
+
+  // Change Backend Functions
+  static NAN_METHOD(SetPreferableBackend);
+  static NAN_METHOD(SetPreferableTarget);
 };
 
 #endif

@@ -25,6 +25,11 @@ NAN_MODULE_INIT(Net::Init) {
   Nan::SetPrototypeMethod(ctor, "getUnconnectedOutLayers", GetUnconnectedOutLayers);
   Nan::SetPrototypeMethod(ctor, "getUnconnectedOutLayersAsync", GetUnconnectedOutLayersAsync);
 
+  // Change Backend Functions
+  Nan::SetPrototypeMethod(ctor, "setPreferableBackend", SetPreferableBackend);
+  Nan::SetPrototypeMethod(ctor, "setPreferableTarget", SetPreferableTarget);
+  
+
   Nan::Set(target,Nan::New("Net").ToLocalChecked(), FF::getFunction(ctor));
 };
 
