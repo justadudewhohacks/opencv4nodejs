@@ -602,3 +602,12 @@ export const statModel: {
   RAW_OUTPUT: number;
   UPDATE_MODEL: number;
 }
+
+
+// DNN_Backend
+export const DNN_BACKEND_DEFAULT: number;
+export const DNN_BACKEND_HALIDE: number;
+export const DNN_BACKEND_INFERENCE_ENGINE: number;
+export const DNN_BACKEND_OPENCV: number;
+export const DNN_BACKEND_VKCOM: number;
+export const DNN_BACKEND_CUDA: number;

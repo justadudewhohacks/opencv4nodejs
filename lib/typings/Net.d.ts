@@ -7,4 +7,9 @@ export class Net {
   forwardAsync(outBlobNames?: string[]): Promise<Mat[]>;
   setInput(blob: Mat, inputName?: string): void;
   setInputAsync(blob: Mat, inputName?: string): Promise<void>;
+
+  // Set DNN_Backend
+  setPreferableBackend(backend?: number): void;
+  setPreferableTarget(backend?: number): void;
+
 }
