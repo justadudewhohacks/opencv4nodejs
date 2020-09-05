@@ -134,7 +134,7 @@ namespace NetBindings {
       this->self = self;
     }
 
-    std::size_t backend;
+    int backend;
 
 
     std::string executeCatchCvExceptionWorker() {
@@ -144,7 +144,7 @@ namespace NetBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        FF::UintConverter::arg(0, &backend, info)
+        FF::IntConverter::arg(0, &backend, info)
       );
     }
   };
@@ -158,7 +158,7 @@ namespace NetBindings {
       this->self = self;
     }
 
-    std::size_t backend;
+    int backend;
 
 
     std::string executeCatchCvExceptionWorker() {
@@ -168,7 +168,7 @@ namespace NetBindings {
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        FF::UintConverter::arg(0, &backend, info)
+        FF::IntConverter::arg(0, &backend, info)
       );
     }
   };
