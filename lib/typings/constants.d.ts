@@ -602,3 +602,22 @@ export const statModel: {
   RAW_OUTPUT: number;
   UPDATE_MODEL: number;
 }
+
+
+// DNN_Backend
+export const DNN_BACKEND_DEFAULT: number;
+export const DNN_BACKEND_HALIDE: number;
+export const DNN_BACKEND_INFERENCE_ENGINE: number;
+export const DNN_BACKEND_OPENCV: number;
+export const DNN_BACKEND_VKCOM: number;
+export const DNN_BACKEND_CUDA: number;
+
+// DNN Target
+export const DNN_TARGET_CPU: number;
+export const DNN_TARGET_OPENCL: number;
+export const DNN_TARGET_OPENCL_FP16: number;
+export const DNN_TARGET_MYRIAD: number;
+export const DNN_TARGET_VULKAN: number;
+export const DNN_TARGET_FPGA: number;
+export const DNN_TARGET_CUDA: number;
+export const DNN_TARGET_CUDA_FP16: number;

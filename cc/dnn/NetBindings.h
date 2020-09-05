@@ -121,6 +121,60 @@ namespace NetBindings {
     }
   };
 
+  // ----------------------------------------------
+  // ----------------------------------------------
+
+  // Change Backend Functions
+
+  // SetPreferableBackend
+  struct SetPreferableBackendWorker : public CatchCvExceptionWorker {
+  public:
+    cv::dnn::Net self;
+    SetPreferableBackendWorker(cv::dnn::Net self) {
+      this->self = self;
+    }
+
+    int backend;
+
+
+    std::string executeCatchCvExceptionWorker() {
+      self.setPreferableBackend(backend);
+      return "";
+    }
+
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        FF::IntConverter::arg(0, &backend, info)
+      );
+    }
+  };
+
+
+  // SetPreferableTarget
+  struct SetPreferableTargetWorker : public CatchCvExceptionWorker {
+  public:
+    cv::dnn::Net self;
+    SetPreferableTargetWorker(cv::dnn::Net self) {
+      this->self = self;
+    }
+
+    int backend;
+
+
+    std::string executeCatchCvExceptionWorker() {
+      self.setPreferableTarget(backend);
+      return "";
+    }
+
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        FF::IntConverter::arg(0, &backend, info)
+      );
+    }
+  };
+
+
+
 }
 
 #endif
