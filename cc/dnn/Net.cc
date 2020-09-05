@@ -3,10 +3,13 @@
 #ifdef HAVE_OPENCV_DNN
 
 #include "opencv2/core.hpp"
+#include "opencv2/dnn.hpp"
 #include "macros.h"
 
 #include "Net.h"
 #include "NetBindings.h"
+
+// using namespace cv::dnn;
 
 Nan::Persistent<v8::FunctionTemplate> Net::constructor;
 
@@ -29,8 +32,27 @@ NAN_MODULE_INIT(Net::Init) {
   Nan::SetPrototypeMethod(ctor, "setPreferableBackend", SetPreferableBackend);
   Nan::SetPrototypeMethod(ctor, "setPreferableTarget", SetPreferableTarget);
   
+  // DNN Backend Options
+	// ----- For now hardcoded
+	// DNN_BACKEND_DEFAULT = 0,
+	// DNN_BACKEND_HALIDE,
+	// DNN_BACKEND_INFERENCE_ENGINE,            //!< Intel's Inference Engine computational backend
+	// 											//!< @sa setInferenceEngineBackendType
+	// DNN_BACKEND_OPENCV,
+	// DNN_BACKEND_VKCOM,
+	// DNN_BACKEND_CUDA
+
+  
+  FF_SET_JS_PROP(target, DNN_BACKEND_DEFAULT, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_DEFAULT));
+  FF_SET_JS_PROP(target, DNN_BACKEND_HALIDE, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_HALIDE));
+  FF_SET_JS_PROP(target, DNN_BACKEND_INFERENCE_ENGINE, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_INFERENCE_ENGINE));
+  FF_SET_JS_PROP(target, DNN_BACKEND_OPENCV, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_OPENCV));
+  FF_SET_JS_PROP(target, DNN_BACKEND_VKCOM, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_VKCOM));
+  FF_SET_JS_PROP(target, DNN_BACKEND_CUDA, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_CUDA));
+
 
   Nan::Set(target,Nan::New("Net").ToLocalChecked(), FF::getFunction(ctor));
+
 };
 
 NAN_METHOD(Net::New) {
@@ -100,5 +122,26 @@ NAN_METHOD(Net::GetUnconnectedOutLayersAsync) {
       "Net::GetUnconnectedOutLayersAsync",
       info);
 }
+
+// ----------------------------------------------
+// ----------------------------------------------
+
+// Change Backend Functions
+NAN_METHOD(Net::SetPreferableBackend) {
+  FF::executeSyncBinding(
+    std::make_shared<NetBindings::SetPreferableBackendWorker>(Net::unwrapSelf(info)),
+    "Net::SetPreferableBackend",
+    info
+  );
+}
+
+NAN_METHOD(Net::SetPreferableTarget) {
+  FF::executeSyncBinding(
+    std::make_shared<NetBindings::SetPreferableTargetWorker>(Net::unwrapSelf(info)),
+    "Net::SetPreferableTarget",
+    info
+  );
+}
+
 
 #endif

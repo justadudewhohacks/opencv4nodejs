@@ -127,10 +127,10 @@ namespace NetBindings {
   // Change Backend Functions
 
   // SetPreferableBackend
-  struct SetPreferableBackend : public CatchCvExceptionWorker {
+  struct SetPreferableBackendWorker : public CatchCvExceptionWorker {
   public:
     cv::dnn::Net self;
-    SetPreferableBackend(cv::dnn::Net self) {
+    SetPreferableBackendWorker(cv::dnn::Net self) {
       this->self = self;
     }
 
@@ -151,10 +151,10 @@ namespace NetBindings {
 
 
   // SetPreferableTarget
-  struct SetPreferableTarget : public CatchCvExceptionWorker {
+  struct SetPreferableTargetWorker : public CatchCvExceptionWorker {
   public:
     cv::dnn::Net self;
-    SetPreferableBackend(cv::dnn::Net self) {
+    SetPreferableTargetWorker(cv::dnn::Net self) {
       this->self = self;
     }
 
