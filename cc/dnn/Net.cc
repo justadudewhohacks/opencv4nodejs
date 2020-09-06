@@ -51,6 +51,29 @@ NAN_MODULE_INIT(Net::Init) {
   FF_SET_JS_PROP(target, DNN_BACKEND_CUDA, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_CUDA));
 
 
+  // DNN_TARGET_CPU = 0,
+  // DNN_TARGET_OPENCL,
+  // DNN_TARGET_OPENCL_FP16,
+  // DNN_TARGET_MYRIAD,
+  // DNN_TARGET_VULKAN,
+  // DNN_TARGET_FPGA,  //!< FPGA device with CPU fallbacks using Inference Engine's Heterogeneous plugin.
+  // DNN_TARGET_CUDA,
+  // DNN_TARGET_CUDA_FP16
+
+  FF_SET_JS_PROP(target, DNN_TARGET_CPU, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_CPU));
+  FF_SET_JS_PROP(target, DNN_TARGET_OPENCL, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_OPENCL));
+  FF_SET_JS_PROP(target, DNN_TARGET_OPENCL_FP16, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_OPENCL_FP16));
+  FF_SET_JS_PROP(target, DNN_TARGET_MYRIAD, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_MYRIAD));
+  FF_SET_JS_PROP(target, DNN_TARGET_VULKAN, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_VULKAN));
+  FF_SET_JS_PROP(target, DNN_TARGET_FPGA, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_FPGA));
+  FF_SET_JS_PROP(target, DNN_TARGET_CUDA, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_CUDA));
+  FF_SET_JS_PROP(target, DNN_TARGET_CUDA_FP16, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_CUDA_FP16));
+  
+
+
+
+
+
   Nan::Set(target,Nan::New("Net").ToLocalChecked(), FF::getFunction(ctor));
 
 };
