@@ -43,12 +43,12 @@ NAN_MODULE_INIT(Net::Init) {
 	// DNN_BACKEND_CUDA
 
   
-  FF_SET_JS_PROP(target, DNN_BACKEND_DEFAULT, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_DEFAULT));
-  FF_SET_JS_PROP(target, DNN_BACKEND_HALIDE, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_HALIDE));
-  FF_SET_JS_PROP(target, DNN_BACKEND_INFERENCE_ENGINE, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_INFERENCE_ENGINE));
-  FF_SET_JS_PROP(target, DNN_BACKEND_OPENCV, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_OPENCV));
-  FF_SET_JS_PROP(target, DNN_BACKEND_VKCOM, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_VKCOM));
-  FF_SET_JS_PROP(target, DNN_BACKEND_CUDA, Nan::New<v8::Integer>(cv::dnn::DNN_BACKEND_CUDA));
+  FF_SET_JS_PROP(target, DNN_BACKEND_DEFAULT, Nan::New<v8::Integer>(cv::dnn::Backend::DNN_BACKEND_DEFAULT));
+  FF_SET_JS_PROP(target, DNN_BACKEND_HALIDE, Nan::New<v8::Integer>(cv::dnn::Backend::DNN_BACKEND_HALIDE));
+  FF_SET_JS_PROP(target, DNN_BACKEND_INFERENCE_ENGINE, Nan::New<v8::Integer>(cv::dnn::Backend::DNN_BACKEND_INFERENCE_ENGINE));
+  FF_SET_JS_PROP(target, DNN_BACKEND_OPENCV, Nan::New<v8::Integer>(cv::dnn::Backend::DNN_BACKEND_OPENCV));
+  FF_SET_JS_PROP(target, DNN_BACKEND_VKCOM, Nan::New<v8::Integer>(cv::dnn::Backend::DNN_BACKEND_VKCOM));
+  FF_SET_JS_PROP(target, DNN_BACKEND_CUDA, Nan::New<v8::Integer>(cv::dnn::Backend::DNN_BACKEND_CUDA));
 
 
   // DNN_TARGET_CPU = 0,
@@ -60,14 +60,14 @@ NAN_MODULE_INIT(Net::Init) {
   // DNN_TARGET_CUDA,
   // DNN_TARGET_CUDA_FP16
 
-  FF_SET_JS_PROP(target, DNN_TARGET_CPU, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_CPU));
-  FF_SET_JS_PROP(target, DNN_TARGET_OPENCL, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_OPENCL));
-  FF_SET_JS_PROP(target, DNN_TARGET_OPENCL_FP16, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_OPENCL_FP16));
-  FF_SET_JS_PROP(target, DNN_TARGET_MYRIAD, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_MYRIAD));
-  FF_SET_JS_PROP(target, DNN_TARGET_VULKAN, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_VULKAN));
-  FF_SET_JS_PROP(target, DNN_TARGET_FPGA, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_FPGA));
-  FF_SET_JS_PROP(target, DNN_TARGET_CUDA, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_CUDA));
-  FF_SET_JS_PROP(target, DNN_TARGET_CUDA_FP16, Nan::New<v8::Integer>(cv::dnn::DNN_TARGET_CUDA_FP16));
+  FF_SET_JS_PROP(target, DNN_TARGET_CPU, Nan::New<v8::Integer>(cv::dnn::Target::DNN_TARGET_CPU));
+  FF_SET_JS_PROP(target, DNN_TARGET_OPENCL, Nan::New<v8::Integer>(cv::dnn::Target::DNN_TARGET_OPENCL));
+  FF_SET_JS_PROP(target, DNN_TARGET_OPENCL_FP16, Nan::New<v8::Integer>(cv::dnn::Target::DNN_TARGET_OPENCL_FP16));
+  FF_SET_JS_PROP(target, DNN_TARGET_MYRIAD, Nan::New<v8::Integer>(cv::dnn::Target::DNN_TARGET_MYRIAD));
+  FF_SET_JS_PROP(target, DNN_TARGET_VULKAN, Nan::New<v8::Integer>(cv::dnn::Target::DNN_TARGET_VULKAN));
+  FF_SET_JS_PROP(target, DNN_TARGET_FPGA, Nan::New<v8::Integer>(cv::dnn::Target::DNN_TARGET_FPGA));
+  FF_SET_JS_PROP(target, DNN_TARGET_CUDA, Nan::New<v8::Integer>(cv::dnn::Target::DNN_TARGET_CUDA));
+  FF_SET_JS_PROP(target, DNN_TARGET_CUDA_FP16, Nan::New<v8::Integer>(cv::dnn::Target::DNN_TARGET_CUDA_FP16));
   
 
 
