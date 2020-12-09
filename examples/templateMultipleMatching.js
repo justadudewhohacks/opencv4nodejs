@@ -1,6 +1,6 @@
 const cv = require('../');
 
-const findMatchingTemplate = async () => {
+const findMultipleMatchingTemplate = async () => {
   // Load images
   const sourceImgMat = await cv.imreadAsync(`${__dirname}/../data/source.jpg`);
   const subImgMat = await cv.imreadAsync(`${__dirname}/../data/sub-img.jpg`);
@@ -35,4 +35,4 @@ const findMatchingTemplate = async () => {
   cv.waitKey();
 }
 
-findMatchingTemplate();
+findMultipleMatchingTemplate();
