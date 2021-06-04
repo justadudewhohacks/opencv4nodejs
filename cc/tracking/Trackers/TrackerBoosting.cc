@@ -26,13 +26,19 @@ NAN_METHOD(TrackerBoosting::New) {
 	FF::TryCatch tryCatch("TrackerBoosting::New");
 	FF_ASSERT_CONSTRUCT_CALL();
 
+#if CV_VERSION_GREATER_EQUAL(4, 5, 2)
+	cv::legacy::TrackerBoosting::Params params;
+#else
 	cv::TrackerBoosting::Params params;
+#endif
 	if (TrackerBoostingParams::Converter::optArg(0, &params, info)) {
 		return tryCatch.reThrow();
 	}
 
 	TrackerBoosting* self = new TrackerBoosting();
-#if CV_VERSION_GREATER_EQUAL(3, 3, 0)
+#if CV_VERSION_GREATER_EQUAL(4, 5, 2)
+	self->tracker = cv::legacy::TrackerBoosting::create(params);
+#elif CV_VERSION_GREATER_EQUAL(3, 3, 0)
 	self->tracker = cv::TrackerBoosting::create(params);
 #else
 	self->tracker = cv::TrackerBoosting::createTracker(params);
