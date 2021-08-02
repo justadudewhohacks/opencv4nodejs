@@ -13,3 +13,6 @@ data/dnn
 dist
 .DS_Store
 native-node-utils
+install/*.js
+lib/*.js
+lib/src/*.js

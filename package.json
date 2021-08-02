@@ -30,7 +30,7 @@
   "typings": "./lib/index.d.ts",
   "scripts": {
     "prepare": "tsc",
-    "install": "node ./install/install.js",
+    "install": "tsc && node ./install/install.js",
     "configure": "node-gyp configure",
     "build": "node-gyp configure build --jobs max",
     "rebuild": "node-gyp rebuild --jobs max",
@@ -42,7 +42,7 @@
     "nan": "^2.14.2",
     "native-node-utils": "^0.2.7",
     "npmlog": "^5.0.0",
-    "opencv-build": "file:../npm-opencv-build"
+    "opencv-build": "github:UrielCh/npm-opencv-build"
   },
   "optionalDependencies": {
     "@types/node": ">10"
