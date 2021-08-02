@@ -1,7 +1,7 @@
-const makeDrawUtils = require('./drawUtils')
-const deprecations  = require('./deprecations')
+import makeDrawUtils from './drawUtils'
+import deprecations from './deprecations'
 
-module.exports = function(cv) {
+export default function(cv) {
   const {
     drawTextBox,
     drawDetection

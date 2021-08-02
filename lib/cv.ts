@@ -1,6 +1,6 @@
-const path = require('path');
-const opencvBuild = require('opencv-build');
-const { resolvePath } = require('./commons');
+import path from 'path';
+import opencvBuild from 'opencv-build';
+import { resolvePath } from './commons';
 
 const requirePath = path.join(__dirname, process.env.BINDINGS_DEBUG ? '../build/Debug/opencv4nodejs' : '../build/Release/opencv4nodejs')
 
@@ -28,7 +28,7 @@ function tryGetOpencvBinDir() {
 
   if (envs.opencvBinDir) {
     logDebug('tryGetOpencvBinDir', 'found opencv binary environment variable in package.json')
-    return envs.opencvBinDir
+    return envs.opencvBinDir as string
   }
   logDebug('tryGetOpencvBinDir', 'failed to find opencv binary environment variable in package.json')
   return null
@@ -65,4 +65,4 @@ Object.keys(haarCascades).forEach(
 Object.keys(lbpCascades).forEach(
   key => cv[key] = resolvePath(path.join(__dirname, './lbpcascades'), lbpCascades[key]));
 
-module.exports = cv;
+export default cv;

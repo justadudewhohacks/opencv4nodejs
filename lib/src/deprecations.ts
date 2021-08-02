@@ -1,8 +1,7 @@
 
-const assert = require('assert');
+import assert from 'assert';
 
-module.exports = function (cv) {
-
+export default function (cv) {
   // deprecate wrapper for the old calcHist API
   const _calcHist = cv.calcHist;
   cv.calcHist = function calcHist(img, histAxes, mask) {
@@ -30,5 +29,4 @@ module.exports = function (cv) {
     }
     return _calcHist(img, histAxes);
   };
-
 };

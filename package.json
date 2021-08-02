@@ -29,6 +29,7 @@
   "main": "./lib/opencv4nodejs.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
+    "prepare": "tsc",
     "install": "node ./install/install.js",
     "configure": "node-gyp configure",
     "build": "node-gyp configure build --jobs max",
@@ -38,12 +39,16 @@
   },
   "gypfile": true,
   "dependencies": {
-    "nan": "^2.14.0",
+    "nan": "^2.14.2",
     "native-node-utils": "^0.2.7",
-    "npmlog": "^4.1.2",
-    "opencv-build": "^0.1.9"
+    "npmlog": "^5.0.0",
+    "opencv-build": "file:../npm-opencv-build"
   },
   "optionalDependencies": {
-    "@types/node": ">6"
+    "@types/node": ">10"
+  },
+  "devDependencies": {
+    "@types/node": "^16.4.10",
+    "@types/npmlog": "^4.1.3"
   }
 }

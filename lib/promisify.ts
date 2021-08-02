@@ -1,5 +1,5 @@
-const isFn = obj => typeof obj === 'function';
-const isAsyncFn = fn => fn.prototype.constructor.name.endsWith('Async');
+const isFn = (obj: any) => typeof obj === 'function';
+const isAsyncFn = (fn: any) => fn.prototype.constructor.name.endsWith('Async');
 
 const promisify = (fn) => function () {
   if (isFn(arguments[arguments.length - 1])) {
@@ -19,7 +19,7 @@ const promisify = (fn) => function () {
   });
 };
 
-module.exports = (cv) => {
+export default (cv) => {
   const fns = Object.keys(cv).filter(k => isFn(cv[k])).map(k => cv[k]);
   const asyncFuncs = fns.filter(isAsyncFn);
   const clazzes = fns.filter(fn => !!Object.keys(fn.prototype).length);

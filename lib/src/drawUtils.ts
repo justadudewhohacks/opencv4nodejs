@@ -1,4 +1,4 @@
-module.exports = function(cv) {
+export default function(cv) {
   function reshapeRectAtBorders(rect, imgDim) {
     const newX = Math.min(Math.max(0, rect.x), imgDim.cols)
     const newY = Math.min(Math.max(0, rect.y), imgDim.rows)
@@ -126,7 +126,7 @@ module.exports = function(cv) {
 
     const { x, y, width, height } = rect
 
-    const segmentLength = width / (opts.segmentFraction || 6);
+    const segmentLength = width / ((opts as any).segmentFraction || 6);
     const upperLeft = new cv.Point(x, y)
     const bottomLeft = new cv.Point(x, y + height)
     const upperRight = new cv.Point(x + width, y)
