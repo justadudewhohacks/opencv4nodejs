@@ -78,7 +78,7 @@ process.env['OPENCV4NODEJS_INCLUDES'] = includes.join('\n')
 process.env['OPENCV4NODEJS_LIBRARIES'] = libs.join('\n')
 
 const debug = process.env.BINDINGS_DEBUG ? '--debug' : ''
-const flags = `${process.env.NODE_GYP_REBUILD_FLAGS.trim()} ` || ''
+const flags = (process.env.NODE_GYP_REBUILD_FLAGS && `${process.env.NODE_GYP_REBUILD_FLAGS.trim()} `) || ''
 const nodegypCmd = 'node-gyp rebuild --jobs max ' + flags + debug
 log.info('install', `spawning node gyp process: ${nodegypCmd}`)
 const child = child_process.exec(nodegypCmd, { maxBuffer: Infinity }, function(err, stdout, stderr) {
