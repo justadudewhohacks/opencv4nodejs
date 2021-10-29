@@ -15,7 +15,7 @@ const photoTestSuite = require('./photo')
 const textTestSuite = require('./text')
 const trackingTestSuite = require('./tracking')
 const videoTestSuite = require('./video')
-const xfeatures2dTestSuite = require('./xfeatures2d')
+// const xfeatures2dTestSuite = require('./xfeatures2d')
 const ximgprocTestSuite = require('./ximgproc')
 
 const modules = [
@@ -139,9 +139,9 @@ describe('cv', () => {
     describe('tracking', () => trackingTestSuite({ cv, utils, getTestImg }));
   }
 
-  if (cv.modules.xfeatures2d) {
+/*   if (cv.modules.xfeatures2d) {
     describe('xfeatures2d', () => xfeatures2dTestSuite({ cv, utils, getTestImg }));
-  }
+  } */
 
   if (cv.modules.ximgproc) {
     describe('ximgproc', () => ximgprocTestSuite({ cv, utils, getTestImg }));

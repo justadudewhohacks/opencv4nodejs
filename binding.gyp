@@ -112,7 +112,7 @@
 			"cc/features2d/detectors/SimpleBlobDetector.cc",
 			"cc/features2d/detectors/SimpleBlobDetectorParams.cc",
 			"cc/xfeatures2d/xfeatures2d.cc",
-			"cc/xfeatures2d/SIFTDetector.cc",
+			# "cc/xfeatures2d/SIFTDetector.cc", https://github.com/justadudewhohacks/opencv4nodejs/issues/805#issuecomment-806314329
 			"cc/xfeatures2d/SURFDetector.cc"
 		],
 
