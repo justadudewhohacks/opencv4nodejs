@@ -63,3 +63,5 @@ export * from './typings/SURFDetector.d';
 export * from './typings/SuperpixelLSC.d';
 export * from './typings/SuperpixelSLIC.d';
 export * from './typings/SuperpixelSEEDS.d';
+export * from './typings/ImgHashBase.d';
+export * from './typings/PHash.d';

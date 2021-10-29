@@ -17,6 +17,7 @@ const trackingTestSuite = require('./tracking')
 const videoTestSuite = require('./video')
 // const xfeatures2dTestSuite = require('./xfeatures2d')
 const ximgprocTestSuite = require('./ximgproc')
+const imgHashTestSuite = require('./img_hash')
 
 const modules = [
   'core', 'imgproc',  'calib3d', 'features2d', 'io',
@@ -24,7 +25,7 @@ const modules = [
 ]
 
 const xmodules = [
-  'face', 'text', 'tracking', 'xfeatures2d', 'ximgproc'
+  'face', 'text', 'tracking', 'xfeatures2d', 'ximgproc', 'img_hash'
 ]
 
 describe('cv', () => {
@@ -145,6 +146,10 @@ describe('cv', () => {
 
   if (cv.modules.ximgproc) {
     describe('ximgproc', () => ximgprocTestSuite({ cv, utils, getTestImg }));
+  }
+
+  if (cv.modules.img_hash) {
+    describe('img_hash', () => imgHashTestSuite({ cv, utils, getTestImg }));
   }
 
 })

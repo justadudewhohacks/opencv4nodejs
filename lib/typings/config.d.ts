@@ -5,6 +5,7 @@ export const xmodules: {
   tracking: boolean;
   xfeatures2d: boolean;
   ximgproc: boolean;
+  img_hash: boolean;
 }
 
 export const version: {
