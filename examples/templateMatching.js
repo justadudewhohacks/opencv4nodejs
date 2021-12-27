@@ -1,5 +1,5 @@
-const cv = require('../');
-
+// const cv = require('../');
+const cv = require('../lib/opencv4nodejs');
 
 const findWaldo = async () => {
   // Load images

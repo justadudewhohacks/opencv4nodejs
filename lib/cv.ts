@@ -1,68 +1,80 @@
+import { OpenCVBuilder } from '@u4/opencv-build';
+import { OpenCVParamBuildOptions } from '@u4/opencv-build/build/BuildEnv';
+import fs from 'fs';
 import path from 'path';
-import opencvBuild from 'opencv-build';
 import { resolvePath } from './commons';
+import pc from 'picocolors'
 
-const requirePath = path.join(__dirname, process.env.BINDINGS_DEBUG ? '../build/Debug/opencv4nodejs' : '../build/Release/opencv4nodejs')
+const logDebug = process.env.OPENCV4NODES_DEBUG_REQUIRE ? require('npmlog').info : () => { }
 
-const logDebug = process.env.OPENCV4NODES_DEBUG_REQUIRE ? require('npmlog').info : () => {}
+function getOpenCV(opt?: OpenCVParamBuildOptions): any {
 
-function tryGetOpencvBinDir() {
-  if (process.env.OPENCV_BIN_DIR) {
-    logDebug('tryGetOpencvBinDir', 'OPENCV_BIN_DIR environment variable is set')
-    return process.env.OPENCV_BIN_DIR
+  const builder = new OpenCVBuilder(opt);
+
+  function tryGetOpencvBinDir() {
+    if (process.env.OPENCV_BIN_DIR) {
+      logDebug('tryGetOpencvBinDir', `${pc.yellow('OPENCV_BIN_DIR')} environment variable is set`)
+      return process.env.OPENCV_BIN_DIR
+    }
+    // if the auto build is not disabled via environment do not even attempt
+    // to read package.json
+    if (!builder.env.isAutoBuildDisabled) {
+      logDebug('tryGetOpencvBinDir', 'auto build has not been disabled via environment variable, using opencv bin dir of opencv-build')
+      return builder.env.opencvBinDir
+    }
+
+    logDebug('tryGetOpencvBinDir', 'auto build has not been explicitly disabled via environment variable, attempting to read envs from package.json...')
+    // const envs = builder.env.readEnvsFromPackageJson()
+
+    if (!builder.env.isAutoBuildDisabled && process.env.OPENCV_BIN_DIR) {
+      logDebug('tryGetOpencvBinDir', 'auto build has not been disabled via package.json, using opencv bin dir of opencv-build')
+      return process.env.OPENCV_BIN_DIR //.opencvBinDir
+    }
+
+    if (builder.env.opencvBinDir) {
+      logDebug('tryGetOpencvBinDir', 'found opencv binary environment variable in package.json')
+      return builder.env.opencvBinDir as string
+    }
+    logDebug('tryGetOpencvBinDir', 'failed to find opencv binary environment variable in package.json')
+    return null
   }
-  // if the auto build is not disabled via environment do not even attempt
-  // to read package.json
-  if (!opencvBuild.isAutoBuildDisabled()) {
-    logDebug('tryGetOpencvBinDir', 'auto build has not been disabled via environment variable, using opencv bin dir of opencv-build')
-    return opencvBuild.opencvBinDir
+
+  let opencvBuild = null
+  const requirePath = path.join(__dirname, process.env.BINDINGS_DEBUG ? '../build/Debug/opencv4nodejs' : '../build/Release/opencv4nodejs')
+  try {
+    logDebug('require', `require path is ${pc.yellow(requirePath)}`)
+    opencvBuild = require(requirePath);
+  } catch (err) {
+    logDebug('require', `failed to require cv with exception: ${pc.red(err.toString())}`)
+    logDebug('require', 'attempting to add opencv binaries to path')
+
+    if (!process.env.path) {
+      logDebug('require', 'there is no path environment variable, skipping...')
+      throw err
+    }
+
+    const opencvBinDir = tryGetOpencvBinDir()
+    logDebug('require', 'adding opencv binary dir to path: ' + opencvBinDir)
+    if (!fs.existsSync(opencvBinDir)) {
+      throw new Error('opencv binary dir does not exist: ' + opencvBinDir)
+    }
+    // ensure binaries are added to path on windows
+    if (!process.env.path.includes(opencvBinDir)) {
+      process.env.path = `${process.env.path};${opencvBinDir};`
+    }
+    logDebug('require', 'process.env.path: ' + process.env.path)
+    opencvBuild = require(requirePath);
   }
 
-  logDebug('tryGetOpencvBinDir', 'auto build has not been explicitly disabled via environment variable, attempting to read envs from package.json...')
-  const envs = opencvBuild.readEnvsFromPackageJson()
-
-  if (!envs.disableAutoBuild) {
-    logDebug('tryGetOpencvBinDir', 'auto build has not been disabled via package.json, using opencv bin dir of opencv-build')
-    return opencvBuild.opencvBinDir
-  }
-
-  if (envs.opencvBinDir) {
-    logDebug('tryGetOpencvBinDir', 'found opencv binary environment variable in package.json')
-    return envs.opencvBinDir as string
-  }
-  logDebug('tryGetOpencvBinDir', 'failed to find opencv binary environment variable in package.json')
-  return null
+  // resolve haarcascade files
+  const { haarCascades, lbpCascades } = opencvBuild;
+  Object.keys(haarCascades).forEach(
+    key => opencvBuild[key] = resolvePath(path.join(__dirname, 'haarcascades'), haarCascades[key]));
+  Object.keys(lbpCascades).forEach(
+    key => opencvBuild[key] = resolvePath(path.join(__dirname, 'lbpcascades'), lbpCascades[key]));
+  return opencvBuild;
 }
 
-let cv = null
-try {
-  logDebug('require', 'require path is ' + requirePath)
-  cv = require(requirePath);
-} catch (err) {
-  logDebug('require', 'failed to require cv with exception: ' + err.toString())
-  logDebug('require', 'attempting to add opencv binaries to path')
+const cv = getOpenCV({ autoBuildOpencvVersion: '3.4.6' })
 
-  if (!process.env.path) {
-    logDebug('require', 'there is no path environment variable, skipping...')
-    throw err
-  }
-
-  const opencvBinDir = tryGetOpencvBinDir()
-  logDebug('require', 'adding opencv binary dir to path: ' + opencvBinDir)
-
-  // ensure binaries are added to path on windows
-  if (!process.env.path.includes(opencvBinDir)) {
-    process.env.path = `${process.env.path};${opencvBinDir};`
-  }
-  logDebug('require', 'process.env.path: ' + process.env.path)
-  cv = require(requirePath);
-}
-
-// resolve haarcascade files
-const { haarCascades, lbpCascades } = cv;
-Object.keys(haarCascades).forEach(
-  key => cv[key] = resolvePath(path.join(__dirname, './haarcascades'), haarCascades[key]));
-Object.keys(lbpCascades).forEach(
-  key => cv[key] = resolvePath(path.join(__dirname, './lbpcascades'), lbpCascades[key]));
-
-export default cv;
+export default cv;// getOpenCV;
