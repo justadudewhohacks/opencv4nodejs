@@ -3,8 +3,7 @@ export * as cv from './cv';
 
 declare module "./cv.js" {
   export class VideoCapture {
-    constructor(filePath: string);
-    constructor(devicePort: number);
+    constructor(filePathOrdevicePort: string | number);
     get(property: number): number;
     read(): Mat;
     readAsync(): Promise<Mat>;

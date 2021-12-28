@@ -2,10 +2,10 @@
  * Please refer to the python version of "ExploreOpencvDnn" by Saumya Shovan Roy.
  * For more detail: https://github.com/rdeepc/ExploreOpencvDnn
  */
-const fs = require("fs");
-const path = require("path");
-const classNames = require("./dnnTensorflowObjectDetectionClassNames");
-const { cv, runVideoDetection } = require("./utils");
+import fs from "fs";
+import path from "path";
+import classNames from "./dnnTensorflowObjectDetectionClassNames";
+import { cv, runVideoDetection } from "./utils";
 
 if (!cv.xmodules.dnn) {
   throw new Error("exiting: opencv4nodejs compiled without dnn module");
@@ -37,7 +37,7 @@ const net = cv.readNetFromTensorflow(pbFile, pbtxtFile);
 const classifyImg = img => {
   // object detection model works with 300 x 300 images
   const size = new cv.Size(300, 300);
-  const vec3 = new cv.Vec(0, 0, 0);
+  const vec3 = new cv.Vec3(0, 0, 0);
 
   // network accepts blobs as input
   const inputBlob = cv.blobFromImage(img, 1, size, vec3, true, true);
@@ -63,9 +63,9 @@ const classifyImg = img => {
       const boxWidht = imgWidth * outputBlob.at([0, 0, y, 5]);
       const boxHeight = imgHeight * outputBlob.at([0, 0, y, 6]);
 
-      const pt1 = new cv.Point(boxX, boxY);
-      const pt2 = new cv.Point(boxWidht, boxHeight);
-      const rectColor = new cv.Vec(23, 230, 210);
+      const pt1 = new cv.Point2(boxX, boxY);
+      const pt2 = new cv.Point2(boxWidht, boxHeight);
+      const rectColor = new cv.Vec3(23, 230, 210);
       const rectThickness = 2;
       const rectLineType = cv.LINE_8;
 
@@ -73,10 +73,10 @@ const classifyImg = img => {
       img.drawRectangle(pt1, pt2, rectColor, rectThickness, rectLineType);
 
       const text = `${className} ${confidence.toFixed(5)}`;
-      const org = new cv.Point(boxX, boxY + 15);
+      const org = new cv.Point2(boxX, boxY + 15);
       const fontFace = cv.FONT_HERSHEY_SIMPLEX;
       const fontScale = 0.5;
-      const textColor = new cv.Vec(255, 0, 0);
+      const textColor = new cv.Vec3(255, 0, 0);
       const thickness = 2;
 
       // put text on the object

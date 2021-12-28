@@ -1,5 +1,6 @@
 import path from 'path';
 import cv from '../lib';
+import { Mat } from '../lib/typings/cv';
 
 export {default as cv} from '../lib';
 
@@ -7,7 +8,7 @@ export const dataPath = path.resolve(__dirname, '../data');
 
 export const getDataFilePath = (fileName: string): string => path.resolve(dataPath, fileName);
 
-export const grabFrames = (videoFile: string, delay: number, onFrame: (mat: any) => void): void => {
+export const grabFrames = (videoFile: number | string, delay: number, onFrame: (mat: Mat) => void): void => {
   const cap = new cv.VideoCapture(videoFile);
   let done = false;
   const intvl = setInterval(() => {
@@ -28,7 +29,7 @@ export const grabFrames = (videoFile: string, delay: number, onFrame: (mat: any)
   }, 0);
 };
 
-export const runVideoDetection = (src: string, detect) => {
+export const runVideoDetection = (src: number, detect) => {
   grabFrames(src, 1, frame => {
     detect(frame);
   });

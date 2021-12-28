@@ -1,9 +1,9 @@
-const cv = require('../');
-const { grabFrames } = require('./utils');
+import cv from '../lib';
+import { grabFrames } from './utils';
 
 // segmenting by skin color (has to be adjusted)
-const skinColorUpper = hue => new cv.Vec(hue, 0.8 * 255, 0.6 * 255);
-const skinColorLower = hue => new cv.Vec(hue, 0.1 * 255, 0.05 * 255);
+const skinColorUpper = hue => new cv.Vec3(hue, 0.8 * 255, 0.6 * 255);
+const skinColorLower = hue => new cv.Vec3(hue, 0.1 * 255, 0.05 * 255);
 
 const makeHandMask = (img) => {
   // filter by skin color
@@ -31,7 +31,7 @@ const ptDist = (pt1, pt2) => pt1.sub(pt2).norm();
 // returns center of all points
 const getCenterPt = pts => pts.reduce(
     (sum, pt) => sum.add(pt),
-    new cv.Point(0, 0)
+    new cv.Point2(0, 0)
   ).div(pts.length);
 
 // get the polygon from a contours hull such that there
@@ -75,7 +75,7 @@ const getHullDefectVertices = (handContour, hullIndices) => {
   const handContourPoints = handContour.getPoints();
 
   // get neighbor defect points of each hull point
-  const hullPointDefectNeighbors = new Map(hullIndices.map(idx => [idx, []]));
+  const hullPointDefectNeighbors: Map<number, Array<any>> = new Map(hullIndices.map((idx: number) => [idx, []]));
   defects.forEach((defect) => {
     const startPointIdx = defect.at(0);
     const endPointIdx = defect.at(1);
@@ -88,7 +88,7 @@ const getHullDefectVertices = (handContour, hullIndices) => {
     // only consider hull points that have 2 neighbor defects
     .filter(hullIndex => hullPointDefectNeighbors.get(hullIndex).length > 1)
     // return vertex points
-    .map((hullIndex) => {
+    .map((hullIndex: number) => {
       const defectNeighborsIdx = hullPointDefectNeighbors.get(hullIndex);
       return ({
         pt: handContourPoints[hullIndex],
@@ -108,9 +108,9 @@ const filterVerticesByAngle = (vertices, maxAngleDeg) =>
     return angleDeg < maxAngleDeg;
   });
 
-const blue = new cv.Vec(255, 0, 0);
-const green = new cv.Vec(0, 255, 0);
-const red = new cv.Vec(0, 0, 255);
+const blue = new cv.Vec3(255, 0, 0);
+const green = new cv.Vec3(0, 255, 0);
+const red = new cv.Vec3(0, 0, 255);
 
 // main
 const delay = 20;
@@ -167,15 +167,15 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
   // display detection result
   const numFingersUp = verticesWithValidAngle.length;
   result.drawRectangle(
-    new cv.Point(10, 10),
-    new cv.Point(70, 70),
+    new cv.Point2(10, 10),
+    new cv.Point2(70, 70),
     { color: green, thickness: 2 }
   );
 
   const fontScale = 2;
   result.putText(
     String(numFingersUp),
-    new cv.Point(20, 60),
+    new cv.Point2(20, 60),
     cv.FONT_ITALIC,
     fontScale,
     { color: green, thickness: 2 }

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const cv = require('../');
+import cv from '../lib';
 
 if (!cv.xmodules.face) {
   throw new Error('exiting: opencv4nodejs compiled without face module');
@@ -21,7 +21,7 @@ const getFaceImage = (grayImg) => {
   return grayImg.getRegion(faceRects[0]);
 };
 
-const trainImgs = imgFiles
+const images = imgFiles
   // get absolute file path
   .map(file => path.resolve(imgsPath, file))
   // read image
@@ -33,37 +33,38 @@ const trainImgs = imgFiles
   // face images must be equally sized
   .map(faceImg => faceImg.resize(80, 80));
 
+const isImageFour = (_, i) => imgFiles[i].includes('4');
+const isNotImageFour = (_, i) => !isImageFour(_, i);
+// use images 1 - 3 for training
+const trainImages = images.filter(isNotImageFour);
+// use images 4 for testing
+const testImages = images.filter(isImageFour);
 // make labels
 const labels = imgFiles
+  .filter(isNotImageFour)
   .map(file => nameMappings.findIndex(name => file.includes(name)));
 
+const runPrediction = (recognizer) => {
+  testImages.forEach((img) => {
+    const result = recognizer.predict(img);
+    console.log('predicted: %s, confidence: %s', nameMappings[result.label], result.confidence);
+    cv.imshowWait('face', img);
+    cv.destroyAllWindows();
+  });
+};
+
+const eigen = new cv.EigenFaceRecognizer();
+const fisher = new cv.FisherFaceRecognizer();
 const lbph = new cv.LBPHFaceRecognizer();
-lbph.train(trainImgs, labels);
+eigen.train(trainImages, labels);
+fisher.train(trainImages, labels);
+lbph.train(trainImages, labels);
 
-const twoFacesImg = cv.imread(path.resolve(basePath, 'daryl-rick.jpg'));
-const result = classifier.detectMultiScale(twoFacesImg.bgrToGray());
+console.log('eigen:');
+runPrediction(eigen);
 
-const minDetections = 10;
-result.objects.forEach((faceRect, i) => {
-  if (result.numDetections[i] < minDetections) {
-    return;
-  }
-  const faceImg = twoFacesImg.getRegion(faceRect).bgrToGray();
-  const who = nameMappings[lbph.predict(faceImg).label];
+console.log('fisher:');
+runPrediction(fisher);
 
-  const rect = cv.drawDetection(
-    twoFacesImg,
-    faceRect,
-    { color: new cv.Vec(255, 0, 0), segmentFraction: 4 }
-  );
-
-  const alpha = 0.4;
-  cv.drawTextBox(
-    twoFacesImg,
-    new cv.Point(rect.x, rect.y + rect.height + 10),
-    [{ text: who }],
-    alpha
-  );
-});
-
-cv.imshowWait('result', twoFacesImg);
+console.log('lbph:');
+runPrediction(lbph);

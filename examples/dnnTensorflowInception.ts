@@ -1,4 +1,4 @@
-const cv = require('../');
+import cv from '../lib';
 const fs = require('fs');
 const path = require('path');
 

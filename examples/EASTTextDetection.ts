@@ -1,6 +1,6 @@
-const path = require('path');
-const fs = require('fs');
-const { cv, drawBlueRect } = require('./utils');
+import path from 'path';
+import fs from 'fs';
+import { cv, drawBlueRect } from './utils';
 const { extractResults } = require('./dnn/ssdUtils');
 
 if (!cv.xmodules.dnn) {

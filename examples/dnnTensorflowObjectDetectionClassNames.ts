@@ -1,4 +1,4 @@
-module.exports = {
+export = {
   0: "background",
   1: "person",
   2: "bicycle",
