@@ -1,11 +1,11 @@
-const fs = require('fs');
-const cv = require('../');
+import fs from 'fs';
+import cv from '../lib';
 
 // a - z
 const lccs = Array(26).fill(97).map((v, i) => v + i).map(ascii => String.fromCharCode(ascii));
 exports.lccs = lccs;
 
-const invert = img => img.threshold(254, 255, cv.THRESH_BINARY_INV);
+const invert = (img) => img.threshold(254, 255, cv.THRESH_BINARY_INV);
 
 const getBoundingRect = component => new cv.Rect(
   component[cv.CC_STAT_LEFT],
@@ -51,7 +51,7 @@ const getLetterBoundingRect = (img, isIorJ) => {
   return letterRect;
 };
 
-exports.centerLetterInImage = (img, isIorJ) => {
+export const centerLetterInImage = (img, isIorJ) => {
   const rect = getLetterBoundingRect(img, isIorJ);
   if (!rect) {
     return null;
@@ -72,7 +72,7 @@ exports.centerLetterInImage = (img, isIorJ) => {
   return centered;
 };
 
-exports.saveConfusionMatrix = (
+export const saveConfusionMatrix = (
   testDataFiles,
   predict,
   numTestImagesPerClass,
@@ -89,7 +89,7 @@ exports.saveConfusionMatrix = (
 
   const confusionMatMatrix = [[''].concat(lccs)].concat(
     confusionMat.div(numTestImagesPerClass)
-      .getDataAsArray().map((col, l) => [lccs[l]].concat(col.map(v => Math.round(v * 100) / 100)))
+      .getDataAsArray().map((col: number[], l: number) => [lccs[l]].concat(col.map(v => Math.round(v * 100) / 100)))
   );
 
   const csvRows = confusionMatMatrix.map(cols => cols.join(';'));
