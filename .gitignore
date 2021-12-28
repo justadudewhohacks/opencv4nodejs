@@ -30,3 +30,6 @@ examples/*.js
 data/ocr/lcletters.xml
 data/ocr/confusionmatrix.csv
 examples/faceDetect/*.js.map
+examples/faceDetect/*.js
+examples/dnn/*.js
+examples/dnn/*.js.map

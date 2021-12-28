@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { cv } from '../utils';
 
-exports = function () {
+export default function () {
   const modelPath = path.resolve(__dirname, '../../data/dnn/facenet');
 
   const prototxt = path.resolve(modelPath, 'facenet.prototxt');

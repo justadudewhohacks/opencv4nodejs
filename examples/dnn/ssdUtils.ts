@@ -1,6 +1,6 @@
 import { cv } from '../utils';
 
-exports.extractResults = function (outputBlob, imgDimensions) {
+export default function extractResults(outputBlob, imgDimensions) {
   return Array(outputBlob.rows).fill(0)
     .map((res, i) => {
       const classLabel = outputBlob.at(i, 1);

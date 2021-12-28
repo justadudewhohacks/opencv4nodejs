@@ -1,8 +1,4 @@
-import {
-  cv,
-  getDataFilePath,
-  drawBlueRect
-} from '../utils';
+import { cv, getDataFilePath, drawBlueRect } from '../utils';
 
 const image = cv.imread(getDataFilePath('got.jpg'));
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);

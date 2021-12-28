@@ -1,15 +1,12 @@
-import {
-  cv,
-  getDataFilePath
-} from '../utils';
-
-const { runVideoFaceDetection } = require('./commons');
+import { Mat } from '../../lib/typings/openCV';
+import { cv, getDataFilePath } from '../utils';
+import { runVideoFaceDetection } from './commons';
 
 const videoFile = getDataFilePath('people.mp4');
 
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
 
-function detectFaces(img) {
+function detectFaces(img: Mat) {
   // restrict minSize and scaleFactor for faster processing
   const options = {
     // minSize: new cv.Size(40, 40),

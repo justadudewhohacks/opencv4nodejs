@@ -1,6 +1,6 @@
 import { cv, grabFrames } from '../utils';
 
-const { makeRunDetectFacenetSSD } = require('./commons');
+import { makeRunDetectFacenetSSD } from './commons';
 
 const runDetection = makeRunDetectFacenetSSD();
 

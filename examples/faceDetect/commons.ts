@@ -1,12 +1,9 @@
-import {
-  cv,
-  grabFrames,
-  drawBlueRect
-} from '../utils';
-const loadFacenet = require('../dnn/loadFacenet');
-const { extractResults } = require('../dnn/ssdUtils');
+import { cv, grabFrames, drawBlueRect } from '../utils';
+import loadFacenet from '../dnn/loadFacenet';
+import extractResults from '../dnn/ssdUtils';
+import { Mat, Rect } from '../../lib/typings/openCV';
 
-exports.runVideoFaceDetection = (src, detectFaces) => grabFrames(src, 1, (frame) => {
+export const runVideoFaceDetection = (src: string, detectFaces: (img: Mat) => Rect[]) => grabFrames(src, 1, (frame) => {
   console.time('detection time');
   const frameResized = frame.resizeToMax(800);
 
@@ -38,9 +35,9 @@ function classifyImg(net, img) {
   return extractResults(outputBlob, img);
 }
 
-exports.makeRunDetectFacenetSSD = function () {
+export const makeRunDetectFacenetSSD = function () {
   const net = loadFacenet();
-  return function (img, minConfidence) {
+  return function (img: Mat, minConfidence: number) {
     const predictions = classifyImg(net, img);
 
     predictions

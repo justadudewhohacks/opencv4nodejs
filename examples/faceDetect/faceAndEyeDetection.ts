@@ -1,9 +1,5 @@
-import {
-  cv,
-  getDataFilePath,
-  drawBlueRect,
-  drawGreenRect
-} from '../utils';
+import { Rect } from '../../lib/typings/openCV';
+import { cv, getDataFilePath, drawBlueRect, drawGreenRect } from '../utils';
 
 const image = cv.imread(getDataFilePath('Lenna.png'));
 
@@ -17,7 +13,7 @@ if (!faceResult.objects.length) {
   throw new Error('No faces detected!');
 }
 
-const sortByNumDetections = result => result.numDetections
+const sortByNumDetections = (result: { objects: Rect[], numDetections: number[] }) => result.numDetections
   .map((num, idx) => ({ num, idx }))
   .sort(((n0, n1) => n1.num - n0.num))
   .map(({ idx }) => idx);
