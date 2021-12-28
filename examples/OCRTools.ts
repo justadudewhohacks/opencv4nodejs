@@ -4,8 +4,8 @@ import cv from '../lib';
 import '../lib/typings/Mat'
 
 // a - z
-const lccs: Array<string> = Array(26).fill(97).map((v, i) => v + i).map(ascii => String.fromCharCode(ascii));
-exports.lccs = lccs;
+export const lccs: Array<string> = Array(26).fill(97).map((v, i) => v + i).map(ascii => String.fromCharCode(ascii));
+
 new cv.Mat();
 
 const invert = (img/*: cv.Mat*/ ) => img.threshold(254, 255, cv.THRESH_BINARY_INV);

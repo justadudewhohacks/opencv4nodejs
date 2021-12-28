@@ -1,8 +1,8 @@
-const {
+import {
   cv,
   getDataFilePath,
   drawBlueRect
-} = require('../utils');
+} from '../utils';
 
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
 

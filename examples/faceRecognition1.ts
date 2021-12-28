@@ -1,6 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 import cv from '../lib';
+import { Mat } from '../lib/typings/cv';
 
 if (!cv.xmodules.face) {
   throw new Error('exiting: opencv4nodejs compiled without face module');
@@ -13,7 +14,7 @@ const nameMappings = ['daryl', 'rick', 'negan'];
 const imgFiles = fs.readdirSync(imgsPath);
 
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
-const getFaceImage = (grayImg) => {
+const getFaceImage = (grayImg: Mat) => {
   const faceRects = classifier.detectMultiScale(grayImg).objects;
   if (!faceRects.length) {
     throw new Error('failed to detect faces');
@@ -54,13 +55,13 @@ result.objects.forEach((faceRect, i) => {
   const rect = cv.drawDetection(
     twoFacesImg,
     faceRect,
-    { color: new cv.Vec(255, 0, 0), segmentFraction: 4 }
+    { color: new cv.Vec3(255, 0, 0), segmentFraction: 4 }
   );
 
   const alpha = 0.4;
   cv.drawTextBox(
     twoFacesImg,
-    new cv.Point(rect.x, rect.y + rect.height + 10),
+    new cv.Point2(rect.x, rect.y + rect.height + 10),
     [{ text: who }],
     alpha
   );

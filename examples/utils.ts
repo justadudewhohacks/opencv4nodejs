@@ -1,6 +1,6 @@
 import path from 'path';
 import cv from '../lib';
-import { Mat } from '../lib/typings/cv';
+import { Mat, Rect, Vec3 } from '../lib/typings/cv';
 
 export {default as cv} from '../lib';
 
@@ -29,13 +29,13 @@ export const grabFrames = (videoFile: number | string, delay: number, onFrame: (
   }, 0);
 };
 
-export const runVideoDetection = (src: number, detect) => {
+export const runVideoDetection = (src: number, detect: (mat: Mat) => any) => {
   grabFrames(src, 1, frame => {
     detect(frame);
   });
 };
 
-export const drawRectAroundBlobs = (binaryImg, dstImg, minPxSize, fixedRectWidth) => {
+export const drawRectAroundBlobs = (binaryImg: Mat, dstImg: Mat, minPxSize: number, fixedRectWidth: number) => {
   const {
     centroids,
     stats
@@ -50,17 +50,18 @@ export const drawRectAroundBlobs = (binaryImg, dstImg, minPxSize, fixedRectWidth
     ];
     const size = stats.at(label, cv.CC_STAT_AREA);
     const blue = new cv.Vec3(255, 0, 0);
+    const thickness = 2;
     if (minPxSize < size) {
       dstImg.drawRectangle(
         new cv.Point2(x1, y1),
         new cv.Point2(x2, y2),
-        { color: blue, thickness: 2 }
+        blue, thickness
       );
     }
   }
 };
-
-export const drawRect = (image, rect, color, opts = { thickness: 2 }) =>
+// drawRectangle(rect: Rect, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
+export const drawRect = (image: Mat, rect: Rect, color: Vec3, opts = { thickness: 2 }) =>
   image.drawRectangle(
     rect,
     color,
@@ -68,9 +69,9 @@ export const drawRect = (image, rect, color, opts = { thickness: 2 }) =>
     cv.LINE_8
   );
 
-export const drawBlueRect = (image, rect, opts = { thickness: 2 }) =>
+export const drawBlueRect = (image: Mat, rect: Rect, opts = { thickness: 2 }) =>
   drawRect(image, rect, new cv.Vec3(255, 0, 0), opts);
-export const drawGreenRect = (image, rect, opts = { thickness: 2 }) =>
+export const drawGreenRect = (image: Mat, rect: Rect, opts = { thickness: 2 }) =>
   drawRect(image, rect, new cv.Vec3(0, 255, 0), opts);
-export const drawRedRect = (image, rect, opts = { thickness: 2 }) =>
+export const drawRedRect = (image: Mat, rect: Rect, opts = { thickness: 2 }) =>
   drawRect(image, rect, new cv.Vec3(0, 0, 255), opts);

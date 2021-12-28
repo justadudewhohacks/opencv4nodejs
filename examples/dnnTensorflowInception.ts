@@ -1,6 +1,6 @@
 import cv from '../lib';
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 if (!cv.xmodules.dnn) {
   throw new Error('exiting: opencv4nodejs compiled without dnn module');
@@ -28,7 +28,7 @@ const classifyImg = (img) => {
   // our input images and pad the image with white pixels to
   // make the images have the same width and height
   const maxImgDim = 224;
-  const white = new cv.Vec(255, 255, 255);
+  const white = new cv.Vec3(255, 255, 255);
   const imgResized = img.resizeToMax(maxImgDim).padToSquare(white);
 
   // network accepts blobs as input

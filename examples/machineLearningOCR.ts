@@ -1,10 +1,10 @@
-const fs = require('fs');
-const cv = require('../');
-const {
+import fs from 'fs';
+import cv from '../';
+import {
   lccs,
   centerLetterInImage,
   saveConfusionMatrix
-} = require('./OCRTools');
+} from './OCRTools';
 
 const trainDataPath = '../data/ocr/traindata';
 const testDataPath = '../data/ocr/testdata';
