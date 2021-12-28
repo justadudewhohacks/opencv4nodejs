@@ -1,23 +1,21 @@
 import fs from 'fs';
 import { cv } from './utils';
 
-// import '../lib/typings/Mat'
-
 // a - z
 export const lccs: Array<string> = Array(26).fill(97).map((v, i) => v + i).map(ascii => String.fromCharCode(ascii));
 
 new cv.Mat();
 
-const invert = (img/*: cv.Mat*/ ) => img.threshold(254, 255, cv.THRESH_BINARY_INV);
+const invert = (img: cv.Mat ) => img.threshold(254, 255, cv.THRESH_BINARY_INV);
 
-const getBoundingRect = component => new cv.Rect(
+const getBoundingRect = (component: number[]) => new cv.Rect(
   component[cv.CC_STAT_LEFT],
   component[cv.CC_STAT_TOP],
   component[cv.CC_STAT_WIDTH],
   component[cv.CC_STAT_HEIGHT]
 );
 
-const getLetterBoundingRect = (img, isIorJ) => {
+const getLetterBoundingRect = (img: cv.Mat, isIorJ: boolean) => {
   const { stats } = invert(img).bgrToGray().connectedComponentsWithStats();
   const componentsOrderedBySize =
     stats.getDataAsArray().sort((s0, s1) => s1[cv.CC_STAT_AREA] - s0[cv.CC_STAT_AREA]);
@@ -54,7 +52,7 @@ const getLetterBoundingRect = (img, isIorJ) => {
   return letterRect;
 };
 
-export const centerLetterInImage = (img, isIorJ) => {
+export const centerLetterInImage = (img: cv.Mat, isIorJ: boolean) => {
   const rect = getLetterBoundingRect(img, isIorJ);
   if (!rect) {
     return null;
@@ -76,10 +74,10 @@ export const centerLetterInImage = (img, isIorJ) => {
 };
 
 export const saveConfusionMatrix = (
-  testDataFiles,
-  predict,
-  numTestImagesPerClass,
-  outputFile
+  testDataFiles: any[],
+  predict: (mat: cv.Mat, isIorJ: boolean) => number,
+  numTestImagesPerClass: number,
+  outputFile: string
 ) => {
   const confusionMat = new cv.Mat(26, 26, cv.CV_64F, 0);
   testDataFiles.forEach((files: string[], label: number) => {

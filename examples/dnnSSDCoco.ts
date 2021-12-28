@@ -1,21 +1,21 @@
 import { cv, drawRect } from './utils';
 import fs from 'fs';
 import path from 'path';
-import classNames from './dnnCocoClassNames';
-const { extractResults } = require('./dnn/ssdUtils');
+import { classNames } from './dnnCocoClassNames';
+import { extractResults, Prediction } from './dnn/ssdUtils';
 
 if (!cv.xmodules || !cv.xmodules.dnn) {
   throw new Error('exiting: opencv4nodejs compiled without dnn module');
 }
 
 // replace with path where you unzipped inception model
-const ssdcocoModelPath = '../data/dnn/coco-SSD_300x300';
+const ssdcocoModelPath = path.join(__dirname, '..', 'data', 'dnn', 'coco-SSD_300x300');
 
 const prototxt = path.resolve(ssdcocoModelPath, 'deploy.prototxt');
 const modelFile = path.resolve(ssdcocoModelPath, 'VGG_coco_SSD_300x300_iter_400000.caffemodel');
 
 if (!fs.existsSync(prototxt) || !fs.existsSync(modelFile)) {
-  console.log('could not find ssdcoco model');
+  console.log('could not find ssdcoco model in ', ssdcocoModelPath);
   console.log('download the model from: https://drive.google.com/file/d/0BzKzrI_SkD1_dUY1Ml9GRTFpUWc/view');
   throw new Error('exiting: could not find ssdcoco model');
 }
@@ -23,7 +23,7 @@ if (!fs.existsSync(prototxt) || !fs.existsSync(modelFile)) {
 // initialize ssdcoco model from prototxt and modelFile
 const net = cv.readNetFromCaffe(prototxt, modelFile);
 
-function classifyImg(img) {
+function classifyImg(img: cv.Mat) {
   // ssdcoco model works with 300 x 300 images
   const imgResized = img.resize(300, 300);
 
@@ -41,7 +41,7 @@ function classifyImg(img) {
     .map(r => Object.assign({}, r, { className: classNames[r.classLabel] }));
 }
 
-const makeDrawClassDetections = predictions => (drawImg, className, getColor, thickness = 2) => {
+const makeDrawClassDetections = (predictions: Prediction[]) => (drawImg, className, getColor, thickness = 2) => {
   predictions
     .filter(p => classNames[p.classLabel] === className)
     .forEach(p => drawRect(drawImg, p.rect, getColor(), { thickness }));
@@ -49,7 +49,7 @@ const makeDrawClassDetections = predictions => (drawImg, className, getColor, th
 };
 
 const runDetectDishesExample = () => {
-  const img = cv.imread('../data/dishes.jpg');
+  const img = cv.imread(path.join(__dirname, '..', 'data', 'dishes.jpg'));
   const minConfidence = 0.2;
 
   const predictions = classifyImg(img).filter(res => res.confidence > minConfidence);
@@ -86,7 +86,7 @@ const runDetectDishesExample = () => {
 };
 
 const runDetectPeopleExample = () => {
-  const img = cv.imread('../data/cars.jpeg');
+  const img = cv.imread(path.join(__dirname, '..', 'data', 'cars.jpeg'));
   const minConfidence = 0.4;
 
   const predictions = classifyImg(img).filter(res => res.confidence > minConfidence);

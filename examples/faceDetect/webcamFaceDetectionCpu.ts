@@ -1,7 +1,7 @@
 import { Mat } from '../../lib/typings/openCV';
 import { cv } from '../utils';
 
-const { runVideoFaceDetection } = require('./commons');
+import { runVideoFaceDetection } from './commons';
 
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
 

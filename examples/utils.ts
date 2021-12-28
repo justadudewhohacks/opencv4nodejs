@@ -1,9 +1,9 @@
 import path from 'path';
-import cvb from '../lib';
+import cv from '../lib';
 import { Mat, Rect, Vec3 } from '../lib/typings/openCV';
 
-export const cv = cvb;// ();
-//export default cv;
+// export {default as cv} from '../lib';
+export * as cv from '../lib';
 
 export const dataPath = path.resolve(__dirname, '../data');
 export const getDataFilePath = (fileName: string): string => path.resolve(dataPath, fileName);
@@ -28,7 +28,7 @@ export const grabFrames = (videoFile: number | string, delay: number, onFrame: (
   }, 0);
 };
 
-export const runVideoDetection = (src: number, detect: (mat: Mat) => any) => {
+export const runVideoDetection = (src: number, detect: (mat: Mat) => any): void => {
   grabFrames(src, 1, frame => {
     detect(frame);
   });
@@ -60,7 +60,7 @@ export const drawRectAroundBlobs = (binaryImg: Mat, dstImg: Mat, minPxSize: numb
   }
 };
 // drawRectangle(rect: Rect, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
-export const drawRect = (image: Mat, rect: Rect, color: Vec3, opts = { thickness: 2 }) =>
+export const drawRect = (image: Mat, rect: Rect, color: Vec3, opts = { thickness: 2 }): void =>
   image.drawRectangle(
     rect,
     color,

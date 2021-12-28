@@ -1,9 +1,9 @@
 import { cv, grabFrames, drawBlueRect } from '../utils';
 import loadFacenet from '../dnn/loadFacenet';
-import extractResults from '../dnn/ssdUtils';
+import { extractResults } from '../dnn/ssdUtils';
 import { Mat, Rect } from '../../lib/typings/openCV';
 
-export const runVideoFaceDetection = (src: string, detectFaces: (img: Mat) => Rect[]) => grabFrames(src, 1, (frame) => {
+export const runVideoFaceDetection = (src: string | number, detectFaces: (img: Mat) => Rect[]) => grabFrames(src, 1, (frame) => {
   console.time('detection time');
   const frameResized = frame.resizeToMax(800);
 
@@ -18,7 +18,7 @@ export const runVideoFaceDetection = (src: string, detectFaces: (img: Mat) => Re
   console.timeEnd('detection time');
 });
 
-function classifyImg(net, img) {
+function classifyImg(net: cv.Net, img: cv.Mat) {
   // facenet model works with 300 x 300 images
   const imgResized = img.resizeToMax(300);
 

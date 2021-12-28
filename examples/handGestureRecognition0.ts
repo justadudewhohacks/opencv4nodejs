@@ -3,7 +3,16 @@ import { Point2 } from '../lib/typings/openCV';
 import { cv } from './utils';
 import { grabFrames } from './utils';
 
-interface PtCount {pt: Point2; contourIdx: number;}
+interface PointWithIdx {
+  pt: Point2;
+  contourIdx: number;
+}
+
+type Vertex = {
+  pt: Point2
+  d1: Point2
+  d2: Point2
+}
 
 // segmenting by skin color (has to be adjusted)
 const skinColorUpper = (hue: number) => new cv.Vec3(hue, 0.8 * 255, 0.6 * 255);
@@ -50,7 +59,7 @@ const getRoughHull = (contour: Contour, maxDist: number) => {
   // group all points in local neighborhood
   const ptsBelongToSameCluster = (pt1: Point2, pt2: Point2): boolean => ptDist(pt1, pt2) < maxDist;
   const { labels } = cv.partition(hullPoints, ptsBelongToSameCluster);
-  const pointsByLabel = new Map<number, Array<PtCount>>();
+  const pointsByLabel = new Map<number, Array<PointWithIdx>>();
   labels.forEach(l => pointsByLabel.set(l, []));
   hullPointsWithIdx.forEach((ptWithIdx, i) => {
     const label = labels[i];
@@ -58,7 +67,7 @@ const getRoughHull = (contour: Contour, maxDist: number) => {
   });
 
   // map points in local neighborhood to most central point
-  const getMostCentralPoint = (pointGroup: PtCount[]) => {
+  const getMostCentralPoint = (pointGroup: PointWithIdx[]) => {
     // find center
     const center: Point2 = getCenterPt(pointGroup.map(ptWithIdx => ptWithIdx.pt));
     // sort ascending by distance to center
@@ -71,7 +80,7 @@ const getRoughHull = (contour: Contour, maxDist: number) => {
   return pointGroups.map(getMostCentralPoint).map(ptWithIdx => ptWithIdx.contourIdx);
 };
 
-const getHullDefectVertices = (handContour, hullIndices) => {
+const getHullDefectVertices = (handContour: Contour, hullIndices: number[]): Vertex[] => {
   const defects = handContour.convexityDefects(hullIndices);
   const handContourPoints = handContour.getPoints();
 
@@ -99,7 +108,7 @@ const getHullDefectVertices = (handContour, hullIndices) => {
     });
 };
 
-const filterVerticesByAngle = (vertices, maxAngleDeg) =>
+const filterVerticesByAngle = (vertices: Vertex[], maxAngleDeg: number) =>
   vertices.filter((v) => {
     const sq = x => x * x;
     const a = v.d1.sub(v.d2).norm();

@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import { cv } from './utils';
-import { Mat } from '../lib/typings/openCV';
 
 if (!cv.xmodules || !cv.xmodules.face) {
   throw new Error('exiting: opencv4nodejs compiled without face module');
@@ -14,7 +13,7 @@ const nameMappings = ['daryl', 'rick', 'negan'];
 const imgFiles = fs.readdirSync(imgsPath);
 
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
-const getFaceImage = (grayImg: Mat) => {
+const getFaceImage = (grayImg: cv.Mat) => {
   const faceRects = classifier.detectMultiScale(grayImg).objects;
   if (!faceRects.length) {
     throw new Error('failed to detect faces');

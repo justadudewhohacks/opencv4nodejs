@@ -1,7 +1,7 @@
 import path from 'path/posix';
 import { cv } from './utils';
 
-const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
+const matchFeatures = ({ img1, img2, detector, matchFunc }: { img1: cv.Mat, img2: cv.Mat, detector: cv.FeatureDetector, matchFunc: (descs1: cv.Mat, descs2: cv.Mat) => cv.DescriptorMatch[] }) => {
   // detect keypoints
   const keyPoints1 = detector.detect(img1);
   const keyPoints2 = detector.detect(img2);
@@ -55,10 +55,10 @@ cv.imshowWait('ORB matches', orbMatchesImg);
 // Match using the BFMatcher with crossCheck true
 const bf = new cv.BFMatcher(cv.NORM_L2, true);
 const orbBFMatchIMG = matchFeatures({
-    img1,
-    img2,
-    detector: new cv.ORBDetector(),
-    matchFunc: (desc1, desc2) => bf.match(desc1, desc2)
+  img1,
+  img2,
+  detector: new cv.ORBDetector(),
+  matchFunc: (desc1, desc2) => bf.match(desc1, desc2)
 });
 cv.imshowWait('ORB with BFMatcher - crossCheck true', orbBFMatchIMG);
 

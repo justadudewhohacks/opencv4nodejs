@@ -1,6 +1,12 @@
 import { cv } from '../utils';
 
-export default function extractResults(outputBlob, imgDimensions) {
+export type Prediction = {
+  classLabel: number
+  confidence: number
+  rect: cv.Rect
+}
+
+export function extractResults(outputBlob: cv.Mat, imgDimensions: { rows: number, cols: number }) {
   return Array(outputBlob.rows).fill(0)
     .map((res, i) => {
       const classLabel = outputBlob.at(i, 1);

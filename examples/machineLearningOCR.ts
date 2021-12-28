@@ -1,11 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { cv } from './utils';
-import {
-  lccs,
-  centerLetterInImage,
-  saveConfusionMatrix
-} from './OCRTools';
+import { lccs, centerLetterInImage, saveConfusionMatrix } from './OCRTools';
 
 const trainDataPath = path.join(__dirname, '..', 'data', 'ocr', 'traindata');
 const testDataPath = path.join(__dirname, '..', 'data', 'ocr', 'testdata');
@@ -44,11 +40,11 @@ const computeHOGDescriptorFromImage = (img, isIorJ) => {
   return hog.compute(im);
 };
 
-const trainSVM = (trainDataFiles, isAuto = false) => {
+const trainSVM = (trainDataFiles: string[][], isAuto = false) => {
   // make hog features of trainingData and label it
   console.log('make features');
-  const samples = [];
-  const labels = [];
+  const samples: number[][] = [];
+  const labels: number[] = [];
   trainDataFiles.forEach((files, label) => {
     files.forEach((file) => {
       const img = cv.imread(file);

@@ -1,4 +1,4 @@
-export = [
+export const classNames = [
   'background',
   'person',
   'bicycle',

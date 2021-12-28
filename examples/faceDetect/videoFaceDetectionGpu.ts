@@ -5,7 +5,7 @@ if (cv.version.minor === 4) {
   console.log('Warning: It seems like opencv 3.4 does not run the opencl version of detectMultiScale.');
 }
 
-const { runVideoFaceDetection } = require('./commons');
+import { runVideoFaceDetection } from './commons';
 
 const videoFile = getDataFilePath('people.mp4');
 

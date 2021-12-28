@@ -33,8 +33,8 @@ const images = imgFiles
   // face images must be equally sized
   .map(faceImg => faceImg.resize(80, 80));
 
-const isImageFour = (_, i) => imgFiles[i].includes('4');
-const isNotImageFour = (_, i) => !isImageFour(_, i);
+const isImageFour = (_: unknown, i: number) => imgFiles[i].includes('4');
+const isNotImageFour = (_: unknown, i: number) => !isImageFour(_, i);
 // use images 1 - 3 for training
 const trainImages = images.filter(isNotImageFour);
 // use images 4 for testing
@@ -44,7 +44,7 @@ const labels = imgFiles
   .filter(isNotImageFour)
   .map(file => nameMappings.findIndex(name => file.includes(name)));
 
-const runPrediction = (recognizer) => {
+const runPrediction = (recognizer: cv.FaceRecognizer) => {
   testImages.forEach((img) => {
     const result = recognizer.predict(img);
     console.log('predicted: %s, confidence: %s', nameMappings[result.label], result.confidence);
