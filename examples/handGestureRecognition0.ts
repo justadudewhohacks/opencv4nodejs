@@ -2,6 +2,9 @@ import cv from '../lib';
 import { Contour, Mat, Point2 } from '../lib/typings/cv';
 import { grabFrames } from './utils';
 
+
+interface PtCount {pt: Point2; contourIdx: number;}
+
 // segmenting by skin color (has to be adjusted)
 const skinColorUpper = (hue: number) => new cv.Vec3(hue, 0.8 * 255, 0.6 * 255);
 const skinColorLower = (hue: number) => new cv.Vec3(hue, 0.1 * 255, 0.05 * 255);
@@ -30,14 +33,11 @@ const getHandContour = (handMask: Mat): Contour => {
 const ptDist = (pt1: Point2, pt2: Point2) => pt1.sub(pt2).norm();
 
 // returns center of all points
-const getCenterPt = (pts: Point2[]) => pts.reduce<Point2>(
-    (sum, pt) => sum.add(pt),
-    new cv.Point2(0, 0)
-  ).div(pts.length);
+const getCenterPt = (pts: Point2[]): Point2 => pts.reduce((sum: Point2, pt: Point2) => sum.add(pt), new Point2(0, 0)).div(pts.length);
 
 // get the polygon from a contours hull such that there
 // will be only a single hull point for a local neighborhood
-const getRoughHull = (contour, maxDist) => {
+const getRoughHull = (contour: Contour, maxDist: number) => {
   // get hull indices and hull points
   const hullIndices = contour.convexHullIndices();
   const contourPoints = contour.getPoints();
@@ -48,9 +48,9 @@ const getRoughHull = (contour, maxDist) => {
   const hullPoints: Point2[] = hullPointsWithIdx.map(ptWithIdx => ptWithIdx.pt);
 
   // group all points in local neighborhood
-  const ptsBelongToSameCluster = (pt1: Point2, pt2: Point2) => ptDist(pt1, pt2) < maxDist;
+  const ptsBelongToSameCluster = (pt1: Point2, pt2: Point2): boolean => ptDist(pt1, pt2) < maxDist;
   const { labels } = cv.partition(hullPoints, ptsBelongToSameCluster);
-  const pointsByLabel = new Map();
+  const pointsByLabel = new Map<number, Array<PtCount>>();
   labels.forEach(l => pointsByLabel.set(l, []));
   hullPointsWithIdx.forEach((ptWithIdx, i) => {
     const label = labels[i];
@@ -58,9 +58,9 @@ const getRoughHull = (contour, maxDist) => {
   });
 
   // map points in local neighborhood to most central point
-  const getMostCentralPoint = (pointGroup) => {
+  const getMostCentralPoint = (pointGroup: PtCount[]) => {
     // find center
-    const center = getCenterPt(pointGroup.map(ptWithIdx => ptWithIdx.pt));
+    const center: Point2 = getCenterPt(pointGroup.map(ptWithIdx => ptWithIdx.pt));
     // sort ascending by distance to center
     return pointGroup.sort(
       (ptWithIdx1, ptWithIdx2) => ptDist(ptWithIdx1.pt, center) - ptDist(ptWithIdx2.pt, center)

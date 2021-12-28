@@ -52,8 +52,8 @@ const classifyImg = img => {
   // get height and width from the image
   const [imgHeight, imgWidth] = img.sizes;
   const numRows = outputBlob.sizes.slice(2, 3);
-
-  for (let y = 0; y < numRows; y += 1) {
+  // this code looks brotken
+  for (let y = 0; y < numRows[0]; y += 1) {
     const confidence = outputBlob.at([0, 0, y, 2]);
     if (confidence > 0.5) {
       const classId = outputBlob.at([0, 0, y, 1]);

@@ -78,13 +78,13 @@ const classifyImg = img => {
       if (confidence > minConfidence) {
         const box = detection.slice(0, 4);
 
-        const centerX = parseInt(box[0] * imgWidth);
-        const centerY = parseInt(box[1] * imgHeight);
-        const width = parseInt(box[2] * imgWidth);
-        const height = parseInt(box[3] * imgHeight);
+        const centerX = Math.floor(box[0] * imgWidth);
+        const centerY = Math.floor(box[1] * imgHeight);
+        const width = Math.floor(box[2] * imgWidth);
+        const height = Math.floor(box[3] * imgHeight);
 
-        const x = parseInt(centerX - width / 2);
-        const y = parseInt(centerY - height / 2);
+        const x = Math.floor(centerX - width / 2);
+        const y = Math.floor(centerY - height / 2);
 
         boxes.push(new cv.Rect(x, y, width, height));
         confidences.push(confidence);
@@ -100,9 +100,9 @@ const classifyImg = img => {
         indices.forEach(i => {
           const rect = boxes[i];
 
-          const pt1 = new cv.Point(rect.x, rect.y);
-          const pt2 = new cv.Point(rect.x + rect.width, rect.y + rect.height);
-          const rectColor = new cv.Vec(255, 0, 0);
+          const pt1 = new cv.Point2(rect.x, rect.y);
+          const pt2 = new cv.Point2(rect.x + rect.width, rect.y + rect.height);
+          const rectColor = new cv.Vec3(255, 0, 0);
           const rectThickness = 2;
           const rectLineType = cv.LINE_8;
 
@@ -110,10 +110,10 @@ const classifyImg = img => {
           img.drawRectangle(pt1, pt2, rectColor, rectThickness, rectLineType);
 
           const text = labels[classIDs[i]];
-          const org = new cv.Point(rect.x, rect.y + 15);
+          const org = new cv.Point2(rect.x, rect.y + 15);
           const fontFace = cv.FONT_HERSHEY_SIMPLEX;
           const fontScale = 0.5;
-          const textColor = new cv.Vec(123, 123, 255);
+          const textColor = new cv.Vec3(123, 123, 255);
           const thickness = 2;
 
           // put text on the object

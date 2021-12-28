@@ -49,7 +49,7 @@ const classifyImg = (img) => {
 
   const result =
     locations.map(pt => ({
-      confidence: parseInt(outputBlob.at(0, pt.x) * 100) / 100,
+      confidence: outputBlob.at(0, pt.x),
       className: classNames[pt.x]
     }))
       // sort result by confidence

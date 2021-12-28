@@ -2,11 +2,11 @@ export * as cv from './cv';
 
 declare module "./cv.js" {
   export class Point {
-    add(otherPoint: Point): Point;
+    add<T extends Point>(otherPoint: T): T;
     at(index: number): number;
-    div(s: number): Point;
-    mul(s: number): Point;
+    div(s: number): this; //Point;
+    mul(s: number): this; //Point;
     norm(): number;
-    sub(otherPoint: Point): Point;
+    sub<T extends Point>(otherPoint: T): T;
   }
 }
