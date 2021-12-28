@@ -9,5 +9,9 @@ declare module "./openCV.js" {
     forwardAsync(outBlobNames?: string[]): Promise<Mat[]>;
     setInput(blob: Mat, inputName?: string): void;
     setInputAsync(blob: Mat, inputName?: string): Promise<void>;
+    getLayerNames(): string[];
+    getLayerNamesAsync(): Promise<string[]>;
+    getUnconnectedOutLayers(): number[]
+    getUnconnectedOutLayersAsync(): Promise<number[]>;
   }
 }

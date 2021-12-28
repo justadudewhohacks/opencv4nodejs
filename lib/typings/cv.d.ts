@@ -174,6 +174,8 @@ declare module "./openCV.js" {
   export function readNetFromCaffeAsync(prototxt: string, modelPath?: string): Promise<Net>;
   export function readNetFromTensorflow(modelPath: string): Net;
   export function readNetFromTensorflowAsync(modelPath: string): Promise<Net>;
+  export function readNetFromDarknet(cfgPath: string, modelPath: string): Net;
+  export function readNetFromDarknetAsync(cfgPath: string, modelPath: string): Promise<Net>;
   export function recoverPose(E: Mat, points1: Point2[], points2: Point2[], focal?: number, pp?: Point2, mask?: Mat): { returnValue: number, R: Mat, T: Vec3 };
   export function recoverPoseAsync(E: Mat, points1: Point2[], points2: Point2[], focal?: number, pp?: Point2, mask?: Mat): Promise<{ returnValue: number, R: Mat, T: Vec3 }>;
   export function reduce(mat: Mat, dim: number, rtype: number, dtype?: number): Mat;
