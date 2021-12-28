@@ -1,7 +1,6 @@
 import { OpenCVParamBuildOptions } from '@u4/opencv-build/build/BuildEnv';
 import promisify from './promisify';
 import extendWithJsSources from './src';
-// import * as OpenCV from './typings/cv';
 import * as OpenCV from './typings/openCV';
 
 function loadOpenCV(opt?: OpenCVParamBuildOptions): typeof OpenCV {
@@ -27,6 +26,7 @@ function loadOpenCV(opt?: OpenCVParamBuildOptions): typeof OpenCV {
 
   let cvObj: typeof OpenCV = promisify(cvBase);
   cvObj = extendWithJsSources(cvObj);
+
   return cvObj;
 }
 

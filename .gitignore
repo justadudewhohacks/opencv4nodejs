@@ -29,3 +29,4 @@ examples/*.js.map
 examples/*.js
 data/ocr/lcletters.xml
 data/ocr/confusionmatrix.csv
+examples/faceDetect/*.js.map
