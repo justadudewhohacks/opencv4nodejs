@@ -1,8 +1,11 @@
 import { Point } from './Point';
+export * as cv from './cv';
 
-export class Point3 extends Point {
-  readonly x: number;
-  readonly y: number;
-  readonly z: number;
-  constructor(x: number, y: number, z: number);
+declare module "./cv.js" {
+  export class Point3 extends Point {
+    readonly x: number;
+    readonly y: number;
+    readonly z: number;
+    constructor(x: number, y: number, z: number);
+  }
 }
