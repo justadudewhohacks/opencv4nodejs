@@ -1,7 +1,7 @@
-const {
+import {
   cv,
   getDataFilePath
-} = require('../utils');
+} from '../utils';
 
 const { makeRunDetectFacenetSSD } = require('./commons');
 

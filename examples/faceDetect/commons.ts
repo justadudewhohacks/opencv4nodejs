@@ -1,8 +1,8 @@
-const {
+import {
   cv,
   grabFrames,
   drawBlueRect
-} = require('../utils');
+} from '../utils';
 const loadFacenet = require('../dnn/loadFacenet');
 const { extractResults } = require('../dnn/ssdUtils');
 
@@ -38,9 +38,9 @@ function classifyImg(net, img) {
   return extractResults(outputBlob, img);
 }
 
-exports.makeRunDetectFacenetSSD = function() {
+exports.makeRunDetectFacenetSSD = function () {
   const net = loadFacenet();
-  return function(img, minConfidence) {
+  return function (img, minConfidence) {
     const predictions = classifyImg(net, img);
 
     predictions

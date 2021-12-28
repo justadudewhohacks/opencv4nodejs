@@ -1,6 +1,6 @@
-const {
+import {
   cv
-} = require('../utils');
+} from '../utils';
 
 const { runVideoFaceDetection } = require('./commons');
 

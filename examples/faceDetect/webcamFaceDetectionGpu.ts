@@ -1,6 +1,4 @@
-const {
-  cv
-} = require('../utils');
+import { cv } from '../utils';
 
 const { runVideoFaceDetection } = require('./commons');
 
@@ -15,7 +13,7 @@ function detectFaces(img) {
     scaleFactor: 1.2,
     minNeighbors: 10
   };
-  return classifier.detectMultiScaleGpu(img.bgrToGray(), options).objects;
+  return classifier.detectMultiScaleGpu(img.bgrToGray(), options); // .objects
 }
 
 runVideoFaceDetection(webcamPort, detectFaces);

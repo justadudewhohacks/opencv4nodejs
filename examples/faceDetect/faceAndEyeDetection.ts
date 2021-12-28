@@ -1,9 +1,9 @@
-const {
+import {
   cv,
   getDataFilePath,
   drawBlueRect,
   drawGreenRect
-} = require('../utils');
+} from '../utils';
 
 const image = cv.imread(getDataFilePath('Lenna.png'));
 
