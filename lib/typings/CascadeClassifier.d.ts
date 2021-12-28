@@ -3,7 +3,7 @@ import { Mat } from './Mat.d';
 import { Rect } from './Rect.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class CascadeClassifier {
     constructor(xmlFilePath: string);
     detectMultiScale(img: Mat, scaleFactor?: number, minNeighbors?: number, flags?: number, minSize?: Size, maxSize?: Size): { objects: Rect[], numDetections: number[] };

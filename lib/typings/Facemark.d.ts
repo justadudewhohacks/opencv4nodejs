@@ -3,7 +3,7 @@ import { Rect } from "./Rect.d";
 import { Point2 } from "./Point2.d";
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class Facemark {
     addTrainingSample(image: Mat, landmarks: number[][]): boolean;
     addTrainingSampleAsync(image: Mat, landmarks: number[][]): Promise<boolean>;

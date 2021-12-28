@@ -5,7 +5,7 @@ import { Point2 } from './Point2.d';
 import { Vec4 } from './Vec4.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class Contour {
     readonly numPoints: number;
     readonly area: number;

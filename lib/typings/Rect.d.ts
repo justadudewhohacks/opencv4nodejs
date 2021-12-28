@@ -1,7 +1,7 @@
 import { Size } from './Size.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class Rect {
     readonly x: number;
     readonly y: number;

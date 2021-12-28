@@ -1,7 +1,7 @@
 import { Mat } from './Mat';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class FaceRecognizer {
     load(file: string): void;
     predict(img: Mat): { label: number, confidence: number };

@@ -1,6 +1,6 @@
 import cv from './utils';
 import path from 'path';
-import type { Mat } from '../lib/typings/cv';
+import type { Mat } from '../lib/typings/openCV';
 
 if (!cv.xmodules || !cv.xmodules.text) {
   throw new Error('exiting: opencv4nodejs compiled without text module');

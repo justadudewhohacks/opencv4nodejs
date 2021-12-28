@@ -1,6 +1,6 @@
 import path from 'path';
 import cvb from '../lib';
-import { Mat, Rect, Vec3 } from '../lib/typings/cv';
+import { Mat, Rect, Vec3 } from '../lib/typings/openCV';
 
 export const cv = cvb;// ();
 export default cv;

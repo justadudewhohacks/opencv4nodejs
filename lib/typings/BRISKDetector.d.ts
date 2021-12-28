@@ -1,7 +1,7 @@
 import { FeatureDetector } from './FeatureDetector';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class BRISKDetector extends FeatureDetector {
     readonly thresh: number;
     readonly octaves: number;

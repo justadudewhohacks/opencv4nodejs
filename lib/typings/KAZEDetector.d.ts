@@ -1,7 +1,7 @@
 import { FeatureDetector } from './FeatureDetector.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class KAZEDetector extends FeatureDetector {
     readonly extended: boolean;
     readonly upright: boolean;

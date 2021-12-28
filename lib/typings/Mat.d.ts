@@ -11,7 +11,7 @@ import { Vec3 } from './Vec3.d';
 import { Vec4 } from './Vec4.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class Mat {
     readonly rows: number;
     readonly cols: number;

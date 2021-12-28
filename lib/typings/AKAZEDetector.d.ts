@@ -1,7 +1,7 @@
 import { FeatureDetector } from './FeatureDetector.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class AKAZEDetector extends FeatureDetector {
     readonly descriptorType: number;
     readonly descriptorSize: number;

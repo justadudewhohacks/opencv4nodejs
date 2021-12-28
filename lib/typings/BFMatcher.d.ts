@@ -2,7 +2,7 @@ import { Mat } from "./Mat";
 import { DescriptorMatch } from "./DescriptorMatch";
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
     export class BFMatcher {
         constructor(normType: number, crossCheck?: boolean);
         constructor(params: { normType: number, crossCheck?: boolean });

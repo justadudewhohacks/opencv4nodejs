@@ -1,6 +1,6 @@
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class Moments {
     readonly m00: number;
     readonly m10: number;

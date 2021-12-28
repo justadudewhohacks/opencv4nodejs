@@ -1,6 +1,6 @@
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class TrackerKCFParams {
     readonly sigma: number;
     readonly lambda: number;

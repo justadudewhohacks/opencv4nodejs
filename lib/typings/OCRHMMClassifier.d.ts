@@ -1,7 +1,7 @@
 import { Mat } from './Mat.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class OCRHMMClassifier {
     constructor(classifier: OCRHMMClassifier, vocabulary: string, transitionPropabilitiesTable: Mat, emissionPropabilitiesTable: Mat, mode?: number);
     eval(img: Mat): { classes: number[], confidences: number[] };

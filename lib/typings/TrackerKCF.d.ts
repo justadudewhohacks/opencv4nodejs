@@ -3,7 +3,7 @@ import { Rect } from './Rect.d';
 import { TrackerKCFParams } from './TrackerKCFParams.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class TrackerKCF {
     constructor();
     constructor(params: TrackerKCFParams);

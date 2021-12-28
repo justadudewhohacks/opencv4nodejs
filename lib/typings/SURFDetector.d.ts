@@ -1,7 +1,7 @@
 import { FeatureDetector } from './FeatureDetector.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class SURFDetector extends FeatureDetector {
     readonly nOctaves: number;
     readonly nOctaveLayers: number;

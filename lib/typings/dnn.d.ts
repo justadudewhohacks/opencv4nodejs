@@ -1,7 +1,7 @@
 import { Point2 } from './Point2.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
     export interface ddnLayerParams {
         blobs: Mat[];
         name: string;

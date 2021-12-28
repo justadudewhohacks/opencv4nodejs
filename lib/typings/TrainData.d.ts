@@ -1,7 +1,7 @@
 import { Mat } from './Mat.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class TrainData {
     readonly samples: Mat;
     readonly layout: number;

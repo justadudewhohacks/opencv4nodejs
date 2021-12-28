@@ -1,5 +1,5 @@
 import path from 'path/posix';
-import { Mat } from '../../lib/typings/cv';
+import { Mat } from '../../lib/typings/openCV';
 import cv from '../utils';
 // import * as cv from '../../';
 

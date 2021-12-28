@@ -1,6 +1,6 @@
 import fs from 'fs';
 import cv from './utils';
-import type { Mat } from '../lib/typings/cv';
+import type { Mat } from '../lib/typings/openCV';
 import path from 'path/posix';
 
 const labeledDataPath = path.join(__dirname, '..', 'data', 'ocr-nocommit', 'letters');

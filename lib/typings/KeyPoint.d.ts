@@ -2,7 +2,7 @@ import { Point2 } from './Point2.d';
 
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class KeyPoint {
     readonly pt: Point2;
     readonly size: number;

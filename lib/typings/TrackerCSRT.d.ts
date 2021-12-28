@@ -3,7 +3,7 @@ import { Rect } from './Rect.d';
 import { TrackerCSRTParams } from './TrackerCSRTParams.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class TrackerCSRT {
     constructor();
     constructor(params: TrackerCSRTParams);

@@ -2,7 +2,7 @@ import { FeatureDetector } from './FeatureDetector.d';
 
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class SIFTDetector extends FeatureDetector {
     readonly nfeatures: number;
     readonly nOctaveLayers: number;

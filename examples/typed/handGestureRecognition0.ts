@@ -1,5 +1,5 @@
 import cv from '../../lib';
-import { Contour, Mat, Point, Point2, Size, Vec3 } from '../../lib/typings/cv';
+import { Contour, Mat, Point, Point2, Size, Vec3 } from '../../lib/typings/openCV';
 import { grabFrames } from './utils';
 
 type PointWithIdx = {

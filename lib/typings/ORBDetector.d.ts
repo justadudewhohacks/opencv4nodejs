@@ -1,7 +1,7 @@
 import { FeatureDetector } from './FeatureDetector.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class ORBDetector extends FeatureDetector {
     readonly maxFeatures: number;
     readonly nLevels: number;

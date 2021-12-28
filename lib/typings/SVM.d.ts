@@ -3,7 +3,7 @@ import { TrainData } from './TrainData.d';
 import { ParamGrid } from './ParamGrid.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class SVM {
     readonly c: number;
     readonly coef0: number;

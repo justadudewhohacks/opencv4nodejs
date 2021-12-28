@@ -1,6 +1,6 @@
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class TrackerBoostingParams {
     readonly numClassifiers: number;
     readonly samplerOverlap: number;

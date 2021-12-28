@@ -1,6 +1,6 @@
 import cv from './utils';
 import path from 'path';
-import { FeatureDetector, Mat } from '../lib/typings/cv';
+import { FeatureDetector, Mat } from '../lib/typings/openCV';
 
 const detectAndComputeAsync = (det: FeatureDetector, img: Mat) =>
   det.detectAsync(img)

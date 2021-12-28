@@ -1,5 +1,5 @@
-import type { Contour, Mat } from '../lib/typings/cv';
-import { Point2 } from '../lib/typings/cv';
+import type { Contour, Mat } from '../lib/typings/openCV';
+import { Point2 } from '../lib/typings/openCV';
 import cv from './utils';
 import { grabFrames } from './utils';
 

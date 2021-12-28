@@ -1,7 +1,7 @@
 import { Vec3 } from './Vec3.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class Vec {
     absdiff(otherVec: Vec): Vec;
     add(otherVec: Vec): Vec;

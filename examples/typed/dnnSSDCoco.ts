@@ -7,7 +7,7 @@ import {
 
 import { classNames } from './dnnCocoClassNames';
 import { extractResults, Prediction } from './dnn/ssdUtils';
-import { Mat, Vec3 } from '../../lib/typings/cv';
+import { Mat, Vec3 } from '../../lib/typings/openCV';
 
 if (!cv.xmodules.dnn) {
   throw new Error('exiting: opencv4nodejs compiled without dnn module');

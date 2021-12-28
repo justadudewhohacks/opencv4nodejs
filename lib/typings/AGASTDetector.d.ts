@@ -1,7 +1,7 @@
 import { KeyPointDetector } from './KeyPointDetector.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class AGASTDetector extends KeyPointDetector {
     readonly threshold: number;
     readonly type: number;

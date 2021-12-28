@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { resolvePath } from './commons';
 import pc from 'picocolors'
-import * as OpenCV from './typings/cv';
+import * as OpenCV from './typings/openCV';
 
 
 const logDebug = process.env.OPENCV4NODES_DEBUG_REQUIRE ? require('npmlog').info : () => { }

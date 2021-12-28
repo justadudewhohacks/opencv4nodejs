@@ -2,7 +2,7 @@ import { Mat } from './Mat.d';
 import { Size } from './Size.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class VideoWriter {
     constructor(filePath: string, fourccCode: number, fps: number, frameSize: Size, isColor?: boolean);
     static fourcc(fourcc: string): number;

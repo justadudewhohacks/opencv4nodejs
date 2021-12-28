@@ -1,7 +1,7 @@
 import { KeyPointDetector } from './KeyPointDetector';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
 
   export class GFTTDetector extends KeyPointDetector {
     readonly maxFeatures: number;

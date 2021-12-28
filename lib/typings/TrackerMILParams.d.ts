@@ -1,6 +1,6 @@
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class TrackerMILParams {
     readonly samplerInitInRadius: number;
     readonly samplerSearchWinSize: number;

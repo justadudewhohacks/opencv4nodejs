@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import cv from './utils';
-import { Mat } from '../lib/typings/cv';
+import { Mat } from '../lib/typings/openCV';
 
 if (!cv.xmodules || !cv.xmodules.face) {
   throw new Error('exiting: opencv4nodejs compiled without face module');

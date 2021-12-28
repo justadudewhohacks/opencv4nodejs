@@ -3,7 +3,7 @@ import { Rect } from './Rect.d';
 import { OCRHMMClassifier } from './OCRHMMClassifier.d';
 export * as cv from './cv';
 
-declare module "./cv.js" {
+declare module "./openCV.js" {
   export class OCRHMMDecoder {
     constructor(classifier: OCRHMMClassifier, vocabulary: string, transitionPropabilitiesTable: Mat, emissionPropabilitiesTable: Mat, mode?: number);
     run(img: Mat, mask?: Mat, componentLevel?: number): string;
