@@ -86,21 +86,43 @@ function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv, libsFoundInDir: OpencvMo
   return includes;
 }
 
-async function main() {
+async function main(args: string[]) {
+  let autoBuildOpencvVersion: string | undefined = undefined;
   let dryRun = false;
 
-  let autoBuildOpencvVersion = '3.4.16'; // failed
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg.startsWith('-v=')) {
+      autoBuildOpencvVersion = args[i].substring(3);
+      continue;
+    }
+    if (arg.startsWith('--version=')) {
+      autoBuildOpencvVersion = args[i].substring(10);
+      continue;
+    }
+    if (arg === '--version' && args[i + 1]) {
+      autoBuildOpencvVersion = args[i + 1];
+      i++;
+      continue;
+    }
+    if (arg === '--dryrun' || arg === '--dry-run') {
+      dryRun = true;
+      continue;
+    }
+    if (arg === '--help' || arg === '-h') {
+      console.log('Usage: install [--version=<version>] [--dry-run]');
+      return;
+    }
+  }
+
+  // let autoBuildOpencvVersion = '3.4.16'; // failed
   // cc\xfeatures2d\siftdetector.h(9): error C2039: 'SIFT': is not a member of 'cv::xfeatures2d' [opencv4nodejs\build\opencv4nodejs.vcxproj]
   // cc\xfeatures2d\siftdetector.h(9): error C3203: 'Ptr': unspecialized class template can't be used as a template argument for template parameter 'T', expected a real type [\opencv4nodejs\build\opencv4nodejs.vcxproj]
-  autoBuildOpencvVersion = '3.4.6';
+  // autoBuildOpencvVersion = '3.4.6';
 
   const builder = new OpenCVBuilder({ autoBuildOpencvVersion });
   console.log(`Using openCV ${pc.green(builder.env.opencvVersion)}`)
   if (process.argv) {
-    if (process.argv.includes('--dryrun'))
-      dryRun = true;
-    if (process.argv.includes('--dry-run'))
-      dryRun = true;
   }
   /**
    * prepare environment variable
@@ -157,4 +179,4 @@ async function main() {
   }
 }
 
-void main();
+void main(process.argv);

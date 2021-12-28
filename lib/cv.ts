@@ -75,6 +75,6 @@ function getOpenCV(opt?: OpenCVParamBuildOptions): any {
   return opencvBuild;
 }
 
-const cv = getOpenCV({ autoBuildOpencvVersion: '3.4.6' })
+const cv = getOpenCV({ prebuild: 'latestBuild' })
 
 export default cv;// getOpenCV;
