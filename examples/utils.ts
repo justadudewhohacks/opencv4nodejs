@@ -1,13 +1,12 @@
 import path from 'path';
-import cv from '../lib';
+import cvb from '../lib';
 import { Mat, Rect, Vec3 } from '../lib/typings/cv';
 
-export {default as cv} from '../lib';
+export const cv = cvb;// ();
+export default cv;
 
 export const dataPath = path.resolve(__dirname, '../data');
-
 export const getDataFilePath = (fileName: string): string => path.resolve(dataPath, fileName);
-
 export const grabFrames = (videoFile: number | string, delay: number, onFrame: (mat: Mat) => void): void => {
   const cap = new cv.VideoCapture(videoFile);
   let done = false;
@@ -35,7 +34,7 @@ export const runVideoDetection = (src: number, detect: (mat: Mat) => any) => {
   });
 };
 
-export const drawRectAroundBlobs = (binaryImg: Mat, dstImg: Mat, minPxSize: number, fixedRectWidth: number) => {
+export const drawRectAroundBlobs = (binaryImg: Mat, dstImg: Mat, minPxSize: number, fixedRectWidth?: number) => {
   const {
     centroids,
     stats

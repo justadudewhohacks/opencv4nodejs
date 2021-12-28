@@ -1,13 +1,13 @@
-import cv from '../lib';
+import cv from './utils';
 import path from 'path';
-import { Mat } from '../lib/typings/cv';
+import type { Mat } from '../lib/typings/cv';
 
-if (!cv.xmodules.text) {
+if (!cv.xmodules || !cv.xmodules.text) {
   throw new Error('exiting: opencv4nodejs compiled without text module');
 }
 
-const dataPath = path.resolve('../data/text-data/');
-const modelsPath = path.resolve('../data/text-models');
+const dataPath = path.resolve(path.join(__dirname, '..', 'data', 'text-data'));
+const modelsPath = path.resolve(path.join(__dirname, '..', 'data', 'text-models'));
 const beamSearchModel = path.resolve(modelsPath, 'OCRBeamSearch_CNN_model_data.xml.gz');
 
 const vocabulary = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

@@ -1,6 +1,5 @@
 import { cv } from '../utils';
 
-
 exports.extractResults = function (outputBlob, imgDimensions) {
   return Array(outputBlob.rows).fill(0)
     .map((res, i) => {

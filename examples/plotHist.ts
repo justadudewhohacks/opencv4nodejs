@@ -1,6 +1,7 @@
-import cv from '../lib';
+import path from 'path/posix';
+import cv from './utils';
 
-const img = cv.imread('../data/Lenna.png');
+const img = cv.imread(path.join(__dirname, '..', 'data', 'Lenna.png'));
 
 // single axis for 1D hist
 const getHistAxis = (channel) => ([

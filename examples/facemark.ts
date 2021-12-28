@@ -1,8 +1,8 @@
-import cv from '../lib';
+import cv from './utils';
 import fs from "fs";
 import path from "path";
 
-if (!cv.xmodules.face) {
+if (!cv.xmodules || !cv.xmodules.face) {
   throw new Error("exiting: opencv4nodejs compiled without face module");
 }
 

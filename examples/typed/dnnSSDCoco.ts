@@ -1,12 +1,13 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as cv from '../../';
+import cv from '../utils';
 import {
   drawRect
 } from './utils';
 
 import { classNames } from './dnnCocoClassNames';
 import { extractResults, Prediction } from './dnn/ssdUtils';
+import { Mat, Vec3 } from '../../lib/typings/cv';
 
 if (!cv.xmodules.dnn) {
   throw new Error('exiting: opencv4nodejs compiled without dnn module');
@@ -27,7 +28,7 @@ if (!fs.existsSync(prototxt) || !fs.existsSync(modelFile)) {
 // initialize ssdcoco model from prototxt and modelFile
 const net = cv.readNetFromCaffe(prototxt, modelFile);
 
-function classifyImg(img: cv.Mat) {
+function classifyImg(img: Mat) {
   // ssdcoco model works with 300 x 300 images
   const imgResized = img.resize(300, 300);
 
@@ -46,7 +47,7 @@ function classifyImg(img: cv.Mat) {
 }
 
 const makeDrawClassDetections = (predictions: Prediction[]) =>
-  (drawImg: cv.Mat, className: string, getColor: () => cv.Vec3, thickness = 2) => {
+  (drawImg: Mat, className: string, getColor: () => Vec3, thickness = 2) => {
     predictions
       .filter(p => classNames[p.classLabel] === className)
       .forEach(p => drawRect(drawImg, p.rect, getColor(), thickness));

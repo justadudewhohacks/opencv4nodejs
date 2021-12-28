@@ -1,9 +1,9 @@
 import path from 'path';
 import fs from 'fs';
 import { cv, drawBlueRect } from './utils';
-const { extractResults } = require('./dnn/ssdUtils');
+// const { extractResults } = require('./dnn/ssdUtils');
 
-if (!cv.xmodules.dnn) {
+if (!cv.xmodules || !cv.xmodules.dnn) {
   throw new Error('exiting: opencv4nodejs compiled without dnn module');
 }
 

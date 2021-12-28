@@ -1,13 +1,16 @@
-import * as cv from '../../';
+import path from 'path/posix';
+import { Mat } from '../../lib/typings/cv';
+import cv from '../utils';
+// import * as cv from '../../';
 
-const detectAndComputeAsync = (det: cv.FeatureDetector, img: cv.Mat) =>
+const detectAndComputeAsync = (det: cv.FeatureDetector, img: Mat) =>
   det.detectAsync(img)
     .then(kps => det.computeAsync(img, kps)
                       .then(desc => ({ kps, desc }))
     );
 
-const img1 = cv.imread('../../data/s0.jpg');
-const img2 = cv.imread('../../data/s1.jpg');
+const img1 = cv.imread(path.join(__dirname, '..', 'data', 's0.jpg'));
+const img2 = cv.imread(path.join(__dirname, '..', 'data', 's1.jpg'));
 
 const detectorNames = [
   'AKAZE',

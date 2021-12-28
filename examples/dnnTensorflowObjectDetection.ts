@@ -7,7 +7,7 @@ import path from "path";
 import classNames from "./dnnTensorflowObjectDetectionClassNames";
 import { cv, runVideoDetection } from "./utils";
 
-if (!cv.xmodules.dnn) {
+if (!cv.xmodules || !cv.xmodules.dnn) {
   throw new Error("exiting: opencv4nodejs compiled without dnn module");
 }
 

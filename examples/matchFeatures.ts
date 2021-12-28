@@ -1,4 +1,5 @@
-import cv from '../lib';
+import path from 'path/posix';
+import cv from './utils';
 
 const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   // detect keypoints
@@ -27,11 +28,11 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('../data/s0.jpg');
-const img2 = cv.imread('../data/s1.jpg');
+const img1 = cv.imread(path.join(__dirname, '..', 'data', 's0.jpg'));
+const img2 = cv.imread(path.join(__dirname, '..', 'data', 's1.jpg'));
 
 // check if opencv compiled with extra modules and nonfree
-if (cv.xmodules.xfeatures2d) {
+if (cv.xmodules && cv.xmodules.xfeatures2d) {
   const siftMatchesImg = matchFeatures({
     img1,
     img2,

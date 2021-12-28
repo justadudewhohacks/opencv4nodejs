@@ -4,11 +4,14 @@ import fs from 'fs';
 import path from 'path';
 import { resolvePath } from './commons';
 import pc from 'picocolors'
+import * as OpenCV from './typings/cv';
+
 
 const logDebug = process.env.OPENCV4NODES_DEBUG_REQUIRE ? require('npmlog').info : () => { }
 
-function getOpenCV(opt?: OpenCVParamBuildOptions): any {
-
+function getOpenCV(opt?: OpenCVParamBuildOptions): typeof OpenCV {
+  if (!opt)
+    opt = { prebuild: 'latestBuild' }
   const builder = new OpenCVBuilder(opt);
 
   function tryGetOpencvBinDir() {
@@ -45,6 +48,7 @@ function getOpenCV(opt?: OpenCVParamBuildOptions): any {
     logDebug('require', `require path is ${pc.yellow(requirePath)}`)
     opencvBuild = require(requirePath);
   } catch (err) {
+    // err.code === 'ERR_DLOPEN_FAILED'
     logDebug('require', `failed to require cv with exception: ${pc.red(err.toString())}`)
     logDebug('require', 'attempting to add opencv binaries to path')
 
@@ -75,6 +79,7 @@ function getOpenCV(opt?: OpenCVParamBuildOptions): any {
   return opencvBuild;
 }
 
-const cv = getOpenCV({ prebuild: 'latestBuild' })
+// const cv = getOpenCV({ prebuild: 'latestBuild' })
+// export default cv;
 
-export default cv;// getOpenCV;
+ export = getOpenCV;

@@ -1,4 +1,5 @@
-import cv from '../lib';
+import cv from './utils';
+import path from 'path';
 import { FeatureDetector, Mat } from '../lib/typings/cv';
 
 const detectAndComputeAsync = (det: FeatureDetector, img: Mat) =>
@@ -7,8 +8,8 @@ const detectAndComputeAsync = (det: FeatureDetector, img: Mat) =>
                       .then(desc => ({ kps, desc }))
     );
 
-const img1 = cv.imread('../data/s0.jpg');
-const img2 = cv.imread('../data/s1.jpg');
+const img1 = cv.imread(path.resolve(__dirname, '..', 'data', 's0.jpg'));
+const img2 = cv.imread(path.resolve(__dirname, '..', 'data', 's1.jpg'));
 
 const detectorNames = [
   'AKAZE',

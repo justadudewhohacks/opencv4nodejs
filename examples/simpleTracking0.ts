@@ -1,8 +1,8 @@
-import cv from '../lib';
-import { grabFrames, drawRectAroundBlobs } from './utils';
+import path from 'path/posix';
+import { cv, grabFrames, drawRectAroundBlobs } from './utils';
 
 const delay = 100;
-grabFrames('../data/horses.mp4', delay, (frame) => {
+grabFrames(path.join(__dirname, '..', 'data', 'horses.mp4'), delay, (frame) => {
   const frameHLS = frame.cvtColor(cv.COLOR_BGR2HLS);
 
   const brownUpper = new cv.Vec3(10, 60, 165);

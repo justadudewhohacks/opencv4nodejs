@@ -30,6 +30,10 @@
   "typings": "./lib/index.d.ts",
   "scripts": {
     "prepare": "tsc",
+    "install_3.4.6": "tsc && node ./install/install.js --version 3.4.6",
+    "install_3.4.7": "tsc && node ./install/install.js --version 3.4.7",
+    "install_3.4.8": "tsc && node ./install/install.js --version 3.4.8",
+    "install_3.4.9": "tsc && node ./install/install.js --version 3.4.9",
     "install": "tsc && node ./install/install.js",
     "configure": "node-gyp configure",
     "build": "node-gyp configure build --jobs max",
@@ -39,10 +43,10 @@
   },
   "gypfile": true,
   "dependencies": {
-    "@u4/opencv-build": "^0.3.4",
+    "@u4/opencv-build": "^0.3.7",
     "nan": "^2.15.0",
     "native-node-utils": "^0.2.7",
-    "npmlog": "^5.0.0",
+    "npmlog": "^6.0.0",
     "picocolors": "^1.0.0"
   },
   "optionalDependencies": {
@@ -51,5 +55,11 @@
   "devDependencies": {
     "@types/node": "^16.4.10",
     "@types/npmlog": "^4.1.4"
-  }
+  },
+  "files": [
+    "cc",
+    "install",
+    "lib",
+    "binding.gyp"
+  ]
 }

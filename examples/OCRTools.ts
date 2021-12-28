@@ -1,7 +1,7 @@
 import fs from 'fs';
-import cv from '../lib';
+import cv from './utils';
 
-import '../lib/typings/Mat'
+// import '../lib/typings/Mat'
 
 // a - z
 export const lccs: Array<string> = Array(26).fill(97).map((v, i) => v + i).map(ascii => String.fromCharCode(ascii));

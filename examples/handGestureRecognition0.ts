@@ -1,7 +1,7 @@
-import cv from '../lib';
-import { Contour, Mat, Point2 } from '../lib/typings/cv';
+import type { Contour, Mat } from '../lib/typings/cv';
+import { Point2 } from '../lib/typings/cv';
+import cv from './utils';
 import { grabFrames } from './utils';
-
 
 interface PtCount {pt: Point2; contourIdx: number;}
 

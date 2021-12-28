@@ -1,14 +1,15 @@
+import path from 'path';
 import fs from 'fs';
-import cv from '../';
+import cv from './utils';
 import {
   lccs,
   centerLetterInImage,
   saveConfusionMatrix
 } from './OCRTools';
 
-const trainDataPath = '../data/ocr/traindata';
-const testDataPath = '../data/ocr/testdata';
-const outPath = '../data/ocr';
+const trainDataPath = path.join(__dirname, '..', 'data', 'ocr', 'traindata');
+const testDataPath = path.join(__dirname, '..', 'data', 'ocr', 'testdata');
+const outPath = path.join(__dirname, '..', 'data', 'ocr');
 const SVMFile = 'lcletters.xml';
 
 const hog = new cv.HOGDescriptor({
@@ -73,10 +74,10 @@ const trainSVM = (trainDataFiles, isAuto = false) => {
 };
 
 const data = lccs.map((letter) => {
-  const trainDataDir = `${trainDataPath}/${letter}`;
-  const testDataDir = `${testDataPath}/${letter}`;
-  const train = fs.readdirSync(trainDataDir).map(file => `${trainDataDir}/${file}`);
-  const test = fs.readdirSync(testDataDir).map(file => `${testDataDir}/${file}`);
+  const trainDataDir = path.join(trainDataPath, letter);
+  const testDataDir = path.join(testDataPath, letter);
+  const train = fs.readdirSync(trainDataDir).map(file => path.join(trainDataDir,file));
+  const test = fs.readdirSync(testDataDir).map(file => path.join(testDataDir, file));
   return ({ train, test });
 });
 
@@ -89,8 +90,8 @@ console.log('train data per class:', numTrainImagesPerClass);
 console.log('test data per class:', numTestImagesPerClass);
 
 trainSVM(trainDataFiles, false);
-svm.save(`${outPath}/${SVMFile}`);
-svm.load(`${outPath}/${SVMFile}`);
+svm.save(path.join(outPath, SVMFile));
+svm.load(path.join(outPath, SVMFile));
 
 // compute prediction error for each letter
 const errs = Array(26).fill(0);
@@ -118,5 +119,5 @@ saveConfusionMatrix(
   testDataFiles,
   (img, isIorJ) => svm.predict(computeHOGDescriptorFromImage(img, isIorJ)),
   numTestImagesPerClass,
-  `${outPath}/confusionmatrix.csv`
+  path.join(outPath, 'confusionmatrix.csv')
 );

@@ -1,9 +1,10 @@
-import cv from '../lib';
+import path from 'path/posix';
+import cv from './utils';
 
 const findWaldo = async () => {
   // Load images
-  const originalMat = await cv.imreadAsync(`${__dirname}/../data/findwaldo.jpg`);
-  const waldoMat = await cv.imreadAsync(`${__dirname}/../data/waldo.jpg`);
+  const originalMat = await cv.imreadAsync(path.join(__dirname, '..', 'data', 'findwaldo.jpg'));
+  const waldoMat = await cv.imreadAsync(path.join(__dirname, '..', 'data', 'waldo.jpg'));
   // Match template (the brightest locations indicate the highest match)
   const matched = originalMat.matchTemplate(waldoMat, 5);
 

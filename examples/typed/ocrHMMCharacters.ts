@@ -1,5 +1,5 @@
 import * as path from 'path';
-import * as cv from '../../';
+import * as cv from '../utils';
 
 if (!cv.xmodules.text) {
   throw new Error('exiting: opencv4nodejs compiled without text module');

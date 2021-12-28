@@ -27,3 +27,5 @@ examples/typed/dnn/*.js
 examples/typed/dnn/*.js.map
 examples/*.js.map
 examples/*.js
+data/ocr/lcletters.xml
+data/ocr/confusionmatrix.csv
