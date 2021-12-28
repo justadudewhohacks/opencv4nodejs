@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import cv from './utils';
+import { cv } from './utils';
 import { Mat } from '../lib/typings/openCV';
 
 if (!cv.xmodules || !cv.xmodules.face) {

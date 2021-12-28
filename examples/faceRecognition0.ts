@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-import cv from './utils';
+import fs from 'fs';
+import path from 'path';
+import { cv } from './utils';
 
 if (!cv.xmodules || !cv.xmodules.face) {
   throw new Error('exiting: opencv4nodejs compiled without face module');

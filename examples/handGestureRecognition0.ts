@@ -1,6 +1,6 @@
 import type { Contour, Mat } from '../lib/typings/openCV';
 import { Point2 } from '../lib/typings/openCV';
-import cv from './utils';
+import { cv } from './utils';
 import { grabFrames } from './utils';
 
 interface PtCount {pt: Point2; contourIdx: number;}

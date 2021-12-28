@@ -1,4 +1,4 @@
-import cv from './utils';
+import { cv } from './utils';
 import fs from "fs";
 import path from "path";
 

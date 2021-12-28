@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import cv from './utils';
+import { cv } from './utils';
 import {
   lccs,
   centerLetterInImage,

@@ -88,10 +88,12 @@ function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv, libsFoundInDir: OpencvMo
 
 async function main(args: string[]) {
   let autoBuildOpencvVersion: string | undefined = undefined;
+  let autoBuildFlags: string | undefined = undefined;
   let dryRun = false;
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
+    const next = args[i+1];
     if (arg.startsWith('-v=')) {
       autoBuildOpencvVersion = args[i].substring(3);
       continue;
@@ -100,6 +102,23 @@ async function main(args: string[]) {
       autoBuildOpencvVersion = args[i].substring(10);
       continue;
     }
+
+    if (arg === '--flags' && next) {
+      autoBuildFlags = next;
+      i++;
+      continue;
+    }
+    if (arg.startsWith('--flags=')) {
+      autoBuildFlags = args[i].substring(8);
+      continue;
+    }
+    if (arg === '-f' && next) {
+      autoBuildFlags = next;
+      i++;
+      continue;
+    }
+    // --flag=-DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi
+
     if (arg === '--version' && args[i + 1]) {
       autoBuildOpencvVersion = args[i + 1];
       i++;
@@ -115,12 +134,16 @@ async function main(args: string[]) {
     }
   }
 
+
+  
+
   // let autoBuildOpencvVersion = '3.4.16'; // failed
   // cc\xfeatures2d\siftdetector.h(9): error C2039: 'SIFT': is not a member of 'cv::xfeatures2d' [opencv4nodejs\build\opencv4nodejs.vcxproj]
   // cc\xfeatures2d\siftdetector.h(9): error C3203: 'Ptr': unspecialized class template can't be used as a template argument for template parameter 'T', expected a real type [\opencv4nodejs\build\opencv4nodejs.vcxproj]
   // autoBuildOpencvVersion = '3.4.6';
-
-  const builder = new OpenCVBuilder({ autoBuildOpencvVersion });
+  if (autoBuildFlags)
+    console.log('autoBuildFlags:', autoBuildFlags);
+  const builder = new OpenCVBuilder({ autoBuildOpencvVersion, autoBuildFlags });
   console.log(`Using openCV ${pc.green(builder.env.opencvVersion)}`)
   if (process.argv) {
   }

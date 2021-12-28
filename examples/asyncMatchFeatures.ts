@@ -1,4 +1,4 @@
-import cv from './utils';
+import { cv } from './utils';
 import path from 'path';
 import { FeatureDetector, Mat } from '../lib/typings/openCV';
 

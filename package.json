@@ -33,7 +33,9 @@
     "install_3.4.6": "tsc && node ./install/install.js --version 3.4.6",
     "install_3.4.7": "tsc && node ./install/install.js --version 3.4.7",
     "install_3.4.8": "tsc && node ./install/install.js --version 3.4.8",
-    "install_3.4.9": "tsc && node ./install/install.js --version 3.4.9",
+    "install_3.4.9": "tsc && node ./install/install.js --version 3.4.9 --flags=-DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi",
+    "install_3.4.9_cuda": "tsc && node ./install/install.js --version 3.4.9 --flags=-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON",
+    
     "install": "tsc && node ./install/install.js",
     "configure": "node-gyp configure",
     "build": "node-gyp configure build --jobs max",

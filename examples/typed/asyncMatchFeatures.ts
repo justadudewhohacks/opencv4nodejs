@@ -1,6 +1,6 @@
 import path from 'path/posix';
 import { Mat } from '../../lib/typings/openCV';
-import cv from '../utils';
+import { cv } from '../utils';
 // import * as cv from '../../';
 
 const detectAndComputeAsync = (det: cv.FeatureDetector, img: Mat) =>

@@ -1,5 +1,5 @@
 const path = require('path');
-import cv from './utils';
+import { cv } from './utils';
 
 const image = cv.imread(path.resolve(__dirname, '../data/Lenna.png'));
 

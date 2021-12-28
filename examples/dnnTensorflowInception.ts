@@ -1,4 +1,4 @@
-import cv from './utils';
+import { cv } from './utils';
 import fs from 'fs';
 import path from 'path';
 
@@ -7,12 +7,12 @@ if (!cv.xmodules || !cv.xmodules.dnn) {
 }
 
 // replace with path where you unzipped inception model
-const inceptionModelPath = '../data/dnn/tf-inception';
+const inceptionModelPath = path.join(__dirname, '..', 'data', 'dnn', 'tf-inception');
 
 const modelFile = path.resolve(inceptionModelPath, 'tensorflow_inception_graph.pb');
 const classNamesFile = path.resolve(inceptionModelPath, 'imagenet_comp_graph_label_strings.txt');
 if (!fs.existsSync(modelFile) || !fs.existsSync(classNamesFile)) {
-  console.log('could not find inception model');
+  console.log('could not find inception model', [modelFile, classNamesFile]);
   console.log('download the model from: https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip');
   throw new Error('exiting');
 }

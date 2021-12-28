@@ -1,5 +1,5 @@
 import path from 'path/posix';
-import cv from './utils';
+import { cv } from './utils';
 
 const img = cv.imread(path.join(__dirname, '..', 'data', 'Lenna.png'));
 

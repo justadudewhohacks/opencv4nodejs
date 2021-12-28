@@ -1,5 +1,5 @@
 import path from 'path/posix';
-import cv from './utils';
+import { cv } from './utils';
 
 const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   // detect keypoints

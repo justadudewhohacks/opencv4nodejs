@@ -1,5 +1,5 @@
 import fs from 'fs';
-import cv from './utils';
+import { cv } from './utils';
 import type { Mat } from '../lib/typings/openCV';
 import path from 'path/posix';
 

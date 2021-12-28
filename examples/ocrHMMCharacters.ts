@@ -1,4 +1,4 @@
-import cv from './utils';
+import { cv } from './utils';
 import path from 'path';
 import type { Mat } from '../lib/typings/openCV';
 

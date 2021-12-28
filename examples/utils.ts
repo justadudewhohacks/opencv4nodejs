@@ -3,7 +3,7 @@ import cvb from '../lib';
 import { Mat, Rect, Vec3 } from '../lib/typings/openCV';
 
 export const cv = cvb;// ();
-export default cv;
+//export default cv;
 
 export const dataPath = path.resolve(__dirname, '../data');
 export const getDataFilePath = (fileName: string): string => path.resolve(dataPath, fileName);
