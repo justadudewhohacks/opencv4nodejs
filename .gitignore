@@ -29,3 +29,5 @@ examples/*.js.map
 examples/simpleTracking0.js
 examples/templateMatching.js
 examples/utils.js
+examples/OCRTools.js
+examples/plotHist.js

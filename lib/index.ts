@@ -1,6 +1,7 @@
 import promisify from './promisify';
 import extendWithJsSources from './src';
 import * as OpenCV from './typings/cv';
+// import './typings/Mat';
 
 const isElectronWebpack =
   // assume module required by webpack if no system path inv envs
@@ -14,8 +15,21 @@ if (cvBase.default)
   cvBase = cvBase.default
 // promisify async methods
 
-let cv: typeof OpenCV = promisify(cvBase);
-cv = extendWithJsSources(cv);
+let cvObj: typeof OpenCV = promisify(cvBase);
+cvObj = extendWithJsSources(cvObj);
+//TMP test TYping
+if (false) {
+  const a = new cvObj.Mat();
+  // do not works
+  // const b: cv.Mat = a;
+  new cvObj.HistAxes({ channel: 1, bins: 1, ranges: [10, 10] })
+  new cvObj.DescriptorMatch();
+  new cvObj.DetectionROI();
+  new cvObj.EigenFaceRecognizer();
+  new cvObj.Facemark();
+  new cvObj.FacemarkLBF();
+}
+
 
 // module.exports = cv;
-export default cv;
+export default cvObj;

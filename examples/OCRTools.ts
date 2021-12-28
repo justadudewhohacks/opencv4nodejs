@@ -1,11 +1,14 @@
 import fs from 'fs';
 import cv from '../lib';
 
-// a - z
-const lccs = Array(26).fill(97).map((v, i) => v + i).map(ascii => String.fromCharCode(ascii));
-exports.lccs = lccs;
+import '../lib/typings/Mat'
 
-const invert = (img) => img.threshold(254, 255, cv.THRESH_BINARY_INV);
+// a - z
+const lccs: Array<string> = Array(26).fill(97).map((v, i) => v + i).map(ascii => String.fromCharCode(ascii));
+exports.lccs = lccs;
+new cv.Mat();
+
+const invert = (img/*: cv.Mat*/ ) => img.threshold(254, 255, cv.THRESH_BINARY_INV);
 
 const getBoundingRect = component => new cv.Rect(
   component[cv.CC_STAT_LEFT],
@@ -89,7 +92,7 @@ export const saveConfusionMatrix = (
 
   const confusionMatMatrix = [[''].concat(lccs)].concat(
     confusionMat.div(numTestImagesPerClass)
-      .getDataAsArray().map((col: number[], l: number) => [lccs[l]].concat(col.map(v => Math.round(v * 100) / 100)))
+      .getDataAsArray().map((col: number[], l: number) => [lccs[l]].concat(col.map((v: number) => '' + Math.round(v * 100) / 100)))
   );
 
   const csvRows = confusionMatMatrix.map(cols => cols.join(';'));

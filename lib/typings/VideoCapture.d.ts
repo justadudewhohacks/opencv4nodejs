@@ -6,8 +6,8 @@ declare module "./cv.js" {
     constructor(filePath: string);
     constructor(devicePort: number);
     get(property: number): number;
-    read(): cv.Mat;
-    readAsync(): Promise<cv.Mat>;
+    read(): Mat;
+    readAsync(): Promise<Mat>;
     release(): void;
     reset(): void;
     set(property: number, value: number): boolean;
