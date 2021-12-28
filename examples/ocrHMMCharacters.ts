@@ -1,5 +1,6 @@
-const cv = require('../');
-const path = require('path');
+import cv from '../lib';
+import path from 'path';
+import { Mat } from '../lib/typings/cv';
 
 if (!cv.xmodules.text) {
   throw new Error('exiting: opencv4nodejs compiled without text module');
@@ -18,7 +19,7 @@ const charImages = ['scenetext_char01.jpg', 'scenetext_char02.jpg']
   .map(cv.imread);
 
 const numbersImg = cv.imread(path.resolve(dataPath, 'numbers.png'));
-const numberImages = [];
+const numberImages = [] as Mat[];
 
 const h = numbersImg.rows / 2;
 const w = numbersImg.cols / 5;
@@ -46,6 +47,6 @@ charImages.concat(numberImages).forEach((img) => {
     )
     .filter(prediction => prediction.confidence > minConfidence);
 
-  console.log('result:', predictions.map(p => `${p.class} : ${parseInt(p.confidence * 10000) / 100}%`));
+  console.log('result:', predictions.map(p => `${p.class} : ${(p.confidence * 100).toFixed(2)}%`));
   cv.imshowWait('image', img);
 });

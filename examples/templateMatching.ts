@@ -1,4 +1,3 @@
-// const cv = require('../');
 import cv from '../lib';
 
 const findWaldo = async () => {

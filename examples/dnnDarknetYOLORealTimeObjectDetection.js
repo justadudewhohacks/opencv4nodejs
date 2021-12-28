@@ -2,9 +2,9 @@
  * Please refer to the python version of "YOLO object detection with OpenCV" by Adrian Rosebrock.
  * For more detail: https://www.pyimagesearch.com/2018/11/12/yolo-object-detection-with-opencv/
  */
-const fs = require("fs");
-const path = require("path");
-const { cv, runVideoDetection } = require("./utils");
+import fs from "fs";
+import path from "path";
+import { cv, runVideoDetection } from "./utils";
 
 if (!cv.xmodules.dnn) {
   throw new Error("exiting: opencv4nodejs compiled without dnn module");

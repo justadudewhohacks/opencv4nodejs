@@ -1,9 +1,12 @@
 import { Mat } from './Mat.d';
 import { Rect } from './Rect.d';
+export * as cv from './cv';
 
-export class TrackerMedianFlow {
-  constructor(pointsInGrid?: number);
-  clear(): void;
-  init(frame: Mat, boundingBox: Rect): boolean;
-  update(frame: Mat): Rect;
+declare module "./cv.js" {
+  export class TrackerMedianFlow {
+    constructor(pointsInGrid?: number);
+    clear(): void;
+    init(frame: Mat, boundingBox: Rect): boolean;
+    update(frame: Mat): Rect;
+  }
 }

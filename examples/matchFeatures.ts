@@ -1,4 +1,4 @@
-const cv = require('../');
+import cv from '../lib';
 
 const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   // detect keypoints

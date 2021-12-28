@@ -1,6 +1,4 @@
-const {
-  cv
-} = require('../utils');
+import { cv } from '../utils';
 
 
 exports.extractResults = function (outputBlob, imgDimensions) {
@@ -8,11 +6,11 @@ exports.extractResults = function (outputBlob, imgDimensions) {
     .map((res, i) => {
       const classLabel = outputBlob.at(i, 1);
       const confidence = outputBlob.at(i, 2);
-      const bottomLeft = new cv.Point(
+      const bottomLeft = new cv.Point2(
         outputBlob.at(i, 3) * imgDimensions.cols,
         outputBlob.at(i, 6) * imgDimensions.rows
       );
-      const topRight = new cv.Point(
+      const topRight = new cv.Point2(
         outputBlob.at(i, 5) * imgDimensions.cols,
         outputBlob.at(i, 4) * imgDimensions.rows
       );

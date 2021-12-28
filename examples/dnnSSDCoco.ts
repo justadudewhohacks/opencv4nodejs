@@ -1,10 +1,10 @@
-const {
+import {
   cv,
   drawRect
-} = require('./utils');
-const fs = require('fs');
-const path = require('path');
-const classNames = require('./dnnCocoClassNames');
+} from './utils';
+import fs from 'fs';
+import path from 'path';
+import classNames from './dnnCocoClassNames';
 const { extractResults } = require('./dnn/ssdUtils');
 
 if (!cv.xmodules.dnn) {
@@ -60,13 +60,13 @@ const runDetectDishesExample = () => {
   const drawClassDetections = makeDrawClassDetections(predictions);
 
   const classColors = {
-    fork: new cv.Vec(0, 255, 0),
-    bowl: new cv.Vec(255, 0, 0),
-    'wine glass': new cv.Vec(0, 0, 255),
-    cup: new cv.Vec(0, 255, 255)
+    fork: new cv.Vec3(0, 255, 0),
+    bowl: new cv.Vec3(255, 0, 0),
+    'wine glass': new cv.Vec3(0, 0, 255),
+    cup: new cv.Vec3(0, 255, 255)
   };
 
-  const legendLeftTop = new cv.Point(580, 20);
+  const legendLeftTop = new cv.Point2(580, 20);
   const alpha = 0.4;
   cv.drawTextBox(
     img,
@@ -96,7 +96,7 @@ const runDetectPeopleExample = () => {
 
   const drawClassDetections = makeDrawClassDetections(predictions);
 
-  const getRandomColor = () => new cv.Vec(Math.random() * 255, Math.random() * 255, 255);
+  const getRandomColor = () => new cv.Vec3(Math.random() * 255, Math.random() * 255, 255);
 
   drawClassDetections(img, 'car', getRandomColor);
   cv.imshowWait('img', img);

@@ -1,5 +1,4 @@
 import { FaceRecognizer } from './FaceRecognizer';
-
 export * as cv from './cv';
 
 declare module "./cv.js" {

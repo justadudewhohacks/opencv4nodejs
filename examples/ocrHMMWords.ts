@@ -1,5 +1,5 @@
-const cv = require('../');
-const path = require('path');
+import cv from '../lib';
+import path from 'path';
 
 if (!cv.xmodules.text) {
   throw new Error('exiting: opencv4nodejs compiled without text module');

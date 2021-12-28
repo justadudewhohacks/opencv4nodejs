@@ -1,8 +1,11 @@
 import { KeyPointDetector } from './KeyPointDetector';
 import { KeyPoint } from './KeyPoint.d';
 import { Mat } from './Mat.d';
+export * as cv from './cv';
 
-export class FeatureDetector extends KeyPointDetector {
-  compute(image: Mat, keypoints: KeyPoint[]): Mat;
-  computeAsync(image: Mat, keypoints: KeyPoint[]): Promise<Mat>;
+declare module "./cv.js" {
+  export class FeatureDetector extends KeyPointDetector {
+    compute(image: Mat, keypoints: KeyPoint[]): Mat;
+    computeAsync(image: Mat, keypoints: KeyPoint[]): Promise<Mat>;
+  }
 }

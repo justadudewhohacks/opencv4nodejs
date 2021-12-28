@@ -82,7 +82,7 @@ export const saveConfusionMatrix = (
   outputFile
 ) => {
   const confusionMat = new cv.Mat(26, 26, cv.CV_64F, 0);
-  testDataFiles.forEach((files, label) => {
+  testDataFiles.forEach((files: string[], label: number) => {
     files.forEach((file) => {
       const img = cv.imread(file);
       const predictedLabel = predict(img, label === 8 || label === 9);

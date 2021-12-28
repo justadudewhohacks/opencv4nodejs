@@ -1,6 +1,7 @@
-const cv = require('../');
+import cv from '../lib';
+import { FeatureDetector, Mat } from '../lib/typings/cv';
 
-const detectAndComputeAsync = (det, img) =>
+const detectAndComputeAsync = (det: FeatureDetector, img: Mat) =>
   det.detectAsync(img)
     .then(kps => det.computeAsync(img, kps)
                       .then(desc => ({ kps, desc }))
@@ -14,9 +15,9 @@ const detectorNames = [
   'BRISK',
   'KAZE',
   'ORB'
-];
+] as const;
 
-const createDetectorFromName = name => new cv[`${name}Detector`]();
+const createDetectorFromName = (name: string): FeatureDetector => new cv[`${name}Detector`]();
 
 // create 4 promises -> each detector detects and computes descriptors for img1 and img2
 const promises = detectorNames

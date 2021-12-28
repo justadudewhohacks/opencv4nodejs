@@ -1,10 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-const {
-  cv
-} = require('../utils');
+import fs from 'fs';
+import path from 'path';
+import { cv } from '../utils';
 
-module.exports = function () {
+exports = function () {
   const modelPath = path.resolve(__dirname, '../../data/dnn/facenet');
 
   const prototxt = path.resolve(modelPath, 'facenet.prototxt');

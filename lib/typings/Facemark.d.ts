@@ -1,7 +1,6 @@
 import { Mat } from "./Mat.d";
 import { Rect } from "./Rect.d";
 import { Point2 } from "./Point2.d";
-
 export * as cv from './cv';
 
 declare module "./cv.js" {

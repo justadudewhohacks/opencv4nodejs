@@ -1,5 +1,8 @@
 import { FaceRecognizer } from './FaceRecognizer';
+export * as cv from './cv';
 
-export class FisherFaceRecognizer extends FaceRecognizer {
-  constructor(num_components?: number, threshold?: number);
+declare module "./cv.js" {
+  export class FisherFaceRecognizer extends FaceRecognizer {
+    constructor(num_components?: number, threshold?: number);
+  }
 }

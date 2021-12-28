@@ -1,9 +1,12 @@
 import { Mat } from './Mat.d';
+export * as cv from './cv';
 
-export class BackgroundSubtractorMOG2 {
-  readonly history: number;
-  readonly varThreshold: number;
-  readonly detectShadows: boolean;
-  constructor(history?: number, varThreshold?: number, detectShadows?: boolean);
-  apply(frame: Mat, learningRate?: number): Mat;
+declare module "./cv.js" {
+  export class BackgroundSubtractorMOG2 {
+    readonly history: number;
+    readonly varThreshold: number;
+    readonly detectShadows: boolean;
+    constructor(history?: number, varThreshold?: number, detectShadows?: boolean);
+    apply(frame: Mat, learningRate?: number): Mat;
+  }
 }
