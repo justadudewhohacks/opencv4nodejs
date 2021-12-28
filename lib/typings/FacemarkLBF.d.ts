@@ -1,3 +1,7 @@
 import { Facemark } from "./Facemark";
 
-export class FacemarkLBF extends Facemark {}
+export * as cv from './cv';
+
+declare module "./cv.js" {
+    export class FacemarkLBF extends Facemark {}
+}

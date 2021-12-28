@@ -13,6 +13,13 @@ import { TermCriteria } from './TermCriteria.d';
 import { OCRHMMClassifier } from './OCRHMMClassifier.d';
 import { Net } from './Net.d';
 
+import './FacemarkAAMParams.d';
+import './DescriptorMatch.d';
+import './DetectionROI.d';
+import './EigenFaceRecognizer.d';
+import './Facemark.d';
+import './FacemarkAAMParams.d';
+
 export class HistAxes {
   channel: number;
   bins: number;
@@ -24,7 +31,7 @@ export class HistAxes {
 export function accumulate(src: Mat, dst: Mat, mask?: Mat): void;
 export function accumulateAsync(src: Mat, dst: Mat, mask?: Mat): Promise<void>;
 export function accumulateProduct(src1: Mat, src2: Mat, dst: Mat, mask?: Mat): void;
-export function accumulateProductAsync(src1: Mat, src2: Mat, dst:Mat, mask?: Mat): Promise<void>;
+export function accumulateProductAsync(src1: Mat, src2: Mat, dst: Mat, mask?: Mat): Promise<void>;
 export function accumulateSquare(src: Mat, dst: Mat, mask?: Mat): void;
 export function accumulateSquareAsync(src: Mat, dst: Mat, mask?: Mat): Promise<void>;
 export function accumulateWeighted(src: Mat, dst: Mat, alpha: number, mask?: Mat): void;
@@ -60,8 +67,8 @@ export function countNonZero(mat: Mat): number;
 export function countNonZeroAsync(mat: Mat): Promise<number>;
 export function createOCRHMMTransitionsTable(vocabulary: string, lexicon: string[]): Mat;
 export function createOCRHMMTransitionsTableAsync(vocabulary: string, lexicon: string[]): Promise<Mat>;
-export function destroyAllWindows() :void;
-export function destroyWindow(winName: string) :void;
+export function destroyAllWindows(): void;
+export function destroyWindow(winName: string): void;
 export function drawKeyPoints(img: Mat, keyPoints: KeyPoint[]): Mat;
 export function drawMatches(img1: Mat, img2: Mat, keyPoints1: KeyPoint[], keyPoints2: KeyPoint[], matches: DescriptorMatch[]): Mat;
 export function eigen(mat: Mat): Mat;
@@ -93,8 +100,8 @@ export function getBuildInformation(): string;
 export function getPerspectiveTransform(srcPoints: Point2[], dstPoints: Point2[]): Mat;
 export function getRotationMatrix2D(center: Point2, angle: number, scale?: number): Mat;
 export function getStructuringElement(shape: number, kernelSize: Size, anchor?: Point2): Mat;
-export function getTextSize(text: string, fontFace: number, fontScale: number, thickness: number): {size: Size, baseLine: number};
-export function getTextSizeAsync(text: string, fontFace: number, fontScale: number, thickness: number): Promise<{size: Size, baseLine: number}>;
+export function getTextSize(text: string, fontFace: number, fontScale: number, thickness: number): { size: Size, baseLine: number };
+export function getTextSizeAsync(text: string, fontFace: number, fontScale: number, thickness: number): Promise<{ size: Size, baseLine: number }>;
 export function getValidDisparityROI(roi1: Rect[], roi2: Rect[], minDisparity: number, numberOfDisparities: number, SADWindowSize: number): Rect;
 export function getValidDisparityROIAsync(roi1: Rect[], roi2: Rect[], minDisparity: number, numberOfDisparities: number, SADWindowSize: number): Promise<Rect>;
 export function goodFeaturesToTrack(mat: Mat, maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Point2[];
@@ -142,7 +149,7 @@ export function matchKnnBruteForceSL2Async(descriptors1: Mat, descriptors2: Mat,
 export function matchKnnFlannBased(descriptors1: Mat, descriptors2: Mat, k: number): DescriptorMatch[][];
 export function matchKnnFlannBasedAsync(descriptors1: Mat, descriptors2: Mat, k: number): Promise<DescriptorMatch[][]>;
 export function mean(mat: Mat): Vec4;
-export function meanAsync(mat: Mat):  Promise<Vec4>;
+export function meanAsync(mat: Mat): Promise<Vec4>;
 export function meanStdDev(mat: Mat, mask?: Mat): { mean: Mat, stddev: Mat };
 export function meanStdDevAsync(mat: Mat, mask?: Mat): Promise<{ mean: Mat, stddev: Mat }>;
 export function medianBlur(mat: Mat, kSize: number): Mat;

@@ -1,5 +1,6 @@
 import promisify from './promisify';
 import extendWithJsSources from './src';
+import * as OpenCV from './typings/cv';
 
 const isElectronWebpack =
   // assume module required by webpack if no system path inv envs
@@ -12,7 +13,9 @@ let cvBase = isElectronWebpack ? require('../build/Release/opencv4nodejs.node') 
 if (cvBase.default)
   cvBase = cvBase.default
 // promisify async methods
-let cv = promisify(cvBase);
+
+let cv: typeof OpenCV = promisify(cvBase);
 cv = extendWithJsSources(cv);
 
-module.exports = cv;
+// module.exports = cv;
+export default cv;
