@@ -1,11 +1,12 @@
 import cv from '../lib';
+import { Contour, Mat, Point2 } from '../lib/typings/cv';
 import { grabFrames } from './utils';
 
 // segmenting by skin color (has to be adjusted)
-const skinColorUpper = hue => new cv.Vec3(hue, 0.8 * 255, 0.6 * 255);
-const skinColorLower = hue => new cv.Vec3(hue, 0.1 * 255, 0.05 * 255);
+const skinColorUpper = (hue: number) => new cv.Vec3(hue, 0.8 * 255, 0.6 * 255);
+const skinColorLower = (hue: number) => new cv.Vec3(hue, 0.1 * 255, 0.05 * 255);
 
-const makeHandMask = (img) => {
+const makeHandMask = (img: Mat) => {
   // filter by skin color
   const imgHLS = img.cvtColor(cv.COLOR_BGR2HLS);
   const rangeMask = imgHLS.inRange(skinColorLower(0), skinColorUpper(15));
@@ -17,7 +18,7 @@ const makeHandMask = (img) => {
   return thresholded;
 };
 
-const getHandContour = (handMask) => {
+const getHandContour = (handMask: Mat): Contour => {
   const mode = cv.RETR_EXTERNAL;
   const method = cv.CHAIN_APPROX_SIMPLE;
   const contours = handMask.findContours(mode, method);
@@ -26,10 +27,10 @@ const getHandContour = (handMask) => {
 };
 
 // returns distance of two points
-const ptDist = (pt1, pt2) => pt1.sub(pt2).norm();
+const ptDist = (pt1: Point2, pt2: Point2) => pt1.sub(pt2).norm();
 
 // returns center of all points
-const getCenterPt = pts => pts.reduce(
+const getCenterPt = (pts: Point2[]) => pts.reduce<Point2>(
     (sum, pt) => sum.add(pt),
     new cv.Point2(0, 0)
   ).div(pts.length);
@@ -40,14 +41,14 @@ const getRoughHull = (contour, maxDist) => {
   // get hull indices and hull points
   const hullIndices = contour.convexHullIndices();
   const contourPoints = contour.getPoints();
-  const hullPointsWithIdx = hullIndices.map(idx => ({
+  const hullPointsWithIdx = hullIndices.map((idx: number) => ({
     pt: contourPoints[idx],
     contourIdx: idx
   }));
-  const hullPoints = hullPointsWithIdx.map(ptWithIdx => ptWithIdx.pt);
+  const hullPoints: Point2[] = hullPointsWithIdx.map(ptWithIdx => ptWithIdx.pt);
 
   // group all points in local neighborhood
-  const ptsBelongToSameCluster = (pt1, pt2) => ptDist(pt1, pt2) < maxDist;
+  const ptsBelongToSameCluster = (pt1: Point2, pt2: Point2) => ptDist(pt1, pt2) < maxDist;
   const { labels } = cv.partition(hullPoints, ptsBelongToSameCluster);
   const pointsByLabel = new Map();
   labels.forEach(l => pointsByLabel.set(l, []));
@@ -115,7 +116,7 @@ const red = new cv.Vec3(0, 0, 255);
 // main
 const delay = 20;
 grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
-  const resizedImg = frame.resizeToMax(640);
+  const resizedImg: Mat = frame.resizeToMax(640);
 
   const handMask = makeHandMask(resizedImg);
   const handContour = getHandContour(handMask);

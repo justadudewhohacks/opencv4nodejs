@@ -134,14 +134,21 @@ declare module "./cv.js" {
     drawChessboardCorners(patternSize: Size, corners: Point2[], patternWasFound: boolean): void;
     drawChessboardCornersAsync(patternSize: Size, corners: Point2[], patternWasFound: boolean): Promise<void>;
     drawCircle(center: Point2, radius: number, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
+    // alternate signature
+    drawContours(contours: Contour[], color: Vec3, opts: {contourIdx?: number, maxLevel?: number, offset?: Point2, lineType?: number, thickness?: number, shift?: number}): void;
     drawContours(contours: Contour[], color: Vec3, contourIdx?: number, maxLevel?: number, offset?: Point2, lineType?: number, thickness?: number, shift?: number): void;
+    // alternate signature
+    drawEllipse(box: RotatedRect, opts: {color?: Vec3, thickness?: number, lineType?: number}): void;
     drawEllipse(box: RotatedRect, color?: Vec3, thickness?: number, lineType?: number): void;
     drawEllipse(center: Point2, axes: Size, angle: number, startAngle: number, endAngle: number, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
     drawFillConvexPoly(pts: Point2[], color?: Vec3, lineType?: number, shift?: number): void;
     drawFillPoly(pts: Point2[][], color?: Vec3, lineType?: number, shift?: number, offset?: Point2): void;
-    drawLine(pt0: Point2, pt1: Point2, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
+    // alternate signature
+    drawLine(pt0: Point2, pt1: Point2, opts: {color?: Vec3, thickness?: number, lineType?: number, shift?: number}): void;
     drawPolylines(pts: Point2[][], isClosed: boolean, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
     drawRectangle(pt0: Point2, pt1: Point2, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
+    // alternate signature
+    drawRectangle(pt0: Point2, pt1: Point2, opt: {color?: Vec3, thickness?: number, lineType?: number, shift?: number}): void;
     drawRectangle(rect: Rect, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
     eigen(): Mat;
     eigenAsync(): Promise<Mat>;
@@ -246,6 +253,8 @@ declare module "./cv.js" {
     push_backAsync(mat: Mat): Promise<Mat>;
     pushBack(mat: Mat): Mat;
     pushBackAsync(mat: Mat): Promise<Mat>;
+    // alternate signature
+    putText(text: string, origin: Point2, fontFace: number, fontScale: number, opts?: {color?: Vec3, thickness?: number, lineType?: number, bottomLeftOrigin?: boolean}): void;
     putText(text: string, origin: Point2, fontFace: number, fontScale: number, color?: Vec3, thickness?: number, lineType?: number, bottomLeftOrigin?: boolean): void;
     putTextAsync(text: string, origin: Point2, fontFace: number, fontScale: number, color?: Vec3, thickness?: number, lineType?: number, bottomLeftOrigin?: boolean): Promise<void>;
     pyrDown(size?: Size, borderType?: number): Mat;

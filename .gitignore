@@ -26,8 +26,4 @@ examples/typed/faceDetect/*.js.map
 examples/typed/dnn/*.js
 examples/typed/dnn/*.js.map
 examples/*.js.map
-examples/simpleTracking0.js
-examples/templateMatching.js
-examples/utils.js
-examples/OCRTools.js
-examples/plotHist.js
+examples/*.js

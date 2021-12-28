@@ -1,34 +1,35 @@
-import * as cv from '../../';
+import cv from '../../lib';
+import { Contour, Mat, Point, Point2, Size, Vec3 } from '../../lib/typings/cv';
 import { grabFrames } from './utils';
 
 type PointWithIdx = {
-  pt: cv.Point2
+  pt: Point2
   contourIdx: number
 }
 
 type Vertex = {
-  pt: cv.Point2
-  d1: cv.Point2
-  d2: cv.Point2
+  pt: Point2
+  d1: Point2
+  d2: Point2
 }
 
 // segmenting by skin color (has to be adjusted)
-const skinColorUpper = (hue: number) => new cv.Vec3(hue, 0.8 * 255, 0.6 * 255);
-const skinColorLower = (hue: number) => new cv.Vec3(hue, 0.1 * 255, 0.05 * 255);
+const skinColorUpper = (hue: number) => new Vec3(hue, 0.8 * 255, 0.6 * 255);
+const skinColorLower = (hue: number) => new Vec3(hue, 0.1 * 255, 0.05 * 255);
 
-const makeHandMask = (img: cv.Mat) => {
+const makeHandMask = (img: Mat) => {
   // filter by skin color
   const imgHLS = img.cvtColor(cv.COLOR_BGR2HLS);
   const rangeMask = imgHLS.inRange(skinColorLower(0), skinColorUpper(15));
 
   // remove noise
-  const blurred = rangeMask.blur(new cv.Size(10, 10));
+  const blurred = rangeMask.blur(new Size(10, 10));
   const thresholded = blurred.threshold(200, 255, cv.THRESH_BINARY);
 
   return thresholded;
 };
 
-const getHandContour = (handMask: cv.Mat) => {
+const getHandContour = (handMask: Mat) => {
   const mode = cv.RETR_EXTERNAL;
   const method = cv.CHAIN_APPROX_SIMPLE;
   const contours = handMask.findContours(mode, method);
@@ -37,17 +38,17 @@ const getHandContour = (handMask: cv.Mat) => {
 };
 
 // returns distance of two points
-const ptDist = (pt1: cv.Point, pt2: cv.Point) => pt1.sub(pt2).norm();
+const ptDist = (pt1: Point, pt2: Point) => pt1.sub(pt2).norm();
 
 // returns center of all points
-const getCenterPt = (pts: cv.Point[]) => pts.reduce(
+const getCenterPt = (pts: Point[]) => pts.reduce(
     (sum, pt) => sum.add(pt),
     new cv.Point2(0, 0)
   ).div(pts.length);
 
 // get the polygon from a contours hull such that there
 // will be only a single hull point for a local neighborhood
-const getRoughHull = (contour: cv.Contour, maxDist: number) => {
+const getRoughHull = (contour: Contour, maxDist: number) => {
   // get hull indices and hull points
   const hullIndices = contour.convexHullIndices();
   const contourPoints = contour.getPoints();
@@ -58,7 +59,7 @@ const getRoughHull = (contour: cv.Contour, maxDist: number) => {
   const hullPoints = hullPointsWithIdx.map(ptWithIdx => ptWithIdx.pt);
 
   // group all points in local neighborhood
-  const ptsBelongToSameCluster = (pt1: cv.Point2, pt2: cv.Point2) => ptDist(pt1, pt2) < maxDist;
+  const ptsBelongToSameCluster = (pt1: Point2, pt2: Point2) => ptDist(pt1, pt2) < maxDist;
   const { labels } = cv.partition(hullPoints, ptsBelongToSameCluster);
   const pointsByLabel = new Map<number, PointWithIdx[]>();
   labels.forEach(l => pointsByLabel.set(l, []));
@@ -81,7 +82,7 @@ const getRoughHull = (contour: cv.Contour, maxDist: number) => {
   return pointGroups.map(getMostCentralPoint).map(ptWithIdx => ptWithIdx.contourIdx);
 };
 
-const getHullDefectVertices = (handContour: cv.Contour, hullIndices: number[]): Vertex[] => {
+const getHullDefectVertices = (handContour: Contour, hullIndices: number[]): Vertex[] => {
   const defects = handContour.convexityDefects(hullIndices);
   const handContourPoints = handContour.getPoints();
 
