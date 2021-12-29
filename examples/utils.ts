@@ -1,9 +1,8 @@
 import path from 'path';
 import cv from '../lib';
+export {default as cv} from '../lib';
 import { Mat, Rect, Vec3 } from '../lib/typings/openCV';
 
-// export {default as cv} from '../lib';
-export * as cv from '../lib';
 
 export const dataPath = path.resolve(__dirname, '../data');
 export const getDataFilePath = (fileName: string): string => path.resolve(dataPath, fileName);

@@ -2,7 +2,7 @@ import { OpenCVParamBuildOptions } from '@u4/opencv-build/build/BuildEnv';
 import promisify from './promisify';
 import extendWithJsSources from './src';
 import * as OpenCV from './typings/openCV';
-export * from './typings/openCV';
+// export * from './typings/openCV';
 
 function loadOpenCV(opt?: OpenCVParamBuildOptions): typeof OpenCV {
   //const isElectronWebpack =
