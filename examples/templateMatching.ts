@@ -1,5 +1,5 @@
 import path from 'path/posix';
-import cv from '..';
+import cv from '../lib';
 
 const findWaldo = async () => {
   // Load images
