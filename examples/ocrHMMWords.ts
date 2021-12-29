@@ -1,5 +1,5 @@
 import path from 'path';
-import { cv } from '..';
+import { cv, Mat } from '..';
 
 if (!cv.xmodules.text) {
   throw new Error('exiting: opencv4nodejs compiled without text module');
@@ -26,7 +26,7 @@ const wordImages = ['scenetext_word01.jpg', 'scenetext_word02.jpg']
   .map(file => path.resolve(dataPath, file))
   .map(cv.imread);
 
-wordImages.forEach((img) => {
+wordImages.forEach((img: Mat) => {
   const grayImg = img.type === cv.CV_8U ? img : img.bgrToGray();
   const mask = grayImg.threshold(100, 255, cv.THRESH_BINARY_INV);
 

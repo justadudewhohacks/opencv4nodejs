@@ -1,4 +1,4 @@
-import { Mat, Rect } from '../../lib/typings/openCV';
+import { Mat, Rect } from '../..';
 import { cv } from '../utils';
 
 export type Prediction = {

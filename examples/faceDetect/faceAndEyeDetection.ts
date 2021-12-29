@@ -1,4 +1,4 @@
-import { Rect } from '../../lib/typings/openCV';
+import { Rect } from '../..';
 import { cv, getDataFilePath, drawBlueRect, drawGreenRect } from '../utils';
 
 const image = cv.imread(getDataFilePath('Lenna.png'));

@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/justadudewhohacks/opencv4nodejs#readme",
   "main": "./lib/opencv4nodejs.js",
-  "typings": "./lib/typings/index.d.ts",
+  "typings": "./typings/index.d.ts",
   "scripts": {
     "prepare": "tsc",
     "install_3.4.6": "tsc && node ./install/install.js --version 3.4.6",

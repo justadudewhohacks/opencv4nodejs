@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { classNames } from './dnnCocoClassNames';
 import { extractResults, Prediction } from './dnn/ssdUtils';
-import { Mat } from '../lib/typings/openCV';
+import { Mat } from '..';
 
 if (!cv.xmodules || !cv.xmodules.dnn) {
   throw new Error('exiting: opencv4nodejs compiled without dnn module');

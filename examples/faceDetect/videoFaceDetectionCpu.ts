@@ -1,4 +1,4 @@
-import { Mat } from '../../lib/typings/openCV';
+import { Mat } from '../..';
 import { cv, getDataFilePath } from '../utils';
 import { runVideoFaceDetection } from './commons';
 

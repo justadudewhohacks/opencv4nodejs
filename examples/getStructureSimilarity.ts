@@ -1,4 +1,4 @@
-import { CV_32F, imread, Mat, Size } from '../lib/typings/openCV';
+import { CV_32F, imread, Mat, Size } from '..';
 
 // Ported from https://docs.opencv.org/2.4/doc/tutorials/gpu/gpu-basics-similarity/gpu-basics-similarity.html
 function getStructureSimilarity(i1: Mat, i2: Mat): number {

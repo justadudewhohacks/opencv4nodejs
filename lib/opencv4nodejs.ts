@@ -1,10 +1,12 @@
 import { OpenCVParamBuildOptions } from '@u4/opencv-build/build/BuildEnv';
 import promisify from './promisify';
 import extendWithJsSources from './src';
-import * as OpenCV from './typings/openCV';
+// import * as OpenCV from '../typings/openCV';
+import raw from './cv';
+
 // export * from './typings/openCV';
 
-function loadOpenCV(opt?: OpenCVParamBuildOptions): typeof OpenCV {
+function loadOpenCV(opt?: OpenCVParamBuildOptions): any {
   //const isElectronWebpack =
   //  // assume module required by webpack if no system path inv envs
   //  !process.env.path
@@ -12,10 +14,6 @@ function loadOpenCV(opt?: OpenCVParamBuildOptions): typeof OpenCV {
   //  && global.window && global.window.process && (global.window.process as any).type
   //  && global.navigator && ((global.navigator.userAgent || '').toLowerCase().indexOf(' electron/') > -1)
   // let cvBase = isElectronWebpack ? require('../build/Release/opencv4nodejs.node') : require('./cv')
-  let raw = require('./cv')
-  if (raw.default)
-    raw = raw.default
-
   const cvBase = raw(opt);
   if (!cvBase.accumulate) {
     throw Error('failed to load opencv basic accumulate not found.')
@@ -25,7 +23,7 @@ function loadOpenCV(opt?: OpenCVParamBuildOptions): typeof OpenCV {
   }
   // promisify async methods
 
-  let cvObj: typeof OpenCV = promisify(cvBase);
+  let cvObj = promisify(cvBase);
   cvObj = extendWithJsSources(cvObj);
 
   return cvObj;

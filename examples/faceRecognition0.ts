@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { FaceRecognizer } from '../lib/typings/openCV';
+import { FaceRecognizer } from '..';
 import { cv } from './utils';
 
 if (!cv.xmodules || !cv.xmodules.face) {

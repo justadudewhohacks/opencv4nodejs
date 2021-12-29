@@ -1,7 +1,7 @@
 import { cv, grabFrames, drawBlueRect } from '../utils';
 import loadFacenet from '../dnn/loadFacenet';
 import { extractResults } from '../dnn/ssdUtils';
-import { Mat, Net, Rect } from '../../lib/typings/openCV';
+import { Mat, Net, Rect } from '../..';
 
 export const runVideoFaceDetection = (src: string | number, detectFaces: (img: Mat) => Rect[]) => grabFrames(src, 1, (frame) => {
   console.time('detection time');

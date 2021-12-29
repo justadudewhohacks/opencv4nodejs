@@ -1,4 +1,4 @@
-import { Mat } from '../../lib/typings/openCV';
+import { Mat } from '../..';
 import { cv, grabFrames } from '../utils';
 import { makeRunDetectFacenetSSD } from './commons';
 

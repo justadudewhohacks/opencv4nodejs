@@ -4,12 +4,12 @@ import fs from 'fs';
 import path from 'path';
 import { resolvePath } from './commons';
 import pc from 'picocolors'
-import * as OpenCV from './typings/openCV';
-
+// import * as OpenCV from '../typings/openCV';
 
 const logDebug = process.env.OPENCV4NODES_DEBUG_REQUIRE ? require('npmlog').info : () => { }
 
-function getOpenCV(opt?: OpenCVParamBuildOptions): typeof OpenCV {
+// OpenCV
+function getOpenCV(opt?: OpenCVParamBuildOptions): any {
   if (!opt)
     opt = { prebuild: 'latestBuild' }
   const builder = new OpenCVBuilder(opt);

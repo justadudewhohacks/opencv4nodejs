@@ -1,7 +1,7 @@
 import path from 'path';
 import cv from '..';
 export {default as cv} from '..';
-import { Mat, Rect, Vec3 } from '../lib/typings/openCV';
+import { Mat, Rect, Vec3 } from '../typings/openCV';
 
 
 export const dataPath = path.resolve(__dirname, '../data');
