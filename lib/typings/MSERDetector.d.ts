@@ -2,7 +2,7 @@ import { KeyPointDetector } from './KeyPointDetector.d';
 import { Point2 } from './Point2.d';
 import { Rect } from './Rect.d';
 import { Mat } from './Mat.d';
-export * as cv from './cv';
+export * as cv from './openCV.js';
 
 declare module "./openCV.js" {
   export class MSERDetector extends KeyPointDetector {

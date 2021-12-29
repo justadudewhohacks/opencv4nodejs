@@ -1,6 +1,6 @@
 import { Mat } from "./Mat";
 import { DescriptorMatch } from "./DescriptorMatch";
-export * as cv from './cv';
+export * as cv from './openCV.js';
 
 declare module "./openCV.js" {
     export class BFMatcher {

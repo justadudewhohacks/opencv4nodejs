@@ -2,7 +2,7 @@ import { Mat } from './Mat.d';
 import { Size } from './Size.d';
 import { Rect } from './Rect.d';
 import { Point2 } from './Point2.d';
-export * as cv from './cv';
+export * as cv from './openCV.js';
 
 declare module "./openCV.js" {
   export class HOGDescriptor {

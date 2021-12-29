@@ -1,6 +1,6 @@
 import { Mat } from './Mat.d';
 import { Size } from './Size.d';
-export * as cv from './cv';
+export * as cv from './openCV.js';
 
 declare module "./openCV.js" {
   export class VideoWriter {

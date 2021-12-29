@@ -1,5 +1,5 @@
 import { FeatureDetector } from './FeatureDetector.d';
-export * as cv from './cv';
+export * as cv from './openCV.js';
 
 declare module "./openCV.js" {
   export class ORBDetector extends FeatureDetector {

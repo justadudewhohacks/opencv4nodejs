@@ -1,5 +1,5 @@
 import { Point } from './Point';
-export * as cv from './cv';
+export * as cv from './openCV.js';
 
 declare module "./openCV.js" {
   export class Point3 extends Point {

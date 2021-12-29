@@ -1,7 +1,7 @@
 import { Size } from './Size.d';
 import { Mat } from './Mat.d';
 import { Rect } from './Rect.d';
-export * as cv from './cv';
+export * as cv from './openCV.js';
 
 declare module "./openCV.js" {
   export class CascadeClassifier {
