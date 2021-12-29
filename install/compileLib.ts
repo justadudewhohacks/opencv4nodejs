@@ -6,6 +6,7 @@ import { resolvePath } from '../lib/commons'
 import pc from 'picocolors'
 import mri from 'mri';
 import { OpenCVParamBuildOptions } from '@u4/opencv-build/build/BuildEnv'
+import path from 'path'
 
 const defaultDir = '/usr/local'
 const defaultLibDir = `${defaultDir}/lib`
@@ -90,14 +91,14 @@ export async function compileLib(args: string[]) {
     let dryRun = false;
     const parsed = mri(args);
 
-    if (parsed.help || parsed.h) {
-        console.log('Usage: install [--version=<version>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild]');
+    if (parsed.help || parsed.h || !args.includes('build')) {
+        console.log('Usage: install [--version=<version>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] build');
         return;
     }
+
     const options: OpenCVParamBuildOptions = {
         autoBuildOpencvVersion: parsed.version,
         autoBuildFlags: parsed.flags,
-
     }
     if (parsed.cuda) options.autoBuildBuildCuda = true;
     if (parsed.nocontrib) options.autoBuildWithoutContrib = true;
@@ -144,7 +145,10 @@ export async function compileLib(args: string[]) {
     // const arch = 'x86_64'
     // const arch = 'x64'
 
+    const cwd = path.join(__dirname, '..');
     // const nodegypCmd = `node-gyp rebuild --arch=${arch} --target_arch=${arch} ` + flags
+    log.info('install', `${__dirname}`)
+    // const nodegypCmd = `node-gyp --help`;
     const nodegypCmd = `node-gyp rebuild ` + flags
     log.info('install', `spawning node gyp process: ${nodegypCmd}`)
 
@@ -157,7 +161,7 @@ export async function compileLib(args: string[]) {
         console.log(nodegypCmd);
         console.log('');
     } else {
-        const child = child_process.exec(nodegypCmd, { maxBuffer: Infinity }, function (error, stdout, stderr) {
+        const child = child_process.exec(nodegypCmd, { maxBuffer: Infinity, cwd }, function (error, stdout, stderr) {
             if (error) {
                 console.log(`error: `, error);
                 log.error('install', `install.ts Done and return ${error.name} ${error.message} Return code: ${error.code}`);

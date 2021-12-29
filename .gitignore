@@ -33,3 +33,6 @@ examples/faceDetect/*.js.map
 examples/faceDetect/*.js
 examples/dnn/*.js
 examples/dnn/*.js.map
+examples/**/*.d.ts
+install/*.d.ts
+lib/**/*.d.ts

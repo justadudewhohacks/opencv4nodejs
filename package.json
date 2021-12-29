@@ -48,7 +48,7 @@
     "clean": "node-gyp clean",
     "build-debug": "BINDINGS_DEBUG=true node ./install/install.js"
   },
-  "gypfile": true,
+  "gypfile": false,
   "dependencies": {
     "@u4/opencv-build": "^0.3.7",
     "mri": "^1.2.0",
