@@ -70,5 +70,5 @@
     "forceConsistentCasingInFileNames": true        /* Disallow inconsistently-cased references to the same file. */
   },
   //"files": [ "./install/install.ts", "./install/parseEnv.ts" ]
-  "include": [ "./install/*.ts", "./lib/**/*.ts", "./examples/*.ts", "./examples/faceDetect/*.ts" ]
+  "include": [ "./install/*.ts", "./lib/**/*.ts", "./examples/**/*.ts" ]
 }

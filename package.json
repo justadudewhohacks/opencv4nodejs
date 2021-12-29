@@ -35,7 +35,9 @@
     "install_3.4.8": "tsc && node ./install/install.js --version 3.4.8",
     "install_3.4.9": "tsc && node ./install/install.js --version 3.4.9 --flags=-DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi",
     "install_3.4.9_cuda": "tsc && node ./install/install.js --version 3.4.9 --flags=-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON",
-    "samples": "tsc && node ./examples/applyColorMap.js && node ./examples/asyncMatchFeatures.js && node ./examples/faceDetect/asyncFaceDetection.js",
+    "install_3.4.10_cuda": "tsc && node ./install/install.js --version 3.4.10 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi\"",
+    "install_3.4.11_cuda": "tsc && node ./install/install.js --version 3.4.11 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi\"",
+    "samples": "tsc && node ./examples/templateMatching.js && node ./examples/applyColorMap.js && node ./examples/asyncMatchFeatures.js && node ./examples/faceDetect/asyncFaceDetection.js",
     "install": "tsc && node ./install/install.js",
     "configure": "node-gyp configure",
     "build": "node-gyp configure build --jobs max",
@@ -46,6 +48,7 @@
   "gypfile": true,
   "dependencies": {
     "@u4/opencv-build": "^0.3.7",
+    "mri": "^1.2.0",
     "nan": "^2.15.0",
     "native-node-utils": "^0.2.7",
     "npmlog": "^6.0.0",
@@ -55,6 +58,7 @@
     "@types/node": ">10"
   },
   "devDependencies": {
+    "@types/mri": "^1.1.1",
     "@types/node": "^16.4.10",
     "@types/npmlog": "^4.1.4"
   },

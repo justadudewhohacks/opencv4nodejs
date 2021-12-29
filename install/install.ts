@@ -4,6 +4,8 @@ import fs from 'fs'
 import log from 'npmlog'
 import { resolvePath } from '../lib/commons'
 import pc from 'picocolors'
+import mri from 'mri';
+import { OpenCVParamBuildOptions } from '@u4/opencv-build/build/BuildEnv'
 
 const defaultDir = '/usr/local'
 const defaultLibDir = `${defaultDir}/lib`
@@ -60,7 +62,6 @@ function getOPENCV4NODEJS_LIBRARIES(libDir: string, libsFoundInDir: OpencvModule
   return libs;
 }
 
-
 function getOPENCV4NODEJS_DEFINES(libsFoundInDir: OpencvModule[]): string[] {
   const defines = libsFoundInDir
     .map(lib => `OPENCV4NODEJS_FOUND_LIBRARY_${lib.opencvModule.toUpperCase()}`)
@@ -69,7 +70,6 @@ function getOPENCV4NODEJS_DEFINES(libsFoundInDir: OpencvModule[]): string[] {
   defines.forEach(def => log.info('defines', def))
   return defines;
 }
-
 
 function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv, libsFoundInDir: OpencvModule[]): string[] {
   const { OPENCV_INCLUDE_DIR } = process.env;
@@ -87,63 +87,34 @@ function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv, libsFoundInDir: OpencvMo
 }
 
 async function main(args: string[]) {
-  let autoBuildOpencvVersion: string | undefined = undefined;
   let autoBuildFlags: string | undefined = undefined;
   let dryRun = false;
 
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-    const next = args[i+1];
-    if (arg.startsWith('-v=')) {
-      autoBuildOpencvVersion = args[i].substring(3);
-      continue;
-    }
-    if (arg.startsWith('--version=')) {
-      autoBuildOpencvVersion = args[i].substring(10);
-      continue;
-    }
+  const parsed = mri(args);
+  console.log(parsed);
 
-    if (arg === '--flags' && next) {
-      autoBuildFlags = next;
-      i++;
-      continue;
-    }
-    if (arg.startsWith('--flags=')) {
-      autoBuildFlags = args[i].substring(8);
-      continue;
-    }
-    if (arg === '-f' && next) {
-      autoBuildFlags = next;
-      i++;
-      continue;
-    }
-    // --flag=-DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi
-
-    if (arg === '--version' && args[i + 1]) {
-      autoBuildOpencvVersion = args[i + 1];
-      i++;
-      continue;
-    }
-    if (arg === '--dryrun' || arg === '--dry-run') {
-      dryRun = true;
-      continue;
-    }
-    if (arg === '--help' || arg === '-h') {
-      console.log('Usage: install [--version=<version>] [--dry-run]');
-      return;
-    }
+  if (parsed.help || parsed.h) {
+    console.log('Usage: install [--version=<version>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild]');
+    return;
   }
+  const options: OpenCVParamBuildOptions = {
+    autoBuildOpencvVersion: parsed.version,
+    autoBuildFlags: parsed.flags,
 
+  }
+  if (parsed.cuda) options.autoBuildBuildCuda = true;
+  if (parsed.nocontrib) options.autoBuildWithoutContrib = true;
+  if (parsed.nobuild) options.disableAutoBuild = true;
 
-  
+  dryRun = parsed.dryrun || parsed['dry-run'];
 
-  // let autoBuildOpencvVersion = '3.4.16'; // failed
+  // Version = '3.4.16'; // failed
   // cc\xfeatures2d\siftdetector.h(9): error C2039: 'SIFT': is not a member of 'cv::xfeatures2d' [opencv4nodejs\build\opencv4nodejs.vcxproj]
   // cc\xfeatures2d\siftdetector.h(9): error C3203: 'Ptr': unspecialized class template can't be used as a template argument for template parameter 'T', expected a real type [\opencv4nodejs\build\opencv4nodejs.vcxproj]
-  // autoBuildOpencvVersion = '3.4.6';
-  if (autoBuildFlags)
-    console.log('autoBuildFlags:', autoBuildFlags);
-  const builder = new OpenCVBuilder({ autoBuildOpencvVersion, autoBuildFlags });
+  for ( const K in ['autoBuildFlags']) {
+    if (options[K]) console.log(`using ${K}:`, options[K]);
+  }
+  const builder = new OpenCVBuilder(options);
   console.log(`Using openCV ${pc.green(builder.env.opencvVersion)}`)
   if (process.argv) {
   }
