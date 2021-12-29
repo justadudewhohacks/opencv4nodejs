@@ -1,6 +1,6 @@
 import { KeyPointDetector } from './KeyPointDetector';
 
-export * as cv from './openCV.js';
+import './openCV.js';
 
 declare module "./openCV.js" {
   export class FASTDetector extends KeyPointDetector {

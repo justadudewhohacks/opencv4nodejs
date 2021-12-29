@@ -1,5 +1,5 @@
 import { Vec } from './Vec.d';
-export * as cv from './openCV.js';
+import './openCV.js';
 
 declare module "./openCV.js" {
   export class Vec3 extends Vec {

@@ -9,7 +9,7 @@ import { Point3 } from './Point3.d';
 import { Vec2 } from './Vec2.d';
 import { Vec3 } from './Vec3.d';
 import { Vec4 } from './Vec4.d';
-export * as cv from './openCV.js';
+import './openCV.js';
 
 declare module "./openCV.js" {
   export class Mat {

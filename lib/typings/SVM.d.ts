@@ -1,7 +1,7 @@
 import { Mat } from './Mat.d';
 import { TrainData } from './TrainData.d';
 import { ParamGrid } from './ParamGrid.d';
-export * as cv from './openCV.js';
+import './openCV.js';
 
 declare module "./openCV.js" {
   export class SVM {

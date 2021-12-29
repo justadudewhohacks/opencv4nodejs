@@ -3,7 +3,7 @@ import { RotatedRect } from './RotatedRect.d';
 import { Moments } from './Moments.d';
 import { Point2 } from './Point2.d';
 import { Vec4 } from './Vec4.d';
-export * as cv from './openCV.js';
+import './openCV.js';
 
 declare module "./openCV.js" {
   export class Contour {

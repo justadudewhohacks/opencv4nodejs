@@ -1,7 +1,7 @@
 import { Mat } from './Mat.d';
 import { Rect } from './Rect.d';
 import { TrackerCSRTParams } from './TrackerCSRTParams.d';
-export * as cv from './openCV.js';
+import './openCV.js';
 
 declare module "./openCV.js" {
   export class TrackerCSRT {
