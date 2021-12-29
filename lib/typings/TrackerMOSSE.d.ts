@@ -3,7 +3,7 @@ import { Rect } from './Rect.d';
 export * as cv from './cv';
 
 declare module "./openCV.js" {
-  export class TrackerKCF {
+  export class TrackerMOSSE {
     constructor();
     clear(): void;
     init(frame: Mat, boundingBox: Rect): boolean;
