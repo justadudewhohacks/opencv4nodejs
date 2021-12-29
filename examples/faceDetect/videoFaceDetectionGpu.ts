@@ -1,11 +1,9 @@
 import { Mat } from '../../lib/typings/openCV';
 import { cv, getDataFilePath } from '../utils';
-
+import { runVideoFaceDetection } from './commons';
 if (cv.version.minor === 4) {
   console.log('Warning: It seems like opencv 3.4 does not run the opencl version of detectMultiScale.');
 }
-
-import { runVideoFaceDetection } from './commons';
 
 const videoFile = getDataFilePath('people.mp4');
 

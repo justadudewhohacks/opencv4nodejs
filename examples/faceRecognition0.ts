@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { FaceRecognizer } from '../lib/typings/openCV';
 import { cv } from './utils';
 
 if (!cv.xmodules || !cv.xmodules.face) {
@@ -44,7 +45,7 @@ const labels = imgFiles
   .filter(isNotImageFour)
   .map(file => nameMappings.findIndex(name => file.includes(name)));
 
-const runPrediction = (recognizer: cv.FaceRecognizer) => {
+const runPrediction = (recognizer: FaceRecognizer) => {
   testImages.forEach((img) => {
     const result = recognizer.predict(img);
     console.log('predicted: %s, confidence: %s', nameMappings[result.label], result.confidence);

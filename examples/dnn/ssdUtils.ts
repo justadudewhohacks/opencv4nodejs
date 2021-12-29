@@ -1,12 +1,13 @@
+import { Mat, Rect } from '../../lib/typings/openCV';
 import { cv } from '../utils';
 
 export type Prediction = {
   classLabel: number
   confidence: number
-  rect: cv.Rect
+  rect: Rect
 }
 
-export function extractResults(outputBlob: cv.Mat, imgDimensions: { rows: number, cols: number }) {
+export function extractResults(outputBlob: Mat, imgDimensions: { rows: number, cols: number }) {
   return Array(outputBlob.rows).fill(0)
     .map((res, i) => {
       const classLabel = outputBlob.at(i, 1);

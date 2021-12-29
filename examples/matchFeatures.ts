@@ -1,7 +1,8 @@
 import path from 'path/posix';
+import { DescriptorMatch, FeatureDetector, Mat } from '../lib/typings/openCV';
 import { cv } from './utils';
 
-const matchFeatures = ({ img1, img2, detector, matchFunc }: { img1: cv.Mat, img2: cv.Mat, detector: cv.FeatureDetector, matchFunc: (descs1: cv.Mat, descs2: cv.Mat) => cv.DescriptorMatch[] }) => {
+const matchFeatures = ({ img1, img2, detector, matchFunc }: { img1: Mat, img2: Mat, detector: FeatureDetector, matchFunc: (descs1: Mat, descs2: Mat) => DescriptorMatch[] }) => {
   // detect keypoints
   const keyPoints1 = detector.detect(img1);
   const keyPoints2 = detector.detect(img2);

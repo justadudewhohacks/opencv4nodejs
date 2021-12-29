@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { Mat } from '../lib/typings/openCV';
 import { cv } from './utils';
 
 if (!cv.xmodules || !cv.xmodules.face) {
@@ -13,7 +14,7 @@ const nameMappings = ['daryl', 'rick', 'negan'];
 const imgFiles = fs.readdirSync(imgsPath);
 
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
-const getFaceImage = (grayImg: cv.Mat) => {
+const getFaceImage = (grayImg: Mat) => {
   const faceRects = classifier.detectMultiScale(grayImg).objects;
   if (!faceRects.length) {
     throw new Error('failed to detect faces');

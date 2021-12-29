@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { classNames } from './dnnCocoClassNames';
 import { extractResults, Prediction } from './dnn/ssdUtils';
+import { Mat } from '../lib/typings/openCV';
 
 if (!cv.xmodules || !cv.xmodules.dnn) {
   throw new Error('exiting: opencv4nodejs compiled without dnn module');
@@ -23,7 +24,7 @@ if (!fs.existsSync(prototxt) || !fs.existsSync(modelFile)) {
 // initialize ssdcoco model from prototxt and modelFile
 const net = cv.readNetFromCaffe(prototxt, modelFile);
 
-function classifyImg(img: cv.Mat) {
+function classifyImg(img: Mat) {
   // ssdcoco model works with 300 x 300 images
   const imgResized = img.resize(300, 300);
 
