@@ -16,36 +16,41 @@
     "async",
     "typescript"
   ],
-  "author": "justadudewhohacks",
+  "contributors": [
+    "Uriel Chemouni <uchemouni@gmail.com> (https://urielch.github.io/)",
+    "justadudewhohacks (https://github.com/justadudewhohacks)"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/justadudewhohacks/opencv4nodejs"
+    "url": "git+https://github.com/UrielCh/opencv4nodejs"
   },
   "bugs": {
-    "url": "https://github.com/justadudewhohacks/opencv4nodejs/issues"
+    "url": "https://github.com/UrielCh/opencv4nodejs/issues"
   },
   "bin": {
     "build-opencv": "./install/install.js"
   },
-  "homepage": "https://github.com/justadudewhohacks/opencv4nodejs#readme",
+  "homepage": "https://github.com/UrielCh/opencv4nodejs#readme",
   "main": "./lib/opencv4nodejs.js",
   "typings": "./typings/index.d.ts",
   "scripts": {
     "prepare": "tsc",
-    "install_3.4.6": "tsc && node ./install/install.js --version 3.4.6",
-    "install_3.4.7": "tsc && node ./install/install.js --version 3.4.7",
-    "install_3.4.8": "tsc && node ./install/install.js --version 3.4.8",
-    "install_3.4.9": "tsc && node ./install/install.js --version 3.4.9 --flags=-DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi",
-    "install_3.4.9_cuda": "tsc && node ./install/install.js --version 3.4.9 --flags=-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON",
-    "install_3.4.10_cuda": "tsc && node ./install/install.js --version 3.4.10 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi\"",
-    "install_3.4.11_cuda": "tsc && node ./install/install.js --version 3.4.11 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi\"",
+    "install_3.4.6": "tsc && node ./install/install.js --version 3.4.6 build",
+    "install_3.4.7": "tsc && node ./install/install.js --version 3.4.7 build",
+    "install_3.4.8": "tsc && node ./install/install.js --version 3.4.8 build",
+    "install_3.4.9": "tsc && node ./install/install.js --version 3.4.9 --flags=-DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi build",
+    "install_3.4.9_cuda": "tsc && node ./install/install.js --version 3.4.9 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON\" build",
+    "install_3.4.10_cuda": "tsc && node ./install/install.js --version 3.4.10 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi\" build",
+    "install_3.4.11_cuda": "tsc && node ./install/install.js --version 3.4.11 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi\" build",
     "samples": "tsc && node ./examples/templateMatching.js && node ./examples/applyColorMap.js && node ./examples/asyncMatchFeatures.js && node ./examples/faceDetect/asyncFaceDetection.js",
     "do-install": "tsc && node ./install/install.js",
     "configure": "node-gyp configure",
     "build": "node-gyp configure build --jobs max",
     "rebuild": "node-gyp rebuild --jobs max",
+    "lint": "eslint examples/**/*.ts lib/**/*.ts typings/**/*.ts ",
     "clean": "node-gyp clean",
+    "cleanjs": "rimraf examples/**/*.{d.ts,js,map} lib/**/*.{d.ts,js,map}",
     "build-debug": "BINDINGS_DEBUG=true node ./install/install.js"
   },
   "gypfile": false,
@@ -63,12 +68,18 @@
   "devDependencies": {
     "@types/mri": "^1.1.1",
     "@types/node": "^16.4.10",
-    "@types/npmlog": "^4.1.4"
+    "@types/npmlog": "^4.1.4",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/parser": "^5.8.1",
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "rimraf": "^3.0.2"
   },
   "files": [
     "cc",
     "install",
     "lib",
+    "typings",
     "binding.gyp"
   ]
 }

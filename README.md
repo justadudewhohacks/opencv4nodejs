@@ -1,5 +1,15 @@
-opencv4nodejs
+# @u4/opencv4nodejs
+
 =============
+
+## Fork changes
+
+- Node-gyp is not run at setup time, It must be launch from the project that includ the lib.
+- `build-opencv` binary must be call to build the project before usage.
+- All javascript code had been converted to Typesscript.
+- This version depend on [@u4/opencv-build](https://www.npmjs.com/package/@u4/opencv-build).
+- This version had been test under windows environnement.
+- This version do not work with electron.
 
 ![opencv4nodejs](https://user-images.githubusercontent.com/31125521/37272906-67187fdc-25d8-11e8-9704-40e9e94c1e80.jpg)
 
@@ -12,7 +22,7 @@ opencv4nodejs
 
 **opencv4nodejs allows you to use the native OpenCV library in nodejs. Besides a synchronous API the package provides an asynchronous API, which allows you to build non-blocking and multithreaded computer vision tasks. opencv4nodejs supports OpenCV 3 and OpenCV 4.**
 
-**The ultimate goal of this project is to provide a comprehensive collection of nodejs bindings to the API of OpenCV and the OpenCV-contrib modules. To get an overview of the currently implemented bindings, have a look at the [type declarations](https://github.com/justadudewhohacks/opencv4nodejs/tree/master/lib/typings) of this package. Furthermore, contribution is highly appreciated. If you want to add missing bindings check out the <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b>.**
+**The ultimate goal of this project is to provide a comprehensive collection of nodejs bindings to the API of OpenCV and the OpenCV-contrib modules. To get an overview of the currently implemented bindings, have a look at the [type declarations](https://github.com/urielch/opencv4nodejs/tree/master/typings) of this package. Furthermore, contribution is highly appreciated. If you want to add missing bindings check out the <a href="https://github.com/urielch/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b>.**
 
 * **[Examples](#examples)**
 * **[How to install](#how-to-install)**
@@ -25,9 +35,9 @@ opencv4nodejs
 * **[External Memory Tracking (v4.0.0)](#external-mem-tracking)**
 <a name="examples"></a>
 
-# Examples
+## Examples
 
-See <a href="https://github.com/justadudewhohacks/opencv4nodejs/tree/master/examples"><b>examples</b></a> for implementation.
+See <a href="https://github.com/urielch/opencv4nodejs/tree/master/examples"><b>examples</b></a> for implementation.
 
 ### Face Detection
 
@@ -165,14 +175,14 @@ Under Linux we have to build OpenCV from source manually or using the auto build
 
 ## Installing OpenCV via Auto Build Script
 
-The auto build script comes in form of the [opencv-build](https://github.com/justadudewhohacks/npm-opencv-build) npm package, which will run by default when installing opencv4nodejs. The script requires you to have git and a recent version of cmake installed.
+The auto build script comes in form of the [opencv-build](https://github.com/urielch/npm-opencv-build) npm package, which will run by default when installing opencv4nodejs. The script requires you to have git and a recent version of cmake installed.
 
 ### Auto Build Flags
 
 You can customize the autobuild flags using *OPENCV4NODEJS_AUTOBUILD_FLAGS=<flags>*.
 Flags must be space-separated.
 
-This is an advanced customization and you should have knowledge regarding the OpenCV compilation flags. Flags added by default are listed [here](https://github.com/justadudewhohacks/npm-opencv-build/blob/master/src/constants.ts#L44-L82).
+This is an advanced customization and you should have knowledge regarding the OpenCV compilation flags. Flags added by default are listed [here](https://github.com/urielch/npm-opencv-build/blob/master/src/constants.ts#L44-L82).
 
 ### Installing a Specific Version of OpenCV
 
@@ -548,7 +558,7 @@ try {
 import * as cv from 'opencv4nodejs'
 ```
 
-Check out the TypeScript [examples](https://github.com/justadudewhohacks/opencv4nodejs/tree/master/examples/typed).
+Check out the TypeScript [examples](https://github.com/urielch/opencv4nodejs/tree/master/examples).
 
 <a name="external-mem-tracking"></a>
 

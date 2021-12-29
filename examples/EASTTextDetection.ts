@@ -53,9 +53,9 @@ function decode(scores, geometry, confThreshold) {
         startX,
         startY,
         endX - startX,
-        endY - startY,
+        endY - startY
       ));
-  		confidences.push(score);
+      confidences.push(score);
     }
   }
 
@@ -76,7 +76,7 @@ function detection(modelAbsPath, imgAbsPath) {
 
   const outBlobNames = [
     'feature_fusion/Conv_7/Sigmoid',
-    'feature_fusion/concat_3',
+    'feature_fusion/concat_3'
   ];
 
   const [scores, geometry] = net.forward(outBlobNames);
@@ -93,7 +93,7 @@ function detection(modelAbsPath, imgAbsPath) {
       rect.x * widthRatio,
       rect.y * heightRatio,
       rect.width * widthRatio,
-      rect.height * heightRatio,
+      rect.height * heightRatio
     )
     drawBlueRect(img, imgRect);
   });

@@ -33,4 +33,4 @@ export function extractResults(outputBlob: Mat, imgDimensions: { rows: number, c
         rect
       });
     });
-};
+}

@@ -1,13 +1,13 @@
 const isFn = (obj: any) => typeof obj === 'function';
 const isAsyncFn = (fn: any) => fn.prototype.constructor.name.endsWith('Async');
 
-const promisify = (fn: Function) => function () {
-  if (isFn(arguments[arguments.length - 1])) {
-    return fn.apply(this, arguments);
+const promisify = (fn: () => any) => function (...params: any[]) {
+  if (isFn(params[params.length - 1])) {
+    return fn.apply(this, params);
   }
 
   return new Promise((resolve, reject) => {
-    const args = Array.prototype.slice.call(arguments);
+    const args = Array.prototype.slice.call(params);
     args.push(function(err: any, res: any) {
       if (err) {
         return reject(err);

@@ -64,9 +64,9 @@ const classifyImg = img => {
   const layerOutputs = net.forward(layerNames);
   console.timeEnd("net.forward");
 
-  let boxes = [];
-  let confidences = [];
-  let classIDs = [];
+  const boxes = [];
+  const confidences = [];
+  const classIDs = [];
 
   layerOutputs.forEach(mat => {
     const output = mat.getDataAsArray();

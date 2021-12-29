@@ -4,12 +4,12 @@ import fs from 'fs';
 import path from 'path';
 import { resolvePath } from './commons';
 import pc from 'picocolors'
-// import * as OpenCV from '../typings/openCV';
+import { info } from 'npmlog';
+import * as openCV from '..';
 
-const logDebug = process.env.OPENCV4NODES_DEBUG_REQUIRE ? require('npmlog').info : () => { }
+const logDebug = process.env.OPENCV4NODES_DEBUG_REQUIRE ? info : () => { /* ignore */}
 
-// OpenCV
-function getOpenCV(opt?: OpenCVParamBuildOptions): any {
+function getOpenCV(opt?: OpenCVParamBuildOptions): typeof openCV {
   if (!opt)
     opt = { prebuild: 'latestBuild' }
   const builder = new OpenCVBuilder(opt);
@@ -78,8 +78,5 @@ function getOpenCV(opt?: OpenCVParamBuildOptions): any {
     key => opencvBuild[key] = resolvePath(path.join(__dirname, 'lbpcascades'), lbpCascades[key]));
   return opencvBuild;
 }
-
-// const cv = getOpenCV({ prebuild: 'latestBuild' })
-// export default cv;
 
  export = getOpenCV;

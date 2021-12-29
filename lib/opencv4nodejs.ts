@@ -1,19 +1,17 @@
 import { OpenCVParamBuildOptions } from '@u4/opencv-build/build/BuildEnv';
 import promisify from './promisify';
 import extendWithJsSources from './src';
-// import * as OpenCV from '../typings/openCV';
-import raw from './cv';
+import raw from './cvloader';
+import * as openCV from '..';
 
-// export * from './typings/openCV';
-
-function loadOpenCV(opt?: OpenCVParamBuildOptions): any {
+function loadOpenCV(opt?: OpenCVParamBuildOptions): typeof openCV {
   //const isElectronWebpack =
   //  // assume module required by webpack if no system path inv envs
   //  !process.env.path
   //  // detect if electron https://github.com/electron/electron/issues/2288
   //  && global.window && global.window.process && (global.window.process as any).type
   //  && global.navigator && ((global.navigator.userAgent || '').toLowerCase().indexOf(' electron/') > -1)
-  // let cvBase = isElectronWebpack ? require('../build/Release/opencv4nodejs.node') : require('./cv')
+  // let cvBase = isElectronWebpack ? require('../build/Release/opencv4nodejs.node') : require('./cvloader')
   const cvBase = raw(opt);
   if (!cvBase.accumulate) {
     throw Error('failed to load opencv basic accumulate not found.')

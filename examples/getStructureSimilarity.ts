@@ -35,7 +35,7 @@ function getStructureSimilarity(i1: Mat, i2: Mat): number {
 
     let t1 = mu1_mu2.convertTo(-1, 2, C1);
     let t2 = sigma12.convertTo(-1, 2, C2);
-    let t3 = t1.hMul(t2);
+    const t3 = t1.hMul(t2);
 
     t1 = mu1_2.addWeighted(1.0, mu2_2, 1.0, C1);
     t2 = sigma1_2.addWeighted(1.0, sigma2_2, 1.0, C2);

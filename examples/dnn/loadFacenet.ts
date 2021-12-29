@@ -19,4 +19,4 @@ export default function () {
     throw new Error('exiting');
   }
   return cv.readNetFromCaffe(prototxt, modelFile);
-};
+}

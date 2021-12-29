@@ -1,10 +1,9 @@
-
 import assert from 'assert';
-
-export default function (cv) {
+import * as openCV from '../..'
+export default function (cv: typeof openCV) {
   // deprecate wrapper for the old calcHist API
   const _calcHist = cv.calcHist;
-  cv.calcHist = function calcHist(img, histAxes, mask) {
+  cv.calcHist = function calcHist(img: openCV.Mat, histAxes, mask) {
     assert(img instanceof cv.Mat, 'Imgproc::CalcHist - Error: expected argument 0 to be of type Mat');
     assert(Array.isArray(histAxes), 'Imgproc::CalcHist - Error: expected argument 1 to be of type array of HistAxes');
 
@@ -29,4 +28,4 @@ export default function (cv) {
     }
     return _calcHist(img, histAxes);
   };
-};
+}

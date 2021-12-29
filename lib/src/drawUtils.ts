@@ -1,4 +1,7 @@
-export default function(cv) {
+// import { cv as OpenCV } from '../..';
+import * as openCV from '../..';
+
+export default function(cv: typeof openCV) {
   function reshapeRectAtBorders(rect, imgDim) {
     const newX = Math.min(Math.max(0, rect.x), imgDim.cols)
     const newY = Math.min(Math.max(0, rect.y), imgDim.rows)
@@ -19,7 +22,7 @@ export default function(cv) {
     })
   }
 
-  function insertText(boxImg, text, { x, y }, opts) {
+  function insertText(boxImg: openCV.Mat, text: string, { x, y }, opts) {
     const {
       fontType,
       fontSize,
@@ -29,13 +32,13 @@ export default function(cv) {
     } = Object.assign(
       {},
       getDefaultTextParams(),
-      { color: new cv.Vec(255, 255, 255) },
+      { color: new cv.Vec3(255, 255, 255) },
       opts
     )
 
     boxImg.putText(
       text,
-      new cv.Point(x, y),
+      new cv.Point2(x, y),
       fontType,
       fontSize,
       color,
@@ -46,7 +49,7 @@ export default function(cv) {
     return boxImg
   }
 
-  function getTextSize(text, opts) {
+  function getTextSize(text: string, opts) {
     const {
       fontType,
       fontSize,
@@ -75,7 +78,7 @@ export default function(cv) {
 
   function getTextHeight(textLines) {
     return textLines.reduce(
-      (height, t) => height + getLineHeight(t),
+      (height: number, t) => height + getLineHeight(t),
       0
     )
   }
@@ -96,7 +99,7 @@ export default function(cv) {
     )
 
     const boxImg = img.getRegion(rect).mul(alpha)
-    let pt = new cv.Point(padding, padding)
+    let pt = new cv.Point2(padding, padding)
     textLines.forEach(
       (textLine, lineNumber) => {
         const opts = Object.assign(
@@ -105,7 +108,7 @@ export default function(cv) {
           textLine
         )
 
-        pt = pt.add(new cv.Point(0, getLineHeight(textLine)))
+        pt = pt.add(new cv.Point2(0, getLineHeight(textLine)))
 
         insertText(
           boxImg,
@@ -114,23 +117,23 @@ export default function(cv) {
           opts
         )
 
-        pt = pt.add(new cv.Point(0, linePadding))
+        pt = pt.add(new cv.Point2(0, linePadding))
       }
     )
     boxImg.copyTo(img.getRegion(rect))
     return img
   }
 
-  function drawDetection(img, inputRect, opts = {}) {
+  function drawDetection(img, inputRect, opts = {} as any) {
     const rect = inputRect.toSquare()
 
     const { x, y, width, height } = rect
 
-    const segmentLength = width / ((opts as any).segmentFraction || 6);
-    const upperLeft = new cv.Point(x, y)
-    const bottomLeft = new cv.Point(x, y + height)
-    const upperRight = new cv.Point(x + width, y)
-    const bottomRight = new cv.Point(x + width, y + height)
+    const segmentLength = width / (opts.segmentFraction || 6);
+    const upperLeft = new cv.Point2(x, y)
+    const bottomLeft = new cv.Point2(x, y + height)
+    const upperRight = new cv.Point2(x + width, y)
+    const bottomRight = new cv.Point2(x + width, y + height)
 
     const drawParams = Object.assign(
       {},
@@ -140,45 +143,45 @@ export default function(cv) {
 
     img.drawLine(
       upperLeft,
-      upperLeft.add(new cv.Point(0, segmentLength)),
+      upperLeft.add(new cv.Point2(0, segmentLength)),
       drawParams
     )
     img.drawLine(
       upperLeft,
-      upperLeft.add(new cv.Point(segmentLength, 0)),
+      upperLeft.add(new cv.Point2(segmentLength, 0)),
       drawParams
     )
 
     img.drawLine(
       bottomLeft,
-      bottomLeft.add(new cv.Point(0, -segmentLength)),
+      bottomLeft.add(new cv.Point2(0, -segmentLength)),
       drawParams
     )
     img.drawLine(
       bottomLeft,
-      bottomLeft.add(new cv.Point(segmentLength, 0)),
+      bottomLeft.add(new cv.Point2(segmentLength, 0)),
       drawParams
     )
 
     img.drawLine(
       upperRight,
-      upperRight.add(new cv.Point(0, segmentLength)),
+      upperRight.add(new cv.Point2(0, segmentLength)),
       drawParams
     )
     img.drawLine(
       upperRight,
-      upperRight.add(new cv.Point(-segmentLength, 0)),
+      upperRight.add(new cv.Point2(-segmentLength, 0)),
       drawParams
     )
 
     img.drawLine(
       bottomRight,
-      bottomRight.add(new cv.Point(0, -segmentLength)),
+      bottomRight.add(new cv.Point2(0, -segmentLength)),
       drawParams
     )
     img.drawLine(
       bottomRight,
-      bottomRight.add(new cv.Point(-segmentLength, 0)),
+      bottomRight.add(new cv.Point2(-segmentLength, 0)),
       drawParams
     )
     return rect
