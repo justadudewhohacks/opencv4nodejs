@@ -31,6 +31,5 @@ function loadOpenCV(opt?: OpenCVParamBuildOptions): typeof OpenCV {
   return cvObj;
 }
 
-const cv = loadOpenCV({ prebuild: 'latestBuild' });
-
+export const cv = loadOpenCV({ prebuild: 'latestBuild' });
 export default cv;

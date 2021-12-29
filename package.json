@@ -29,8 +29,8 @@
     "build-opencv": "./install/install.js"
   },
   "homepage": "https://github.com/justadudewhohacks/opencv4nodejs#readme",
-  "main": "./lib/index.js",
-  "typings": "./lib/index.d.ts",
+  "main": "./lib/opencv4nodejs.js",
+  "typings": "./lib/typings/index.d.ts",
   "scripts": {
     "prepare": "tsc",
     "install_3.4.6": "tsc && node ./install/install.js --version 3.4.6",

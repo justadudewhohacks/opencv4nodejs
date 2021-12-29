@@ -1,6 +1,6 @@
 import path from 'path';
-import cv from '../lib';
-export {default as cv} from '../lib';
+import cv from '..';
+export {default as cv} from '..';
 import { Mat, Rect, Vec3 } from '../lib/typings/openCV';
 
 
