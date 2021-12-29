@@ -1,6 +1,6 @@
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class TrackerCSRTParams {
     constructor();
     readonly admm_iterations: number;
@@ -31,4 +31,3 @@ declare module "./openCV.js" {
     readonly weights_lr: number;
     readonly window_function: string;
   }
-}

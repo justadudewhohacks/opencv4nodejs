@@ -1,7 +1,7 @@
 import { FeatureDetector } from './FeatureDetector.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class AKAZEDetector extends FeatureDetector {
     readonly descriptorType: number;
     readonly descriptorSize: number;
@@ -13,4 +13,3 @@ declare module "./openCV.js" {
     constructor(descriptorType?: number, descriptorSize?: number, descriptorChannels?: number, threshold?: number, nOctaves?: number, nOctaveLayers?: number, diffusivity?: number);
     constructor(params: { descriptorType?: number, descriptorSize?: number, descriptorChannels?: number, threshold?: number, nOctaves?: number, nOctaveLayers?: number, diffusivity?: number });
   }
-}

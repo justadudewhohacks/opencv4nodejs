@@ -1,7 +1,7 @@
 import { Mat } from './Mat.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export interface ddnLayerParams {
     blobs: Mat[];
     name: string;
@@ -9,7 +9,7 @@ declare module "./openCV.js" {
   }
 
   export class Net {
-    addLayer(name: name, type: String, params: ddnLayerParams): number
+    addLayer(name: string, type: String, params: ddnLayerParams): number
     addLayerToPrev(name: string, type: string, params: ddnLayerParams): number
     connect(outPin: string, inpPin: string): void;
     connect(outLayerId: number, outNum: number, inpLayerId: number, inpNum: number);
@@ -44,4 +44,3 @@ declare module "./openCV.js" {
     getUnconnectedOutLayersAsync(): Promise<number[]>;
   
   }
-}

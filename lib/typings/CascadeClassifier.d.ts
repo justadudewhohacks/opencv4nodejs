@@ -1,9 +1,9 @@
 import { Size } from './Size.d';
 import { Mat } from './Mat.d';
 import { Rect } from './Rect.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class CascadeClassifier {
     constructor(xmlFilePath: string);
     detectMultiScale(img: Mat, opts: {scaleFactor?: number, minNeighbors?: number, flags?: number, minSize?: Size, maxSize?: Size}): { objects: Rect[], numDetections: number[] };
@@ -14,4 +14,3 @@ declare module "./openCV.js" {
     detectMultiScaleWithRejectLevels(img: Mat, scaleFactor?: number, minNeighbors?: number, flags?: number, minSize?: Size, maxSize?: Size): { objects: Rect[], rejectLevels: number[], levelWeights: number[] };
     detectMultiScaleWithRejectLevelsAsync(img: Mat, scaleFactor?: number, minNeighbors?: number, flags?: number, minSize?: Size, maxSize?: Size): Promise<{ objects: Rect[], rejectLevels: number[], levelWeights: number[] }>;
   }
-}

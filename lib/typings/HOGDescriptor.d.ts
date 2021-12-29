@@ -2,9 +2,9 @@ import { Mat } from './Mat.d';
 import { Size } from './Size.d';
 import { Rect } from './Rect.d';
 import { Point2 } from './Point2.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class HOGDescriptor {
     readonly winSize: Size;
     readonly blockSize: Size;
@@ -41,4 +41,3 @@ declare module "./openCV.js" {
     save(path: string): void;
     setSVMDetector(detector: number[]): void;
   }
-}

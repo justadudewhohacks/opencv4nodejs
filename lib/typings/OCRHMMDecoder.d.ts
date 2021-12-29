@@ -1,9 +1,9 @@
 import { Mat } from './Mat.d';
 import { Rect } from './Rect.d';
 import { OCRHMMClassifier } from './OCRHMMClassifier.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class OCRHMMDecoder {
     constructor(classifier: OCRHMMClassifier, vocabulary: string, transitionPropabilitiesTable: Mat, emissionPropabilitiesTable: Mat, mode?: number);
     run(img: Mat, mask?: Mat, componentLevel?: number): string;
@@ -11,4 +11,3 @@ declare module "./openCV.js" {
     runWithInfo(img: Mat, mask?: Mat, componentLevel?: number): { outputText: string, rects: Rect[], words: string[], confidences: number[] };
     runWithInfoAsync(img: Mat, mask?: Mat, componentLevel?: number): Promise<{ outputText: string, rects: Rect[], words: string[], confidences: number[] }>;
   }
-}

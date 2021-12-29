@@ -1,7 +1,7 @@
 import { Rect } from "./Rect.d";
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class FacemarkLBFParams {
     readonly baggingOverlap: number;
     readonly cascadeFace: string;
@@ -21,4 +21,3 @@ declare module "./openCV.js" {
     readonly verbose: boolean;
     constructor();
   }
-}

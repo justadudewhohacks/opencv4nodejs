@@ -1,8 +1,8 @@
 import { Mat } from './Mat.d';
 import { Rect } from './Rect.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class MultiTracker {
     constructor();
     addBOOSTING(frame: Mat, boundingBox: Rect): boolean;
@@ -12,4 +12,3 @@ declare module "./openCV.js" {
     addTLD(frame: Mat, boundingBox: Rect): boolean;
     update(frame: Mat): Rect[];
   }
-}

@@ -1,6 +1,6 @@
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class SimpleBlobDetectorParams {
     blobColor: number;
     filterByArea: boolean;
@@ -23,4 +23,3 @@ declare module "./openCV.js" {
     thresholdStep: number;
     constructor();
   }
-}

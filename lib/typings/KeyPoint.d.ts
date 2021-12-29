@@ -1,8 +1,8 @@
 import { Point2 } from './Point2.d';
 
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class KeyPoint {
     readonly pt: Point2;
     readonly size: number;
@@ -13,4 +13,3 @@ declare module "./openCV.js" {
     readonly localId: number;
     constructor(point: Point2, size: number, angle: number, response: number, octave: number, class_id: number);
   }
-}

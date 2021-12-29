@@ -1,7 +1,7 @@
 import { Mat } from './Mat.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class SuperpixelSEEDS {
     readonly image: Mat;
     readonly labels: Mat;
@@ -15,4 +15,3 @@ declare module "./openCV.js" {
     constructor(img: Mat, num_superpixels: number, num_levels: number, prior?: number, histogramBins?: number, doubleStep?: boolean);
     iterate(iterations?: number): void;
   }
-}

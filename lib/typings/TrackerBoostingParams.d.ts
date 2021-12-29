@@ -1,6 +1,6 @@
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class TrackerBoostingParams {
     readonly numClassifiers: number;
     readonly samplerOverlap: number;
@@ -9,4 +9,3 @@ declare module "./openCV.js" {
     readonly featureSetNumFeatures: number;
     constructor();
   }
-}

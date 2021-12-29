@@ -1,7 +1,7 @@
 import { KeyPointDetector } from './KeyPointDetector';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
 
   export class GFTTDetector extends KeyPointDetector {
     readonly maxFeatures: number;
@@ -13,4 +13,3 @@ declare module "./openCV.js" {
     constructor(maxFeatures?: number, qualityLevel?: number, minDistance?: number, blockSize?: number, harrisDetector?: boolean, k?: number);
     constructor(params: { maxFeatures?: number, qualityLevel?: number, minDistance?: number, blockSize?: number, harrisDetector?: boolean, k?: number });
   }
-}

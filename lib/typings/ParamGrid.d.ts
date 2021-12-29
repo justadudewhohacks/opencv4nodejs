@@ -1,6 +1,6 @@
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class ParamGrid {
     readonly minVal: number;
     readonly maxVal: number;
@@ -8,4 +8,3 @@ declare module "./openCV.js" {
     constructor(paramId: number);
     constructor(minVal: number, maxVal: number, logStep: number);
   }
-}

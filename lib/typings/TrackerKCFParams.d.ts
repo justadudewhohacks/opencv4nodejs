@@ -1,6 +1,6 @@
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class TrackerKCFParams {
     readonly sigma: number;
     readonly lambda: number;
@@ -18,4 +18,3 @@ declare module "./openCV.js" {
     readonly detect_thresh: number;
     constructor();
   }
-}

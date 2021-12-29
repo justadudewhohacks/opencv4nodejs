@@ -1,6 +1,6 @@
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class FacemarkAAMParams {
     readonly m: number;
     readonly maxM: number;
@@ -14,4 +14,3 @@ declare module "./openCV.js" {
     readonly verbose: boolean;
     constructor();
   }
-}

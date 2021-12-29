@@ -1,6 +1,6 @@
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export const xmodules: {
     dnn: boolean;
     face: boolean;
@@ -14,4 +14,3 @@ declare module "./openCV.js" {
     major: number;
     minor: number;
   }
-}

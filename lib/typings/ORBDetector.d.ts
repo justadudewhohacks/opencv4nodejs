@@ -1,7 +1,7 @@
 import { FeatureDetector } from './FeatureDetector.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class ORBDetector extends FeatureDetector {
     readonly maxFeatures: number;
     readonly nLevels: number;
@@ -15,4 +15,3 @@ declare module "./openCV.js" {
     constructor(maxFeatures?: number, scaleFactor?: number, nLevels?: number, edgeThreshold?: number, firstLevel?: number, WTA_K?: number, scoreType?: number, patchSize?: number, fastThreshold?: number);
     constructor(params: { maxFeatures?: number, scaleFactor?: number, nLevels?: number, edgeThreshold?: number, firstLevel?: number, WTA_K?: number, scoreType?: number, patchSize?: number, fastThreshold?: number });
   }
-}

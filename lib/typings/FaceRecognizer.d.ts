@@ -1,7 +1,7 @@
 import { Mat } from './Mat';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class FaceRecognizer {
     load(file: string): void;
     predict(img: Mat): { label: number, confidence: number };
@@ -10,4 +10,3 @@ declare module "./openCV.js" {
     train(trainImages: Mat[], labels: number[]): void;
     trainAsync(trainImages: Mat[], labels: number[]): Promise<void>;
   }
-}

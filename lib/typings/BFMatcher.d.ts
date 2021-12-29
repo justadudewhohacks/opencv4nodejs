@@ -1,8 +1,8 @@
 import { Mat } from "./Mat";
 import { DescriptorMatch } from "./DescriptorMatch";
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
     export class BFMatcher {
         constructor(normType: number, crossCheck?: boolean);
         constructor(params: { normType: number, crossCheck?: boolean });
@@ -11,4 +11,3 @@ declare module "./openCV.js" {
         knnMatch(descriptors1: Mat, descriptors2: Mat, k: number): Array<[DescriptorMatch] | [any]>;
         knnMatchAsync(descriptors1: Mat, descriptors2: Mat, k: number): Promise<Array<[DescriptorMatch] | [any]>>;
     }
-}

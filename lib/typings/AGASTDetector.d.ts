@@ -1,7 +1,7 @@
 import { KeyPointDetector } from './KeyPointDetector.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class AGASTDetector extends KeyPointDetector {
     readonly threshold: number;
     readonly type: number;
@@ -9,4 +9,3 @@ declare module "./openCV.js" {
     constructor(threshold?: number, nonmaxSuppression?: boolean, type?: number);
     constructor(params: { threshold?: number, nonmaxSuppression?: boolean, type?: number });
   }
-}

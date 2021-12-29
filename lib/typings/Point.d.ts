@@ -1,6 +1,6 @@
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class Point {
     add<T extends Point>(otherPoint: T): T;
     at(index: number): number;
@@ -9,4 +9,3 @@ declare module "./openCV.js" {
     norm(): number;
     sub<T extends Point>(otherPoint: T): T;
   }
-}

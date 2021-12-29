@@ -9,9 +9,9 @@ import { Point3 } from './Point3.d';
 import { Vec2 } from './Vec2.d';
 import { Vec3 } from './Vec3.d';
 import { Vec4 } from './Vec4.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class Mat {
     readonly rows: number;
     readonly cols: number;
@@ -348,4 +348,3 @@ declare module "./openCV.js" {
 
     static eye(rows: number, cols: number, type: number): Mat;
   }
-}

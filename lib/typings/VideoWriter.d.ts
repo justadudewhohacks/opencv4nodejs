@@ -1,8 +1,8 @@
 import { Mat } from './Mat.d';
 import { Size } from './Size.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class VideoWriter {
     constructor(filePath: string, fourccCode: number, fps: number, frameSize: Size, isColor?: boolean);
     static fourcc(fourcc: string): number;
@@ -12,4 +12,3 @@ declare module "./openCV.js" {
     write(img: Mat): void;
     writeAsync(img: Mat): Promise<void>;
   }
-}

@@ -1,6 +1,6 @@
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class TrackerMILParams {
     readonly samplerInitInRadius: number;
     readonly samplerSearchWinSize: number;
@@ -11,4 +11,3 @@ declare module "./openCV.js" {
     readonly featureSetNumFeatures: number;
     constructor();
   }
-}

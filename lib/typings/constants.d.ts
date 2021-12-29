@@ -1,6 +1,6 @@
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export const CV_8U: number;
   export const CV_8S: number;
   export const CV_16U: number;
@@ -605,4 +605,3 @@ declare module "./openCV.js" {
     RAW_OUTPUT: number;
     UPDATE_MODEL: number;
   }
-}

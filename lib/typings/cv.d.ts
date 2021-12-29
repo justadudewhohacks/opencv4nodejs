@@ -13,7 +13,7 @@ import { TermCriteria } from './TermCriteria.d';
 import { OCRHMMClassifier } from './OCRHMMClassifier.d';
 import { Net } from './Net.d';
 
-declare module "./openCV.js" {
+
   export class HistAxes {
     channel: number;
     bins: number;
@@ -239,4 +239,3 @@ declare module "./openCV.js" {
   export function dangerousEnableCustomMatAllocator(): boolean;
   export function dangerousDisableCustomMatAllocator(): boolean;
   export function getMemMetrics(): { TotalAlloc: number, TotalKnownByJS: number, NumAllocations: number, NumDeAllocations: number };
-}

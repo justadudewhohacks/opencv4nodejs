@@ -2,9 +2,9 @@ import { KeyPointDetector } from './KeyPointDetector.d';
 import { Point2 } from './Point2.d';
 import { Rect } from './Rect.d';
 import { Mat } from './Mat.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class MSERDetector extends KeyPointDetector {
     readonly delta: number;
     readonly minArea: number;
@@ -20,4 +20,3 @@ declare module "./openCV.js" {
     detectRegions(image: Mat): { msers: Point2[][], bboxes: Rect[] };
     detectRegionsAsync(image: Mat): Promise<{ msers: Point2[][], bboxes: Rect[] }>;
   }
-}

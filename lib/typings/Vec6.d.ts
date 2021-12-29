@@ -1,7 +1,7 @@
 import { Vec } from './Vec.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class Vec6 extends Vec {
     readonly u: number;
     readonly v: number;
@@ -11,4 +11,3 @@ declare module "./openCV.js" {
     readonly z: number;
     constructor(u: number, v: number, w: number, x: number, y: number, z: number);
   }
-}

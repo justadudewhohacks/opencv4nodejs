@@ -1,9 +1,9 @@
 import { Mat } from './Mat.d';
 import { TrainData } from './TrainData.d';
 import { ParamGrid } from './ParamGrid.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class SVM {
     readonly c: number;
     readonly coef0: number;
@@ -32,4 +32,3 @@ declare module "./openCV.js" {
     trainAuto(trainData: TrainData, kFold?: number, cGrid?: ParamGrid, gammaGrid?: ParamGrid, pGrid?: ParamGrid, nuGrid?: ParamGrid, coeffGrid?: ParamGrid, degreeGrid?: ParamGrid, balanced?: boolean): Mat;
     trainAutoAsync(trainData: TrainData, kFold?: number, cGrid?: ParamGrid, gammaGrid?: ParamGrid, pGrid?: ParamGrid, nuGrid?: ParamGrid, coeffGrid?: ParamGrid, degreeGrid?: ParamGrid, balanced?: boolean): Promise<Mat>;
   }
-}

@@ -1,6 +1,6 @@
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class TermCriteria {
     readonly type: number;
     readonly maxCount: number;
@@ -8,4 +8,3 @@ declare module "./openCV.js" {
     constructor();
     constructor(type: number, maxCount: number, epsilon: number);
   }
-}

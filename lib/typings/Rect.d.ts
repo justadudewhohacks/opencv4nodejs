@@ -1,7 +1,7 @@
 import { Size } from './Size.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class Rect {
     readonly x: number;
     readonly y: number;
@@ -20,4 +20,3 @@ declare module "./openCV.js" {
     toSquare(): Rect;
     toSquareAsync(): Promise<Rect>;
   }
-}

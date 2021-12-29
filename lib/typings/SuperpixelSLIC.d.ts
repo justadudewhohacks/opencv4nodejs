@@ -1,7 +1,7 @@
 import { Mat } from './Mat.d';
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class SuperpixelSLIC {
     readonly image: Mat;
     readonly labels: Mat;
@@ -13,4 +13,3 @@ declare module "./openCV.js" {
     constructor(img: Mat, algorithm?: number, regionSize?: number, ruler?: number);
     iterate(iterations?: number): void;
   }
-}

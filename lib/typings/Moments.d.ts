@@ -1,6 +1,6 @@
-import './openCV.js';
 
-declare module "./openCV.js" {
+
+
   export class Moments {
     readonly m00: number;
     readonly m10: number;
@@ -28,4 +28,3 @@ declare module "./openCV.js" {
     readonly nu03: number;
     huMoments(): number[];
   }
-}
