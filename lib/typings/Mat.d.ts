@@ -145,6 +145,7 @@ declare module "./openCV.js" {
     drawFillPoly(pts: Point2[][], color?: Vec3, lineType?: number, shift?: number, offset?: Point2): void;
     // alternate signature
     drawLine(pt0: Point2, pt1: Point2, opts: {color?: Vec3, thickness?: number, lineType?: number, shift?: number}): void;
+    drawLine(pt0: Point2, pt1: Point2, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
     drawPolylines(pts: Point2[][], isClosed: boolean, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
     drawRectangle(pt0: Point2, pt1: Point2, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
     // alternate signature
