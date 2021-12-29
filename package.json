@@ -50,7 +50,7 @@
     "rebuild": "node-gyp rebuild --jobs max",
     "lint": "eslint examples/**/*.ts lib/**/*.ts typings/**/*.ts ",
     "clean": "node-gyp clean",
-    "cleanjs": "rimraf examples/**/*.{d.ts,js,map} lib/**/*.{d.ts,js,map}",
+    "cleanjs": "rimraf {install,lib,examples}/**/*.{d.ts,js,map}",
     "build-debug": "BINDINGS_DEBUG=true node ./install/install.js"
   },
   "gypfile": false,
