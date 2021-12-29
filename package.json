@@ -25,6 +25,9 @@
   "bugs": {
     "url": "https://github.com/justadudewhohacks/opencv4nodejs/issues"
   },
+  "bin": {
+    "build-opencv": "./install/install.js"
+  },
   "homepage": "https://github.com/justadudewhohacks/opencv4nodejs#readme",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
@@ -38,7 +41,7 @@
     "install_3.4.10_cuda": "tsc && node ./install/install.js --version 3.4.10 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi\"",
     "install_3.4.11_cuda": "tsc && node ./install/install.js --version 3.4.11 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi\"",
     "samples": "tsc && node ./examples/templateMatching.js && node ./examples/applyColorMap.js && node ./examples/asyncMatchFeatures.js && node ./examples/faceDetect/asyncFaceDetection.js",
-    "install": "tsc && node ./install/install.js",
+    "do-install": "tsc && node ./install/install.js",
     "configure": "node-gyp configure",
     "build": "node-gyp configure build --jobs max",
     "rebuild": "node-gyp rebuild --jobs max",
