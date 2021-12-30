@@ -3,6 +3,7 @@
 ci/coverage-report
 !package.json
 !binding.gyp
+!_binding.gyp
 !lib
 !install
 !test

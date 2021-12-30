@@ -98,7 +98,7 @@ export async function compileLib(args: string[]) {
 
     const options: OpenCVParamBuildOptions = {
         autoBuildOpencvVersion: parsed.version,
-        autoBuildFlags: parsed.flags,
+        autoBuildFlags: parsed.flags
     }
     if (parsed.cuda) options.autoBuildBuildCuda = true;
     if (parsed.nocontrib) options.autoBuildWithoutContrib = true;
@@ -113,9 +113,7 @@ export async function compileLib(args: string[]) {
         if (options[K]) console.log(`using ${K}:`, options[K]);
     }
     const builder = new OpenCVBuilder(options);
-    console.log(`Using openCV ${pc.green(builder.env.opencvVersion)}`)
-    if (process.argv) {
-    }
+    console.log(`Using openCV ${pc.green(builder.env.opencvVersion)}`);
     /**
      * prepare environment variable
      */
@@ -146,6 +144,15 @@ export async function compileLib(args: string[]) {
     // const arch = 'x64'
 
     const cwd = path.join(__dirname, '..');
+    {
+        const hidenGyp = path.join(cwd, '_binding.gyp');
+        const realGyp = path.join(cwd, 'binding.gyp');
+        if (fs.existsSync(hidenGyp)) {
+            fs.renameSync(hidenGyp, realGyp);
+        }
+    }
+
+
     // const nodegypCmd = `node-gyp rebuild --arch=${arch} --target_arch=${arch} ` + flags
     log.info('install', `${__dirname}`)
     // const nodegypCmd = `node-gyp --help`;
@@ -161,7 +168,7 @@ export async function compileLib(args: string[]) {
         console.log(nodegypCmd);
         console.log('');
     } else {
-        const child = child_process.exec(nodegypCmd, { maxBuffer: Infinity, cwd }, function (error, stdout, stderr) {
+        const child = child_process.exec(nodegypCmd, { maxBuffer: Infinity, cwd }, function (error/*, stdout, stderr*/) {
             if (error) {
                 console.log(`error: `, error);
                 log.error('install', `install.ts Done and return ${error.name} ${error.message} Return code: ${error.code}`);

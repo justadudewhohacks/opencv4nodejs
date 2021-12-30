@@ -79,6 +79,6 @@
     "install",
     "lib",
     "typings",
-    "binding.gyp"
+    "_binding.gyp"
   ]
 }
