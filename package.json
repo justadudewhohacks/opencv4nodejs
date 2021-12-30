@@ -1,6 +1,6 @@
 {
   "name": "@u4/opencv4nodejs",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "Asynchronous OpenCV 3.x nodejs bindings with JavaScript and TypeScript API.",
   "keywords": [
     "opencv",
@@ -35,7 +35,7 @@
   "main": "./lib/opencv4nodejs.js",
   "typings": "./typings/index.d.ts",
   "scripts": {
-    "prepare": "tsc",
+    "prepack": "tsc",
     "install_3.4.6": "tsc && node ./install/install.js --version 3.4.6 build",
     "install_3.4.7": "tsc && node ./install/install.js --version 3.4.7 build",
     "install_3.4.8": "tsc && node ./install/install.js --version 3.4.8 build",
@@ -45,15 +45,14 @@
     "install_3.4.11_cuda": "tsc && node ./install/install.js --version 3.4.11 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DBUILD_LIST=core,imgproc,imgcodecs,videoio,highgui,video,calib3d,features2d,objdetect,dnn,ml,flann,photo,stitching,gapi\" build",
     "samples": "tsc && node ./examples/templateMatching.js && node ./examples/applyColorMap.js && node ./examples/asyncMatchFeatures.js && node ./examples/faceDetect/asyncFaceDetection.js",
     "do-install": "tsc && node ./install/install.js",
-    "configure": "node-gyp configure",
-    "build": "node-gyp configure build --jobs max",
-    "rebuild": "node-gyp rebuild --jobs max",
+    "do-configure": "node-gyp configure",
+    "do-build": "node-gyp configure build --jobs max",
+    "do-rebuild": "node-gyp rebuild --jobs max",
     "lint": "eslint examples/**/*.ts lib/**/*.ts typings/**/*.ts ",
     "clean": "node-gyp clean",
     "cleanjs": "rimraf {install,lib,examples}/**/*.{d.ts,js,map}",
     "build-debug": "BINDINGS_DEBUG=true node ./install/install.js"
   },
-  "gypfile": false,
   "dependencies": {
     "@u4/opencv-build": "^0.3.7",
     "mri": "^1.2.0",
