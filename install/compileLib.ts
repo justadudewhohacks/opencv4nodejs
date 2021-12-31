@@ -170,9 +170,9 @@ export async function compileLib(args: string[]) {
         const child = child_process.exec(nodegypCmd, { maxBuffer: Infinity, cwd }, function (error/*, stdout, stderr*/) {
             if (error) {
                 console.log(`error: `, error);
-                log.error('install', `install.ts Done and return ${error.name} ${error.message} Return code: ${error.code}`);
+                log.error('install', `install.ts failed and return ${error.name} ${error.message} return code: ${error.code}`);
             } else {
-                log.info('install', 'install.ts Done With no Error');
+                log.info('install', 'install.ts complet with no rrror');
             }
         })
         if (child.stdout) child.stdout.pipe(process.stdout)
