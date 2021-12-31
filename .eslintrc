@@ -1,4 +1,5 @@
 {
+  "ignorePatterns": [ '**/*.js' ],
   "root": true,
   "parser": "@typescript-eslint/parser",
    "plugins": [
@@ -8,7 +9,7 @@
   "rules": {
     "linebreak-style": [
       "error",
-      "windows"
+      "windows" 
     ],
     "comma-dangle": ["error", {"functions": "never"}],
     "func-names": 0,

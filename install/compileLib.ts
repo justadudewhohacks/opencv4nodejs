@@ -1,11 +1,10 @@
-import { OpencvModule, OpenCVBuilder, OpenCVBuildEnv, isWin } from '@u4/opencv-build'
+import { OpencvModule, OpenCVBuilder, OpenCVBuildEnv, isWin, OpenCVBuildEnvParams } from '@u4/opencv-build'
 import child_process from 'child_process'
 import fs from 'fs'
 import log from 'npmlog'
 import { resolvePath } from '../lib/commons'
 import pc from 'picocolors'
 import mri from 'mri';
-import { OpenCVParamBuildOptions } from '@u4/opencv-build/build/BuildEnv'
 import path from 'path'
 
 const defaultDir = '/usr/local'
@@ -96,7 +95,7 @@ export async function compileLib(args: string[]) {
         return;
     }
 
-    const options: OpenCVParamBuildOptions = {
+    const options: OpenCVBuildEnvParams = {
         autoBuildOpencvVersion: parsed.version,
         autoBuildFlags: parsed.flags
     }

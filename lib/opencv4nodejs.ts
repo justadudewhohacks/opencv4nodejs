@@ -1,10 +1,10 @@
-import { OpenCVParamBuildOptions } from '@u4/opencv-build/build/BuildEnv';
+import { OpenCVBuildEnvParams } from '@u4/opencv-build';
 import promisify from './promisify';
 import extendWithJsSources from './src';
 import raw from './cvloader';
 import * as openCV from '..';
 
-function loadOpenCV(opt?: OpenCVParamBuildOptions): typeof openCV {
+function loadOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
   //const isElectronWebpack =
   //  // assume module required by webpack if no system path inv envs
   //  !process.env.path

@@ -1,5 +1,5 @@
 import { OpenCVBuilder } from '@u4/opencv-build';
-import { OpenCVParamBuildOptions } from '@u4/opencv-build/build/BuildEnv';
+import { OpenCVBuildEnvParams } from '@u4/opencv-build';
 import fs from 'fs';
 import path from 'path';
 import { resolvePath } from './commons';
@@ -9,7 +9,7 @@ import * as openCV from '..';
 
 const logDebug = process.env.OPENCV4NODES_DEBUG_REQUIRE ? info : () => { /* ignore */}
 
-function getOpenCV(opt?: OpenCVParamBuildOptions): typeof openCV {
+function getOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
   if (!opt)
     opt = { prebuild: 'latestBuild' }
   const builder = new OpenCVBuilder(opt);
