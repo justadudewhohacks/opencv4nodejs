@@ -1,6 +1,6 @@
 # @u4/opencv4nodejs
 
-=============
+[![NPM Version](https://img.shields.io/npm/v/@u4/opencv4nodejs.svg?style=flat)](https://www.npmjs.org/package/@u4/opencv4nodejs)
 
 ## Fork changes
 
@@ -22,22 +22,22 @@
 
 **opencv4nodejs allows you to use the native OpenCV library in nodejs. Besides a synchronous API the package provides an asynchronous API, which allows you to build non-blocking and multithreaded computer vision tasks. opencv4nodejs supports OpenCV 3 and OpenCV 4.**
 
-**The ultimate goal of this project is to provide a comprehensive collection of nodejs bindings to the API of OpenCV and the OpenCV-contrib modules. To get an overview of the currently implemented bindings, have a look at the [type declarations](https://github.com/urielch/opencv4nodejs/tree/master/typings) of this package. Furthermore, contribution is highly appreciated. If you want to add missing bindings check out the <a href="https://github.com/urielch/opencv4nodejs/tree/master/CONTRIBUTING.md"><b>contribution guide</b>.**
+**The ultimate goal of this project is to provide a comprehensive collection of nodejs bindings to the API of OpenCV and the OpenCV-contrib modules. To get an overview of the currently implemented bindings, have a look at the [type declarations](https://github.com/urielch/opencv4nodejs/tree/master/typings) of this package. Furthermore, contribution is highly appreciated. If you want to add missing bindings check out the [contribution guide](https://github.com/urielch/opencv4nodejs/tree/master/CONTRIBUTING.md).**
 
-* **[Examples](#examples)**
-* **[How to install](#how-to-install)**
-* **[Usage with Docker](#usage-with-docker)**
-* **[Usage with Electron](#usage-with-electron)**
-* **[Usage with NW.js](#usage-with-nwjs)**
-* **[Quick Start](#quick-start)**
-* **[Async API](#async-api)**
-* **[With TypeScript](#with-typescript)**
-* **[External Memory Tracking (v4.0.0)](#external-mem-tracking)**
+- **[Examples](#examples)**
+- **[How to install](#how-to-install)**
+- **[Usage with Docker](#usage-with-docker)**
+- **[Usage with Electron](#usage-with-electron)**
+- **[Usage with NW.js](#usage-with-nwjs)**
+- **[Quick Start](#quick-start)**
+- **[Async API](#async-api)**
+- **[With TypeScript](#with-typescript)**
+- **[External Memory Tracking (v4.0.0)](#external-mem-tracking)**
 <a name="examples"></a>
 
 ## Examples
 
-See <a href="https://github.com/urielch/opencv4nodejs/tree/master/examples"><b>examples</b></a> for implementation.
+See [examples](https://github.com/UrielCh/opencv4nodejs/tree/master/examples) for implementation.
 
 ### Face Detection
 
@@ -46,7 +46,7 @@ See <a href="https://github.com/urielch/opencv4nodejs/tree/master/examples"><b>e
 
 ### Face Recognition with the OpenCV face module
 
-Check out <a href="https://medium.com/@muehler.v/node-js-opencv-for-face-recognition-37fa7cb860e8"><b>Node.js + OpenCV for Face Recognition</b></a>.
+Check out [Node.js + OpenCV for Face Recognition](https://medium.com/@muehler.v/node-js-opencv-for-face-recognition-37fa7cb860e8)</b></a>.
 
 ![facerec](https://user-images.githubusercontent.com/31125521/35453007-eac9d516-02c8-11e8-9c4d-a77c01ae1f77.jpg)
 
@@ -54,19 +54,21 @@ Check out <a href="https://medium.com/@muehler.v/node-js-opencv-for-face-recogni
 
 ![facelandmarks](https://user-images.githubusercontent.com/31125521/39297394-af14ae26-4943-11e8-845a-a06cbfa28d5a.jpg)
 
-### Face Recognition with <a href="https://github.com/justadudewhohacks/face-recognition.js"><b>face-recognition.js</b></a>
+### Face Recognition with [face-recognition.js](https://github.com/justadudewhohacks/face-recognition.js)
 
-Check out <a href="https://medium.com/@muehler.v/node-js-face-recognition-js-simple-and-robust-face-recognition-using-deep-learning-ea5ba8e852"><b>Node.js + face-recognition.js : Simple and Robust Face Recognition using Deep Learning</b></a>.
+Check out [Node.js + face-recognition.js : Simple and Robust Face Recognition using Deep Learning](https://medium.com/@muehler.v/node-js-face-recognition-js-simple-and-robust-face-recognition-using-deep-learning-ea5ba8e852).
 
 [![IMAGE ALT TEXT](https://user-images.githubusercontent.com/31125521/35453884-055f3bde-02cc-11e8-8fa6-945f320652c3.jpg)](https://www.youtube.com/watch?v=ArcFHpX-usQ "Nodejs Face Recognition using face-recognition.js and opencv4nodejs")
 
 ### Hand Gesture Recognition
-Check out <a href="https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0"><b>Simple Hand Gesture Recognition using OpenCV and JavaScript</b></a>.
+
+Check out [Simple Hand Gesture Recognition using OpenCV and JavaScript](https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0).
 
 ![gesture-rec_sm](https://user-images.githubusercontent.com/31125521/30052864-41bd5680-9227-11e7-8a62-6205f3d99d5c.gif)
 
 ### Object Recognition with Deep Neural Networks
-Check out <a href="https://medium.com/@muehler.v/node-js-meets-opencvs-deep-neural-networks-fun-with-tensorflow-and-caffe-ff8d52a0f072"><b>Node.js meets OpenCV’s Deep Neural Networks — Fun with Tensorflow and Caffe</b></a>.
+
+Check out [Node.js meets OpenCV’s Deep Neural Networks — Fun with Tensorflow and Caffe](https://medium.com/@muehler.v/node-js-meets-opencvs-deep-neural-networks-fun-with-tensorflow-and-caffe-ff8d52a0f072).
 
 #### Tensorflow Inception
 
@@ -74,14 +76,14 @@ Check out <a href="https://medium.com/@muehler.v/node-js-meets-opencvs-deep-neur
 ![car](https://user-images.githubusercontent.com/31125521/32703296-f6cea892-c7f3-11e7-8aaa-9fe48b88fe05.jpeg)
 ![banana](https://user-images.githubusercontent.com/31125521/32703297-f6e932ca-c7f3-11e7-9a66-bbc826ebf007.jpg)
 
-
 #### Single Shot Multibox Detector with COCO
 
 ![dishes-detection](https://user-images.githubusercontent.com/31125521/32703228-eae787d4-c7f2-11e7-8323-ea0265deccb3.jpg)
 ![car-detection](https://user-images.githubusercontent.com/31125521/32703229-eb081e36-c7f2-11e7-8b26-4d253b4702b4.jpg)
 
 ### Machine Learning
-Check out <a href="https://medium.com/@muehler.v/machine-learning-with-opencv-and-javascript-part-1-recognizing-handwritten-letters-using-hog-and-88719b70efaa"><b>Machine Learning with OpenCV and JavaScript: Recognizing Handwritten Letters using HOG and SVM</b></a>.
+
+Check out [Machine Learning with OpenCV and JavaScript: Recognizing Handwritten Letters using HOG and SVM](https://medium.com/@muehler.v/machine-learning-with-opencv-and-javascript-part-1-recognizing-handwritten-letters-using-hog-and-88719b70efaa).
 
 ![resulttable](https://user-images.githubusercontent.com/31125521/30635645-5a466ea8-9df3-11e7-8498-527e1293c4fa.png)
 
@@ -99,19 +101,19 @@ Check out <a href="https://medium.com/@muehler.v/machine-learning-with-opencv-an
 ![plotbgr](https://user-images.githubusercontent.com/31125521/29995016-1b847970-8fdf-11e7-9316-4eb0fd550adc.jpg)
 ![plotgray](https://user-images.githubusercontent.com/31125521/29995015-1b83e06e-8fdf-11e7-8fa8-5d18326b9cd3.jpg)
 
-### Boiler plate for combination of opencv4nodejs, express and websockets.
+### Boiler plate for combination of opencv4nodejs, express and websockets
 
 [opencv4nodejs-express-websockets](https://github.com/Mudassir-23/opencv4nodejs-express-websockets) - Boilerplate express app for getting started on opencv with nodejs and to live stream the video through websockets.
 
 ### Automating lights by people detection through classifier
 
-Check out <a href="https://medium.com/softway-blog/automating-lights-with-computer-vision-nodejs-fb9b614b75b2"><b>Automating lights with Computer Vision & NodeJS</b></a>.
+Check out [Automating lights with Computer Vision & NodeJS](https://medium.com/softway-blog/automating-lights-with-computer-vision-nodejs-fb9b614b75b2).
 
 ![user-presence](https://user-images.githubusercontent.com/34403479/70385871-8d62e680-19b7-11ea-855c-3b2febfdbd72.png)
 
 <a name="how-to-install"></a>
 
-# How to install
+## How to install
 
 ``` bash
 npm install --save opencv4nodejs
@@ -140,7 +142,7 @@ set OPENCV4NODEJS_DISABLE_AUTOBUILD=1
 
 ### Windows
 
-You can install any of the OpenCV 3 or OpenCV 4 <a href="https://github.com/opencv/opencv/releases/"><b>releases</b></a> manually or via the [Chocolatey](https://chocolatey.org/) package manager:
+You can install any of the OpenCV 3 or OpenCV 4 [releases](https://github.com/opencv/opencv/releases/) manually or via the [Chocolatey](https://chocolatey.org/) package manager:
 
 ``` bash
 # to install OpenCV 4.1.0
@@ -150,10 +152,12 @@ choco install OpenCV -y -version 4.1.0
 Note, this will come without contrib modules. To install OpenCV under windows with contrib modules you have to build the library from source or you can use the auto build script.
 
 Before installing opencv4nodejs with an own installation of OpenCV you need to expose the following environment variables:
+
 - *OPENCV_INCLUDE_DIR* pointing to the directory with the subfolder *opencv2* containing the header files
 - *OPENCV_LIB_DIR* pointing to the lib directory containing the OpenCV .lib files
 
 Also you will need to add the OpenCV binaries to your system path:
+
 - add an environment variable *OPENCV_BIN_DIR* pointing to the binary directory containing the OpenCV .dll files
 - append `;%OPENCV_BIN_DIR%;` to your system path variable
 
@@ -226,7 +230,7 @@ The following environment variables can be passed:
 
 <a name="usage-with-docker"></a>
 
-# Usage with Docker
+## Usage with Docker
 
 ### [opencv-express](https://github.com/justadudewhohacks/opencv-express) - example for opencv4nodejs with express.js and docker
 
@@ -238,32 +242,35 @@ FROM justadudewhohacks/opencv-nodejs
 
 **Note**: The aforementioned Docker image already has ```opencv4nodejs``` installed globally. In order to prevent build errors during an ```npm install```, your ```package.json``` should not include ```opencv4nodejs```, and instead should include/require the global package either by requiring it by absolute path or setting the ```NODE_PATH``` environment variable to ```/usr/lib/node_modules``` in your Dockerfile and requiring the package as you normally would.
 
-Different OpenCV 3.x base images can be found here: https://hub.docker.com/r/justadudewhohacks/.
+Different OpenCV 3.x base images can be found here: <https://hub.docker.com/r/justadudewhohacks/>.
 
 <a name="usage-with-electron"></a>
 
-# Usage with Electron
+## Usage with Electron
 
 ### [opencv-electron](https://github.com/justadudewhohacks/opencv-electron) - example for opencv4nodejs with electron
 
 Add the following script to your package.json:
+
 ``` python
 "electron-rebuild": "electron-rebuild -w opencv4nodejs"
 ```
 
 Run the script:
+
 ``` bash
-$ npm run electron-rebuild
+npm run electron-rebuild
 ```
 
 Require it in the application:
+
 ``` javascript
 const cv = require('opencv4nodejs');
 ```
 
 <a name="usage-with-nwjs"></a>
 
-# Usage with NW.js
+## Usage with NW.js
 
 Any native modules, including opencv4nodejs, must be recompiled to be used with [NW.js](https://nwjs.io/). Instructions on how to do this are available in the **[Use Native Modules](http://docs.nwjs.io/en/latest/For%20Users/Advanced/Use%20Native%20Node%20Modules/)** section of the the NW.js documentation.
 
@@ -275,7 +282,7 @@ const cv = require('opencv4nodejs');
 
 <a name="quick-start"></a>
 
-# Quick Start
+## Quick Start
 
 ``` javascript
 const cv = require('opencv4nodejs');
@@ -484,6 +491,7 @@ ctx.putImageData(imgData, 0, 0);
 ### Method Interface
 
 OpenCV method interface from official docs or src:
+
 ``` c++
 void GaussianBlur(InputArray src, OutputArray dst, Size ksize, double sigmaX, double sigmaY = 0, int borderType = BORDER_DEFAULT);
 ```
@@ -505,7 +513,7 @@ const dst2 = src.gaussianBlur(new cv.Size(5, 5), 1.2, optionalArgs);
 
 <a name="async-api"></a>
 
-# Async API
+## Async API
 
 The async API can be consumed by passing a callback as the last argument of the function call. By default, if an async method is called without passing a callback, the function call will yield a Promise.
 
@@ -552,7 +560,7 @@ try {
 
 <a name="with-typescript"></a>
 
-# With TypeScript
+## With TypeScript
 
 ``` javascript
 import * as cv from 'opencv4nodejs'
@@ -562,7 +570,7 @@ Check out the TypeScript [examples](https://github.com/urielch/opencv4nodejs/tre
 
 <a name="external-mem-tracking"></a>
 
-# External Memory Tracking (v4.0.0)
+## External Memory Tracking (v4.0.0)
 
 Since version 4.0.0 was released, external memory tracking has been enabled by default. Simply put, the memory allocated for Matrices (cv.Mat) will be manually reported to the node process. This solves the issue of inconsistent Garbage Collection, which could have resulted in spiking memory usage of the node process eventually leading to overflowing the RAM of your system, prior to version 4.0.0.
 
@@ -574,9 +582,8 @@ set OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING=1 // windows
 ```
 
 Or directly in your code:
+
 ``` javascript
 process.env.OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING = 1
 const cv = require('opencv4nodejs')
 ```
-
-

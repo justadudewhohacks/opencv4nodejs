@@ -42,9 +42,16 @@ export class Mat {
   addWeighted(alpha: number, mat2: Mat, beta: number, gamma: number, dtype?: number): Mat;
   addWeightedAsync(alpha: number, mat2: Mat, beta: number, gamma: number, dtype?: number): Promise<Mat>;
   and(otherMat: Mat): Mat;
-  at(row: number, col: number): number | Vec2 | Vec3 | Vec4;
-  at(idx: number[]): number | Vec2 | Vec3 | Vec4;
-  atRaw(row: number, col: number): number | number[];
+  at(row: number, col: number): number;
+  at(row: number, col: number): Vec2;
+  at(row: number, col: number): Vec3;
+  at(row: number, col: number): Vec4;
+  at(idx: number[]): number;
+  at(idx: number[]): Vec2;
+  at(idx: number[]): Vec3;
+  at(idx: number[]): Vec4;
+  atRaw(row: number, col: number): number;
+  atRaw(row: number, col: number): number[];
   bgrToGray(): Mat;
   bgrToGrayAsync(): Promise<Mat>;
   bilateralFilter(d: number, sigmaColor: number, sigmaSpace: number, borderType?: number): Mat;
@@ -166,7 +173,8 @@ export class Mat {
   gaussianBlurAsync(kSize: Size, sigmaX: number, sigmaY?: number, borderType?: number): Promise<Mat>;
   getData(): Buffer;
   getDataAsync(): Promise<Buffer>;
-  getDataAsArray(): number[][] | number[][][];
+  getDataAsArray(): number[][];
+  getDataAsArray(): number[][][];
   getOptimalNewCameraMatrix(distCoeffs: number[], imageSize: Size, alpha: number, newImageSize?: Size, centerPrincipalPoint?: boolean): { out: Mat, validPixROI: Rect };
   getOptimalNewCameraMatrixAsync(distCoeffs: number[], imageSize: Size, alpha: number, newImageSize?: Size, centerPrincipalPoint?: boolean): Promise<{ out: Mat, validPixROI: Rect }>;
   getRegion(region: Rect): Mat;
@@ -270,7 +278,7 @@ export class Mat {
   sepFilter2D(ddepth: number, kernelX: Mat, kernelY: Mat, anchor?: Point2, delta?: number, borderType?: number): Mat;
   sepFilter2DAsync(ddepth: number, kernelX: Mat, kernelY: Mat, anchor?: Point2, delta?: number, borderType?: number): Promise<Mat>;
   set(row: number, col: number, value: number | Vec2 | Vec3 | Vec4 | number[]): void;
-  setTo(value: number| Vec2 | Vec3 | Vec4, mask?: Mat): Mat;
+  setTo(value: number | Vec2 | Vec3 | Vec4, mask?: Mat): Mat;
   setToAsync(value: number | Vec2 | Vec3 | Vec4, mask?: Mat): Promise<Mat>;
   sobel(ddepth: number, dx: number, dy: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Mat;
   sobelAsync(ddepth: number, dx: number, dy: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
