@@ -19,13 +19,20 @@ function loadOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
   if (!cvBase.blur) {
     throw Error('failed to load opencv basic blur not found.')
   }
+  
   // promisify async methods
-
   let cvObj = promisify(cvBase);
   cvObj = extendWithJsSources(cvObj);
 
   return cvObj;
 }
 
-export const cv = loadOpenCV({ prebuild: 'latestBuild' });
-export default cv;
+const cv = loadOpenCV({ prebuild: 'latestBuild' });
+const defExport = { cv };
+// duplucate all export for retrocompatibility
+for (const key in cv) {
+  defExport[key] = cv[key];
+}
+defExport['cv'] = cv;
+
+export = defExport;

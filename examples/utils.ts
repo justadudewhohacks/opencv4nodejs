@@ -3,6 +3,10 @@ import cv from '..';
 export {default as cv} from '..';
 import { Mat, Rect, Vec3 } from '..';
 
+/**
+ * add some helpter for examples TS
+ */
+
 export const dataPath = path.resolve(__dirname, '../data');
 export const getDataFilePath = (fileName: string): string => path.resolve(dataPath, fileName);
 export const grabFrames = (videoFile: number | string, delay: number, onFrame: (mat: Mat) => void): void => {

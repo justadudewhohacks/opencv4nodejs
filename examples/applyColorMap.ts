@@ -1,4 +1,7 @@
-import { cv } from './utils';
+// using default import
+import cv from '..';
+// using old import style
+// import { cv } from './utils';
 import path from 'path';
 
 const file = path.resolve(__dirname, '..', 'data', 'Lenna.png');

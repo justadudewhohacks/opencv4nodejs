@@ -88,6 +88,7 @@ function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv, libsFoundInDir: OpencvMo
 
 export async function compileLib(args: string[]) {
     let dryRun = false;
+    let JOBS = 'max';
     const parsed = mri(args);
 
     if (parsed.help || parsed.h || !args.includes('build')) {
@@ -102,7 +103,11 @@ export async function compileLib(args: string[]) {
     if (parsed.cuda) options.autoBuildBuildCuda = true;
     if (parsed.nocontrib) options.autoBuildWithoutContrib = true;
     if (parsed.nobuild) options.disableAutoBuild = true;
-
+    // https://github.com/justadudewhohacks/opencv4nodejs/issues/826
+    // https://github.com/justadudewhohacks/opencv4nodejs/pull/827
+    // https://github.com/justadudewhohacks/opencv4nodejs/pull/824
+    if (parsed.jobs) JOBS = parsed.jobs;
+    if (parsed.j) JOBS = parsed.j;
     dryRun = parsed.dryrun || parsed['dry-run'];
 
     // Version = '3.4.16'; // failed
@@ -138,16 +143,20 @@ export async function compileLib(args: string[]) {
     process.env['OPENCV4NODEJS_DEFINES'] = OPENCV4NODEJS_DEFINES;
     process.env['OPENCV4NODEJS_INCLUDES'] = OPENCV4NODEJS_INCLUDES;
     process.env['OPENCV4NODEJS_LIBRARIES'] = OPENCV4NODEJS_LIBRARIES;
-    const flags = process.env.BINDINGS_DEBUG ? '--jobs max --debug' : '--jobs max'
+    let flags = '';
+    if (process.env.BINDINGS_DEBUG)
+        flags += ' --debug';
+    // process.env.JOBS=JOBS;
+    flags += ` --jobs ${JOBS}`;
+    
     // const arch = 'x86_64'
     // const arch = 'x64'
-
     const cwd = path.join(__dirname, '..');
     {
         const hidenGyp = path.join(cwd, '_binding.gyp');
         const realGyp = path.join(cwd, 'binding.gyp');
         if (fs.existsSync(hidenGyp)) {
-            fs.renameSync(hidenGyp, realGyp);
+            fs.copyFileSync(hidenGyp, realGyp);
         }
     }
 

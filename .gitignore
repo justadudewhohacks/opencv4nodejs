@@ -35,3 +35,4 @@ examples/dnn/*.js.map
 examples/**/*.d.ts
 install/*.d.ts
 lib/**/*.d.ts
+binding.gyp
