@@ -181,7 +181,7 @@ export async function compileLib(args: string[]) {
                 console.log(`error: `, error);
                 log.error('install', `install.ts failed and return ${error.name} ${error.message} return code: ${error.code}`);
             } else {
-                log.info('install', 'install.ts complet with no rrror');
+                log.info('install', 'install.ts complet with no error');
             }
         })
         if (child.stdout) child.stdout.pipe(process.stdout)
