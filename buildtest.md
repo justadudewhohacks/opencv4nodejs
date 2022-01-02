@@ -2,7 +2,7 @@
 
 ## windows build Test
 
-| openCV   |tested|
+| openCV   |node v16 + VS2017 + VS2019|
 |----------|------|
 | V 3.4.6  | Pass |
 | V 3.4.7  | Pass |
