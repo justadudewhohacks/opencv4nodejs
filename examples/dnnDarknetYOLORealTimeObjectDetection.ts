@@ -23,7 +23,7 @@ if (
   !fs.existsSync(labelsFile)
 ) {
   console.log("could not find darknet model");
-  console.log("download the model from: https://pjreddie.com/darknet/yolo/");
+  console.log("Download the model from: https://pjreddie.com/darknet/yolo/");
   throw new Error("exiting");
 }
 

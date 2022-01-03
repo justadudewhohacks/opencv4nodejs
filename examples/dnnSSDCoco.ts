@@ -3,28 +3,14 @@ import fs from 'fs';
 import path from 'path';
 import { classNames } from './dnnCocoClassNames';
 import { extractResults, Prediction } from './dnn/ssdUtils';
-import { Mat } from '..';
+import { Mat, Net } from '..';
 
 if (!cv.xmodules || !cv.xmodules.dnn) {
   throw new Error('exiting: opencv4nodejs compiled without dnn module');
 }
 
-// replace with path where you unzipped inception model
-const ssdcocoModelPath = path.join(__dirname, '..', 'data', 'dnn', 'coco-SSD_300x300');
 
-const prototxt = path.resolve(ssdcocoModelPath, 'deploy.prototxt');
-const modelFile = path.resolve(ssdcocoModelPath, 'VGG_coco_SSD_300x300_iter_400000.caffemodel');
-
-if (!fs.existsSync(prototxt) || !fs.existsSync(modelFile)) {
-  console.log('could not find ssdcoco model in ', ssdcocoModelPath);
-  console.log('download the model from: https://drive.google.com/file/d/0BzKzrI_SkD1_dUY1Ml9GRTFpUWc/view');
-  throw new Error('exiting: could not find ssdcoco model');
-}
-
-// initialize ssdcoco model from prototxt and modelFile
-const net = cv.readNetFromCaffe(prototxt, modelFile);
-
-function classifyImg(img: Mat) {
+function classifyImg(net: Net, img: Mat) {
   // ssdcoco model works with 300 x 300 images
   const imgResized = img.resize(300, 300);
 
@@ -49,11 +35,11 @@ const makeDrawClassDetections = (predictions: Prediction[]) => (drawImg, classNa
   return drawImg;
 };
 
-const runDetectDishesExample = () => {
+const runDetectDishesExample = (net: Net) => {
   const img = cv.imread(path.join(__dirname, '..', 'data', 'dishes.jpg'));
   const minConfidence = 0.2;
 
-  const predictions = classifyImg(img).filter(res => res.confidence > minConfidence);
+  const predictions = classifyImg(net, img).filter(res => res.confidence > minConfidence);
 
   const drawClassDetections = makeDrawClassDetections(predictions);
 
@@ -86,11 +72,11 @@ const runDetectDishesExample = () => {
   cv.imshowWait('img', img);
 };
 
-const runDetectPeopleExample = () => {
+const runDetectPeopleExample = (net: Net) => {
   const img = cv.imread(path.join(__dirname, '..', 'data', 'cars.jpeg'));
   const minConfidence = 0.4;
 
-  const predictions = classifyImg(img).filter(res => res.confidence > minConfidence);
+  const predictions = classifyImg(net, img).filter(res => res.confidence > minConfidence);
 
   const drawClassDetections = makeDrawClassDetections(predictions);
 
@@ -100,5 +86,22 @@ const runDetectPeopleExample = () => {
   cv.imshowWait('img', img);
 };
 
-runDetectDishesExample();
-runDetectPeopleExample();
+async function main() {
+  // replace with path where you unzipped inception model
+  const ssdcocoModelPath = path.join(__dirname, '..', 'data', 'dnn', 'coco-SSD_300x300');
+  const prototxt = path.resolve(ssdcocoModelPath, 'deploy.prototxt');
+  const modelFile = path.resolve(ssdcocoModelPath, 'VGG_coco_SSD_300x300_iter_400000.caffemodel');
+
+  if (!fs.existsSync(prototxt) || !fs.existsSync(modelFile)) {
+    console.log('could not find ssdcoco model in ', ssdcocoModelPath);
+    console.log('Download the model from: https://drive.google.com/file/d/0BzKzrI_SkD1_dUY1Ml9GRTFpUWc/view');
+    throw new Error('exiting: could not find ssdcoco model');
+  }
+
+  // initialize ssdcoco model from prototxt and modelFile
+  const net = cv.readNetFromCaffe(prototxt, modelFile);
+
+  runDetectDishesExample(net);
+  runDetectPeopleExample(net);
+}
+main();

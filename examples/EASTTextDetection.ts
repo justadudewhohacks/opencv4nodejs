@@ -1,28 +1,16 @@
 import path from 'path';
-import fs from 'fs';
-import { cv, drawBlueRect } from './utils';
-// const { extractResults } = require('./dnn/ssdUtils');
+import { cv, drawBlueRect, getCachedFile } from './utils';
+import { Mat } from '../typings';
 
 if (!cv.xmodules || !cv.xmodules.dnn) {
   throw new Error('exiting: opencv4nodejs compiled without dnn module');
-}
-
-const modelPath = path.resolve(__dirname,
-  '../data/text-models/frozen_east_text_detection.pb');
-const imgPath = path.resolve(__dirname, '../data/text-data/detection.png');
-
-if (!fs.existsSync(modelPath)) {
-  console.log('could not find EAST model');
-  console.log('download the model from: https://github.com/oyyd/frozen_east_text_detection.pb/blob/71415464412c55bb1d135fcdeda498e29a67effa/frozen_east_text_detection.pb?raw=true'
-    + ' or create a .pb model from https://github.com/argman/EAST');
-  throw new Error('exiting: could not find EAST model');
 }
 
 const MIN_CONFIDENCE = 0.5;
 const NMS_THRESHOLD = 0.4;
 const SIZE = 320;
 
-function decode(scores, geometry, confThreshold) {
+function decode(scores: Mat, geometry: Mat, confThreshold: number) {
   const [numRows, numCols] = scores.sizes.slice(2);
   const boxes = [];
   const confidences = [];
@@ -58,11 +46,10 @@ function decode(scores, geometry, confThreshold) {
       confidences.push(score);
     }
   }
-
   return [boxes, confidences];
 }
 
-function detection(modelAbsPath, imgAbsPath) {
+function detection(modelPath: string, imgAbsPath: string): void {
   const net = cv.readNetFromTensorflow(modelPath);
   const img = cv.imread(imgAbsPath);
   const [imgHeight, imgWidth] = img.sizes;
@@ -97,11 +84,15 @@ function detection(modelAbsPath, imgAbsPath) {
     )
     drawBlueRect(img, imgRect);
   });
-
   cv.imshowWait('EAST text detection', img);
 }
 
-detection(
-  modelPath,
-  imgPath
-);
+
+async function main() {
+  const notice = 'EAST .pb model is missing, you can create your from https://github.com/argman/EAST';
+  const modelPath = await getCachedFile('../data/text-models/frozen_east_text_detection.pb', 'https://github.com/oyyd/frozen_east_text_detection.pb/blob/71415464412c55bb1d135fcdeda498e29a67effa/frozen_east_text_detection.pb?raw=true')
+  const imgPath = path.resolve(__dirname, '../data/text-data/detection.png');
+  detection(modelPath, imgPath);
+}
+main();
+

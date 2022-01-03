@@ -1,7 +1,44 @@
 import path from 'path';
+import fs from 'fs';
 import cv from '..';
 export {default as cv} from '..';
 import { Mat, Rect, Vec3 } from '..';
+import Axios from 'axios';
+import ProgressBar from 'progress';
+
+export function getCachedFile(localName: string, url: string, notice?: string): Promise<string> {
+  // __dirname, 
+  const resolved = path.resolve(localName);
+  if (fs.existsSync(resolved)) {
+    return Promise.resolve(resolved);
+  }
+  if (notice)
+    console.log(notice);
+  console.log(`can not find ${localName} try downloading file from ${url}`);
+  return new Promise<string>(async (done) => {
+    console.log('Connecting server…')
+    const { data, headers } = await Axios({
+      url,
+      method: 'GET',
+      responseType: 'stream'
+    })
+    const totalLength = headers['content-length']
+  
+    console.log('Starting download')
+    const progressBar = new ProgressBar('-> downloading [:bar] :percent :etas', {
+        width: 40,
+        complete: '=',
+        incomplete: ' ',
+        renderThrottle: 1,
+        total: parseInt(totalLength)
+      })
+    const writer = fs.createWriteStream(resolved)
+    data.on('data', (chunk) => progressBar.tick(chunk.length))
+    data.pipe(writer)
+    data.on('complete', () => done(resolved))
+  })
+}
+
 
 /**
  * add some helpter for examples TS

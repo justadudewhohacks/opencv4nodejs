@@ -13,7 +13,7 @@ const modelFile = path.resolve(inceptionModelPath, 'tensorflow_inception_graph.p
 const classNamesFile = path.resolve(inceptionModelPath, 'imagenet_comp_graph_label_strings.txt');
 if (!fs.existsSync(modelFile) || !fs.existsSync(classNamesFile)) {
   console.log('could not find inception model', [modelFile, classNamesFile]);
-  console.log('download the model from: https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip');
+  console.log('Download the model from: https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip');
   throw new Error('exiting');
 }
 

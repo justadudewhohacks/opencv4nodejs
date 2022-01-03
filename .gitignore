@@ -36,3 +36,4 @@ examples/**/*.d.ts
 install/*.d.ts
 lib/**/*.d.ts
 binding.gyp
+data/text-models/frozen_east_text_detection.pb

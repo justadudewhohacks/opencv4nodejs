@@ -23,7 +23,7 @@ const pbtxtFile = path.resolve(
 if (!fs.existsSync(pbFile) || !fs.existsSync(pbtxtFile)) {
   console.log("could not find detection model");
   console.log(
-    "download the model from: https://github.com/opencv/opencv/wiki/TensorFlow-Object-Detection-API#use-existing-config-file-for-your-model"
+    "Download the model from: https://github.com/opencv/opencv/wiki/TensorFlow-Object-Detection-API#use-existing-config-file-for-your-model"
   );
   throw new Error("exiting");
 }

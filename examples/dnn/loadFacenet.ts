@@ -15,7 +15,7 @@ export default function () {
       console.log(`download the prototxt from: https://raw.githubusercontent.com/opencv/opencv/master/samples/dnn/face_detector/deploy.prototxt to ${prototxt}`);
 
     if (!fs.existsSync(modelFile))
-      console.log(`download the model from: https://raw.githubusercontent.com/opencv/opencv_3rdparty/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel to ${modelFile}`);
+      console.log(`Download the model from: https://raw.githubusercontent.com/opencv/opencv_3rdparty/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel to ${modelFile}`);
     throw new Error('exiting');
   }
   return cv.readNetFromCaffe(prototxt, modelFile);

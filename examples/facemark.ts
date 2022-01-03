@@ -12,7 +12,7 @@ const modelFile = path.resolve(facemarkModelPath, "lbfmodel.yaml");
 if (!fs.existsSync(modelFile)) {
   console.log("could not find landmarks model");
   console.log(
-    "download the model from: https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml"
+    "Download the model from: https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml"
   );
   throw new Error("exiting: could not find landmarks model");
 }
