@@ -1,4 +1,4 @@
-import path from 'path/posix';
+import path from 'path';
 import { cv, grabFrames, drawRectAroundBlobs } from './utils';
 
 const bgSubtractor = new cv.BackgroundSubtractorMOG2();

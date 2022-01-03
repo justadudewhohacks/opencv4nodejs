@@ -1,4 +1,4 @@
-import path from 'path/posix';
+import path from 'path';
 import cv from '..';
 
 const findWaldo = async () => {

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { cv } from './utils';
 import type { Mat } from '..';
-import path from 'path/posix';
+import path from 'path';
 
 const labeledDataPath = path.join(__dirname, '..', 'data', 'ocr-nocommit', 'letters');
 const outputDataPath = path.join(__dirname, '..', 'data', 'ocr-nocommit', 'letters_generated');

@@ -1,4 +1,4 @@
-import path from 'path/posix';
+import path from 'path';
 import { DescriptorMatch, FeatureDetector, Mat } from '..';
 import { cv } from './utils';
 
