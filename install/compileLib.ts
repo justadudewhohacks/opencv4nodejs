@@ -6,6 +6,7 @@ import { resolvePath } from '../lib/commons'
 import pc from 'picocolors'
 import mri from 'mri';
 import path from 'path'
+import { EOL } from 'os'
 
 const defaultDir = '/usr/local'
 const defaultLibDir = `${defaultDir}/lib`
@@ -56,8 +57,7 @@ function getOPENCV4NODEJS_LIBRARIES(libDir: string, libsFoundInDir: OpencvModule
         : ['-L' + libDir]
             .concat(libsFoundInDir.map(lib => '-lopencv_' + lib.opencvModule))
             .concat('-Wl,-rpath,' + libDir)
-    console.log()
-    log.info('install', 'setting the following libs:')
+    log.info('libs', `${EOL}Setting the following libs:`)
     libs.forEach(lib => log.info('libs', '' + lib))
     return libs;
 }
@@ -65,9 +65,8 @@ function getOPENCV4NODEJS_LIBRARIES(libDir: string, libsFoundInDir: OpencvModule
 function getOPENCV4NODEJS_DEFINES(libsFoundInDir: OpencvModule[]): string[] {
     const defines = libsFoundInDir
         .map(lib => `OPENCV4NODEJS_FOUND_LIBRARY_${lib.opencvModule.toUpperCase()}`)
-    console.log()
-    log.info('install', 'setting the following defines:')
-    defines.forEach(def => log.info('defines', def))
+    log.info('defines', `${EOL}Setting the following defines:`)
+    defines.forEach(def => log.info('defines', pc.yellow(def)))
     return defines;
 }
 
@@ -80,9 +79,8 @@ function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv, libsFoundInDir: OpencvMo
     const includes = env.isAutoBuildDisabled
         ? (explicitIncludeDir ? [explicitIncludeDir] : getDefaultIncludeDirs())
         : [resolvePath(env.opencvInclude), resolvePath(env.opencv4Include)]
-    console.log()
-    log.info('install', 'setting the following includes:')
-    includes.forEach(inc => log.info('includes', '' + inc))
+    log.info('install', '${EOL}setting the following includes:')
+    includes.forEach(inc => log.info('includes', pc.green(inc)))
     return includes;
 }
 
@@ -117,13 +115,13 @@ export async function compileLib(args: string[]) {
         if (options[K]) console.log(`using ${K}:`, options[K]);
     }
     const builder = new OpenCVBuilder(options);
-    console.log(`Using openCV ${pc.green(builder.env.opencvVersion)}`);
+    log.info('install', `Using openCV ${pc.green('%s')}`, builder.env.opencvVersion)
     /**
      * prepare environment variable
      */
     // builder.env.applyEnvsFromPackageJson()
     const libDir: string = getLibDir(builder.env);
-    log.info('install', 'using lib dir: ' + libDir)
+    log.info('install', 'Using lib dir: ' + libDir)
     if (!fs.existsSync(libDir)) {
         await builder.install();
     }
@@ -135,14 +133,15 @@ export async function compileLib(args: string[]) {
     if (!libsFoundInDir.length) {
         throw new Error('no OpenCV libraries found in lib dir: ' + libDir)
     }
-    log.info('install', 'found the following libs:')
-    libsFoundInDir.forEach(lib => log.info('install', `${lib.opencvModule}: ${lib.libPath}`))
+    log.info('install', `${EOL}Found the following libs:`)
+    libsFoundInDir.forEach(lib => log.info('install', `${pc.yellow('%s')}: ${pc.green('%s')}`, lib.opencvModule, lib.libPath))
     const OPENCV4NODEJS_DEFINES = getOPENCV4NODEJS_DEFINES(libsFoundInDir).join(';');
     const OPENCV4NODEJS_INCLUDES = getOPENCV4NODEJS_INCLUDES(builder.env, libsFoundInDir).join(';');
     const OPENCV4NODEJS_LIBRARIES = getOPENCV4NODEJS_LIBRARIES(libDir, libsFoundInDir).join(';');
     process.env['OPENCV4NODEJS_DEFINES'] = OPENCV4NODEJS_DEFINES;
     process.env['OPENCV4NODEJS_INCLUDES'] = OPENCV4NODEJS_INCLUDES;
     process.env['OPENCV4NODEJS_LIBRARIES'] = OPENCV4NODEJS_LIBRARIES;
+
     let flags = '';
     if (process.env.BINDINGS_DEBUG)
         flags += ' --debug';
@@ -162,10 +161,9 @@ export async function compileLib(args: string[]) {
 
 
     // const nodegypCmd = `node-gyp rebuild --arch=${arch} --target_arch=${arch} ` + flags
-    log.info('install', `${__dirname}`)
     // const nodegypCmd = `node-gyp --help`;
     const nodegypCmd = `node-gyp rebuild ` + flags
-    log.info('install', `spawning node gyp process: ${nodegypCmd}`)
+    log.info('install', `Spawning in ${cwd} node gyp process: ${nodegypCmd}`)
 
     if (dryRun) {
         console.log('');

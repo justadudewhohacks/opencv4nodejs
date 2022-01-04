@@ -37,3 +37,4 @@ install/*.d.ts
 lib/**/*.d.ts
 binding.gyp
 data/text-models/frozen_east_text_detection.pb
+data/face/lbfmodel.yaml
