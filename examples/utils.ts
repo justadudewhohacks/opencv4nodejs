@@ -5,6 +5,7 @@ export { default as cv } from '..';
 import { Mat, Rect, Vec3 } from '..';
 import Axios from 'axios';
 import ProgressBar from 'progress';
+import pc from 'picocolors';
 
 export function getCachedFile(localName: string, url: string, notice?: string): Promise<string> {
   const localFile = path.resolve(__dirname, localName);
@@ -13,14 +14,14 @@ export function getCachedFile(localName: string, url: string, notice?: string): 
   }
   if (notice)
     console.log(notice);
-  console.log(`can not find ${localName} try downloading file from ${url}`);
+  console.log(`Can not find ${pc.yellow(localName)} try downloading file from ${pc.underline(pc.cyan(url))}`);
   const parent = path.dirname(localFile);
   try {
     fs.mkdirSync(parent, { recursive: true });
   } catch (e) {
     // ignore error
   }
-  return new Promise<string>(async (done) => {
+  return new Promise<string>(async (done, reject) => {
     console.log('Connecting server…')
     const { data, headers } = await Axios({
       url,
@@ -38,9 +39,11 @@ export function getCachedFile(localName: string, url: string, notice?: string): 
       total: parseInt(totalLength)
     })
     const writer = fs.createWriteStream(localFile)
-    data.on('data', (chunk) => progressBar.tick(chunk.length))
+    
+    data.on('data', (chunk: any[]) => progressBar.tick(chunk.length))
     data.pipe(writer)
-    data.on('complete', () => done(localFile))
+    data.on('error', (e: unknown) => {  console.log('reject', e); reject(e) })
+    data.on('close', () => { console.log('complete'); done(localFile) })
   })
 }
 

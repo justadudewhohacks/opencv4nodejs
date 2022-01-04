@@ -1,10 +1,13 @@
+import { Mat } from '../typings';
 import { cv, getCachedFile } from './utils';
 
-if (!cv.xmodules || !cv.xmodules.face) {
-  throw new Error("exiting: opencv4nodejs compiled without face module");
-}
 
 async function main() {
+  if (!cv.xmodules || !cv.xmodules.face) {
+    console.error(`exiting: opencv4nodejs (${cv.version.major}.${cv.version.minor}) compiled without face module`);
+    return;
+  }
+  
   const modelFile = await getCachedFile("../data/face/lbfmodel.yaml", 'https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml', 'could not find landmarks model');
   const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
   // create the facemark object with the landmarks model
@@ -12,7 +15,7 @@ async function main() {
   facemark.loadModel(modelFile);
 
   // give the facemark object it's face detection callback
-  facemark.setFaceDetector(frame => {
+  facemark.setFaceDetector((frame: Mat) => {
     const { objects } = classifier.detectMultiScale(frame, 1.12);
     return objects;
   });

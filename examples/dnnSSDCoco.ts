@@ -94,8 +94,16 @@ async function main() {
 
   if (!fs.existsSync(prototxt) || !fs.existsSync(modelFile)) {
     console.log('could not find ssdcoco model in ', ssdcocoModelPath);
-    console.log('Download the model from: https://drive.google.com/file/d/0BzKzrI_SkD1_dUY1Ml9GRTFpUWc/view');
-    throw new Error('exiting: could not find ssdcoco model');
+    try {
+      fs.mkdirSync(ssdcocoModelPath, {recursive: true});
+    } catch (e) {
+      // ignore
+    }
+    //console.log('Download the model from: https://drive.google.com/file/d/0BzKzrI_SkD1_dUY1Ml9GRTFpUWc/view');
+    // console.log('Download the model from: https://drive.google.com/u/0/uc?id=0BzKzrI_SkD1_dUY1Ml9GRTFpUWc&export=download');
+    console.log('Download the model from: https://drive.google.com/u/0/uc?export=download&id=0BzKzrI_SkD1_dUY1Ml9GRTFpUWc');
+    return;
+    // throw new Error('exiting: could not find ssdcoco model');
   }
 
   // initialize ssdcoco model from prototxt and modelFile

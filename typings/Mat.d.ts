@@ -124,8 +124,14 @@ export class Mat {
   drawChessboardCornersAsync(patternSize: Size, corners: Point2[], patternWasFound: boolean): Promise<void>;
   drawCircle(center: Point2, radius: number, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
   // alternate signature
-  drawContours(contours: Contour[], color: Vec3, opts: { contourIdx?: number, maxLevel?: number, offset?: Point2, lineType?: number, thickness?: number, shift?: number }): void;
-  drawContours(contours: Contour[], color: Vec3, contourIdx?: number, maxLevel?: number, offset?: Point2, lineType?: number, thickness?: number, shift?: number): void;
+  /**
+   * MatImgprocBindings.h
+   * @param contours list of contours
+   * @param contourIdx 0 based contour index to draw
+   */
+  drawContours(contours: Point2[][], contourIdx: number, color: Vec3, opts: { maxLevel?: number, offset?: Point2, lineType?: number, thickness?: number, shift?: number }): void;
+  drawContours(contours: Point2[][], contourIdx: number, color: Vec3, thickness?: number, lineType?: number, hierarchy?: any, maxLevel?: number, offset?: Point2): void;
+  // drawContours(contours: Point2[][], contourIdx: number, color: Vec3, maxLevel?: number, offset?: Point2, lineType?: number, thickness?: number, shift?: number): void;
   // alternate signature
   drawEllipse(box: RotatedRect, opts: { color?: Vec3, thickness?: number, lineType?: number }): void;
   drawEllipse(box: RotatedRect, color?: Vec3, thickness?: number, lineType?: number): void;

@@ -1,3 +1,4 @@
+import path from 'path';
 import type { Contour, Mat } from '..';
 import { Point2 } from '..';
 import { cv } from './utils';
@@ -124,7 +125,8 @@ const red = new cv.Vec3(0, 0, 255);
 
 // main
 const delay = 20;
-grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
+const video = path.resolve(__dirname, '..', 'data', 'hand-gesture.mp4');
+grabFrames(video, delay, (frame) => {
   const resizedImg: Mat = frame.resizeToMax(640);
 
   const handMask = makeHandMask(resizedImg);
@@ -147,9 +149,10 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
   const result = resizedImg.copy();
   // draw bounding box and center line
   resizedImg.drawContours(
-    [handContour],
+    [handContour.getPoints()],
+    0,
     blue,
-    { thickness: 2 }
+    { thickness: 6 }
   );
 
   // draw points and vertices
@@ -196,6 +199,6 @@ grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
   result.copyTo(sideBySide.getRegion(new cv.Rect(0, 0, cols, rows)));
   resizedImg.copyTo(sideBySide.getRegion(new cv.Rect(cols, 0, cols, rows)));
 
-  cv.imshow('handMask', handMask);
-  cv.imshow('result', sideBySide);
+  cv.imshowWait('handMask', handMask);
+  cv.imshowWait('result', sideBySide);
 });
