@@ -147,16 +147,14 @@ export async function compileLib(args: string[]) {
         flags += ' --debug';
     // process.env.JOBS=JOBS;
     flags += ` --jobs ${JOBS}`;
-    
+
     // const arch = 'x86_64'
     // const arch = 'x64'
     const cwd = path.join(__dirname, '..');
-    {
-        const hidenGyp = path.join(cwd, '_binding.gyp');
-        const realGyp = path.join(cwd, 'binding.gyp');
-        if (fs.existsSync(hidenGyp)) {
-            fs.copyFileSync(hidenGyp, realGyp);
-        }
+    const hidenGyp = path.join(cwd, '_binding.gyp');
+    const realGyp = path.join(cwd, 'binding.gyp');
+    if (fs.existsSync(hidenGyp)) {
+        fs.copyFileSync(hidenGyp, realGyp);
     }
 
 
@@ -175,6 +173,7 @@ export async function compileLib(args: string[]) {
         console.log('');
     } else {
         const child = child_process.exec(nodegypCmd, { maxBuffer: Infinity, cwd }, function (error/*, stdout, stderr*/) {
+            fs.unlinkSync(realGyp);
             if (error) {
                 console.log(`error: `, error);
                 log.error('install', `install.ts failed and return ${error.name} ${error.message} return code: ${error.code}`);

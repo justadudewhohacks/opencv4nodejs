@@ -6,6 +6,7 @@ import { resolvePath } from './commons';
 import pc from 'picocolors'
 import { info } from 'npmlog';
 import * as openCV from '..';
+import { EOL } from 'os';
 
 const logDebug = process.env.OPENCV4NODES_DEBUG_REQUIRE ? info : () => { /* ignore */}
 
@@ -67,7 +68,15 @@ function getOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
       process.env.path = `${process.env.path};${opencvBinDir};`
     }
     logDebug('require', 'process.env.path: ' + process.env.path)
-    opencvBuild = require(requirePath);
+    try {
+      opencvBuild = require(requirePath);
+    } catch(e) {
+      if (e instanceof Error) {
+        const msg = `${e.message}, openCV binding not available, see: ${EOL}build-opencv --help${EOL}${EOL}And start a build with:${EOL}build-opencv --version 4.5.4 build${EOL}`;
+        throw Error(msg)
+      }
+      throw e;
+    }
   }
 
   // resolve haarcascade files

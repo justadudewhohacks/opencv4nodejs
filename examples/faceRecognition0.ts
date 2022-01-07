@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { FaceRecognizer } from '..';
+import { FaceRecognizer, Mat } from '..';
 import { cv } from './utils';
 
 function main() {
@@ -16,7 +16,7 @@ function main() {
   const imgFiles = fs.readdirSync(imgsPath);
 
   const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
-  const getFaceImage = (grayImg) => {
+  const getFaceImage = (grayImg: Mat) => {
     const faceRects = classifier.detectMultiScale(grayImg).objects;
     if (!faceRects.length) {
       throw new Error('failed to detect faces');
@@ -48,7 +48,7 @@ function main() {
     .map(file => nameMappings.findIndex(name => file.includes(name)));
 
   const runPrediction = (recognizer: FaceRecognizer) => {
-    testImages.forEach((img) => {
+    testImages.forEach((img: Mat) => {
       const result = recognizer.predict(img);
       console.log('predicted: %s, confidence: %s', nameMappings[result.label], result.confidence);
       cv.imshowWait('face', img);

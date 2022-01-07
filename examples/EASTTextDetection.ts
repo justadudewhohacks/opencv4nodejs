@@ -2,9 +2,13 @@ import path from 'path';
 import { cv, drawBlueRect, getCachedFile } from './utils';
 import { Mat } from '../typings';
 
-if (!cv.xmodules || !cv.xmodules.dnn) {
-  throw new Error('exiting: opencv4nodejs compiled without dnn module');
-}
+/**
+ * Text detection simple code example.
+ * Get box containing text from image.
+ * 
+ * use EAST: An Efficient and Accurate Scene Text Detector
+ * https://github.com/argman/EAST
+ */
 
 const MIN_CONFIDENCE = 0.5;
 const NMS_THRESHOLD = 0.4;
@@ -87,10 +91,14 @@ function detection(modelPath: string, imgAbsPath: string): void {
   cv.imshowWait('EAST text detection', img);
 }
 
-
 async function main() {
+  if (!cv.xmodules || !cv.xmodules.dnn) {
+    console.error('exiting: opencv4nodejs compiled without dnn module');
+    return;
+  }
+  
   const notice = 'EAST .pb model is missing, you can create your from https://github.com/argman/EAST';
-  const modelPath = await getCachedFile('../data/text-models/frozen_east_text_detection.pb', 'https://github.com/oyyd/frozen_east_text_detection.pb/blob/71415464412c55bb1d135fcdeda498e29a67effa/frozen_east_text_detection.pb?raw=true')
+  const modelPath = await getCachedFile('../data/text-models/frozen_east_text_detection.pb', 'https://github.com/oyyd/frozen_east_text_detection.pb/blob/71415464412c55bb1d135fcdeda498e29a67effa/frozen_east_text_detection.pb?raw=true', notice)
   const imgPath = path.resolve(__dirname, '../data/text-data/detection.png');
   detection(modelPath, imgPath);
 }

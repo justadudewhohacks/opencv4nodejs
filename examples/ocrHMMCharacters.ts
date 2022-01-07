@@ -2,6 +2,10 @@ import { cv } from './utils';
 import path from 'path';
 import type { Mat } from '..';
 
+/**
+ * OCR One by one using OCRHMMClassifier
+ */
+
 if (!cv.xmodules || !cv.xmodules.text) {
   throw new Error('exiting: opencv4nodejs compiled without text module');
 }

@@ -31,7 +31,7 @@ async function main() {
   // https://gist.githubusercontent.com/dkurt/54a8e8b51beb3bd3f770b79e56927bd7/raw/2a20064a9d33b893dd95d2567da126d0ecd03e85/ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt
 
   if (!fs.existsSync(pbtxtFile)) {
-    console.log(`Could not find detection model ${pbtxtFile}}`);
+    console.log(`Could not find detection model ${pbtxtFile}`);
     console.log("Download the model from: http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz")
     console.log("See doc https://github.com/opencv/opencv/wiki/TensorFlow-Object-Detection-API#use-existing-config-file-for-your-model");
     return;

@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Mat } from '..';
-import { cv } from './utils';
+import cv, { Mat } from '..';
 
 function main() {
   if (!cv.xmodules || !cv.xmodules.face) {
