@@ -10,7 +10,7 @@ export class Net {
   addLayer(name: string, type: string, params: ddnLayerParams): number
   addLayerToPrev(name: string, type: string, params: ddnLayerParams): number
   connect(outPin: string, inpPin: string): void;
-  connect(outLayerId: number, outNum: number, inpLayerId: number, inpNum: number);
+  connect(outLayerId: number, outNum: number, inpLayerId: number, inpNum: number): void;
   dump(): string;
   dumpToFile(path: string): void;
   empty(): void;
@@ -25,7 +25,7 @@ export class Net {
 
   getLayerNames(): string[];
   getUnconnectedOutLayers(): number[];
-  setInput(blob: Mat, name?: string, scalefactor?: number, mean?: number);
+  setInput(blob: Mat, name?: string, scalefactor?: number, mean?: number): void;
   setInput(blob: Mat, inputName?: string): void;
 
   // forward(outputName?: string): Mat;
