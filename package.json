@@ -50,8 +50,7 @@
     "build-debug": "BINDINGS_DEBUG=true node bin/install.js"
   },
   "dependencies": {
-    "@u4/opencv-build": "^0.3.10",
-    "mri": "^1.2.0",
+    "@u4/opencv-build": "^0.3.11",
     "nan": "^2.15.0",
     "native-node-utils": "^0.2.7",
     "npmlog": "^6.0.0",

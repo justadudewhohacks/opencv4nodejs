@@ -1,10 +1,9 @@
-import { OpencvModule, OpenCVBuilder, OpenCVBuildEnv, isWin, OpenCVBuildEnvParams } from '@u4/opencv-build'
+import { OpencvModule, OpenCVBuilder, OpenCVBuildEnv, isWin, OpenCVBuildEnvParams, args2Option, genHelp } from '@u4/opencv-build'
 import child_process from 'child_process'
 import fs from 'fs'
 import log from 'npmlog'
 import { resolvePath } from '../lib/commons'
 import pc from 'picocolors'
-import mri from 'mri';
 import path from 'path'
 import { EOL } from 'os'
 
@@ -87,30 +86,20 @@ function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv, libsFoundInDir: OpencvMo
 export async function compileLib(args: string[]) {
     let dryRun = false;
     let JOBS = 'max';
-    const parsed = mri(args);
 
-    if (parsed.help || parsed.h || !args.includes('build')) {
+    if (args.includes('--help') || args.includes('-h') || !args.includes('build')) {
         console.log('Usage: install [--version=<version>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] build');
+        console.log(genHelp());
         return;
     }
-
-    const options: OpenCVBuildEnvParams = {
-        autoBuildOpencvVersion: parsed.version,
-        autoBuildFlags: parsed.flags
-    }
-    if (parsed.cuda) options.autoBuildBuildCuda = true;
-    if (parsed.nocontrib) options.autoBuildWithoutContrib = true;
-    if (parsed.nobuild) options.disableAutoBuild = true;
-    // https://github.com/justadudewhohacks/opencv4nodejs/issues/826
-    // https://github.com/justadudewhohacks/opencv4nodejs/pull/827
-    // https://github.com/justadudewhohacks/opencv4nodejs/pull/824
-    if (parsed.jobs) JOBS = parsed.jobs;
-    if (parsed.j) JOBS = parsed.j;
-    dryRun = parsed.dryrun || parsed['dry-run'];
-
-    // Version = '3.4.16'; // failed
-    // cc\xfeatures2d\siftdetector.h(9): error C2039: 'SIFT': is not a member of 'cv::xfeatures2d' [opencv4nodejs\build\opencv4nodejs.vcxproj]
-    // cc\xfeatures2d\siftdetector.h(9): error C3203: 'Ptr': unspecialized class template can't be used as a template argument for template parameter 'T', expected a real type [\opencv4nodejs\build\opencv4nodejs.vcxproj]
+    const options: OpenCVBuildEnvParams = args2Option(args)
+    dryRun = (args.includes('--dry-run') || args.includes('--dryrun'));
+    let njobs = args.indexOf('--jobs')
+    if (njobs === -1)
+        njobs = args.indexOf('-j')
+    if (njobs > 0)
+        JOBS = args[njobs + 1];
+    
     for (const K in ['autoBuildFlags']) {
         if (options[K]) console.log(`using ${K}:`, options[K]);
     }
