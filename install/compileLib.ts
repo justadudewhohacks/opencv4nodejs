@@ -1,4 +1,4 @@
-import { OpencvModule, OpenCVBuilder, OpenCVBuildEnv, isWin, OpenCVBuildEnvParams, args2Option, genHelp } from '@u4/opencv-build'
+import { OpencvModule, OpenCVBuilder, OpenCVBuildEnv, OpenCVBuildEnvParams, args2Option, genHelp } from '@u4/opencv-build'
 import child_process from 'child_process'
 import fs from 'fs'
 import log from 'npmlog'
@@ -15,9 +15,9 @@ const defaultIncludeDirOpenCV4 = `${defaultIncludeDir}/opencv4`
 /**
  * @returns global system include paths
  */
-function getDefaultIncludeDirs() {
+function getDefaultIncludeDirs(env: OpenCVBuildEnv) {
     log.info('install', 'OPENCV_INCLUDE_DIR is not set, looking for default include dir')
-    if (isWin()) {
+    if (env.isWin) {
         throw new Error('OPENCV_INCLUDE_DIR has to be defined on windows when auto build is disabled')
     }
     return [defaultIncludeDir, defaultIncludeDirOpenCV4]
@@ -26,9 +26,9 @@ function getDefaultIncludeDirs() {
 /**
  * @returns return a path like /usr/local/lib
  */
-function getDefaultLibDir() {
+function getDefaultLibDir(env: OpenCVBuildEnv) {
     log.info('install', 'OPENCV_LIB_DIR is not set, looking for default lib dir')
-    if (isWin()) {
+    if (env.isWin) {
         throw new Error('OPENCV_LIB_DIR has to be defined on windows when auto build is disabled')
     }
     return defaultLibDir
@@ -39,7 +39,7 @@ function getDefaultLibDir() {
  */
 function getLibDir(env: OpenCVBuildEnv): string {
     if (env.isAutoBuildDisabled) {
-        return resolvePath(process.env.OPENCV_LIB_DIR) || getDefaultLibDir();
+        return resolvePath(process.env.OPENCV_LIB_DIR) || getDefaultLibDir(env);
     } else {
         const dir = resolvePath(env.opencvLibDir);
         if (!dir) {
@@ -49,8 +49,8 @@ function getLibDir(env: OpenCVBuildEnv): string {
     }
 }
 
-function getOPENCV4NODEJS_LIBRARIES(libDir: string, libsFoundInDir: OpencvModule[]): string[] {
-    const libs = isWin()
+function getOPENCV4NODEJS_LIBRARIES(env: OpenCVBuildEnv, libDir: string, libsFoundInDir: OpencvModule[]): string[] {
+    const libs = env.isWin
         ? libsFoundInDir.map(lib => resolvePath(lib.libPath))
         // dynamically link libs if not on windows
         : ['-L' + libDir]
@@ -76,7 +76,7 @@ function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv, libsFoundInDir: OpencvMo
         explicitIncludeDir = resolvePath(OPENCV_INCLUDE_DIR)
     }
     const includes = env.isAutoBuildDisabled
-        ? (explicitIncludeDir ? [explicitIncludeDir] : getDefaultIncludeDirs())
+        ? (explicitIncludeDir ? [explicitIncludeDir] : getDefaultIncludeDirs(env))
         : [resolvePath(env.opencvInclude), resolvePath(env.opencv4Include)]
     log.info('install', '${EOL}setting the following includes:')
     includes.forEach(inc => log.info('includes', pc.green(inc)))
@@ -126,7 +126,7 @@ export async function compileLib(args: string[]) {
     libsFoundInDir.forEach(lib => log.info('install', `${pc.yellow('%s')}: ${pc.green('%s')}`, lib.opencvModule, lib.libPath))
     const OPENCV4NODEJS_DEFINES = getOPENCV4NODEJS_DEFINES(libsFoundInDir).join(';');
     const OPENCV4NODEJS_INCLUDES = getOPENCV4NODEJS_INCLUDES(builder.env, libsFoundInDir).join(';');
-    const OPENCV4NODEJS_LIBRARIES = getOPENCV4NODEJS_LIBRARIES(libDir, libsFoundInDir).join(';');
+    const OPENCV4NODEJS_LIBRARIES = getOPENCV4NODEJS_LIBRARIES(builder.env, libDir, libsFoundInDir).join(';');
     process.env['OPENCV4NODEJS_DEFINES'] = OPENCV4NODEJS_DEFINES;
     process.env['OPENCV4NODEJS_INCLUDES'] = OPENCV4NODEJS_INCLUDES;
     process.env['OPENCV4NODEJS_LIBRARIES'] = OPENCV4NODEJS_LIBRARIES;
