@@ -3,6 +3,7 @@
 ## Version 6.0.8
 
 * add support for Electron
+* cleaner logs
 
 ## Version 6.0.7
 

@@ -5,13 +5,6 @@ import raw from './cvloader';
 import * as openCV from '..';
 
 function loadOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
-  //const isElectronWebpack =
-  //  // assume module required by webpack if no system path inv envs
-  //  !process.env.path
-  //  // detect if electron https://github.com/electron/electron/issues/2288
-  //  && global.window && global.window.process && (global.window.process as any).type
-  //  && global.navigator && ((global.navigator.userAgent || '').toLowerCase().indexOf(' electron/') > -1)
-  // let cvBase = isElectronWebpack ? require('../build/Release/opencv4nodejs.node') : require('./cvloader')
   const cvBase = raw(opt);
   if (!cvBase.accumulate) {
     throw Error('failed to load opencv basic accumulate not found.')
@@ -31,7 +24,7 @@ function loadOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
 
 const cv = loadOpenCV({ prebuild: 'latestBuild' });
 const defExport = { cv };
-// duplucate all export for retrocompatibility
+// duplicate all export for retro-compatibility
 for (const key in cv) {
   defExport[key] = cv[key];
 }

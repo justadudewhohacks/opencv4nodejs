@@ -56,8 +56,14 @@ function getOPENCV4NODEJS_LIBRARIES(env: OpenCVBuildEnv, libDir: string, libsFou
         : ['-L' + libDir]
             .concat(libsFoundInDir.map(lib => '-lopencv_' + lib.opencvModule))
             .concat('-Wl,-rpath,' + libDir)
-    log.info('libs', `${EOL}Setting the following libs:`)
-    libs.forEach(lib => log.info('libs', '' + lib))
+
+    if (libs.length > 0) {
+        const dir = path.dirname(libs[0]);
+        const names = libs.map(lib => path.basename(lib))
+        log.info('libs', `${EOL}Setting lib from ${pc.green(dir)} : ${names.map(pc.yellow).join(', ')}`)
+    } else {
+        log.info('libs', `${EOL}no Libs available`)
+    }
     return libs;
 }
 
@@ -181,8 +187,11 @@ export async function compileLib(args: string[]) {
 
     for (const dir of process.env.PATH.split(path.delimiter)) {
         nodegypCmd = getExistingBin(dir, nodegyp);
-        if (nodegypCmd)
+        if (nodegypCmd) {
+            // no need to use full path
+            nodegypCmd = nodegyp;
             break;
+        }
     }
     if (!nodegypCmd) {
         for (const startDir in [__dirname, process.cwd()]) {
@@ -206,9 +215,10 @@ export async function compileLib(args: string[]) {
         throw Error(msg)
     }
 
-    nodegypCmd += ` rebuild ${flags}`;
+    // flags starts with ' '
+    nodegypCmd += ` rebuild${flags}`;
 
-    log.info('install', `Spawning in ${cwd} node gyp process: ${nodegypCmd}`)
+    log.info('install', `Spawning in directory:${cwd} node-gyp process: ${nodegypCmd}`)
 
     if (dryRun) {
         console.log('');
