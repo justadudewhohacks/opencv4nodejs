@@ -252,13 +252,13 @@ Different OpenCV 3.x base images can be found here: <https://hub.docker.com/r/ju
 
 Add the following script to your package.json:
 
-``` python
-"electron-rebuild": "electron-rebuild -w opencv4nodejs"
+```python
+"electron-rebuild": "build-opencv --electron --version 4.5.4 build"
 ```
 
 Run the script:
 
-``` bash
+```bash
 npm run electron-rebuild
 ```
 

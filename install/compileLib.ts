@@ -2,7 +2,7 @@ import { OpencvModule, OpenCVBuilder, OpenCVBuildEnv, OpenCVBuildEnvParams, args
 import child_process from 'child_process'
 import fs from 'fs'
 import log from 'npmlog'
-import { isElectronWebpack, resolvePath } from '../lib/commons'
+import { resolvePath } from '../lib/commons'
 import pc from 'picocolors'
 import path from 'path'
 import { EOL } from 'os'
@@ -83,23 +83,53 @@ function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv, libsFoundInDir: OpencvMo
     return includes;
 }
 
+function getExistingNodeModulesBin(dir: string, name: string): string {
+    const binPath = path.join(dir, 'node_modules', '.bin', name);
+    if (fs.existsSync(binPath)) {
+        return binPath;
+    }
+    return '';
+}
+
+function getExistingBin(dir: string, name: string): string {
+    const binPath = path.join(dir, name);
+    if (fs.existsSync(binPath)) {
+        return binPath;
+    }
+    return '';
+}
+
+
+function getParents(dir: string) {
+    const out = [dir];
+    while (true) {
+        const next = path.resolve(dir, '..');
+        if (next === dir)
+            break;
+        dir = next;
+        out.push(dir);
+    }
+    return out;
+}
+
 export async function compileLib(args: string[]) {
     let dryRun = false;
     let JOBS = 'max';
 
     if (args.includes('--help') || args.includes('-h') || !args.includes('build')) {
-        console.log('Usage: install [--version=<version>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] build');
+        console.log('Usage: install [--version=<version>] [--electron] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] build');
         console.log(genHelp());
         return;
     }
     const options: OpenCVBuildEnvParams = args2Option(args)
+
     dryRun = (args.includes('--dry-run') || args.includes('--dryrun'));
     let njobs = args.indexOf('--jobs')
     if (njobs === -1)
         njobs = args.indexOf('-j')
     if (njobs > 0)
         JOBS = args[njobs + 1];
-    
+
     for (const K in ['autoBuildFlags']) {
         if (options[K]) console.log(`using ${K}:`, options[K]);
     }
@@ -146,27 +176,38 @@ export async function compileLib(args: string[]) {
     // const arch = 'x86_64' / 'x64'
     // flags += --arch=${arch} --target_arch=${arch}
     let nodegypCmd = ''
-    if (isElectronWebpack()) {
-        let dir = __dirname;
-        while (dir) {
-            const rebuild = path.join(dir, 'node_modules', '.bin', 'electron-rebuild');
-            if (fs.existsSync(rebuild)) {
-                nodegypCmd = `${rebuild} rebuild ${flags}`;
-                break;
-            }
-            const next = path.resolve(dir, '..');
-            if (next === dir) {
-                break;
-            }
-        }
-        if (!nodegypCmd) {
-            const msg = `Please install 'electron-rebuild' to build openCV bindings${EOL}npm install --save-dev electron-rebuild`;
-            throw Error(msg)
-        }
-    } else {
-        nodegypCmd = `node-gyp rebuild ${flags}`;
+
+    const nodegyp = options.extra.electron ? 'electron-rebuild' : 'node-gyp';
+
+    for (const dir of process.env.PATH.split(path.delimiter)) {
+        nodegypCmd = getExistingBin(dir, nodegyp);
+        if (nodegypCmd)
+            break;
     }
-    
+    if (!nodegypCmd) {
+        for (const startDir in [__dirname, process.cwd()]) {
+            let dir = startDir;
+            while (dir) {
+                nodegypCmd = getExistingNodeModulesBin(dir, nodegyp);
+                if (nodegypCmd)
+                    break;
+                const next = path.resolve(dir, '..');
+                if (next === dir) {
+                    break;
+                }
+                dir = next;
+            }
+            if (nodegypCmd)
+                break;
+        }
+    }
+    if (!nodegypCmd) {
+        const msg = `Please install "${nodegyp}" to build openCV bindings${EOL}npm install --save-dev ${nodegyp}`;
+        throw Error(msg)
+    }
+
+    nodegypCmd += ` rebuild ${flags}`;
+
     log.info('install', `Spawning in ${cwd} node gyp process: ${nodegypCmd}`)
 
     if (dryRun) {
@@ -180,11 +221,12 @@ export async function compileLib(args: string[]) {
     } else {
         const child = child_process.exec(nodegypCmd, { maxBuffer: Infinity, cwd }, function (error/*, stdout, stderr*/) {
             fs.unlinkSync(realGyp);
+            const bin = options.extra.electron ? 'electron-rebuild' : 'node-gyp';
             if (error) {
                 console.log(`error: `, error);
-                log.error('install', `install.ts failed and return ${error.name} ${error.message} return code: ${error.code}`);
+                log.error('install', `${bin} failed and return ${error.name} ${error.message} return code: ${error.code}`);
             } else {
-                log.info('install', 'install.ts complet with no error');
+                log.info('install', `${bin} complete successfully`);
             }
         })
         if (child.stdout) child.stdout.pipe(process.stdout)
