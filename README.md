@@ -4,12 +4,12 @@
 
 ## Fork changes
 
-- Node-gyp is not run at setup time, It must be launch from the project that includ the lib.
-- `build-opencv` binary must be call to build the project before usage.
+- I recomand you to only define an global OPENCV_BUILD_ROOT=~/opencv to boost you develepoment speed and reduce you hard disk usage.
+- `node-gyp` is not run during `npm install`, It must be launch from the project with `build-opencv`. (if you forgot to do so some help message will assis you :wink:)
 - All javascript code had been converted to Typesscript.
 - This version depend on [@u4/opencv-build](https://www.npmjs.com/package/@u4/opencv-build).
-- This version had been test under windows environnement.
-- This version do not work with electron.
+- This version had been test under windows / MacOs X / Debian environnement.
+- This version **Works** with new elecron.
 
 ![opencv4nodejs](https://user-images.githubusercontent.com/31125521/37272906-67187fdc-25d8-11e8-9704-40e9e94c1e80.jpg)
 
@@ -116,7 +116,7 @@ Check out [Automating lights with Computer Vision & NodeJS](https://medium.com/s
 ## How to install
 
 ``` bash
-npm install --save opencv4nodejs
+npm install --save @u4/opencv4nodejs
 ```
 
 Native node modules are built via node-gyp, which already comes with npm by default. However, node-gyp requires you to have python installed. If you are running into node-gyp specific issues have a look at known issues with [node-gyp](https://github.com/nodejs/node-gyp) first.
@@ -206,7 +206,7 @@ It's possible to specify build environment variables by inserting them into the 
   "name": "my-project",
   "version": "0.0.0",
   "dependencies": {
-    "opencv4nodejs": "^X.X.X"
+    "@u4/opencv4nodejs": "^X.X.X"
   },
   "opencv4nodejs": {
     "disableAutoBuild": 1,
@@ -248,7 +248,7 @@ Different OpenCV 3.x base images can be found here: <https://hub.docker.com/r/ju
 
 ## Usage with Electron
 
-### [opencv-electron](https://github.com/justadudewhohacks/opencv-electron) - example for opencv4nodejs with electron
+### [opencv-electron](https://github.com/urielch/opencv-electron) - example for opencv4nodejs with electron
 
 Add the following script to your package.json:
 
@@ -265,7 +265,7 @@ npm run electron-rebuild
 Require it in the application:
 
 ``` javascript
-const cv = require('opencv4nodejs');
+const cv = require('@u4/opencv4nodejs');
 ```
 
 <a name="usage-with-nwjs"></a>
@@ -277,7 +277,7 @@ Any native modules, including opencv4nodejs, must be recompiled to be used with 
 Once recompiled, the module can be installed and required as usual:
 
 ``` javascript
-const cv = require('opencv4nodejs');
+const cv = require('@u4/opencv4nodejs');
 ```
 
 <a name="quick-start"></a>
@@ -285,7 +285,7 @@ const cv = require('opencv4nodejs');
 ## Quick Start
 
 ``` javascript
-const cv = require('opencv4nodejs');
+const cv = require('@u4/opencv4nodejs');
 ```
 
 ### Initializing Mat (image matrix), Vec, Point
@@ -563,7 +563,7 @@ try {
 ## With TypeScript
 
 ``` javascript
-import * as cv from 'opencv4nodejs'
+import * as cv from '@u4/opencv4nodejs'
 ```
 
 Check out the TypeScript [examples](https://github.com/urielch/opencv4nodejs/tree/master/examples).
@@ -585,5 +585,5 @@ Or directly in your code:
 
 ``` javascript
 process.env.OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING = 1
-const cv = require('opencv4nodejs')
+const cv = require('@u4/opencv4nodejs')
 ```

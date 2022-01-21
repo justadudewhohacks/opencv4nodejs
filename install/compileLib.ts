@@ -2,7 +2,7 @@ import { OpencvModule, OpenCVBuilder, OpenCVBuildEnv, OpenCVBuildEnvParams, args
 import child_process from 'child_process'
 import fs from 'fs'
 import log from 'npmlog'
-import { resolvePath } from '../lib/commons'
+import { isElectronWebpack, resolvePath } from '../lib/commons'
 import pc from 'picocolors'
 import path from 'path'
 import { EOL } from 'os'
@@ -78,7 +78,7 @@ function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv, libsFoundInDir: OpencvMo
     const includes = env.isAutoBuildDisabled
         ? (explicitIncludeDir ? [explicitIncludeDir] : getDefaultIncludeDirs(env))
         : [resolvePath(env.opencvInclude), resolvePath(env.opencv4Include)]
-    log.info('install', '${EOL}setting the following includes:')
+    log.info('install', `${EOL}setting the following includes:`)
     includes.forEach(inc => log.info('includes', pc.green(inc)))
     return includes;
 }
@@ -108,7 +108,6 @@ export async function compileLib(args: string[]) {
     /**
      * prepare environment variable
      */
-    // builder.env.applyEnvsFromPackageJson()
     const libDir: string = getLibDir(builder.env);
     log.info('install', 'Using lib dir: ' + libDir)
     if (!fs.existsSync(libDir)) {
@@ -137,8 +136,6 @@ export async function compileLib(args: string[]) {
     // process.env.JOBS=JOBS;
     flags += ` --jobs ${JOBS}`;
 
-    // const arch = 'x86_64'
-    // const arch = 'x64'
     const cwd = path.join(__dirname, '..');
     const hidenGyp = path.join(cwd, '_binding.gyp');
     const realGyp = path.join(cwd, 'binding.gyp');
@@ -146,10 +143,30 @@ export async function compileLib(args: string[]) {
         fs.copyFileSync(hidenGyp, realGyp);
     }
 
-
-    // const nodegypCmd = `node-gyp rebuild --arch=${arch} --target_arch=${arch} ` + flags
-    // const nodegypCmd = `node-gyp --help`;
-    const nodegypCmd = `node-gyp rebuild ` + flags
+    // const arch = 'x86_64' / 'x64'
+    // flags += --arch=${arch} --target_arch=${arch}
+    let nodegypCmd = ''
+    if (isElectronWebpack()) {
+        let dir = __dirname;
+        while (dir) {
+            const rebuild = path.join(dir, 'node_modules', '.bin', 'electron-rebuild');
+            if (fs.existsSync(rebuild)) {
+                nodegypCmd = `${rebuild} rebuild ${flags}`;
+                break;
+            }
+            const next = path.resolve(dir, '..');
+            if (next === dir) {
+                break;
+            }
+        }
+        if (!nodegypCmd) {
+            const msg = `Please install 'electron-rebuild' to build openCV bindings${EOL}npm install --save-dev electron-rebuild`;
+            throw Error(msg)
+        }
+    } else {
+        nodegypCmd = `node-gyp rebuild ${flags}`;
+    }
+    
     log.info('install', `Spawning in ${cwd} node gyp process: ${nodegypCmd}`)
 
     if (dryRun) {

@@ -1,5 +1,9 @@
 # changelog
 
+## Version 6.0.8
+
+* add support for Electron
+
 ## Version 6.0.7
 
 * bump dependence versions inclkuding @u4/opencv-build@0.4.1

@@ -2,7 +2,7 @@ import { OpenCVBuilder } from '@u4/opencv-build';
 import { OpenCVBuildEnvParams } from '@u4/opencv-build';
 import fs from 'fs';
 import path from 'path';
-import { resolvePath } from './commons';
+import { isElectronWebpack, resolvePath } from './commons';
 import pc from 'picocolors'
 import { info } from 'npmlog';
 import * as openCV from '..';
@@ -44,7 +44,12 @@ function getOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
   }
 
   let opencvBuild = null
-  const requirePath = path.join(__dirname, process.env.BINDINGS_DEBUG ? '../build/Debug/opencv4nodejs' : '../build/Release/opencv4nodejs')
+  let requirePath = '';
+  if (isElectronWebpack()) {
+    requirePath = '../build/Release/opencv4nodejs.node';
+  } else {
+    requirePath = path.join(__dirname, process.env.BINDINGS_DEBUG ? '../build/Debug/opencv4nodejs' : '../build/Release/opencv4nodejs')
+  }
   try {
     logDebug('require', `require path is ${pc.yellow(requirePath)}`)
     opencvBuild = require(requirePath);
