@@ -566,6 +566,71 @@ export const LBP_FRONTALFACE_IMPROVED: string;
 export const LBP_PROFILEFACE: string;
 export const LBP_SILVERWARE: string;
 
+export const WINDOW_NORMAL: number;
+export const WINDOW_AUTOSIZE: number;
+export const WINDOW_OPENGL: number;
+export const WINDOW_FULLSCREEN: number;
+export const WINDOW_FREERATIO: number;
+export const WINDOW_KEEPRATIO: number;
+export const WINDOW_GUI_EXPANDED: number;
+export const WINDOW_GUI_NORMAL: number;
+
+//! Flags for cv::setWindowProperty / cv::getWindowProperty
+// enum WindowPropertyFlags
+export const WND_PROP_FULLSCREEN: number;
+export const WND_PROP_AUTOSIZE: number;
+export const WND_PROP_ASPECT_RATIO: number;
+export const WND_PROP_OPENGL: number;
+export const WND_PROP_VISIBLE: number;
+export const WND_PROP_TOPMOST: number;
+export const WND_PROP_VSYNC: number;
+
+//! Mouse Events see cv::MouseCallback
+// enum MouseEventTypes
+export const EVENT_MOUSEMOVE: number;
+export const EVENT_LBUTTONDOWN: number;
+export const EVENT_RBUTTONDOWN: number;
+export const EVENT_MBUTTONDOWN: number;
+export const EVENT_LBUTTONUP: number;
+export const EVENT_RBUTTONUP: number;
+export const EVENT_MBUTTONUP: number;
+export const EVENT_LBUTTONDBLCLK: number;
+export const EVENT_RBUTTONDBLCLK: number;
+export const EVENT_MBUTTONDBLCLK: number;
+export const EVENT_MOUSEWHEEL: number;
+export const EVENT_MOUSEHWHEEL: number;
+
+//! Mouse Event Flags see cv::MouseCallback
+// enum MouseEventFlags
+export const EVENT_FLAG_LBUTTON: number;
+export const EVENT_FLAG_RBUTTON: number;
+export const EVENT_FLAG_MBUTTON: number;
+export const EVENT_FLAG_CTRLKEY: number;
+export const EVENT_FLAG_SHIFTKEY: number;
+export const EVENT_FLAG_ALTKEY: number;
+
+//! Qt font weight
+// enum QtFontWeights
+export const QT_FONT_LIGHT: number;
+export const QT_FONT_NORMAL: number;
+export const QT_FONT_DEMIBOLD: number;
+export const QT_FONT_BOLD: number;
+export const QT_FONT_BLACK: number;
+
+//! Qt font style
+// enum QtFontStyles
+export const QT_STYLE_NORMAL: number;
+export const QT_STYLE_ITALIC: number;
+export const QT_STYLE_OBLIQUE: number;
+
+//! Qt "button" type
+// enum QtButtonTypes
+export const QT_PUSH_BUTTON: number;
+export const QT_CHECKBOX: number;
+export const QT_RADIOBOX: number;
+export const QT_NEW_BUTTONBAR: number;
+
+
 export const termCriteria: {
   COUNT: number;
   MAX_ITER: number;

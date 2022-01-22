@@ -3,6 +3,10 @@
 #include "opencv_modules.h"
 
 #include "core/core.h"
+
+#ifdef HAVE_OPENCV_HIGHGUI
+#include "highgui/highgui.h"
+#endif
 #ifdef HAVE_OPENCV_CALIB3D
 #include "calib3d/calib3d.h"
 #endif
@@ -80,6 +84,11 @@ NAN_MODULE_INIT(init) {
 
 	Nan::Set(modules, FF::newString("core"), Nan::New(true));
 	Core::Init(target);
+
+#ifdef HAVE_OPENCV_HIGHGUI
+	Nan::Set(modules, FF::newString("highgui"), Nan::New(true));
+	Highgui::Init(target);
+#endif
 #ifdef HAVE_OPENCV_CALIB3D
 	Nan::Set(modules, FF::newString("calib3d"), Nan::New(true));
 	Calib3d::Init(target);
