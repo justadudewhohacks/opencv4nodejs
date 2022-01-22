@@ -6,6 +6,8 @@ import { resolvePath } from '../lib/commons'
 import pc from 'picocolors'
 import path from 'path'
 import { EOL } from 'os'
+import blob from 'glob';
+import { promisify } from 'util';
 
 const defaultDir = '/usr/local'
 const defaultLibDir = `${defaultDir}/lib`
@@ -75,7 +77,7 @@ function getOPENCV4NODEJS_DEFINES(libsFoundInDir: OpencvModule[]): string[] {
     return defines;
 }
 
-function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv, libsFoundInDir: OpencvModule[]): string[] {
+function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv): string[] {
     const { OPENCV_INCLUDE_DIR } = process.env;
     let explicitIncludeDir = '';
     if (OPENCV_INCLUDE_DIR) {
@@ -123,13 +125,14 @@ export async function compileLib(args: string[]) {
     let JOBS = 'max';
 
     if (args.includes('--help') || args.includes('-h') || !args.includes('build')) {
-        console.log('Usage: install [--version=<version>] [--electron] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] build');
+        console.log('Usage: install [--version=<version>] [--vscode] [--electron] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] build');
         console.log(genHelp());
         return;
     }
     const options: OpenCVBuildEnvParams = args2Option(args)
 
     dryRun = (args.includes('--dry-run') || args.includes('--dryrun'));
+
     let njobs = args.indexOf('--jobs')
     if (njobs === -1)
         njobs = args.indexOf('-j')
@@ -160,7 +163,7 @@ export async function compileLib(args: string[]) {
     log.info('install', `${EOL}Found the following libs:`)
     libsFoundInDir.forEach(lib => log.info('install', `${pc.yellow('%s')}: ${pc.green('%s')}`, lib.opencvModule, lib.libPath))
     const OPENCV4NODEJS_DEFINES = getOPENCV4NODEJS_DEFINES(libsFoundInDir).join(';');
-    const OPENCV4NODEJS_INCLUDES = getOPENCV4NODEJS_INCLUDES(builder.env, libsFoundInDir).join(';');
+    const OPENCV4NODEJS_INCLUDES = getOPENCV4NODEJS_INCLUDES(builder.env).join(';');
     const OPENCV4NODEJS_LIBRARIES = getOPENCV4NODEJS_LIBRARIES(builder.env, libDir, libsFoundInDir).join(';');
     process.env['OPENCV4NODEJS_DEFINES'] = OPENCV4NODEJS_DEFINES;
     process.env['OPENCV4NODEJS_INCLUDES'] = OPENCV4NODEJS_INCLUDES;
@@ -220,7 +223,40 @@ export async function compileLib(args: string[]) {
 
     log.info('install', `Spawning in directory:${cwd} node-gyp process: ${nodegypCmd}`)
 
-    if (dryRun) {
+    if (options.extra.vscode) {
+        // const nan = require('nan');
+        // const nativeNodeUtils = require('native-node-utils');
+        const pblob = promisify(blob)
+        const openCvModuleInclude = await pblob(path.join(builder.env.opencvSrc, 'modules', '*', 'include'));
+        const openCvContribModuleInclude = await pblob(path.join(builder.env.opencvContribSrc, 'modules', '*', 'include'));
+        const cvVersion = builder.env.opencvVersion.split('.');
+        const config = {
+            "name": "opencv4nodejs",
+            "includePath": [
+                'Missing node-gyp/Cache/16.13.1/include/node',
+                ...OPENCV4NODEJS_INCLUDES,
+                '${workspaceFolder}/node_modules/nan',
+                '${workspaceFolder}/node_modules/native-node-utils/src',
+                '${workspaceFolder}/cc',
+                '${workspaceFolder}/cc/core',
+                ...openCvModuleInclude,
+                ...openCvContribModuleInclude,
+            ],
+            "defines": [
+                `CV_VERSION_MAJOR=${cvVersion[0]}`,
+                `CV_VERSION_MINOR=${cvVersion[1]}`,
+                `CV_VERSION_REVISION=${cvVersion[2]}`,
+                ...OPENCV4NODEJS_DEFINES],
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            // "compilerArgs": [ "-std=c++11" ]
+        }
+        if (process.platform === 'win32') {
+            config.defines.push('WIN');
+            config.defines.push('_HAS_EXCEPTIONS=1');
+        }
+        console.log(JSON.stringify(config, null, '  '));
+    } else if (dryRun) {
         console.log('');
         console.log(`export OPENCV4NODEJS_DEFINES="${OPENCV4NODEJS_DEFINES}"`);
         console.log(`export OPENCV4NODEJS_INCLUDES="${OPENCV4NODEJS_INCLUDES}"`);

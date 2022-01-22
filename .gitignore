@@ -38,3 +38,4 @@ lib/**/*.d.ts
 binding.gyp
 data/text-models/frozen_east_text_detection.pb
 data/face/lbfmodel.yaml
+bin/win32-x64-82/opencv4nodejs.node

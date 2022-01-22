@@ -10,4 +10,7 @@ const image = cv.imread(file);
 console.log('Lenna.png loaded');
 const processedImage = cv.applyColorMap(image, cv.COLORMAP_AUTUMN);
 
-cv.imshowWait("applyColorMap", processedImage);
+const WindowName = "applyColorMap";
+cv.imshowWait(WindowName, processedImage);
+//cv.setWindowProperty(WindowName, cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
+//cv.setWindowProperty(WindowName, cv.WND_PROP_FULLSCREEN, cv.WINDOW_NORMAL)
