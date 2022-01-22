@@ -1,7 +1,7 @@
 #include "macros.h"
 
 #if CV_VERSION_GREATER_EQUAL(3, 2, 0)
-
+// This file defines the list of modules available in current build configuration
 #include <opencv2/opencv_modules.hpp>
 
 // we do not support DNN module for OpenCV 3.2 and lower
