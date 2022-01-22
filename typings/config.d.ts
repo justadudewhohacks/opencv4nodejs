@@ -10,4 +10,5 @@ export const xmodules: {
 export const version: {
   major: number;
   minor: number;
+  revision: number;
 }
