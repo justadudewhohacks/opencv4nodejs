@@ -12,6 +12,7 @@ import { Rect } from './Rect.d';
 import { TermCriteria } from './TermCriteria.d';
 import { OCRHMMClassifier } from './OCRHMMClassifier.d';
 import { Net } from './Net.d';
+import { WND_PROP } from '.';
 
 export class HistAxes {
   channel: number;
@@ -211,6 +212,12 @@ export function undistortPoints(srcPoints: Point2[], cameraMatrix: Mat, distCoef
 export function undistortPointsAsync(srcPoints: Point2[], cameraMatrix: Mat, distCoeffs: Mat): Promise<Point2[]>;
 export function waitKey(delay?: number): number;
 export function waitKeyEx(delay?: number): number;
+
+
+//  WND_PROP_FULLSCREEN | WND_PROP_AUTOSIZE | WND_PROP_ASPECT_RATIO | WND_PROP_OPENGL | WND_PROP_VISIBLE | WND_PROP_TOPMOST | WND_PROP_VSYNC
+export function setWindowProperty(winName: string, prop_id: WND_PROP, prop_value: number): void;
+export function getWindowProperty(winName: string, prop_id: WND_PROP): number;
+export function setWindowTitle(winName: string, title: string): void;
 
 export type DrawParams = {
   thickness?: number;

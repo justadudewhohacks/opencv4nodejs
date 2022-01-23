@@ -9,7 +9,9 @@ class Highgui {
 public:
   static NAN_MODULE_INIT(Init);
 
-  // static NAN_METHOD(method);
+	static NAN_METHOD(setWindowProperty);
+	static NAN_METHOD(getWindowProperty);
+  static NAN_METHOD(setWindowTitle);
 };
 
 #endif
