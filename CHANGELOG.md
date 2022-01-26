@@ -1,5 +1,11 @@
 # changelog
 
+## Version 6.0.10
+
+* add highgui modules
+* add setWindowProperty, getWindowProperty, setWindowTitle function
+* update cpp standard version to fix modern electron support
+
 ## Version 6.0.9
 
 * enable nan module worker
