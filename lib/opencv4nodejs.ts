@@ -16,9 +16,9 @@ function loadOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
   // promisify async methods
   let cvObj = promisify(cvBase);
   cvObj = extendWithJsSources(cvObj);
-  // add xmodules alias if not present
-  if (!cvObj.xmodules && cvObj.modules)
-    cvObj.xmodules = cvObj.modules
+  // add xmodules alias if not present (moved to C++ part)
+  // if (!cvObj.xmodules && cvObj.modules)
+  //  cvObj.xmodules = cvObj.modules
   return cvObj;
 }
 

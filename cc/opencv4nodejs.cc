@@ -81,6 +81,7 @@ NAN_MODULE_INIT(init) {
 	v8::Local<v8::Object> modules = Nan::New<v8::Object>();
 	// attache the newly created modules object
 	Nan::Set(target, FF::newString("modules"), modules);
+	Nan::Set(target, FF::newString("xmodules"), modules);
 
 	Nan::Set(modules, FF::newString("core"), Nan::New(true));
 	Core::Init(target);
