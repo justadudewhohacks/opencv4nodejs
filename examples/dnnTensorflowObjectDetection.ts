@@ -11,7 +11,6 @@ import { cv, getCachedFile, runVideoDetection } from "./utils";
 import pc from "picocolors";
 
 async function main() {
-
   if (!cv.xmodules || !cv.xmodules.dnn) {
     console.error("exiting: opencv4nodejs compiled without dnn module");
     return;

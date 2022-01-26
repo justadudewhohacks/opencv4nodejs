@@ -20,8 +20,15 @@ const findWaldo = async () => {
     cv.LINE_8
   );
 
+  const windowName = 'We\'ve found Waldo!';
   // Open result in new window
-  cv.imshow('We\'ve found Waldo!', originalMat);
+  cv.imshow(windowName, originalMat) !;
+  cv.setWindowTitle(windowName, "Waldo !"); !
+  //  console.log('FULLSCREEN:', cv.getWindowProperty(windowName, cv.WND_PROP_FULLSCREEN));
+  //  console.log('AUTOSIZE:', cv.getWindowProperty(windowName, cv.WND_PROP_AUTOSIZE));
+  //  console.log('VISIBLE:', cv.getWindowProperty(windowName, cv.WND_PROP_VISIBLE));  
+  // cv.setWindowProperty(windowName, cv.WND_PROP_VISIBLE, cv.WINDOW_FULLSCREEN)
+  // cv.setWindowProperty(windowName, cv.WND_PROP_FULLSCREEN, cv.WINDOW_NORMAL)
   cv.waitKey();
 };
 
