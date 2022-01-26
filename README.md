@@ -13,12 +13,8 @@
 
 ![opencv4nodejs](https://user-images.githubusercontent.com/31125521/37272906-67187fdc-25d8-11e8-9704-40e9e94c1e80.jpg)
 
-[![Build Status](https://travis-ci.org/justadudewhohacks/opencv4nodejs.svg?branch=master)](http://travis-ci.org/justadudewhohacks/opencv4nodejs)
-[![Build status](https://ci.appveyor.com/api/projects/status/cv3o65nrosh1udbb/branch/master?svg=true)](https://ci.appveyor.com/project/justadudewhohacks/opencv4nodejs/branch/master)
-[![Coverage](https://codecov.io/github/justadudewhohacks/opencv4nodejs/coverage.svg?branch=master)](https://codecov.io/gh/justadudewhohacks/opencv4nodejs)
-[![npm download](https://img.shields.io/npm/dm/opencv4nodejs.svg?style=flat)](https://www.npmjs.com/package/opencv4nodejs)
-[![node version](https://img.shields.io/badge/node.js-%3E=_6-green.svg?style=flat)](http://nodejs.org/download/)
-[![Slack](https://slack.bri.im/badge.svg)](https://slack.bri.im/)
+[![npm download](https://img.shields.io/npm/dm/opencv4nodejs.svg?style=flat)](https://www.npmjs.com/package/@u4/opencv4nodejs)
+[![node version](https://img.shields.io/badge/node.js-%3E=_12-green.svg?style=flat)](http://nodejs.org/download/)
 
 **opencv4nodejs allows you to use the native OpenCV library in nodejs. Besides a synchronous API the package provides an asynchronous API, which allows you to build non-blocking and multithreaded computer vision tasks. opencv4nodejs supports OpenCV 3 and OpenCV 4.**
 
@@ -129,6 +125,26 @@ On Windows you will furthermore need Windows Build Tools to compile OpenCV and o
 npm install --global windows-build-tools
 ```
 
+Once the @u4/opencv4nodejs is installed, prepare a compilation task in your `package.json`
+
+```json
+{
+  "scripts": {
+    "install_arm64": "build-opencv --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64\" build",
+    "install_4.5.5_cuda": "build-opencv --version 4.5.5 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON\" build",
+    "do-install": "build-opencv build",
+  }
+}
+```
+
+then call it to build the mapping
+
+```bash
+npm run install_4.5.5_cuda
+```
+
+All build param can be append to the `build-opencv` build command line (see `build-opencv --help`) the opencv4nodejs part of package.json are still read but you yould not use it for new project.
+
 ## Installing OpenCV Manually
 
 Setting up OpenCV on your own will require you to set an environment variable to prevent the auto build script to run:
@@ -197,7 +213,7 @@ You can specify the Version of OpenCV you want to install via the script by sett
 
 If you only want to build a subset of the OpenCV modules you can pass the *-DBUILD_LIST* cmake flag via the *OPENCV4NODEJS_AUTOBUILD_FLAGS* environment variable. For example `export OPENCV4NODEJS_AUTOBUILD_FLAGS=-DBUILD_LIST=dnn` will build only modules required for `dnn` and reduces the size and compilation time of the OpenCV package.
 
-## Configuring Environments via package.json
+## Configuring Environments via package.json (deprecated)
 
 It's possible to specify build environment variables by inserting them into the `package.json` as follows:
 

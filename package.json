@@ -37,17 +37,13 @@
   "scripts": {
     "prepack": "tsc",
     "install_macm1": "tsc && node bin/install.js --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64\" build",
-    "install_3_4_11_cuda": "tsc && node bin/install.js --version 3.4.11 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON\" build",
     "install_4.5.5_cuda": "tsc && node bin/install.js --version 4.5.5 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON\" build",
     "samples": "tsc && node ./examples/templateMatching.js && node ./examples/applyColorMap.js && node ./examples/asyncMatchFeatures.js && node ./examples/faceDetect/asyncFaceDetection.js",
     "do-install": "tsc && node bin/install.js build",
-    "do-configure": "node-gyp configure",
-    "do-build": "node-gyp configure build --jobs max",
-    "do-rebuild": "node-gyp rebuild --jobs max",
     "lint": "eslint examples/**/*.ts lib/**/*.ts typings/**/*.ts ",
     "clean": "node-gyp clean",
     "cleanjs": "rimraf {install,lib,examples}/**/*.{d.ts,js,map}",
-    "build-debug": "BINDINGS_DEBUG=true node bin/install.js"
+    "build-debug": "tsc && BINDINGS_DEBUG=true node bin/install.js build"
   },
   "dependencies": {
     "@u4/opencv-build": "^0.4.2",
