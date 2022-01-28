@@ -1,6 +1,12 @@
+import { Mat } from "../Mat";
+import { Vec2 } from "../Vec2";
+import { Vec3 } from "../Vec3";
+import { Vec4 } from "../Vec4";
+import { Vec6 } from "../Vec6";
 import { Point2 } from "../Point2";
 import { Point3 } from "../Point3";
 import { TermCriteria } from "../TermCriteria";
+
 
 // double 	cv::kmeans (InputArray data, int K, InputOutputArray bestLabels, TermCriteria criteria, int attempts, int flags, OutputArray centers=noArray())
 //  	Finds centers of clusters and groups input samples around the clusters. More...

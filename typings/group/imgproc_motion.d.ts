@@ -1,3 +1,4 @@
+import { Mat } from "..";
 
 /**
  * Adds an image to the accumulator image.

@@ -1,5 +1,9 @@
 # changelog
 
+## Version 6.0.12
+
+* fix missing imports
+
 ## Version 6.0.11
 
 * fix drawUtils.ts code

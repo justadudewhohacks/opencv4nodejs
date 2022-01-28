@@ -1,5 +1,9 @@
+import { Mat } from "../Mat";
+import { Point2 } from "../Point2";
+import { Vec2 } from "../Vec2";
+import { Vec3 } from "../Vec3";
+import { Vec4 } from "../Vec4";
 
-// missing
 // void 	cv::absdiff (InputArray src1, InputArray src2, OutputArray dst)
 // Calculates the per-element absolute difference between two arrays or between an array and a scalar. More...
 

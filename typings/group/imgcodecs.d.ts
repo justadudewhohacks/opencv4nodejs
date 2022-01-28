@@ -1,3 +1,5 @@
+import { Mat } from '../Mat.d';
+
 // bool 	cv::haveImageReader (const String &filename)
 //  	Returns true if the specified image can be decoded by OpenCV. More...
 //  
