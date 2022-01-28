@@ -21,7 +21,6 @@ NAN_MODULE_INIT(Io::Init) {
 #endif
   Nan::SetMethod(target, "imencode", Imencode);
   Nan::SetMethod(target, "imdecode", Imdecode);
-  Nan::SetMethod(target, "moveWindow", MoveWindow);
   Nan::SetMethod(target, "destroyWindow", DestroyWindow);
   Nan::SetMethod(target, "destroyAllWindows", DestroyAllWindows);
 
@@ -119,16 +118,6 @@ NAN_METHOD(Io::WaitKeyEx) {
   info.GetReturnValue().Set(Nan::New(key));
 }
 #endif
-
-NAN_METHOD(Io::MoveWindow) {
-	FF::TryCatch tryCatch("Io::MoveWindow");
-	std::string winName;
-	int x, y;
-	if (FF::StringConverter::arg(0, &winName, info) || FF::IntConverter::arg(1, &x, info) || FF::IntConverter::arg(2, &y, info)) {
-		return tryCatch.reThrow();
-	}
-	cv::moveWindow(winName, x, y);
-}
 
 NAN_METHOD(Io::DestroyWindow) {
 	FF::TryCatch tryCatch("Io::DestroyWindow");

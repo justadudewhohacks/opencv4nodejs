@@ -1,6 +1,8 @@
 import path from 'path';
 import cv from '..';
 
+// const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
+
 const findWaldo = async () => {
   // Load images
   const originalMat = await cv.imreadAsync(path.join(__dirname, '..', 'data', 'findwaldo.jpg'));
@@ -22,8 +24,8 @@ const findWaldo = async () => {
 
   const windowName = 'We\'ve found Waldo!';
   // Open result in new window
-  cv.imshow(windowName, originalMat) !;
-  cv.setWindowTitle(windowName, "Waldo !"); !
+  cv.imshow(windowName, originalMat);
+  cv.setWindowTitle(windowName, "Waldo !");
   //  console.log('FULLSCREEN:', cv.getWindowProperty(windowName, cv.WND_PROP_FULLSCREEN));
   //  console.log('AUTOSIZE:', cv.getWindowProperty(windowName, cv.WND_PROP_AUTOSIZE));
   //  console.log('VISIBLE:', cv.getWindowProperty(windowName, cv.WND_PROP_VISIBLE));  

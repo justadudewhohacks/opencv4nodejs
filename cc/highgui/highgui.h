@@ -12,6 +12,7 @@ public:
 	static NAN_METHOD(setWindowProperty);
 	static NAN_METHOD(getWindowProperty);
   static NAN_METHOD(setWindowTitle);
+  static NAN_METHOD(moveWindow);
 };
 
 #endif

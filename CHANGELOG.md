@@ -1,5 +1,13 @@
 # changelog
 
+## Version 6.0.11
+
+* fix drawUtils.ts code
+* use @u4/opencv-build 0.4.3
+* add some more cv types
+* start refactor cv.d.ts
+* drop enum usage type WND_PROP
+
 ## Version 6.0.10
 
 * add highgui modules
