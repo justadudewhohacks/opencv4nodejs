@@ -2,7 +2,7 @@ import { OpenCVBuildEnvParams } from '@u4/opencv-build';
 import promisify from './promisify';
 import extendWithJsSources from './src';
 import raw from './cvloader';
-import * as openCV from '..';
+import type * as openCV from '..';
 
 function loadOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
   const cvBase = raw(opt);

@@ -1,5 +1,6 @@
 import assert from 'assert';
-import * as openCV from '../..'
+import type * as openCV from '../..'
+
 export default function (cv: typeof openCV) {
   // deprecate wrapper for the old calcHist API
   const _calcHist = cv.calcHist;
