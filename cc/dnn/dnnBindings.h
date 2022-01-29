@@ -37,6 +37,32 @@ namespace DnnBindings {
   };
 #endif
 
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  struct ReadNetFromONNXWorker : public CatchCvExceptionWorker{
+  public:
+    std::string onnxFile;
+
+    cv::dnn::Net net;
+
+    std::string executeCatchCvExceptionWorker() {
+      net = cv::dnn::readNetFromONNX(onnxFile);
+      if (net.empty()) {
+        return std::string("failed to load network model: " + onnxFile).data();
+      }
+      return "";
+    }
+
+    v8::Local<v8::Value> getReturnValue() {
+      return Net::Converter::wrap(net);
+    }
+
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+          FF::StringConverter::arg(0, &onnxFile, info));
+    }
+  };
+#endif
+
   struct ReadNetFromTensorflowWorker : public CatchCvExceptionWorker {
   public:
     std::string modelFile;
