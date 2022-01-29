@@ -1,12 +1,14 @@
+import { TestContext } from "../../model";
+
 const { expect } = require('chai');
 
-module.exports = function ({ cv, utils }) {
-
+export default function (args: TestContext) {
+  const { cv, utils } = args;
   const { assertError } = utils;
 
   describe('at', () => {
     describe('Vec2', () => {
-      const vec2 = new cv.Vec(10, 20);
+      const vec2 = new cv.Vec2(10, 20);
       it('should throw index out of bounds', () => {
         assertError(() => vec2.at(-1), 'Index out of bounds: Vec2 at index -1');
         assertError(() => vec2.at(2), 'Index out of bounds: Vec2 at index 2');
@@ -18,7 +20,7 @@ module.exports = function ({ cv, utils }) {
       });
     });
     describe('Vec3', () => {
-      const vec3 = new cv.Vec(10, 20, 30);
+      const vec3 = new cv.Vec3(10, 20, 30);
       it('should throw index out of bounds', () => {
         assertError(() => vec3.at(-1), 'Index out of bounds: Vec3 at index -1');
         assertError(() => vec3.at(3), 'Index out of bounds: Vec3 at index 3');
@@ -32,7 +34,7 @@ module.exports = function ({ cv, utils }) {
     });
 
     describe('Vec4', () => {
-      const vec4 = new cv.Vec(5, 10, 20, 30);
+      const vec4 = new cv.Vec4(5, 10, 20, 30);
       it('should throw index out of bounds', () => {
         assertError(() => vec4.at(-1), 'Index out of bounds: Vec4 at index -1');
         assertError(() => vec4.at(4), 'Index out of bounds: Vec4 at index 4');
@@ -47,7 +49,7 @@ module.exports = function ({ cv, utils }) {
     });
 
     describe('Vec6', () => {
-      const vec6 = new cv.Vec(5, 10, 20, 30, 40, 50);
+      const vec6 = new cv.Vec6(5, 10, 20, 30, 40, 50);
       it('should throw index out of bounds', () => {
         assertError(() => vec6.at(-1), 'Index out of bounds: Vec6 at index -1');
         assertError(() => vec6.at(6), 'Index out of bounds: Vec6 at index 6');

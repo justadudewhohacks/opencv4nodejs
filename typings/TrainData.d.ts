@@ -8,4 +8,5 @@ export class TrainData {
   readonly sampleWeights: number[];
   readonly varType: number[];
   constructor(samples: Mat, layout: number, responses: Mat, varIdx?: number[], sampleIdx?: number[], sampleWeights?: number[], varType?: number[]);
+  constructor(samples: Mat, layout: number, responses: Mat, opt: {varIdx?: number[], sampleIdx?: number[], sampleWeights?: number[], varType?: number[]});
 }

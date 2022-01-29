@@ -118,7 +118,7 @@ export class Mat {
   distanceTransformWithLabels(distanceType: number, maskSize: number, labelType?: number): { labels: Mat, dist: Mat };
   distanceTransformWithLabelsAsync(distanceType: number, maskSize: number, labelType?: number): Promise<{ labels: Mat, dist: Mat }>;
   div(s: number): Mat;
-  dot(): Mat;
+  dot(m?: Mat): Mat;
   drawArrowedLine(pt0: Point2, pt1: Point2, color?: Vec3, thickness?: number, lineType?: number, shift?: number, tipLength?: number): void;
   drawChessboardCorners(patternSize: Size, corners: Point2[], patternWasFound: boolean): void;
   drawChessboardCornersAsync(patternSize: Size, corners: Point2[], patternWasFound: boolean): Promise<void>;
@@ -234,8 +234,13 @@ export class Mat {
   mulSpectrumsAsync(mat2: Mat, dftRows?: boolean, conjB?: boolean): Promise<Mat>;
   norm(src2: Mat, normType?: number, mask?: Mat): number;
   norm(normType?: number, mask?: Mat): number;
+  
   normalize(alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat): Mat;
+  normalize(opt: {alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat}): Mat;
+  
   normalizeAsync(alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat): Promise<Mat>;
+  normalizeAsync(opt: {alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat}): Promise<Mat>;
+
   or(otherMat: Mat): Mat;
   padToSquare(color: Vec3): Mat;
   

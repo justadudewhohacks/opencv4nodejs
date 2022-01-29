@@ -1,5 +1,7 @@
+import { TestContext } from "../model";
+
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg  } = args;
+  const { cv, utils  } = args;
 
   const {
     assertPropsWithValue

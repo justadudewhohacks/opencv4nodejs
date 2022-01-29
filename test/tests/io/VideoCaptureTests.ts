@@ -58,13 +58,12 @@ export default function (args: TestContext) {
   });
 
   describe('setAsync', () => {
-    it('should set properties', (done) => {
+    it('should set properties', async (done) => {
       const cap = new cv.VideoCapture(getTestVideoPath());
-      cap.setAsync(cv.CAP_PROP_POS_MSEC, 1000, (err, wasSet) => {
-        expect(cap.get(cv.CAP_PROP_POS_MSEC)|0).to.equal(1001);
-        expect(wasSet).to.equal(true);
-        done();
-      });
+      const wasSet = await cap.setAsync(cv.CAP_PROP_POS_MSEC, 1000);
+      expect(cap.get(cv.CAP_PROP_POS_MSEC)|0).to.equal(1001);
+      expect(wasSet).to.equal(true);
+      done();
     });
   });
 

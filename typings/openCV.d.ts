@@ -14,9 +14,13 @@ export * from './DetectionROI';
 export * from './EigenFaceRecognizer';
 export * from './FASTDetector';
 export * from './FaceRecognizer';
+
 export * from './Facemark';
 export * from './FacemarkAAMParams';
+
 export * from './FacemarkLBF';
+export * from './FacemarkLBFParams';
+
 export * from './FeatureDetector';
 export * from './FisherFaceRecognizer';
 export * from './GFTTDetector';

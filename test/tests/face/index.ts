@@ -38,7 +38,7 @@ export default function (args: TestContext) {
   if (cvVersionGreaterEqual(3, 4, 0)) {
     describe('FaceMark', () => {
 
-        facemarkStructsTests({ cv, utils });
+        facemarkStructsTests(args);
 
         describe('FacemarkLBF', () => {
           facemarkTests(cv.FacemarkLBF, cv.FacemarkLBFParams);

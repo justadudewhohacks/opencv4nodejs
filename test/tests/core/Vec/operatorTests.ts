@@ -1,14 +1,14 @@
+import { expect } from 'chai';
+import { TestContext } from '../../model';
 
-const { expect } = require('chai');
-
-module.exports = function ({ cv, utils }) {
-
+module.exports = function (args: TestContext) {
+  const { cv, utils } = args;
   const {
     assertError,
     assertPropsWithValue
   } = utils;
 
-  const OperatorRequiresArg = vec => (func, isScalar) => {
+  const OperatorRequiresArg = vec => (func, isScalar?: boolean) => {
     it('should throw if no args', () => {
       assertError(
         () => vec[func].bind(vec)(),
@@ -19,9 +19,9 @@ module.exports = function ({ cv, utils }) {
 
   describe('operators', () => {
     describe('Vec2', () => {
-      const vec0 = new cv.Vec(100, 200);
-      const vec1 = new cv.Vec(25, 50);
-      const vec2 = new cv.Vec(5, 4);
+      const vec0 = new cv.Vec2(100, 200);
+      const vec1 = new cv.Vec2(25, 50);
+      const vec2 = new cv.Vec2(5, 4);
       const operatorRequiresArg = OperatorRequiresArg(vec0);
       describe('add', () => {
         operatorRequiresArg('add');
@@ -171,25 +171,25 @@ module.exports = function ({ cv, utils }) {
         operatorRequiresArg('absdiff');
 
         it('apply absdiff to matrices', () => {
-          assertPropsWithValue(new cv.Vec(100, 50, 25).absdiff(new cv.Vec(25, 75, 25)))({ x: 75, y: 25, z: 0 });
+          assertPropsWithValue(new cv.Vec3(100, 50, 25).absdiff(new cv.Vec3(25, 75, 25)))({ x: 75, y: 25, z: 0 });
         });
       });
 
       describe('exp', () => {
         it('apply exp to vector', () => {
-          assertPropsWithValue(new cv.Vec(Math.log(4), 0, Math.log(0)).exp())({ x: 4, y: 1, z: 0 });
+          assertPropsWithValue(new cv.Vec3(Math.log(4), 0, Math.log(0)).exp())({ x: 4, y: 1, z: 0 });
         });
       });
 
       describe('sqrt', () => {
         it('apply sqrt to vector', () => {
-          assertPropsWithValue(new cv.Vec(4, 16, 64).sqrt())({ x: 2, y: 4, z: 8 });
+          assertPropsWithValue(new cv.Vec3(4, 16, 64).sqrt())({ x: 2, y: 4, z: 8 });
         });
       });
 
       describe('norm', () => {
         it('should return magnitude', () => {
-          expect(new cv.Vec(Math.sqrt(4), Math.sqrt(4), Math.sqrt(8)).norm()).to.equal(4);
+          expect(new cv.Vec3(Math.sqrt(4), Math.sqrt(4), Math.sqrt(8)).norm()).to.equal(4);
         });
       });
 
@@ -197,15 +197,15 @@ module.exports = function ({ cv, utils }) {
         operatorRequiresArg('cross');
 
         it('compute cross product of vectors', () => {
-          assertPropsWithValue(new cv.Vec(1, 0, 0).cross(new cv.Vec(0, 1, 0)))({ x: 0, y: 0, z: 1 });
+          assertPropsWithValue(new cv.Vec3(1, 0, 0).cross(new cv.Vec3(0, 1, 0)))({ x: 0, y: 0, z: 1 });
         });
       });
     });
 
     describe('Vec4', () => {
-      const vec0 = new cv.Vec(50, 100, 200, 300);
-      const vec1 = new cv.Vec(10, 25, 50, 75);
-      const vec2 = new cv.Vec(2, 5, 4, 3);
+      const vec0 = new cv.Vec4(50, 100, 200, 300);
+      const vec1 = new cv.Vec4(10, 25, 50, 75);
+      const vec2 = new cv.Vec4(2, 5, 4, 3);
       const operatorRequiresArg = OperatorRequiresArg(vec0);
       describe('add', () => {
         operatorRequiresArg('add');
@@ -267,33 +267,33 @@ module.exports = function ({ cv, utils }) {
         operatorRequiresArg('absdiff');
 
         it('apply absdiff to matrices', () => {
-          assertPropsWithValue(new cv.Vec(0, 100, 50, 25).absdiff(new cv.Vec(50, 25, 75, 25)))({ w: 50, x: 75, y: 25, z: 0 });
+          assertPropsWithValue(new cv.Vec4(0, 100, 50, 25).absdiff(new cv.Vec4(50, 25, 75, 25)))({ w: 50, x: 75, y: 25, z: 0 });
         });
       });
 
       describe('exp', () => {
         it('apply exp to vector', () => {
-          assertPropsWithValue(new cv.Vec(Math.log(1), Math.log(4), 0, Math.log(0)).exp())({ w: 1, x: 4, y: 1, z: 0 });
+          assertPropsWithValue(new cv.Vec4(Math.log(1), Math.log(4), 0, Math.log(0)).exp())({ w: 1, x: 4, y: 1, z: 0 });
         });
       });
 
       describe('sqrt', () => {
         it('apply sqrt to vector', () => {
-          assertPropsWithValue(new cv.Vec(0, 4, 16, 64).sqrt())({ w: 0, x: 2, y: 4, z: 8 });
+          assertPropsWithValue(new cv.Vec4(0, 4, 16, 64).sqrt())({ w: 0, x: 2, y: 4, z: 8 });
         });
       });
 
       describe('norm', () => {
         it('should return magnitude', () => {
-          expect(new cv.Vec(Math.sqrt(4), Math.sqrt(4), Math.sqrt(4), Math.sqrt(4)).norm()).to.equal(4);
+          expect(new cv.Vec6(Math.sqrt(4), Math.sqrt(4), Math.sqrt(4), Math.sqrt(4)).norm()).to.equal(4);
         });
       });
     });
 
     describe('Vec6', () => {
-      const vec0 = new cv.Vec(50, 100, 200, 300, 400, 500);
-      const vec1 = new cv.Vec(10, 25, 50, 75, 100, 125);
-      const vec2 = new cv.Vec(2, 5, 4, 3, 2, 1);
+      const vec0 = new cv.Vec6(50, 100, 200, 300, 400, 500);
+      const vec1 = new cv.Vec6(10, 25, 50, 75, 100, 125);
+      const vec2 = new cv.Vec6(2, 5, 4, 3, 2, 1);
       const operatorRequiresArg = OperatorRequiresArg(vec0);
       describe('add', () => {
         operatorRequiresArg('add');
@@ -355,25 +355,25 @@ module.exports = function ({ cv, utils }) {
         operatorRequiresArg('absdiff');
 
         it('apply absdiff to matrices', () => {
-          assertPropsWithValue(new cv.Vec(0, 100, 50, 25, 150, 10).absdiff(new cv.Vec(50, 25, 75, 25, 50, 20)))({ u: 50, v: 75, w: 25, x: 0, y: 100, z: 10 });
+          assertPropsWithValue(new cv.Vec6(0, 100, 50, 25, 150, 10).absdiff(new cv.Vec6(50, 25, 75, 25, 50, 20)))({ u: 50, v: 75, w: 25, x: 0, y: 100, z: 10 });
         });
       });
 
       describe('exp', () => {
         it('apply exp to vector', () => {
-          assertPropsWithValue(new cv.Vec(Math.log(1), Math.log(4), 0, Math.log(0), Math.log(4), Math.log(4)).exp())({ u: 1, v: 4, w: 1, x: 0, y: 4, z: 4 });
+          assertPropsWithValue(new cv.Vec6(Math.log(1), Math.log(4), 0, Math.log(0), Math.log(4), Math.log(4)).exp())({ u: 1, v: 4, w: 1, x: 0, y: 4, z: 4 });
         });
       });
 
       describe('sqrt', () => {
         it('apply sqrt to vector', () => {
-          assertPropsWithValue(new cv.Vec(0, 4, 16, 64, 256, 1024).sqrt())({ u: 0, v: 2, w: 4, x: 8, y: 16, z: 32 });
+          assertPropsWithValue(new cv.Vec6(0, 4, 16, 64, 256, 1024).sqrt())({ u: 0, v: 2, w: 4, x: 8, y: 16, z: 32 });
         });
       });
 
       describe('norm', () => {
         it('should return magnitude', () => {
-          expect(new cv.Vec(Math.sqrt(8), Math.sqrt(8), Math.sqrt(8), Math.sqrt(8), Math.sqrt(16), Math.sqrt(16)).norm()).to.equal(8);
+          expect(new cv.Vec6(Math.sqrt(8), Math.sqrt(8), Math.sqrt(8), Math.sqrt(8), Math.sqrt(16), Math.sqrt(16)).norm()).to.equal(8);
         });
       });
     });

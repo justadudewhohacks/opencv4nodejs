@@ -63,7 +63,9 @@ export const SLIC: number;// 100;
 export const SLICO: number;// = 101;
 export const MSLIC: number;//  = 102;
 
-
+export const CONTOURS_MATCH_I1: number;
+export const CONTOURS_MATCH_I2: number;
+export const CONTOURS_MATCH_I3: number;
 
 export const ADAPTIVE_THRESH_GAUSSIAN_C: number;
 export const ADAPTIVE_THRESH_MEAN_C: number;

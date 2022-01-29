@@ -1,3 +1,6 @@
+export class FacemarkAAM {
+}
+
 export class FacemarkAAMParams {
   readonly m: number;
   readonly maxM: number;
@@ -10,4 +13,9 @@ export class FacemarkAAMParams {
   readonly textureMaxM: number;
   readonly verbose: boolean;
   constructor();
+}
+
+
+export class FacemarkAAMData {
+  s0: string;
 }
