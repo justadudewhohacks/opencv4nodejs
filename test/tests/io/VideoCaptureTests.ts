@@ -48,6 +48,7 @@ export default function (args: TestContext) {
     });
   });
 
+  // FAIL
   describe('set', () => {
     it('should set properties', () => {
       const cap = new cv.VideoCapture(getTestVideoPath());
@@ -57,6 +58,7 @@ export default function (args: TestContext) {
     });
   });
 
+  // FAIL
   describe('setAsync', () => {
     it('should set properties', async (done) => {
       const cap = new cv.VideoCapture(getTestVideoPath());

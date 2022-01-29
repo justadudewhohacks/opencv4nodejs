@@ -223,16 +223,16 @@ export default function (args: TestContext) {
     });
 
     describe('async', () => {
-      it('should return buffer with data of single channeled Mat', async (done) => {
+      it('should return buffer with data of single channeled Mat', async () => {
         const buf = await matC1.getDataAsync()
         expect(buf).instanceOf(Buffer).lengthOf(6);
-        done();
+        // done();
       });
 
-      it('should return buffer with data of triple channeled Mat', async (done) => {
+      it('should return buffer with data of triple channeled Mat', async () => {
         const buf = await matC3.getDataAsync();
         expect(buf).instanceOf(Buffer).lengthOf(18);
-        done();
+        //done();
       });
     });
   });

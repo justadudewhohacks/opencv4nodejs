@@ -211,7 +211,7 @@ export default function (args: TestContext) {
         expectOutputCallbacked(done)
       });
 
-      it('should throw if locations invalid', async (done) => {
+      it('should throw if locations invalid', async () => {
         try {
           await hog.computeAsync(
             getPeoplesTestImg(),
@@ -222,9 +222,10 @@ export default function (args: TestContext) {
           try {
             expect(err).to.be.an('error');
             assert.include(err.toString(), 'expected array element at index 1 to be of type Point2');
-            done();
+            // done();
           } catch (e) {
-            done(e);
+            throw e;
+            // done(e);
           }
         }
       });

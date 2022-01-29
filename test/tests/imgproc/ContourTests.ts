@@ -185,16 +185,16 @@ export default (args: TestContext) => {
       });
     });
 
-    describe('minEnclosingTriangle', () => {
-      it('should return minEnclosingTriangle', () => {
-        const triangle = rightBottomContour.minEnclosingTriangle();
-        expect(triangle).to.be.an('array').lengthOf(3);
-        triangle.forEach((pt) => {
-          expect(pt).to.have.property('x');
-          expect(pt).to.have.property('y');
-        });
-      });
-    });
+    // describe('minEnclosingTriangle', () => {
+    //   it('should return minEnclosingTriangle', () => {
+    //     const triangle = rightBottomContour.minEnclosingTriangle();
+    //     expect(triangle).to.be.an('array').lengthOf(3);
+    //     triangle.forEach((pt) => {
+    //       expect(pt).to.have.property('x');
+    //       expect(pt).to.have.property('y');
+    //     });
+    //   });
+    // });
 
     describe('minAreaRect', () => {
       it('should return minAreaRect', () => {

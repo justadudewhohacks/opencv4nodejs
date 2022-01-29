@@ -129,16 +129,14 @@ export default function (args: TestContext) {
     describe('async', () => {
       _asyncFuncShouldRequireArgs(cv.imdecodeAsync);
 
-      it('should decode png', async (done) => {
+      it('should decode png', async () => {
         const dec = await cv.imdecodeAsync(getLennaBase64Buf());
           assertDataDeepEquals(lenna.getDataAsArray(), dec.getDataAsArray());
-          done();
       });
 
-      it('should decode jpeg', async (done) => {
+      it('should decode jpeg', async () => {
         const dec = await cv.imdecodeAsync(getGotBase64Buf())
         assertDataDeepEquals(got.getDataAsArray(), dec.getDataAsArray());
-        done();
       });
     });
   });
