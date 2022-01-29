@@ -12,8 +12,8 @@ import { TermCriteria } from "../TermCriteria";
 //  	Finds centers of clusters and groups input samples around the clusters. More...
 //  
 //  	Splits an element set into equivalency classes. More...
-export function kmeans(data: Point2[], k: number, attempts: number, termCriteria: TermCriteria, flags: number): { labels: number[], centers: Point2[] };
-export function kmeans(data: Point3[], k: number, attempts: number, termCriteria: TermCriteria, flags: number): { labels: number[], centers: Point3[] };
+export function kmeans(data: Point2[], k: number, termCriteria: TermCriteria, attempts: number, flags: number): { labels: number[], centers: Point2[] };
+export function kmeans(data: Point3[], k: number, termCriteria: TermCriteria, attempts: number, flags: number): { labels: number[], centers: Point3[] };
 
 // template<typename _Tp , class _EqPredicate >
 // int 	partition (const std::vector< _Tp > &_vec, std::vector< int > &labels, _EqPredicate predicate=_EqPredicate())

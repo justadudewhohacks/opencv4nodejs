@@ -123,21 +123,22 @@ function getParents(dir: string) {
 export async function compileLib(args: string[]) {
     let dryRun = false;
     let JOBS = 'max';
-
-    if (args.includes('--help') || args.includes('-h') || !args.includes('build')) {
-        console.log('Usage: install [--version=<version>] [--vscode] [--electron] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] build');
+    const validAction = ['build', 'clean', 'configure', 'rebuild', 'install', 'list', 'remove']
+    const action = args[args.length - 1];
+    if (args.includes('--help') || args.includes('-h') || !validAction.includes(action)) {
+        console.log(`Usage: install [--version=<version>] [--vscode] [--jobs=<thread>] [--electron] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] ${validAction.join('|')}`);
         console.log(genHelp());
         return;
     }
     const options: OpenCVBuildEnvParams = args2Option(args)
 
-    dryRun = (args.includes('--dry-run') || args.includes('--dryrun'));
+    if (options.extra.jobs) {
+        JOBS = options.extra.jobs;
+    }
 
-    let njobs = args.indexOf('--jobs')
-    if (njobs === -1)
-        njobs = args.indexOf('-j')
-    if (njobs > 0)
-        JOBS = args[njobs + 1];
+    if (options.extra['dry-run'] || options.extra['dryrun']) {
+        dryRun = true;
+    }
 
     for (const K in ['autoBuildFlags']) {
         if (options[K]) console.log(`using ${K}:`, options[K]);
@@ -219,7 +220,7 @@ export async function compileLib(args: string[]) {
     }
 
     // flags starts with ' '
-    nodegypCmd += ` rebuild${flags}`;
+    nodegypCmd += ` ${action}${flags}`;
 
     log.info('install', `Spawning in directory:${cwd} node-gyp process: ${nodegypCmd}`)
 

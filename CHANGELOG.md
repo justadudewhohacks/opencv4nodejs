@@ -1,5 +1,13 @@
 # changelog
 
+## Version 6.1.0
+
+* [breaking change] build-opencv action argument build is now renamed rebuild, and build, clean, configure ar now available.
+* [breaking change] build-opencv -j alias of --job if gone
+* testing are now converted to Typescript
+* fix Typing
+* add doc
+
 ## Version 6.0.12
 
 * fix missing imports

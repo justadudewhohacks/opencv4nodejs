@@ -34,6 +34,30 @@ export const CV_64FC2: number;
 export const CV_64FC3: number;
 export const CV_64FC4: number;
 
+// TODO inject value of REDUCE_SUM REDUCE_...
+export const REDUCE_SUM: number;
+export const REDUCE_AVG: number;
+export const REDUCE_MAX: number;
+export const REDUCE_MIN: number;
+
+// Gaussian elimination with the optimal pivot element chosen.
+export const DECOMP_LU: number;
+
+// singular value decomposition (SVD) method; the system can be over-defined and/or the matrix src1 can be singular
+export const DECOMP_SVD: number;
+
+// eigenvalue decomposition; the matrix src1 must be symmetrical
+export const DECOMP_EIG: number; 
+
+// Cholesky LLT factorization; the matrix src1 must be symmetrical and positively defined
+export const DECOMP_CHOLESKY: number;
+
+// QR factorization; the system can be over-defined and/or the matrix src1 can be singular
+export const DECOMP_QR: number;
+
+// while all the previous flags are mutually exclusive, this flag can be used together with any of the previous; it means that the normal equations src1T⋅src1⋅dst=src1Tsrc2 are solved instead of the original system src1⋅dst=src2
+export const DECOMP_NORMAL: number;
+
 export const ADAPTIVE_THRESH_GAUSSIAN_C: number;
 export const ADAPTIVE_THRESH_MEAN_C: number;
 export const BORDER_CONSTANT: number;
