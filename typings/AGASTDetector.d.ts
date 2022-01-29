@@ -7,3 +7,8 @@ export class AGASTDetector extends KeyPointDetector {
   constructor(threshold?: number, nonmaxSuppression?: boolean, type?: number);
   constructor(params: { threshold?: number, nonmaxSuppression?: boolean, type?: number });
 }
+
+export class AGASTDetectorType {
+  static OAST_9_16: number;
+  static AGAST_7_12d: number;
+}

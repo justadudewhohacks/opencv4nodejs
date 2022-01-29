@@ -11,3 +11,13 @@ export class AKAZEDetector extends FeatureDetector {
   constructor(descriptorType?: number, descriptorSize?: number, descriptorChannels?: number, threshold?: number, nOctaves?: number, nOctaveLayers?: number, diffusivity?: number);
   constructor(params: { descriptorType?: number, descriptorSize?: number, descriptorChannels?: number, threshold?: number, nOctaves?: number, nOctaveLayers?: number, diffusivity?: number });
 }
+
+export class AKAZEDescriptorType {
+  static DESCRIPTOR_MLDB: number;
+  static DESCRIPTOR_KAZE_UPRIGHT: number;
+}
+
+export class KAZEDiffusivityType {
+  static DIFF_PM_G2: number;
+  static DIFF_WEICKERT: number;
+}

@@ -9,3 +9,9 @@ export class TrackerKCF {
   init(frame: Mat, boundingBox: Rect): boolean;
   update(frame: Mat): Rect;
 }
+
+export class trackerKCFModes{
+  static GRAY: number;
+	static CN: number;
+	static CUSTOM: number;
+}

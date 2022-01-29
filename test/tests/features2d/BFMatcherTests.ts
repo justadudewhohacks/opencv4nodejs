@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { TestContext } from '../model';
 
 export default function (args: TestContext) {
   const { cv, utils, getTestImg  } = args;

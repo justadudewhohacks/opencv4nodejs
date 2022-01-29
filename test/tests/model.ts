@@ -42,7 +42,7 @@ export interface TestContext {
         assertDataAlmostDeepEquals: (data0: any, data1: any) => void;
         assertMatValueAlmostEquals: (val0: number, val1: number) => void;
         assertMatValueEquals: (val0: number, val1: number) => void;
-        assertMetaData: (mat: Mat) => (arg0: any, cols?: any, type?: any) => void;
+        assertMetaData: (mat: Mat | number[]) => (arg0: any, cols?: any, type?: any) => void;
         dangerousDeepEquals: (obj0: any, obj1: any) => boolean;
         generateIts: (msg: string, testFunc: Function, exclusions?: Set<string>) => void;
         isZeroMat: (mat: Mat) => boolean;
@@ -64,7 +64,7 @@ export interface TestContext {
         asyncFuncShouldRequireArgs?: any
         _funcShouldRequireArgs?: any
         expectFloat?: any
-    
+        readTestImage?: any    
     },
     getTestImg: () => Mat;
     getPeoplesTestImg?: () => Mat;

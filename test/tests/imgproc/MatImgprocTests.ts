@@ -270,7 +270,7 @@ export default function (args: TestContext) {
   describe('drawing', () => {
     const getDut = () => new cv.Mat(10, 10, cv.CV_8UC3, [128, 128, 128]);
 
-    const getDrawParams = () => ([
+    const getDrawParams = (): Array<[string, any]> => ([
       ['color', new cv.Vec3(255, 255, 255)],
       ['thickness', 2],
       ['lineType', cv.LINE_4],
@@ -674,7 +674,7 @@ export default function (args: TestContext) {
           res.centroids.at(label255, 1)
         ];
         const expectedCenter = [2, 1];
-        assertMatValueEquals(centroid, expectedCenter);
+        (assertMatValueEquals as any)(centroid, expectedCenter);
         expect(res.stats.at(label255, cv.CC_STAT_LEFT)).to.equal(1);
         expect(res.stats.at(label255, cv.CC_STAT_TOP)).to.equal(0);
         expect(res.stats.at(label255, cv.CC_STAT_WIDTH)).to.equal(3);
@@ -1473,8 +1473,8 @@ export default function (args: TestContext) {
         [[0, 0, 0], [100, 100, 100], [101, 101, 101]]
       ], cv.CV_8UC3);
 
-      const lower = new cv.Vec(101, 101, 101);
-      const upper = new cv.Vec(255, 255, 255);
+      const lower = new cv.Vec3(101, 101, 101);
+      const upper = new cv.Vec3(255, 255, 255);
 
       generateAPITests({
         getDut: () => mat,

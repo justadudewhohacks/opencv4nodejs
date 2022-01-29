@@ -230,7 +230,7 @@ export default (args: TestContext) => {
 
     const imageSize = new cv.Size(200, 200);
     const R = cv.Mat.eye(3, 3, cv.CV_64F);
-    const T = new cv.Vec(1, 1, 1);
+    const T = new cv.Vec3(1, 1, 1);
 
     describe('stereoRectify', () => {
       generateAPITests({

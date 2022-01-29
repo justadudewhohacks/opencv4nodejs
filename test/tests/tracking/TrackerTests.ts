@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { TestContext } from '../model';
 
 const expectImplementsMethods = (tracker) => {
   expect(tracker).to.have.property('clear').to.be.a('function');
@@ -17,7 +18,7 @@ export default function (args: TestContext) {
   } = utils
 
   const TrackerTestGenerator = getTestImg => (trackerName) => {
-    const newTracker = () => new cv[trackerName]();
+    const newTracker = (arg?: any) => new cv[trackerName]();
     const newTrackerParams = () => new cv[`${trackerName}Params`]();
 
     describe(trackerName, () => {
@@ -156,6 +157,7 @@ export default function (args: TestContext) {
 
     describe('update', () => {
       it('should throw if no args', () => {
+        // @ts-expect-error
         expect(() => (new cv.MultiTracker()).update()).to.throw('MultiTracker::Update - Error: expected argument 0 to be of type');
       });
 

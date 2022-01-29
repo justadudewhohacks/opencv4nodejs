@@ -9,8 +9,6 @@ export default function (args: TestContext) {
     assertPropsWithValue,
     assertMetaData,
     dangerousDeepEquals,
-    funcShouldRequireArgs,
-    readTestImage,
     generateAPITests,
     generateClassMethodTests,
     expectToBeVec4,
@@ -36,7 +34,7 @@ export default function (args: TestContext) {
         20, 0.04, 1
       ]),
       getOptionalArgsMap: () => ([
-        ['mask', new cv.Mat(512, 512, cv.CV_U8)],
+        ['mask', new cv.Mat(512, 512, cv.CV_8U)],
         ['blockSize', 3],
         ['gradientSize', 3],
         ['useHarrisDetector', false],
@@ -118,9 +116,10 @@ export default function (args: TestContext) {
     const cols = 3;
     const shape = cv.MORPH_CROSS;
     const kernelSize = new cv.Size(cols, rows);
-    const anchor = new cv.Point(0, 1);
+    const anchor = new cv.Point2(0, 1);
 
     it('should throw if no args', () => {
+      // @ts-expect-error
       expect(() => cv.getStructuringElement()).to.throw('Imgproc::GetStructuringElement - Error: expected argument 0 to be of type');
     });
 
@@ -144,29 +143,37 @@ export default function (args: TestContext) {
 
   describe('HistAxes', () => {
     it('should throw if no args', () => {
+      // @ts-ignore:next-line
       expect(() => new cv.HistAxes()).to.throw('HistAxes::New - expected one argument');
     });
     it('should throw if incomplete args', () => {
+      // @ts-expect-error
       expect(() => new cv.HistAxes({})).to.throw('HistAxes::New - expected object to have ranges');
+      // @ts-expect-error
       expect(() => new cv.HistAxes({ranges: []})).to.throw('HistAxes::New - expected object to have bins');
+      // @ts-expect-error
       expect(() => new cv.HistAxes({ranges: [], bins: 0})).to.throw('HistAxes::New - expected object to have channel');
       expect(() => new cv.HistAxes({
+        // @ts-expect-error
         ranges: [],
         bins: 0,
         channel: 0
       })).to.throw('HistAxes::New - expected ranges to be an array with 2 numbers');
       expect(() => new cv.HistAxes({
+        // @ts-expect-error
         ranges: [1],
         bins: 0,
         channel: 0
       })).to.throw('HistAxes::New - expected ranges to be an array with 2 numbers');
       expect(() => new cv.HistAxes({
+        // @ts-expect-error
         ranges: [1,2,3],
         bins: 0,
         channel: 0
       })).to.throw('HistAxes::New - expected ranges to be an array with 2 numbers');
       expect(() => new cv.HistAxes({
-        ranges: [1,"2"],
+      // @ts-expect-error
+      ranges: [1,"2"],
         bins: 0,
         channel: 0
       })).to.throw('HistAxes::New - expected ranges to be an array with 2 numbers');
@@ -183,10 +190,12 @@ export default function (args: TestContext) {
 
   describe('calcHist', () => {
     it('should throw if no args', () => {
+      // @ts-expect-error
       expect(() => cv.calcHist()).to.throw('Imgproc::CalcHist - Error: expected argument 0 to be of type');
     });
 
     it('should throw if no HistAxes arg', () => {
+      // @ts-expect-error
       expect(() => cv.calcHist(getTestImg())).to.throw('Imgproc::CalcHist - Error: expected argument 1 to be of type array of HistAxes');
     });
 
@@ -208,7 +217,7 @@ export default function (args: TestContext) {
           channel: 0,
           bins: 8,
           ranges: [0, 256]
-        }
+        } as { channel: number, bins: number, ranges: [number, number] }
       ].map(x => new cv.HistAxes(x));
       const hist1D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist1D)({ rows: 8, cols: 1, dims: 2 });
@@ -220,12 +229,12 @@ export default function (args: TestContext) {
           channel: 0,
           bins: 8,
           ranges: [0, 256]
-        },
+        } as { channel: number, bins: number, ranges: [number, number] },
         {
           channel: 1,
           bins: 32,
           ranges: [0, 256]
-        }
+        } as { channel: number, bins: number, ranges: [number, number] }
       ].map(x => new cv.HistAxes(x));
       const hist2D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist2D)({ rows: 8, cols: 32, dims: 2 });
@@ -238,17 +247,17 @@ export default function (args: TestContext) {
           channel: 0,
           bins: 8,
           ranges: [0, 256]
-        },
+        } as { channel: number, bins: number, ranges: [number, number] },
         {
           channel: 1,
           bins: 8,
           ranges: [0, 256]
-        },
+        } as { channel: number, bins: number, ranges: [number, number] },
         {
           channel: 2,
           bins: 8,
           ranges: [0, 256]
-        }
+        } as { channel: number, bins: number, ranges: [number, number] }
       ].map(x => new cv.HistAxes(x));
       const hist3D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist3D)({ dims: 3 });
@@ -322,6 +331,7 @@ export default function (args: TestContext) {
     ], cv.CV_16S);
 
     it('should throw if no args', () => {
+      // @ts-expect-error
       expect(() => cv.canny()).to.throw('Imgproc::Canny - Error: expected argument 0 to be of type');
     });
 
@@ -491,7 +501,7 @@ export default function (args: TestContext) {
         mask
       ]),
       expectOutput: () => {
-        channelIndices = ['x', 'y', 'z']
+        const channelIndices = ['x', 'y', 'z']
         for (let row = 0; row < dst.rows; row++) {
           for (let col = 0; col < dst.cols; col++) {
             for (let channel = 0; channel < dst.channels; channel++) {
@@ -547,7 +557,7 @@ export default function (args: TestContext) {
         mask
       ]),
       expectOutput: () => {
-        channelIndices = ['x', 'y', 'z']
+        const channelIndices = ['x', 'y', 'z']
         for (let row = 0; row < dst.rows; row++) {
           for (let col = 0; col < dst.cols; col++) {
             for (let channel = 0; channel < dst.channels; channel++) {
@@ -597,7 +607,7 @@ export default function (args: TestContext) {
         mask
       ]),
       expectOutput: () => {
-        channelIndices = ['x', 'y', 'z']
+        const channelIndices = ['x', 'y', 'z']
         for (let row = 0; row < dst.rows; row++) {
           for (let col = 0; col < dst.cols; col++) {
             for (let channel = 0; channel < dst.channels; channel++) {
@@ -649,7 +659,7 @@ export default function (args: TestContext) {
         mask
       ]),
       expectOutput: () => {
-        channelIndices = ['x', 'y', 'z']
+        const channelIndices = ['x', 'y', 'z']
         for (let row = 0; row < dst.rows; row++) {
           for (let col = 0; col < dst.cols; col++) {
             for (let channel = 0; channel < dst.channels; channel++) {

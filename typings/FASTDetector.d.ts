@@ -7,3 +7,8 @@ export class FASTDetector extends KeyPointDetector {
   constructor(threshold?: number, nonmaxSuppression?: boolean, type?: number);
   constructor(params: { threshold?: number, nonmaxSuppression?: boolean, type?: number });
 }
+
+export class FASTDetectorType {
+  static TYPE_9_16: number;
+  static TYPE_7_12: number;
+}

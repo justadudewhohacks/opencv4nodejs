@@ -1,4 +1,5 @@
 import { assert, expect } from 'chai';
+import { TestContext } from '../model';
 
 export default function (args: TestContext) {
   const { cv, utils, getTestImg  } = args;
@@ -6,7 +7,6 @@ export default function (args: TestContext) {
   const {
     assertMetaData,
     assertPropsWithValue,
-    funcShouldRequireArgs,
     cvVersionGreaterEqual
   } = utils;
 
@@ -16,6 +16,7 @@ export default function (args: TestContext) {
 
     describe('constructor', () => {
       it('should throw if no args', () => {
+        //@ts-expect-error
         expect(() => new cv.SuperpixelSEEDS()).to.throw('SuperpixelSEEDS::New - Error: expected argument 0 to be of type');
       });
 
@@ -51,6 +52,7 @@ export default function (args: TestContext) {
 
       describe('constructor', () => {
         it('should throw if no args', () => {
+          // @ts-expect-error
           expect(() => new cv.SuperpixelSLIC()).to.throw('SuperpixelSLIC::New - Error: expected argument 0 to be of type');
         });
 
@@ -82,6 +84,7 @@ export default function (args: TestContext) {
     describe('SuperpixelLSC', () => {
       describe('constructor', () => {
         it('should throw if no args', () => {
+          // @ts-expect-error
           expect(() => new cv.SuperpixelLSC()).to.throw('SuperpixelLSC::New - Error: expected argument 0 to be of type');
         });
 

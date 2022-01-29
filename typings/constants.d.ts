@@ -58,6 +58,13 @@ export const DECOMP_QR: number;
 // while all the previous flags are mutually exclusive, this flag can be used together with any of the previous; it means that the normal equations src1T⋅src1⋅dst=src1Tsrc2 are solved instead of the original system src1⋅dst=src2
 export const DECOMP_NORMAL: number;
 
+// https://docs.opencv.org/4.x/df/d6c/group__ximgproc__superpixel.html
+export const SLIC: number;// 100;
+export const SLICO: number;// = 101;
+export const MSLIC: number;//  = 102;
+
+
+
 export const ADAPTIVE_THRESH_GAUSSIAN_C: number;
 export const ADAPTIVE_THRESH_MEAN_C: number;
 export const BORDER_CONSTANT: number;

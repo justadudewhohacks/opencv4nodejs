@@ -75,7 +75,7 @@ export default (args: TestContext) => {
       use_segmentation: false,
       weights_lr: 0.03,
       window_function: "kaiser"
-    };
+    } as any;
     if(cvVersionGreaterEqual(3, 4, 4)){
       params.psr_threshold = 0.4;
     }

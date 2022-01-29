@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { TestContext } from '../model';
 
 export default function (args: TestContext) {
   const { cv, utils, getTestImg  } = args;
@@ -54,6 +55,7 @@ export default function (args: TestContext) {
     const learningRate = 2.5;
 
     it('should throw if no args', () => {
+      // @ts-expect-error
       expect(() => (new cv.BackgroundSubtractorMOG2()).apply()).to.throw('BackgroundSubtractor::Apply - Error: expected argument 0 to be of type');
     });
 

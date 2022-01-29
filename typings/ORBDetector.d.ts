@@ -13,3 +13,8 @@ export class ORBDetector extends FeatureDetector {
   constructor(maxFeatures?: number, scaleFactor?: number, nLevels?: number, edgeThreshold?: number, firstLevel?: number, WTA_K?: number, scoreType?: number, patchSize?: number, fastThreshold?: number);
   constructor(params: { maxFeatures?: number, scaleFactor?: number, nLevels?: number, edgeThreshold?: number, firstLevel?: number, WTA_K?: number, scoreType?: number, patchSize?: number, fastThreshold?: number });
 }
+
+export class ORBScoreType {
+  static HARRIS_SCORE: number;
+  static FAST_SCORE: number;
+}

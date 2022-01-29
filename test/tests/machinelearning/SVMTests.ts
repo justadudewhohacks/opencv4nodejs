@@ -215,6 +215,7 @@ export default (args: TestContext) => {
         const svm1 = Object.assign({}, svm);
         const svm2 = Object.assign({}, svmNew);
         svm1.classWeights = null;
+        //@ts-ignore
         svm2.classWeights = null;
         assertPropsWithValue(svm1)(svm2);
       });

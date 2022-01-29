@@ -1,8 +1,8 @@
 import { Point2 } from './Point2.d';
 
 export class DetectionROI {
-  readonly scale: number;
-  readonly locations: Point2[];
-  readonly confidences: number[];
+  scale: number;
+  locations: Point2[];
+  confidences: number[];
   constructor();
 }

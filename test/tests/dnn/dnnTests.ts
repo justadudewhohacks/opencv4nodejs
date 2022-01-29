@@ -19,7 +19,7 @@ export default function (args: TestContext) {
     const getOptionalArgsMap = () => ([
       ['scalefactor', 0.8],
       ['size', new cv.Size(3, 3)],
-      ['mean', new cv.Vec(0.5, 0.5, 0.5)],
+      ['mean', new cv.Vec3(0.5, 0.5, 0.5)],
       ['swapRB', true]
     ]);
 
@@ -33,7 +33,7 @@ export default function (args: TestContext) {
         getOptionalArgsMap: () => ([
           ['scalefactor', 0.8],
           ['size', new cv.Size(3, 3)],
-          ['mean', new cv.Vec(0.5, 0.5, 0.5)],
+          ['mean', new cv.Vec3(0.5, 0.5, 0.5)],
           ['swapRB', true]
         ]),
         expectOutput
@@ -62,7 +62,7 @@ export default function (args: TestContext) {
         getOptionalArgsMap: () => ([
           ['scalefactor', 0.8],
           ['size', new cv.Size(3, 3)],
-          ['mean', new cv.Vec(0.5, 0.5, 0.5)],
+          ['mean', new cv.Vec3(0.5, 0.5, 0.5)],
           ['swapRB', true],
           ['crop', false],
           ['ddepth', cv.CV_32F]

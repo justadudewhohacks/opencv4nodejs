@@ -11,6 +11,7 @@ export default (args: TestContext) => {
   const cvVarType = cv.ml.VAR_ORDERED;
   describe('constructor', () => {
     it('should throw if without args', () => {
+      // @ts-ignore:next-line
       expect(() => new cv.TrainData()).to.throw();
     });
 

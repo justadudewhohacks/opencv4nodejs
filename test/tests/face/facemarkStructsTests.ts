@@ -1,3 +1,5 @@
+import { TestContext } from "../model";
+
 export default (args: TestContext) => {
   const { cv, utils } = args;
 

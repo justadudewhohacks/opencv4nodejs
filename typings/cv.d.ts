@@ -17,6 +17,7 @@ export class HistAxes {
   bins: number;
   ranges: number[];
 
+  constructor(channel: number, bins: number, ranges: [number, number]);
   constructor(opts: { channel: number, bins: number, ranges: [number, number] });
 }
 
@@ -55,7 +56,7 @@ export function findEssentialMatAsync(points1: Point2[], points2: Point2[], foca
 export function findFundamentalMat(points1: Point2[], points2: Point2[], method?: number, param1?: number, param2?: number): { F: Mat, mask: Mat };
 export function findFundamentalMatAsync(points1: Point2[], points2: Point2[], method?: number, param1?: number, param2?: number): Promise<{ F: Mat, mask: Mat }>;
 export function findHomography(srcPoints: Point2[], dstPoints: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number): { homography: Mat, mask: Mat };
-export function fitLine(points: Point2[], distType: number, param: number, reps: number, aeps: number): number[];
+export function fitLine(points: Point2[], distType: number, param: number, reps: number, aeps: number): Vec4;
 export function fitLine(points: Point3[], distType: number, param: number, reps: number, aeps: number): number[];
 export function getAffineTransform(srcPoints: Point2[], dstPoints: Point2[]): Mat;
 export function getBuildInformation(): string;

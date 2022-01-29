@@ -1,6 +1,7 @@
 import facemarkStructsTests from './facemarkStructsTests';
 import recognizerTestsFactory from './recognizerTests';
 import facemarkTestsFactory from './facemarkTests';
+import { TestContext } from '../model';
 
 export default function (args: TestContext) {
   const { cv, utils, getTestImg  } = args;

@@ -1,5 +1,7 @@
 import { TestContext } from "../model";
-import { assert, expect } from 'chai';
+import { expect } from 'chai';
+
+const CV_CALIB_USE_INTRINSIC_GUESS = 1;
 
 export default (args: TestContext) => {
   const { cv, utils } = args;
@@ -79,10 +81,10 @@ export default (args: TestContext) => {
         });
     };
 
-    const rvec1 = new cv.Vec(0.5, 0, 0);
-    const tvec1 = new cv.Vec(0.5, 0.5, 0.5);
-    const rvec2 = new cv.Vec(0, 0.5, 0);
-    const tvec2 = new cv.Vec(0.5, 0.5, 0.5);
+    const rvec1 = new cv.Vec3(0.5, 0, 0);
+    const tvec1 = new cv.Vec3(0.5, 0.5, 0.5);
+    const rvec2 = new cv.Vec3(0, 0.5, 0);
+    const tvec2 = new cv.Vec3(0.5, 0.5, 0.5);
 
     generateAPITests({
       getDut: () => cv,
@@ -178,8 +180,8 @@ export default (args: TestContext) => {
   });
 
   describe('projectPoints', () => {
-    const rvec = new cv.Vec(1, 0, 0);
-    const tvec = new cv.Vec(1, 1, 1);
+    const rvec = new cv.Vec3(1, 0, 0);
+    const tvec = new cv.Vec3(1, 1, 1);
     const aspectRatio = 1;
     generateAPITests({
       getDut: () => cv,
@@ -248,10 +250,11 @@ export default (args: TestContext) => {
       _cameraMatrix,
       distCoefficients
     ];
-    const getOptionalParamsMap = () => ([
-      ['flags', cv.CV_CALIB_USE_INTRINSIC_GUESS as number],
+    // openCV3 only
+    const getOptionalParamsMap = (): Array<[string, any]> => ([
+      ['flags', CV_CALIB_USE_INTRINSIC_GUESS as number],
       ['termCriteria', new cv.TermCriteria()]
-    ]) as const;
+    ]);
 
     (cvVersionGreaterEqual(3, 1, 0) ? describe : describe.skip)('calibrateCamera', () => {
       generateAPITests({
@@ -312,7 +315,7 @@ export default (args: TestContext) => {
         imageSize
       ],
       getOptionalParamsMap: () => ([
-        ['flags', cv.CV_CALIB_USE_INTRINSIC_GUESS],
+        ['flags', CV_CALIB_USE_INTRINSIC_GUESS],
         ['termCriteria', new cv.TermCriteria()]
       ]),
       expectOutput
@@ -502,8 +505,8 @@ export default (args: TestContext) => {
   });
 
   (cvVersionGreaterEqual(3, 1, 0) ? describe : describe.skip)('sampsonDistance', () => {
-    const pt1 = new cv.Vec(0.5, 0.5);
-    const pt2 = new cv.Vec(100.5, 100.5);
+    const pt1 = new cv.Vec2(0.5, 0.5);
+    const pt2 = new cv.Vec2(100.5, 100.5);
     const F = cv.Mat.eye(3, 3, cv.CV_64F);
 
     generateAPITests({
@@ -530,7 +533,7 @@ export default (args: TestContext) => {
       imagePoints,
       imagePoints
     ]);
-    const getOptionalParamsMap = () => ([
+    const getOptionalParamsMap = (): Array<[string, any]> => ([
         ['method', cv.LMEDS],
         ['ransacReprojThreshold', 1.0],
         ['maxIters', 1000],

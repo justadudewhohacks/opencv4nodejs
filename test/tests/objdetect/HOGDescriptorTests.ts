@@ -11,7 +11,8 @@ export default function (args: TestContext) {
     getTmpDataFilePath
   } = utils;
 
-  const HISTOGRAM_NORM_TYPE = cvVersionGreaterEqual(4, 0, 0) ? cv.HOGHistogramNormType.L2Hys : 0
+  // const HISTOGRAM_NORM_TYPE = cvVersionGreaterEqual(4, 0, 0) ? cv.HOGHistogramNormType.L2Hys : 0
+  const HISTOGRAM_NORM_TYPE = 0;
 
   const peopleDetectorHog = new cv.HOGDescriptor();
   peopleDetectorHog.setSVMDetector(cv.HOGDescriptor.getDefaultPeopleDetector());
@@ -70,7 +71,7 @@ export default function (args: TestContext) {
         histogramNormType: HISTOGRAM_NORM_TYPE,
         L2HysThreshold: 0.4,
         gammaCorrection: true,
-        numLevels: 64,
+        nlevels: 64,
         signedGradient: true
       });
       [{ p: 'winSize', dim: 40 }, { p: 'blockSize', dim: 20 }, { p: 'blockStride', dim: 10 }, { p: 'cellSize', dim: 30 }].forEach(
@@ -132,7 +133,7 @@ export default function (args: TestContext) {
         histogramNormType: HISTOGRAM_NORM_TYPE,
         L2HysThreshold: 0.4,
         gammaCorrection: true,
-        numLevels: 64,
+        nlevels: 64,
         signedGradient: true
       });
       const file = getTmpDataFilePath('testHOG.xml');
@@ -169,7 +170,7 @@ export default function (args: TestContext) {
 
     const winStride = new cv.Size(3, 3);
     const padding = new cv.Size(3, 3);
-    const invalidLocations = [new cv.Point(50, 50), undefined, new cv.Point(50, 150)];
+    const invalidLocations = [new cv.Point2(50, 50), undefined, new cv.Point2(50, 150)];
 
     const otherSyncTests = () => {
       it('should be callable with single channel img', () => {
@@ -194,6 +195,7 @@ export default function (args: TestContext) {
         assertError(
           () => hog.compute(
             getPeoplesTestImg(),
+            // @ts-expect-error
             { locations: invalidLocations }
           ),
           'expected array element at index 1 to be of type Point2'
@@ -202,34 +204,35 @@ export default function (args: TestContext) {
     };
 
     const otherAsyncCallbackedTests = () => {
-      it('should be callable with single channel img', (done) => {
-        hog.computeAsync(
+      it('should be callable with single channel img', async (done) => {
+        await hog.computeAsync(
           getTestMatC1(),
-          expectOutputCallbacked(done)
         );
+        expectOutputCallbacked(done)
       });
 
-      it('should throw if locations invalid', (done) => {
-        hog.computeAsync(
-          getPeoplesTestImg(),
-          winStride,
-          padding,
-          invalidLocations,
-          (err) => {
-            try {
-              expect(err).to.be.an('error');
-              assert.include(err.toString(), 'expected array element at index 1 to be of type Point2');
-              done();
-            } catch (e) {
-              done(e);
-            }
+      it('should throw if locations invalid', async (done) => {
+        try {
+          await hog.computeAsync(
+            getPeoplesTestImg(),
+            winStride,
+            padding,
+            invalidLocations)
+        } catch (err) {
+          try {
+            expect(err).to.be.an('error');
+            assert.include(err.toString(), 'expected array element at index 1 to be of type Point2');
+            done();
+          } catch (e) {
+            done(e);
           }
-        );
+        }
       });
 
       it('should throw if locations invalid for opt arg object', (done) => {
         hog.computeAsync(
           getPeoplesTestImg(),
+          // @ts-expect-error
           { locations: invalidLocations },
           (err) => {
             try {

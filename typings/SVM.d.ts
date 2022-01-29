@@ -23,6 +23,7 @@ export class SVM {
   predict(samples: Mat, flags?: number): number[];
   save(file: string): void;
   setParams(c?: number, coef0?: number, degree?: number, gamma?: number, nu?: number, p?: number, kernelType?: number, classWeights?: Mat): void;
+  setParams(args: {c?: number, coef0?: number, degree?: number, gamma?: number, nu?: number, p?: number, kernelType?: number, classWeights?: Mat}): void;
   train(trainData: TrainData, flags?: number): boolean;
   train(samples: Mat, layout: number, responses: Mat): boolean;
   trainAsync(trainData: TrainData, flags?: number): Promise<boolean>;
