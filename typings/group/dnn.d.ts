@@ -103,6 +103,8 @@ export function readNetFromDarknetAsync(cfgPath: string, modelPath: string): Pro
 //Net 	cv::dnn::readNetFromONNX (const std::vector< uchar > &buffer)
 //Reads a network model from ONNX in-memory buffer. More...
 
+export function readNetFromONNX(onnxFile: string): Net;
+export function readNetFromONNXAsync(onnxFile: string): Promise<Net>;
 
 
 //Net 	cv::dnn::readNetFromTensorflow (const String &model, const String &config=String())
