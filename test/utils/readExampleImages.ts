@@ -4,8 +4,7 @@ import type openCV from '../../typings';
 
 const readExampleImages = function(cv: typeof openCV) {
 
-  const getTestImagePath = (isPng = true) =>
-    (isPng ? '../data/Lenna.png' : '../data/got.jpg');
+  const getTestImagePath = (isPng = true) => (isPng ? '../data/Lenna.png' : '../data/got.jpg');
   const getTestVideoPath = () => '../data/traffic.mp4';
 
   return {

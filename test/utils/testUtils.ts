@@ -102,7 +102,7 @@ export const getTmpDataFilePath = (file: string): string => {
   return filePath;
 };
 
-export const fileExists = filePath => fs.existsSync(filePath);
+export const fileExists = (filePath: string) => fs.existsSync(filePath);
 
 export const expectToBeVec2 = (vec: Vec2): void => {
   expect(vec).to.have.property('x');

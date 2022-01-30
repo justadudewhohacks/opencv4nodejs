@@ -55,16 +55,19 @@ export interface TestContext {
         generateAPITests: (opts: Partial<APITestOpts>) => void,
         generateClassMethodTests: (opts) => void;
         getNodeMajorVersion: () => number;
+
         getTestVideoPath?: () => string;
+        getTestImagePath?: (isPng?: boolean) => string;
+
         clearTmpData?: any,
         getTmpDataFilePath?: any
         fileExists?: any
         _asyncFuncShouldRequireArgs?: any
-        getTestImagePath?: any
         asyncFuncShouldRequireArgs?: any
         _funcShouldRequireArgs?: any
         expectFloat?: any
-        readTestImage?: any    
+        readTestImage?: () => Mat;
+        readPeoplesTestImage?: () => Mat;
     },
     getTestImg: () => Mat;
     getPeoplesTestImg?: () => Mat;

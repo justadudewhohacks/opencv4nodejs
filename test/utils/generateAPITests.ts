@@ -35,12 +35,12 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
   const getOptionalArgs = getOptionalArg
     ? () => [getOptionalArg()]
     : (getOptionalArgsMap
-      ? () => getOptionalArgsMap().map(kv => kv[1])
+      ? () => getOptionalArgsMap().map((kv: [string, any]) => kv[1])
       : getEmptyArray
     );
   const getOptionalArgsObject = () => {
     const optionalArgsObject = {};
-    getOptionalArgsMap().forEach((kv) => { optionalArgsObject[kv[0]] = kv[1]; });
+    getOptionalArgsMap().forEach((kv: [string, any]) => { optionalArgsObject[kv[0]] = kv[1]; });
     return optionalArgsObject;
   };
   const hasRequiredArgs = !!opts.getRequiredArgs;
@@ -54,7 +54,6 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
     } catch (err) {
       done(err);
     }
-
   }
 
   const expectOutputCallbacked = (done, dut, args) => (err, res) => {
