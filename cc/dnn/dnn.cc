@@ -23,6 +23,10 @@ NAN_MODULE_INIT(Dnn::Init) {
   Nan::SetMethod(target, "readNetFromDarknetAsync", ReadNetFromDarknetAsync);
   Nan::SetMethod(target, "NMSBoxes", NMSBoxes);
 #endif
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  Nan::SetMethod(target, "readNetFromONNX", ReadNetFromONNX);
+  Nan::SetMethod(target, "readNetFromONNXAsync", ReadNetFromONNXAsync);
+#endif
 };
 
 
@@ -111,6 +115,22 @@ NAN_METHOD(Dnn::NMSBoxes) {
     "NMSBoxes",
     info
   );
+}
+#endif
+
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+NAN_METHOD(Dnn::ReadNetFromONNX) {
+  FF::executeSyncBinding(
+      std::make_shared<DnnBindings::ReadNetFromONNXWorker>(),
+      "ReadNetFromONNX",
+      info);
+}
+
+NAN_METHOD(Dnn::ReadNetFromONNXAsync) {
+  FF::executeAsyncBinding(
+      std::make_shared<DnnBindings::ReadNetFromONNXWorker>(),
+      "ReadNetFromONNXAsync",
+      info);
 }
 #endif
 
