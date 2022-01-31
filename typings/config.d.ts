@@ -21,4 +21,4 @@ export const version: {
   revision: number;
 }
 
-export const modules: typeof cv.xmodules;
+export const modules: typeof xmodules;
