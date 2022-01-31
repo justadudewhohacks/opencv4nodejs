@@ -2,9 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import { expect } from 'chai';
 import { TestContext } from '../model';
+import { Mat } from '../../../typings';
 
 export default function (args: TestContext) {
-  const { cv, utils} = args;
+  const { cv, utils } = args;
 
   const {
     assertDataDeepEquals,
@@ -18,21 +19,25 @@ export default function (args: TestContext) {
     generateAPITests
   } = utils;
 
-  let lenna;
-  let got;
-  let lennaBase64Buf;
-  let gotBase64Buf;
+  let lenna: Mat;
+  let got: Mat;
+  let lennaBase64Buf: Buffer;
+  let gotBase64Buf: Buffer;
 
   const getLennaBase64Buf = () => lennaBase64Buf;
   const getGotBase64Buf = () => gotBase64Buf;
+  let imageData: Buffer;
+  let imageDataCopy: Buffer;
 
-  const lennaBase64File = fs.readFileSync(path.join(__dirname, 'data/lennaBase64.json'), {encoding:'utf8', flag:'r'});
-  const gotBase64File = fs.readFileSync(path.join(__dirname, 'data/gotBase64.json'), {encoding:'utf8', flag:'r'});
+  const lennaBase64File = fs.readFileSync(path.join(__dirname, 'data/lennaBase64.json'), { encoding: 'utf8', flag: 'r' });
+  const gotBase64File = fs.readFileSync(path.join(__dirname, 'data/gotBase64.json'), { encoding: 'utf8', flag: 'r' });
   before(() => {
     lenna = cv.imread(getTestImagePath(true));
     got = cv.imread(getTestImagePath(false));
     lennaBase64Buf = Buffer.from(JSON.parse(lennaBase64File).data, 'base64');
     gotBase64Buf = Buffer.from(JSON.parse(gotBase64File).data, 'base64');
+    imageData = fs.readFileSync(getTestImagePath(true))
+    imageDataCopy = Buffer.from(imageData);
   });
 
   describe('imread', () => {
@@ -50,7 +55,6 @@ export default function (args: TestContext) {
       }
     });
   });
-
   describe('imwrite', () => {
     const file = getTmpDataFilePath('written_sync.png');
     const flags = [cv.IMWRITE_PNG_COMPRESSION];
@@ -138,6 +142,36 @@ export default function (args: TestContext) {
         const dec = await cv.imdecodeAsync(getGotBase64Buf())
         assertDataDeepEquals(got.getDataAsArray(), dec.getDataAsArray());
       });
+
+      // describe('imdecode corruption test', async () => {
+      //   it('corrupted png header image loading should throw empty Mat', async () => {
+      //     imageDataCopy[0] = 0;
+      //     expect(() => cv.imdecode(imageDataCopy)).to.throw('empty Mat');
+      //   });
+      //   it('corrupted png image size loading should throw error', async () => {
+      //     imageData.copy(imageDataCopy);
+      //     const IHDRChunkOffset = 8;
+      //     //{
+      //     //  const IHDRSize = imageDataCopy.slice(IHDRChunkOffset, IHDRChunkOffset + 4);
+      //     //  const IHDRSizeLess = imageDataCopy.slice(IHDRChunkOffset + 4, IHDRChunkOffset + 21);
+      //     //  const IHDRCRC = imageDataCopy.slice(IHDRChunkOffset + 21, IHDRChunkOffset + 25);
+      //     //  console.log('IHDRSize:     ' + IHDRSize.toString('hex'));
+      //     //  console.log('IHDRSizeLess: ' + IHDRSizeLess.toString('hex'));
+      //     //  console.log('IHDRCRC:      ' + IHDRCRC.toString('hex'));
+      //     //}  
+      //     // set wide to 0
+      //     imageDataCopy[16] = 0;
+      //     imageDataCopy[17] = 0;
+      //     imageDataCopy[18] = 0;
+      //     imageDataCopy[19] = 0;
+      //     const offset = IHDRChunkOffset + 21;
+      //     imageDataCopy[offset + 0] = 0x23;
+      //     imageDataCopy[offset + 1] = 0x76;
+      //     imageDataCopy[offset + 2] = 0xFA;
+      //     imageDataCopy[offset + 3] = 0x6C;
+      //     expect(() => cv.imdecode(imageDataCopy)).to.throw('empty Mat');
+      //   });
+      // })
     });
   });
 

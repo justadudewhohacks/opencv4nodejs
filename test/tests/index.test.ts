@@ -21,7 +21,7 @@ import xfeatures2dTestSuite from './xfeatures2d';
 import ximgprocTestSuite from './ximgproc';
 
 const modules = [
-  'core', 'imgproc',  'calib3d', 'features2d', 'io',
+  'core', 'imgproc', 'calib3d', 'features2d', 'io',
   'dnn', 'ml', 'objdetect', 'photo', 'video'
 ]
 
@@ -30,6 +30,26 @@ const xmodules = [
 ]
 
 describe('cv', () => {
+
+  const toTest = {
+    core: true,
+    imgproc: false, // to fix
+    calib3d: true,
+    features2d: true,
+    io: true,
+    dnn: true,
+    machinelearning: true,
+    objdetect: false, // to fix
+    photo: true,
+    video: true,
+    face: true,
+    text: true,
+    tracking: true,
+    xfeatures2d: true,
+    ximgproc: true,
+  }
+  // Object.keys(toTest).forEach(m => toTest[m] =  false);
+  // toTest.core = true;
 
   let testImg = null;
   let peoplesTestImg = null;
@@ -78,6 +98,7 @@ describe('cv', () => {
   console.log('compiled with the following modules:', cv.xmodules)
   console.log('expected modules to be built:', builtModules)
 
+  // no more mandatory environement version variable
   // it('OpenCV version should match', () => {
   //   expect((process.env.OPENCV_VERSION || '').substr(0, 5)).to.equal(
   //     // on osx latest opencv package for major version is installed via brew
@@ -88,49 +109,49 @@ describe('cv', () => {
   it('all modules should be built', () => {
     builtModules.forEach(m => expect(cv.modules).to.have.property(m));
   })
-  if (cv.modules.core) {
+  if (toTest.core && cv.modules.core) {
     describe('core', () => coreTestSuite({ cv, utils, getTestImg }));
   }
-  // if (cv.modules.imgproc) {
-  //   describe('imgproc', () => imgprocTestSuite({ cv, utils, getTestImg }));
-  // }
-  if (cv.modules.calib3d) {
+  if (toTest.imgproc && cv.modules.imgproc) {
+    describe('imgproc', () => imgprocTestSuite({ cv, utils, getTestImg }));
+  }
+  if (toTest.calib3d && cv.modules.calib3d) {
     describe('calib3d', () => calib3dTestSuite({ cv, utils, getTestImg }));
   }
-  if (cv.modules.features2d) {
+  if (toTest.features2d && cv.modules.features2d) {
     describe('features2d', () => features2dTestSuite({ cv, utils, getTestImg }));
   }
-  // if (cv.modules.io) {
-  //   describe('io', () => ioTestSuite({ cv, utils, getTestImg }));
-  // }
-  if (cv.modules.dnn) {
+  if (toTest.io && cv.modules.io) {
+    describe('io', () => ioTestSuite({ cv, utils, getTestImg }));
+  }
+  if (toTest.dnn && cv.modules.dnn) {
     describe('dnn', () => dnnTestSuite({ cv, utils, getTestImg }));
   }
-  if (cv.modules.machinelearning) {
+  if (toTest.machinelearning && cv.modules.machinelearning) {
     describe('machinelearning', () => machinelearningTestSuite({ cv, utils, getTestImg }));
   }
-  //if (cv.modules.objdetect) {
-  //  describe('objdetect', () => objdetectTestSuite({ cv, utils, getTestImg, getPeoplesTestImg }));
-  //}
-  if (cv.modules.photo) {
+  if (toTest.objdetect && cv.modules.objdetect) {
+    describe('objdetect', () => objdetectTestSuite({ cv, utils, getTestImg, getPeoplesTestImg }));
+  }
+  if (toTest.photo && cv.modules.photo) {
     describe('photo', () => photoTestSuite({ cv, utils, getTestImg }));
   }
-  if (cv.modules.video) {
+  if (toTest.video && cv.modules.video) {
     describe('video', () => videoTestSuite({ cv, utils, getTestImg }));
   }
-  if (cv.modules.face) {
+  if (toTest.face && cv.modules.face) {
     describe('face', () => faceTestSuite({ cv, utils, getTestImg }));
   }
-  if (cv.modules.text) {
+  if (toTest.text && cv.modules.text) {
     describe('text', () => textTestSuite({ cv, utils, getTestImg }));
   }
-  if (cv.modules.tracking) {
+  if (toTest.tracking && cv.modules.tracking) {
     describe('tracking', () => trackingTestSuite({ cv, utils, getTestImg }));
   }
-  if (cv.modules.xfeatures2d) {
+  if (toTest.xfeatures2d && cv.modules.xfeatures2d) {
     describe('xfeatures2d', () => xfeatures2dTestSuite({ cv, utils, getTestImg }));
   }
-  if (cv.modules.ximgproc) {
+  if (toTest.ximgproc && cv.modules.ximgproc) {
     describe('ximgproc', () => ximgprocTestSuite({ cv, utils, getTestImg }));
   }
 })
