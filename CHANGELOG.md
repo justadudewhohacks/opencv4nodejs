@@ -6,6 +6,7 @@
 * [breaking change] build-opencv -j alias of --job if gone
 * testing are now converted to Typescript
 * fix Typing
+* fix getRegion() cordump
 * add doc
 
 ## Version 6.0.12

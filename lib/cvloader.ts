@@ -77,7 +77,7 @@ function getOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
       opencvBuild = require(requirePath);
     } catch(e) {
       if (e instanceof Error) {
-        const msg = `${e.message}, openCV binding not available, see: ${EOL}build-opencv --help${EOL}${EOL}And start a build with:${EOL}build-opencv --version 4.5.4 build${EOL}`;
+        const msg = `${e.message}, openCV binding not available, see: ${EOL}build-opencv --help${EOL}${EOL}And start a build with:${EOL}build-opencv --version 4.5.4 rebuild${EOL}`;
         throw Error(msg)
       }
       throw e;
