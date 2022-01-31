@@ -64,8 +64,24 @@ export function getPerspectiveTransform(srcPoints: Point2[], dstPoints: Point2[]
 export function getRotationMatrix2D(center: Point2, angle: number, scale?: number): Mat;
 
 
+/**
+ * openCV 3 and 4 are not compatible
+ * 
+ * Calculates the width and height of a text string.
+ * param text	Input text string.
+ * param fontHeight	Drawing font size by pixel unit.
+ * param thickness	Thickness of lines used to render the text. See putText for details.
+ * param baseLine	y-coordinate of the baseline relative to the bottom-most text point.
+ * 
+ * @param text	Input text string.
+ * @param fontFace	Font to use, see HersheyFonts.
+ * @param fontScale	Font scale factor that is multiplied by the font-specific base size.
+ * @param thickness	Thickness of lines used to render the text. See putText for details.
+ * @param [out]	baseLine	y-coordinate of the baseline relative to the bottom-most text point.
+ */
 export function getTextSize(text: string, fontFace: number, fontScale: number, thickness: number): { size: Size, baseLine: number };
 export function getTextSizeAsync(text: string, fontFace: number, fontScale: number, thickness: number): Promise<{ size: Size, baseLine: number }>;
+
 export function getValidDisparityROI(roi1: Rect[], roi2: Rect[], minDisparity: number, numberOfDisparities: number, SADWindowSize: number): Rect;
 export function getValidDisparityROIAsync(roi1: Rect[], roi2: Rect[], minDisparity: number, numberOfDisparities: number, SADWindowSize: number): Promise<Rect>;
 export function goodFeaturesToTrack(mat: Mat, maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Point2[];
@@ -102,8 +118,6 @@ export function matchKnnBruteForceSL2Async(descriptors1: Mat, descriptors2: Mat,
 export function matchKnnFlannBased(descriptors1: Mat, descriptors2: Mat, k: number): DescriptorMatch[][];
 export function matchKnnFlannBasedAsync(descriptors1: Mat, descriptors2: Mat, k: number): Promise<DescriptorMatch[][]>;
 
-
-
 export function minMaxLoc(mat: Mat, mask?: Mat): { minVal: number, maxVal: number, minLoc: Point2, maxLoc: Point2 };
 export function minMaxLocAsync(mat: Mat, mask?: Mat): Promise<{ minVal: number, maxVal: number, minLoc: Point2, maxLoc: Point2 }>;
 
@@ -113,7 +127,6 @@ export function setNumThreads(nthreads: number): void;
 export function getThreadNum(): number;
 export function projectPoints(objectPoints: Point3[], imagePoints: Point2[], rvec: Vec3, tvec: Vec3, cameraMatrix: Mat, distCoeffs: number[], aspectRatio?: number): { imagePoints: Point2[], jacobian: Mat };
 export function projectPointsAsync(objectPoints: Point3[], imagePoints: Point2[], rvec: Vec3, tvec: Vec3, cameraMatrix: Mat, distCoeffs: number[], aspectRatio?: number): Promise<{ imagePoints: Point2[], jacobian: Mat }>;
-
 
 export function recoverPose(E: Mat, points1: Point2[], points2: Point2[], focal?: number, pp?: Point2, mask?: Mat): { returnValue: number, R: Mat, T: Vec3 };
 export function recoverPoseAsync(E: Mat, points1: Point2[], points2: Point2[], focal?: number, pp?: Point2, mask?: Mat): Promise<{ returnValue: number, R: Mat, T: Vec3 }>;
