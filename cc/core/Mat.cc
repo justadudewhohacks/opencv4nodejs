@@ -374,7 +374,12 @@ NAN_METHOD(Mat::GetRegion) {
 	if (Rect::Converter::arg(0, &rect, info)) {
 		return tryCatch.reThrow();
 	}
-	info.GetReturnValue().Set(Mat::Converter::wrap(Mat::unwrapSelf(info)(rect)));
+  // FF::TryCatch tryCatch do not work here
+  try {
+    info.GetReturnValue().Set(Mat::Converter::wrap(Mat::unwrapSelf(info)(rect)));
+  } catch (const std::exception& e) {
+    return tryCatch.throwError(e.what());
+  }
 }
 
 NAN_METHOD(Mat::Norm) {

@@ -215,6 +215,10 @@ export default function (args: TestContext) {
       });
     });
 
+    it('getRegion out of bound should throw an error', () => {
+      assertError(() => matC3.getRegion(new cv.Rect(0, 0, 100, 100)), "Mat::GetRegion - OpenCV Error: (0 <= roi.x && 0 <= roi.width && roi.x + roi.width <= m.cols && 0 <= roi.y && 0 <= roi.height && roi.y + roi.height <= m.rows) in cv::Mat::Mat")
+    });
+
     describe('getData after getRegion should throw an error', () => {
       it('should return buffer of with data of single channeled Mat', () => {
         const region = matC3.getRegion(new cv.Rect(0, 0, 2, 2));
@@ -517,8 +521,7 @@ export default function (args: TestContext) {
   });
 
   describe('checking of non-instance arguments', () => {
-    it('should throw errors with correct error '
-        + 'messages with non-instance arguments', () => {
+    it('should throw errors with correct error messages with non-instance arguments', () => {
       const img = getTestImg();
 
       assertError(
