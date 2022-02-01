@@ -49,7 +49,8 @@ export default function (cv: typeof openCV) {
   /**
    * get text block contour
    */
-  function getTextSize(text: string, opts: Partial<TextParams>): TextDimention {
+  function getTextSize(text: string, opts?: Partial<TextParams>): TextDimention {
+    opts = opts || {};
     const fontType = opts.fontSize || DefaultTextParams.fontType;
     const fontSize = opts.fontSize || DefaultTextParams.fontSize;
     const thickness = opts.thickness || DefaultTextParams.thickness;

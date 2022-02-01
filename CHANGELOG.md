@@ -1,5 +1,10 @@
 # changelog
 
+## Version 6.1.1
+
+* fix ambiguous typing
+* restructure examples
+
 ## Version 6.1.0
 
 * [breaking change] build-opencv action argument build is now renamed rebuild, and build, clean, configure ar now available.
