@@ -45,9 +45,20 @@ export function getWindowProperty(winName: string, prop_id: number): number;
  */
 export 	function moveWindow(winname: string, x: number, y: number)
 //  
-// void 	cv::namedWindow (const String &winname, int flags=WINDOW_AUTOSIZE)
-//  	Creates a window. More...
-//  
+/**
+ * Creates a window.
+ * 
+ * The function namedWindow creates a window that can be used as a placeholder for images and trackbars. Created windows are referred to by their names.
+ * If a window with the same name already exists, the function does nothing.
+ * 
+ * https://docs.opencv.org/4.x/d7/dfc/group__highgui.html#ga5afdf8410934fd099df85c75b2e0888b
+ * 
+ * @param winname Name of the window in the window caption that may be used as a window identifier. default: cv.WINDOW_AUTOSIZE
+ * @param flags Flags of the window. The supported flags are: (cv::WindowFlags)
+ */
+export 	function namedWindow(winname: string, flags?: number)
+
+
 // int 	cv::pollKey ()
 //  	Polls for a pressed key. More...
 //  

@@ -24,6 +24,7 @@ export class HistAxes {
 export * from './group/calib3d';
 export * from './group/core_array';
 export * from './group/core_cluster';
+export * from './group/core_utils';
 export * from './group/imgproc_motion';
 export * from './group/dnn';
 export * from './group/highgui.d';
@@ -31,6 +32,7 @@ export * from './group/imgcodecs.d';
 export * from './group/imgproc_colormap';
 export * from './group/imgproc_filter';
 export * from './group/imgproc_motion';
+// export * from './group/imgproc_draw';
 
 /** @deprecated */
 export function calcHist(img: Mat, histAxes: { channel: number, bins: number, ranges: [number, number] }[], mask?: Mat): Mat;

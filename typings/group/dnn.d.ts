@@ -78,7 +78,14 @@ export function readNetFromCaffeAsync(prototxt: string, modelPath?: string): Pro
 //
 //Net 	cv::dnn::readNetFromDarknet (const char *bufferCfg, size_t lenCfg, const char *bufferModel=NULL, size_t lenModel=0)
 //Reads a network model stored in Darknet model files. More...
-
+/**
+ * Reads a network model stored in Darknet model files.
+ * 
+ * https://docs.opencv.org/4.x/d6/d0f/group__dnn.html#gafde362956af949cce087f3f25c6aff0d
+ * 
+ * @param cfgPath 	path to the .cfg file with text description of the network architecture. (should be an absolute path)
+ * @param modelPath to the .weights file with learned network. (should be an absolute path)
+ */
 export function readNetFromDarknet(cfgPath: string, modelPath: string): Net;
 export function readNetFromDarknetAsync(cfgPath: string, modelPath: string): Promise<Net>;
 

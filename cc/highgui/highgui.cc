@@ -15,6 +15,7 @@ NAN_MODULE_INIT(Highgui::Init) {
     Nan::SetMethod(target, "getWindowProperty", getWindowProperty);
     Nan::SetMethod(target, "setWindowTitle", setWindowTitle);
     Nan::SetMethod(target, "moveWindow", moveWindow);
+    Nan::SetMethod(target, "namedWindow", namedWindow);
 
 };
 
@@ -91,5 +92,21 @@ NAN_METHOD(Highgui::getWindowProperty) {
   FF::IntConverter::arg(1, &prop_id, info);
   info.GetReturnValue().Set(Nan::New(cv::getWindowProperty(FF::StringConverter::unwrapUnchecked(info[0]), prop_id)));
 }
+
+
+NAN_METHOD(Highgui::namedWindow) {
+  FF::TryCatch tryCatch("Highgui::namedWindow");
+
+	std::string winName;
+  int flags = 0;
+
+  if (!info[0]->IsString()) {
+    return tryCatch.throwError("expected arg0 (winName) to be the window name");
+  }
+  FF::IntConverter::optArg(1, &flags, info);
+  FF::StringConverter::arg(0, &winName, info);
+  cv::namedWindow(FF::StringConverter::unwrapUnchecked(info[0]), flags);
+}
+
 
 #endif

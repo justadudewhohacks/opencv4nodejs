@@ -59,6 +59,9 @@ public:
 	static NAN_METHOD(EigenAsync);
 	static NAN_METHOD(Solve);
 	static NAN_METHOD(SolveAsync);
+
+	static NAN_METHOD(GetTickFrequency);
+	static NAN_METHOD(GetTickCount);
 };
 
 #endif

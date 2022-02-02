@@ -108,7 +108,7 @@ namespace NetBindings {
     GetUnconnectedOutLayersWorker(cv::dnn::Net self) {
       this->self = self;
     }
-
+  
     std::vector<int> layerIndexes;
 
     std::string executeCatchCvExceptionWorker() {

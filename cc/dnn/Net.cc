@@ -25,7 +25,11 @@ NAN_MODULE_INIT(Net::Init) {
   Nan::SetPrototypeMethod(ctor, "getUnconnectedOutLayers", GetUnconnectedOutLayers);
   Nan::SetPrototypeMethod(ctor, "getUnconnectedOutLayersAsync", GetUnconnectedOutLayersAsync);
 
-  Nan::Set(target,Nan::New("Net").ToLocalChecked(), FF::getFunction(ctor));
+  Nan::SetPrototypeMethod(ctor, "setPreferableBackend", SetPreferableBackend);
+  Nan::SetPrototypeMethod(ctor, "setPreferableTarget", SetPreferableTarget);
+  Nan::SetPrototypeMethod(ctor, "getPerfProfile", GetPerfProfile);
+
+  Nan::Set(target, Nan::New("Net").ToLocalChecked(), FF::getFunction(ctor));
 };
 
 NAN_METHOD(Net::New) {
@@ -95,5 +99,44 @@ NAN_METHOD(Net::GetUnconnectedOutLayersAsync) {
       "Net::GetUnconnectedOutLayersAsync",
       info);
 }
+
+NAN_METHOD(Net::SetPreferableBackend) {
+  FF::TryCatch tryCatch("Core::SetPreferableBackend");
+  cv::dnn::Net self = Net::unwrapSelf(info);
+  int backendId;
+  if(FF::IntConverter::arg(0, &backendId, info)) {
+    return tryCatch.reThrow();
+  }
+  self.setPreferableBackend(backendId);
+}
+
+NAN_METHOD(Net::SetPreferableTarget) {
+  FF::TryCatch tryCatch("Core::SetPreferableTarget");
+  cv::dnn::Net self = Net::unwrapSelf(info);
+  int targetId;
+  if(FF::IntConverter::arg(0, &targetId, info)) {
+    return tryCatch.reThrow();
+  }
+  self.setPreferableTarget(targetId);
+}
+
+// ret {	retval: number, timings: number[] } 
+
+NAN_METHOD(Net::GetPerfProfile) {
+  FF::TryCatch tryCatch("Core::GetPerfProfile");
+  cv::dnn::Net self = Net::unwrapSelf(info);
+
+  // int64 cv::dnn::Net::getPerfProfile	(	std::vector< double > & 	timings	)	
+  std::vector<double> layersTimes;
+  int64 time = self.getPerfProfile(layersTimes);
+
+  v8::Local<v8::Object> obj = Nan::New<v8::Object>();
+
+  Nan::Set(obj, Nan::New("retval").ToLocalChecked(), FF::DoubleConverter::wrap(time));
+  Nan::Set(obj, Nan::New("timings").ToLocalChecked(), FF::DoubleArrayConverter::wrap(layersTimes));
+
+  info.GetReturnValue().Set(obj);
+}
+
 
 #endif
