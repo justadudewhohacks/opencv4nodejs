@@ -43,4 +43,4 @@ test/**/*.js
 examples/**/*.js
 examples/src/ObjectDetection-YOLO/bird_yolo_out.jpg
 examples/src/yolov3.weights
-
+examples/src/ObjectDetection-YOLO/yolo_out_py.avi

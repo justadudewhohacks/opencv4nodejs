@@ -5,13 +5,14 @@ import { Mat, Net, Point2, Rect, Size, Vec3, VideoCapture, VideoWriter } from '@
 import { cv, getCachedFile } from '../utils';
 import path from 'path';
 
+// ported from https://github.com/spmallick/learnopencv/blob/master/ObjectDetection-YOLO/object_detection_yolo.py
+
 const conf = {
     confThreshold: 0.5,// Confidence threshold
     nmsThreshold: 0.4, // Non-maximum suppression threshold
     inpWidth: 416,     // Width of network's input image
     inpHeight: 416,    // Height of network's input image}
 }
-
 
 function getHelp() {
     console.log('Object Detection using YOLO in OPENCV');
@@ -22,13 +23,8 @@ function getHelp() {
 }
 
 const args: { image?: string, video?: string, device?: string, h?: boolean, help?: boolean } = mri(process.argv.slice(2), {});
-//=> { _: ['hello', 'world'], foo:true, f:true, fuz:true, b:'baz', bar:'baz', m:true, t:true, v:true }
 
 if (args.help || args.h) {
-    getHelp();
-}
-
-if (!args.image && !args.video) {
     getHelp();
 }
 
@@ -161,14 +157,9 @@ async function main() {
     let vid_writer: VideoWriter | null = null;
     // Get the video writer initialized to save the output video
     if (!args.image) {
-        let fourccCode = 'MJPG'.codePointAt(0) as number * 256 * 256 * 256;
-        fourccCode += 'MJPG'.codePointAt(1) as number * 256 * 256;
-        fourccCode += 'MJPG'.codePointAt(2) as number * 256;
-        fourccCode += 'MJPG'.codePointAt(3) as number;
-        // const fourccCode = cv.VideoWriter_fourcc('MJPG');
-        const fps = 30;
+        const fps = 25;
         const frameSize = new cv.Size(cap.get(cv.CAP_PROP_FRAME_WIDTH), cap.get(cv.CAP_PROP_FRAME_HEIGHT));
-        vid_writer = new VideoWriter(outputFile, fourccCode, fps, frameSize);
+        vid_writer = new VideoWriter(outputFile, VideoWriter.fourcc('MJPG'), fps, frameSize);
     }
     while (cv.waitKey(1) < 0) {
         //# get frame from the video
