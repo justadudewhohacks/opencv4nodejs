@@ -9,7 +9,5 @@ export class VideoCapture {
   reset(): void;
   set(property: number, value: number): boolean;
   setAsync(property: number, value: number): Promise<boolean>;
-  
-  //static fourcc(char c1, char c2, char c3, char c4 ): number;		
-
+  // see VideoWriter for fourcc function
 }

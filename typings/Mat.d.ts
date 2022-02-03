@@ -372,13 +372,45 @@ export class Mat {
   scharrAsync(ddepth: number, dx: number, dy: number, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
   seamlessClone(dst: Mat, mask: Mat, p: Point2, flags: number): Mat;
   seamlessCloneAsync(dst: Mat, mask: Mat, p: Point2, flags: number): Promise<Mat>;
+  /**
+   * Applies a separable linear filter to an image.
+   * 
+   * The function applies a separable linear filter to the image. That is, first, every row of src is filtered with the 1D kernel kernelX. Then, every column of the result is filtered with the 1D kernel kernelY. The final result shifted by delta is stored in dst .
+   * 
+   * https://docs.opencv.org/4.x/d4/d86/group__imgproc__filter.html#ga910e29ff7d7b105057d1625a4bf6318d
+   * 
+   * @param ddepth Destination image depth, see combinations
+   * @param kernelX Coefficients for filtering each row.
+   * @param kernelY Coefficients for filtering each column.
+   * @param anchor Anchor position within the kernel. The default value (−1,−1) means that the anchor is at the kernel center.
+   * @param delta Value added to the filtered results before storing them.
+   * @param borderType Pixel extrapolation method, see BorderTypes. BORDER_WRAP is not supported.
+   */
   sepFilter2D(ddepth: number, kernelX: Mat, kernelY: Mat, anchor?: Point2, delta?: number, borderType?: number): Mat;
+  sepFilter2D(ddepth: number, kernelX: Mat, kernelY: Mat, opts: { anchor?: Point2, delta?: number, borderType?: number }): Mat;
   sepFilter2DAsync(ddepth: number, kernelX: Mat, kernelY: Mat, anchor?: Point2, delta?: number, borderType?: number): Promise<Mat>;
+  sepFilter2DAsync(ddepth: number, kernelX: Mat, kernelY: Mat, opts: { anchor?: Point2, delta?: number, borderType?: number }): Promise<Mat>;
+
   set(row: number, col: number, value: number | Vec2 | Vec3 | Vec4 | number[]): void;
   setTo(value: number | Vec2 | Vec3 | Vec4, mask?: Mat): Mat;
   setToAsync(value: number | Vec2 | Vec3 | Vec4, mask?: Mat): Promise<Mat>;
-  sobel(ddepth: number, dx: number, dy: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Mat;
-  sobelAsync(ddepth: number, dx: number, dy: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
+  /**
+   * 
+   * https://docs.opencv.org/4.x/d4/d86/group__imgproc__filter.html#gacea54f142e81b6758cb6f375ce782c8d
+   * 
+   * @param ddepth output image depth, see combinations; in the case of 8-bit input images it will result in truncated derivatives.
+   * @param dx 	order of the derivative x.
+   * @param dy 	order of the derivative y.
+   * @param ksize size of the extended Sobel kernel; it must be 1, 3, 5, or 7.
+   * @param scale optional scale factor for the computed derivative values; by default, no scaling is applied (see getDerivKernels for details).
+   * @param delta optional delta value that is added to the results prior to storing them in dst.
+   * @param borderType pixel extrapolation method, see BorderTypes. BORDER_WRAP is not supported.
+   */
+  sobel(ddepth: number, dx: number, dy: number, ksize?: 1 | 3 | 5 | 7, scale?: number, delta?: number, borderType?: number): Mat;
+  sobel(ddepth: number, dx: number, dy: number, opts: { ksize?: 1 | 3 | 5 | 7, scale?: number, delta?: number, borderType?: number }): Mat;
+  sobelAsync(ddepth: number, dx: number, dy: number, ksize?: 1 | 3 | 5 | 7, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
+  sobelAsync(ddepth: number, dx: number, dy: number, opts: { ksize?: 1 | 3 | 5 | 7, scale?: number, delta?: number, borderType?: number }): Promise<Mat>;
+
   solve(mat2: Mat, flags?: number): Mat;
   solveAsync(mat2: Mat, flags?: number): Promise<Mat>;
   split(): Mat[];
@@ -419,10 +451,34 @@ export class Mat {
   transformAsync(m: Mat): Promise<Mat>;
 
   transpose(): Mat;
-
+  /**
+   * This function reconstructs 3-dimensional points (in homogeneous coordinates) by using their observations with a stereo camera.
+   * 
+   * https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html#gad3fc9a0c82b08df034234979960b778c
+   * @param projPoints1 2xN array of feature points in the first image. In the case of the c++ version, it can be also a vector of feature points or two-channel matrix of size 1xN or Nx1.
+   * @param projPoints2 2xN array of corresponding points in the second image. In the case of the c++ version, it can be also a vector of feature points or two-channel matrix of size 1xN or Nx1.
+   */
   triangulatePoints(projPoints1: Point2[], projPoints2: Point2[]): Mat;
   triangulatePointsAsync(projPoints1: Point2[], projPoints2: Point2[]): Promise<Mat>;
 
+  /**
+   * Transforms an image to compensate for lens distortion.
+   * 
+   * The function transforms an image to compensate radial and tangential lens distortion.
+   * 
+   * The function is simply a combination of initUndistortRectifyMap (with unity R ) and remap (with bilinear interpolation). See the former function for details of the transformation being performed.
+   * 
+   * Those pixels in the destination image, for which there is no correspondent pixels in the source image, are filled with zeros (black color).
+   * 
+   * A particular subset of the source image that will be visible in the corrected image can be regulated by newCameraMatrix. You can use getOptimalNewCameraMatrix to compute the appropriate newCameraMatrix depending on your requirements.
+   * 
+   * The camera matrix and the distortion parameters can be determined using calibrateCamera. If the resolution of images is different from the resolution used at the calibration stage, fx,fy,cx and cy need to be scaled accordingly, while the distortion coefficients remain the same.
+   * 
+   * https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html#ga69f2545a8b62a6b0fc2ee060dc30559d
+   * 
+   * @param cameraMatrix Input camera matrix
+   * @param distCoeffs 	Input vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,τx,τy]]]]) of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.
+   */
   undistort(cameraMatrix: Mat, distCoeffs: Mat): Mat;
   undistortAsync(cameraMatrix: Mat, distCoeffs: Mat): Promise<Mat>;
   validateDisparity(cost: Mat, minDisparity: number, numberOfDisparities: number, disp12MaxDisp?: number): void;
