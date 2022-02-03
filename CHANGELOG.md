@@ -5,7 +5,8 @@
 * fix ambiguous typing
 * restructure examples
 * add some bindings
-* add AgeGender from https://github.com/spmallick/learnopencv/blob/master/AgeGender/AgeGender.py
+* add AgeGender from [spmallick/learnopencv](https://github.com/spmallick/learnopencv/blob/master/AgeGender/)
+* add ObjectDetection-YOLO from [spmallick/learnopencv](https://github.com/spmallick/learnopencv/blob/master/ObjectDetection-YOLO/)
 
 ## Version 6.1.0
 
