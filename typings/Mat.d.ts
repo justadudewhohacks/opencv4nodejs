@@ -193,6 +193,11 @@ export class Mat {
   getDataAsArray(): number[][][];
   getOptimalNewCameraMatrix(distCoeffs: number[], imageSize: Size, alpha: number, newImageSize?: Size, centerPrincipalPoint?: boolean): { out: Mat, validPixROI: Rect };
   getOptimalNewCameraMatrixAsync(distCoeffs: number[], imageSize: Size, alpha: number, newImageSize?: Size, centerPrincipalPoint?: boolean): Promise<{ out: Mat, validPixROI: Rect }>;
+  /**
+   * crop a region from the image
+   * like python Mat[x1,y1,x2,y2]
+   * @param region 
+   */
   getRegion(region: Rect): Mat;
   goodFeaturesToTrack(maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Point2[];
   goodFeaturesToTrackAsync(maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Promise<Point2[]>;

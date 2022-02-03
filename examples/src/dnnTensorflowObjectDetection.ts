@@ -39,9 +39,14 @@ async function main() {
   // set webcam port
   const webcamPort = 0;
 
+  if (!fs.existsSync(pbFile)) {
+    throw new Error(`Could not find detection model ${pbFile}`);
+  }
+  if (!fs.existsSync(pbtxtFile)) {
+    throw new Error(`Could not find ${pbtxtFile}`);
+  }
   // initialize tensorflow darknet model from modelFile
-  console.log(`cv.readNetFromTensorflow("${pc.green(pbFile)}", "${pc.green(pbtxtFile)}")`);
-  const net = cv.readNetFromTensorflow(pbFile, pbtxtFile);
+  const net = cv.readNet(pbFile, pbtxtFile);
   
   const classifyImg = (img: Mat) => {
     // object detection model works with 300 x 300 images
@@ -49,7 +54,7 @@ async function main() {
     const vec3 = new cv.Vec3(0, 0, 0);
 
     // network accepts blobs as input
-    const inputBlob = cv.blobFromImage(img, 1, size, vec3, true, true);
+    const inputBlob = cv.blobFromImage(img, { scaleFactor: 1, size, mean: vec3, swapRB: true, crop: true } );
     net.setInput(inputBlob);
 
     console.time("net.forward");

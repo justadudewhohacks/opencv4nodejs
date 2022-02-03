@@ -60,8 +60,13 @@ function detection(modelPath: string, imgAbsPath: string): void {
   const widthRatio = imgWidth / SIZE;
   const heightRatio = imgHeight / SIZE;
 
-  const inputBlob = cv.blobFromImage(img, 1,
-    new cv.Size(SIZE, SIZE), new cv.Vec3(123.68, 116.78, 103.94), true, false);
+  const inputBlob = cv.blobFromImage(img, {
+    scaleFactor: 1,
+    size: new cv.Size(SIZE, SIZE),
+    mean: new cv.Vec3(123.68, 116.78, 103.94),
+    swapRB: true,
+    crop: false
+  });
 
   net.setInput(inputBlob);
 
