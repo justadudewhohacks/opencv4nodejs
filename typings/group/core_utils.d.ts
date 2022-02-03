@@ -7,7 +7,7 @@
  * https://docs.opencv.org/4.x/db/de0/group__core__utils.html#ga705441a9ef01f47acdc55d87fbe5090c
  */
 export function getTickFrequency(): number;
- 
+
 /**
  * Returns the number of ticks.
  * 
@@ -18,11 +18,21 @@ export function getTickFrequency(): number;
  */
 export function getTickCount(): number;
 
-// int 	cv::getVersionMajor ()
-//  	Returns major library version. More...
-//  
-// int 	cv::getVersionMinor ()
-//  	Returns minor library version. More...
-//  
-// int 	cv::getVersionRevision ()
-//  	Returns revision field of the library version. More...
+/**
+ * Returns major library version.
+ * https://docs.opencv.org/4.x/db/de0/group__core__utils.html#gaebca81a0853cd9dff3d6fd88dad25ad0
+ */
+export function getVersionMajor(): number;
+
+
+/**
+ * Returns minor library version.
+ * https://docs.opencv.org/4.x/db/de0/group__core__utils.html#gaf76d1e4fd9562ae058abfea4891b8b0d
+ */
+export function getVersionMinor(): number;
+
+/**
+* Returns revision field of the library version.
+* https://docs.opencv.org/4.x/db/de0/group__core__utils.html#ga2d7ae9f1e3fb51d5a62c5cde4626bfcd
+*/
+export function getVersionRevision(): number;
