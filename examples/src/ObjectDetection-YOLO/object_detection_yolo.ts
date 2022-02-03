@@ -14,18 +14,14 @@ const conf = {
     inpHeight: 416,    // Height of network's input image}
 }
 
-function getHelp() {
+const args: { image?: string, video?: string, device?: string, help?: boolean } = mri(process.argv.slice(2), {default: {device: 'cpu'}, alias: {h: 'help'}});
+
+if (args.help) {
     console.log('Object Detection using YOLO in OPENCV');
     console.log('--device Device to perform inference on \'cpu\' or \'gpu\'. (default is cpu)');
     console.log('--image  Path to image file.');
     console.log('--video  Path to video file.');
     process.exit(0);
-}
-
-const args: { image?: string, video?: string, device?: string, h?: boolean, help?: boolean } = mri(process.argv.slice(2), {});
-
-if (args.help || args.h) {
-    getHelp();
 }
 
 const device = args.device || 'cpu';
