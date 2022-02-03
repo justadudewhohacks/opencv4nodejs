@@ -144,6 +144,10 @@ export function solvePnP(objectPoints: Point3[], imagePoints: Point2[], cameraMa
 export function solvePnPAsync(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], useExtrinsicGuess?: boolean, flags?: number): Promise<{ returnValue: boolean, rvec: Vec3, tvec: Vec3 }>;
 export function solvePnPAsync(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], useExtrinsicGuess?: boolean, iterationsCount?: number, reprojectionError?: number, confidence?: number, flags?: number): Promise<{ returnValue: boolean, rvec: Vec3, tvec: Vec3, inliers: number[] }>;
 
+export function isCustomMatAllocatorEnabled(): boolean;
+export function dangerousEnableCustomMatAllocator(): boolean;
+export function dangerousDisableCustomMatAllocator(): boolean;
+export function getMemMetrics(): { TotalAlloc: number, TotalKnownByJS: number, NumAllocations: number, NumDeAllocations: number };
 
 export type DrawParams = {
   thickness?: number;
@@ -164,10 +168,10 @@ export interface TextLine extends FontParams {
   text: string;
 }
 
+
+
+// non Natif
 export function drawDetection(img: Mat, inputRect: Rect, opts?: DrawDetectionParams): Rect;
+// non Natif
 export function drawTextBox(img: Mat, upperLeft: { x: number, y: number }, textLines: TextLine[], alpha: number): Mat;
 
-export function isCustomMatAllocatorEnabled(): boolean;
-export function dangerousEnableCustomMatAllocator(): boolean;
-export function dangerousDisableCustomMatAllocator(): boolean;
-export function getMemMetrics(): { TotalAlloc: number, TotalKnownByJS: number, NumAllocations: number, NumDeAllocations: number };

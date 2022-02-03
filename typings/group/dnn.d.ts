@@ -11,20 +11,49 @@ import { Size } from '../Size';
 //Creates 4-dimensional blob from image. More...
 
 
+/**
+ * Creates 4-dimensional blob from image. Optionally resizes and crops image from center, subtract mean values, scales values by scalefactor, swap Blue and Red channels.
+ * 
+ * if crop is true, input image is resized so one side after resize is equal to corresponding dimension in size and another one is equal or larger. Then, crop from the center is performed. If crop is false, direct resize without cropping and preserving aspect ratio is performed.
+ * 
+ * https://docs.opencv.org/4.x/d6/d0f/group__dnn.html#ga29f34df9376379a603acd8df581ac8d7
+ *
+ * @pram image	input image (with 1-, 3- or 4-channels).
+ * @pram scalefactor	multiplier for image values.
+ * @pram size	spatial size for output image
+ * @pram mean	scalar with mean values which are subtracted from channels. Values are intended to be in (mean-R, mean-G, mean-B) order if image has BGR ordering and swapRB is true.
+ * @pram swapRB	flag which indicates that swap first and last channels in 3-channel image is necessary.
+ * @pram crop	flag which indicates whether image will be cropped after resize or not
+ * @pram ddepth	Depth of output blob. Choose CV_32F or CV_8U.
+ * 
+ * 
+ * @return 4-dimensional Mat with NCHW dimensions order.
+ */
 export function blobFromImage(image: Mat, scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Mat;
 export function blobFromImageAsync(image: Mat, scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Promise<Mat>;
 
+/**
+ * Creates 4-dimensional blob from series of images. Optionally resizes and crops images from center, subtract mean values, scales values by scalefactor, swap Blue and Red channels.
+ * 
+ * if crop is true, input image is resized so one side after resize is equal to corresponding dimension in size and another one is equal or larger. Then, crop from the center is performed. If crop is false, direct resize without cropping and preserving aspect ratio is performed.
+ * 
+ * https://docs.opencv.org/4.x/d6/d0f/group__dnn.html#ga0b7b7c3c530b747ef738178835e1e70f
+ * 
+ * @param images	input images (all with 1-, 3- or 4-channels).
+ * @param scalefactor	multiplier for images values.
+ * @param size	spatial size for output image
+ * @param mean	scalar with mean values which are subtracted from channels. Values are intended to be in (mean-R, mean-G, mean-B) order if image has BGR ordering and swapRB is true.
+ * @param swapRB	flag which indicates that swap first and last channels in 3-channel image is necessary.
+ * @param crop	flag which indicates whether image will be cropped after resize or not
+ * @param ddepth	Depth of output blob. Choose CV_32F or CV_8U.
+ * 
+ * @returns 4-dimensional Mat with NCHW dimensions order.
+ */
+export function blobFromImages(images: Mat[], scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Mat;
+export function blobFromImages(images: Mat[], opt: {scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number}): Mat;
 
-
-//Mat 	cv::dnn::blobFromImages (InputArrayOfArrays images, double scalefactor=1.0, Size size=Size(), const Scalar &mean=Scalar(), bool swapRB=false, bool crop=false, int ddepth=CV_32F)
-//Creates 4-dimensional blob from series of images. Optionally resizes and crops images from center, subtract mean values, scales values by scalefactor, swap Blue and Red channels. More...
-//
-//void 	cv::dnn::blobFromImages (InputArrayOfArrays images, OutputArray blob, double scalefactor=1.0, Size size=Size(), const Scalar &mean=Scalar(), bool swapRB=false, bool crop=false, int ddepth=CV_32F)
-//Creates 4-dimensional blob from series of images. More...
-export function blobFromImages(image: Mat[], scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Mat;
-export function blobFromImagesAsync(image: Mat[], scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Promise<Mat>;
-
-
+export function blobFromImagesAsync(images: Mat[], scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Promise<Mat>;
+export function blobFromImagesAsync(images: Mat[], opt: {scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number}): Promise<Mat>;
 
 
 //void 	cv::dnn::enableModelDiagnostics (bool isDiagnosticsMode)
@@ -48,9 +77,47 @@ export function blobFromImagesAsync(image: Mat[], scaleFactor?: number, size?: S
 //void 	cv::dnn::NMSBoxes (const std::vector< Rect2d > &bboxes, const std::vector< float > &scores, const float score_threshold, const float nms_threshold, std::vector< int > &indices, const float eta=1.f, const int top_k=0)
 //
 //void 	cv::dnn::NMSBoxes (const std::vector< RotatedRect > &bboxes, const std::vector< float > &scores, const float score_threshold, const float nms_threshold, std::vector< int > &indices, const float eta=1.f, const int top_k=0)
-export function NMSBoxes(bboxes: Rect[], scores: number[], scoreThreshold: number, nmsThreshold: number): number[];
+/**
+ * Performs non maximum suppression given boxes and corresponding scores.
+ * 
+ * https://docs.opencv.org/4.x/d6/d0f/group__dnn.html#ga9d118d70a1659af729d01b10233213ee
+ * 
+ * 
+ * @param bboxes	a set of bounding boxes to apply NMS.
+ * @param scores	a set of corresponding confidences.
+ * @param scoreThreshold	a threshold used to filter boxes by score.
+ * @param nmsThreshold	a threshold used in non maximum suppression.
+ * @param eta	a coefficient in adaptive threshold formula: nms_thresholdi+1=eta⋅nms_thresholdi.
+ * @param top_k	if >0, keep at most top_k picked indices.
+ * 
+ * @return the kept indices of bboxes after NMS.
+ */
+export function NMSBoxes(bboxes: Rect[], scores: number[], scoreThreshold: number, nmsThreshold: number, eta?: number, topK?: number): number[];
+export function NMSBoxes(bboxes: Rect[], scores: number[], scoreThreshold: number, nmsThreshold: number, opts: {eta?: number, topK?: number}): number[];
 
+/**
+ * Read deep learning network represented in one of the supported formats.
+ * 
+ * https://docs.opencv.org/3.4.17/d6/d0f/group__dnn.html#ga3b34fe7a29494a6a4295c169a7d32422
+ * 
+ * @param model	Binary file contains trained weights. The following file extensions are expected for models from different frameworks:
+ * *.caffemodel (Caffe, http://caffe.berkeleyvision.org/),
+ * *.pb (TensorFlow, https://www.tensorflow.org/),
+ * *.t7 | *.net (Torch, http://torch.ch/),
+ * *.weights (Darknet, https://pjreddie.com/darknet/),
+ * *.bin (DLDT, https://software.intel.com/openvino-toolkit),
+ * *.onnx (ONNX, https://onnx.ai/) 
+ * @param modelPath Text file contains network configuration. It could be a file with the following extensions:
+ * *.prototxt (Caffe, http://caffe.berkeleyvision.org/),
+ * *.pbtxt (TensorFlow, https://www.tensorflow.org/),
+ * *.cfg (Darknet, https://pjreddie.com/darknet/),
+ * *.xml (DLDT, https://software.intel.com/openvino-toolkit)
+ */
+export function readNet(model: string, config?: string, framework?: string): Net;
+export function readNet(model: string, opt: {config?: string, framework?: string}): Net;
 
+export function readNetAsync(model: string, config?: string, framework?: string): Promise<Net>;
+export function readNetAsync(model: string, opt:{config?: string, framework?: string}): Promise<Net>;
 
 //Net 	cv::dnn::readNet (const String &model, const String &config="", const String &framework="")
 //Read deep learning network represented in one of the supported formats. More...

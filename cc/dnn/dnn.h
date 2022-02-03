@@ -28,6 +28,8 @@ public:
   static NAN_METHOD(ReadNetFromONNX);
   static NAN_METHOD(ReadNetFromONNXAsync);
 #endif
+  static NAN_METHOD(ReadNet);
+  static NAN_METHOD(ReadNetAsync);
 };
 
 #endif

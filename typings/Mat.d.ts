@@ -10,9 +10,18 @@ import { Vec3 } from './Vec3.d';
 import { Vec4 } from './Vec4.d';
 
 export class Mat {
+  /**
+   * Mat height like python .shape[0]
+   */
   readonly rows: number;
+  /**
+   * Mat width like python .shape[1]
+   */
   readonly cols: number;
   readonly type: number;
+  /**
+   * Mat channels like python .shape[2]
+   */
   readonly channels: number;
   readonly depth: number;
   readonly dims: number;
@@ -136,7 +145,7 @@ export class Mat {
   drawEllipse(box: RotatedRect, opts: { color?: Vec3, thickness?: number, lineType?: number }): void;
   drawEllipse(box: RotatedRect, color?: Vec3, thickness?: number, lineType?: number): void;
   drawEllipse(center: Point2, axes: Size, angle: number, startAngle: number, endAngle: number, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
-  
+
   drawFillConvexPoly(pts: Point2[], color?: Vec3, lineType?: number, shift?: number): void;
   drawFillPoly(pts: Point2[][], color?: Vec3, lineType?: number, shift?: number, offset?: Point2): void;
   // alternate signature
@@ -234,22 +243,22 @@ export class Mat {
   mulSpectrumsAsync(mat2: Mat, dftRows?: boolean, conjB?: boolean): Promise<Mat>;
   norm(src2: Mat, normType?: number, mask?: Mat): number;
   norm(normType?: number, mask?: Mat): number;
-  
+
   normalize(alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat): Mat;
-  normalize(opt: {alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat}): Mat;
-  
+  normalize(opt: { alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat }): Mat;
+
   normalizeAsync(alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat): Promise<Mat>;
-  normalizeAsync(opt: {alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat}): Promise<Mat>;
+  normalizeAsync(opt: { alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat }): Promise<Mat>;
 
   or(otherMat: Mat): Mat;
   padToSquare(color: Vec3): Mat;
-  
+
   perspectiveTransform(m: Mat): Mat;
   perspectiveTransformAsync(m: Mat): Promise<Mat>;
-  
+
   pop_back(numRows?: number): Mat;
   pop_backAsync(numRows?: number): Promise<Mat>;
-  
+
   popBack(numRows?: number): Mat;
   popBackAsync(numRows?: number): Promise<Mat>;
 
@@ -258,40 +267,40 @@ export class Mat {
 
   pushBack(mat: Mat): Mat;
   pushBackAsync(mat: Mat): Promise<Mat>;
-  
+
   putText(text: string, origin: Point2, fontFace: number, fontScale: number, color?: Vec3, thickness?: number, lineType?: number, bottomLeftOrigin?: boolean | 0): void;
   putText(text: string, origin: Point2, fontFace: number, fontScale: number, opts?: { color?: Vec3, thickness?: number, lineType?: number, bottomLeftOrigin?: boolean | 0 }): void;
-  
+
   putTextAsync(text: string, origin: Point2, fontFace: number, fontScale: number, color?: Vec3, thickness?: number, lineType?: number, bottomLeftOrigin?: boolean | 0): Promise<void>;
   putTextAsync(text: string, origin: Point2, fontFace: number, fontScale: number, opts?: { color?: Vec3, thickness?: number, lineType?: number, bottomLeftOrigin?: boolean | 0 }): Promise<void>;
-  
+
   pyrDown(size?: Size, borderType?: number): Mat;
   pyrDownAsync(size?: Size, borderType?: number): Promise<Mat>;
-  
+
   pyrUp(size?: Size, borderType?: number): Mat;
   pyrUpAsync(size?: Size, borderType?: number): Promise<Mat>;
-  
+
   recoverPose(E: Mat, points1: Point2[], points2: Point2[], mask?: Mat): { returnValue: number, R: Mat, T: Vec3 };
   recoverPoseAsync(E: Mat, points1: Point2[], points2: Point2[], mask?: Mat): Promise<{ returnValue: number, R: Mat, T: Vec3 }>;
-  
+
   rectify3Collinear(distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], cameraMatrix3: Mat, distCoeffs3: number[], imageSize: Size, R12: Mat, T12: Vec3, R13: Mat, T13: Vec3, alpha: number, newImageSize: Size, flags: number): { returnValue: number, R1: Mat, R2: Mat, R3: Mat, P1: Mat, P2: Mat, P3: Mat, Q: Mat, roi1: Rect, roi2: Rect };
   rectify3CollinearAsync(distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], cameraMatrix3: Mat, distCoeffs3: number[], imageSize: Size, R12: Mat, T12: Vec3, R13: Mat, T13: Vec3, alpha: number, newImageSize: Size, flags: number): Promise<{ returnValue: number, R1: Mat, R2: Mat, R3: Mat, P1: Mat, P2: Mat, P3: Mat, Q: Mat, roi1: Rect, roi2: Rect }>;
-  
+
   reduce(dim: number, rtype: number, dtype?: number): Mat;
   reduceAsync(dim: number, rtype: number, dtype?: number): Promise<Mat>;
-  
+
   reprojectImageTo3D(Q: Mat, handleMissingValues?: boolean, ddepth?: number): Mat;
   reprojectImageTo3DAsync(Q: Mat, handleMissingValues?: boolean, ddepth?: number): Promise<Mat>;
-  
+
   rescale(factor: number): Mat;
   rescaleAsync(factor: number): Promise<Mat>;
-  
+
   resize(rows: number, cols: number, fx?: number, fy?: number, interpolation?: number): Mat;
   resize(dsize: Size, fx?: number, fy?: number, interpolation?: number): Mat;
-  
+
   resizeAsync(rows: number, cols: number, fx?: number, fy?: number, interpolation?: number): Promise<Mat>;
   resizeAsync(dsize: Size, fx?: number, fy?: number, interpolation?: number): Promise<Mat>;
-  
+
   resizeToMax(maxRowsOrCols: number): Mat;
   resizeToMaxAsync(maxRowsOrCols: number): Promise<Mat>;
 

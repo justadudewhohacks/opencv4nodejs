@@ -44,111 +44,73 @@ NAN_MODULE_INIT(Dnn::Init) {
   Nan::SetMethod(target, "readNetFromONNX", ReadNetFromONNX);
   Nan::SetMethod(target, "readNetFromONNXAsync", ReadNetFromONNXAsync);
 #endif
+  Nan::SetMethod(target, "readNet", ReadNet);
+  Nan::SetMethod(target, "readNetAsync", ReadNetAsync);
 };
 
 
 NAN_METHOD(Dnn::ReadNetFromTensorflow) {
-  FF::executeSyncBinding(
-    std::make_shared<DnnBindings::ReadNetFromTensorflowWorker>(),
-    "ReadNetFromTensorflow",
-    info
-  );
+  FF::executeSyncBinding(std::make_shared<DnnBindings::ReadNetFromTensorflowWorker>(), "ReadNetFromTensorflow", info);
 }
 
 NAN_METHOD(Dnn::ReadNetFromTensorflowAsync) {
-  FF::executeAsyncBinding(
-    std::make_shared<DnnBindings::ReadNetFromTensorflowWorker>(),
-    "ReadNetFromTensorflowAsync",
-    info
-  );
+  FF::executeAsyncBinding(std::make_shared<DnnBindings::ReadNetFromTensorflowWorker>(), "ReadNetFromTensorflowAsync", info);
 }
 
 NAN_METHOD(Dnn::ReadNetFromCaffe) {
-  FF::executeSyncBinding(
-    std::make_shared<DnnBindings::ReadNetFromCaffeWorker>(),
-    "ReadNetFromCaffe",
-    info
-  );
+  FF::executeSyncBinding(std::make_shared<DnnBindings::ReadNetFromCaffeWorker>(), "ReadNetFromCaffe", info);
 }
 
 NAN_METHOD(Dnn::ReadNetFromCaffeAsync) {
-  FF::executeAsyncBinding(
-    std::make_shared<DnnBindings::ReadNetFromCaffeWorker>(),
-    "ReadNetFromCaffeAsync",
-    info
-  );
+  FF::executeAsyncBinding(std::make_shared<DnnBindings::ReadNetFromCaffeWorker>(), "ReadNetFromCaffeAsync", info);
 }
 
 NAN_METHOD(Dnn::BlobFromImage) {
-  FF::executeSyncBinding(
-    std::make_shared<DnnBindings::BlobFromImageWorker>(true),
-    "BlobFromImage",
-    info
-  );
+  FF::executeSyncBinding(std::make_shared<DnnBindings::BlobFromImageWorker>(true), "BlobFromImage", info);
 }
 
 NAN_METHOD(Dnn::BlobFromImageAsync) {
-  FF::executeAsyncBinding(
-    std::make_shared<DnnBindings::BlobFromImageWorker>(true),
-    "BlobFromImageAsync",
-    info
-  );
+  FF::executeAsyncBinding(std::make_shared<DnnBindings::BlobFromImageWorker>(true), "BlobFromImageAsync", info);
 }
 
 NAN_METHOD(Dnn::BlobFromImages) {
-  FF::executeSyncBinding(
-    std::make_shared<DnnBindings::BlobFromImageWorker>(false),
-    "BlobFromImages",
-    info
-  );
+  FF::executeSyncBinding(std::make_shared<DnnBindings::BlobFromImageWorker>(false), "BlobFromImages", info);
 }
 
 NAN_METHOD(Dnn::BlobFromImagesAsync) {
-  FF::executeAsyncBinding(
-    std::make_shared<DnnBindings::BlobFromImageWorker>(false),
-    "BlobFromImagesAsync",
-    info
-  );
+  FF::executeAsyncBinding(std::make_shared<DnnBindings::BlobFromImageWorker>(false), "BlobFromImagesAsync", info);
 }
 
 #if CV_VERSION_GREATER_EQUAL(3, 4, 0)
 NAN_METHOD(Dnn::ReadNetFromDarknet) {
-  FF::executeSyncBinding(
-      std::make_shared<DnnBindings::ReadNetFromDarknetWorker>(),
-      "ReadNetFromDarknet",
-      info);
+  FF::executeSyncBinding(std::make_shared<DnnBindings::ReadNetFromDarknetWorker>(), "ReadNetFromDarknet", info);
 }
 
 NAN_METHOD(Dnn::ReadNetFromDarknetAsync) {
-  FF::executeAsyncBinding(
-      std::make_shared<DnnBindings::ReadNetFromDarknetWorker>(),
-      "ReadNetFromDarknetAsync",
-      info);
+  FF::executeAsyncBinding(std::make_shared<DnnBindings::ReadNetFromDarknetWorker>(), "ReadNetFromDarknetAsync", info);
 }
 
 NAN_METHOD(Dnn::NMSBoxes) {
-  FF::executeSyncBinding(
-    std::make_shared<DnnBindings::NMSBoxes>(),
-    "NMSBoxes",
-    info
-  );
+  FF::executeSyncBinding(std::make_shared<DnnBindings::NMSBoxes>(), "NMSBoxes", info);
 }
 #endif
 
 #if CV_VERSION_GREATER_EQUAL(4, 0, 0)
 NAN_METHOD(Dnn::ReadNetFromONNX) {
-  FF::executeSyncBinding(
-      std::make_shared<DnnBindings::ReadNetFromONNXWorker>(),
-      "ReadNetFromONNX",
-      info);
+  FF::executeSyncBinding(std::make_shared<DnnBindings::ReadNetFromONNXWorker>(), "ReadNetFromONNX", info);
 }
 
 NAN_METHOD(Dnn::ReadNetFromONNXAsync) {
-  FF::executeAsyncBinding(
-      std::make_shared<DnnBindings::ReadNetFromONNXWorker>(),
-      "ReadNetFromONNXAsync",
-      info);
+  FF::executeAsyncBinding(std::make_shared<DnnBindings::ReadNetFromONNXWorker>(), "ReadNetFromONNXAsync", info);
 }
 #endif
+
+NAN_METHOD(Dnn::ReadNet) {
+  FF::executeSyncBinding(std::make_shared<DnnBindings::ReadNetWorker>(), "ReadNet", info);
+}
+
+NAN_METHOD(Dnn::ReadNetAsync) {
+  FF::executeAsyncBinding(std::make_shared<DnnBindings::ReadNetWorker>(), "ReadNetAsync", info);
+}
 
 #endif
