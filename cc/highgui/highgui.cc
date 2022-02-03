@@ -98,7 +98,7 @@ NAN_METHOD(Highgui::namedWindow) {
   FF::TryCatch tryCatch("Highgui::namedWindow");
 
 	std::string winName;
-  int flags = 0;
+  int flags = cv::WINDOW_AUTOSIZE;
 
   if (!info[0]->IsString()) {
     return tryCatch.throwError("expected arg0 (winName) to be the window name");
