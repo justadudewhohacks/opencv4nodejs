@@ -31,9 +31,21 @@ export class Mat {
   readonly sizes: number[];
   constructor();
   constructor(channels: Mat[]);
+  /**
+   * @param type CV_8U, CV_8S, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F ...
+   */
   constructor(rows: number, cols: number, type: number, fillValue?: number | number[]);
+  /**
+   * @param type CV_8U, CV_8S, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F ...
+   */
   constructor(dataArray: number[][], type: number);
+  /**
+   * @param type CV_8U, CV_8S, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F ...
+   */
   constructor(dataArray: number[][][], type: number);
+  /**
+   * @param type CV_8U, CV_8S, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F ...
+   */
   constructor(data: Buffer, rows: number, cols: number, type?: number);
   abs(): Mat;
   absdiff(otherMat: Mat): Mat;
@@ -122,6 +134,15 @@ export class Mat {
   dftAsync(flags?: number, nonzeroRows?: number): Promise<Mat>;
   dilate(kernel: Mat, anchor?: Point2, iterations?: number, borderType?: number): Mat;
   dilateAsync(kernel: Mat, anchor?: Point2, iterations?: number, borderType?: number): Promise<Mat>;
+  /**
+   * Calculates the distance to the closest zero pixel for each pixel of the source image.
+   * 
+   * https://docs.opencv.org/4.x/d7/d1b/group__imgproc__misc.html#ga8a0b7fdfcb7a13dde018988ba3a43042
+   * 
+   * @param distanceType Type of distance, see DistanceTypes
+   * @param maskSize Size of the distance transform mask, see DistanceTransformMasks. DIST_MASK_PRECISE is not supported by this variant. In case of the DIST_L1 or DIST_C distance type, the parameter is forced to 3 because a 3×3 mask gives the same result as 5×5 or any larger aperture.
+   * @param dstType Type of output image. It can be CV_8U or CV_32F. Type CV_8U can be used only for the first variant of the function and distanceType == DIST_L1.
+   */
   distanceTransform(distanceType: number, maskSize: number, dstType?: number): Mat;
   distanceTransformAsync(distanceType: number, maskSize: number, dstType?: number): Promise<Mat>;
   distanceTransformWithLabels(distanceType: number, maskSize: number, labelType?: number): { labels: Mat, dist: Mat };
@@ -181,15 +202,37 @@ export class Mat {
   flattenFloat(rows: number, cols: number): Mat;
   flip(flipCode: number): Mat;
   flipAsync(flipCode: number): Promise<Mat>;
-  floodFill(seedPoint: Point2, newVal: number, mask?: Mat, loDiff?: number, upDiff?: number, flags?: number): { returnValue: number, rect: Rect };
-  floodFill(seedPoint: Point2, newVal: Vec3, mask?: Mat, loDiff?: Vec3, upDiff?: Vec3, flags?: number): { returnValue: number, rect: Rect };
-  floodFillAsync(seedPoint: Point2, newVal: number, mask?: Mat, loDiff?: number, upDiff?: number, flags?: number): Promise<{ returnValue: number, rect: Rect }>;
-  floodFillAsync(seedPoint: Point2, newVal: Vec3, mask?: Mat, loDiff?: Vec3, upDiff?: Vec3, flags?: number): Promise<{ returnValue: number, rect: Rect }>;
+  /**
+   * Fills a connected component with the given color.
+   * 
+   * The function cv::floodFill fills a connected component starting from the seed point with the specified color. The connectivity is determined by the color/brightness closeness of the neighbor pixels. The pixel at (x,y) is considered to belong to the repainted domain if:
+   * 
+   * https://docs.opencv.org/4.x/d7/d1b/group__imgproc__misc.html#ga366aae45a6c1289b341d140839f18717
+   * 
+   * @param seedPoint Starting point.
+   * @param newVal New value of the repainted domain pixels.
+   * @param mask Operation mask that should be a single-channel 8-bit image, 2 pixels wider and 2 pixels taller than image. Since this is both an input and output parameter, you must take responsibility of initializing it. Flood-filling cannot go across non-zero pixels in the input mask. For example, an edge detector output can be used as a mask to stop filling at edges. On output, pixels in the mask corresponding to filled pixels in the image are set to 1 or to the a value specified in flags as described below. Additionally, the function fills the border of the mask with ones to simplify internal processing. It is therefore possible to use the same mask in multiple calls to the function to make sure the filled areas do not overlap.
+   * @param loDiff Maximal lower brightness/color difference between the currently observed pixel and one of its neighbors belonging to the component, or a seed pixel being added to the component.
+   * @param upDiff Maximal upper brightness/color difference between the currently observed pixel and one of its neighbors belonging to the component, or a seed pixel being added to the component.
+   * @param flags Operation flags. The first 8 bits contain a connectivity value. The default value of 4 means that only the four nearest neighbor pixels (those that share an edge) are considered. A connectivity value of 8 means that the eight nearest neighbor pixels (those that share a corner) will be considered. The next 8 bits (8-16) contain a value between 1 and 255 with which to fill the mask (the default value is 1). For example, 4 | ( 255 << 8 ) will consider 4 nearest neighbours and fill the mask with a value of 255. The following additional options occupy higher bits and therefore may be further combined with the connectivity and mask fill values using bit-wise or (|), see FloodFillFlags.
+   */
+  floodFill<T extends number | Vec3>(seedPoint: Point2, newVal: T, mask?: Mat, loDiff?: T, upDiff?: T, flags?: T): { returnValue: number, rect: Rect };
+  floodFill<T extends number | Vec3>(seedPoint: Point2, newVal: T, opts: { mask?: Mat, loDiff?: T, upDiff?: T, flags?: T }): { returnValue: number, rect: Rect };
+
+  floodFillAsync<T extends number | Vec3>(seedPoint: Point2, newVal: T, mask?: Mat, loDiff?: T, upDiff?: T, flags?: number): Promise<{ returnValue: number, rect: Rect }>;
+  floodFillAsync<T extends number | Vec3>(seedPoint: Point2, newVal: T, opts: { mask?: Mat, loDiff?: T, upDiff?: T, flags?: number }): Promise<{ returnValue: number, rect: Rect }>;
+
   gaussianBlur(kSize: Size, sigmaX: number, sigmaY?: number, borderType?: number): Mat;
   gaussianBlurAsync(kSize: Size, sigmaX: number, sigmaY?: number, borderType?: number): Promise<Mat>;
   getData(): Buffer;
   getDataAsync(): Promise<Buffer>;
+  /**
+   * if Mat.dims <= 2
+   */
   getDataAsArray(): number[][];
+  /**
+   * if Mat.dims > 2 (3D)
+   */
   getDataAsArray(): number[][][];
   getOptimalNewCameraMatrix(distCoeffs: number[], imageSize: Size, alpha: number, newImageSize?: Size, centerPrincipalPoint?: boolean): { out: Mat, validPixROI: Rect };
   getOptimalNewCameraMatrixAsync(distCoeffs: number[], imageSize: Size, alpha: number, newImageSize?: Size, centerPrincipalPoint?: boolean): Promise<{ out: Mat, validPixROI: Rect }>;
@@ -221,8 +264,18 @@ export class Mat {
   inRange(lower: Vec3, upper: Vec3): Mat;
   inRangeAsync(lower: number, upper: number): Promise<Mat>;
   inRangeAsync(lower: Vec3, upper: Vec3): Promise<Mat>;
+  /**
+   * Calculates the integral of an image.
+   * 
+   * https://docs.opencv.org/4.x/d7/d1b/group__imgproc__misc.html#ga97b87bec26908237e8ba0f6e96d23e28
+   * 
+   * @param sdepth desired depth of the integral and the tilted integral images, CV_32S, CV_32F, or CV_64F.
+   * @param sqdepth desired depth of the integral image of squared pixel values, CV_32F or CV_64F.
+   */
   integral(sdepth?: number, sqdepth?: number): { sum: Mat, sqsum: Mat, tilted: Mat };
+  integral(opts: { sdepth?: number, sqdepth?: number }): { sum: Mat, sqsum: Mat, tilted: Mat };
   integralAsync(sdepth?: number, sqdepth?: number): Promise<{ sum: Mat, sqsum: Mat, tilted: Mat }>;
+  integralAsync(opts: { sdepth?: number, sqdepth?: number }): Promise<{ sum: Mat, sqsum: Mat, tilted: Mat }>;
   inv(): Mat;
   laplacian(ddepth: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Mat;
   laplacianAsync(ddepth: number, ksize?: number, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
@@ -338,15 +391,38 @@ export class Mat {
   stereoRectify(distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], imageSize: Size, R: Mat, T: Vec3, flags?: number, alpha?: number, newImageSize?: Size): { R1: Mat, R2: Mat, P1: Mat, P2: Mat, Q: Mat, roi1: Rect, roi2: Rect };
   stereoRectifyAsync(distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], imageSize: Size, R: Mat, T: Vec3, flags?: number, alpha?: number, newImageSize?: Size): Promise<{ R1: Mat, R2: Mat, P1: Mat, P2: Mat, Q: Mat, roi1: Rect, roi2: Rect }>;
   sub(otherMat: Mat): Mat;
+  /**
+   * Calculates the sum of array elements.
+   * The function cv::sum calculates and returns the sum of array elements, independently for each channel.
+   * https://docs.opencv.org/4.x/d2/de8/group__core__array.html#ga716e10a2dd9e228e4d3c95818f106722
+   * Mat must have from 1 to 4 channels.
+   */
   sum(): number | Vec2 | Vec3 | Vec4;
   sumAsync(): Promise<number | Vec2 | Vec3 | Vec4>;
+  /**
+   * Applies a fixed-level threshold to each array element.
+   * 
+   * The function applies fixed-level thresholding to a multiple-channel array. The function is typically used to get a bi-level (binary) image out of a grayscale image ( compare could be also used for this purpose) or for removing a noise, that is, filtering out pixels with too small or too large values. There are several types of thresholding supported by the function. They are determined by type parameter.
+   * 
+   * Also, the special values THRESH_OTSU or THRESH_TRIANGLE may be combined with one of the above values. In these cases, the function determines the optimal threshold value using the Otsu's or Triangle algorithm and uses it instead of the specified thresh.
+   * 
+   * Note: Currently, the Otsu's and Triangle methods are implemented only for 8-bit single-channel images.
+   * https://docs.opencv.org/4.x/d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57
+   * @param thresh threshold value.
+   * @param maxVal maximum value to use with the THRESH_BINARY and THRESH_BINARY_INV thresholding types
+   * @param type thresholding type (see ThresholdTypes).
+   */
   threshold(thresh: number, maxVal: number, type: number): Mat;
   thresholdAsync(thresh: number, maxVal: number, type: number): Promise<Mat>;
+
   transform(m: Mat): Mat;
   transformAsync(m: Mat): Promise<Mat>;
+
   transpose(): Mat;
+
   triangulatePoints(projPoints1: Point2[], projPoints2: Point2[]): Mat;
   triangulatePointsAsync(projPoints1: Point2[], projPoints2: Point2[]): Promise<Mat>;
+
   undistort(cameraMatrix: Mat, distCoeffs: Mat): Mat;
   undistortAsync(cameraMatrix: Mat, distCoeffs: Mat): Promise<Mat>;
   validateDisparity(cost: Mat, minDisparity: number, numberOfDisparities: number, disp12MaxDisp?: number): void;
@@ -358,6 +434,19 @@ export class Mat {
   watershed(markers: Mat): Mat;
   watershedAsync(markers: Mat): Promise<Mat>;
   release(): void;
-
+  /**
+   * Returns an identity matrix of the specified size and type.
+   * 
+   * The method returns a Matlab-style identity matrix initializer, similarly to Mat::zeros. Similarly to Mat::ones, you can use a scale operation to create a scaled identity matrix efficiently:
+   * 
+   * // make a 4x4 diagonal matrix with 0.1's on the diagonal.
+   * Mat A = Mat::eye(4, 4, CV_32F)*0.1;
+   * 
+   * Note: In case of multi-channels type, identity matrix will be initialized only for the first channel, the others will be set to 0's
+   * https://docs.opencv.org/4.x/d3/d63/classcv_1_1Mat.html#a458874f0ab8946136254da37ba06b78b
+   * @param rows Number of rows.
+   * @param cols Number of columns.
+   * @param type Created matrix type.
+   */
   static eye(rows: number, cols: number, type: number): Mat;
 }

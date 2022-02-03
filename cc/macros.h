@@ -23,10 +23,6 @@
 		getter<ff_property_converter>(info, getProperty_##ff_property_name); \
 	}
 
-/* define getters */
-#define FF_GETTER(ff_property_name, ff_property_converter) \
-	FF_GETTER_CUSTOM(ff_property_name, ff_property_converter, self.ff_property_name)
-
 /* define accessors, custom expression for accessing properties of "self" */
 #define FF_ACCESSORS_CUSTOM(ff_property_name, ff_property_converter, ff_access_property_expr) \
 	FF_GETTER_CUSTOM(ff_property_name, ff_property_converter, ff_access_property_expr); \
