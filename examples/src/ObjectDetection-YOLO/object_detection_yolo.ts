@@ -14,7 +14,7 @@ const conf = {
     inpHeight: 416,    // Height of network's input image}
 }
 
-const args: { image?: string, video?: string, device?: string, help?: boolean } = mri(process.argv.slice(2), {default: {device: 'cpu'}, alias: {h: 'help'}});
+const args: { image?: string, video?: string, device?: string, help?: boolean } = mri(process.argv.slice(2), { default: { device: 'cpu' }, alias: { h: 'help' } });
 
 if (args.help) {
     console.log('Object Detection using YOLO in OPENCV');
@@ -61,7 +61,7 @@ async function main() {
     const drawPred = (frame: Mat, classId: number, conf: number, left: number, top: number, right: number, bottom: number): void => {
         // Draw a bounding box.
         frame.drawRectangle(new Point2(left, top), new Point2(right, bottom), new Vec3(255, 178, 50), 3)
-        let label = Math.round(conf*100) + '%';
+        let label = Math.round(conf * 100) + '%';
 
         // Get the label for the class name and its confidence
         if (classes) {
@@ -157,6 +157,8 @@ async function main() {
         const frameSize = new cv.Size(cap.get(cv.CAP_PROP_FRAME_WIDTH), cap.get(cv.CAP_PROP_FRAME_HEIGHT));
         vid_writer = new VideoWriter(outputFile, VideoWriter.fourcc('MJPG'), fps, frameSize);
     }
+    const size = new Size(conf.inpWidth, conf.inpHeight);
+    const mean = new Vec3(0, 0, 0);
     while (cv.waitKey(1) < 0) {
         //# get frame from the video
         const frame: Mat = cap.read()
@@ -164,13 +166,13 @@ async function main() {
         if (!frame || frame.sizes.length === 0) { // hasFrame:
             console.log("Done processing !!!")
             console.log("Output file is stored as ", outputFile)
-            cv.waitKey(6000)            
+            cv.waitKey(6000)
             // Release device
             cap.release()
             break
         }
         // Create a 4D blob from a frame.
-        const blob: Mat = cv.blobFromImage(frame, 1 / 255, new Size(conf.inpWidth, conf.inpHeight), new Vec3(0, 0, 0), true, false)
+        const blob: Mat = cv.blobFromImage(frame, { scaleFactor: 1 / 255, size, mean, swapRB: true, crop: false })
         // Sets the input to the network
         net.setInput(blob)
         // Runs the forward pass to get output of the output layers
@@ -179,7 +181,7 @@ async function main() {
         // Remove the bounding boxes with low confidence
         postprocess(frame, outs)
         // Put efficiency information. The function getPerfProfile returns the overall time for inference(t) and the timings for each of the layers(in layersTimes)
-        const {	retval } = net.getPerfProfile()
+        const { retval } = net.getPerfProfile()
         const label = `Inference time: ${(retval * 1000.0 / cv.getTickFrequency()).toFixed(2)} ms`;
         // Write the frame with the detection boxes
         frame.putText(label, new Point2(0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, new Vec3(0, 0, 255))
