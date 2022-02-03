@@ -4,13 +4,6 @@ import { Net } from '../Net.d';
 import { Vec3 } from '../Vec3';
 import { Size } from '../Size';
 
-//Mat 	cv::dnn::blobFromImage (InputArray image, double scalefactor=1.0, const Size &size=Size(), const Scalar &mean=Scalar(), bool swapRB=false, bool crop=false, int ddepth=CV_32F)
-//Creates 4-dimensional blob from image. Optionally resizes and crops image from center, subtract mean values, scales values by scalefactor, swap Blue and Red channels. More...
-//
-//void 	cv::dnn::blobFromImage (InputArray image, OutputArray blob, double scalefactor=1.0, const Size &size=Size(), const Scalar &mean=Scalar(), bool swapRB=false, bool crop=false, int ddepth=CV_32F)
-//Creates 4-dimensional blob from image. More...
-
-
 /**
  * Creates 4-dimensional blob from image. Optionally resizes and crops image from center, subtract mean values, scales values by scalefactor, swap Blue and Red channels.
  * 
@@ -30,7 +23,9 @@ import { Size } from '../Size';
  * @return 4-dimensional Mat with NCHW dimensions order.
  */
 export function blobFromImage(image: Mat, scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Mat;
+export function blobFromImage(image: Mat, opts: { scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number }): Mat;
 export function blobFromImageAsync(image: Mat, scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Promise<Mat>;
+export function blobFromImageAsync(image: Mat, opts: { scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number }): Promise<Mat>;
 
 /**
  * Creates 4-dimensional blob from series of images. Optionally resizes and crops images from center, subtract mean values, scales values by scalefactor, swap Blue and Red channels.
@@ -50,10 +45,10 @@ export function blobFromImageAsync(image: Mat, scaleFactor?: number, size?: Size
  * @returns 4-dimensional Mat with NCHW dimensions order.
  */
 export function blobFromImages(images: Mat[], scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Mat;
-export function blobFromImages(images: Mat[], opt: {scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number}): Mat;
+export function blobFromImages(images: Mat[], opts: { scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number }): Mat;
 
 export function blobFromImagesAsync(images: Mat[], scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number): Promise<Mat>;
-export function blobFromImagesAsync(images: Mat[], opt: {scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number}): Promise<Mat>;
+export function blobFromImagesAsync(images: Mat[], opts: { scaleFactor?: number, size?: Size, mean?: Vec3, swapRB?: boolean, crop?: boolean, ddepth?: number }): Promise<Mat>;
 
 
 //void 	cv::dnn::enableModelDiagnostics (bool isDiagnosticsMode)
@@ -93,7 +88,7 @@ export function blobFromImagesAsync(images: Mat[], opt: {scaleFactor?: number, s
  * @return the kept indices of bboxes after NMS.
  */
 export function NMSBoxes(bboxes: Rect[], scores: number[], scoreThreshold: number, nmsThreshold: number, eta?: number, topK?: number): number[];
-export function NMSBoxes(bboxes: Rect[], scores: number[], scoreThreshold: number, nmsThreshold: number, opts: {eta?: number, topK?: number}): number[];
+export function NMSBoxes(bboxes: Rect[], scores: number[], scoreThreshold: number, nmsThreshold: number, opts: { eta?: number, topK?: number }): number[];
 
 /**
  * Read deep learning network represented in one of the supported formats.
@@ -114,37 +109,21 @@ export function NMSBoxes(bboxes: Rect[], scores: number[], scoreThreshold: numbe
  * *.xml (DLDT, https://software.intel.com/openvino-toolkit)
  */
 export function readNet(model: string, config?: string, framework?: string): Net;
-export function readNet(model: string, opt: {config?: string, framework?: string}): Net;
+export function readNet(model: string, opts: { config?: string, framework?: string }): Net;
 
 export function readNetAsync(model: string, config?: string, framework?: string): Promise<Net>;
-export function readNetAsync(model: string, opt:{config?: string, framework?: string}): Promise<Net>;
+export function readNetAsync(model: string, opts: { config?: string, framework?: string }): Promise<Net>;
 
-//Net 	cv::dnn::readNet (const String &model, const String &config="", const String &framework="")
-//Read deep learning network represented in one of the supported formats. More...
-//
-//Net 	cv::dnn::readNet (const String &framework, const std::vector< uchar > &bufferModel, const std::vector< uchar > &bufferConfig=std::vector< uchar >())
-//Read deep learning network represented in one of the supported formats. More...
-//
-//Net 	cv::dnn::readNetFromCaffe (const String &prototxt, const String &caffeModel=String())
-//Reads a network model stored in Caffe framework's format. More...
+/**
+ * Reads a network model stored in Caffe framework's format.
+ * 
+ * https://docs.opencv.org/4.x/d6/d0f/group__dnn.html#ga29d0ea5e52b1d1a6c2681e3f7d68473a
+ * @param prototxt path to the .prototxt file with text description of the network architecture.
+ * @param modelPath path to the .caffemodel file with learned network.
+ */
 export function readNetFromCaffe(prototxt: string, modelPath?: string): Net;
 export function readNetFromCaffeAsync(prototxt: string, modelPath?: string): Promise<Net>;
 
-
-//Net 	cv::dnn::readNetFromCaffe (const std::vector< uchar > &bufferProto, const std::vector< uchar > &bufferModel=std::vector< uchar >())
-//Reads a network model stored in Caffe model in memory. More...
-//
-//Net 	cv::dnn::readNetFromCaffe (const char *bufferProto, size_t lenProto, const char *bufferModel=NULL, size_t lenModel=0)
-//Reads a network model stored in Caffe model in memory. More...
-//
-//Net 	cv::dnn::readNetFromDarknet (const String &cfgFile, const String &darknetModel=String())
-//Reads a network model stored in Darknet model files. More...
-//
-//Net 	cv::dnn::readNetFromDarknet (const std::vector< uchar > &bufferCfg, const std::vector< uchar > &bufferModel=std::vector< uchar >())
-//Reads a network model stored in Darknet model files. More...
-//
-//Net 	cv::dnn::readNetFromDarknet (const char *bufferCfg, size_t lenCfg, const char *bufferModel=NULL, size_t lenModel=0)
-//Reads a network model stored in Darknet model files. More...
 /**
  * Reads a network model stored in Darknet model files.
  * 
@@ -166,29 +145,23 @@ export function readNetFromDarknetAsync(cfgPath: string, modelPath: string): Pro
 //Net 	cv::dnn::readNetFromModelOptimizer (const uchar *bufferModelConfigPtr, size_t bufferModelConfigSize, const uchar *bufferWeightsPtr, size_t bufferWeightsSize)
 //Load a network from Intel's Model Optimizer intermediate representation. More...
 
-
-
-//Net 	cv::dnn::readNetFromONNX (const String &onnxFile)
-//Reads a network model ONNX. More...
-//
-//Net 	cv::dnn::readNetFromONNX (const char *buffer, size_t sizeBuffer)
-//Reads a network model from ONNX in-memory buffer. More...
-//
-//Net 	cv::dnn::readNetFromONNX (const std::vector< uchar > &buffer)
-//Reads a network model from ONNX in-memory buffer. More...
-
+/**
+ * Reads a network model ONNX.
+ * https://docs.opencv.org/4.x/d6/d0f/group__dnn.html#ga7faea56041d10c71dbbd6746ca854197
+ * 
+ * @param onnxFile 	path to the .onnx file with text description of the network architecture.
+ */
 export function readNetFromONNX(onnxFile: string): Net;
 export function readNetFromONNXAsync(onnxFile: string): Promise<Net>;
 
-
-//Net 	cv::dnn::readNetFromTensorflow (const String &model, const String &config=String())
-//Reads a network model stored in TensorFlow framework's format. More...
-//
-//Net 	cv::dnn::readNetFromTensorflow (const std::vector< uchar > &bufferModel, const std::vector< uchar > &bufferConfig=std::vector< uchar >())
-//Reads a network model stored in TensorFlow framework's format. More...
-//
-//Net 	cv::dnn::readNetFromTensorflow (const char *bufferModel, size_t lenModel, const char *bufferConfig=NULL, size_t lenConfig=0)
-//Reads a network model stored in TensorFlow framework's format. More...
+/**
+ * Reads a network model stored in TensorFlow framework's format.
+ * 
+ * https://docs.opencv.org/4.x/d6/d0f/group__dnn.html#gad820b280978d06773234ba6841e77e8d
+ * 
+ * @param modelPath path to the .pb file with binary protobuf description of the network architecture
+ * @param config path to the .pbtxt file that contains text graph definition in protobuf format. Resulting Net object is built by text graph using weights from a binary one that let us make it more flexible.
+ */
 export function readNetFromTensorflow(modelPath: string, config?: string): Net;
 export function readNetFromTensorflowAsync(modelPath: string): Promise<Net>;
 
