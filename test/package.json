@@ -16,6 +16,7 @@
   "author": "justadudewhohacks",
   "license": "MIT",
   "dependencies": {
+    "@u4/opencv4nodejs": "link:..",
     "chai": "^4.2.0",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0"

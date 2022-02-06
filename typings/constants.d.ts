@@ -116,76 +116,221 @@ export const CALIB_USE_LU: number;
 export const CALIB_USE_QR: number;
 export const CALIB_ZERO_DISPARITY: number;
 export const CALIB_ZERO_TANGENT_DIST: number;
+/**
+ * Android - not used.
+ */
 export const CAP_ANDROID: number;
+/**
+ * Auto detect == 0.
+ */
 export const CAP_ANY: number;
+/**
+ * Aravis SDK.
+ */
 export const CAP_ARAVIS: number;
+/**
+ * AVFoundation framework for iOS (OS X Lion will have the same API)
+ */
 export const CAP_AVFOUNDATION: number;
 export const CAP_CMU1394: number;
 export const CAP_DC1394: number;
+/**
+ * DirectShow (via videoInput)
+ */
 export const CAP_DSHOW: number;
+/**
+ * Open and record video file or stream using the FFMPEG library.
+ */
 export const CAP_FFMPEG: number;
+/**
+ * IEEE 1394 drivers.
+ */
 export const CAP_FIREWIRE: number;
+/**
+ * Smartek Giganetix GigEVisionSDK.
+ */
 export const CAP_GIGANETIX: number;
+/**
+ * gPhoto2 connection
+ */
 export const CAP_GPHOTO2: number;
+/**
+ * GStreamer.
+ */
 export const CAP_GSTREAMER: number;
 export const CAP_IEEE1394: number;
+/**
+ * OpenCV Image Sequence (e.g. img_%02d.jpg)
+ */
 export const CAP_IMAGES: number;
+/**
+ * RealSense (former Intel Perceptual Computing SDK)
+ */
 export const CAP_INTELPERC: number;
 export const CAP_MODE_BGR: number;
 export const CAP_MODE_GRAY: number;
 export const CAP_MODE_RGB: number;
 export const CAP_MODE_YUYV: number;
+/**
+ * Microsoft Media Foundation (via videoInput)
+ */
 export const CAP_MSMF: number;
+/**
+ * OpenNI (for Kinect)
+ */
 export const CAP_OPENNI: number;
+/**
+ * OpenNI2 (for Kinect)
+ */
 export const CAP_OPENNI2: number;
+/**
+ * OpenNI2 (for Asus Xtion and Occipital Structure sensors)
+ */
 export const CAP_OPENNI2_ASUS: number;
+/**
+ * OpenNI (for Asus Xtion)
+ */
 export const CAP_OPENNI_ASUS: number;
 export const CAP_PROP_AUTOFOCUS: number;
+/**
+ * DC1394: exposure control done by camera, user can adjust reference level using this feature.
+ */
 export const CAP_PROP_AUTO_EXPOSURE: number;
 export const CAP_PROP_BACKLIGHT: number;
+/**
+ * Brightness of the image (only for those cameras that support).
+ */
 export const CAP_PROP_BRIGHTNESS: number;
 export const CAP_PROP_BUFFERSIZE: number;
+/**
+ * Contrast of the image (only for cameras).
+ */
 export const CAP_PROP_CONTRAST: number;
+/**
+ * Boolean flags indicating whether images should be converted to RGB.
+ * GStreamer note: The flag is ignored in case if custom pipeline is used. It's user responsibility to interpret pipeline output.
+ */
 export const CAP_PROP_CONVERT_RGB: number;
+/**
+ * Exposure (only for those cameras that support).
+ */
 export const CAP_PROP_EXPOSURE: number;
 export const CAP_PROP_FOCUS: number;
+/**
+ * Format of the Mat objects (see Mat::type()) returned by VideoCapture::retrieve(). Set value -1 to fetch undecoded RAW video streams (as Mat 8UC1).
+ */
 export const CAP_PROP_FORMAT: number;
+/**
+ * 4-character code of codec. see VideoWriter::fourcc .
+ */
 export const CAP_PROP_FOURCC: number;
+/**
+ * Frame rate.
+ */
 export const CAP_PROP_FPS: number;
+/**
+ * Number of frames in the video file.
+ */
 export const CAP_PROP_FRAME_COUNT: number;
+/**
+ * Height of the frames in the video stream.
+ */
 export const CAP_PROP_FRAME_HEIGHT: number;
+/**
+ * Width of the frames in the video stream.
+ */
 export const CAP_PROP_FRAME_WIDTH: number;
+/**
+ * Gain of the image (only for those cameras that support).
+ */
 export const CAP_PROP_GAIN: number;
 export const CAP_PROP_GAMMA: number;
 export const CAP_PROP_GUID: number;
+/**
+ * Hue of the image (only for cameras).
+ */
 export const CAP_PROP_HUE: number;
 export const CAP_PROP_IRIS: number;
 export const CAP_PROP_ISO_SPEED: number;
+/**
+ * Backend-specific value indicating the current capture mode.
+ */
 export const CAP_PROP_MODE: number;
+/**
+ * 
+ */
 export const CAP_PROP_MONOCHROME: number;
 export const CAP_PROP_PAN: number;
+/**
+ * Relative position of the video file: 0=start of the film, 1=end of the film.
+ */
 export const CAP_PROP_POS_AVI_RATIO: number;
+/**
+ * 0-based index of the frame to be decoded/captured next.
+ */
 export const CAP_PROP_POS_FRAMES: number;
+/**
+ * Current position of the video file in milliseconds.
+ */
 export const CAP_PROP_POS_MSEC: number;
+/**
+ * Rectification flag for stereo cameras (note: only supported by DC1394 v 2.x backend currently).
+ */
 export const CAP_PROP_RECTIFICATION: number;
 export const CAP_PROP_ROLL: number;
+/**
+ * Saturation of the image (only for cameras).
+ */
 export const CAP_PROP_SATURATION: number;
+/**
+ * Pop up video/camera filter dialog (note: only supported by DSHOW backend currently. The property value is ignored)
+ */
 export const CAP_PROP_SETTINGS: number;
+/**
+ * 
+ */
 export const CAP_PROP_SHARPNESS: number;
 export const CAP_PROP_TEMPERATURE: number;
 export const CAP_PROP_TILT: number;
 export const CAP_PROP_TRIGGER: number;
 export const CAP_PROP_TRIGGER_DELAY: number;
+/**
+ * Currently unsupported.
+ */
 export const CAP_PROP_WHITE_BALANCE_BLUE_U: number;
 export const CAP_PROP_WHITE_BALANCE_RED_V: number;
 export const CAP_PROP_ZOOM: number;
+/**
+ * PvAPI, Prosilica GigE SDK.
+ */
 export const CAP_PVAPI: number;
+/**
+ * QuickTime (obsolete, removed)
+ */
 export const CAP_QT: number;
+/**
+ * Unicap drivers (obsolete, removed)
+ */
 export const CAP_UNICAP: number;
+/**
+ * V4L/V4L2 capturing support.
+ */
 export const CAP_V4L: number;
+/**
+ * Same as CAP_V4L.
+ */
 export const CAP_V4L2: number;
+/**
+ * Video For Windows (obsolete, removed)
+ */
 export const CAP_VFW: number;
+/**
+ * Microsoft Windows Runtime using Media Foundation.
+ */
 export const CAP_WINRT: number;
+/**
+ * XIMEA Camera API.
+ */
 export const CAP_XIAPI: number;
 export const CC_STAT_AREA: number;
 export const CC_STAT_HEIGHT: number;

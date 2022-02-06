@@ -4,6 +4,7 @@ specifiers:
   '@types/chai': ^4.3.0
   '@types/mocha': ^9.1.0
   '@types/node': ^17.0.13
+  '@u4/opencv4nodejs': link:..
   chai: ^4.2.0
   istanbul: ^0.4.5
   mocha: ^5.2.0
@@ -12,6 +13,7 @@ specifiers:
   typescript: ^4.5.5
 
 dependencies:
+  '@u4/opencv4nodejs': link:..
   chai: 4.3.6
   istanbul: 0.4.5
   mocha: 5.2.0

@@ -1,7 +1,7 @@
-import type openCV from '../../typings';
+import { cv } from '@u4/opencv4nodejs';
 import { Mat, Vec2, Vec3, Vec4 } from '../../typings';
 
-export type OpenCV = typeof openCV
+export type OpenCV = typeof cv
 
 export interface APITestOpts {
     getDut?: any,

@@ -13,6 +13,7 @@ export const xmodules: {
   photo: boolean;
   objdetect: boolean;
   machinelearning: boolean;
+  video: boolean;
 }
 
 export const version: {

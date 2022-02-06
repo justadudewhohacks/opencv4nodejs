@@ -40,7 +40,7 @@ export default function (args: TestContext) {
     });
   });
 
-  describe('properties', () => {
+  describe('VideoCapture properties', () => {
     it('should get properties', () => {
       const cap = new cv.VideoCapture(getTestVideoPath());
       expect(cap.get(cv.CAP_PROP_FRAME_WIDTH)).to.equal(640);
@@ -49,7 +49,7 @@ export default function (args: TestContext) {
   });
 
   // FAIL
-  describe('set', () => {
+  describe('VideoCapture set', () => {
     it('should set properties', () => {
       const cap = new cv.VideoCapture(getTestVideoPath());
       const wasSet = cap.set(cv.CAP_PROP_POS_MSEC, 1000)
@@ -59,7 +59,7 @@ export default function (args: TestContext) {
   });
 
   // FAIL
-  describe('setAsync', () => {
+  describe('VideoCapture setAsync', () => {
     it('should set properties', async (done) => {
       const cap = new cv.VideoCapture(getTestVideoPath());
       const wasSet = await cap.setAsync(cv.CAP_PROP_POS_MSEC, 1000);

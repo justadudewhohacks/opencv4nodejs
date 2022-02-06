@@ -2,17 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import type openCV from '../../typings';
 
-const readExampleImages = function(cv: typeof openCV) {
-
-  const getTestImagePath = (isPng = true) => (isPng ? '../data/Lenna.png' : '../data/got.jpg');
-  const getTestVideoPath = () => '../data/traffic.mp4';
-
+export default function(cv: typeof openCV) {
   return {
-    getTestImagePath,
-    getTestVideoPath,
+    getTestImagePath: (isPng = true) => (isPng ? '../data/Lenna.png' : '../data/got.jpg'),
+    getTestVideoPath: () => '../data/traffic.mp4',
     readTestImage: () => new cv.Mat(fs.readFileSync(path.resolve(__dirname, './Lenna.data')), 512, 512, cv.CV_8UC3),
     readPeoplesTestImage: () => new cv.Mat(fs.readFileSync(path.resolve(__dirname, './people.data')), 360, 640, cv.CV_8UC3)
   };
 };
-
-export default readExampleImages;
