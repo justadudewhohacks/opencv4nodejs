@@ -126,7 +126,7 @@ export async function compileLib(args: string[]) {
     const validAction = ['build', 'clean', 'configure', 'rebuild', 'install', 'list', 'remove']
     const action = args[args.length - 1];
     if (args.includes('--help') || args.includes('-h') || !validAction.includes(action)) {
-        console.log(`Usage: install [--version=<version>] [--vscode] [--jobs=<thread>] [--electron] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] ${validAction.join('|')}`);
+        console.log(`Usage: install [--version=<version>] [--vscode] [--jobs=<thread>] [--electron] [--node-gyp-options=<options>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] ${validAction.join('|')}`);
         console.log(genHelp());
         return;
     }
@@ -185,7 +185,8 @@ export async function compileLib(args: string[]) {
 
     // const arch = 'x86_64' / 'x64'
     // flags += --arch=${arch} --target_arch=${arch}
-    let nodegypCmd = ''
+    const cmdOptions = options.extra['node-gyp-options'] || '';
+    flags += ` ${cmdOptions}`;
 
     const nodegyp = options.extra.electron ? 'electron-rebuild' : 'node-gyp';
 
