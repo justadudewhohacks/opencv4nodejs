@@ -69,14 +69,34 @@ function getOPENCV4NODEJS_LIBRARIES(env: OpenCVBuildEnv, libDir: string, libsFou
     return libs;
 }
 
+/**
+ * generate all C++ Defines and debug them nicely on screen
+ * @param libsFoundInDir selected modules
+ * @returns list of defines
+ */
 function getOPENCV4NODEJS_DEFINES(libsFoundInDir: OpencvModule[]): string[] {
     const defines = libsFoundInDir
         .map(lib => `OPENCV4NODEJS_FOUND_LIBRARY_${lib.opencvModule.toUpperCase()}`)
     log.info('defines', `${EOL}Setting the following defines:`)
-    defines.forEach(def => log.info('defines', pc.yellow(def)))
+    const longest = Math.max(...defines.map(a=>a.length));
+    let next = '';
+    for (const define of defines) {
+        if (next.length > 80) {
+            log.info('defines', pc.yellow(next));
+            next = '';
+        }
+        next += define.padEnd(longest + 1, ' ');
+    }
+    if (next)
+        log.info('defines', pc.yellow(next));
     return defines;
 }
 
+/**
+ * generate C++ Includes
+ * @param env context
+ * @returns list of directory to include for C++ compiler
+ */
 function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv): string[] {
     const { OPENCV_INCLUDE_DIR } = process.env;
     let explicitIncludeDir = '';
@@ -86,7 +106,7 @@ function getOPENCV4NODEJS_INCLUDES(env: OpenCVBuildEnv): string[] {
     const includes = env.isAutoBuildDisabled
         ? (explicitIncludeDir ? [explicitIncludeDir] : getDefaultIncludeDirs(env))
         : [resolvePath(env.opencvInclude), resolvePath(env.opencv4Include)]
-    log.info('install', `${EOL}setting the following includes:`)
+    log.info('install', `${EOL}Setting the following includes:`)
     includes.forEach(inc => log.info('includes', pc.green(inc)))
     return includes;
 }
@@ -128,6 +148,7 @@ export async function compileLib(args: string[]) {
     if (args.includes('--help') || args.includes('-h') || !validAction.includes(action)) {
         console.log(`Usage: install [--version=<version>] [--vscode] [--jobs=<thread>] [--electron] [--node-gyp-options=<options>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] ${validAction.join('|')}`);
         console.log(genHelp());
+        console.log('   --dry-run            Display command line use to build library');
         return;
     }
     const options: OpenCVBuildEnvParams = args2Option(args)
@@ -166,6 +187,7 @@ export async function compileLib(args: string[]) {
     const OPENCV4NODEJS_DEFINES = getOPENCV4NODEJS_DEFINES(libsFoundInDir).join(';');
     const OPENCV4NODEJS_INCLUDES = getOPENCV4NODEJS_INCLUDES(builder.env).join(';');
     const OPENCV4NODEJS_LIBRARIES = getOPENCV4NODEJS_LIBRARIES(builder.env, libDir, libsFoundInDir).join(';');
+
     process.env['OPENCV4NODEJS_DEFINES'] = OPENCV4NODEJS_DEFINES;
     process.env['OPENCV4NODEJS_INCLUDES'] = OPENCV4NODEJS_INCLUDES;
     process.env['OPENCV4NODEJS_LIBRARIES'] = OPENCV4NODEJS_LIBRARIES;
@@ -177,11 +199,6 @@ export async function compileLib(args: string[]) {
     flags += ` --jobs ${JOBS}`;
 
     const cwd = path.join(__dirname, '..');
-    const hidenGyp = path.join(cwd, '_binding.gyp');
-    const realGyp = path.join(cwd, 'binding.gyp');
-    if (fs.existsSync(hidenGyp)) {
-        fs.copyFileSync(hidenGyp, realGyp);
-    }
 
     // const arch = 'x86_64' / 'x64'
     // flags += --arch=${arch} --target_arch=${arch}
@@ -189,7 +206,7 @@ export async function compileLib(args: string[]) {
     flags += ` ${cmdOptions}`;
 
     const nodegyp = options.extra.electron ? 'electron-rebuild' : 'node-gyp';
-
+    let nodegypCmd = '';
     for (const dir of process.env.PATH.split(path.delimiter)) {
         nodegypCmd = getExistingBin(dir, nodegyp);
         if (nodegypCmd) {
@@ -259,16 +276,20 @@ export async function compileLib(args: string[]) {
         }
         console.log(JSON.stringify(config, null, '  '));
     } else if (dryRun) {
+        let setEnv = 'export ';
+        if (process.platform === 'win32') {
+            setEnv = '$Env:';
+        }
         console.log('');
-        console.log(`export OPENCV4NODEJS_DEFINES="${OPENCV4NODEJS_DEFINES}"`);
-        console.log(`export OPENCV4NODEJS_INCLUDES="${OPENCV4NODEJS_INCLUDES}"`);
-        console.log(`export OPENCV4NODEJS_LIBRARIES="${OPENCV4NODEJS_LIBRARIES}"`);
+        console.log(`${setEnv}OPENCV4NODEJS_DEFINES="${OPENCV4NODEJS_DEFINES}"`);
+        console.log(`${setEnv}OPENCV4NODEJS_INCLUDES="${OPENCV4NODEJS_INCLUDES}"`);
+        console.log(`${setEnv}OPENCV4NODEJS_LIBRARIES="${OPENCV4NODEJS_LIBRARIES}"`);
         console.log('');
         console.log(nodegypCmd);
         console.log('');
     } else {
         const child = child_process.exec(nodegypCmd, { maxBuffer: Infinity, cwd }, function (error/*, stdout, stderr*/) {
-            fs.unlinkSync(realGyp);
+            // fs.unlinkSync(realGyp);
             const bin = options.extra.electron ? 'electron-rebuild' : 'node-gyp';
             if (error) {
                 console.log(`error: `, error);

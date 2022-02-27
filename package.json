@@ -1,6 +1,6 @@
 {
   "name": "@u4/opencv4nodejs",
-  "version": "6.1.1",
+  "version": "6.1.2",
   "description": "Asynchronous OpenCV 3.x / 4.x nodejs bindings with JavaScript and TypeScript API.",
   "keywords": [
     "opencv",
@@ -36,7 +36,9 @@
   "typings": "./typings/index.d.ts",
   "scripts": {
     "prepack": "tsc",
-    "install_macm1": "tsc && node bin/install.js --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64 -DWITH_FFMPEG=ON\" rebuild",
+    "install": "echo Use 'build-opencv rebuild' of (node bin/install.js rebuild) script to start node-gyp, use --help to check all options.",
+    "install_default": "tsc && node bin/install.js rebuild",
+    "install_macm1": "tsc &&node bin/install.js --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64 -DWITH_FFMPEG=ON\" rebuild",
     "install_cuda": "tsc && node bin/install.js --version 4.5.5 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_FFMPEG=ON\" rebuild",
     "samples": "tsc && node ./examples/templateMatching.js && node ./examples/applyColorMap.js && node ./examples/asyncMatchFeatures.js && node ./examples/faceDetect/asyncFaceDetection.js",
     "do-build": "tsc && node bin/install.js --flags=\"-DWITH_FFMPEG=ON\" --jobs 4 build",
@@ -68,8 +70,13 @@
     "axios": "^0.25.0",
     "eslint": "^8.7.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.29.2",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "progress": "^2.0.3",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "typescript": "^4.5.5"
   },
   "files": [
     "cc",
@@ -77,6 +84,6 @@
     "lib",
     "bin",
     "typings",
-    "_binding.gyp"
+    "binding.gyp"
   ]
 }
