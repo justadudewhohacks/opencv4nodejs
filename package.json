@@ -37,16 +37,16 @@
   "scripts": {
     "prepack": "tsc",
     "install": "echo Use 'build-opencv rebuild' of (node bin/install.js rebuild) script to start node-gyp, use --help to check all options.",
-    "install_default": "tsc && node bin/install.js rebuild",
-    "install_macm1": "tsc &&node bin/install.js --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64 -DWITH_FFMPEG=ON\" rebuild",
-    "install_cuda": "tsc && node bin/install.js --version 4.5.5 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_FFMPEG=ON\" rebuild",
+    "install_default": "tsc && build-opencv rebuild",
+    "install_macm1": "tsc && build-opencv --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64 -DWITH_FFMPEG=ON\" rebuild",
+    "install_cuda": "tsc && build-opencv --version 4.5.5 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_FFMPEG=ON\" rebuild",
     "samples": "tsc && node ./examples/templateMatching.js && node ./examples/applyColorMap.js && node ./examples/asyncMatchFeatures.js && node ./examples/faceDetect/asyncFaceDetection.js",
-    "do-build": "tsc && node bin/install.js --flags=\"-DWITH_FFMPEG=ON\" --jobs 4 build",
-    "do-rebuild": "tsc && node bin/install.js --flags=\"-DWITH_FFMPEG=ON\" --jobs 4 rebuild",
+    "do-build": "tsc && build-opencv --flags=\"-DWITH_FFMPEG=ON\" --jobs 4 build",
+    "do-rebuild": "tsc && build-opencv --flags=\"-DWITH_FFMPEG=ON\" --jobs 4 rebuild",
     "lint": "eslint examples/**/*.ts lib/**/*.ts typings/**/*.ts ",
     "clean": "node-gyp clean",
     "cleanjs": "rimraf {install,lib,examples}/**/*.{d.ts,js,map}",
-    "build-debug": "tsc && BINDINGS_DEBUG=true node bin/install.js rebuild"
+    "build-debug": "tsc && BINDINGS_DEBUG=true build-opencv rebuild"
   },
   "dependencies": {
     "@u4/opencv-build": "^0.4.3",
