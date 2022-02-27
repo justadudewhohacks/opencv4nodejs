@@ -2,12 +2,13 @@
 
 ## Version 6.1.2
 
-* add --node-gyp-options=<options> param in compilation script [PR11](https://github.com/UrielCh/opencv4nodejs/pull/11)
+* add `--node-gyp-options=<options>` param in compilation script [PR11](https://github.com/UrielCh/opencv4nodejs/pull/11)
 * add doc in code
 * rename _binding.gyp to binding.gyp and add a dummy "install" script
 * add missing dev dependency
 * improve compilation output log
 * improve --dry-run mode
+* call build-opencv instead of node bin/install.js in package.json
 
 ## Version 6.1.1
 
