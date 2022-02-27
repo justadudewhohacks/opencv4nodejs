@@ -8,7 +8,7 @@
 * add missing dev dependency
 * improve compilation output log
 * improve --dry-run mode
-* call build-opencv instead of node bin/install.js in package.json
+* bump dependencies versions
 
 ## Version 6.1.1
 

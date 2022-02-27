@@ -192,11 +192,23 @@ export async function compileLib(args: string[]) {
     process.env['OPENCV4NODEJS_INCLUDES'] = OPENCV4NODEJS_INCLUDES;
     process.env['OPENCV4NODEJS_LIBRARIES'] = OPENCV4NODEJS_LIBRARIES;
 
+    // see https://github.com/nodejs/node-gyp#command-options for all flags
     let flags = '';
-    if (process.env.BINDINGS_DEBUG)
-        flags += ' --debug';
+
     // process.env.JOBS=JOBS;
     flags += ` --jobs ${JOBS}`;
+
+    // --target not mapped
+    // --silly, --loglevel=silly	Log all progress to console
+    // --verbose, --loglevel=verbose	Log most progress to console
+    // --silent, --loglevel=silent	Don't log anything to console
+
+    if (process.env.BINDINGS_DEBUG)
+        flags += ' --debug';
+    else
+        flags += ' --release';
+
+    // --thin=yes
 
     const cwd = path.join(__dirname, '..');
 
