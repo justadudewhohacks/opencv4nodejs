@@ -36,7 +36,7 @@
   "typings": "./typings/index.d.ts",
   "scripts": {
     "prepack": "tsc",
-    "install": "echo Use 'build-opencv rebuild' of (node bin/install.js rebuild) script to start node-gyp, use --help to check all options.",
+    "install": "echo \"Use 'build-opencv rebuild' of (node bin/install.js rebuild) script to start node-gyp, use --help to check all options.\"",
     "install_default": "tsc && node bin/install.js rebuild",
     "install_macm1": "tsc && node bin/install.js --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64 -DWITH_FFMPEG=ON\" rebuild",
     "install_cuda": "tsc && node bin/install.js --version 4.5.5 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_FFMPEG=ON\" rebuild",
