@@ -1,5 +1,9 @@
 # changelog
 
+## Version 6.1.3
+
+* fix linux build regression [PR14](https://github.com/UrielCh/opencv4nodejs/pull/14)
+
 ## Version 6.1.2
 
 * add `--node-gyp-options=<options>` param in compilation script [PR11](https://github.com/UrielCh/opencv4nodejs/pull/11)
