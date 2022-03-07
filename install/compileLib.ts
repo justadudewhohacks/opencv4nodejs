@@ -297,6 +297,10 @@ export async function compileLib(args: string[]) {
         console.log(`${setEnv}OPENCV4NODEJS_INCLUDES="${OPENCV4NODEJS_INCLUDES}"`);
         console.log(`${setEnv}OPENCV4NODEJS_LIBRARIES="${OPENCV4NODEJS_LIBRARIES}"`);
         console.log('');
+        if (cwd.includes(' '))
+            console.log(`cd "${cwd}"`);
+        else
+            console.log(`cd ${cwd}`);
         console.log(nodegypCmd);
         console.log('');
     } else {
