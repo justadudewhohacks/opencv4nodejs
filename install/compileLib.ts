@@ -146,7 +146,7 @@ export async function compileLib(args: string[]) {
     const validAction = ['build', 'clean', 'configure', 'rebuild', 'install', 'list', 'remove']
     const action = args[args.length - 1];
     if (args.includes('--help') || args.includes('-h') || !validAction.includes(action)) {
-        console.log(`Usage: install [--version=<version>] [--vscode] [--jobs=<thread>] [--electron] [--node-gyp-options=<options>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] ${validAction.join('|')}`);
+        console.log(`Usage: build|rebuild|configure|install [--version=<version>] [--vscode] [--jobs=<thread>] [--electron] [--node-gyp-options=<options>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] ${validAction.join('|')}`);
         console.log(genHelp());
         console.log('   --dry-run            Display command line use to build library');
         return;
