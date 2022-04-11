@@ -117,7 +117,8 @@
 		],
 
 		"cflags" : [
-			"-std=c++11"
+			"-std=c++11",
+			"-Wno-misleading-indentation"
 		],
 		"cflags!" : [
 			"-fno-exceptions"
