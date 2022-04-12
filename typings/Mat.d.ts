@@ -37,8 +37,7 @@ export class Mat {
   constructor(rows: number, cols: number, type: number, fillValue?: number | number[]);
   /**
    * @param type CV_8U, CV_8S, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F ...
-   */
-  constructor(dataArray: number[][], type: number);
+   */  constructor(dataArray: number[][], type: number);
   /**
    * @param type CV_8U, CV_8S, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F ...
    */
@@ -136,9 +135,9 @@ export class Mat {
   dilateAsync(kernel: Mat, anchor?: Point2, iterations?: number, borderType?: number): Promise<Mat>;
   /**
    * Calculates the distance to the closest zero pixel for each pixel of the source image.
-   * 
+   *
    * https://docs.opencv.org/4.x/d7/d1b/group__imgproc__misc.html#ga8a0b7fdfcb7a13dde018988ba3a43042
-   * 
+   *
    * @param distanceType Type of distance, see DistanceTypes
    * @param maskSize Size of the distance transform mask, see DistanceTransformMasks. DIST_MASK_PRECISE is not supported by this variant. In case of the DIST_L1 or DIST_C distance type, the parameter is forced to 3 because a 3×3 mask gives the same result as 5×5 or any larger aperture.
    * @param dstType Type of output image. It can be CV_8U or CV_32F. Type CV_8U can be used only for the first variant of the function and distanceType == DIST_L1.
@@ -204,11 +203,11 @@ export class Mat {
   flipAsync(flipCode: number): Promise<Mat>;
   /**
    * Fills a connected component with the given color.
-   * 
+   *
    * The function cv::floodFill fills a connected component starting from the seed point with the specified color. The connectivity is determined by the color/brightness closeness of the neighbor pixels. The pixel at (x,y) is considered to belong to the repainted domain if:
-   * 
+   *
    * https://docs.opencv.org/4.x/d7/d1b/group__imgproc__misc.html#ga366aae45a6c1289b341d140839f18717
-   * 
+   *
    * @param seedPoint Starting point.
    * @param newVal New value of the repainted domain pixels.
    * @param mask Operation mask that should be a single-channel 8-bit image, 2 pixels wider and 2 pixels taller than image. Since this is both an input and output parameter, you must take responsibility of initializing it. Flood-filling cannot go across non-zero pixels in the input mask. For example, an edge detector output can be used as a mask to stop filling at edges. On output, pixels in the mask corresponding to filled pixels in the image are set to 1 or to the a value specified in flags as described below. Additionally, the function fills the border of the mask with ones to simplify internal processing. It is therefore possible to use the same mask in multiple calls to the function to make sure the filled areas do not overlap.
@@ -239,7 +238,7 @@ export class Mat {
   /**
    * crop a region from the image
    * like python Mat[x1,y1,x2,y2]
-   * @param region 
+   * @param region
    */
   getRegion(region: Rect): Mat;
   goodFeaturesToTrack(maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Point2[];
@@ -266,9 +265,9 @@ export class Mat {
   inRangeAsync(lower: Vec3, upper: Vec3): Promise<Mat>;
   /**
    * Calculates the integral of an image.
-   * 
+   *
    * https://docs.opencv.org/4.x/d7/d1b/group__imgproc__misc.html#ga97b87bec26908237e8ba0f6e96d23e28
-   * 
+   *
    * @param sdepth desired depth of the integral and the tilted integral images, CV_32S, CV_32F, or CV_64F.
    * @param sqdepth desired depth of the integral image of squared pixel values, CV_32F or CV_64F.
    */
@@ -284,16 +283,16 @@ export class Mat {
   matMulDerivAsync(B: Mat): Promise<{ dABdA: Mat, dABdB: Mat }>;
   /**
    * Compares a template against overlapped image regions.
-   * 
+   *
    * The function slides through image , compares the overlapped patches of size w×h against templ using the specified method and stores the comparison results in result . TemplateMatchModes describes the formulae for the available comparison methods ( I denotes image, T template, R result, M the optional mask ). The summation is done over template and/or the image patch: x′=0...w−1,y′=0...h−1
    * After the function finishes the comparison, the best matches can be found as global minimums (when TM_SQDIFF was used) or maximums (when TM_CCORR or TM_CCOEFF was used) using the minMaxLoc function. In case of a color image, template summation in the numerator and each sum in the denominator is done over all of the channels and separate mean values are used for each channel. That is, the function can take a color template and a color image. The result will still be a single-channel image, which is easier to analyze.
-   * 
+   *
    * https://docs.opencv.org/4.x/df/dfb/group__imgproc__object.html#ga586ebfb0a7fb604b35a23d85391329be
-   * 
+   *
    * @param template Searched template. It must be not greater than the source image and have the same data type.
    * @param method Parameter specifying the comparison method, see TemplateMatchModes
    * @param mask Optional mask. It must have the same size as templ. It must either have the same number of channels as template or only one channel, which is then used for all template and image channels. If the data type is CV_8U, the mask is interpreted as a binary mask, meaning only elements where mask is nonzero are used and are kept unchanged independent of the actual mask value (weight equals 1). For data tpye CV_32F, the mask values are used as weights. The exact formulas are documented in TemplateMatchModes.
-   * 
+   *
    * @return Map of comparison results. It must be single-channel 32-bit floating-point. If image is W×H and templ is w×h , then result is (W−w+1)×(H−h+1) .
    */
   matchTemplate(template: Mat, method: number, mask?: Mat): Mat;
@@ -306,13 +305,13 @@ export class Mat {
   medianBlurAsync(kSize: number): Promise<Mat>;
   /**
    * Finds the global minimum and maximum in an array.
-   * 
+   *
    * The function cv::minMaxLoc finds the minimum and maximum element values and their positions. The extremums are searched across the whole array or, if mask is not an empty array, in the specified array region.
-   * 
+   *
    * The function do not work with multi-channel arrays. If you need to find minimum or maximum elements across all the channels, use Mat::reshape first to reinterpret the array as single-channel. Or you may extract the particular channel using either extractImageCOI , or mixChannels , or split .
-   * 
+   *
    * https://docs.opencv.org/4.x/d2/de8/group__core__array.html#gab473bf2eb6d14ff97e89b355dac20707
-   * 
+   *
    * @param mask 	optional mask used to select a sub-array.
    */
   minMaxLoc(mask?: Mat): { minVal: number, maxVal: number, minLoc: Point2, maxLoc: Point2 };
@@ -399,11 +398,11 @@ export class Mat {
   seamlessCloneAsync(dst: Mat, mask: Mat, p: Point2, flags: number): Promise<Mat>;
   /**
    * Applies a separable linear filter to an image.
-   * 
+   *
    * The function applies a separable linear filter to the image. That is, first, every row of src is filtered with the 1D kernel kernelX. Then, every column of the result is filtered with the 1D kernel kernelY. The final result shifted by delta is stored in dst .
-   * 
+   *
    * https://docs.opencv.org/4.x/d4/d86/group__imgproc__filter.html#ga910e29ff7d7b105057d1625a4bf6318d
-   * 
+   *
    * @param ddepth Destination image depth, see combinations
    * @param kernelX Coefficients for filtering each row.
    * @param kernelY Coefficients for filtering each column.
@@ -420,9 +419,9 @@ export class Mat {
   setTo(value: number | Vec2 | Vec3 | Vec4, mask?: Mat): Mat;
   setToAsync(value: number | Vec2 | Vec3 | Vec4, mask?: Mat): Promise<Mat>;
   /**
-   * 
+   *
    * https://docs.opencv.org/4.x/d4/d86/group__imgproc__filter.html#gacea54f142e81b6758cb6f375ce782c8d
-   * 
+   *
    * @param ddepth output image depth, see combinations; in the case of 8-bit input images it will result in truncated derivatives.
    * @param dx 	order of the derivative x.
    * @param dy 	order of the derivative y.
@@ -458,11 +457,11 @@ export class Mat {
   sumAsync(): Promise<number | Vec2 | Vec3 | Vec4>;
   /**
    * Applies a fixed-level threshold to each array element.
-   * 
+   *
    * The function applies fixed-level thresholding to a multiple-channel array. The function is typically used to get a bi-level (binary) image out of a grayscale image ( compare could be also used for this purpose) or for removing a noise, that is, filtering out pixels with too small or too large values. There are several types of thresholding supported by the function. They are determined by type parameter.
-   * 
+   *
    * Also, the special values THRESH_OTSU or THRESH_TRIANGLE may be combined with one of the above values. In these cases, the function determines the optimal threshold value using the Otsu's or Triangle algorithm and uses it instead of the specified thresh.
-   * 
+   *
    * Note: Currently, the Otsu's and Triangle methods are implemented only for 8-bit single-channel images.
    * https://docs.opencv.org/4.x/d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57
    * @param thresh threshold value.
@@ -478,7 +477,7 @@ export class Mat {
   transpose(): Mat;
   /**
    * This function reconstructs 3-dimensional points (in homogeneous coordinates) by using their observations with a stereo camera.
-   * 
+   *
    * https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html#gad3fc9a0c82b08df034234979960b778c
    * @param projPoints1 2xN array of feature points in the first image. In the case of the c++ version, it can be also a vector of feature points or two-channel matrix of size 1xN or Nx1.
    * @param projPoints2 2xN array of corresponding points in the second image. In the case of the c++ version, it can be also a vector of feature points or two-channel matrix of size 1xN or Nx1.
@@ -488,19 +487,19 @@ export class Mat {
 
   /**
    * Transforms an image to compensate for lens distortion.
-   * 
+   *
    * The function transforms an image to compensate radial and tangential lens distortion.
-   * 
+   *
    * The function is simply a combination of initUndistortRectifyMap (with unity R ) and remap (with bilinear interpolation). See the former function for details of the transformation being performed.
-   * 
+   *
    * Those pixels in the destination image, for which there is no correspondent pixels in the source image, are filled with zeros (black color).
-   * 
+   *
    * A particular subset of the source image that will be visible in the corrected image can be regulated by newCameraMatrix. You can use getOptimalNewCameraMatrix to compute the appropriate newCameraMatrix depending on your requirements.
-   * 
+   *
    * The camera matrix and the distortion parameters can be determined using calibrateCamera. If the resolution of images is different from the resolution used at the calibration stage, fx,fy,cx and cy need to be scaled accordingly, while the distortion coefficients remain the same.
-   * 
+   *
    * https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html#ga69f2545a8b62a6b0fc2ee060dc30559d
-   * 
+   *
    * @param cameraMatrix Input camera matrix
    * @param distCoeffs 	Input vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,τx,τy]]]]) of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.
    */
@@ -517,12 +516,12 @@ export class Mat {
   release(): void;
   /**
    * Returns an identity matrix of the specified size and type.
-   * 
+   *
    * The method returns a Matlab-style identity matrix initializer, similarly to Mat::zeros. Similarly to Mat::ones, you can use a scale operation to create a scaled identity matrix efficiently:
-   * 
+   *
    * // make a 4x4 diagonal matrix with 0.1's on the diagonal.
    * Mat A = Mat::eye(4, 4, CV_32F)*0.1;
-   * 
+   *
    * Note: In case of multi-channels type, identity matrix will be initialized only for the first channel, the others will be set to 0's
    * https://docs.opencv.org/4.x/d3/d63/classcv_1_1Mat.html#a458874f0ab8946136254da37ba06b78b
    * @param rows Number of rows.
