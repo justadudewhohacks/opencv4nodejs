@@ -132,7 +132,8 @@ export class Mat {
   drawChessboardCorners(patternSize: Size, corners: Point2[], patternWasFound: boolean): void;
   drawChessboardCornersAsync(patternSize: Size, corners: Point2[], patternWasFound: boolean): Promise<void>;
   drawCircle(center: Point2, radius: number, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
-  drawContours(contours: Contour[], color: Vec3, contourIdx?: number, maxLevel?: number, offset?: Point2, lineType?: number, thickness?: number, shift?: number): void;
+  drawContours(contours: Point2[][], contourIdx: number, color: Vec3, thickness?: number, lineType?: number, hierarchy?: Vec4[], maxLevel?: number, offset?: Point2): void;
+  drawContoursAsync(contours: Point2[][], contourIdx: number, color: Vec3, thickness?: number, lineType?: number, hierarchy?: Vec4[], maxLevel?: number, offset?: Point2): Promise<void>;
   drawEllipse(box: RotatedRect, color?: Vec3, thickness?: number, lineType?: number): void;
   drawEllipse(center: Point2, axes: Size, angle: number, startAngle: number, endAngle: number, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
   drawFillConvexPoly(pts: Point2[], color?: Vec3, lineType?: number, shift?: number): void;
