@@ -59,13 +59,13 @@ export interface TestContext {
         getTestVideoPath?: () => string;
         getTestImagePath?: (isPng?: boolean) => string;
 
-        clearTmpData?: any,
-        getTmpDataFilePath?: any
-        fileExists?: any
-        _asyncFuncShouldRequireArgs?: any
-        asyncFuncShouldRequireArgs?: any
-        _funcShouldRequireArgs?: any
-        expectFloat?: any
+        clearTmpData?: () => void;
+        getTmpDataFilePath?: (file: string) => string;
+        fileExists?: (filePath: string) => boolean;
+        _asyncFuncShouldRequireArgs?: (func: (...args: any[]) => any) => void;
+        asyncFuncShouldRequireArgs?: (func: (...args: any[]) => any) => void;
+        _funcShouldRequireArgs?: (func: () => any) => void
+        expectFloat?: (val: number, expected: number) => Chai.Assertion;
         readTestImage?: () => Mat;
         readPeoplesTestImage?: () => Mat;
     },

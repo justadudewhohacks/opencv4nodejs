@@ -12,7 +12,7 @@ export const assertError = (func: () => any, msg: string): void => {
   assert.include(errMsg, msg);
 };
 
-const assertErrorAsyncPromised = (func, msg) => {
+const assertErrorAsyncPromised = (func: () => any, msg: string): Promise<any> => {
   const ret = func();
 
   if (!ret.then || !ret.catch) {
@@ -23,7 +23,7 @@ const assertErrorAsyncPromised = (func, msg) => {
   return ret.then(() => {
     assert(false, 'no error was thrown');
   })
-  .catch((err) => {
+  .catch((err: any) => {
     assert.include(err.toString(), msg);
   });
 };
@@ -45,19 +45,19 @@ export const assertPropsWithValue = (obj: any) => (props: any, floatSafe = false
   );
 };
 
-export const funcShouldRequireArgs = (func: () => any): void => {
+export const funcShouldRequireArgs = (func: (...args: any[]) => any): void => {
   it('should throw if no args', () => {
     assertError(func, 'expected arg 0 to be');
   });
 };
 
-export const _funcShouldRequireArgs = (func: () => any) => {
+export const _funcShouldRequireArgs = (func: (...args: any[]) => any) : void => {
   it('should throw if no args', () => {
     assertError(func, 'expected argument 0 to be');
   });
 };
 
-export const asyncFuncShouldRequireArgs = (func: () => any) => {
+export const asyncFuncShouldRequireArgs = (func: (...args: any[]) => any): void => {
   it('should throw if no args', (done) => {
     assertErrorAsyncPromised(func, 'expected argument 0 to be')
     .then(() => done());
@@ -65,7 +65,7 @@ export const asyncFuncShouldRequireArgs = (func: () => any) => {
 };
 
 
-export const _asyncFuncShouldRequireArgs = (func) => {
+export const _asyncFuncShouldRequireArgs = (func: (...args: any[]) => any): void => {
   it('should throw if no args', (done) => {
     assertErrorAsyncPromised(func, 'expected arg 0 to be')
     .then(() => done());

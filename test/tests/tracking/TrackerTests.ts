@@ -9,12 +9,11 @@ const expectImplementsMethods = (tracker) => {
 };
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg  } = args;
+  const { cv, utils, getTestImg } = args;
 
   const {
     cvVersionGreaterEqual,
     cvVersionEqual,
-    funcShouldRequireArgs
   } = utils
 
   const TrackerTestGenerator = getTestImg => (trackerName) => {
