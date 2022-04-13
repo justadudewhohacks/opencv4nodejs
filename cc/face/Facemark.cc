@@ -36,8 +36,7 @@ void Facemark::Init(v8::Local<v8::FunctionTemplate> ctor) {
   Nan::SetPrototypeMethod(ctor, "load", Load);
 #if CV_VERSION_MAJOR <= 3 && CV_VERSION_MINOR < 2
   Nan::SetPrototypeMethod(ctor, "addTrainingSample", AddTrainingSample);
-  Nan::SetPrototypeMethod(ctor, "addTrainingSampleAsync",
-	  AddTrainingSampleAsync);
+  Nan::SetPrototypeMethod(ctor, "addTrainingSampleAsync", AddTrainingSampleAsync);
   Nan::SetPrototypeMethod(ctor, "getData", GetData);
   Nan::SetPrototypeMethod(ctor, "getDataAsync", GetDataAsync);
   Nan::SetPrototypeMethod(ctor, "getFaces", GetFaces);

@@ -16,7 +16,10 @@ public:
 	static NAN_METHOD(Imshow);
 	static NAN_METHOD(ImshowWait);
 	static NAN_METHOD(WaitKey);
-	static NAN_METHOD(MoveWindow);
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
+	static NAN_METHOD(WaitKeyEx);
+#endif
+	// static NAN_METHOD(MoveWindow); moved to highgui
 	static NAN_METHOD(DestroyWindow);
 	static NAN_METHOD(DestroyAllWindows);
 	static NAN_METHOD(Imread);

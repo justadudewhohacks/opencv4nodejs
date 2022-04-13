@@ -16,9 +16,11 @@ NAN_MODULE_INIT(Io::Init) {
   Nan::SetMethod(target, "imshowWait", ImshowWait);
   Nan::SetMethod(target, "imwrite", Imwrite);
   Nan::SetMethod(target, "waitKey", WaitKey);
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
+  Nan::SetMethod(target, "waitKeyEx", WaitKeyEx);
+#endif
   Nan::SetMethod(target, "imencode", Imencode);
   Nan::SetMethod(target, "imdecode", Imdecode);
-  Nan::SetMethod(target, "moveWindow", MoveWindow);
   Nan::SetMethod(target, "destroyWindow", DestroyWindow);
   Nan::SetMethod(target, "destroyAllWindows", DestroyAllWindows);
 
@@ -105,15 +107,17 @@ NAN_METHOD(Io::WaitKey) {
   info.GetReturnValue().Set(Nan::New(key));
 }
 
-NAN_METHOD(Io::MoveWindow) {
-	FF::TryCatch tryCatch("Io::MoveWindow");
-	std::string winName;
-	int x, y;
-	if (FF::StringConverter::arg(0, &winName, info) || FF::IntConverter::arg(1, &x, info) || FF::IntConverter::arg(2, &y, info)) {
-		return tryCatch.reThrow();
-	}
-	cv::moveWindow(winName, x, y);
+#if CV_VERSION_GREATER_EQUAL(3, 2, 0)
+NAN_METHOD(Io::WaitKeyEx) {
+  int key;
+  if (info[0]->IsNumber()) {
+    key = cv::waitKeyEx(info[0]->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value());
+  } else{
+    key = cv::waitKeyEx();
+  }
+  info.GetReturnValue().Set(Nan::New(key));
 }
+#endif
 
 NAN_METHOD(Io::DestroyWindow) {
 	FF::TryCatch tryCatch("Io::DestroyWindow");

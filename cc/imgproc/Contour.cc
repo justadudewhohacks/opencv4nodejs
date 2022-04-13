@@ -175,6 +175,7 @@ NAN_METHOD(Contour::ConvexHullIndices) {
 	);
 	info.GetReturnValue().Set(FF::IntArrayConverter::wrap(hullIndices));
 }
+
 NAN_METHOD(Contour::ConvexityDefects) {
 	FF::TryCatch tryCatch("Contour::ConvexityDefects");
 	std::vector<int> hull;

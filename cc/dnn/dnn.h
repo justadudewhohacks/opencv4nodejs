@@ -24,6 +24,12 @@ public:
   static NAN_METHOD(ReadNetFromDarknetAsync);
   static NAN_METHOD(NMSBoxes);
 #endif
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  static NAN_METHOD(ReadNetFromONNX);
+  static NAN_METHOD(ReadNetFromONNXAsync);
+#endif
+  static NAN_METHOD(ReadNet);
+  static NAN_METHOD(ReadNetAsync);
 };
 
 #endif

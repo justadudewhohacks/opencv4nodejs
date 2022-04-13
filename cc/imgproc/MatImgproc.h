@@ -64,6 +64,7 @@ public:
   static NAN_METHOD(DrawFillPoly);
   static NAN_METHOD(DrawFillConvexPoly);
   static NAN_METHOD(PutText);
+  static NAN_METHOD(PutTextAsync);
   static NAN_METHOD(MatchTemplate);
   static NAN_METHOD(MatchTemplateAsync);
   static NAN_METHOD(Canny);

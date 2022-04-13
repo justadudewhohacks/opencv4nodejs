@@ -2038,7 +2038,6 @@ namespace MatImgprocBindings {
 	  int maxLevel = INT_MAX;
 	  cv::Point2d offset;
 
-
 	  std::string executeCatchCvExceptionWorker() {
 		  cv::drawContours(self, contours, contourIdx, color, thickness, lineType, hierarchy, maxLevel, offset);
 		  return "";

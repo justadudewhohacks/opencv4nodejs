@@ -28,13 +28,21 @@ NAN_METHOD(TrackerCSRT::New) {
 	FF::TryCatch tryCatch("TrackerCSRT::New");
 	FF_ASSERT_CONSTRUCT_CALL();
 
+#if CV_VERSION_GREATER_EQUAL(4, 5, 2)
+	cv::legacy::TrackerCSRT::Params params;
+#else
 	cv::TrackerCSRT::Params params;
+#endif
 	if (TrackerCSRTParams::Converter::optArg(0, &params, info)) {
 		return tryCatch.reThrow();
 	}
 
 	TrackerCSRT* self = new TrackerCSRT();
+#if CV_VERSION_GREATER_EQUAL(4, 5, 2)
+	self->tracker = cv::legacy::TrackerCSRT::create(params);
+#else
 	self->tracker = cv::TrackerCSRT::create(params);
+#endif
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };

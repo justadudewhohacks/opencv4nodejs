@@ -80,7 +80,7 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetPrototypeMethod(ctor, "copyMakeBorder", CopyMakeBorder);
   Nan::SetPrototypeMethod(ctor, "copyMakeBorderAsync", CopyMakeBorderAsync);
   Nan::SetPrototypeMethod(ctor, "splitChannels", Split);
-  Nan::SetPrototypeMethod(ctor, "splitChannelsAsync", Split);
+  Nan::SetPrototypeMethod(ctor, "splitChannelsAsync", SplitAsync);
 
 #if CV_VERSION_GREATER_EQUAL(3, 2, 0)
   Nan::SetPrototypeMethod(ctor, "rotate", Rotate);
@@ -143,7 +143,9 @@ NAN_METHOD(Mat::New) {
 	FF::TryCatch tryCatch("Mat::New");
 	FF_ASSERT_CONSTRUCT_CALL();
   Mat* self = new Mat();
-  /* from channels */
+  /* from channels
+   * constructor(channels: Mat[]);
+   */
   if (info.Length() == 1 && info[0]->IsArray()) {
     v8::Local<v8::Array> jsChannelMats = v8::Local<v8::Array>::Cast(info[0]);
     std::vector<cv::Mat> channels;
@@ -171,7 +173,10 @@ NAN_METHOD(Mat::New) {
     cv::merge(channels, mat);
     self->setNativeObject(mat);
   }
-  /* data array, type */
+  /* data array, type
+   * constructor(dataArray: number[][], type: number);
+   * constructor(dataArray: number[][][], type: number);
+  */
   else if (info.Length() == 2 && info[0]->IsArray() && info[1]->IsInt32()) {
     v8::Local<v8::Array> rowArray = v8::Local<v8::Array>::Cast(info[0]);
     int type = info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
@@ -192,7 +197,9 @@ NAN_METHOD(Mat::New) {
     FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, type, FF_MAT_FROM_JS_ARRAY, FF::matPut);
     self->setNativeObject(mat);
   }
-  /* row, col, type */
+  /* row, col, type
+   * constructor(rows: number, cols: number, type: number, fillValue?: number | number[]);
+   */
   else if (info[0]->IsNumber() && info[1]->IsNumber() && info[2]->IsInt32()) {
     int type = info[2]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     cv::Mat mat(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), type);
@@ -213,7 +220,9 @@ NAN_METHOD(Mat::New) {
     }
     self->setNativeObject(mat);
   }
-  /* raw data, row, col, type */
+  /* raw data, row, col, type
+   * constructor(data: Buffer, rows: number, cols: number, type?: number);
+   */
   else if (info.Length() == 4 && info[1]->IsNumber() && info[2]->IsNumber() && info[3]->IsInt32()) {
     int type = info[3]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
     char *data = static_cast<char *>(node::Buffer::Data(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
@@ -374,7 +383,12 @@ NAN_METHOD(Mat::GetRegion) {
 	if (Rect::Converter::arg(0, &rect, info)) {
 		return tryCatch.reThrow();
 	}
-	info.GetReturnValue().Set(Mat::Converter::wrap(Mat::unwrapSelf(info)(rect)));
+  // FF::TryCatch tryCatch do not work here
+  try {
+    info.GetReturnValue().Set(Mat::Converter::wrap(Mat::unwrapSelf(info)(rect)));
+  } catch (const std::exception& e) {
+    return tryCatch.throwError(e.what());
+  }
 }
 
 NAN_METHOD(Mat::Norm) {

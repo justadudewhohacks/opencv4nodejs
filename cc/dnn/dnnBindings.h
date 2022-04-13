@@ -6,7 +6,7 @@
 namespace DnnBindings {
 
 #if CV_VERSION_GREATER_EQUAL(3, 4, 0)
-  struct ReadNetFromDarknetWorker : public CatchCvExceptionWorker{
+  struct ReadNetFromDarknetWorker: public CatchCvExceptionWorker {
   public:
     std::string cfgFile;
     std::string darknetModelFile = "";
@@ -26,18 +26,82 @@ namespace DnnBindings {
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-          FF::StringConverter::arg(0, &cfgFile, info));
+      return (FF::StringConverter::arg(0, &cfgFile, info));
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-          FF::StringConverter::optArg(1, &darknetModelFile, info));
+      return (FF::StringConverter::optArg(1, &darknetModelFile, info));
     }
   };
 #endif
 
-  struct ReadNetFromTensorflowWorker : public CatchCvExceptionWorker {
+struct ReadNetWorker: public CatchCvExceptionWorker {
+public:
+  std::string model;
+  std::string config = "";
+  std::string framework = "";
+
+  cv::dnn::Net net;
+
+  std::string executeCatchCvExceptionWorker() {
+    net = cv::dnn::readNet(model, config, framework);
+    if (net.empty()) {
+      return std::string("failed to load network model: " + model).data();
+    }
+    return "";
+  }
+
+  v8::Local<v8::Value> getReturnValue() {
+    return Net::Converter::wrap(net);
+  }
+
+  bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+    return FF::StringConverter::arg(0, &model, info);
+  }
+
+  bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+    return (FF::StringConverter::optArg(1, &config, info) || FF::StringConverter::optArg(2, &framework, info));
+  }
+
+  bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+	  return FF::isArgObject(info, 1);
+	}
+
+	bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+	  v8::Local<v8::Object> opts = info[1]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+	  return (
+		  FF::StringConverter::optProp(&config, "config", opts) ||
+		  FF::StringConverter::optProp(&framework, "framework", opts)
+    );
+	 }
+};
+
+#if CV_VERSION_GREATER_EQUAL(4, 0, 0)
+  struct ReadNetFromONNXWorker: public CatchCvExceptionWorker {
+  public:
+    std::string onnxFile;
+
+    cv::dnn::Net net;
+
+    std::string executeCatchCvExceptionWorker() {
+      net = cv::dnn::readNetFromONNX(onnxFile);
+      if (net.empty()) {
+        return std::string("failed to load network model: " + onnxFile).data();
+      }
+      return "";
+    }
+
+    v8::Local<v8::Value> getReturnValue() {
+      return Net::Converter::wrap(net);
+    }
+
+    bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return FF::StringConverter::arg(0, &onnxFile, info);
+    }
+  };
+#endif
+
+  struct ReadNetFromTensorflowWorker: public CatchCvExceptionWorker {
   public:
     std::string modelFile;
     std::string configFile = "";
@@ -61,19 +125,15 @@ namespace DnnBindings {
     }
 
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-          FF::StringConverter::arg(0, &modelFile, info)
-      );
+      return (FF::StringConverter::arg(0, &modelFile, info));
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-          FF::StringConverter::optArg(1, &configFile, info)
-      );
+      return (FF::StringConverter::optArg(1, &configFile, info));
     }
   };
 
-  struct ReadNetFromCaffeWorker : public CatchCvExceptionWorker {
+  struct ReadNetFromCaffeWorker: public CatchCvExceptionWorker {
   public:
     std::string prototxt;
     std::string modelFile = "";
@@ -99,9 +159,7 @@ namespace DnnBindings {
     }
 
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return (
-        FF::StringConverter::optArg(1, &modelFile, info)
-      );
+      return (FF::StringConverter::optArg(1, &modelFile, info));
     }
   };
 
@@ -114,6 +172,7 @@ namespace DnnBindings {
 
     cv::Mat image;
     std::vector<cv::Mat> images;
+  
     double scalefactor = 1.0;
     cv::Size2d size = cv::Size2d();
     cv::Vec3d mean = cv::Vec3d();
@@ -188,10 +247,11 @@ namespace DnnBindings {
     float score_threshold;
     float nms_threshold;
     std::vector<int> indices;
+    float eta = 1.0f;
+    int top_k = 0;
 
     std::string executeCatchCvExceptionWorker() {
-      cv::dnn::NMSBoxes(bboxes, scores, score_threshold,
-          nms_threshold, indices);
+      cv::dnn::NMSBoxes(bboxes, scores, score_threshold, nms_threshold, indices);
       return "";
     }
 
@@ -207,6 +267,22 @@ namespace DnnBindings {
         FF::FloatConverter::arg(3, &nms_threshold, info)
       );
     }
+
+    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+        return FF::FloatConverter::optArg(4, &eta, info) || FF::IntConverter::optArg(5, &top_k, info);
+    }
+
+    bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  return FF::isArgObject(info, 4);
+	  }
+
+    bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
+		  v8::Local<v8::Object> opts = info[4]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
+		  return (
+        FF::FloatConverter::optProp(&eta, "eta", opts) ||
+        FF::IntConverter::optProp(&top_k, "topK", opts)
+      );
+	  }
   };
 #endif
 }
