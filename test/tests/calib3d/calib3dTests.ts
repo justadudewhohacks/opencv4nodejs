@@ -34,6 +34,9 @@ export default (args: TestContext) => {
     new cv.Point2(101.0, 101.0),
     new cv.Point2(101.0, 100.5)
   ];
+  
+  const rvecInit = new cv.Vec3(22, 45, 67);
+  const tvecInit = new cv.Vec3(526, 315, 245);
   const distCoefficients = [0, 0.5, 1.0, 1.0];
 
   describe('findHomography', () => {
@@ -114,15 +117,18 @@ export default (args: TestContext) => {
       cv.Mat.eye(3, 3, cv.CV_64F),
       distCoefficients
     ]);
-
-    describe('solvePnP', () => {
+    
+    describe('solvePnP with extrinsicGuess', () => {
       generateAPITests({
         getDut: () => cv,
+        hasAsync: false,
         methodName: 'solvePnP',
         getRequiredArgs,
-        getOptionalParamsMap: () => ([
+        getOptionalArgsMap: () => ([
+          ['rvec', rvecInit],
+          ['tvec', tvecInit],
           ['useExtrinsicGuess', true],
-          ['flags', cv.SOLVEPNP_DLS]
+          ['flags', cv.SOLVEPNP_ITERATIVE]
         ]),
         expectOutput
       });
@@ -134,6 +140,8 @@ export default (args: TestContext) => {
         methodName: 'solvePnPRansac',
         getRequiredArgs,
         getOptionalParamsMap: () => ([
+          ['rvec', rvecInit],
+          ['tvec', tvecInit],
           ['useExtrinsicGuess', true],
           ['iterationsCount', 200],
           ['reprojectionError', 16.0],

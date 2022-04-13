@@ -155,20 +155,24 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        FF::BoolConverter::optArg(4, &useExtrinsicGuess, info) ||
-        FF::IntConverter::optArg(5, &flags, info)
+				Vec3::Converter::optArg(4, &rvec, info) ||
+				Vec3::Converter::optArg(5, &tvec, info) ||
+				FF::BoolConverter::optArg(6, &useExtrinsicGuess, info) ||
+        FF::IntConverter::optArg(7, &flags, info)
       );
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF::isArgObject(info, 4);
+			return FF::isArgObject(info, 4) && !Vec3::hasInstance(info[4]);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[4]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
         FF::BoolConverter::optProp(&useExtrinsicGuess, "useExtrinsicGuess", opts) ||
-        FF::IntConverter::optProp(&flags, "flags", opts)
+        FF::IntConverter::optProp(&flags, "flags", opts) ||
+				Vec3::Converter::optProp(&rvec, "rvec", opts) ||
+				Vec3::Converter::optProp(&tvec, "tvec", opts)
       );
     }
   };
@@ -196,21 +200,25 @@ namespace Calib3dBindings {
   
     bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       return (
-        FF::BoolConverter::optArg(4, &useExtrinsicGuess, info) ||
-        FF::IntConverter::optArg(5, &iterationsCount, info) ||
-        FF::FloatConverter::optArg(6, &reprojectionError, info) ||
-        FF::DoubleConverter::optArg(7, &confidence, info) ||
-        FF::IntConverter::optArg(8, &flags, info)
+        Vec3::Converter::optArg(4, &rvec, info) ||
+        Vec3::Converter::optArg(5, &tvec, info) ||				
+        FF::BoolConverter::optArg(6, &useExtrinsicGuess, info) ||
+        FF::IntConverter::optArg(7, &iterationsCount, info) ||
+        FF::FloatConverter::optArg(8, &reprojectionError, info) ||
+        FF::DoubleConverter::optArg(9, &confidence, info) ||
+        FF::IntConverter::optArg(10, &flags, info)
       );
     }
   
     bool hasOptArgsObject(Nan::NAN_METHOD_ARGS_TYPE info) {
-      return FF::isArgObject(info, 4);
+      return FF::isArgObject(info, 4) && !Vec3::hasInstance(info[4]);
     }
   
     bool unwrapOptionalArgsFromOpts(Nan::NAN_METHOD_ARGS_TYPE info) {
       v8::Local<v8::Object> opts = info[4]->ToObject(Nan::GetCurrentContext()).ToLocalChecked();
       return (
+        Vec3::Converter::optProp(&rvec, "rvec", opts) ||
+        Vec3::Converter::optProp(&tvec, "tvec", opts) ||
         FF::BoolConverter::optProp(&useExtrinsicGuess, "useExtrinsicGuess", opts) ||
         FF::IntConverter::optProp(&iterationsCount, "iterationsCount", opts) ||
         FF::FloatConverter::optProp(&reprojectionError, "reprojectionError", opts) ||
