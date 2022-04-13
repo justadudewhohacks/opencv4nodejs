@@ -1,4 +1,4 @@
-import { Mat } from "../../typings";
+import { Mat, Vec4 } from "../../typings";
 
 import { assert } from 'chai';
 import { assertPropsWithValue } from './testUtils';
@@ -17,9 +17,9 @@ const matTypeNames = [
   'CV_64FC1', 'CV_64FC2', 'CV_64FC3', 'CV_64FC4'
 ];
 
-const normalizeValue = val =>
-(val.x !== undefined ? [val.w, val.x, val.y, val.z] :
-  (val.length !== 4 ? [undefined, val[0], val[1], val[2]] : val)
+const normalizeValue = (val: number | Vec4 | Array<number>) =>
+((val as Vec4).x !== undefined ? [(val as Vec4).w, (val as Vec4).x, (val as Vec4).y, (val as Vec4).z] :
+  ((val as Array<number>).length !== 4 ? [undefined, val[0], val[1], val[2]] : val)
 );
 
 const AssertMatValueEquals = cmpFunc => (val0: number, val1: number): void => {
@@ -48,7 +48,7 @@ const generateItsFactory = (cv: typeof openCV) => (msg: string, testFunc: Functi
 const assertMatValueEquals = AssertMatValueEquals((v0: number, v1: number) => v0 === v1);
 
 /* compare float values differently as there will be slight precision loss */
-const assertDataAlmostDeepEquals = (data0: any, data1: any): void =>
+const assertDataAlmostDeepEquals = (data0: number[][], data1: number[][]): void =>
   data0.forEach((row, r) => row.forEach((val, c) => assertMatValueAlmostEquals(val, data1[r][c])));
 
 const assertDataDeepEquals = (data0: any, data1: any): void => {
@@ -74,14 +74,12 @@ const isUniformMat = (mat: Mat, matVal: number): boolean => {
 
 const isZeroMat = (mat: Mat) => isUniformMat(mat, 0);
 
-const assertMetaData = (mat: Mat) => (arg0: any, cols: any, type: any): void => {
-  let propsWithValues = {
-    rows: arg0, cols, type
-  };
+const assertMetaData = (mat: Mat) => (args0: any, cols: number, type: number): void => {
+  let propsWithValues = { rows: args0, cols, type };
   const propsFromArg0 = {
-    rows: arg0.rows,
-    cols: arg0.cols,
-    type: arg0.type
+    rows: args0.rows,
+    cols: args0.cols,
+    type: args0.type
   };
   if (['rows', 'cols', 'type'].every(prop => !isNaN(propsFromArg0[prop]))) {
     propsWithValues = propsFromArg0;

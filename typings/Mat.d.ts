@@ -9,6 +9,72 @@ import { Vec2 } from './Vec2.d';
 import { Vec3 } from './Vec3.d';
 import { Vec4 } from './Vec4.d';
 
+
+export class CalibrationMatrixValues {
+  /**
+   * Output field of view in degrees along the horizontal sensor axis.
+   */
+  fovx: number;
+  /**
+   * Output field of view in degrees along the vertical sensor axis.
+   */
+  fovy: number;
+  /**
+   * Focal length of the lens in mm.
+   */
+  focalLength: number;
+  /**
+   * Principal point in mm.
+   */
+  principalPoint: Point2;
+  /**
+   * f(y) / f(x)
+   */
+  aspectRatio: number;
+}
+
+export class StereoRectify {
+  /**
+   * 	Output 3x3 rectification transform (rotation matrix) for the first camera. This matrix brings points given in the unrectified first camera's coordinate system to points in the rectified first camera's coordinate system. In more technical terms, it performs a change of basis from the unrectified first camera's coordinate system to the rectified first camera's coordinate system.
+   */
+  R1: Mat;
+  /**
+   * 	Output 3x3 rectification transform (rotation matrix) for the second camera. This matrix brings points given in the unrectified second camera's coordinate system to points in the rectified second camera's coordinate system. In more technical terms, it performs a change of basis from the unrectified second camera's coordinate system to the rectified second camera's coordinate system.
+   */
+  R2: Mat;
+  /**
+   * 	Output 3x4 projection matrix in the new (rectified) coordinate systems for the first camera, i.e. it projects points given in the rectified first camera coordinate system into the rectified first camera's image.
+   */
+  P1: Mat;
+  /**
+   * 	Output 3x4 projection matrix in the new (rectified) coordinate systems for the second camera, i.e. it projects points given in the rectified first camera coordinate system into the rectified second camera's image.
+   */
+  P2: Mat;
+  /**
+   * Output 4×4 disparity-to-depth mapping matrix (see reprojectImageTo3D).
+   */
+  Q: Mat;
+  /**
+   * Optional output rectangles inside the rectified images where all the pixels are valid. If alpha=0 , the ROIs cover the whole images. Otherwise, they are likely to be smaller (see the picture below).
+   */
+  roi1: Rect;
+  /**
+   * 	Optional output rectangles inside the rectified images where all the pixels are valid. If alpha=0 , the ROIs cover the whole images. Otherwise, they are likely to be smaller (see the picture below).
+   */
+  roi2: Rect;
+}
+
+export class OptimalNewCameraMatrix {
+  /**
+   * Returns the new camera intrinsic matrix based on the free scaling parameter.
+   */
+  out: Mat;
+  /**
+   * 	Optional output rectangle that outlines all-good-pixels region in the undistorted image. See roi1, roi2 description in stereoRectify .
+   */
+  validPixROI: Rect;
+};
+
 export class Mat {
   /**
    * Mat height like python .shape[0]
@@ -86,8 +152,20 @@ export class Mat {
   boxFilterAsync(ddepth: number, ksize: Size, anchor?: Point2, normalize?: boolean, borderType?: number): Promise<Mat>;
   buildPyramid(maxLevel: number, borderType?: number): Mat[];
   buildPyramidAsync(maxLevel: number, borderType?: number): Promise<Mat[]>;
-  calibrationMatrixValues(imageSize: Size, apertureWidth: number, apertureHeight: number): { fovx: number, fovy: number, focalLength: number, principalPoint: Point2, aspectRatio: number };
-  calibrationMatrixValuesAsync(imageSize: Size, apertureWidth: number, apertureHeight: number): Promise<{ fovx: number, fovy: number, focalLength: number, principalPoint: Point2, aspectRatio: number }>;
+
+  /**
+   * Computes useful camera characteristics from the camera intrinsic matrix.
+   * 
+   * Do keep in mind that the unity measure 'mm' stands for whatever unit of measure one chooses for the chessboard pitch (it can thus be any value).
+   * 
+   * https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html#ga87955f4330d5c20e392b265b7f92f691
+   * 
+   * @param imageSize Input image size in pixels.
+   * @param apertureWidth Physical width in mm of the sensor.
+   * @param apertureHeight Physical height in mm of the sensor.
+   */
+  calibrationMatrixValues(imageSize: Size, apertureWidth: number, apertureHeight: number): CalibrationMatrixValues;
+  calibrationMatrixValuesAsync(imageSize: Size, apertureWidth: number, apertureHeight: number): Promise<CalibrationMatrixValues>;
   canny(threshold1: number, threshold2: number, apertureSize?: number, L2gradient?: boolean): Mat;
   cannyAsync(threshold1: number, threshold2: number, apertureSize?: number, L2gradient?: boolean): Promise<Mat>;
   compareHist(H2: Mat, method: number): number;
@@ -233,8 +311,19 @@ export class Mat {
    * if Mat.dims > 2 (3D)
    */
   getDataAsArray(): number[][][];
-  getOptimalNewCameraMatrix(distCoeffs: number[], imageSize: Size, alpha: number, newImageSize?: Size, centerPrincipalPoint?: boolean): { out: Mat, validPixROI: Rect };
-  getOptimalNewCameraMatrixAsync(distCoeffs: number[], imageSize: Size, alpha: number, newImageSize?: Size, centerPrincipalPoint?: boolean): Promise<{ out: Mat, validPixROI: Rect }>;
+  /**
+   * The function computes and returns the optimal new camera intrinsic matrix based on the free scaling parameter. By varying this parameter, you may retrieve only sensible pixels alpha=0 , keep all the original image pixels if there is valuable information in the corners alpha=1 , or get something in between. When alpha>0 , the undistorted result is likely to have some black pixels corresponding to "virtual" pixels outside of the captured distorted image. The original camera intrinsic matrix, distortion coefficients, the computed new camera intrinsic matrix, and newImageSize should be passed to initUndistortRectifyMap to produce the maps for remap.
+   * 
+   * https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html#ga7a6c4e032c97f03ba747966e6ad862b1
+   * 
+   * @param distCoeffs 	Input vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,τx,τy]]]]) of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.
+   * @param imageSize Original image size.
+   * @param alpha Free scaling parameter between 0 (when all the pixels in the undistorted image are valid) and 1 (when all the source image pixels are retained in the undistorted image). See stereoRectify for details.
+   * @param newImageSize 	Image size after rectification. By default, it is set to imageSize .
+   * @param centerPrincipalPoint Optional flag that indicates whether in the new camera intrinsic matrix the principal point should be at the image center or not. By default, the principal point is chosen to best fit a subset of the source image (determined by alpha) to the corrected image.
+   */
+  getOptimalNewCameraMatrix(distCoeffs: number[], imageSize: Size, alpha: number, newImageSize?: Size, centerPrincipalPoint?: boolean): OptimalNewCameraMatrix;
+  getOptimalNewCameraMatrixAsync(distCoeffs: number[], imageSize: Size, alpha: number, newImageSize?: Size, centerPrincipalPoint?: boolean): Promise<OptimalNewCameraMatrix>;
   /**
    * crop a region from the image
    * like python Mat[x1,y1,x2,y2]
@@ -444,8 +533,23 @@ export class Mat {
   sqrBoxFilter(ddepth: number, ksize: Size, anchor?: Point2, normalize?: boolean, borderType?: number): Mat;
   sqrBoxFilterAsync(ddepth: number, ksize: Size, anchor?: Point2, normalize?: boolean, borderType?: number): Promise<Mat>;
   sqrt(): Mat;
-  stereoRectify(distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], imageSize: Size, R: Mat, T: Vec3, flags?: number, alpha?: number, newImageSize?: Size): { R1: Mat, R2: Mat, P1: Mat, P2: Mat, Q: Mat, roi1: Rect, roi2: Rect };
-  stereoRectifyAsync(distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], imageSize: Size, R: Mat, T: Vec3, flags?: number, alpha?: number, newImageSize?: Size): Promise<{ R1: Mat, R2: Mat, P1: Mat, P2: Mat, Q: Mat, roi1: Rect, roi2: Rect }>;
+  /**
+   * Computes rectification transforms for each head of a calibrated stereo camera.
+   * 
+   * https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html#ga617b1685d4059c6040827800e72ad2b6
+   * 
+   * @param distCoeffs1 First camera distortion parameters.
+   * @param cameraMatrix2 Second camera intrinsic matrix.
+   * @param distCoeffs2 Second camera distortion parameters.
+   * @param imageSize Size of the image used for stereo calibration.
+   * @param R Rotation matrix from the coordinate system of the first camera to the second camera, see stereoCalibrate.
+   * @param T Translation vector from the coordinate system of the first camera to the second camera, see stereoCalibrate.
+   * @param flags Operation flags that may be zero or CALIB_ZERO_DISPARITY . If the flag is set, the function makes the principal points of each camera have the same pixel coordinates in the rectified views. And if the flag is not set, the function may still shift the images in the horizontal or vertical direction (depending on the orientation of epipolar lines) to maximize the useful image area.
+   * @param alpha Free scaling parameter. If it is -1 or absent, the function performs the default scaling. Otherwise, the parameter should be between 0 and 1. alpha=0 means that the rectified images are zoomed and shifted so that only valid pixels are visible (no black areas after rectification). alpha=1 means that the rectified image is decimated and shifted so that all the pixels from the original images from the cameras are retained in the rectified images (no source image pixels are lost). Any intermediate value yields an intermediate result between those two extreme cases.
+   * @param newImageSize New image resolution after rectification. The same size should be passed to initUndistortRectifyMap (see the stereo_calib.cpp sample in OpenCV samples directory). When (0,0) is passed (default), it is set to the original imageSize . Setting it to a larger value can help you preserve details in the original image, especially when there is a big radial distortion.
+   */
+  stereoRectify(distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], imageSize: Size, R: Mat, T: Vec3, flags?: number, alpha?: number, newImageSize?: Size): StereoRectify;
+  stereoRectifyAsync(distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], imageSize: Size, R: Mat, T: Vec3, flags?: number, alpha?: number, newImageSize?: Size): Promise<StereoRectify>;
   sub(otherMat: Mat): Mat;
   /**
    * Calculates the sum of array elements.

@@ -47,7 +47,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
   const hasOptArgs = !!getOptionalArg || !!getOptionalArgsMap;
   const hasOptArgsObject = !!getOptionalArgsMap;
 
-  const expectAsyncOutput = (done, dut, args, res) => {
+  const expectAsyncOutput = (done: (err?: any) => void, dut, args, res) => {
     try {
       expectOutput(res, dut, args);
       done();

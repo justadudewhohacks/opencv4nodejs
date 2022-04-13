@@ -1,7 +1,8 @@
 import { generateAPITests, getDefaultAPITestOpts } from './generateAPITests';
 import type openCV from '../../typings';
+import { APITestOpts } from '../tests/model';
 
-const generateClassMethodTestsFactory = (cv: typeof openCV) => (opts) => {
+const generateClassMethodTestsFactory = (cv: typeof openCV) => (opts: Partial<APITestOpts>) => {
   const {
     getClassInstance,
     classNameSpace,

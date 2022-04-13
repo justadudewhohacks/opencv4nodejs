@@ -1,5 +1,6 @@
 import { TestContext } from "../model";
 import { expect } from 'chai';
+import { CalibrationMatrixValues, Mat, OptimalNewCameraMatrix, StereoRectify, Vec2 } from "../../../typings";
 
 export default (args: TestContext) => {
   const { cv, utils } = args;
@@ -27,7 +28,7 @@ export default (args: TestContext) => {
   const distCoefficients = [0, 0.5, 1.0, 1.0];
 
   describe('rodrigues', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: {jacobian: Mat, dst: Mat}) => {
       expect(res).to.have.property('dst').to.be.instanceOf(cv.Mat);
       assertMetaData(res.dst)(3, 1, cv.CV_64F);
       expect(res).to.have.property('jacobian').to.be.instanceOf(cv.Mat);
@@ -91,7 +92,7 @@ export default (args: TestContext) => {
   });
 
   describe('matMulDeriv', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: {dABdA: Mat, dABdB: Mat}) => {
       expect(res).to.have.property('dABdA').to.be.instanceOf(cv.Mat);
       assertMetaData(res.dABdA)(9, 9, cv.CV_64F);
       expect(res).to.have.property('dABdB').to.be.instanceOf(cv.Mat);
@@ -112,7 +113,7 @@ export default (args: TestContext) => {
   });
 
   describe('findChessboardCorners', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: {returnValue: boolean, corners: Array<any>}) => {
       expect(res).to.have.property('returnValue').to.be.a('boolean');
       expect(res).to.have.property('corners').to.be.an('array');
     };
@@ -185,12 +186,12 @@ export default (args: TestContext) => {
   });
 
   describe('calibrationMatrixValues', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: CalibrationMatrixValues) => {
       expect(res).to.have.property('fovx').to.be.a('number').above(0);
       expect(res).to.have.property('fovy').to.be.a('number').above(0);
       expect(res).to.have.property('focalLength').to.be.a('number').above(0);
       expect(res).to.have.property('principalPoint');
-      expectToBeVec2(res.principalPoint);
+      expectToBeVec2(res.principalPoint); // is a Point2
       expect(res).to.have.property('aspectRatio').to.be.a('number').above(0);
     };
 
@@ -212,7 +213,7 @@ export default (args: TestContext) => {
   });
 
   describe('rectify', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: StereoRectify) => {
       expect(res).to.have.property('R1').to.be.instanceOf(cv.Mat);
       assertMetaData(res.R1)(3, 3, cv.CV_64F);
       expect(res).to.have.property('R2').to.be.instanceOf(cv.Mat);
@@ -292,7 +293,7 @@ export default (args: TestContext) => {
   });
 
   describe('getOptimalNewCameraMatrix', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: OptimalNewCameraMatrix) => {
       expect(res).to.have.property('out').to.be.instanceOf(cv.Mat);
       assertMetaData(res.out)(3, 3, cv.CV_64F);
       expect(res).to.have.property('validPixROI').to.be.instanceOf(cv.Rect);

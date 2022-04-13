@@ -1,4 +1,4 @@
-import { cv } from '@u4/opencv4nodejs';
+import { cv, Point2, Point3 } from '@u4/opencv4nodejs';
 import { Mat, Vec2, Vec3, Vec4 } from '../../typings';
 
 export type OpenCV = typeof cv
@@ -33,8 +33,8 @@ export interface TestContext {
     utils: {
         funcShouldRequireArgs: (func: () => any) => void;
         assertPropsWithValue: (obj: any) => (props: any, floatSafe ?: boolean) => void;
-        expectToBeVec2: (vec: Vec2) => void;
-        expectToBeVec3: (vec: Vec3) => void;
+        expectToBeVec2: (vec: Vec2 | Point2) => void;
+        expectToBeVec3: (vec: Vec3 | Point3) => void;
         expectToBeVec4: (vec: Vec4) => void;
     
         assertError: (func: () => any, msg: string) => void;
