@@ -43,7 +43,7 @@ export function getWindowProperty(winName: string, prop_id: number): number;
  * @param x	The new x-coordinate of the window.
  * @param y	The new y-coordinate of the window.
  */
-export 	function moveWindow(winname: string, x: number, y: number)
+export 	function moveWindow(winname: string, x: number, y: number): void;
 //  
 /**
  * Creates a window.
@@ -56,7 +56,7 @@ export 	function moveWindow(winname: string, x: number, y: number)
  * @param winname Name of the window in the window caption that may be used as a window identifier. default: cv.WINDOW_AUTOSIZE
  * @param flags Flags of the window. The supported flags are: (cv::WindowFlags)
  */
-export 	function namedWindow(winname: string, flags?: number)
+export 	function namedWindow(winname: string, flags?: number): void;
 
 
 // int 	cv::pollKey ()
