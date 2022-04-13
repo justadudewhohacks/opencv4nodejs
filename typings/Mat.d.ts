@@ -10,6 +10,25 @@ import { Vec3 } from './Vec3.d';
 import { Vec4 } from './Vec4.d';
 
 
+export class DrawContoursOptions {
+  /**
+   * Maximal level for drawn contours. If it is 0, only the specified contour is drawn. If it is 1, the function draws the contour(s) and all the nested contours. If it is 2, the function draws the contours, all the nested contours, all the nested-to-nested contours, and so on. This parameter is only taken into account when there is hierarchy available.
+   */
+  maxLevel?: number;
+  /**
+   * Optional contour shift parameter. Shift all the drawn contours by the specified offset=(dx,dy) .
+   */
+  offset?: Point2;
+  /**
+   * Line connectivity. See LineTypes
+   */
+  lineType?: number;
+  /**
+   * Thickness of lines the contours are drawn with. If it is negative (for example, thickness=FILLED ), the contour interiors are drawn.
+   */
+  thickness?: number;
+}
+
 export class CalibrationMatrixValues {
   /**
    * Output field of view in degrees along the horizontal sensor axis.
@@ -232,11 +251,17 @@ export class Mat {
   drawCircle(center: Point2, radius: number, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
   // alternate signature
   /**
+   * Draws contours outlines or filled contours.
+   * 
+   * The function draws contour outlines in the image if thickness≥0 or fills the area bounded by the contours if thickness<0 . The example below shows how to retrieve connected components from the binary image and label them: :
+   * 
+   * https://docs.opencv.org/4.5.4/d6/d6e/group__imgproc__draw.html#ga746c0625f1781f1ffc9056259103edbc
+   * 
    * MatImgprocBindings.h
    * @param contours list of contours
    * @param contourIdx 0 based contour index to draw
    */
-  drawContours(contours: Point2[][], contourIdx: number, color: Vec3, opts: { maxLevel?: number, offset?: Point2, lineType?: number, thickness?: number, shift?: number }): void;
+  drawContours(contours: Point2[][], contourIdx: number, color: Vec3, opts: DrawContoursOptions): void;
   drawContours(contours: Point2[][], contourIdx: number, color: Vec3, thickness?: number, lineType?: number, hierarchy?: any, maxLevel?: number, offset?: Point2): void;
   // drawContours(contours: Point2[][], contourIdx: number, color: Vec3, maxLevel?: number, offset?: Point2, lineType?: number, thickness?: number, shift?: number): void;
   // alternate signature
