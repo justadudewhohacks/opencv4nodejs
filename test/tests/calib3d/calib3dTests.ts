@@ -35,8 +35,8 @@ export default (args: TestContext) => {
     new cv.Point2(101.0, 100.5)
   ];
   
-  const rvecInit = new cv.Vec(22, 45, 67)
-  const tvecInit = new cv.Vec(526, 315, 245)
+  const rvecInit = new cv.Vec3(22, 45, 67);
+  const tvecInit = new cv.Vec3(526, 315, 245);
   const distCoefficients = [0, 0.5, 1.0, 1.0];
 
   describe('findHomography', () => {
@@ -160,8 +160,8 @@ export default (args: TestContext) => {
         getDut: () => cv,
         methodName: 'solveP3P',
         getRequiredArgs: () => ([
-          objectPoints0.slice(0, 3),
-          imagePoints0.slice(0, 3),
+          objectPoints.slice(0, 3),
+          imagePoints.slice(0, 3),
           cv.Mat.eye(3, 3, cv.CV_64F),
           distCoefficients
         ]),
@@ -195,7 +195,7 @@ export default (args: TestContext) => {
       getDut: () => cv,
       methodName: 'projectPoints',
       getRequiredArgs: () => [
-        objectPoints0,
+        objectPoints,
         rvec,
         tvec,
         cv.Mat.eye(3, 3, cv.CV_64F),
@@ -205,7 +205,7 @@ export default (args: TestContext) => {
         aspectRatio
       ]),
       expectOutput: (res) => {
-        expect(res).to.have.property('imagePoints').to.be.an('array').lengthOf(imagePoints0.length);
+        expect(res).to.have.property('imagePoints').to.be.an('array').lengthOf(imagePoints.length);
         expect(res).to.have.property('jacobian').to.be.instanceOf(cv.Mat);
         assertMetaData(res.jacobian)(16, 14, cv.CV_64F);
       }
@@ -371,8 +371,8 @@ export default (args: TestContext) => {
       getDut: () => cv,
       methodName: 'findFundamentalMat',
       getRequiredArgs: () => [
-        imagePoints0,
-        imagePoints0
+        imagePoints,
+        imagePoints
       ],
       getOptionalParamsMap: () => ([
         ['method', cv.FM_LMEDS],
@@ -395,8 +395,8 @@ export default (args: TestContext) => {
       getDut: () => cv,
       methodName: 'findEssentialMat',
       getRequiredArgs: () => [
-        imagePoints0,
-        imagePoints0
+        imagePoints,
+        imagePoints
       ],
       getOptionalParamsMap: () => ([
         ['focal', 800.0],
