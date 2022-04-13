@@ -13,6 +13,23 @@ module.exports = ({ cv, utils }) => {
 
   const objectPoints = [
     new cv.Point(0, 0, 0),
+    new cv.Point(0, -330.0, -65.0), // #Chin
+    new cv.Point(-225.0, 170.0, -135.0), //#Left eye corner
+    new cv.Point(225.0, 170.0, -135.0), // #Right eye corner 
+    new cv.Point(-150.0, -150.0, -125.0), // #Left mouth 
+    new cv.Point(150.0, -150.0, -125.0) // #Right mouth 
+  ];
+  const imagePoints = [
+    new cv.Point(418, 247), //Nose tip
+    new cv.Point(392, 329), //Chin
+    new cv.Point(353, 199), // Left eye corner
+    new cv.Point(434, 203), //Right eye corner
+    new cv.Point(348, 270), //Left mouth 
+    new cv.Point(414, 279) //Right mouth 
+  ];
+  
+  const objectPoints0 = [
+    new cv.Point(0, 0, 0),
     new cv.Point(0.5, 0.5, 0.5),
     new cv.Point(1.0, 1.0, 1.0),
     new cv.Point(1.0, 0.5, 0),
@@ -21,7 +38,7 @@ module.exports = ({ cv, utils }) => {
     new cv.Point(101.0, 101.0, 101.0),
     new cv.Point(101.0, 100.5, 100)
   ];
-  const imagePoints = [
+  const imagePoints0 = [
     new cv.Point(0, 0),
     new cv.Point(0.5, 0.5),
     new cv.Point(1.0, 1.0),
@@ -31,6 +48,9 @@ module.exports = ({ cv, utils }) => {
     new cv.Point(101.0, 101.0),
     new cv.Point(101.0, 100.5)
   ];
+  
+  const rvecInit = new cv.Vec(22, 45, 67)
+  const tvecInit = new cv.Vec(526, 315, 245)
   const distCoefficients = [0, 0.5, 1.0, 1.0];
 
   describe('findHomography', () => {
@@ -111,15 +131,18 @@ module.exports = ({ cv, utils }) => {
       cv.Mat.eye(3, 3, cv.CV_64F),
       distCoefficients
     ]);
-
-    describe('solvePnP', () => {
+    
+    describe('solvePnP with extrinsicGuess', () => {
       generateAPITests({
         getDut: () => cv,
+        hasAsync: false,
         methodName: 'solvePnP',
         getRequiredArgs,
-        getOptionalParamsMap: () => ([
+        getOptionalArgsMap: () => ([
+          ['rvec', rvecInit],
+          ['tvec', tvecInit],
           ['useExtrinsicGuess', true],
-          ['flags', cv.SOLVEPNP_DLS]
+          ['flags', cv.SOLVEPNP_ITERATIVE]
         ]),
         expectOutput
       });
@@ -131,6 +154,8 @@ module.exports = ({ cv, utils }) => {
         methodName: 'solvePnPRansac',
         getRequiredArgs,
         getOptionalParamsMap: () => ([
+          ['rvec', rvecInit],
+          ['tvec', tvecInit],
           ['useExtrinsicGuess', true],
           ['iterationsCount', 200],
           ['reprojectionError', 16.0],
@@ -149,8 +174,8 @@ module.exports = ({ cv, utils }) => {
         getDut: () => cv,
         methodName: 'solveP3P',
         getRequiredArgs: () => ([
-          objectPoints.slice(0, 3),
-          imagePoints.slice(0, 3),
+          objectPoints0.slice(0, 3),
+          imagePoints0.slice(0, 3),
           cv.Mat.eye(3, 3, cv.CV_64F),
           distCoefficients
         ]),
@@ -184,7 +209,7 @@ module.exports = ({ cv, utils }) => {
       getDut: () => cv,
       methodName: 'projectPoints',
       getRequiredArgs: () => [
-        objectPoints,
+        objectPoints0,
         rvec,
         tvec,
         cv.Mat.eye(3, 3, cv.CV_64F),
@@ -194,7 +219,7 @@ module.exports = ({ cv, utils }) => {
         aspectRatio
       ]),
       expectOutput: (res) => {
-        expect(res).to.have.property('imagePoints').to.be.an('array').lengthOf(imagePoints.length);
+        expect(res).to.have.property('imagePoints').to.be.an('array').lengthOf(imagePoints0.length);
         expect(res).to.have.property('jacobian').to.be.instanceOf(cv.Mat);
         assertMetaData(res.jacobian)(16, 14, cv.CV_64F);
       }
@@ -359,8 +384,8 @@ module.exports = ({ cv, utils }) => {
       getDut: () => cv,
       methodName: 'findFundamentalMat',
       getRequiredArgs: () => [
-        imagePoints,
-        imagePoints
+        imagePoints0,
+        imagePoints0
       ],
       getOptionalParamsMap: () => ([
         ['method', cv.FM_LMEDS],
@@ -383,8 +408,8 @@ module.exports = ({ cv, utils }) => {
       getDut: () => cv,
       methodName: 'findEssentialMat',
       getRequiredArgs: () => [
-        imagePoints,
-        imagePoints
+        imagePoints0,
+        imagePoints0
       ],
       getOptionalParamsMap: () => ([
         ['focal', 800.0],
