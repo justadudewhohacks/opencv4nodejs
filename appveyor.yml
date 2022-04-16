@@ -56,15 +56,25 @@ install:
 build_script:
   - node --version
   - npm install -g pnpm
-  - if "%BUILD_TASK%" == "ENVS" (
-      cd c:\projects\opencv4nodejs\ci\envs &&
-      pnpm install &&
-      pnpm test
-    ) else (
-      cd c:\projects\opencv4nodejs &&
-      pnpm install &&
-      cd c:\projects\opencv4nodejs\test &&
-      pnpm install &&
-      pnpm run test-appveyor &&
-      pnpm run test-externalMemTracking
-    )
+  - cd c:\projects\opencv4nodejs
+  - pnpm install
+  - pnpm run prepack
+  - npm link
+  - build-opencv rebuild
+  - cd c:\projects\opencv4nodejs\test
+  - pnpm install
+  - pnpm run test-appveyor
+  - pnpm run test-externalMemTracking
+
+  #- if "%BUILD_TASK%" == "ENVS" (
+  #    cd c:\projects\opencv4nodejs\ci\envs &&
+  #    pnpm install &&
+  #    pnpm test
+  #  ) else (
+  #    cd c:\projects\opencv4nodejs &&
+  #    pnpm install &&
+  #    cd c:\projects\opencv4nodejs\test &&
+  #    pnpm install &&
+  #    pnpm run test-appveyor &&
+  #    pnpm run test-externalMemTracking
+  #  )
