@@ -50,7 +50,7 @@
     "build-debug": "tsc && BINDINGS_DEBUG=true node bin/install.js rebuild"
   },
   "dependencies": {
-    "@u4/opencv-build": "^0.4.4",
+    "@u4/opencv-build": "^0.4.5",
     "glob": "^8.0.1",
     "nan": "^2.15.0",
     "native-node-utils": "^0.2.7",
