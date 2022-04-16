@@ -25,23 +25,22 @@ environment:
     - nodejs_version: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      OPENCV_VERSION: "%OPENCV3_LATEST%"
-    - nodejs_version: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-
-    - nodejs_version: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-      BUILD_TASK: "ENVS"
+    # - nodejs_version: 16
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #   OPENCV_VERSION: "%OPENCV3_LATEST%"
+    # - nodejs_version: 16
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
+    #   OPENCV_VERSION: "%OPENCV4_LATEST%"
+    # - nodejs_version: 16
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
+    #   OPENCV_VERSION: "%OPENCV4_LATEST%"
+    # - nodejs_version: 16
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #   OPENCV_VERSION: "%OPENCV4_LATEST%"
+    # - nodejs_version: 16
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #   OPENCV_VERSION: "%OPENCV4_LATEST%"
+    #   BUILD_TASK: "ENVS"
 
 install:
   - cmd: choco install OpenCV -y -version %OPENCV_VERSION%
@@ -56,15 +55,16 @@ install:
 
 test_script:
   - node --version
+  - npm install -g pnpm
   - if "%BUILD_TASK%" == "ENVS" (
       cd c:\projects\opencv4nodejs\ci\envs &&
-      npm install &&
-      npm test
+      pnpm install &&
+      pnpm test
     ) else (
       cd c:\projects\opencv4nodejs &&
-      npm install &&
+      pnpm install &&
       cd c:\projects\opencv4nodejs\test &&
-      npm install &&
-      npm run test-appveyor &&
-      npm run test-externalMemTracking
+      pnpm install &&
+      pnpm run test-appveyor &&
+      pnpm run test-externalMemTracking
     )
