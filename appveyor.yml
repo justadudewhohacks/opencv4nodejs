@@ -14,36 +14,31 @@ init:
 
 # what combinations to test
 environment:
-  OPENCV3_LATEST: 3.4.6
-  OPENCV4_LATEST: 4.1.0
-  PYTHON_VERSION: 2.7
-  PYTHON: "C:\\Python27-x64"
+  OPENCV3_LATEST: 3.4.16
+  OPENCV4_LATEST: 4.5.4
+  PYTHON_VERSION: 3.8
+  PYTHON: "C:\\Python38-x64"
   # use self build
   OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
 
   matrix:
-    - nodejs_version: 12
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    - nodejs_version: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 12
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    - nodejs_version: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       OPENCV_VERSION: "%OPENCV3_LATEST%"
-    - nodejs_version: 12
+    - nodejs_version: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
+      OPENCV_VERSION: "%OPENCV4_LATEST%"
+
+    - nodejs_version: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
+      OPENCV_VERSION: "%OPENCV4_LATEST%"
+    - nodejs_version: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 11
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 10
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 8
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 6
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 12
+    - nodejs_version: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       OPENCV_VERSION: "%OPENCV4_LATEST%"
       BUILD_TASK: "ENVS"
@@ -57,7 +52,7 @@ install:
   - ps: Install-Product node $env:nodejs_version x64
   - node --version
 
-build: off
+# build: off
 
 test_script:
   - node --version

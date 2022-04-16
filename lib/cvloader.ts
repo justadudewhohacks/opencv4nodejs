@@ -6,7 +6,6 @@ import { isElectronWebpack, resolvePath } from './commons';
 import pc from 'picocolors'
 import { info } from 'npmlog';
 import type * as openCV from '..';
-import { EOL } from 'os';
 
 const logDebug = process.env.OPENCV4NODES_DEBUG_REQUIRE ? info : () => { /* ignore */}
 
@@ -77,7 +76,14 @@ function getOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
       opencvBuild = require(requirePath);
     } catch(e) {
       if (e instanceof Error) {
-        const msg = `${e.message}, openCV binding not available, reed: ${EOL}build-opencv --help${EOL}.${path.sep}node_modules${path.sep}.bin${path.sep}build-opencv --help${EOL}${EOL}And build missing file with:${EOL}build-opencv --version 4.5.4 rebuild${EOL}.${path.sep}node_modules${path.sep}.bin${path.sep}build-opencv --version 4.5.4 rebuild${EOL}`;
+        const msg = `require("${pc.yellow(requirePath)}"); 
+Failed with: ${e.message}, openCV binding not available, reed: 
+build-opencv --help
+And build missing file with:
+build-opencv --version 4.5.4 rebuild
+
+PS: a 'npm link' may help
+`;
         throw Error(msg)
       }
       throw e;

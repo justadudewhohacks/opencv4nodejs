@@ -330,6 +330,10 @@ export class Mat {
   getDataAsync(): Promise<Buffer>;
   /**
    * if Mat.dims <= 2
+   * 
+   * @see https://github.com/justadudewhohacks/opencv4nodejs/issues/329
+   * 
+   * Note this method offer low performances, use getData instead.
    */
   getDataAsArray(): number[][];
   /**
