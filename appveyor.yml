@@ -40,7 +40,7 @@ environment:
     - nodejs_version: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       OPENCV_VERSION: "%OPENCV4_LATEST%"
-      BUILD_TASK: "ENVS"
+      # BUILD_TASK: "ENVS"
 
 install:
   - cmd: choco install OpenCV -y --version %OPENCV_VERSION%
@@ -62,11 +62,15 @@ build_script:
   - pnpm run prepack
   - npm link
   - build-opencv rebuild
+  - cd c:\projects\opencv4nodejs\ci\envs
+  - build-opencv rebuild
+  - pnpm install
+  - pnpm test
   - cd c:\projects\opencv4nodejs\test
   - pnpm install
-  #- pnpm run test-appveyor
-  - SET OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING=1
-  - pnpm run test-externalMemTracking
+  - pnpm run test-appveyor
+  # - SET OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING=1
+  # - pnpm run test-externalMemTracking
   # - SET OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING=
   # - pnpm run test-externalMemTracking
 
