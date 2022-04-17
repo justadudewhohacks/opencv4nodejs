@@ -1,6 +1,6 @@
 import { TestContext } from "../model";
 import { expect } from 'chai';
-import { CalibrationMatrixValues, Mat, OptimalNewCameraMatrix, StereoRectify, Vec2 } from "../../../typings";
+import { CalibrationMatrixValues, Mat, OptimalNewCameraMatrix, StereoRectify } from "../../../typings";
 
 export default (args: TestContext) => {
   const { cv, utils } = args;
