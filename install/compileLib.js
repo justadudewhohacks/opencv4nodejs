@@ -124,26 +124,45 @@ function getExistingBin(dir, name) {
     }
     return '';
 }
-function getParents(dir) {
-    const out = [dir];
-    while (true) {
-        const next = path_1.default.resolve(dir, '..');
-        if (next === dir)
-            break;
-        dir = next;
-        out.push(dir);
-    }
-    return out;
-}
+// function getParents(dir: string) {
+//     const out = [dir];
+//     while (true) {
+//         const next = path.resolve(dir, '..');
+//         if (next === dir)
+//             break;
+//         dir = next;
+//         out.push(dir);
+//     }
+//     return out;
+// }
 async function compileLib(args) {
     let dryRun = false;
     let JOBS = 'max';
-    const validAction = ['build', 'clean', 'configure', 'rebuild', 'install', 'list', 'remove'];
-    const action = args[args.length - 1];
+    const validAction = ['build', 'clean', 'configure', 'rebuild', 'install', 'list', 'remove', 'auto'];
+    let action = args[args.length - 1];
     if (args.includes('--help') || args.includes('-h') || !validAction.includes(action)) {
         console.log(`Usage: build-opencv build|rebuild|configure|install [--version=<version>] [--vscode] [--jobs=<thread>] [--electron] [--node-gyp-options=<options>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] ${validAction.join('|')}`);
         console.log((0, opencv_build_1.genHelp)());
         console.log('   --dry-run            Display command line use to build library');
+        return;
+    }
+    if (action === 'auto') {
+        const env = process.env;
+        if (env.OPENCV4NODEJS_DISABLE_AUTOBUILD) {
+            action = 'rebuild';
+        }
+        if (env.OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION) {
+            action = 'rebuild';
+        }
+        const npmEnv = opencv_build_1.OpenCVBuildEnv.readEnvsFromPackageJson();
+        if (npmEnv && Object.keys(npmEnv).length) {
+            action = 'rebuild';
+        }
+    }
+    if (action === 'auto') {
+        console.log(`Use 'build-opencv rebuild' script to start node-gyp, use --help to check all options.
+or configure configure a opencv4nodejs section in your package.json
+or use OPENCV4NODEJS_* env variable.`);
         return;
     }
     const options = (0, opencv_build_1.args2Option)(args);
