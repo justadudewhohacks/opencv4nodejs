@@ -36,7 +36,7 @@
   "typings": "./typings/index.d.ts",
   "scripts": {
     "prepack": "tsc",
-    "install": "echo \"Use 'build-opencv rebuild' of (node bin/install.js rebuild) script to start node-gyp, use --help to check all options.\"",
+    "install": "tsc && node bin/install.js auto",
     "install_default": "tsc && node bin/install.js rebuild",
     "install_macm1": "tsc && node bin/install.js --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64 -DWITH_FFMPEG=ON\" rebuild",
     "install_cuda": "tsc && node bin/install.js --version 4.5.5 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_FFMPEG=ON\" rebuild",
@@ -50,20 +50,17 @@
     "build-debug": "tsc && BINDINGS_DEBUG=true node bin/install.js rebuild"
   },
   "dependencies": {
-    "@u4/opencv-build": "^0.4.5",
+    "@u4/opencv-build": "^0.4.6",
     "glob": "^8.0.1",
     "nan": "^2.15.0",
     "native-node-utils": "^0.2.7",
     "npmlog": "^6.0.1",
     "picocolors": "^1.0.0"
   },
-  "optionalDependencies": {
-    "@types/node": ">=17"
-  },
   "devDependencies": {
     "@types/glob": "^7.2.0",
     "@types/mri": "^1.1.1",
-    "@types/node": "^17.0.5",
+    "@types/node": "^17.0.24",
     "@types/npmlog": "^4.1.4",
     "@types/progress": "^2.0.5",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
