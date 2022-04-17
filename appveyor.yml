@@ -28,18 +28,23 @@ environment:
     - nodejs_version: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       OPENCV_VERSION: "%OPENCV3_LATEST%"
+
+    - nodejs_version: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
+      OPENCV_VERSION: "4.5.5"
     - nodejs_version: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
       OPENCV_VERSION: "%OPENCV4_LATEST%"
     - nodejs_version: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
+      OPENCV_VERSION: "%OPENCV3_LATEST%"
+
     - nodejs_version: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       OPENCV_VERSION: "%OPENCV4_LATEST%"
     - nodejs_version: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
+      OPENCV_VERSION: "%OPENCV3_LATEST%"
     #  # BUILD_TASK: "ENVS"
 
 install:
