@@ -60,12 +60,12 @@ export default function (args: TestContext) {
 
   // FAIL
   describe('VideoCapture setAsync', () => {
-    it('should set properties', async (done) => {
+    it('should set properties', async () => {
       const cap = new cv.VideoCapture(getTestVideoPath());
       const wasSet = await cap.setAsync(cv.CAP_PROP_POS_MSEC, 1000);
       expect(cap.get(cv.CAP_PROP_POS_MSEC)|0).to.equal(83); // 1001 do not knowm why result is 83 or 1001
       expect(wasSet).to.equal(true);
-      done();
+      return true;
     });
   });
 
