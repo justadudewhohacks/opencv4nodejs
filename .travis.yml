@@ -9,8 +9,8 @@ env:
   global:
     - OPENCV4NODEJS_DISABLE_AUTOBUILD=1
     - LATEST_STABLE_NODEJS_VERSION=12
-    - OPENCV3_LATEST=3.4.6
-    - OPENCV4_LATEST=4.1.0
+    - OPENCV3_LATEST=3.4.16
+    - OPENCV4_LATEST=4.5.4
 
 matrix:
   include:
@@ -102,22 +102,17 @@ matrix:
 
     # latest OpenCV 3
     - os: linux
-      node_js: 6
+      node_js: 12
       env:
         - OPENCV_VERSION=$OPENCV3_LATEST-contrib
           BUILD_TASK=test
     - os: linux
-      node_js: 8
+      node_js: 14
       env:
         - OPENCV_VERSION=$OPENCV3_LATEST-contrib
           BUILD_TASK=test
     - os: linux
-      node_js: 10
-      env:
-        - OPENCV_VERSION=$OPENCV3_LATEST-contrib
-          BUILD_TASK=test
-    - os: linux
-      node_js: 11
+      node_js: 16
       env:
         - OPENCV_VERSION=$OPENCV3_LATEST-contrib
           BUILD_TASK=test
@@ -129,22 +124,17 @@ matrix:
 
     # latest OpenCV 4
     - os: linux
-      node_js: 6
+      node_js: 12
       env:
         - OPENCV_VERSION=$OPENCV4_LATEST-contrib
           BUILD_TASK=test
     - os: linux
-      node_js: 8
+      node_js: 14
       env:
         - OPENCV_VERSION=$OPENCV4_LATEST-contrib
           BUILD_TASK=test
     - os: linux
-      node_js: 10
-      env:
-        - OPENCV_VERSION=$OPENCV4_LATEST-contrib
-          BUILD_TASK=test
-    - os: linux
-      node_js: 11
+      node_js: 16
       env:
         - OPENCV_VERSION=$OPENCV4_LATEST-contrib
           BUILD_TASK=test

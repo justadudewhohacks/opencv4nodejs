@@ -67,8 +67,8 @@ build_script:
   #- pnpm run test-appveyor
   - SET OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING=1
   - pnpm run test-externalMemTracking
-  - SET OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING=
-  - pnpm run test-externalMemTracking
+  # - SET OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING=
+  # - pnpm run test-externalMemTracking
 
   #- if "%BUILD_TASK%" == "ENVS" (
   #    cd c:\projects\opencv4nodejs\ci\envs &&
