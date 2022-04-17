@@ -25,21 +25,21 @@ environment:
     - nodejs_version: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       OPENCV_VERSION: "%OPENCV4_LATEST%"
-    #- nodejs_version: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    #  OPENCV_VERSION: "%OPENCV3_LATEST%"
-    #- nodejs_version: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
-    #  OPENCV_VERSION: "%OPENCV4_LATEST%"
-    #- nodejs_version: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
-    #  OPENCV_VERSION: "%OPENCV4_LATEST%"
-    #- nodejs_version: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #  OPENCV_VERSION: "%OPENCV4_LATEST%"
-    #- nodejs_version: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #  OPENCV_VERSION: "%OPENCV4_LATEST%"
+    - nodejs_version: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      OPENCV_VERSION: "%OPENCV3_LATEST%"
+    - nodejs_version: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
+      OPENCV_VERSION: "%OPENCV4_LATEST%"
+    - nodejs_version: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
+      OPENCV_VERSION: "%OPENCV4_LATEST%"
+    - nodejs_version: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      OPENCV_VERSION: "%OPENCV4_LATEST%"
+    - nodejs_version: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      OPENCV_VERSION: "%OPENCV4_LATEST%"
     #  # BUILD_TASK: "ENVS"
 
 install:
@@ -51,9 +51,9 @@ install:
   - ps: Install-Product node $env:nodejs_version x64
   # - node --version
 
-# build: off
+build: off
 
-build_script:
+test_script:
   - node --version
   - npm install -g pnpm
   - pnpm install -g node-gyp
