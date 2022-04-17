@@ -12,7 +12,6 @@ data/dnn
 dist
 .DS_Store
 native-node-utils
-install/*.js
 install/*.js.map
 lib/*.js
 lib/*.js.map
