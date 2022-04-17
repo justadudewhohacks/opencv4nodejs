@@ -62,10 +62,10 @@ test_script:
   - pnpm run prepack
   - npm link
   - build-opencv rebuild
-  - cd c:\projects\opencv4nodejs\ci\envs
-  - build-opencv rebuild
-  - pnpm install
-  - pnpm test
+  # - cd c:\projects\opencv4nodejs\ci\envs
+  # - build-opencv rebuild
+  # - pnpm install
+  # - pnpm test
   - cd c:\projects\opencv4nodejs\test
   - pnpm install
   - pnpm run test-appveyor
