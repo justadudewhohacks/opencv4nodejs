@@ -68,8 +68,10 @@ NAN_MODULE_INIT(Dnn::Init) {
   Nan::SetMethod(target, "readNetFromONNX", ReadNetFromONNX);
   Nan::SetMethod(target, "readNetFromONNXAsync", ReadNetFromONNXAsync);
 #endif
+#if CV_VERSION_GREATER_EQUAL(3, 4, 2)
   Nan::SetMethod(target, "readNet", ReadNet);
   Nan::SetMethod(target, "readNetAsync", ReadNetAsync);
+#endif
 };
 
 

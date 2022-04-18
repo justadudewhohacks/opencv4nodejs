@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils} = args;
+  const { cv, utils } = args;
 
   const {
     assertMetaData,
@@ -48,22 +48,30 @@ export default function (args: TestContext) {
     });
   });
 
-  // FAIL
   describe('VideoCapture set', () => {
     it('should set properties', () => {
       const cap = new cv.VideoCapture(getTestVideoPath());
       const wasSet = cap.set(cv.CAP_PROP_POS_MSEC, 1000)
-      expect(cap.get(cv.CAP_PROP_POS_MSEC)|0).to.equal(83); // 1001 do not knowm why result is 83 or 1001
+      const msec = cap.get(cv.CAP_PROP_POS_MSEC) | 0;
+      // depending of openCV version, result can be 83 or 1001
+      if (msec === 83) // openCV 3.4.6 and below
+        expect(msec).to.equal(83);
+      else // openCV 3.4.8 and over
+        expect(msec).to.equal(1001);
       expect(wasSet).to.equal(true);
     });
   });
 
-  // FAIL
   describe('VideoCapture setAsync', () => {
     it('should set properties', async () => {
       const cap = new cv.VideoCapture(getTestVideoPath());
       const wasSet = await cap.setAsync(cv.CAP_PROP_POS_MSEC, 1000);
-      expect(cap.get(cv.CAP_PROP_POS_MSEC)|0).to.equal(83); // 1001 do not knowm why result is 83 or 1001
+      // depending of openCV version, result can be 83 or 1001
+      const msec = cap.get(cv.CAP_PROP_POS_MSEC) | 0;
+      if (msec === 83) // openCV 3.4.6 and below
+        expect(msec).to.equal(83);
+      else // openCV 3.4.8 and over
+        expect(msec).to.equal(1001);
       expect(wasSet).to.equal(true);
       return true;
     });
