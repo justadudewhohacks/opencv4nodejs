@@ -27,98 +27,102 @@ environment:
       NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - 
-      OPENCVV: 4.5.4
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 4.4.0
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 4.3.0
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 4.2.0
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 4.1.2
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 3.4.16
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 3.4.15
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 3.4.6
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 3.4.0
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 3.3.1
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - # minimal supported value
-      OPENCVV: 3.2.0
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-
-    - 
       OPENCVV: 4.5.5
       NODEV: 14
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - 
-      OPENCVV: 4.5.4
-      NODEV: 14
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - 
-      OPENCVV: 4.4.0
-      NODEV: 14
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - 
-      OPENCVV: 4.3.0
-      NODEV: 14
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - 
-      OPENCVV: 4.2.0
-      NODEV: 14
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - 
-      OPENCVV: 4.1.2
-      NODEV: 14
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    # - 
+    #   OPENCVV: 4.5.4
+    #   NODEV: 16
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    # - 
+    #   OPENCVV: 4.4.0
+    #   NODEV: 16
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    # - 
+    #   OPENCVV: 4.3.0
+    #   NODEV: 16
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    # - 
+    #   OPENCVV: 4.2.0
+    #   NODEV: 16
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    # - 
+    #   OPENCVV: 4.1.2
+    #   NODEV: 16
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - 
       OPENCVV: 3.4.16
-      NODEV: 14
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - 
-      OPENCVV: 3.4.15
-      NODEV: 14
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - 
-      OPENCVV: 3.4.6
-      NODEV: 14
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - 
-      OPENCVV: 3.4.0
-      NODEV: 14
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - 
-      OPENCVV: 3.3.1
-      NODEV: 14
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - # minimal supported value
-      OPENCVV: 3.2.0
-      NODEV: 14
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: 3.4.15
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: 3.4.6
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: 3.4.0
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: 3.3.1
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- # minimal supported value
+    #  OPENCVV: 3.2.0
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+
+    #- 
+    #  OPENCVV: 4.5.5
+    #  NODEV: 14
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #- 
+    #  OPENCVV: 4.5.4
+    #  NODEV: 14
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #- 
+    #  OPENCVV: 4.4.0
+    #  NODEV: 14
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #- 
+    #  OPENCVV: 4.3.0
+    #  NODEV: 14
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #- 
+    #  OPENCVV: 4.2.0
+    #  NODEV: 14
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #- 
+    #  OPENCVV: 4.1.2
+    #  NODEV: 14
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #- 
+    #  OPENCVV: 3.4.16
+    #  NODEV: 14
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #- 
+    #  OPENCVV: 3.4.15
+    #  NODEV: 14
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #- 
+    #  OPENCVV: 3.4.6
+    #  NODEV: 14
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #- 
+    #  OPENCVV: 3.4.0
+    #  NODEV: 14
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #- 
+    #  OPENCVV: 3.3.1
+    #  NODEV: 14
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #- # minimal supported value
+    #  OPENCVV: 3.2.0
+    #  NODEV: 14
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
     # - 
     #   OPENCVV: "%OPENCV3_LATEST%"
@@ -155,7 +159,7 @@ install:
   - ps: Install-Product node $env:NODEV x64
   # - node --version
 
-build: off
+build: false
 
 test_script:
   - node --version

@@ -1,5 +1,11 @@
 # changelog
 
+## Version 6.1.4
+
+* Tested an works with all openCV version from 3.2.0 to 4.5.5
+* small patches
+* new build system, retrocompatible with origial justadudewhohacks/opencv4nodejs
+
 ## Version 6.1.3
 
 * fix linux build regression [PR14](https://github.com/UrielCh/opencv4nodejs/pull/14)
