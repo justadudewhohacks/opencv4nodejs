@@ -54,14 +54,14 @@ environment:
     #  OPENCVV: 3.4.15
     #  NODEV: 16
     #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 3.4.6
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 3.4.0
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: 3.4.6
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: 3.4.0
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - 
       OPENCVV: 3.3.1
       NODEV: 16
@@ -122,7 +122,7 @@ test_script:
   - cd c:\projects\opencv4nodejs
   - pnpm install
   - pnpm run prepack
-  - npm link
+  # - npm link
   # - build-opencv rebuild
   # - cd c:\projects\opencv4nodejs\ci\envs && build-opencv rebuild && pnpm install && pnpm test
   - cd c:\projects\opencv4nodejs\test
