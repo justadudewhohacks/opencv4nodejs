@@ -62,9 +62,11 @@ public:
 
 	static NAN_METHOD(GetTickFrequency);
 	static NAN_METHOD(GetTickCount);
+	#if CV_VERSION_GREATER_EQUAL(3, 4, 2)
 	static NAN_METHOD(GetVersionMajor);
 	static NAN_METHOD(GetVersionMinor);
 	static NAN_METHOD(GetVersionRevision);
+	#endif
 };
 
 #endif

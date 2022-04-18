@@ -21,18 +21,20 @@ export function getTickCount(): number;
 /**
  * Returns major library version.
  * https://docs.opencv.org/4.x/db/de0/group__core__utils.html#gaebca81a0853cd9dff3d6fd88dad25ad0
+ * @since 3.4.2
  */
 export function getVersionMajor(): number;
-
 
 /**
  * Returns minor library version.
  * https://docs.opencv.org/4.x/db/de0/group__core__utils.html#gaf76d1e4fd9562ae058abfea4891b8b0d
+ * @since 3.4.2
  */
 export function getVersionMinor(): number;
 
 /**
 * Returns revision field of the library version.
 * https://docs.opencv.org/4.x/db/de0/group__core__utils.html#ga2d7ae9f1e3fb51d5a62c5cde4626bfcd
+* @since 3.4.2
 */
 export function getVersionRevision(): number;

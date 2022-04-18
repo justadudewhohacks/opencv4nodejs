@@ -59,11 +59,11 @@ NAN_MODULE_INIT(Core::Init) {
 
   Nan::SetMethod(target, "getTickFrequency", GetTickFrequency);
   Nan::SetMethod(target, "getTickCount", GetTickCount);
-
+#if CV_VERSION_GREATER_EQUAL(3, 4, 2)
   Nan::SetMethod(target, "getVersionMajor", GetVersionMajor);
   Nan::SetMethod(target, "getVersionMinor", GetVersionMinor);
   Nan::SetMethod(target, "getVersionRevision", GetVersionRevision);
-
+#endif
 };
 
 NAN_METHOD(Core::GetBuildInformation) {
@@ -388,6 +388,7 @@ NAN_METHOD(Core::GetTickCount) {
   info.GetReturnValue().Set(FF::IntConverter::wrap(cv::getTickCount()));
 }
 
+#if CV_VERSION_GREATER_EQUAL(3, 4, 2)
 NAN_METHOD(Core::GetVersionMajor) {
   info.GetReturnValue().Set(FF::IntConverter::wrap(cv::getVersionMajor()));
 }
@@ -399,4 +400,4 @@ NAN_METHOD(Core::GetVersionMinor) {
 NAN_METHOD(Core::GetVersionRevision) {
   info.GetReturnValue().Set(FF::IntConverter::wrap(cv::getVersionRevision()));
 }
-
+#endif
