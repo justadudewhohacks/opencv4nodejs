@@ -55,6 +55,10 @@ environment:
     #  NODEV: 16
     #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - 
+      OPENCVV: 3.4.8
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    - 
       OPENCVV: 3.4.0
       NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
