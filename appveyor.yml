@@ -22,65 +22,79 @@ environment:
   OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
 
   matrix:
-    - nodejs_version: 16
+    - 
+      OPENCVV: 4.5.5
+      NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      OPENCV_VERSION: "4.5.5"
-    - nodejs_version: 16
+    - 
+      OPENCVV: 4.5.4
+      NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      OPENCV_VERSION: "4.5.4"
-    - nodejs_version: 16
+    - 
+      OPENCVV: 4.4.0
+      NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      OPENCV_VERSION: "4.4.0"
-    - nodejs_version: 16
+    - 
+      OPENCVV: 4.3.0
+      NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      OPENCV_VERSION: "4.3.0"
-    - nodejs_version: 16
+    - 
+      OPENCVV: 4.2.0
+      NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      OPENCV_VERSION: "4.2.0"
-    - nodejs_version: 16
+    - 
+      OPENCVV: 4.1.2
+      NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      OPENCV_VERSION: "4.1.2"
-    - nodejs_version: 16
+    - 
+      OPENCVV: 3.4.17
+      NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      OPENCV_VERSION: "3.4.17"
-    - nodejs_version: 16
+    - 
+      OPENCVV: 3.4.16
+      NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      OPENCV_VERSION: "3.4.16"
-    - nodejs_version: 16
+    - 
+      OPENCVV: 3.4.15
+      NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      OPENCV_VERSION: "3.4.15"
-    - nodejs_version: 16
+    - 
+      OPENCVV: 3.3.1
+      NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      OPENCV_VERSION: "3.3.1"
- #   - nodejs_version: 16
- #     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
- #     OPENCV_VERSION: "%OPENCV3_LATEST%"
-#
-    #- nodejs_version: 16
+    # - 
+    #   OPENCVV: "%OPENCV3_LATEST%"
+    #   NODEV: 16
+    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: 4.5.5
+    #  NODEV: 16
     #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
-    #  OPENCV_VERSION: "4.5.5"
-    #- nodejs_version: 16
+    #- 
+    #  OPENCVV: "%OPENCV4_LATEST%"
+    #  NODEV: 16
     #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
-    #  OPENCV_VERSION: "%OPENCV4_LATEST%"
-    #- nodejs_version: 16
+    #- 
+    #  OPENCVV: "%OPENCV3_LATEST%"
+    #  NODEV: 16
     #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
-    #  OPENCV_VERSION: "%OPENCV3_LATEST%"
-
-    #- nodejs_version: 16
+    #- 
+    #  OPENCVV: "%OPENCV4_LATEST%"
+    #  NODEV: 16
     #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #  OPENCV_VERSION: "%OPENCV4_LATEST%"
-    #- nodejs_version: 16
+    #- 
+    #  OPENCVV: "%OPENCV3_LATEST%"
+    #  NODEV: 16
     #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #  OPENCV_VERSION: "%OPENCV3_LATEST%"
     #  # BUILD_TASK: "ENVS"
 
 install:
-  - cmd: choco install OpenCV -y --version %OPENCV_VERSION%
+  - cmd: choco install OpenCV -y --version %OPENCVV%
   - if not "%BUILD_TASK%" == "ENVS" SET OPENCV_INCLUDE_DIR=c:\tools\opencv\build\include
   - if not "%BUILD_TASK%" == "ENVS" SET OPENCV_LIB_DIR=c:\tools\opencv\build\x64\vc14\lib
   - if not "%BUILD_TASK%" == "ENVS" SET OPENCV_BIN_DIR=c:\tools\opencv\build\x64\vc14\bin
   - if not "%BUILD_TASK%" == "ENVS" SET PATH=%PATH%;%OPENCV_BIN_DIR%;
-  - ps: Install-Product node $env:nodejs_version x64
+  - ps: Install-Product node $env:NODEV x64
   # - node --version
 
 build: off
