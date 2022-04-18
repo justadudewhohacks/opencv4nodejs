@@ -22,18 +22,18 @@ environment:
   OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
 
   matrix:
-    - 
-      OPENCVV: 4.5.5
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 4.5.4
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 4.4.0
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: 4.5.5
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: 4.5.4
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: 4.4.0
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - 
       OPENCVV: 4.3.0
       NODEV: 16
@@ -44,10 +44,6 @@ environment:
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - 
       OPENCVV: 4.1.2
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 3.4.17
       NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - 
