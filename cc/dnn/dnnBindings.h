@@ -35,6 +35,9 @@ namespace DnnBindings {
   };
 #endif
 
+
+#if CV_VERSION_GREATER_EQUAL(3, 4, 2)
+
 struct ReadNetWorker: public CatchCvExceptionWorker {
 public:
   std::string model;
@@ -75,6 +78,7 @@ public:
     );
 	 }
 };
+# endif
 
 #if CV_VERSION_GREATER_EQUAL(4, 0, 0)
   struct ReadNetFromONNXWorker: public CatchCvExceptionWorker {

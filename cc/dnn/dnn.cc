@@ -115,6 +115,7 @@ NAN_METHOD(Dnn::ReadNetFromONNXAsync) {
 }
 #endif
 
+#if CV_VERSION_GREATER_EQUAL(3, 4, 2)
 NAN_METHOD(Dnn::ReadNet) {
   FF::executeSyncBinding(std::make_shared<DnnBindings::ReadNetWorker>(), "ReadNet", info);
 }
@@ -122,5 +123,6 @@ NAN_METHOD(Dnn::ReadNet) {
 NAN_METHOD(Dnn::ReadNetAsync) {
   FF::executeAsyncBinding(std::make_shared<DnnBindings::ReadNetWorker>(), "ReadNetAsync", info);
 }
+#endif
 
 #endif
