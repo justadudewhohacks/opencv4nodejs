@@ -27,7 +27,9 @@ void HighguiConstants::Init(v8::Local<v8::Object> target)
 	FF_SET_CV_CONSTANT(target, WND_PROP_OPENGL);
 	FF_SET_CV_CONSTANT(target, WND_PROP_VISIBLE);
 	FF_SET_CV_CONSTANT(target, WND_PROP_TOPMOST);
-	FF_SET_CV_CONSTANT(target, WND_PROP_VSYNC);
+	#if CV_VERSION_GREATER_EQUAL(4, 5, 2)
+	  FF_SET_CV_CONSTANT(target, WND_PROP_VSYNC);
+    #endif
 
 	//! Mouse Events see cv::MouseCallback
 	// enum MouseEventTypes
