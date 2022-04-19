@@ -199,26 +199,53 @@ NAN_METHOD(Mat::New) {
   }
   /* row, col, type
    * constructor(rows: number, cols: number, type: number, fillValue?: number | number[]);
+   * constructor(rows: number, cols: number, type: number, data: Buffer, step?: number);
    */
   else if (info[0]->IsNumber() && info[1]->IsNumber() && info[2]->IsInt32()) {
     int type = info[2]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
-    cv::Mat mat(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), type);
-    /* fill vector */
-    // TODO by Vec
-    if (info[3]->IsArray()) {
-      v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[3]);
-      if (mat.channels() != (long)vec->Length()) {
-        return tryCatch.throwError(
-          std::string("Mat::New - number of channels (") + std::to_string(mat.channels())
-          + std::string(") do not match fill vector length ") + std::to_string(vec->Length())
-        );
+    if (info.Length() == 3 || info[3]->IsArray() || info[3]->IsNumber()) {
+      
+      cv::Mat mat(info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), type);
+          
+      /* fill vector */
+      // TODO by Vec
+      if (info[3]->IsArray()) {
+        v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[3]);
+        if (mat.channels() != (long)vec->Length()) {
+          return tryCatch.throwError(
+            std::string("Mat::New - number of channels (") + std::to_string(mat.channels())
+            + std::string(") do not match fill vector length ") + std::to_string(vec->Length())
+          );
+        }
+        FF_MAT_APPLY_TYPED_OPERATOR(mat, vec, type, FF_MAT_FILL, FF::matPut);
       }
-      FF_MAT_APPLY_TYPED_OPERATOR(mat, vec, type, FF_MAT_FILL, FF::matPut);
+      if (info[3]->IsNumber()) {
+        FF_MAT_APPLY_TYPED_OPERATOR(mat, info[3], type, FF_MAT_FILL, FF::matPut);
+      }
+      self->setNativeObject(mat);
     }
-    if (info[3]->IsNumber()) {
-      FF_MAT_APPLY_TYPED_OPERATOR(mat, info[3], type, FF_MAT_FILL, FF::matPut);
+    else if(info[3]->IsObject()){
+      char *data = static_cast<char *>(node::Buffer::Data(info[3]->ToObject(Nan::GetCurrentContext()).ToLocalChecked()));
+      if(info[4]->IsNumber()){
+        int step = info[4]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+        cv::Mat mat(
+          info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 
+          info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 
+          type,
+          data,
+          step
+        );
+        self->setNativeObject(mat);
+      } else {
+        cv::Mat mat(
+          info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 
+          info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), 
+          type,
+          data
+        );
+        self->setNativeObject(mat);
+      }
     }
-    self->setNativeObject(mat);
   }
   /* raw data, row, col, type
    * constructor(data: Buffer, rows: number, cols: number, type?: number);

@@ -122,7 +122,12 @@ export class Mat {
   constructor(rows: number, cols: number, type: number, fillValue?: number | number[]);
   /**
    * @param type CV_8U, CV_8S, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F ...
-   */  constructor(dataArray: number[][], type: number);
+   */
+  constructor(rows: number, cols: number, type: number, data: Buffer, step?: number);
+  /**
+   * @param type CV_8U, CV_8S, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F ...
+   */
+  constructor(dataArray: number[][], type: number);
   /**
    * @param type CV_8U, CV_8S, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F ...
    */
