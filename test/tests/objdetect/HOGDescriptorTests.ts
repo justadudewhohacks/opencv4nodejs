@@ -1,12 +1,15 @@
 import { assert, expect } from 'chai';
+import { Point2, Rect } from '../../../typings';
 import { TestContext } from '../model';
+
+type numFieldsType = 'winSize' | 'blockSize' | 'blockStride' | 'cellSize';
 
 export default function (args: TestContext) {
   const { cv, utils, getPeoplesTestImg } = args;
   const {
     generateAPITests,
     assertError,
-    cvVersionGreaterEqual,
+    // cvVersionGreaterEqual,
     clearTmpData,
     getTmpDataFilePath
   } = utils;
@@ -43,7 +46,13 @@ export default function (args: TestContext) {
         64,
         true
       );
-      [{ p: 'winSize', dim: 40 }, { p: 'blockSize', dim: 20 }, { p: 'blockStride', dim: 10 }, { p: 'cellSize', dim: 30 }].forEach(
+      const toTest: {p: numFieldsType, dim: number}[] = [
+        { p: 'winSize', dim: 40 },
+        { p: 'blockSize', dim: 20 },
+        { p: 'blockStride', dim: 10 },
+        { p: 'cellSize', dim: 30 }
+      ];
+      toTest.forEach(
         (pv) => {
           expect(hog).to.have.property(pv.p).instanceOf(cv.Size);
           const { width, height } = hog[pv.p];
@@ -74,7 +83,13 @@ export default function (args: TestContext) {
         nlevels: 64,
         signedGradient: true
       });
-      [{ p: 'winSize', dim: 40 }, { p: 'blockSize', dim: 20 }, { p: 'blockStride', dim: 10 }, { p: 'cellSize', dim: 30 }].forEach(
+      const toTest: { p: numFieldsType, dim: number}[] = [
+        { p: 'winSize', dim: 40 },
+        { p: 'blockSize', dim: 20 },
+        { p: 'blockStride', dim: 10 },
+        { p: 'cellSize', dim: 30 }
+      ];
+      toTest.forEach(
         (pv) => {
           expect(hog).to.have.property(pv.p).instanceOf(cv.Size);
           const { width, height } = hog[pv.p];
@@ -145,17 +160,17 @@ export default function (args: TestContext) {
   });
 
   describe('compute', () => {
-    const expectOutput = (desc) => {
+    const expectOutput = (desc: any[]): void => {
       expect(desc).to.be.an('array');
       expect(desc.length).to.be.above(0);
     };
 
-    const expectOutputCallbacked = done => (err, desc) => {
+    const expectOutputCallbacked = (done: Mocha.Done) => (err, desc) => {
       expectOutput(desc);
       done();
     };
 
-    const expectOutputPromisified = done => (desc) => {
+    const expectOutputPromisified = (done: Mocha.Done) => (desc) => {
       expectOutput(desc);
       done();
     };
@@ -382,11 +397,11 @@ export default function (args: TestContext) {
     });
 
     describe('detectMultiScaleROI', () => {
-      const expectOutput = (result) => {
+      const expectOutput = (result: any[]) => {
         expect(result).be.an('array');
       };
 
-      const makeDetectionROI = (scale, locations, confidences) => {
+      const makeDetectionROI = (scale: number, locations: Point2[], confidences: number[]) => {
         const detectionROI = new cv.DetectionROI();
         detectionROI.scale = scale;
         detectionROI.locations = locations;
@@ -413,7 +428,7 @@ export default function (args: TestContext) {
   });
 
   describe('groupRectangles', () => {
-    const expectOutput = (result) => {
+    const expectOutput = (result: Rect[]) => {
       expect(result).to.be.an('array');
       result.forEach(rect => expect(rect).instanceOf(cv.Rect));
     };
