@@ -83,7 +83,26 @@ export default function (args: TestContext) {
       assertPropsWithValue(new cv.Mat([matEmpty8UC2, matEmpty8U]))({ channels: 3 });
     });
   });
+  describe('constructor with steps', () => {
+    const originMat = new cv.Mat([[1, 2], [3, 4]], cv.CV_8U);
+    const expected = originMat.getDataAsArray()
+    const data = originMat.getData()
 
+    it('should work constructable from rows, cols, type, data', () => {
+      assertDataDeepEquals(new cv.Mat(2, 2, cv.CV_8U, data).getDataAsArray(), expected);
+    });
+    
+
+    it('should work constructable from rows, cols, type, data linesize 2', () => {
+      assertDataDeepEquals(new cv.Mat(2, 2, cv.CV_8U, data, 2).getDataAsArray(), expected);
+    });
+    
+    const bigBuffer = Buffer.concat([data.slice(0,2),data.slice(0,1), data.slice(2), data.slice(0,1)])
+    
+    it('should work constructable from rows, cols, type, data linesize 3', () => {
+      assertDataDeepEquals(new cv.Mat(2, 2, cv.CV_8U, bigBuffer, 3).getDataAsArray(), expected);
+    });
+  });
   describe('copy', () => {
     const expectOutput = (res) => {
       assertMetaData(res)(srcMat.rows, srcMat.cols, srcMat.type);
