@@ -14,7 +14,7 @@ const MIN_CONFIDENCE = 0.5;
 const NMS_THRESHOLD = 0.4;
 const SIZE = 320;
 
-function decode(scores: Mat, geometry: Mat, confThreshold: number) {
+function decode(scores: Mat, geometry: Mat, confThreshold = MIN_CONFIDENCE) {
   const [numRows, numCols] = scores.sizes.slice(2);
   const boxes = [];
   const confidences = [];
@@ -23,7 +23,7 @@ function decode(scores: Mat, geometry: Mat, confThreshold: number) {
     for (let x = 0; x < numCols; x += 1) {
       const score = scores.at([0, 0, y, x]);
 
-      if (score < MIN_CONFIDENCE) {
+      if (score < confThreshold) {
         continue;
       }
 

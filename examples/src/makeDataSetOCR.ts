@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import fs from 'fs';
 import { cv, getResource } from './utils';
 import type { Mat } from '@u4/opencv4nodejs';

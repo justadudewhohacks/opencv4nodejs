@@ -75,7 +75,7 @@ export const centerLetterInImage = (img: Mat, isIorJ?: boolean) => {
 };
 
 export const saveConfusionMatrix = (
-  testDataFiles: any[],
+  testDataFiles: string[][],
   predict: (mat: Mat, isIorJ: boolean) => number,
   numTestImagesPerClass: number,
   outputFile: string

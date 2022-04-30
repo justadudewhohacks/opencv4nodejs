@@ -72,7 +72,7 @@ export const grabFrames = (videoFile: number | string, delay: number, onFrame: (
   }, 0);
 };
 
-export const runVideoDetection = (src: number, detect: (mat: Mat) => any): void => {
+export const runVideoDetection = (src: number, detect: (mat: Mat) => void): void => {
   grabFrames(src, 1, frame => {
     detect(frame);
   });
