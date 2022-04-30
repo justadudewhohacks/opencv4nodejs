@@ -92,7 +92,7 @@ class dnnDarknetYOLORealTimeObjectDetection {
     });
 
     cv.imshow("Darknet YOLO Object Detection", img);
-  };
+  }
 
   async run() {
     if (!cv.xmodules || !cv.xmodules.dnn) {

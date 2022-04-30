@@ -8,7 +8,6 @@ import path from "path";
 import { Mat } from '@u4/opencv4nodejs';
 import classNames from "./data/dnnTensorflowObjectDetectionClassNames";
 import { cv, getCachedFile, getResource, runVideoDetection } from "./utils";
-import pc from "picocolors";
 
 async function main() {
   if (!cv.xmodules || !cv.xmodules.dnn) {

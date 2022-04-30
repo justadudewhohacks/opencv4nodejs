@@ -3,13 +3,11 @@ import { Size } from './Size.d';
 import { Vec2 } from './Vec2.d';
 import { Vec3 } from './Vec3.d';
 import { Vec4 } from './Vec4.d';
-import { Vec6 } from './Vec6.d';
 import { Point2 } from './Point2.d';
 import { Point3 } from './Point3.d';
 import { KeyPoint } from './KeyPoint.d';
 import { DescriptorMatch } from './DescriptorMatch.d';
 import { Rect } from './Rect.d';
-import { TermCriteria } from './TermCriteria.d';
 import { OCRHMMClassifier } from './OCRHMMClassifier.d';
 
 export class HistAxes {

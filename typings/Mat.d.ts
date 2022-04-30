@@ -92,7 +92,7 @@ export class OptimalNewCameraMatrix {
    * 	Optional output rectangle that outlines all-good-pixels region in the undistorted image. See roi1, roi2 description in stereoRectify .
    */
   validPixROI: Rect;
-};
+}
 
 export class Mat {
   /**
@@ -267,7 +267,7 @@ export class Mat {
    * @param contourIdx 0 based contour index to draw
    */
   drawContours(contours: Point2[][], contourIdx: number, color: Vec3, opts: DrawContoursOptions): void;
-  drawContours(contours: Point2[][], contourIdx: number, color: Vec3, thickness?: number, lineType?: number, hierarchy?: any, maxLevel?: number, offset?: Point2): void;
+  drawContours(contours: Point2[][], contourIdx: number, color: Vec3, thickness?: number, lineType?: number, hierarchy?: Vec4[], maxLevel?: number, offset?: Point2): void;
   // drawContours(contours: Point2[][], contourIdx: number, color: Vec3, maxLevel?: number, offset?: Point2, lineType?: number, thickness?: number, shift?: number): void;
   // alternate signature
   drawEllipse(box: RotatedRect, opts: { color?: Vec3, thickness?: number, lineType?: number }): void;

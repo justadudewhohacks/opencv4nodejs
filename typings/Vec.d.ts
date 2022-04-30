@@ -1,5 +1,3 @@
-import { Vec3 } from './Vec3.d';
-
 export class Vec {
   absdiff(otherVec: Vec): Vec;
   add(otherVec: Vec): Vec;

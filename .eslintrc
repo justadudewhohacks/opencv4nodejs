@@ -1,5 +1,5 @@
 {
-  "ignorePatterns": [ '**/*.js' ],
+  "ignorePatterns": [ "**/*.js" ],
   "root": true,
   "parser": "@typescript-eslint/parser",
    "plugins": [
