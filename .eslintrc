@@ -18,6 +18,7 @@
     "import/no-extraneous-dependencies": 0,
     "no-underscore-dangle": 0,
     "no-nested-ternary": 0,
+    "no-async-promise-executor": 0,
     "radix": 0
   },
   "env": {

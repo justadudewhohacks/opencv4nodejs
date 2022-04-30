@@ -51,7 +51,7 @@ const getRoughHull = (contour: Contour, maxDist: number) => {
   // get hull indices and hull points
   const hullIndices = contour.convexHullIndices();
   const contourPoints = contour.getPoints();
-  const hullPointsWithIdx = hullIndices.map((idx: number) => ({
+  const hullPointsWithIdx: PointWithIdx[] = hullIndices.map((idx: number) => ({
     pt: contourPoints[idx],
     contourIdx: idx
   }));
@@ -62,9 +62,11 @@ const getRoughHull = (contour: Contour, maxDist: number) => {
   const { labels } = cv.partition(hullPoints, ptsBelongToSameCluster);
   const pointsByLabel = new Map<number, Array<PointWithIdx>>();
   labels.forEach(l => pointsByLabel.set(l, []));
-  hullPointsWithIdx.forEach((ptWithIdx, i) => {
+  hullPointsWithIdx.forEach((ptWithIdx: PointWithIdx, i: number) => {
     const label = labels[i];
-    (pointsByLabel.get(label) as any).push(ptWithIdx);
+    const slot = pointsByLabel.get(label);
+    if (slot)
+      slot.push(ptWithIdx);
   });
 
   // map points in local neighborhood to most central point
@@ -86,21 +88,27 @@ const getHullDefectVertices = (handContour: Contour, hullIndices: number[]): Ver
   const handContourPoints = handContour.getPoints();
 
   // get neighbor defect points of each hull point
-  const hullPointDefectNeighbors: Map<number, Array<any>> = new Map(hullIndices.map((idx: number) => [idx, []]));
+  const hullPointDefectNeighbors: Map<number, Array<number>> = new Map(hullIndices.map((idx: number) => [idx, []]));
   defects.forEach((defect) => {
     const startPointIdx = defect.at(0);
     const endPointIdx = defect.at(1);
     const defectPointIdx = defect.at(2);
-    (hullPointDefectNeighbors.get(startPointIdx) as any[]).push(defectPointIdx);
-    (hullPointDefectNeighbors.get(endPointIdx) as any[]).push(defectPointIdx);
+    const startNeighbors = hullPointDefectNeighbors.get(startPointIdx);
+    if (startNeighbors)
+      startNeighbors.push(defectPointIdx);
+    const endNeighbors = hullPointDefectNeighbors.get(endPointIdx);
+    if (endNeighbors)
+      endNeighbors.push(defectPointIdx);
   });
 
   return Array.from(hullPointDefectNeighbors.keys())
     // only consider hull points that have 2 neighbor defects
-    .filter(hullIndex => (hullPointDefectNeighbors.get(hullIndex) as any[]).length > 1)
+    .filter(hullIndex => { const ar = hullPointDefectNeighbors.get(hullIndex); return ar && ar.length})
     // return vertex points
     .map((hullIndex: number) => {
-      const defectNeighborsIdx = hullPointDefectNeighbors.get(hullIndex) as any[];
+      const defectNeighborsIdx = hullPointDefectNeighbors.get(hullIndex);
+      if (!defectNeighborsIdx)
+        throw Error('defectNeighborsIdx is missing for idx: '+ hullIndex)
       return ({
         pt: handContourPoints[hullIndex],
         d1: handContourPoints[defectNeighborsIdx[0]],

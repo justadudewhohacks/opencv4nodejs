@@ -74,9 +74,9 @@ export default function (cv: typeof openCV) {
     }, 0)
   }
 
-  function getBaseLine(textLine: TextLines, opts?: Partial<TextParams>): number {
-    return getTextSize(textLine.text, opts).baseLine
-  }
+  // function getBaseLine(textLine: TextLines, opts?: Partial<TextParams>): number {
+  //   return getTextSize(textLine.text, opts).baseLine
+  // }
 
   /**
    * get single text line height in pixel

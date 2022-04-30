@@ -1,6 +1,6 @@
 import fs from 'fs';
 import mri from 'mri';
-import { Mat, mean, Net, Point2, Rect, Size, Vec3, VideoCapture, VideoWriter } from '@u4/opencv4nodejs';
+import { Mat, Net, Point2, Rect, Size, Vec3, VideoCapture } from '@u4/opencv4nodejs';
 import { cv, getCachedFile } from '../utils';
 import path from 'path';
 

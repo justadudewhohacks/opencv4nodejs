@@ -14,6 +14,7 @@ export function isElectronWebpack() {
   // return process.versions.hasOwnProperty('electron');
    // assume module required by webpack if no system path inv envs
    return !process.env.path
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
    && global.window && global.window.process && (global.window.process as any).type
    && global.navigator && ((global.navigator.userAgent || '').toLowerCase().indexOf(' electron/') > -1)
 }

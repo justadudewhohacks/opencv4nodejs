@@ -1,4 +1,3 @@
-import path from 'path';
 import cv from '@u4/opencv4nodejs';
 import { getResource } from './utils';
 

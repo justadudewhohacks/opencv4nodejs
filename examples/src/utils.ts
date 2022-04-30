@@ -21,28 +21,26 @@ export function getCachedFile(localName: string, url: string, notice?: string): 
     // ignore error
   }
   return new Promise<string>(async (done, reject) => {
-    console.log('Connecting server…')
+    console.log('Connecting server…');
     const { data, headers } = await Axios({
       url,
       method: 'GET',
       responseType: 'stream'
-    })
-    const totalLength = headers['content-length']
-
-    console.log('Starting download')
+    });
+    const totalLength = headers['content-length'];
+    console.log('Starting download');
     const progressBar = new ProgressBar('-> downloading [:bar] :percent :etas', {
       width: 40,
       complete: '=',
       incomplete: ' ',
       renderThrottle: 1,
       total: parseInt(totalLength)
-    })
-    const writer = fs.createWriteStream(localFile)
-    
-    data.on('data', (chunk: any[]) => progressBar.tick(chunk.length))
-    data.pipe(writer)
-    data.on('error', (e: unknown) => {  console.log('reject', e); reject(e) })
-    data.on('close', () => { console.log('complete'); done(localFile) })
+    });
+    const writer = fs.createWriteStream(localFile);
+    data.on('data', (chunk: Buffer) => progressBar.tick(chunk.length));
+    data.pipe(writer);
+    data.on('error', (e: unknown) => { console.log('reject', e); reject(e); });
+    data.on('close', () => { console.log('complete'); done(localFile); });
   })
 }
 

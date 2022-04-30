@@ -9,7 +9,9 @@ export class Facemark {
   loadModelAsync(model: string): Promise<void>;
   getFaces(image: Mat): Rect[];
   getFacesAsync(image: Mat): Promise<Rect[]>;
-  setFaceDetector(callback: Function): boolean;
+  // TODO definme callback model.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setFaceDetector(callback: (...any) => any): boolean;
   training(): void;
   trainingAsync(): Promise<void>;
   fit(image: Mat, faces: Rect[]): Point2[][];
