@@ -37,3 +37,4 @@ examples/src/AgeGender/age-gender-out-sample1.jpg
 examples/src/AgeGender/gender_net.caffemodel
 examples/src/AgeGender/opencv_face_detector_uint8.pb
 examples/src/AgeGender/age_net.caffemodel
+.pnpm-debug.log

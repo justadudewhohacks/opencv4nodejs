@@ -7,10 +7,7 @@
   ],
   "extends": ["eslint:recommended", "plugin:@typescript-eslint/eslint-recommended", "plugin:@typescript-eslint/recommended"],
   "rules": {
-    "linebreak-style": [
-      "error",
-      "windows" 
-    ],
+    "linebreak-style": 0,
     "comma-dangle": ["error", {"functions": "never"}],
     "func-names": 0,
     "import/no-unresolved": 0,

@@ -1,14 +1,14 @@
 import cv from '@u4/opencv4nodejs';
-import { getResource } from './utils';
+import { getResource } from '../utils';
 
 // const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
 const findWaldo = async () => {
   // Load images
-  const originalMat = await cv.imreadAsync(getResource('findwaldo.jpg'));
-  const waldoMat = await cv.imreadAsync(getResource('waldo.jpg'));
+  const originalMat = await cv.imreadAsync(getResource('templates/findwaldo.jpg'));
+  const waldoMat = await cv.imreadAsync(getResource('templates/waldo.jpg'));
   // Match template (the brightest locations indicate the highest match)
-  const matched = originalMat.matchTemplate(waldoMat, 5);
+  const matched = originalMat.matchTemplate(waldoMat, cv.TM_CCOEFF_NORMED);
 
   // Use minMaxLoc to locate the highest value (or lower, depending of the type of matching method)
   const minMax = matched.minMaxLoc();

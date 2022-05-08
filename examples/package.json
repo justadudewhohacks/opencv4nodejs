@@ -4,7 +4,7 @@
   "description": "example for opencv4nodejs",
   "main": "EASTTextDetection.js",
   "scripts": {
-    "clean": "rimraf **/*.js"
+    "clean": "rimraf src/**/*.js src/**/*.map *.js.map *.js *.log"
   },
   "author": "",
   "license": "MIT",
@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "@types/node": "^17.0.14",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.5"
   }
