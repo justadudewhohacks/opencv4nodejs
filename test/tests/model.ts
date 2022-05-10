@@ -1,5 +1,5 @@
 import { cv, Point2, Point3 } from '@u4/opencv4nodejs';
-import { Mat, Vec2, Vec3, Vec4 } from '../../typings';
+import { Mat, Vec2, Vec3, Vec4 } from '@u4/opencv4nodejs';
 
 export type OpenCV = typeof cv
 

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import type openCV from '../../typings';
+import type openCV from '@u4/opencv4nodejs';
 
 export default function(cv: typeof openCV) {
   return {

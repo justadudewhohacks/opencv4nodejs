@@ -1,6 +1,6 @@
 import { assert, expect } from 'chai';
 import fs from 'fs';
-import { Vec2, Vec3, Vec4 } from '../../typings';
+import { Vec2, Vec3, Vec4 } from '@u4/opencv4nodejs';
 
 export const assertError = (func: () => any, msg: string): void => {
   let errMsg = '';

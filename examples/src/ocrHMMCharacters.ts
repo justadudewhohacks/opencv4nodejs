@@ -1,6 +1,6 @@
 import { cv, getResource } from './utils';
 import path from 'path';
-import type { Mat } from '../../typings';
+import type { Mat } from '@u4/opencv4nodejs';
 
 /**
  * OCR One by one using OCRHMMClassifier

@@ -1,8 +1,7 @@
-import { Mat, Vec4 } from "../../typings";
-
+import { Mat, Vec4 } from '@u4/opencv4nodejs';
 import { assert } from 'chai';
+import type openCV from '@u4/opencv4nodejs';
 import { assertPropsWithValue } from './testUtils';
-import type openCV from '../../typings';
 
 // TODO: proper deepEquals
 const dangerousDeepEquals = (obj0: any, obj1: any) => JSON.stringify(obj0) === JSON.stringify(obj1);
@@ -17,12 +16,11 @@ const matTypeNames = [
   'CV_64FC1', 'CV_64FC2', 'CV_64FC3', 'CV_64FC4'
 ];
 
-const normalizeValue = (val: number | Vec4 | Array<number>) =>
-((val as Vec4).x !== undefined ? [(val as Vec4).w, (val as Vec4).x, (val as Vec4).y, (val as Vec4).z] :
-  ((val as Array<number>).length !== 4 ? [undefined, val[0], val[1], val[2]] : val)
+const normalizeValue = (val: number | Vec4 | Array<number>) => ((val as Vec4).x !== undefined ? [(val as Vec4).w, (val as Vec4).x, (val as Vec4).y, (val as Vec4).z]
+  : ((val as Array<number>).length !== 4 ? [undefined, val[0], val[1], val[2]] : val)
 );
 
-const AssertMatValueEquals = cmpFunc => (val0: number, val1: number): void => {
+const AssertMatValueEquals = (cmpFunc) => (val0: number, val1: number): void => {
   assert(typeof val0 === typeof val1, 'expected mat values to have same type');
   if (typeof val0 === 'number') {
     assert(cmpFunc(val0, val1), 'expected mat flat values to be equal');
@@ -32,7 +30,7 @@ const AssertMatValueEquals = cmpFunc => (val0: number, val1: number): void => {
 
     const v0 = normalizeValue(val0);
     const v1 = normalizeValue(val1);
-    [0, 1, 2, 3].forEach(n => assert(cmpFunc(v0[n], v1[n]), `expected mat values to be equal at index ${n}`));
+    [0, 1, 2, 3].forEach((n) => assert(cmpFunc(v0[n], v1[n]), `expected mat values to be equal at index ${n}`));
   }
 };
 
@@ -40,16 +38,14 @@ const assertMatValueAlmostEquals = AssertMatValueEquals(
   (v0: number, v1: number) => (!v0 && !v1) || (((v0 - 0.0001) < v1) && (v1 < (v0 + 0.0001)))
 );
 
-const generateItsFactory = (cv: typeof openCV) => (msg: string, testFunc: Function, exclusions = new Set<string>()): void =>
-  matTypeNames.filter(type => !exclusions.has(type)).forEach((type) => {
-    it(`${type} ${msg}`, () => testFunc(cv[type]));
-  });
+const generateItsFactory = (cv: typeof openCV) => (msg: string, testFunc: Function, exclusions = new Set<string>()): void => matTypeNames.filter((type) => !exclusions.has(type)).forEach((type) => {
+  it(`${type} ${msg}`, () => testFunc(cv[type]));
+});
 
 const assertMatValueEquals = AssertMatValueEquals((v0: number, v1: number) => v0 === v1);
 
 /* compare float values differently as there will be slight precision loss */
-const assertDataAlmostDeepEquals = (data0: number[][], data1: number[][]): void =>
-  data0.forEach((row, r) => row.forEach((val, c) => assertMatValueAlmostEquals(val, data1[r][c])));
+const assertDataAlmostDeepEquals = (data0: number[][], data1: number[][]): void => data0.forEach((row, r) => row.forEach((val, c) => assertMatValueAlmostEquals(val, data1[r][c])));
 
 const assertDataDeepEquals = (data0: any, data1: any): void => {
   assert(dangerousDeepEquals(data0, data1), 'mat data not equal');
@@ -67,9 +63,9 @@ const MatValuesComparator = (mat0: Mat, mat1: Mat) => (cmpFunc: (a: number, b: n
 
 const isUniformMat = (mat: Mat, matVal: number): boolean => {
   if (mat.channels === 1) {
-    return mat.getDataAsArray().every(r => r.every(val => val === matVal));
+    return mat.getDataAsArray().every((r) => r.every((val) => val === matVal));
   }
-  return mat.getDataAsArray().every(r => r.every((vec) => (vec as any).every((val: number) => val === matVal)));
+  return mat.getDataAsArray().every((r) => r.every((vec) => (vec as any).every((val: number) => val === matVal)));
 };
 
 const isZeroMat = (mat: Mat) => isUniformMat(mat, 0);
@@ -81,13 +77,13 @@ const assertMetaData = (mat: Mat) => (args0: any, cols: number, type: number): v
     cols: args0.cols,
     type: args0.type
   };
-  if (['rows', 'cols', 'type'].every(prop => !isNaN(propsFromArg0[prop]))) {
+  if (['rows', 'cols', 'type'].every((prop) => !isNaN(propsFromArg0[prop]))) {
     propsWithValues = propsFromArg0;
   }
   assertPropsWithValue(mat)(propsWithValues);
 };
 
-export default function(cv: typeof openCV) {
+export default function (cv: typeof openCV) {
   return {
     assertDataDeepEquals,
     assertDataAlmostDeepEquals,
@@ -99,5 +95,5 @@ export default function(cv: typeof openCV) {
     isZeroMat,
     isUniformMat,
     MatValuesComparator
-  }
+  };
 }

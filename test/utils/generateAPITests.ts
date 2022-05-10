@@ -1,18 +1,19 @@
 import { assert, expect } from 'chai';
 
-import { assertError, asyncFuncShouldRequireArgs, _funcShouldRequireArgs as funcShouldRequireArgs} from './testUtils';
+import { assertError, asyncFuncShouldRequireArgs, _funcShouldRequireArgs as funcShouldRequireArgs } from './testUtils';
 
 import { emptyFunc, getEmptyArray } from './commons';
 import { APITestOpts } from '../tests/model';
 
-export const getDefaultAPITestOpts = (opts: Partial<APITestOpts>): Partial<APITestOpts> => Object.assign({}, {
+export const getDefaultAPITestOpts = (opts: Partial<APITestOpts>): Partial<APITestOpts> => ({
   hasAsync: true,
   otherSyncTests: emptyFunc,
   otherAsyncCallbackedTests: emptyFunc,
   otherAsyncPromisedTests: emptyFunc,
   beforeHook: null,
-  afterHook: null
-}, opts);
+  afterHook: null,
+  ...opts
+});
 
 export const generateAPITests = (opts: Partial<APITestOpts>): void => {
   const {
@@ -28,7 +29,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
     otherAsyncPromisedTests,
     beforeHook,
     afterHook
-  } = getDefaultAPITestOpts(opts)
+  } = getDefaultAPITestOpts(opts);
 
   const methodNameAsync = `${methodName}Async`;
   const getRequiredArgs = opts.getRequiredArgs || getEmptyArray;
@@ -54,7 +55,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
     } catch (err) {
       done(err);
     }
-  }
+  };
 
   const expectOutputCallbacked = (done, dut, args) => (err, res) => {
     if (err) {
@@ -63,7 +64,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
     expectAsyncOutput(done, dut, args, res);
   };
 
-  const expectOutputPromisified = (done, dut, args) => res => expectAsyncOutput(done, dut, args, res);
+  const expectOutputPromisified = (done, dut, args) => (res) => expectAsyncOutput(done, dut, args, res);
 
   const generateTests = (type?: 'callbacked' | 'promised') => {
     const isCallbacked = type === 'callbacked';
@@ -71,11 +72,11 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
     const isAsync = isCallbacked || isPromised;
 
     const method = isAsync ? methodNameAsync : methodName;
-    const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
     const getErrPrefix = () => `${(methodNameSpace ? `${methodNameSpace}::` : '')}${capitalize(method)} - Error:`;
-    const typeErrMsg = argN => `${getErrPrefix()} expected argument ${argN} to be of type`;
-    const propErrMsg = prop => `${getErrPrefix()} expected property ${prop} to be of type`;
+    const typeErrMsg = (argN) => `${getErrPrefix()} expected argument ${argN} to be of type`;
+    const propErrMsg = (prop) => `${getErrPrefix()} expected property ${prop} to be of type`;
 
     const expectSuccess = (args, done) => {
       const dut = getDut();
@@ -83,7 +84,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
         return dut[method].apply(dut, args)
           .then(expectOutputPromisified(done, dut, args))
           .catch(done);
-      } else if (isCallbacked) {
+      } if (isCallbacked) {
         args.push(expectOutputCallbacked(done, dut, args));
         return dut[method].apply(dut, args);
       }

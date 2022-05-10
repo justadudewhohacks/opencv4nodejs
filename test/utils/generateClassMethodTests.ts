@@ -1,5 +1,5 @@
+import type openCV from '@u4/opencv4nodejs';
 import { generateAPITests, getDefaultAPITestOpts } from './generateAPITests';
-import type openCV from '../../typings';
 import { APITestOpts } from '../tests/model';
 
 const generateClassMethodTestsFactory = (cv: typeof openCV) => (opts: Partial<APITestOpts>) => {
@@ -9,21 +9,23 @@ const generateClassMethodTestsFactory = (cv: typeof openCV) => (opts: Partial<AP
     methodNameSpace,
     getRequiredArgs,
     methodName
-  } = getDefaultAPITestOpts(opts)
+  } = getDefaultAPITestOpts(opts);
 
   describe(`${classNameSpace}::${methodName}`, () => {
-    generateAPITests(Object.assign({}, opts, {
+    generateAPITests({
+      ...opts,
       getDut: getClassInstance,
       methodNameSpace: classNameSpace
-    }))
-  })
+    });
+  });
 
   describe(`${methodNameSpace}::${methodName}`, () => {
-    generateAPITests(Object.assign({}, opts, {
+    generateAPITests({
+      ...opts,
       getDut: () => cv,
       getRequiredArgs: () => [getClassInstance()].concat(getRequiredArgs ? getRequiredArgs() : [])
-    }))
-  })
-}
+    });
+  });
+};
 
 export default generateClassMethodTestsFactory;
