@@ -164,7 +164,7 @@ build: false
 test_script:
   - node --version
   - npm install -g pnpm
-  - pnpm install -g node-gyp
+  # - pnpm install -g node-gyp
   - cd c:\projects\opencv4nodejs
   - pnpm install
   - pnpm run prepack
