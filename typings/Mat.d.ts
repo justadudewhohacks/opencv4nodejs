@@ -413,9 +413,9 @@ export class Mat {
    * https://docs.opencv.org/4.x/df/dfb/group__imgproc__object.html#ga586ebfb0a7fb604b35a23d85391329be
    *
    * @param template Searched template. It must be not greater than the source image and have the same data type.
-   * @param method Parameter specifying the comparison method, see TemplateMatchModes
+   * @param method Parameter specifying the comparison method, can be one of TM_SQDIFF, TM_SQDIFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_CCOEFF, TM_CCOEFF_NORMED.
    * @param mask Optional mask. It must have the same size as templ. It must either have the same number of channels as template or only one channel, which is then used for all template and image channels. If the data type is CV_8U, the mask is interpreted as a binary mask, meaning only elements where mask is nonzero are used and are kept unchanged independent of the actual mask value (weight equals 1). For data tpye CV_32F, the mask values are used as weights. The exact formulas are documented in TemplateMatchModes.
-   *
+   * 
    * @return Map of comparison results. It must be single-channel 32-bit floating-point. If image is W×H and templ is w×h , then result is (W−w+1)×(H−h+1) .
    */
   matchTemplate(template: Mat, method: number, mask?: Mat): Mat;

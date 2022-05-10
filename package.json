@@ -37,6 +37,7 @@
   "scripts": {
     "prepack": "tsc",
     "install": "node bin/install.js auto",
+    "install_Mac": "tsc && CXXFLAGS=\"-std=c++14 -Wno-c++11-narrowing\" node ./install/install.js --version 4.5.3 build",
     "install_default": "tsc && node bin/install.js rebuild",
     "install_macm1": "tsc && node bin/install.js --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64 -DWITH_FFMPEG=ON\" rebuild",
     "install_cuda": "tsc && node bin/install.js --version 4.5.5 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_FFMPEG=ON\" rebuild",
@@ -54,6 +55,7 @@
     "glob": "^8.0.1",
     "nan": "^2.15.0",
     "native-node-utils": "^0.2.7",
+    "node-gyp": "^9.0.0",
     "npmlog": "^6.0.1",
     "picocolors": "^1.0.0"
   },
