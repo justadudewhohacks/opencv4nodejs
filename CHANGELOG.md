@@ -1,5 +1,12 @@
 # changelog
 
+## Version 6.1.5
+
+* dump deps versions
+* improve dry-run
+* add toMatTypeName() function
+* add template samples
+  
 ## Version 6.1.4
 
 * Tested an works with all openCV version from 3.2.0 to 4.5.5

@@ -56,7 +56,7 @@ const locateMetroStation = async () => {
   console.log(`getDataAsArray processed in ${getDataAsArrayLoopTime.toString().padStart(4, ' ')} ms to find ${matches0.length} region 1st: ${matches0[0]}`);
 
 
-  /** using slow getDataAsArray */
+  /** using faster raw data from getData */
   let getDataLoopTime = Date.now();
   const { cols, rows } = matched;
   const raw = matched.getData();

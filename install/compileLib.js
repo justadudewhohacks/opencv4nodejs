@@ -143,7 +143,6 @@ async function compileLib(args) {
     if (args.includes('--help') || args.includes('-h') || !validAction.includes(action)) {
         console.log(`Usage: build-opencv build|rebuild|configure|install [--version=<version>] [--vscode] [--jobs=<thread>] [--electron] [--node-gyp-options=<options>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] ${validAction.join('|')}`);
         console.log((0, opencv_build_1.genHelp)());
-        console.log('   --dry-run            Display command line use to build library');
         return;
     }
     if (action === 'auto') {
