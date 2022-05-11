@@ -25,7 +25,7 @@ cv.imreadAsync(getResourcePath('got.jpg'))
       )
       .then((facesImg) => {
         cv.imshow('face detection', facesImg);
-        wait4key();
+        return wait4key();
       })
     )
     .catch(err => console.error(err));

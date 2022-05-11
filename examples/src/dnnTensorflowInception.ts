@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { Mat } from '@u4/opencv4nodejs';
 
-function main() {
+async function main() {
   if (!cv.xmodules || !cv.xmodules.dnn) {
     console.error(`exiting: opencv4nodejs (${cv.version.major}.${cv.version.minor}) compiled without dnn module`);
     return;
@@ -81,7 +81,7 @@ function main() {
     }
   ];
 
-  testData.forEach((data) => {
+  for (const data of testData) {
     const fullpath = path.resolve(data.image);
     if (!fs.existsSync(fullpath)) {
       console.log(`${fullpath} not found`);
@@ -105,8 +105,8 @@ function main() {
       alpha
     );
     cv.imshow('img', img);
-    wait4key();
-  });
+    await wait4key();
+  }
 }
 
 main();

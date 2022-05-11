@@ -53,7 +53,7 @@ function decode(scores: Mat, geometry: Mat, confThreshold = MIN_CONFIDENCE) {
   return [boxes, confidences];
 }
 
-function detection(modelPath: string, imgAbsPath: string): void {
+async function detection(modelPath: string, imgAbsPath: string): Promise<void> {
   const net = cv.readNetFromTensorflow(modelPath);
   const img = cv.imread(imgAbsPath);
   const [imgHeight, imgWidth] = img.sizes;
@@ -95,7 +95,7 @@ function detection(modelPath: string, imgAbsPath: string): void {
     drawBlueRect(img, imgRect);
   });
   cv.imshow('EAST text detection', img);
-  wait4key();
+  await wait4key();
 }
 
 async function main() {
@@ -107,7 +107,7 @@ async function main() {
   const notice = 'EAST .pb model is missing, you can create your from https://github.com/argman/EAST';
   const modelPath = await getCachedFile(getResourcePath('text-models/frozen_east_text_detection.pb'), 'https://github.com/oyyd/frozen_east_text_detection.pb/blob/71415464412c55bb1d135fcdeda498e29a67effa/frozen_east_text_detection.pb?raw=true', notice)
   const imgPath = path.resolve(getResourcePath('text-data/detection.png'));
-  detection(modelPath, imgPath);
+  await detection(modelPath, imgPath);
 }
 main();
 

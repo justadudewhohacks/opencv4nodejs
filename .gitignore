@@ -38,3 +38,4 @@ examples/src/AgeGender/gender_net.caffemodel
 examples/src/AgeGender/opencv_face_detector_uint8.pb
 examples/src/AgeGender/age_net.caffemodel
 .pnpm-debug.log
+examples/data/dnn/yolo-object-detection/

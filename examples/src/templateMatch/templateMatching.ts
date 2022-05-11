@@ -29,7 +29,7 @@ const findWaldo = async () => {
   //  console.log('VISIBLE:', cv.getWindowProperty(windowName, cv.WND_PROP_VISIBLE));  
   // cv.setWindowProperty(windowName, cv.WND_PROP_VISIBLE, cv.WINDOW_FULLSCREEN)
   // cv.setWindowProperty(windowName, cv.WND_PROP_FULLSCREEN, cv.WINDOW_NORMAL)
-  wait4key();
+  await wait4key();
 };
 
 // noinspection JSIgnoredPromiseFromCall

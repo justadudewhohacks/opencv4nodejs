@@ -3,7 +3,7 @@ import path from 'path';
 import cv, { Mat } from '@u4/opencv4nodejs';
 import { getResourcePath, wait4key } from './utils';
 
-function main() {
+async function main() {
   if (!cv.xmodules || !cv.xmodules.face) {
     console.error(`exiting: opencv4nodejs (${cv.version.major}.${cv.version.minor}) compiled without face module`);
     return;
@@ -70,6 +70,6 @@ function main() {
   });
 
   cv.imshow('result', twoFacesImg);
-  wait4key();
+  await wait4key();
 }
 main();

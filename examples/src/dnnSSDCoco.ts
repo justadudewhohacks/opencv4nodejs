@@ -34,7 +34,7 @@ const makeDrawClassDetections = (predictions: Prediction[]) => (drawImg: Mat, cl
   return drawImg;
 };
 
-const runDetectDishesExample = (net: Net) => {
+const runDetectDishesExample = async (net: Net) => {
   const img = cv.imread(getResourcePath('dishes.jpg'));
   const minConfidence = 0.2;
 
@@ -69,10 +69,10 @@ const runDetectDishesExample = (net: Net) => {
   });
 
   cv.imshow('img', img);
-  wait4key();
+  await wait4key();
 };
 
-const runDetectPeopleExample = (net: Net) => {
+const runDetectPeopleExample = async (net: Net) => {
   const img = cv.imread(getResourcePath('cars.jpeg'));
   const minConfidence = 0.4;
 
@@ -84,7 +84,7 @@ const runDetectPeopleExample = (net: Net) => {
 
   drawClassDetections(img, 'car', getRandomColor);
   cv.imshow('img', img);
-  wait4key();
+  await wait4key();
 };
 
 async function main() {
@@ -110,7 +110,7 @@ async function main() {
   // initialize ssdcoco model from prototxt and modelFile
   const net = cv.readNetFromCaffe(prototxt, modelFile);
 
-  runDetectDishesExample(net);
-  runDetectPeopleExample(net);
+  await runDetectDishesExample(net);
+  await runDetectPeopleExample(net);
 }
 main();

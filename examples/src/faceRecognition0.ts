@@ -3,7 +3,7 @@ import path from 'path';
 import { FaceRecognizer, Mat } from '@u4/opencv4nodejs';
 import { cv, getResourcePath, wait4key } from './utils';
 
-function main() {
+async function main() {
   if (!cv.xmodules || !cv.xmodules.face) {
     console.error(`exiting: opencv4nodejs (${cv.version.major}.${cv.version.minor}) compiled without face module`);
     return;
@@ -47,14 +47,14 @@ function main() {
     .filter(isNotImageFour)
     .map(file => nameMappings.findIndex(name => file.includes(name)));
 
-  const runPrediction = (recognizer: FaceRecognizer) => {
-    testImages.forEach((img: Mat) => {
+  const runPrediction = async (recognizer: FaceRecognizer) => {
+    for (const img of testImages) {
       const result = recognizer.predict(img);
       console.log('predicted: %s, confidence: %s', nameMappings[result.label], result.confidence);
       cv.imshow('face', img);
-      wait4key();
+      await wait4key();
       cv.destroyAllWindows();
-    });
+    }
   };
 
   const eigen = new cv.EigenFaceRecognizer();
@@ -65,12 +65,12 @@ function main() {
   lbph.train(trainImages, labels);
 
   console.log('eigen:');
-  runPrediction(eigen);
+  await runPrediction(eigen);
 
   console.log('fisher:');
-  runPrediction(fisher);
+  await runPrediction(fisher);
 
   console.log('lbph:');
-  runPrediction(lbph);
+  await runPrediction(lbph);
 }
 main();

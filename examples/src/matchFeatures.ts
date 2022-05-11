@@ -28,39 +28,43 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }: { img1: Mat, img2: M
   );
 };
 
-const img1 = cv.imread(getResourcePath('s0.jpg'));
-const img2 = cv.imread(getResourcePath('s1.jpg'));
 
-// check if opencv compiled with extra modules and nonfree
-if (cv.xmodules && cv.xmodules.xfeatures2d) {
-  const siftMatchesImg = matchFeatures({
+export async function test() {
+  const img1 = cv.imread(getResourcePath('s0.jpg'));
+  const img2 = cv.imread(getResourcePath('s1.jpg'));
+
+  // check if opencv compiled with extra modules and nonfree
+  if (cv.xmodules && cv.xmodules.xfeatures2d) {
+    const siftMatchesImg = matchFeatures({
+      img1,
+      img2,
+      detector: new cv.SIFTDetector({ nFeatures: 2000 }),
+      matchFunc: cv.matchFlannBased
+    });
+    cv.imshow('SIFT matches', siftMatchesImg);
+    await wait4key();
+  } else {
+    console.log('skipping SIFT matches');
+  }
+
+  const orbMatchesImg = matchFeatures({
     img1,
     img2,
-    detector: new cv.SIFTDetector({ nFeatures: 2000 }),
-    matchFunc: cv.matchFlannBased
+    detector: new cv.ORBDetector(),
+    matchFunc: cv.matchBruteForceHamming
   });
-  cv.imshow('SIFT matches', siftMatchesImg);
-  wait4key();
-} else {
-  console.log('skipping SIFT matches');
+  cv.imshow('ORB matches', orbMatchesImg);
+  await wait4key();
+
+  // Match using the BFMatcher with crossCheck true
+  const bf = new cv.BFMatcher(cv.NORM_L2, true);
+  const orbBFMatchIMG = matchFeatures({
+    img1,
+    img2,
+    detector: new cv.ORBDetector(),
+    matchFunc: (desc1, desc2) => bf.match(desc1, desc2)
+  });
+  cv.imshow('ORB with BFMatcher - crossCheck true', orbBFMatchIMG);
+  await wait4key();
 }
-
-const orbMatchesImg = matchFeatures({
-  img1,
-  img2,
-  detector: new cv.ORBDetector(),
-  matchFunc: cv.matchBruteForceHamming
-});
-cv.imshow('ORB matches', orbMatchesImg);
-wait4key();
-
-// Match using the BFMatcher with crossCheck true
-const bf = new cv.BFMatcher(cv.NORM_L2, true);
-const orbBFMatchIMG = matchFeatures({
-  img1,
-  img2,
-  detector: new cv.ORBDetector(),
-  matchFunc: (desc1, desc2) => bf.match(desc1, desc2)
-});
-cv.imshow('ORB with BFMatcher - crossCheck true', orbBFMatchIMG);
-wait4key();
+test();

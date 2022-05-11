@@ -1,7 +1,7 @@
 import path from 'path';
 import type { Contour, Mat } from '@u4/opencv4nodejs';
 import { Point2 } from '@u4/opencv4nodejs';
-import { cv, getResourcePath, wait4key } from './utils';
+import { cv, getResourcePath } from './utils';
 import { grabFrames } from './utils';
 
 interface PointWithIdx {
@@ -103,12 +103,12 @@ const getHullDefectVertices = (handContour: Contour, hullIndices: number[]): Ver
 
   return Array.from(hullPointDefectNeighbors.keys())
     // only consider hull points that have 2 neighbor defects
-    .filter(hullIndex => { const ar = hullPointDefectNeighbors.get(hullIndex); return ar && ar.length})
+    .filter(hullIndex => { const ar = hullPointDefectNeighbors.get(hullIndex); return ar && ar.length })
     // return vertex points
     .map((hullIndex: number) => {
       const defectNeighborsIdx = hullPointDefectNeighbors.get(hullIndex);
       if (!defectNeighborsIdx)
-        throw Error('defectNeighborsIdx is missing for idx: '+ hullIndex)
+        throw Error('defectNeighborsIdx is missing for idx: ' + hullIndex)
       return ({
         pt: handContourPoints[hullIndex],
         d1: handContourPoints[defectNeighborsIdx[0]],
@@ -164,7 +164,7 @@ grabFrames(video, delay, (frame) => {
   );
 
   // draw points and vertices
-  verticesWithValidAngle.forEach((v) => {
+  for (const v of verticesWithValidAngle) {
     resizedImg.drawLine(
       v.pt,
       v.d1,
@@ -183,7 +183,7 @@ grabFrames(video, delay, (frame) => {
       new cv.RotatedRect(v.pt, new cv.Size(20, 20), 0),
       { color: red, thickness: 2 }
     );
-  });
+  }
 
   // display detection result
   const numFingersUp = verticesWithValidAngle.length;
@@ -208,7 +208,7 @@ grabFrames(video, delay, (frame) => {
   resizedImg.copyTo(sideBySide.getRegion(new cv.Rect(cols, 0, cols, rows)));
 
   cv.imshow('handMask', handMask);
-  wait4key();
+  // await wait4key();
   cv.imshow('result', sideBySide);
-  wait4key();
+  // await wait4key();
 });
