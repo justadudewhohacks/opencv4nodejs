@@ -176,14 +176,29 @@ export interface TextLine extends FontParams {
 export function drawDetection(img: Mat, inputRect: Rect, opts?: DrawDetectionParams): Rect;
 // non Natif
 export function drawTextBox(img: Mat, upperLeft: { x: number, y: number }, textLines: TextLine[], alpha: number): Mat;
-// non Natif
+/**
+ * Convert a Mat type to string for easy read
+ * non Natif code
+ * @param type Mat type as int value
+ */
 export function toMatTypeName(type: number): string | undefined;
 /**
  * Find values greater than threshold in a 32bit float matrix and return a list of matchs formated as [[x1, y1, score1]. [x2, y2, score2], [x3, y3, score3]]
- * non Natif
+ * add to be used with matchTemplate
+ * non Natif code
  * @param scoreMat Matric containing scores as 32Bit float (CV_32F)
  * @param threshold Minimal score to collect
  * @param region search region
  * @returns a list of matchs
  */
 export function getScoreMax(scoreMat: Mat, threshold: number, region?: Rect): Array<[number, number, number]>;
+
+/**
+ * Drop overlaping zones, keeping best one
+ * add to be used with matchTemplate
+ * non Natif code
+ * @param template template Matrix used to get dimentions.
+ * @param matches list of matches as a list in [x,y,score]. (this data will be altered)
+ * @returns best match without colisions
+ */
+export function dropOverlappingZone(template: Mat, matches: Array<[number, number, number]>): Array<[number, number, number]>;

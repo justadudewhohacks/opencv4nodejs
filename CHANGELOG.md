@@ -7,6 +7,7 @@
 * add toMatTypeName() function
 * add template samples
 * add cv.getScoreMax()
+* add cv.dropOverlappingZone()
   
 ## Version 6.1.4
 

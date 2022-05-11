@@ -8,11 +8,25 @@ export type MatTypes = typeof allTypes[number];
  * @param cv 
  */
 export default function (cv: typeof openCV): void {
+    /**
+     * Convert a Mat type to string for easy read
+     * non Natif code
+     * @param type Mat type as int value
+     */
     cv.toMatTypeName = (type: number): MatTypes | undefined => {
         for (const t of allTypes) {
             if (cv[t] === type) return t;
         }
     };
+    /**
+     * Find values greater than threshold in a 32bit float matrix and return a list of matchs formated as [[x1, y1, score1]. [x2, y2, score2], [x3, y3, score3]]
+     * add to be used with matchTemplate
+     * non Natif code
+     * @param scoreMat Matric containing scores as 32Bit float (CV_32F)
+     * @param threshold Minimal score to collect
+     * @param region search region
+     * @returns a list of matchs
+     */
     cv.getScoreMax = (scoreMat: Mat, threshold: number, region?: Rect): Array<[number, number, number]> => {
         if (scoreMat.type !== cv.CV_32F)
             throw Error('this method can only be call on a CV_32F Mat');
@@ -46,4 +60,35 @@ export default function (cv: typeof openCV): void {
         }
         return out;
     }
+
+    /**
+     * Drop overlaping zones, keeping best one
+     * @param template template Matrix used to get dimentions.
+     * @param matches list of matches as a list in [x,y,score]. (this data will be altered)
+     * @returns best match without colisions
+     */
+    cv.dropOverlappingZone = (template: Mat, matches: Array<[number, number, number]>): Array<[number, number, number]> => {
+        const total = matches.length;
+        const width = template.cols / 2;
+        const height = template.rows / 2;
+        for (let i = 0; i < total; i++) {
+            const cur = matches[i];
+            if (!cur[2]) continue;
+            for (let j = i + 1; j < total; j++) {
+                const sec = matches[j];
+                if (!sec[2]) continue;
+                if (Math.abs(cur[1] - sec[1]) > height) continue;
+                if (Math.abs(cur[0] - sec[0]) > width) continue;
+                if (cur[2] > sec[2]) {
+                    sec[2] = 0;
+                } else {
+                    cur[2] = 0;
+                    break;
+                }
+            }
+        }
+        return matches.filter(m => m[2]);
+    }
+
+
 }

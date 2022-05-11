@@ -1,42 +1,7 @@
 import cv, { Mat, Rect } from '@u4/opencv4nodejs';
 import { getResourcePath, wait4key } from '../utils';
 
-const confidence = 0.90;
-
-/**
- * drop overlaping zones
- * @param template template Matrix used to get dimentions.
- * @param matches list of matches as a list in [x,y,score]. (this data will be altered)
- * @returns best match without colisions
- */
-function dropCollision(template: Mat, matches: Array<[number, number, number]>): Array<[number, number, number]> {
-  ////////////
-  // supression des colisions
-  const total = matches.length;
-  const width = template.cols / 2;
-  const height = template.rows / 2;
-  for (let i = 0; i < total; i++) {
-    const cur = matches[i];
-    if (!cur[2]) continue;
-    for (let j = i + 1; j < total; j++) {
-      const sec = matches[j];
-      if (!sec[2]) continue;
-      if (Math.abs(cur[1] - sec[1]) > height) continue;
-      if (Math.abs(cur[0] - sec[0]) > width) continue;
-      if (cur[2] > sec[2]) {
-        sec[2] = 0;
-      } else {
-        cur[2] = 0;
-        break;
-      }
-    }
-    // if (cur[2])
-    //  matchesClean.push(cur);
-    // fin supression collisions
-  }
-  return matches.filter(m => !m[2]);
-}
-
+const confidence = 0.60;
 
 class MatchCoord {
   constructor(public x: number, public y: number, public value: number, public template: Mat) { }
@@ -79,7 +44,7 @@ const locateDiceDot = async (display: boolean): Promise<void> => {
   const { cols, rows } = matched;
   const matchesRaw = cv.getScoreMax(matched, confidence, new Rect(0, 0, cols - metroMat.cols + 1, rows - metroMat.rows + 1));
   console.log(`matchesRaw is ${matchesRaw.length} length`)
-  const matchesFiltered = dropCollision(metroMat, matchesRaw);
+  const matchesFiltered = cv.dropOverlappingZone(metroMat, matchesRaw);
   console.log(`matchesFiltered is ${matchesFiltered.length} length`)
   
   
