@@ -1,5 +1,5 @@
 import cv, { Mat, Rect } from '@u4/opencv4nodejs';
-import { delay, getResourcePath, wait4key } from '../utils';
+import { getResourcePath, wait4key } from '../utils';
 
 const confidence = 0.97;
 
@@ -15,48 +15,6 @@ class MatchCoord {
     const color = new cv.Vec3(83, 24, 78);
     mat.drawRectangle(rect, color, 2, cv.LINE_8);
   }
-}
-
-/**
- * Find values greater than threshold in a 32bit float matrix and return a list of matchs formated as [[x1, y1, score1]. [x2, y2, score2], [x3, y3, score3]]
- * 
- * @param scoreMat Matric containing scores as 32Bit float (CV_32F)
- * @param threshold Minimal score to collect
- * @param region search region
- * @returns a list of matchs
- */
-export const getScoreMax = (scoreMat: Mat, threshold: number, region?: Rect): Array<[number, number, number]> => {
-  if (scoreMat.type !== cv.CV_32F)
-    throw Error('this method can only be call on a CV_32F Mat');
-  if (scoreMat.dims !== 2)
-    throw Error('this method can only be call on a 2 dimmention Mat');
-
-  const out: Array<[number, number, number]> = [];
-  const { cols, rows } = scoreMat;
-  const raw = scoreMat.getData();
-
-  let x1, x2, y1, y2: number;
-  if (region) {
-    x1 = region.x;
-    y1 = region.y;
-    x2 = x1 + region.width;
-    y2 = y1 + region.height;
-  } else {
-    x1 = y1 = 0;
-    x2 = cols;
-    y2 = rows;
-  }
-  for (let y = y1; y < y2; y++) {
-    let offset = (x1 + y * cols) * 4;
-    for (let x = x1; x < x2; x++) {
-      const value = raw.readFloatLE(offset);
-      if (value > threshold) {
-        out.push([x, y, value]);
-      }
-      offset += 4;
-    }
-  }
-  return out;
 }
 
 const locateMetroStation = async (display: boolean): Promise<void> => {
@@ -101,7 +59,7 @@ const locateMetroStation = async (display: boolean): Promise<void> => {
   let getDataLoopTime = Date.now();
 
   const { cols, rows } = matched;
-  const matches1 = getScoreMax(matched, confidence, new Rect(0, 0, cols - metroMat.cols + 1, rows - metroMat.rows + 1)).map(m => new MatchCoord(m[0], m[1], m[2], metroMat))
+  const matches1 = cv.getScoreMax(matched, confidence, new Rect(0, 0, cols - metroMat.cols + 1, rows - metroMat.rows + 1)).map(m => new MatchCoord(m[0], m[1], m[2], metroMat))
   getDataLoopTime = Date.now() - getDataLoopTime;
   matches1.sort((a, b) => b.value - a.value);
   console.log(`getData        processed in ${getDataLoopTime.toString().padStart(4, ' ')} ms to find ${matches1.length} region 1st: ${matches1[0]}`);

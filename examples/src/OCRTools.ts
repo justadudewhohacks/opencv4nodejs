@@ -5,9 +5,9 @@ import { cv } from './utils';
 // a - z
 export const lccs: Array<string> = Array(26).fill(97).map((v, i) => v + i).map(ascii => String.fromCharCode(ascii));
 
-new cv.Mat();
+// new cv.Mat();
 
-const invert = (img: Mat ) => img.threshold(254, 255, cv.THRESH_BINARY_INV);
+const invert = (img: Mat) => img.threshold(254, 255, cv.THRESH_BINARY_INV);
 
 const getBoundingRect = (component: number[]) => new cv.Rect(
   component[cv.CC_STAT_LEFT],

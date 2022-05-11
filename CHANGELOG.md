@@ -6,6 +6,7 @@
 * improve dry-run
 * add toMatTypeName() function
 * add template samples
+* add cv.getScoreMax()
   
 ## Version 6.1.4
 

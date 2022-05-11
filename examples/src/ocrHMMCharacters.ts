@@ -6,12 +6,10 @@ import type { Mat } from '@u4/opencv4nodejs';
  * OCR One by one using OCRHMMClassifier
  */
 
-if (!cv.xmodules || !cv.xmodules.text) {
-  throw new Error('exiting: opencv4nodejs compiled without text module');
-}
-
 export async function ocrHMMCharacters() {
-
+  if (!cv.xmodules || !cv.xmodules.text) {
+    throw new Error('exiting: opencv4nodejs compiled without text module');
+  }  
   const dataPath = path.resolve(getResourcePath('text-data'));
   const modelsPath = path.resolve(getResourcePath('text-models'));
   const beamSearchModel = path.resolve(modelsPath, 'OCRBeamSearch_CNN_model_data.xml.gz');

@@ -5,7 +5,7 @@ import { Mat } from '../..';
 export default function (cv: typeof openCV) {
   // deprecate wrapper for the old calcHist API
   const _calcHist = cv.calcHist;
-  cv.calcHist = function calcHist(img: openCV.Mat, histAxes: { channel: number, bins: number, ranges: [number, number] }[], mask?: Mat) {
+  cv.calcHist = function calcHist(img: Mat, histAxes: { channel: number, bins: number, ranges: [number, number] }[], mask?: Mat) {
     assert(img instanceof cv.Mat, 'Imgproc::CalcHist - Error: expected argument 0 to be of type Mat');
     assert(Array.isArray(histAxes), 'Imgproc::CalcHist - Error: expected argument 1 to be of type array of HistAxes');
 

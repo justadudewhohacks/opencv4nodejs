@@ -178,3 +178,12 @@ export function drawDetection(img: Mat, inputRect: Rect, opts?: DrawDetectionPar
 export function drawTextBox(img: Mat, upperLeft: { x: number, y: number }, textLines: TextLine[], alpha: number): Mat;
 // non Natif
 export function toMatTypeName(type: number): string | undefined;
+/**
+ * Find values greater than threshold in a 32bit float matrix and return a list of matchs formated as [[x1, y1, score1]. [x2, y2, score2], [x3, y3, score3]]
+ * non Natif
+ * @param scoreMat Matric containing scores as 32Bit float (CV_32F)
+ * @param threshold Minimal score to collect
+ * @param region search region
+ * @returns a list of matchs
+ */
+export function getScoreMax(scoreMat: Mat, threshold: number, region?: Rect): Array<[number, number, number]>;

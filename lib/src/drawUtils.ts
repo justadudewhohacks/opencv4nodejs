@@ -1,4 +1,5 @@
 import type * as openCV from '../..';
+import { Mat, Rect, Vec3 } from '../..';
 
 export interface TextParams {
   fontType: number;
@@ -18,16 +19,16 @@ export interface TextDimention {
 }
 
 interface DrawParams {
-  color?: openCV.Vec3;
+  color?: Vec3;
   thickness?: number;
   lineType?: number;
   shift?: number;
 }
 
-export default function (cv: typeof openCV) {
+export default function (cv: typeof openCV): void {
   const DefaultTextParams: TextParams = { fontType: cv.FONT_HERSHEY_SIMPLEX, fontSize: 0.8, thickness: 2, lineType: cv.LINE_4 }
 
-  function reshapeRectAtBorders(rect: openCV.Rect, imgDim: openCV.Mat) {
+  function reshapeRectAtBorders(rect: Rect, imgDim: Mat) {
     const x = Math.min(Math.max(0, rect.x), imgDim.cols)
     const y = Math.min(Math.max(0, rect.y), imgDim.rows)
     const width = Math.min(rect.width, imgDim.cols - x)
@@ -35,7 +36,7 @@ export default function (cv: typeof openCV) {
     return new cv.Rect(x, y, width, height)
   }
 
-  function insertText(boxImg: openCV.Mat, text: string, origin: { x: number, y: number }, opts: Partial<TextParams & {color: openCV.Vec3}>) {
+  function insertText(boxImg: Mat, text: string, origin: { x: number, y: number }, opts: Partial<TextParams & {color: Vec3}>) {
     const fontType = opts.fontType || DefaultTextParams.fontType;
     const fontSize = opts.fontSize || DefaultTextParams.fontSize;
     const color = opts.color || new cv.Vec3(255, 255, 255);
@@ -98,7 +99,7 @@ export default function (cv: typeof openCV) {
     return textLines.reduce((height, textLine) => height + getLineHeight(textLine, opts), 0)
   }
 
-  function drawTextBox(img: openCV.Mat, upperLeft: { x: number, y: number }, textLines: TextLines[], alpha: number): openCV.Mat {
+  cv.drawTextBox = (img: Mat, upperLeft: { x: number, y: number }, textLines: TextLines[], alpha: number): Mat => {
     const padding = 10
     const linePadding = 10
 
@@ -121,7 +122,7 @@ export default function (cv: typeof openCV) {
     return img
   }
 
-  function drawDetection(img: openCV.Mat, inputRect: openCV.Rect, opts = {} as DrawParams & { segmentFraction?: number }): openCV.Rect {
+  cv.drawDetection = (img: Mat, inputRect: Rect, opts = {} as DrawParams & { segmentFraction?: number }): Rect => {
     const rect = inputRect.toSquare()
 
     const { x, y, width, height } = rect
@@ -146,10 +147,5 @@ export default function (cv: typeof openCV) {
     img.drawLine(bottomRight, bottomRight.add(new cv.Point2(0, -segmentLength)), drawParams)
     img.drawLine(bottomRight, bottomRight.add(new cv.Point2(-segmentLength, 0)), drawParams)
     return rect
-  }
-
-  return {
-    drawTextBox,
-    drawDetection
   }
 }

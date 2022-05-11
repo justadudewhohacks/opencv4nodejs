@@ -4,18 +4,10 @@ import * as OpenCV from '../..';
 import misc from './misc';
 
 export default function(cv: typeof OpenCV) {
-  const {
-    drawTextBox,
-    drawDetection
-  } = makeDrawUtils(cv)
-
-  cv.drawTextBox = drawTextBox;
-  cv.drawDetection = drawDetection;
-
-  const { toMatTypeName } = misc(cv);
-  cv.toMatTypeName = toMatTypeName;
-
+  // add functions  
+  makeDrawUtils(cv)
+  // add functions  
+  misc(cv);
   deprecations(cv);
-  
   return cv;
 }
