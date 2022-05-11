@@ -36,6 +36,6 @@ async function main() {
   }
 
   cv.imshow("VideoCapture", image);
-  wait4key();
+  await wait4key();
 }
 main();
