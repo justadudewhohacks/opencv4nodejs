@@ -1,4 +1,4 @@
-import { cv, getResourcePath } from './utils';
+import { cv, getResourcePath, wait4key } from './utils';
 import fs from 'fs';
 import path from 'path';
 import { Mat } from '@u4/opencv4nodejs';
@@ -104,7 +104,8 @@ function main() {
       predictions.map(p => ({ text: p, fontSize: 0.5, thickness: 1 })),
       alpha
     );
-    cv.imshowWait('img', img);
+    cv.imshow('img', img);
+    wait4key();
   });
 }
 

@@ -1,7 +1,5 @@
 import cv from '@u4/opencv4nodejs';
-import { getResourcePath } from '../utils';
-
-// const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
+import { getResourcePath, wait4key } from '../utils';
 
 const findWaldo = async () => {
   // Load images
@@ -31,7 +29,7 @@ const findWaldo = async () => {
   //  console.log('VISIBLE:', cv.getWindowProperty(windowName, cv.WND_PROP_VISIBLE));  
   // cv.setWindowProperty(windowName, cv.WND_PROP_VISIBLE, cv.WINDOW_FULLSCREEN)
   // cv.setWindowProperty(windowName, cv.WND_PROP_FULLSCREEN, cv.WINDOW_NORMAL)
-  cv.waitKey();
+  wait4key();
 };
 
 // noinspection JSIgnoredPromiseFromCall

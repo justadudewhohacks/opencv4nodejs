@@ -1,5 +1,5 @@
 import { Rect } from '@u4/opencv4nodejs';
-import { cv, getResourcePath, drawBlueRect, drawGreenRect } from '../utils';
+import { cv, getResourcePath, drawBlueRect, drawGreenRect, wait4key } from '../utils';
 
 const image = cv.imread(getResourcePath('Lenna.png'));
 
@@ -40,4 +40,5 @@ drawBlueRect(image, faceRect);
 // draw eyes detection in face region
 eyeRects.forEach(eyeRect => drawGreenRect(faceRegion, eyeRect));
 
-cv.imshowWait('face detection', image);
+cv.imshow('face detection', image);
+wait4key();

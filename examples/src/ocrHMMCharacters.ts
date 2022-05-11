@@ -1,4 +1,4 @@
-import { cv, getResourcePath } from './utils';
+import { cv, getResourcePath, wait4key } from './utils';
 import path from 'path';
 import type { Mat } from '@u4/opencv4nodejs';
 
@@ -52,5 +52,6 @@ charImages.concat(numberImages).forEach((img) => {
     .filter(prediction => prediction.confidence > minConfidence);
 
   console.log('result:', predictions.map(p => `${p.class} : ${(p.confidence * 100).toFixed(2)}%`));
-  cv.imshowWait('image', img);
+  cv.imshow('image', img);
+  wait4key();
 });

@@ -1,4 +1,4 @@
-import { cv, getResourcePath } from './utils';
+import { cv, getResourcePath, wait4key } from './utils';
 
 const img = cv.imread(getResourcePath('Lenna.png'));
 
@@ -29,7 +29,7 @@ cv.plot1DHist(rHist, plot, red, thickness);
 
 cv.imshow('rgb image', img);
 cv.imshow('rgb histogram', plot);
-cv.waitKey();
+wait4key();
 
 const grayImg = img.bgrToGray();
 const grayHist = cv.calcHist(grayImg, getHistAxis(0));
@@ -38,5 +38,5 @@ cv.plot1DHist(grayHist, grayHistPlot, new cv.Vec3(0, 0, 0));
 
 cv.imshow('grayscale image', grayImg);
 cv.imshow('grayscale histogram', grayHistPlot);
-cv.waitKey();
+wait4key();
 

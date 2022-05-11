@@ -1,7 +1,7 @@
 import path from 'path';
 import type { Contour, Mat } from '@u4/opencv4nodejs';
 import { Point2 } from '@u4/opencv4nodejs';
-import { cv, getResourcePath } from './utils';
+import { cv, getResourcePath, wait4key } from './utils';
 import { grabFrames } from './utils';
 
 interface PointWithIdx {
@@ -207,6 +207,8 @@ grabFrames(video, delay, (frame) => {
   result.copyTo(sideBySide.getRegion(new cv.Rect(0, 0, cols, rows)));
   resizedImg.copyTo(sideBySide.getRegion(new cv.Rect(cols, 0, cols, rows)));
 
-  cv.imshowWait('handMask', handMask);
-  cv.imshowWait('result', sideBySide);
+  cv.imshow('handMask', handMask);
+  wait4key();
+  cv.imshow('result', sideBySide);
+  wait4key();
 });

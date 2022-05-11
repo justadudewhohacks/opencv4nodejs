@@ -1,4 +1,4 @@
-import { getResourcePath, drawRect } from './utils';
+import { getResourcePath, drawRect, wait4key } from './utils';
 import fs from 'fs';
 import path from 'path';
 import { classNames } from './data/dnnCocoClassNames';
@@ -68,7 +68,8 @@ const runDetectDishesExample = (net: Net) => {
     drawClassDetections(img, className, () => color);
   });
 
-  cv.imshowWait('img', img);
+  cv.imshow('img', img);
+  wait4key();
 };
 
 const runDetectPeopleExample = (net: Net) => {
@@ -82,7 +83,8 @@ const runDetectPeopleExample = (net: Net) => {
   const getRandomColor = () => new cv.Vec3(Math.random() * 255, Math.random() * 255, 255);
 
   drawClassDetections(img, 'car', getRandomColor);
-  cv.imshowWait('img', img);
+  cv.imshow('img', img);
+  wait4key();
 };
 
 async function main() {

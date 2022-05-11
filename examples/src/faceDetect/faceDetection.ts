@@ -1,4 +1,4 @@
-import { cv, getResourcePath, drawBlueRect } from '../utils';
+import { cv, getResourcePath, drawBlueRect, wait4key } from '../utils';
 
 const image = cv.imread(getResourcePath('got.jpg'));
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
@@ -19,4 +19,5 @@ objects.forEach((rect, i) => {
   drawBlueRect(image, rect, { thickness });
 });
 
-cv.imshowWait('face detection', image);
+cv.imshow('face detection', image);
+wait4key();

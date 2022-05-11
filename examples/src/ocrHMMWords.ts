@@ -1,6 +1,6 @@
 import path from 'path';
 import { cv, Mat } from '@u4/opencv4nodejs';
-import { getResourcePath } from './utils';
+import { getResourcePath, wait4key } from './utils';
 
 if (!cv.xmodules.text) {
   throw new Error('exiting: opencv4nodejs compiled without text module');
@@ -35,5 +35,6 @@ wordImages.forEach((img: Mat) => {
 
   console.log('outputText:', ret.outputText);
   cv.imshow('mask', mask);
-  cv.imshowWait('img', img);
+  cv.imshow('img', img);
+  wait4key();
 });

@@ -1,5 +1,5 @@
 import { DescriptorMatch, FeatureDetector, Mat } from '@u4/opencv4nodejs';
-import { cv, getResourcePath } from './utils';
+import { cv, getResourcePath, wait4key } from './utils';
 
 const matchFeatures = ({ img1, img2, detector, matchFunc }: { img1: Mat, img2: Mat, detector: FeatureDetector, matchFunc: (descs1: Mat, descs2: Mat) => DescriptorMatch[] }) => {
   // detect keypoints
@@ -39,7 +39,8 @@ if (cv.xmodules && cv.xmodules.xfeatures2d) {
     detector: new cv.SIFTDetector({ nFeatures: 2000 }),
     matchFunc: cv.matchFlannBased
   });
-  cv.imshowWait('SIFT matches', siftMatchesImg);
+  cv.imshow('SIFT matches', siftMatchesImg);
+  wait4key();
 } else {
   console.log('skipping SIFT matches');
 }
@@ -50,7 +51,8 @@ const orbMatchesImg = matchFeatures({
   detector: new cv.ORBDetector(),
   matchFunc: cv.matchBruteForceHamming
 });
-cv.imshowWait('ORB matches', orbMatchesImg);
+cv.imshow('ORB matches', orbMatchesImg);
+wait4key();
 
 // Match using the BFMatcher with crossCheck true
 const bf = new cv.BFMatcher(cv.NORM_L2, true);
@@ -60,5 +62,5 @@ const orbBFMatchIMG = matchFeatures({
   detector: new cv.ORBDetector(),
   matchFunc: (desc1, desc2) => bf.match(desc1, desc2)
 });
-cv.imshowWait('ORB with BFMatcher - crossCheck true', orbBFMatchIMG);
-
+cv.imshow('ORB with BFMatcher - crossCheck true', orbBFMatchIMG);
+wait4key();

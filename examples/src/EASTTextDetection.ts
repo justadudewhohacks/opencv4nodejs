@@ -1,5 +1,5 @@
 import path from 'path';
-import { cv, drawBlueRect, getCachedFile, getResourcePath } from './utils';
+import { cv, drawBlueRect, getCachedFile, getResourcePath, wait4key } from './utils';
 import { Mat, Rect } from '@u4/opencv4nodejs';
 
 /**
@@ -94,7 +94,8 @@ function detection(modelPath: string, imgAbsPath: string): void {
     )
     drawBlueRect(img, imgRect);
   });
-  cv.imshowWait('EAST text detection', img);
+  cv.imshow('EAST text detection', img);
+  wait4key();
 }
 
 async function main() {

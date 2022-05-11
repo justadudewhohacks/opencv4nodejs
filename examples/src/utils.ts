@@ -6,6 +6,10 @@ import Axios from 'axios';
 import ProgressBar from 'progress';
 import pc from 'picocolors';
 
+
+export const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
+
+
 export function getCachedFile(localName: string, url: string, notice?: string): Promise<string> {
   const localFile = path.resolve(__dirname, localName);
   if (fs.existsSync(localFile)) {
@@ -120,6 +124,34 @@ export const drawRect = (image: Mat, rect: Rect, color: Vec3, opts = { thickness
     opts.thickness,
     cv.LINE_8
   );
+
+
+export async function wait4key(): Promise<'terminal' | 'window'> {
+  // console.log('press a key to continue.');
+  process.stdin.setRawMode(true);
+  process.stdin.resume();
+  let done: 'terminal' | 'window' | null = null;
+  const capture = (/*data: Buffer*/) => {
+    // console.log({data})
+    done = 'terminal';
+  };
+  process.stdin.on('data', capture);
+  await delay(10);
+  done = null;
+  for (; ;) {
+    await delay(10);
+    if (~cv.waitKey(10)) {
+      done = 'window';
+      break;
+    }
+    if (done)
+      break;
+  }
+  process.stdin.off('data', capture);
+  process.stdin.pause();
+  process.stdin.setRawMode(false);
+  return done;
+}
 
 export const drawBlueRect = (image: Mat, rect: Rect, opts = { thickness: 2 }) =>
   drawRect(image, rect, new cv.Vec3(255, 0, 0), opts);

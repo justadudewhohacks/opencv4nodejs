@@ -1,5 +1,5 @@
 import cv, { Mat, Rect } from '@u4/opencv4nodejs';
-import { getResourcePath } from '../utils';
+import { delay, getResourcePath, wait4key } from '../utils';
 
 const confidence = 0.97;
 
@@ -117,8 +117,8 @@ const locateMetroStation = async (display: boolean): Promise<void> => {
     // Open result in new window
     cv.imshow(windowName, parisMapMat);
     cv.setWindowTitle(windowName, `The ${matches1.length} Metros stations are here:`);
-    cv.waitKey();
+    await wait4key();
   }
 };
 
-locateMetroStation(false);
+locateMetroStation(true);

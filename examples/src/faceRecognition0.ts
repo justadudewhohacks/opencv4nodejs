@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { FaceRecognizer, Mat } from '@u4/opencv4nodejs';
-import { cv, getResourcePath } from './utils';
+import { cv, getResourcePath, wait4key } from './utils';
 
 function main() {
   if (!cv.xmodules || !cv.xmodules.face) {
@@ -51,7 +51,8 @@ function main() {
     testImages.forEach((img: Mat) => {
       const result = recognizer.predict(img);
       console.log('predicted: %s, confidence: %s', nameMappings[result.label], result.confidence);
-      cv.imshowWait('face', img);
+      cv.imshow('face', img);
+      wait4key();
       cv.destroyAllWindows();
     });
   };

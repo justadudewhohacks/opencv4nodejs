@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import cv, { Mat } from '@u4/opencv4nodejs';
-import { getResourcePath } from './utils';
+import { getResourcePath, wait4key } from './utils';
 
 function main() {
   if (!cv.xmodules || !cv.xmodules.face) {
@@ -69,6 +69,7 @@ function main() {
     );
   });
 
-  cv.imshowWait('result', twoFacesImg);
+  cv.imshow('result', twoFacesImg);
+  wait4key();
 }
 main();

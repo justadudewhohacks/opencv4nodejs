@@ -1,6 +1,6 @@
 // using default import
 import cv from '@u4/opencv4nodejs';
-import { getResourcePath } from './utils';
+import { getResourcePath, wait4key } from './utils';
 
 const file = getResourcePath('Lenna.png');
 console.log('loading ', file);
@@ -15,5 +15,5 @@ cv.setWindowProperty(windowName, cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
 // console.log('AUTOSIZE:', cv.getWindowProperty(windowName, cv.WND_PROP_AUTOSIZE));
 // console.log('VISIBLE:', cv.getWindowProperty(windowName, cv.WND_PROP_VISIBLE));
 // cv.setWindowProperty(windowName, cv.WND_PROP_FULLSCREEN, cv.WINDOW_NORMAL)
-cv.waitKey();
+wait4key();
 
