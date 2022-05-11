@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import { cv, getResource } from '../utils';
+import { cv, getResourcePath } from '../utils';
 
 export default function () {
-  const modelPath = path.resolve(path.join(getResource('dnn'), 'facenet'));
+  const modelPath = path.resolve(path.join(getResourcePath('dnn'), 'facenet'));
 
   const prototxt = path.resolve(modelPath, 'facenet.prototxt');
   const modelFile = path.resolve(modelPath, 'res10_300x300_ssd_iter_140000.caffemodel');

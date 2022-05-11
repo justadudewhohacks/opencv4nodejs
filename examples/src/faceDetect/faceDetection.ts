@@ -1,6 +1,6 @@
-import { cv, getDataFilePath, drawBlueRect } from '../utils';
+import { cv, getResourcePath, drawBlueRect } from '../utils';
 
-const image = cv.imread(getDataFilePath('got.jpg'));
+const image = cv.imread(getResourcePath('got.jpg'));
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
 
 // detect faces

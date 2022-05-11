@@ -1,6 +1,6 @@
-import { cv, getResource } from './utils';
+import { cv, getResourcePath } from './utils';
 
-const img = cv.imread(getResource('Lenna.png'));
+const img = cv.imread(getResourcePath('Lenna.png'));
 
 // single axis for 1D hist
 const getHistAxis = (channel: number) => ([

@@ -1,12 +1,12 @@
 import cv from '@u4/opencv4nodejs';
-import { getResource } from '../utils';
+import { getResourcePath } from '../utils';
 
 // const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
 const findWaldo = async () => {
   // Load images
-  const originalMat = await cv.imreadAsync(getResource('templates/findwaldo.jpg'));
-  const waldoMat = await cv.imreadAsync(getResource('templates/waldo.jpg'));
+  const originalMat = await cv.imreadAsync(getResourcePath('templates/findwaldo.jpg'));
+  const waldoMat = await cv.imreadAsync(getResourcePath('templates/waldo.jpg'));
   // Match template (the brightest locations indicate the highest match)
   const matched = originalMat.matchTemplate(waldoMat, cv.TM_CCOEFF_NORMED);
 

@@ -1,7 +1,7 @@
 import { Rect } from '@u4/opencv4nodejs';
-import { cv, getDataFilePath, drawBlueRect, drawGreenRect } from '../utils';
+import { cv, getResourcePath, drawBlueRect, drawGreenRect } from '../utils';
 
-const image = cv.imread(getDataFilePath('Lenna.png'));
+const image = cv.imread(getResourcePath('Lenna.png'));
 
 const faceClassifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_DEFAULT);
 const eyeClassifier = new cv.CascadeClassifier(cv.HAAR_EYE);

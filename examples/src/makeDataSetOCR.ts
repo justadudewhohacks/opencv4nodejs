@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import fs from 'fs';
-import { cv, getResource } from './utils';
+import { cv, getResourcePath } from './utils';
 import type { Mat } from '@u4/opencv4nodejs';
 import path from 'path';
 
-const labeledDataPath = path.join(getResource('ocr-nocommit'), 'letters');
-const outputDataPath = path.join(getResource('ocr-nocommit'), 'letters_generated');
+const labeledDataPath = path.join(getResourcePath('ocr-nocommit'), 'letters');
+const outputDataPath = path.join(getResourcePath('ocr-nocommit'), 'letters_generated');
 
 const lccs = Array(26).fill(97).map((v, i) => v + i).map(a => String.fromCharCode(a));
 

@@ -1,5 +1,5 @@
 import { DescriptorMatch, FeatureDetector, Mat } from '@u4/opencv4nodejs';
-import { cv, getResource } from './utils';
+import { cv, getResourcePath } from './utils';
 
 const matchFeatures = ({ img1, img2, detector, matchFunc }: { img1: Mat, img2: Mat, detector: FeatureDetector, matchFunc: (descs1: Mat, descs2: Mat) => DescriptorMatch[] }) => {
   // detect keypoints
@@ -28,8 +28,8 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }: { img1: Mat, img2: M
   );
 };
 
-const img1 = cv.imread(getResource('s0.jpg'));
-const img2 = cv.imread(getResource('s1.jpg'));
+const img1 = cv.imread(getResourcePath('s0.jpg'));
+const img2 = cv.imread(getResourcePath('s1.jpg'));
 
 // check if opencv compiled with extra modules and nonfree
 if (cv.xmodules && cv.xmodules.xfeatures2d) {

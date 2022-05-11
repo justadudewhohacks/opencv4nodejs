@@ -3,8 +3,9 @@ import promisify from './promisify';
 import extendWithJsSources from './src';
 import raw from './cvloader';
 import type * as openCV from '..';
+declare type OpenCVType = typeof openCV;
 
-function loadOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
+function loadOpenCV(opt?: OpenCVBuildEnvParams): OpenCVType {
   const cvBase = raw(opt);
   if (!cvBase.accumulate) {
     throw Error('failed to load opencv basic accumulate not found.')
@@ -14,7 +15,7 @@ function loadOpenCV(opt?: OpenCVBuildEnvParams): typeof openCV {
   }
   
   // promisify async methods
-  let cvObj = promisify(cvBase);
+  let cvObj = promisify<OpenCVType>(cvBase);
   cvObj = extendWithJsSources(cvObj);
   // add xmodules alias if not present (moved to C++ part)
   // if (!cvObj.xmodules && cvObj.modules)

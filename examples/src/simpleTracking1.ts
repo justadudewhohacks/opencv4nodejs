@@ -1,9 +1,9 @@
-import { cv, grabFrames, drawRectAroundBlobs, getResource } from './utils';
+import { cv, grabFrames, drawRectAroundBlobs, getResourcePath } from './utils';
 
 const bgSubtractor = new cv.BackgroundSubtractorMOG2();
 
 const delay = 50;
-grabFrames(getResource('traffic.mp4'), delay, (frame) => {
+grabFrames(getResourcePath('traffic.mp4'), delay, (frame) => {
   const foreGroundMask = bgSubtractor.apply(frame);
 
   const iterations = 2;

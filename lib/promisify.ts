@@ -1,6 +1,6 @@
 const isFn = (obj: unknown) => typeof obj === 'function';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isAsyncFn = (fn: (...any) => any) => fn.prototype.constructor.name.endsWith('Async');
+const isAsyncFn = (fn: (...args: any[]) => any) => fn.prototype.constructor.name.endsWith('Async');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const promisify = (fn: () => any) => function (...params: any[]) {

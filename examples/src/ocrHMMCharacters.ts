@@ -1,4 +1,4 @@
-import { cv, getResource } from './utils';
+import { cv, getResourcePath } from './utils';
 import path from 'path';
 import type { Mat } from '@u4/opencv4nodejs';
 
@@ -10,8 +10,8 @@ if (!cv.xmodules || !cv.xmodules.text) {
   throw new Error('exiting: opencv4nodejs compiled without text module');
 }
 
-const dataPath = path.resolve(getResource('text-data'));
-const modelsPath = path.resolve(getResource('text-models'));
+const dataPath = path.resolve(getResourcePath('text-data'));
+const modelsPath = path.resolve(getResourcePath('text-models'));
 const beamSearchModel = path.resolve(modelsPath, 'OCRBeamSearch_CNN_model_data.xml.gz');
 
 const vocabulary = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

@@ -1,6 +1,6 @@
-import { cv, getResource } from './utils';
+import { cv, getResourcePath } from './utils';
 
-const image = cv.imread(getResource('Lenna.png'));
+const image = cv.imread(getResourcePath('Lenna.png'));
 
 const dst = image.guidedFilter(image, 10, 500, -1);
 

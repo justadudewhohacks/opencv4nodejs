@@ -7,7 +7,7 @@ import fs from "fs";
 import path from "path";
 import { Mat } from '@u4/opencv4nodejs';
 import classNames from "./data/dnnTensorflowObjectDetectionClassNames";
-import { cv, getCachedFile, getResource, runVideoDetection } from "./utils";
+import { cv, getCachedFile, getResourcePath, runVideoDetection } from "./utils";
 
 async function main() {
   if (!cv.xmodules || !cv.xmodules.dnn) {
@@ -16,7 +16,7 @@ async function main() {
   }
 
   // replace with path where you unzipped detection model
-  const detectionModelPath = getResource("dnn/tf-detection");
+  const detectionModelPath = getResourcePath("dnn/tf-detection");
 
   const pbFile = path.resolve(detectionModelPath, "frozen_inference_graph.pb");
   // const pbtxtFile = path.resolve(
@@ -24,7 +24,7 @@ async function main() {
   //   "ssd_mobilenet_v2_coco_2018_03_29.pbtxt"
   // );
 
-  const pbtxtFile = await getCachedFile(getResource("dnn/tf-detection/ssd_mobilenet_v2_coco_2018_03_29.pbtxt"), 'https://raw.githubusercontent.com/opencv/opencv_extra/master/testdata/dnn/ssd_mobilenet_v2_coco_2018_03_29.pbtxt')
+  const pbtxtFile = await getCachedFile(getResourcePath("dnn/tf-detection/ssd_mobilenet_v2_coco_2018_03_29.pbtxt"), 'https://raw.githubusercontent.com/opencv/opencv_extra/master/testdata/dnn/ssd_mobilenet_v2_coco_2018_03_29.pbtxt')
   
   // https://gist.githubusercontent.com/dkurt/54a8e8b51beb3bd3f770b79e56927bd7/raw/2a20064a9d33b893dd95d2567da126d0ecd03e85/ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt
 

@@ -1,4 +1,4 @@
-import { cv, getResource } from './utils';
+import { cv, getResourcePath } from './utils';
 import fs from 'fs';
 import path from 'path';
 import { Mat } from '@u4/opencv4nodejs';
@@ -10,7 +10,7 @@ function main() {
   }
 
   // replace with path where you unzipped inception model
-  const inceptionModelPath = path.join(getResource('dnn'), 'tf-inception');
+  const inceptionModelPath = path.join(getResourcePath('dnn'), 'tf-inception');
   const modelFile = path.resolve(inceptionModelPath, 'tensorflow_inception_graph.pb');
   const classNamesFile = path.resolve(inceptionModelPath, 'imagenet_comp_graph_label_strings.txt');
   if (!fs.existsSync(modelFile) || !fs.existsSync(classNamesFile)) {
@@ -64,19 +64,19 @@ function main() {
 
   const testData = [
     {
-      image: getResource('banana.jpg'),
+      image: getResourcePath('banana.jpg'),
       label: 'banana'
     },
     {
-      image: getResource('husky.jpg'),
+      image: getResourcePath('husky.jpg'),
       label: 'husky'
     },
     {
-      image: getResource('car.jpeg'),
+      image: getResourcePath('car.jpeg'),
       label: 'car'
     },
     {
-      image: getResource('lenna.png'),
+      image: getResourcePath('lenna.png'),
       label: 'lenna'
     }
   ];

@@ -1,7 +1,7 @@
 import path from 'path';
 import type { Contour, Mat } from '@u4/opencv4nodejs';
 import { Point2 } from '@u4/opencv4nodejs';
-import { cv, getResource } from './utils';
+import { cv, getResourcePath } from './utils';
 import { grabFrames } from './utils';
 
 interface PointWithIdx {
@@ -133,7 +133,7 @@ const red = new cv.Vec3(0, 0, 255);
 
 // main
 const delay = 20;
-const video = path.resolve(getResource('hand-gesture.mp4'));
+const video = path.resolve(getResourcePath('hand-gesture.mp4'));
 grabFrames(video, delay, (frame) => {
   const resizedImg: Mat = frame.resizeToMax(640);
 

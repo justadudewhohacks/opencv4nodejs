@@ -1,8 +1,8 @@
 // using default import
 import cv from '@u4/opencv4nodejs';
-import { getResource } from './utils';
+import { getResourcePath } from './utils';
 
-const file = getResource('Lenna.png');
+const file = getResourcePath('Lenna.png');
 console.log('loading ', file);
 const image = cv.imread(file);
 console.log('Lenna.png loaded');

@@ -1,4 +1,4 @@
-import { getResource, drawRect } from './utils';
+import { getResourcePath, drawRect } from './utils';
 import fs from 'fs';
 import path from 'path';
 import { classNames } from './data/dnnCocoClassNames';
@@ -35,7 +35,7 @@ const makeDrawClassDetections = (predictions: Prediction[]) => (drawImg: Mat, cl
 };
 
 const runDetectDishesExample = (net: Net) => {
-  const img = cv.imread(getResource('dishes.jpg'));
+  const img = cv.imread(getResourcePath('dishes.jpg'));
   const minConfidence = 0.2;
 
   const predictions = classifyImg(net, img).filter(res => res.confidence > minConfidence);
@@ -72,7 +72,7 @@ const runDetectDishesExample = (net: Net) => {
 };
 
 const runDetectPeopleExample = (net: Net) => {
-  const img = cv.imread(getResource('cars.jpeg'));
+  const img = cv.imread(getResourcePath('cars.jpeg'));
   const minConfidence = 0.4;
 
   const predictions = classifyImg(net, img).filter(res => res.confidence > minConfidence);
@@ -87,7 +87,7 @@ const runDetectPeopleExample = (net: Net) => {
 
 async function main() {
   // replace with path where you unzipped inception model
-  const ssdcocoModelPath = path.join(getResource('dnn'), 'coco-SSD_300x300');
+  const ssdcocoModelPath = path.join(getResourcePath('dnn'), 'coco-SSD_300x300');
   const prototxt = path.resolve(ssdcocoModelPath, 'deploy.prototxt');
   const modelFile = path.resolve(ssdcocoModelPath, 'VGG_coco_SSD_300x300_iter_400000.caffemodel');
 

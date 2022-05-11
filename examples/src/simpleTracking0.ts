@@ -1,7 +1,7 @@
-import { cv, grabFrames, drawRectAroundBlobs, getResource } from './utils';
+import { cv, grabFrames, drawRectAroundBlobs, getResourcePath } from './utils';
 
 const delay = 100;
-grabFrames(getResource('horses.mp4'), delay, (frame) => {
+grabFrames(getResourcePath('horses.mp4'), delay, (frame) => {
   const frameHLS = frame.cvtColor(cv.COLOR_BGR2HLS);
 
   const brownUpper = new cv.Vec3(10, 60, 165);

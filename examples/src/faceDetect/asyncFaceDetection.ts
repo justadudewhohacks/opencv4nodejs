@@ -1,8 +1,7 @@
-import { cv, getDataFilePath, drawBlueRect } from '../utils';
+import { cv, getResourcePath, drawBlueRect } from '../utils';
 
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
-
-cv.imreadAsync(getDataFilePath('got.jpg'))
+cv.imreadAsync(getResourcePath('got.jpg'))
   .then(img =>
     img.bgrToGrayAsync()
       .then(grayImg => classifier.detectMultiScaleAsync(grayImg))

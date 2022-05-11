@@ -1,4 +1,4 @@
-import { cv, getResource } from './utils';
+import { cv, getResourcePath } from './utils';
 import { FeatureDetector, Mat } from '@u4/opencv4nodejs';
 
 const detectAndComputeAsync = (det: FeatureDetector, img: Mat) =>
@@ -7,8 +7,8 @@ const detectAndComputeAsync = (det: FeatureDetector, img: Mat) =>
       .then(desc => ({ kps, desc }))
     );
 
-const img1 = cv.imread(getResource('s0.jpg'));
-const img2 = cv.imread(getResource('s1.jpg'));
+const img1 = cv.imread(getResourcePath('s0.jpg'));
+const img2 = cv.imread(getResourcePath('s1.jpg'));
 
 const detectorNames = [
   // 'AGAST',

@@ -44,13 +44,22 @@ export function getCachedFile(localName: string, url: string, notice?: string): 
   })
 }
 
-
 /**
  * add some helpter for examples TS
  */
 
-export const dataPath = path.resolve(__dirname, '../data');
-export const getDataFilePath = (fileName: string): string => path.resolve(dataPath, fileName);
+export const dataPath = path.resolve(__dirname, '..', '..', 'data');
+
+// export const getDataFilePath = (fileName: string): string => {
+//   const fullpath = path.resolve(dataPath, fileName)
+//   return fullpath;
+// };
+
+export const getResourcePath = (name?: string): string => {
+  const fullpath = path.resolve(dataPath, name || '.');
+  return fullpath;
+};
+
 export const grabFrames = (videoFile: number | string, delay: number, onFrame: (mat: Mat) => void): void => {
   const cap = new cv.VideoCapture(videoFile);
   let done = false;
@@ -119,4 +128,3 @@ export const drawGreenRect = (image: Mat, rect: Rect, opts = { thickness: 2 }) =
 export const drawRedRect = (image: Mat, rect: Rect, opts = { thickness: 2 }) =>
   drawRect(image, rect, new cv.Vec3(0, 0, 255), opts);
 
-export const getResource = (name?: string): string => path.resolve(__dirname, '..', '..', 'data', name || '.');

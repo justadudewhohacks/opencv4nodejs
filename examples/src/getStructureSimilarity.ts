@@ -1,5 +1,5 @@
 import { CV_32F, imread, Mat, Size } from '@u4/opencv4nodejs';
-import { getResource } from './utils';
+import { getResourcePath } from './utils';
 
 // Ported from https://docs.opencv.org/2.4/doc/tutorials/gpu/gpu-basics-similarity/gpu-basics-similarity.html
 function getStructureSimilarity(i1: Mat, i2: Mat): number {
@@ -47,8 +47,8 @@ function getStructureSimilarity(i1: Mat, i2: Mat): number {
     return [y, x, w].reduce((a, b) => a + b) / 3;
 }
 
-const i1 = imread(getResource('ssim-1.png'));
-const i2 = imread(getResource('ssim-2.png'));
+const i1 = imread(getResourcePath('ssim-1.png'));
+const i2 = imread(getResourcePath('ssim-2.png'));
 
 const structureSimilarity = getStructureSimilarity(i1, i2);
 

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import cv, { Mat } from '@u4/opencv4nodejs';
-import { getResource } from './utils';
+import { getResourcePath } from './utils';
 
 function main() {
   if (!cv.xmodules || !cv.xmodules.face) {
@@ -9,7 +9,7 @@ function main() {
     return;
   }
 
-  const basePath = getResource('face-recognition');
+  const basePath = getResourcePath('face-recognition');
   const imgsPath = path.resolve(basePath, 'imgs');
   const nameMappings = ['daryl', 'rick', 'negan'];
 
