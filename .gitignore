@@ -40,3 +40,7 @@ examples/src/AgeGender/age_net.caffemodel
 .pnpm-debug.log
 examples/data/dnn/yolo-object-detection/
 lib/src/*.map
+lib/cvloader.js
+lib/opencv4nodejs.js
+lib/promisify.js
+lib/src/*.js
