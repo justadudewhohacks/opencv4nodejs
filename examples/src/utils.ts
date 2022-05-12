@@ -128,7 +128,8 @@ export const drawRect = (image: Mat, rect: Rect, color: Vec3, opts = { thickness
 
 export async function wait4key(): Promise<'terminal' | 'window'> {
   // console.log('press a key to continue.');
-  process.stdin.setRawMode(true);
+  if (process.stdin.isTTY)
+    process.stdin.setRawMode(true);
   process.stdin.resume();
   let done: 'terminal' | 'window' | null = null;
   const capture = (/*data: Buffer*/) => {
@@ -149,7 +150,8 @@ export async function wait4key(): Promise<'terminal' | 'window'> {
   }
   process.stdin.off('data', capture);
   process.stdin.pause();
-  process.stdin.setRawMode(false);
+  if (process.stdin.isTTY)
+    process.stdin.setRawMode(false);
   return done;
 }
 

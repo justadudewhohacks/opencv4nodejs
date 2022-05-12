@@ -25,6 +25,16 @@ export class Net {
 
   getLayerNames(): string[];
   getUnconnectedOutLayers(): number[];
+  /**
+   * Sets the new input value for the network.
+   * 
+   * https://docs.opencv.org/4.x/db/d30/classcv_1_1dnn_1_1Net.html#a5e74adacffd6aa53d56046581de7fcbd
+   * 
+   * @param blob 	A new blob. Should have CV_32F or CV_8U depth.
+   * @param name 	A name of input layer.
+   * @param scalefactor An optional normalization scale.
+   * @param mean 	An optional mean subtraction values.
+   */
   setInput(blob: Mat, name?: string, scalefactor?: number, mean?: number): void;
   setInput(blob: Mat, inputName?: string): void;
 

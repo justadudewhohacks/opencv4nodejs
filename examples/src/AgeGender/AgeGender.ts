@@ -1,7 +1,7 @@
 import fs from 'fs';
 import mri from 'mri';
 import { Mat, Net, Point2, Rect, Size, Vec3, VideoCapture } from '@u4/opencv4nodejs';
-import { cv, getCachedFile } from '../utils';
+import { cv, getCachedFile, wait4key } from '../utils';
 import path from 'path';
 
 // ported from https://github.com/spmallick/learnopencv/blob/master/AgeGender/AgeGender.py
@@ -18,7 +18,6 @@ const getMaxIndex = (scores: number[]): number => {
     }
     return classId;
 }
-
 
 function getFaceBox(net: Net, frame: Mat, conf_threshold = 0.7): { frameFace: Mat, bboxes: Rect[] } {
     const frameOpencvDnn: Mat = frame.copy();
@@ -44,7 +43,7 @@ function getFaceBox(net: Net, frame: Mat, conf_threshold = 0.7): { frameFace: Ma
     return { frameFace: frameOpencvDnn, bboxes };
 }
 
-const args: { input?: string, device?: string, help?: boolean } = mri(process.argv.slice(2), { default: { device: 'cpu' }, alias: { h: 'help' } });
+const args: { input?: string, device?: string, help?: boolean } = mri(process.argv.slice(2), { default: { device: 'cpu' }, alias: { h: 'help' } }) as any;
 
 if (args.help) {
     console.log('Use this script to run age and gender recognition using OpenCV.');
@@ -58,10 +57,12 @@ const main = async () => {
     const faceModel = await getCachedFile(path.resolve(__dirname, "opencv_face_detector_uint8.pb"), 'https://github.com/spmallick/learnopencv/raw/master/AgeGender/opencv_face_detector_uint8.pb')
 
     const ageProto = path.resolve(__dirname, "age_deploy.prototxt")
-    const ageModel = path.resolve(__dirname, "age_net.caffemodel")
+    // 44 MB file
+    const ageModel = path.resolve(__dirname, "age_net.caffemodel") // https://www.dropbox.com/s/xfb20y596869vbb/age_net.caffemodel?dl=0
 
     const genderProto = path.resolve(__dirname, "gender_deploy.prototxt")
-    const genderModel = path.resolve(__dirname, "gender_net.caffemodel")
+    // 44 MB file
+    const genderModel = path.resolve(__dirname, "gender_net.caffemodel") // https://www.dropbox.com/s/iyv483wz7ztr9gh/gender_net.caffemodel?dl=0
 
     const MODEL_MEAN_VALUES = new Vec3(78.4263377603, 87.7689143744, 114.895847746)
     const ageList = ['(0-2)', '(4-6)', '(8-12)', '(15-20)', '(25-32)', '(38-43)', '(48-53)', '(60-100)']
@@ -129,24 +130,28 @@ const main = async () => {
         }
 
         for (const bboxOrg of bboxes) {
-            // console.log(bboxOrg);
-            // const bbox = bboxOrg.toSquare();
-            //console.log(bbox);
-            const bbox = new Rect(Math.round(bboxOrg.x - padding), Math.round(bboxOrg.y - padding), Math.round(bboxOrg.width + padding * 2), Math.round(bboxOrg.height + padding * 2));
+            const bbox = new Rect(
+                Math.max(Math.round(bboxOrg.x - padding), 0),
+                Math.max(Math.round(bboxOrg.y - padding), 0),
+                Math.round(bboxOrg.width + padding * 2),
+                Math.round(bboxOrg.height + padding * 2));
             const face = frame.getRegion(bbox);
             // TODO add padding
             // const face = frame[max(0,bbox[1]-padding):min(bbox[3]+padding,frame.shape[0]-1),max(0,bbox[0]-padding):min(bbox[2]+padding, frame.shape[1]-1)]
             const blob = cv.blobFromImage(face, { scaleFactor: 1.0, size: new Size(227, 227), mean: MODEL_MEAN_VALUES, swapRB: false });
             genderNet.setInput(blob)
             const genderPreds = genderNet.forward()
-            const data1 = genderPreds.getDataAsArray();
+            console.log(` genderPreds DIM: ${ genderPreds.dims}, type: ${ cv.toMatTypeName(genderPreds.type)}`)
+            // list of number[2]
+            const data1: Array<number[]> = genderPreds.getDataAsArray();
             const maxId1 = getMaxIndex(data1[0])
             const gender = genderList[maxId1] // .argmax()
             console.log(`Gender Output : ${genderPreds}`);
             console.log(`Gender : ${gender}, conf = ${data1[0][maxId1]}`)
             ageNet.setInput(blob)
             const agePreds = ageNet.forward()
-            const data2 = agePreds.getDataAsArray();
+            // list of number[8]
+            const data2: Array<number[]> = agePreds.getDataAsArray();
             const maxId2 = getMaxIndex(data2[0])
             const age = ageList[maxId2]
             console.log(`Age Output : ${agePreds}`)
@@ -155,8 +160,10 @@ const main = async () => {
             frameFace.putText(label, new Point2(bbox.x, bbox.y - 10), cv.FONT_HERSHEY_SIMPLEX, 0.8, new Vec3(0, 255, 255), 2, cv.LINE_AA)
             cv.imshow("Age Gender Demo", frameFace)
             cv.imwrite(`age-gender-out-${args.input}`, frameFace)
+            cv.waitKey(1);
         }
         console.log(`time : ${Date.now() - t} ms`);
+        await wait4key();   
     }
 };
 main().catch(console.error);
