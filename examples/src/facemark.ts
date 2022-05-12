@@ -8,7 +8,7 @@ async function main() {
     return;
   }
   
-  const modelFile = await getCachedFile(getResourcePath('face/lbfmodel.yaml'), 'https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml', 'could not find landmarks model');
+  const modelFile = await getCachedFile(getResourcePath('face/lbfmodel.yaml'), 'https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml', {notice: 'could not find landmarks model'});
   const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
   // create the facemark object with the landmarks model
   const facemark = new cv.FacemarkLBF();

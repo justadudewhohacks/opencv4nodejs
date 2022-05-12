@@ -44,3 +44,5 @@ lib/cvloader.js
 lib/opencv4nodejs.js
 lib/promisify.js
 lib/src/*.js
+examples/src/JPEGImages/
+examples/labels/

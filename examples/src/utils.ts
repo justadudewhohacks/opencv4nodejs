@@ -6,17 +6,16 @@ import Axios from 'axios';
 import ProgressBar from 'progress';
 import pc from 'picocolors';
 
-
 export const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
-
-export function getCachedFile(localName: string, url: string, notice?: string): Promise<string> {
+export function getCachedFile(localName: string, url: string, opts?: { notice?: string, noProgress?: boolean }): Promise<string> {
+  opts = opts || {};
   const localFile = path.resolve(__dirname, localName);
   if (fs.existsSync(localFile)) {
     return Promise.resolve(localFile);
   }
-  if (notice)
-    console.log(notice);
+  if (opts.notice)
+    console.log(opts.notice);
   console.log(`Can not find ${pc.yellow(localName)} try downloading file from ${pc.underline(pc.cyan(url))}`);
   const parent = path.dirname(localFile);
   try {
@@ -25,26 +24,40 @@ export function getCachedFile(localName: string, url: string, notice?: string): 
     // ignore error
   }
   return new Promise<string>(async (done, reject) => {
-    console.log('Connecting server…');
+    // console.log('Connecting server…');
     const { data, headers } = await Axios({
       url,
       method: 'GET',
       responseType: 'stream'
     });
     const totalLength = headers['content-length'];
-    console.log('Starting download');
-    const progressBar = new ProgressBar('-> downloading [:bar] :percent :etas', {
-      width: 40,
-      complete: '=',
-      incomplete: ' ',
-      renderThrottle: 1,
-      total: parseInt(totalLength)
-    });
+    console.log(`Starting download ${localName}`);
     const writer = fs.createWriteStream(localFile);
-    data.on('data', (chunk: Buffer) => progressBar.tick(chunk.length));
+    if (!opts?.noProgress) {
+      const progressBar = new ProgressBar('-> downloading [:bar] :percent :etas', {
+        width: 40,
+        complete: '=',
+        incomplete: ' ',
+        renderThrottle: 1,
+        total: parseInt(totalLength)
+      });
+      data.on('data', (chunk: Buffer) => progressBar.tick(chunk.length));
+    }
     data.pipe(writer);
     data.on('error', (e: unknown) => { console.log('reject', e); reject(e); });
-    data.on('close', () => { console.log('complete'); done(localFile); });
+    data.on('close', () => {
+      const stats = fs.statSync(localFile);
+      let size = '';
+      if (stats.size < 1000)
+        size = `${(stats.size)} Bytes`;
+      else if (stats.size < 1024 * 1024)
+        size = `${(stats.size / 1024).toFixed(2)} KB`;
+      else if (stats.size < 1024 * 1024 * 1024)
+        size = `${(stats.size / (1024 * 1024)).toFixed(2)} MB`;
+      else
+        size = `${(stats.size / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+      console.log(`${size} downloaded to ${localName}`); done(localFile);
+    });
   })
 }
 

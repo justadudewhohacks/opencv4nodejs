@@ -105,7 +105,7 @@ async function main() {
   }
   
   const notice = 'EAST .pb model is missing, you can create your from https://github.com/argman/EAST';
-  const modelPath = await getCachedFile(getResourcePath('text-models/frozen_east_text_detection.pb'), 'https://github.com/oyyd/frozen_east_text_detection.pb/blob/71415464412c55bb1d135fcdeda498e29a67effa/frozen_east_text_detection.pb?raw=true', notice)
+  const modelPath = await getCachedFile(getResourcePath('text-models/frozen_east_text_detection.pb'), 'https://github.com/oyyd/frozen_east_text_detection.pb/blob/71415464412c55bb1d135fcdeda498e29a67effa/frozen_east_text_detection.pb?raw=true', {notice})
   const imgPath = path.resolve(getResourcePath('text-data/detection.png'));
   await detection(modelPath, imgPath);
 }

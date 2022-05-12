@@ -15,9 +15,12 @@ function getFaceBox(net: Net, frame: Mat, conf_threshold = 0.7): { frameFace: Ma
     net.setInput(blob)
     const detections: Mat = net.forward()
     const bboxes: Rect[] = []
-    // console.log('size:', detections.sizes);
+    // dimmentions [1, 1, 200, 7]
+    // look to me sorted by score.
     const max = detections.sizes[2];
     for (let i = 0; i < max; i++) {
+        // detections.at([0, 0, i, 1]) == 0
+        // detections.at([0, 0, i, 2]) == 1
         const confidence = detections.at([0, 0, i, 2])
         if (confidence > conf_threshold) {
             const x1 = detections.at([0, 0, i, 3]) * frameWidth;
@@ -139,7 +142,7 @@ const main = async () => {
             cv.waitKey(1);
         }
         console.log(`time : ${Date.now() - t} ms`);
-        await wait4key();   
+        await wait4key();
     }
 };
 main().catch(console.error);

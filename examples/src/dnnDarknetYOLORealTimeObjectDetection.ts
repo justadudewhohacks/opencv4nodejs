@@ -101,9 +101,9 @@ class dnnDarknetYOLORealTimeObjectDetection {
     }
 
     const darknetPath = "../data/dnn/yolo-object-detection";
-    const cfgFile = await getCachedFile(`${darknetPath}/yolov3-tiny.cfg`, 'https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolov3-tiny.cfg', 'See https://pjreddie.com/darknet/yolo/')
-    const weightsFile = await getCachedFile(`${darknetPath}/yolov3-tiny.weights`, 'https://pjreddie.com/media/files/yolov3-tiny.weights', 'See https://pjreddie.com/darknet/yolo/');
-    const labelsFile = await getCachedFile(`${darknetPath}/coco.names`, 'https://raw.githubusercontent.com/pjreddie/darknet/master/data/coco.names', 'See https://pjreddie.com/darknet/yolo/');
+    const cfgFile = await getCachedFile(`${darknetPath}/yolov3-tiny.cfg`, 'https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolov3-tiny.cfg', {notice: 'See https://pjreddie.com/darknet/yolo/'})
+    const weightsFile = await getCachedFile(`${darknetPath}/yolov3-tiny.weights`, 'https://pjreddie.com/media/files/yolov3-tiny.weights', {notice: 'See https://pjreddie.com/darknet/yolo/'});
+    const labelsFile = await getCachedFile(`${darknetPath}/coco.names`, 'https://raw.githubusercontent.com/pjreddie/darknet/master/data/coco.names', {notice: 'See https://pjreddie.com/darknet/yolo/'});
     if (
       !fs.existsSync(weightsFile) ||
       !fs.existsSync(cfgFile) ||
