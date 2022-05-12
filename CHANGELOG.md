@@ -8,6 +8,7 @@
 * add template samples
 * add cv.getScoreMax()
 * add cv.dropOverlappingZone()
+* add Net.dump() mapping
   
 ## Version 6.1.4
 

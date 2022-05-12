@@ -70,7 +70,6 @@ export default class NetIdentifier {
     async forward(inputName?: string): Promise<Mat> {
         const net = await this.getNet();
         // console.log(net.getLayerNames());
-        // console.log(net.dump());
         if (inputName)
             return net.forwardAsync(inputName);
         else

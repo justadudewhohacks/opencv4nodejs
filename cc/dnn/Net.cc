@@ -16,17 +16,26 @@ NAN_MODULE_INIT(Net::Init) {
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(Nan::New("Net").ToLocalChecked());
 
+  // setInput(blob: Mat, name?: string, scalefactor?: number, mean?: number): void;
+  // setInput(blob: Mat, inputName?: string): void;
   Nan::SetPrototypeMethod(ctor, "setInput", SetInput);
   Nan::SetPrototypeMethod(ctor, "setInputAsync", SetInputAsync);
+  // forward(inputName?: string): Mat;
   Nan::SetPrototypeMethod(ctor, "forward", Forward);
   Nan::SetPrototypeMethod(ctor, "forwardAsync", ForwardAsync);
+  // getLayerNames(): string[];
   Nan::SetPrototypeMethod(ctor, "getLayerNames", GetLayerNames);
   Nan::SetPrototypeMethod(ctor, "getLayerNamesAsync", GetLayerNamesAsync);
+  // getUnconnectedOutLayers(): number[];
   Nan::SetPrototypeMethod(ctor, "getUnconnectedOutLayers", GetUnconnectedOutLayers);
   Nan::SetPrototypeMethod(ctor, "getUnconnectedOutLayersAsync", GetUnconnectedOutLayersAsync);
-
+  // dump(): string;
+  Nan::SetPrototypeMethod(ctor, "dump", Dump);
+  // setPreferableBackend(backendId: number): void;
   Nan::SetPrototypeMethod(ctor, "setPreferableBackend", SetPreferableBackend);
+  // setPreferableTarget(targetId: number): void;
   Nan::SetPrototypeMethod(ctor, "setPreferableTarget", SetPreferableTarget);
+  // getPerfProfile(): {	retval: number, timings: number[] };
   Nan::SetPrototypeMethod(ctor, "getPerfProfile", GetPerfProfile);
 
   Nan::Set(target, Nan::New("Net").ToLocalChecked(), FF::getFunction(ctor));
@@ -98,6 +107,12 @@ NAN_METHOD(Net::GetUnconnectedOutLayersAsync) {
       std::make_shared<NetBindings::GetUnconnectedOutLayersWorker>(Net::unwrapSelf(info)),
       "Net::GetUnconnectedOutLayersAsync",
       info);
+}
+
+NAN_METHOD(Net::Dump) {
+  FF::TryCatch tryCatch("Core::Dump");
+  cv::dnn::Net self = Net::unwrapSelf(info);
+  info.GetReturnValue().Set(FF::newString(self.dump()));
 }
 
 NAN_METHOD(Net::SetPreferableBackend) {

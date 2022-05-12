@@ -8,7 +8,7 @@ import { info } from 'npmlog';
 import type * as openCV from '..';
 declare type OpenCVType = typeof openCV;
 
-const logDebug = process.env.OPENCV4NODES_DEBUG_REQUIRE ? info : () => { /* ignore */}
+const logDebug = process.env.OPENCV4NODES_DEBUG_REQUIRE ? info : () => { /* ignore */ }
 
 function tryGetOpencvBinDir(builder: OpenCVBuilder) {
   if (process.env.OPENCV_BIN_DIR) {
@@ -76,16 +76,30 @@ function getOpenCV(opt?: OpenCVBuildEnvParams): OpenCVType {
     logDebug('require', 'process.env.path: ' + process.env.path)
     try {
       opencvBuild = require(requirePath);
-    } catch(e) {
+    } catch (e) {
       if (e instanceof Error) {
-        const msg = `require("${pc.yellow(requirePath)}"); 
-Failed with: ${e.message}, openCV binding not available, reed: 
-build-opencv --help
-And build missing file with:
-build-opencv --version 4.5.4 rebuild
-
-PS: a 'npm link' may help
-`;
+        let msg = '';
+        const message = e.message;
+        if (message.startsWith('Cannot find module')) {
+          msg = `require("${pc.yellow(requirePath)}"); 
+          Failed with: ${pc.red(message)}, openCV binding not available, reed: 
+          build-opencv --help
+          And build missing file with:
+          build-opencv --version 4.5.4 rebuild
+          
+          PS: a 'npm link' may help
+          `;
+        } else if (message === 'The specified module could not be found.') {
+          msg = `require("${pc.yellow(requirePath)}"); 
+          Failed with: ${pc.red(message)}, openCV module looks broken, clean you builds directory and rebuild everything
+          rm -r <path to your build directory>
+          build-opencv --version 4.5.4 rebuild
+          `;
+        } else {
+          msg = `require("${pc.yellow(requirePath)}"); 
+          Failed with: ${pc.red(message)}
+          `;
+        }
         throw Error(msg)
       }
       throw e;
@@ -101,4 +115,4 @@ PS: a 'npm link' may help
   return opencvBuild;
 }
 
- export = getOpenCV;
+export = getOpenCV;
