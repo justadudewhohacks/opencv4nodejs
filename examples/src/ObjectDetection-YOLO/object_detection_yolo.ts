@@ -14,7 +14,7 @@ const conf = {
     inpHeight: 416    // Height of network's input image}
 }
 
-const args: { image?: string, video?: string, device?: string, help?: boolean } = mri(process.argv.slice(2), { default: { device: 'cpu' }, alias: { h: 'help' } });
+const args: { image?: string, video?: string, device?: string, help?: boolean } = mri(process.argv.slice(2), { default: { device: 'cpu' }, alias: { h: 'help' } }) as any;
 
 if (args.help) {
     console.log('Object Detection using YOLO in OPENCV');
