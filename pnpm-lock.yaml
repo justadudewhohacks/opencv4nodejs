@@ -3,12 +3,12 @@ lockfileVersion: 5.3
 specifiers:
   '@types/glob': ^7.2.0
   '@types/mri': ^1.1.1
-  '@types/node': ^17.0.32
+  '@types/node': ^17.0.33
   '@types/npmlog': ^4.1.4
   '@types/progress': ^2.0.5
   '@typescript-eslint/eslint-plugin': ^5.23.0
   '@typescript-eslint/parser': ^5.23.0
-  '@u4/opencv-build': ^0.4.7
+  '@u4/opencv-build': ^0.5.0
   axios: ^0.27.2
   eslint: ^8.15.0
   eslint-config-airbnb: ^19.0.4
@@ -16,7 +16,7 @@ specifiers:
   eslint-plugin-jsx-a11y: ^6.5.1
   eslint-plugin-react: ^7.29.4
   eslint-plugin-react-hooks: ^4.5.0
-  glob: ^8.0.1
+  glob: ^8.0.3
   nan: ^2.15.0
   native-node-utils: ^0.2.7
   node-gyp: ^9.0.0
@@ -27,8 +27,8 @@ specifiers:
   typescript: ^4.6.4
 
 dependencies:
-  '@u4/opencv-build': 0.4.7
-  glob: 8.0.1
+  '@u4/opencv-build': 0.5.0
+  glob: 8.0.3
   nan: 2.15.0
   native-node-utils: 0.2.7
   node-gyp: 9.0.0
@@ -38,7 +38,7 @@ dependencies:
 devDependencies:
   '@types/glob': 7.2.0
   '@types/mri': 1.1.1
-  '@types/node': 17.0.32
+  '@types/node': 17.0.33
   '@types/npmlog': 4.1.4
   '@types/progress': 2.0.5
   '@typescript-eslint/eslint-plugin': 5.23.0_17b6d2ce7129f0b36f2c30ae592c16e7
@@ -153,7 +153,7 @@ packages:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
     dependencies:
       '@types/minimatch': 3.0.5
-      '@types/node': 17.0.32
+      '@types/node': 17.0.33
     dev: true
 
   /@types/json-schema/7.0.11:
@@ -172,8 +172,8 @@ packages:
     resolution: {integrity: sha512-nJOuiTlsvmClSr3+a/trTSx4DTuY/VURsWGKSf/eeavh0LRMqdsK60ti0TlwM5iHiGOK3/Ibkxsbr7i9rzGreA==}
     dev: true
 
-  /@types/node/17.0.32:
-    resolution: {integrity: sha512-eAIcfAvhf/BkHcf4pkLJ7ECpBAhh9kcxRBpip9cTiO+hf+aJrsxYxBeS6OXvOd9WqNAJmavXVpZvY1rBjNsXmw==}
+  /@types/node/17.0.33:
+    resolution: {integrity: sha512-miWq2m2FiQZmaHfdZNcbpp9PuXg34W5JZ5CrJ/BaS70VuhoJENBEQybeiYSaPBRNq6KQGnjfEnc/F3PN++D+XQ==}
     dev: true
 
   /@types/npmlog/4.1.4:
@@ -183,7 +183,7 @@ packages:
   /@types/progress/2.0.5:
     resolution: {integrity: sha512-ZYYVc/kSMkhH9W/4dNK/sLNra3cnkfT2nJyOAIDY+C2u6w72wa0s1aXAezVtbTsnN8HID1uhXCrLwDE2ZXpplg==}
     dependencies:
-      '@types/node': 17.0.32
+      '@types/node': 17.0.33
     dev: true
 
   /@typescript-eslint/eslint-plugin/5.23.0_17b6d2ce7129f0b36f2c30ae592c16e7:
@@ -312,11 +312,11 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@u4/opencv-build/0.4.7:
-    resolution: {integrity: sha512-6g0N5q+5KRLSfqbp9vgUMgWFRrEmmbvIFKto2VN4lPbYm9Qf9JnL4qCffa2YFDQM/vTnzn8Cno3G5mhzwC6frA==}
+  /@u4/opencv-build/0.5.0:
+    resolution: {integrity: sha512-ENVaduTf++adk0C1z1jCu5h5sayyuEoIKeNaqPo7XsokHkAYDIjmhjl/I5U2SzAHi7zRBzZs85sQcHqkCvXyYQ==}
     hasBin: true
     dependencies:
-      glob: 8.0.1
+      glob: 8.0.3
       npmlog: 6.0.2
       picocolors: 1.0.0
       rimraf: 3.0.2
@@ -504,7 +504,7 @@ packages:
       '@npmcli/move-file': 2.0.0
       chownr: 2.0.0
       fs-minipass: 2.1.0
-      glob: 8.0.1
+      glob: 8.0.3
       infer-owner: 1.0.4
       lru-cache: 7.9.0
       minipass: 3.1.6
@@ -1138,8 +1138,8 @@ packages:
       once: 1.4.0
       path-is-absolute: 1.0.1
 
-  /glob/8.0.1:
-    resolution: {integrity: sha512-cF7FYZZ47YzmCu7dDy50xSRRfO3ErRfrXuLZcNIuyiJEco0XSrGtuilG19L5xp3NcwTx7Gn+X6Tv3fmsUPTbow==}
+  /glob/8.0.3:
+    resolution: {integrity: sha512-ull455NHSHI/Y1FqGaaYFaLGkNMMJbavMrEGFXG/PGrg6y7sutWHUHrz6gy6WEBH6akM1M414dWKCNs+IhKdiQ==}
     engines: {node: '>=12'}
     dependencies:
       fs.realpath: 1.0.0
@@ -1147,7 +1147,6 @@ packages:
       inherits: 2.0.4
       minimatch: 5.0.1
       once: 1.4.0
-      path-is-absolute: 1.0.1
     dev: false
 
   /globals/13.13.0:

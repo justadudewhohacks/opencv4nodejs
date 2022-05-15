@@ -41,9 +41,9 @@
     "install_default": "tsc && node bin/install.js rebuild",
     "install_macm1": "tsc && node bin/install.js --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64 -DWITH_FFMPEG=ON\" rebuild",
     "install_cuda": "tsc && node bin/install.js --version 4.5.5 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_FFMPEG=ON\" rebuild",
-    "test": "cd test && pnpm install && pnpm run test test",
+    "test": "cd test && pnpm install && pnpm run test",
     "samples": "cd examples && pnpm install && tsc && node ./src/templateMatch/multiMatchBench.js && node ./src/templateMatch/multiMatchColision.js && node ./src/applyColorMap.js && node ./src/asyncMatchFeatures.js && node ./src/faceDetect/asyncFaceDetection.js",
-    "do-build":   "tsc && node bin/install.js --version 4.5.5 --jobs MAX build",
+    "do-build": "tsc && node bin/install.js --version 4.5.5 --jobs MAX build",
     "do-rebuild": "tsc && node bin/install.js --version 4.5.5 --jobs MAX rebuild",
     "lint": "eslint examples/**/*.ts lib/**/*.ts typings/**/*.ts ",
     "clean": "node-gyp clean",
@@ -51,8 +51,8 @@
     "build-debug": "tsc && BINDINGS_DEBUG=true node bin/install.js rebuild"
   },
   "dependencies": {
-    "@u4/opencv-build": "^0.4.7",
-    "glob": "^8.0.1",
+    "@u4/opencv-build": "^0.5.0",
+    "glob": "^8.0.3",
     "nan": "^2.15.0",
     "native-node-utils": "^0.2.7",
     "node-gyp": "^9.0.0",
@@ -62,7 +62,7 @@
   "devDependencies": {
     "@types/glob": "^7.2.0",
     "@types/mri": "^1.1.1",
-    "@types/node": "^17.0.32",
+    "@types/node": "^17.0.33",
     "@types/npmlog": "^4.1.4",
     "@types/progress": "^2.0.5",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
