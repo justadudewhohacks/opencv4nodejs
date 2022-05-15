@@ -28,7 +28,7 @@ export function getCachedFile(localName: string, url: string, opts?: { notice?: 
     const { data, headers } = await Axios({
       url,
       method: 'GET',
-      responseType: 'stream'
+      responseType: 'stream',
     });
     const totalLength = headers['content-length'];
     console.log(`Starting download ${localName}`);
@@ -39,7 +39,7 @@ export function getCachedFile(localName: string, url: string, opts?: { notice?: 
         complete: '=',
         incomplete: ' ',
         renderThrottle: 1,
-        total: parseInt(totalLength)
+        total: parseInt(totalLength),
       });
       data.on('data', (chunk: Buffer) => progressBar.tick(chunk.length));
     }
@@ -105,17 +105,14 @@ export const runVideoDetection = (src: number, detect: (mat: Mat) => void): void
 };
 
 export const drawRectAroundBlobs = (binaryImg: Mat, dstImg: Mat, minPxSize: number, fixedRectWidth?: number) => {
-  const {
-    centroids,
-    stats
-  } = binaryImg.connectedComponentsWithStats();
+  const { centroids, stats } = binaryImg.connectedComponentsWithStats();
 
   // pretend label 0 is background
   for (let label = 1; label < centroids.rows; label += 1) {
     const [x1, y1] = [stats.at(label, cv.CC_STAT_LEFT), stats.at(label, cv.CC_STAT_TOP)];
     const [x2, y2] = [
       x1 + (fixedRectWidth || stats.at(label, cv.CC_STAT_WIDTH)),
-      y1 + (fixedRectWidth || stats.at(label, cv.CC_STAT_HEIGHT))
+      y1 + (fixedRectWidth || stats.at(label, cv.CC_STAT_HEIGHT)),
     ];
     const size = stats.at(label, cv.CC_STAT_AREA);
     const blue = new cv.Vec3(255, 0, 0);

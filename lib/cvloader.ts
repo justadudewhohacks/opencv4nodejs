@@ -38,7 +38,6 @@ function tryGetOpencvBinDir(builder: OpenCVBuilder) {
   return null
 }
 
-
 function getOpenCV(opt?: OpenCVBuildEnvParams): OpenCVType {
   if (!opt)
     opt = { prebuild: 'latestBuild' }
@@ -107,6 +106,7 @@ function getOpenCV(opt?: OpenCVBuildEnvParams): OpenCVType {
   }
 
   // resolve haarcascade files
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { haarCascades, lbpCascades } = opencvBuild as any;
   Object.keys(haarCascades).forEach(
     key => opencvBuild[key] = resolvePath(path.join(__dirname, 'haarcascades'), haarCascades[key]));

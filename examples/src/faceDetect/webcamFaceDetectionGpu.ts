@@ -11,7 +11,7 @@ function detectFaces(img: Mat) {
   const options = {
     minSize: new cv.Size(100, 100),
     scaleFactor: 1.2,
-    minNeighbors: 10
+    minNeighbors: 10,
   };
   return classifier.detectMultiScaleGpu(img.bgrToGray(), options); // .objects
 }

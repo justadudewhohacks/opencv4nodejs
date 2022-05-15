@@ -15,7 +15,7 @@ export async function ocrHMMWords() {
   const vocabulary = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   const lexicon = [
     'abb', 'riser', 'CHINA', 'HERE', 'HERO', 'President', 'smash', 'KUALA', 'Produkt', 'NINTENDO',
-    'foo', 'asdf', 'BAR', 'this', 'makes', 'no', 'sense', 'at', 'all'
+    'foo', 'asdf', 'BAR', 'this', 'makes', 'no', 'sense', 'at', 'all',
   ];
 
   const transitionP = cv.createOCRHMMTransitionsTable(vocabulary, lexicon);

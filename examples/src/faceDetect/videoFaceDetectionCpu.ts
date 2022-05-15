@@ -12,7 +12,7 @@ function detectFaces(img: Mat) {
     // minSize: new cv.Size(40, 40),
     // scaleFactor: 1.2,
     scaleFactor: 1.1,
-    minNeighbors: 10
+    minNeighbors: 10,
   };
   return classifier.detectMultiScale(img.bgrToGray(), options).objects;
 }

@@ -79,5 +79,5 @@ export const classNames = [
   'scissors',
   'teddy bear',
   'hair drier',
-  'toothbrush'
+  'toothbrush',
 ];

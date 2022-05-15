@@ -46,7 +46,7 @@ const runDetectDishesExample = async (net: Net) => {
     fork: new cv.Vec3(0, 255, 0),
     bowl: new cv.Vec3(255, 0, 0),
     'wine glass': new cv.Vec3(0, 0, 255),
-    cup: new cv.Vec3(0, 255, 255)
+    cup: new cv.Vec3(0, 255, 255),
   };
 
   const legendLeftTop = new cv.Point2(580, 20);
@@ -57,7 +57,7 @@ const runDetectDishesExample = async (net: Net) => {
     Object.keys(classColors).map(className => ({
       text: className,
       fontSize: 0.8,
-      color: classColors[className]
+      color: classColors[className],
     })),
     alpha
   );

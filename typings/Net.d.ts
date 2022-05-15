@@ -24,6 +24,11 @@ export class Net {
   //forward (std::vector< std::vector< Mat > > &outputBlobs, const std::vector< String > &outBlobNames): void
 
   getLayerNames(): string[];
+  /**
+   * Returns indexes of layers with unconnected outputs.
+   * 
+   * FIXIT: Rework API to registerOutput() approach, deprecate this call
+   */
   getUnconnectedOutLayers(): number[];
   /**
    * Sets the new input value for the network.

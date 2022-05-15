@@ -34,7 +34,7 @@ function getFaceBox(net: Net, frame: Mat, conf_threshold = 0.7): { frameFace: Ma
     return { frameFace: frameOpencvDnn, bboxes };
 }
 
-const args: { input?: string, device?: string, help?: boolean } = mri(process.argv.slice(2), { default: { device: 'cpu' }, alias: { h: 'help' } }) as any;
+const args = mri(process.argv.slice(2), { default: { device: 'cpu' }, alias: { h: 'help' } }) as { input?: string, device?: string, help?: boolean };
 
 if (args.help) {
     console.log('Use this script to run age and gender recognition using OpenCV.');

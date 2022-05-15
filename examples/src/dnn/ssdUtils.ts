@@ -27,10 +27,6 @@ export function extractResults(outputBlob: Mat, imgDimensions: { rows: number, c
         bottomLeft.y - topRight.y
       );
 
-      return ({
-        classLabel,
-        confidence,
-        rect
-      });
+      return ({ classLabel, confidence, rect });
     });
 }

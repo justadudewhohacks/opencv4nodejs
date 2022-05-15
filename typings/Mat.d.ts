@@ -113,6 +113,7 @@ export class Mat {
   readonly empty: boolean;
   readonly step: number;
   readonly elemSize: number;
+  // called shape in python
   readonly sizes: number[];
   constructor();
   constructor(channels: Mat[]);

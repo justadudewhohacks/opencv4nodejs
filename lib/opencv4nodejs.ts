@@ -1,12 +1,12 @@
 import { OpenCVBuildEnvParams } from '@u4/opencv-build';
 import promisify from './promisify';
 import extendWithJsSources from './src';
-import raw from './cvloader';
+import getOpenCV from './cvloader';
 import type * as openCV from '..';
 declare type OpenCVType = typeof openCV;
 
 function loadOpenCV(opt?: OpenCVBuildEnvParams): OpenCVType {
-  const cvBase = raw(opt);
+  const cvBase = getOpenCV(opt);
   if (!cvBase.accumulate) {
     throw Error('failed to load opencv basic accumulate not found.')
   }

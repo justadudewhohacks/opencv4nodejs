@@ -79,5 +79,5 @@ export = {
   87: "scissors",
   88: "teddy bear",
   89: "hair drier",
-  90: "toothbrush"
+  90: "toothbrush",
 } as {[key: number]: string};

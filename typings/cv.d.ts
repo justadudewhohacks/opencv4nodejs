@@ -13,7 +13,7 @@ import { OCRHMMClassifier } from './OCRHMMClassifier.d';
 export class HistAxes {
   channel: number;
   bins: number;
-  ranges: number[];
+  ranges: [number, number];
 
   constructor(channel: number, bins: number, ranges: [number, number]);
   constructor(opts: { channel: number, bins: number, ranges: [number, number] });

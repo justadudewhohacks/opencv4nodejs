@@ -34,7 +34,7 @@ async function getDataFromOpenImages_snowman() {
         const rl = readline.createInterface({
             input: fs.createReadStream(trainAnotation),
             //output: process.stdout,
-            terminal: false
+            terminal: false,
         });
 
         const annotations: Array<string> = [];
@@ -65,7 +65,7 @@ async function getDataFromOpenImages_snowman() {
                 `${(Number(lineParts[5]) + Number(lineParts[4]))/2}`, // center X
                 `${(Number(lineParts[7]) + Number(lineParts[6]))/2}`, // center Y
                 `${Number(lineParts[5]) - Number(lineParts[4])}`, // X1
-                `${Number(lineParts[7]) - Number(lineParts[6])}`  // y1
+                `${Number(lineParts[7]) - Number(lineParts[6])}`, // y1
             ].join(' ') + '\n';
             return fs.promises.writeFile(`labels/${lineParts[0]}.txt`, data, { encoding: 'utf8' });
         })));

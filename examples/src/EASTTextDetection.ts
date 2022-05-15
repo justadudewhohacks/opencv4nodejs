@@ -65,14 +65,14 @@ async function detection(modelPath: string, imgAbsPath: string): Promise<void> {
     size: new cv.Size(SIZE, SIZE),
     mean: new cv.Vec3(123.68, 116.78, 103.94),
     swapRB: true,
-    crop: false
+    crop: false,
   });
 
   net.setInput(inputBlob);
 
   const outBlobNames = [
     'feature_fusion/Conv_7/Sigmoid',
-    'feature_fusion/concat_3'
+    'feature_fusion/concat_3',
   ];
 
   const [scores, geometry] = net.forward(outBlobNames);

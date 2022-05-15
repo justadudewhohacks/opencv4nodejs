@@ -39,7 +39,7 @@ export async function matchFeatures() {
       img1,
       img2,
       detector: new cv.SIFTDetector({ nFeatures: 2000 }),
-      matchFunc: cv.matchFlannBased
+      matchFunc: cv.matchFlannBased,
     });
     cv.imshow('SIFT matches', siftMatchesImg);
     await wait4key();
@@ -51,7 +51,7 @@ export async function matchFeatures() {
     img1,
     img2,
     detector: new cv.ORBDetector(),
-    matchFunc: cv.matchBruteForceHamming
+    matchFunc: cv.matchBruteForceHamming,
   });
   cv.imshow('ORB matches', orbMatchesImg);
   await wait4key();
@@ -62,7 +62,7 @@ export async function matchFeatures() {
     img1,
     img2,
     detector: new cv.ORBDetector(),
-    matchFunc: (desc1, desc2) => bf.match(desc1, desc2)
+    matchFunc: (desc1, desc2) => bf.match(desc1, desc2),
   });
   cv.imshow('ORB with BFMatcher - crossCheck true', orbBFMatchIMG);
   await wait4key();

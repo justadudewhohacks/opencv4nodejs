@@ -53,7 +53,7 @@ const getRoughHull = (contour: Contour, maxDist: number) => {
   const contourPoints = contour.getPoints();
   const hullPointsWithIdx: PointWithIdx[] = hullIndices.map((idx: number) => ({
     pt: contourPoints[idx],
-    contourIdx: idx
+    contourIdx: idx,
   }));
   const hullPoints: Point2[] = hullPointsWithIdx.map(ptWithIdx => ptWithIdx.pt);
 
@@ -112,7 +112,7 @@ const getHullDefectVertices = (handContour: Contour, hullIndices: number[]): Ver
       return ({
         pt: handContourPoints[hullIndex],
         d1: handContourPoints[defectNeighborsIdx[0]],
-        d2: handContourPoints[defectNeighborsIdx[1]]
+        d2: handContourPoints[defectNeighborsIdx[1]],
       });
     });
 };

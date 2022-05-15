@@ -17,7 +17,7 @@ const detectorNames = [
   'KAZE',
   'SIFT',
   'SURF',
-  'ORB'
+  'ORB',
 ] as const;
 
 type detectorType = typeof detectorNames[number];
@@ -60,7 +60,7 @@ async function asyncMatch() {
             .then(matches => ({
               matches,
               kps1: allResults[0].kps,
-              kps2: allResults[1].kps
+              kps2: allResults[1].kps,
             }))
         )
     );

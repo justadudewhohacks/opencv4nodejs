@@ -21,7 +21,7 @@ export default function (cv: typeof openCV) {
           warningThrown = true;
           console.warn(`Imgproc::CalcHist - Deprecated support for object in argument 1 at index ${i}. Please switch to using HistAxes instances.`);
         }
-        histAxes[i] = new cv.HistAxes(entry) as any;
+        histAxes[i] = new cv.HistAxes(entry);
       }
     }
 

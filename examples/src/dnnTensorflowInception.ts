@@ -53,7 +53,7 @@ async function main() {
     const result =
       locations.map(pt => ({
         confidence: outputBlob.at(0, pt.x),
-        className: classNames[pt.x]
+        className: classNames[pt.x],
       }))
         // sort result by confidence
         .sort((r0, r1) => r1.confidence - r0.confidence)
@@ -65,20 +65,20 @@ async function main() {
   const testData = [
     {
       image: getResourcePath('banana.jpg'),
-      label: 'banana'
+      label: 'banana',
     },
     {
       image: getResourcePath('husky.jpg'),
-      label: 'husky'
+      label: 'husky',
     },
     {
       image: getResourcePath('car.jpeg'),
-      label: 'car'
+      label: 'car',
     },
     {
       image: getResourcePath('lenna.png'),
-      label: 'lenna'
-    }
+      label: 'lenna',
+    },
   ];
 
   for (const data of testData) {

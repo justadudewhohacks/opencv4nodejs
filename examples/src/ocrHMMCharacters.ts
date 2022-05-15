@@ -37,17 +37,14 @@ export async function ocrHMMCharacters() {
 
   const imgs = charImages.concat(numberImages);
   for (const img of imgs) {
-    const {
-      classes,
-      confidences
-    } = hmmClassifier.eval(img);
+    const { classes, confidences } = hmmClassifier.eval(img);
 
     const minConfidence = 0.05;
     const predictions = classes
       .map(
         (clazz: number, i: number) => ({
           class: vocabulary[clazz],
-          confidence: confidences[i]
+          confidence: confidences[i],
         })
       )
       .filter(prediction => prediction.confidence > minConfidence);

@@ -19,13 +19,13 @@ const hog = new cv.HOGDescriptor({
   L2HysThreshold: 0.2,
   nbins: 9,
   gammaCorrection: true,
-  signedGradient: true
+  signedGradient: true,
 });
 
 const svm = new cv.SVM({
   kernelType: cv.ml.SVM.RBF,
   c: 12.5,
-  gamma: 0.50625
+  gamma: 0.50625,
 });
 
 const computeHOGDescriptorFromImage = (img: Mat, isIorJ?: boolean) => {

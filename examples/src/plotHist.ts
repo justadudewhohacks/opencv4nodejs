@@ -9,8 +9,8 @@ export async function plotHist() {
     {
       channel,
       bins: 256,
-      ranges: [0, 256]
-    }
+      ranges: [0, 256] as [number, number],
+    },
   ]);
 
   // calc histogram for blue, green, red channel

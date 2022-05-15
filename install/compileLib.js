@@ -153,7 +153,7 @@ async function compileLib(args) {
         if (env.OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION) {
             action = 'rebuild';
         }
-        const npmEnv = opencv_build_1.OpenCVBuildEnv.readEnvsFromPackageJson();
+        const npmEnv = OpenCVBuildEnv.readEnvsFromPackageJson();
         if (npmEnv && Object.keys(npmEnv).length) {
             action = 'rebuild';
         }

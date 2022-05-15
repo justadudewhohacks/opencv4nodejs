@@ -11,10 +11,10 @@ const conf = {
     confThreshold: 0.5,// Confidence threshold
     nmsThreshold: 0.4, // Non-maximum suppression threshold
     inpWidth: 416,     // Width of network's input image
-    inpHeight: 416    // Height of network's input image}
+    inpHeight: 416,    // Height of network's input image}
 }
 
-const args: { image?: string, video?: string, device?: string, help?: boolean } = mri(process.argv.slice(2), { default: { device: 'cpu' }, alias: { h: 'help' } }) as any;
+const args = mri(process.argv.slice(2), { default: { device: 'cpu' }, alias: { h: 'help' } }) as { image?: string, video?: string, device?: string, help?: boolean };
 
 if (args.help) {
     console.log('Object Detection using YOLO in OPENCV');
