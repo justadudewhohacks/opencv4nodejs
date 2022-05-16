@@ -55,7 +55,7 @@ export default (args: TestContext) => {
 
     it('should be constructable from args', () => {
       const svm = new cv.SVM(someArgs);
-      assertPropsWithValue(svm)(someArgs);
+      assertPropsWithValue(svm, someArgs);
     });
 
     it('should not be trained', () => {
@@ -67,21 +67,21 @@ export default (args: TestContext) => {
     it('should set params', () => {
       const svm = new cv.SVM();
       svm.setParams(someArgs);
-      assertPropsWithValue(svm)(someArgs);
+      assertPropsWithValue(svm, someArgs);
     });
 
     it('should set only specified params', () => {
-      const args = {
+      const args2 = {
         c: 0.2,
         coef0: 0.1,
       };
       const svm = new cv.SVM(someArgs);
-      svm.setParams(args);
-      assertPropsWithValue(svm)(
+      svm.setParams(args2);
+      assertPropsWithValue(
+        svm,
         {
-
           ...someArgs,
-          ...args,
+          ...args2,
         },
       );
     });
@@ -198,7 +198,7 @@ export default (args: TestContext) => {
     });
 
     describe('calcError', () => {
-      it.skip('calcError', () => {});
+      it.skip('calcError', () => { /* empty */ });
     });
 
     describe('save and load', () => {
@@ -214,9 +214,8 @@ export default (args: TestContext) => {
         const svm1 = { ...svm };
         const svm2 = { ...svmNew };
         svm1.classWeights = null;
-        // @ts-ignore
         svm2.classWeights = null;
-        assertPropsWithValue(svm1)(svm2);
+        assertPropsWithValue(svm1, svm2 as any);
       });
     });
   });

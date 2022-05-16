@@ -70,17 +70,14 @@ const isUniformMat = (mat: Mat, matVal: number): boolean => {
 
 const isZeroMat = (mat: Mat) => isUniformMat(mat, 0);
 
-const assertMetaData = (mat: Mat) => (args0: any, cols: number, type: number): void => {
-  let propsWithValues = { rows: args0, cols, type };
-  const propsFromArg0 = {
-    rows: args0.rows,
-    cols: args0.cols,
-    type: args0.type,
-  };
-  if (['rows', 'cols', 'type'].every((prop) => !Number.isNaN(propsFromArg0[prop]))) {
-    propsWithValues = propsFromArg0;
+const assertMetaData = (mat: Mat) => (args0: number | {rows: number, cols: number, type: number}, cols: number, type: number): void => {
+  if (typeof args0 === 'number') {
+    const propsWithValues = { rows: args0 as number, cols, type };
+    assertPropsWithValue(mat, propsWithValues);
+  } else {
+    const meta = args0 as {rows: number, cols: number, type: number};
+    assertPropsWithValue(mat, meta);
   }
-  assertPropsWithValue(mat)(propsWithValues);
 };
 
 export default function (cv: typeof openCV) {

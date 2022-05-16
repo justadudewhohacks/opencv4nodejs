@@ -6,7 +6,6 @@ export default function (args: TestContext) {
 
   const {
     assertPropsWithValue,
-    generateAPITests,
   } = utils;
 
   describe('constructor', () => {
@@ -27,7 +26,7 @@ export default function (args: TestContext) {
 
     it('should initialize with correct values', () => {
       const match = new cv.BFMatcher(normType, crossCheck);
-      assertPropsWithValue(match)({ normType, crossCheck });
+      assertPropsWithValue(match, { normType, crossCheck });
     });
   });
 

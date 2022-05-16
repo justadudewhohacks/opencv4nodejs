@@ -128,7 +128,7 @@ export default function (args: TestContext) {
         shape,
         kernelSize,
       );
-      assertPropsWithValue(kernel)({ rows, cols });
+      assertPropsWithValue(kernel, { rows, cols });
     });
 
     it('should be constructable with anchor', () => {
@@ -137,7 +137,7 @@ export default function (args: TestContext) {
         kernelSize,
         anchor,
       );
-      assertPropsWithValue(kernel)({ rows, cols });
+      assertPropsWithValue(kernel, { rows, cols });
     });
   });
 
@@ -184,7 +184,7 @@ export default function (args: TestContext) {
         bins: 8,
         ranges: [0, 256],
       });
-      assertPropsWithValue(h)({ channel: 0, bins: 8, ranges: [0, 256] });
+      assertPropsWithValue(h, { channel: 0, bins: 8, ranges: [0, 256] });
     });
   });
 
@@ -208,7 +208,7 @@ export default function (args: TestContext) {
         },
       ];
       const hist1D = cv.calcHist(getTestImg(), histAxes);
-      assertPropsWithValue(hist1D)({ rows: 8, cols: 1, dims: 2 });
+      assertPropsWithValue(hist1D, { rows: 8, cols: 1, dims: 2 });
     });
 
     it('should return 1 dimensional hist', () => {
@@ -220,7 +220,7 @@ export default function (args: TestContext) {
         } as { channel: number, bins: number, ranges: [number, number] },
       ].map((x) => new cv.HistAxes(x));
       const hist1D = cv.calcHist(getTestImg(), histAxes);
-      assertPropsWithValue(hist1D)({ rows: 8, cols: 1, dims: 2 });
+      assertPropsWithValue(hist1D, { rows: 8, cols: 1, dims: 2 });
     });
 
     it('should return 2 dimensional hist', () => {
@@ -237,7 +237,7 @@ export default function (args: TestContext) {
         } as { channel: number, bins: number, ranges: [number, number] },
       ].map((x) => new cv.HistAxes(x));
       const hist2D = cv.calcHist(getTestImg(), histAxes);
-      assertPropsWithValue(hist2D)({ rows: 8, cols: 32, dims: 2 });
+      assertPropsWithValue(hist2D, { rows: 8, cols: 32, dims: 2 });
     });
 
     // TODO causes sigsegv on 3.0.0 and 3.1.0
@@ -260,7 +260,7 @@ export default function (args: TestContext) {
         } as { channel: number, bins: number, ranges: [number, number] },
       ].map((x) => new cv.HistAxes(x));
       const hist3D = cv.calcHist(getTestImg(), histAxes);
-      assertPropsWithValue(hist3D)({ dims: 3 });
+      assertPropsWithValue(hist3D, { dims: 3 });
     });
   });
 

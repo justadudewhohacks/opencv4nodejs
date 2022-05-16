@@ -14,7 +14,7 @@ export default function (args: TestContext) {
 
   const createAndAssertMatDataEquals = (type: number) => {
     const matData = getExampleMatData(cv, type);
-    const mat = new cv.Mat(matData as any, type);
+    const mat = new cv.Mat(matData, type);
 
     assertMetaData(mat)(4, 3, type);
     if ([cv.CV_32FC1, cv.CV_32FC2, cv.CV_32FC3, cv.CV_32FC4].some((matType) => matType === type)) {

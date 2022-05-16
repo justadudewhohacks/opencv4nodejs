@@ -18,7 +18,7 @@ export default function (args: TestContext) {
       const maxCount = 100;
       const epsilon = 0.8;
       const termCriteria = new cv.TermCriteria(type, maxCount, epsilon);
-      assertPropsWithValue(termCriteria)({ type, maxCount, epsilon });
+      assertPropsWithValue(termCriteria, { type, maxCount, epsilon });
     });
   });
 }

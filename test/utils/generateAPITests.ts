@@ -40,8 +40,8 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
       : getEmptyArray
     );
   const getOptionalArgsObject = () => {
-    const optionalArgsObject = {};
-    getOptionalArgsMap().forEach((kv: [string, any]) => { optionalArgsObject[kv[0]] = kv[1]; });
+    const optionalArgsObject: {[key: string]: any} = {};
+    getOptionalArgsMap().forEach(([k, v]: [string, any]) => { optionalArgsObject[k] = v; });
     return optionalArgsObject;
   };
   const hasRequiredArgs = !!opts.getRequiredArgs;
@@ -59,9 +59,10 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
 
   const expectOutputCallbacked = (done, dut, args) => (err, res) => {
     if (err) {
-      return done(err);
+      done(err);
+    } else {
+      expectAsyncOutput(done, dut, args, res);
     }
-    expectAsyncOutput(done, dut, args, res);
   };
 
   const expectOutputPromisified = (done, dut, args) => (res) => expectAsyncOutput(done, dut, args, res);

@@ -33,25 +33,25 @@ export default function (args: TestContext) {
         it('should have int positions', () => {
           const x = 100;
           const y = 200;
-          assertPropsWithValue(new cv.Point2(x, y))({ x, y });
+          assertPropsWithValue(new cv.Point2(x, y), { x, y });
         });
 
         it('should have double positions', () => {
           const x = 100.12345;
           const y = 200.89764;
-          assertPropsWithValue(new cv.Point2(x, y))({ x, y });
+          assertPropsWithValue(new cv.Point2(x, y), { x, y });
         });
 
         it('should have negative int positions', () => {
           const x = -100;
           const y = -200;
-          assertPropsWithValue(new cv.Point2(x, y))({ x, y });
+          assertPropsWithValue(new cv.Point2(x, y), { x, y });
         });
 
         it('should have negative double positions', () => {
           const x = -100.12345;
           const y = -200.89764;
-          assertPropsWithValue(new cv.Point2(x, y))({ x, y });
+          assertPropsWithValue(new cv.Point2(x, y), { x, y });
         });
       });
 
@@ -77,7 +77,7 @@ export default function (args: TestContext) {
           operatorRequiresArg('add');
 
           it('add points', () => {
-            assertPropsWithValue(pt0.add(pt1))({ x: 3, y: 4 });
+            assertPropsWithValue(pt0.add(pt1), { x: 3, y: 4 });
           });
         });
 
@@ -85,7 +85,7 @@ export default function (args: TestContext) {
           operatorRequiresArg('sub');
 
           it('subtract points', () => {
-            assertPropsWithValue(pt0.sub(pt1))({ x: -1, y: -2 });
+            assertPropsWithValue(pt0.sub(pt1), { x: -1, y: -2 });
           });
         });
 
@@ -93,7 +93,7 @@ export default function (args: TestContext) {
           operatorRequiresArg('mul', true);
 
           it('multiply point by scalar', () => {
-            assertPropsWithValue(pt1.mul(2))({ x: 4, y: 6 });
+            assertPropsWithValue(pt1.mul(2), { x: 4, y: 6 });
           });
         });
 
@@ -101,7 +101,7 @@ export default function (args: TestContext) {
           operatorRequiresArg('div', true);
 
           it('divide point by scalar', () => {
-            assertPropsWithValue(pt1.div(2))({ x: 1.0, y: 1.5 });
+            assertPropsWithValue(pt1.div(2), { x: 1.0, y: 1.5 });
           });
         });
 
@@ -119,14 +119,14 @@ export default function (args: TestContext) {
           const x = 100;
           const y = 200;
           const z = 300;
-          assertPropsWithValue(new cv.Point3(x, y, z))({ x, y, z });
+          assertPropsWithValue(new cv.Point3(x, y, z), { x, y, z });
         });
 
         it('should have double positions', () => {
           const x = 100.12345;
           const y = 200.89764;
           const z = 300.034;
-          assertPropsWithValue(new cv.Point3(x, y, z))({ x, y, z });
+          assertPropsWithValue(new cv.Point3(x, y, z), { x, y, z });
         });
 
         it('should have negative int positions', () => {
@@ -134,7 +134,7 @@ export default function (args: TestContext) {
             const x = -100;
             const y = -200;
             const z = -300;
-            assertPropsWithValue(new cv.Point3(x, y, z))({ x, y, z });
+            assertPropsWithValue(new cv.Point3(x, y, z), { x, y, z });
           });
         });
 
@@ -142,7 +142,7 @@ export default function (args: TestContext) {
           const x = -100.12345;
           const y = -200.89764;
           const z = -300.034;
-          assertPropsWithValue(new cv.Point3(x, y, z))({ x, y, z });
+          assertPropsWithValue(new cv.Point3(x, y, z), { x, y, z });
         });
       });
 
@@ -168,7 +168,7 @@ export default function (args: TestContext) {
           operatorRequiresArg('add');
 
           it('add points', () => {
-            assertPropsWithValue(pt0.add(pt1))({ x: 3, y: 4, z: 5 });
+            assertPropsWithValue(pt0.add(pt1), { x: 3, y: 4, z: 5 });
           });
         });
 
@@ -176,7 +176,7 @@ export default function (args: TestContext) {
           operatorRequiresArg('sub');
 
           it('subtract points', () => {
-            assertPropsWithValue(pt0.sub(pt1))({ x: -1, y: -2, z: -3 });
+            assertPropsWithValue(pt0.sub(pt1), { x: -1, y: -2, z: -3 });
           });
         });
 
@@ -184,7 +184,7 @@ export default function (args: TestContext) {
           operatorRequiresArg('mul', true);
 
           it('multiply point by scalar', () => {
-            assertPropsWithValue(pt1.mul(2))({ x: 4, y: 6, z: 8 });
+            assertPropsWithValue(pt1.mul(2), { x: 4, y: 6, z: 8 });
           });
         });
 
@@ -192,7 +192,7 @@ export default function (args: TestContext) {
           operatorRequiresArg('div', true);
 
           it('divide point by scalar', () => {
-            assertPropsWithValue(pt1.div(2))({ x: 1.0, y: 1.5, z: 2 });
+            assertPropsWithValue(pt1.div(2), { x: 1.0, y: 1.5, z: 2 });
           });
         });
 

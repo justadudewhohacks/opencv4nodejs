@@ -14,11 +14,11 @@ export default function (args: TestContext) {
     describe('constructor', () => {
       if (defaults) {
         it('should use default values if no args', () => {
-          assertPropsWithValue(new Detector())(defaults);
+          assertPropsWithValue(new Detector(), defaults);
         });
 
         it('should use default values if empty args', () => {
-          assertPropsWithValue(new Detector({}))(defaults);
+          assertPropsWithValue(new Detector({}), defaults);
         });
       }
 
@@ -30,7 +30,7 @@ export default function (args: TestContext) {
           });
           /* eslint-disable new-parens */
           const detector = new (Detector.bind.apply(Detector, [null].concat(customProps.values)));
-          assertPropsWithValue(detector)(props);
+          assertPropsWithValue(detector, props);
         });
 
         it('should be constructable with custom props object', () => {
@@ -38,7 +38,7 @@ export default function (args: TestContext) {
           customProps.args.forEach((arg, i) => {
             props[arg] = customProps.values[i];
           });
-          assertPropsWithValue(new Detector(props))(props);
+          assertPropsWithValue(new Detector(props), props);
         });
       }
 
@@ -86,7 +86,7 @@ export default function (args: TestContext) {
             keyPoints,
           ]),
           expectOutput: (desc) => {
-            assertPropsWithValue(desc)({ rows: keyPoints.length });
+            assertPropsWithValue(desc, { rows: keyPoints.length });
           },
         });
       });

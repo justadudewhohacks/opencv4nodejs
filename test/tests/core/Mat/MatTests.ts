@@ -52,7 +52,7 @@ export default function (args: TestContext) {
 
     it('should throw if channel is not a Mat', () => {
       assertError(
-        // @ts-ignore:next-line
+        // @ts-expect-error expected channel 2 to be an instance of Mat
         () => new cv.Mat([matEmpty8U, matEmpty8U, 'foo']),
         'expected channel 2 to be an instance of Mat',
       );
@@ -72,7 +72,7 @@ export default function (args: TestContext) {
 
     it('should be constructable from more then 4 single channels', () => {
       const channels = 10;
-      assertPropsWithValue(new cv.Mat(Array(channels).fill(0).map(() => matEmpty8U)))({ channels });
+      assertPropsWithValue(new cv.Mat(Array(channels).fill(0).map(() => matEmpty8U)), { channels });
     });
 
     it('should be constructable from double channeled', () => {
@@ -80,7 +80,7 @@ export default function (args: TestContext) {
     });
 
     it('should be constructable from mixed channels', () => {
-      assertPropsWithValue(new cv.Mat([matEmpty8UC2, matEmpty8U]))({ channels: 3 });
+      assertPropsWithValue(new cv.Mat([matEmpty8UC2, matEmpty8U]), { channels: 3 });
     });
   });
   describe('constructor with steps', () => {
@@ -543,7 +543,7 @@ export default function (args: TestContext) {
       const img = getTestImg();
 
       assertError(
-        // @ts-ignore:next-line
+        // @ts-expect-error expected argument 0 to be of type Rect
         () => img.getRegion(0, 1, 2, 3),
         'Mat::GetRegion - Error: expected argument 0 to be of type Rect',
       );

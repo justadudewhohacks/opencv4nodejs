@@ -7,7 +7,6 @@ export default function (args: TestContext) {
   const {
     assertMetaData,
     assertPropsWithValue,
-    funcShouldRequireArgs,
   } = utils;
 
   const history = 1000;
@@ -25,7 +24,7 @@ export default function (args: TestContext) {
         varThreshold,
         detectShadows,
       );
-      assertPropsWithValue(bgsubtractor)({
+      assertPropsWithValue(bgsubtractor, {
         history,
         varThreshold,
         detectShadows,
@@ -38,7 +37,7 @@ export default function (args: TestContext) {
         varThreshold,
         detectShadows,
       });
-      assertPropsWithValue(bgsubtractor)({
+      assertPropsWithValue(bgsubtractor, {
         history,
         varThreshold,
         detectShadows,
@@ -55,7 +54,7 @@ export default function (args: TestContext) {
     const learningRate = 2.5;
 
     it('should throw if no args', () => {
-      // @ts-expect-error
+      // @ts-expect-error Error: expected argument 0 to be of type
       expect(() => (new cv.BackgroundSubtractorMOG2()).apply()).to.throw('BackgroundSubtractor::Apply - Error: expected argument 0 to be of type');
     });
 

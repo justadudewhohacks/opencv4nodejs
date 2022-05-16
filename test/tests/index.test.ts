@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { expect } from 'chai';
 import cv from '@u4/opencv4nodejs';
 import Utils from '../utils';

@@ -27,7 +27,7 @@ export default (args: TestContext) => {
 
     it('should initialize with correct values', () => {
       const match = new cv.DescriptorMatch(queryIdx, trainIdx, distance);
-      assertPropsWithValue(match)({ queryIdx, trainIdx, distance });
+      assertPropsWithValue(match, { queryIdx, trainIdx, distance });
     });
   });
 };

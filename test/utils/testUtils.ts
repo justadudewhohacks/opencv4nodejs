@@ -28,7 +28,7 @@ const assertErrorAsyncPromised = (func: () => any, msg: string): Promise<any> =>
     });
 };
 
-const makeCompareValues = (floatSafe: boolean) => (val1: number, val2: number) => {
+const makeCompareValues = (floatSafe: boolean) => (val1: number | object | boolean | string, val2: number | object | boolean | string) => {
   if (floatSafe && typeof val1 === 'number' && typeof val2 === 'number') {
     return Math.abs(val1 - val2) < 0.001;
   } if (typeof val1 === 'object' && typeof val2 === 'object') {
@@ -38,7 +38,7 @@ const makeCompareValues = (floatSafe: boolean) => (val1: number, val2: number) =
   return val1 === val2;
 };
 
-export const assertPropsWithValue = (obj: any) => (props: any, floatSafe = false) => {
+export const assertPropsWithValue = (obj: {[key: string]: number | object | boolean | string} & any, props: {[key: string]: number | object | boolean | string}, floatSafe = false) => {
   const compareValues = makeCompareValues(floatSafe);
   Object.keys(props).forEach((key) => assert(compareValues(props[key], obj[key]), `${key} - expected: ${props[key]}, have: ${obj[key]}`));
 };

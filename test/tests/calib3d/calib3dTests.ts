@@ -49,7 +49,7 @@ export default (args: TestContext) => {
     const confidence = 0.9;
 
     const expectOutput = (res) => {
-      assertPropsWithValue(res.homography)({ type: cv.CV_64F, rows: 3, cols: 3 });
+      assertPropsWithValue(res.homography, { type: cv.CV_64F, rows: 3, cols: 3 });
     };
 
     generateAPITests({

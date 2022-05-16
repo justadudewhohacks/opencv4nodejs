@@ -26,7 +26,7 @@ export default function (args: TestContext) {
     getNodeMajorVersion,
   } = utils;
 
-  const partitionTests = (createInstance) => {
+  const partitionTests = (createInstance: () => any) => {
     it('should return labels and numLabels', () => {
       const { labels, numLabels } = cv.partition([createInstance(), createInstance()], () => true);
 
@@ -343,14 +343,14 @@ export default function (args: TestContext) {
         // without mask
         expect(res.minVal).to.equal(0.1);
         expect(res.maxVal).to.equal(0.6);
-        assertPropsWithValue(res.minLoc)({ x: 0, y: 0 });
-        assertPropsWithValue(res.maxLoc)({ x: 2, y: 1 });
+        assertPropsWithValue(res.minLoc, { x: 0, y: 0 });
+        assertPropsWithValue(res.maxLoc, { x: 2, y: 1 });
       } else {
         // with mask
         expect(res.minVal).to.equal(0.2);
         expect(res.maxVal).to.equal(0.5);
-        assertPropsWithValue(res.minLoc)({ x: 1, y: 0 });
-        assertPropsWithValue(res.maxLoc)({ x: 1, y: 1 });
+        assertPropsWithValue(res.minLoc, { x: 1, y: 0 });
+        assertPropsWithValue(res.maxLoc, { x: 1, y: 1 });
       }
     };
 

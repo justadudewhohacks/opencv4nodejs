@@ -16,7 +16,7 @@ export default (args: TestContext) => {
         facemarkData[item] = data[item];
       });
 
-      assertPropsWithValue(facemarkData)(data);
+      assertPropsWithValue(facemarkData, data);
     });
 
     it('FacemarkAAMParams', () => {
@@ -38,7 +38,7 @@ export default (args: TestContext) => {
         facemarkParams[param] = params[param];
       });
 
-      assertPropsWithValue(facemarkParams)(params);
+      assertPropsWithValue(facemarkParams, params);
     });
 
     it('FacemarkLBFParams', () => {
@@ -66,7 +66,7 @@ export default (args: TestContext) => {
         facemarkParams[param] = params[param];
       });
 
-      assertPropsWithValue(facemarkParams)(params);
+      assertPropsWithValue(facemarkParams, params);
     });
   });
 };

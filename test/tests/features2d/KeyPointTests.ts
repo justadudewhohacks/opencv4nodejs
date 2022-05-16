@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { expect } from 'chai';
 import { TestContext } from '../model';
 
@@ -18,12 +19,12 @@ export default (args: TestContext) => {
     const class_id = 2;
 
     it('has default constructor', () => {
-      // @ts-ignore:next-line
+      // @ts-expect-error has default constructor
       expect(() => new cv.KeyPoint()).to.not.throw();
     });
 
     it('should throw if insufficient args passed', () => {
-      // @ts-ignore:next-line
+      // @ts-expect-error throw if insufficient args passed
       expect(() => new cv.KeyPoint2(pt, undefined)).to.throw();
     });
 
@@ -33,9 +34,9 @@ export default (args: TestContext) => {
 
     it('should initialize with correct values', () => {
       const kp = new cv.KeyPoint(pt, size, angle, response, octave, class_id);
-      assertPropsWithValue(kp)({ size, octave, class_id });
+      assertPropsWithValue(kp, { size, octave, class_id });
       expect(kp).to.have.property('pt');
-      assertPropsWithValue(kp.pt)(pt);
+      assertPropsWithValue(kp.pt, pt as any);
       expectFloat(kp.angle, angle);
       expectFloat(kp.response, response);
     });

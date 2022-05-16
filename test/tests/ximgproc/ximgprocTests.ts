@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { assert, expect } from 'chai';
 import { TestContext } from '../model';
 
@@ -16,7 +17,7 @@ export default function (args: TestContext) {
 
     describe('constructor', () => {
       it('should throw if no args', () => {
-        // @ts-expect-error
+        // @ts-expect-error expected argument 0 to be of type
         expect(() => new cv.SuperpixelSEEDS()).to.throw('SuperpixelSEEDS::New - Error: expected argument 0 to be of type');
       });
 
@@ -26,7 +27,7 @@ export default function (args: TestContext) {
         assertMetaData(superpixelSeeds.image)({
           rows: 250, cols: 250, type: cv.CV_8UC3,
         });
-        assertPropsWithValue(superpixelSeeds)({
+        assertPropsWithValue(superpixelSeeds, {
           num_superpixels,
           num_levels,
         });
@@ -39,7 +40,7 @@ export default function (args: TestContext) {
         const superpixelSeeds = new cv.SuperpixelSEEDS(getTestImg().resizeToMax(250), num_superpixels, num_levels);
         superpixelSeeds.iterate();
         assert(superpixelSeeds.numCalculatedSuperpixels > 0, 'no superpixels calculated');
-        assertPropsWithValue(superpixelSeeds.labels)({
+        assertPropsWithValue(superpixelSeeds.labels, {
           rows: 250, cols: 250, type: cv.CV_32S,
         });
       });
@@ -52,7 +53,7 @@ export default function (args: TestContext) {
 
       describe('constructor', () => {
         it('should throw if no args', () => {
-          // @ts-expect-error
+          // @ts-expect-error expected argument 0 to be of type
           expect(() => new cv.SuperpixelSLIC()).to.throw('SuperpixelSLIC::New - Error: expected argument 0 to be of type');
         });
 
@@ -62,7 +63,7 @@ export default function (args: TestContext) {
           assertMetaData(superpixel.image)({
             rows: 250, cols: 250, type: cv.CV_8UC3,
           });
-          assertPropsWithValue(superpixel)({
+          assertPropsWithValue(superpixel, {
             algorithm,
           });
         });
@@ -73,7 +74,7 @@ export default function (args: TestContext) {
           const superpixel = new cv.SuperpixelSLIC(getTestImg().resizeToMax(250), algorithm);
           superpixel.iterate();
           assert(superpixel.numCalculatedSuperpixels > 0, 'no superpixels calculated');
-          assertPropsWithValue(superpixel.labels)({
+          assertPropsWithValue(superpixel.labels, {
             rows: 250, cols: 250, type: cv.CV_32S,
           });
         });
@@ -83,7 +84,7 @@ export default function (args: TestContext) {
     describe('SuperpixelLSC', () => {
       describe('constructor', () => {
         it('should throw if no args', () => {
-          // @ts-expect-error
+          // @ts-expect-error expected argument 0 to be of type
           expect(() => new cv.SuperpixelLSC()).to.throw('SuperpixelLSC::New - Error: expected argument 0 to be of type');
         });
 
@@ -101,7 +102,7 @@ export default function (args: TestContext) {
           const superpixel = new cv.SuperpixelLSC(getTestImg().resizeToMax(250));
           superpixel.iterate();
           assert(superpixel.numCalculatedSuperpixels > 0, 'no superpixels calculated');
-          assertPropsWithValue(superpixel.labels)({
+          assertPropsWithValue(superpixel.labels, {
             rows: 250, cols: 250, type: cv.CV_32S,
           });
         });

@@ -19,7 +19,7 @@ export default (args: TestContext) => {
 
     const trackerParams = new cv.TrackerBoostingParams();
     Object.keys(params).forEach((param) => { trackerParams[param] = params[param]; });
-    assertPropsWithValue(trackerParams)(params);
+    assertPropsWithValue(trackerParams, params);
   });
 
   (cvVersionGreaterEqual(3, 1, 0) ? it : it.skip)('TrackerKCFParams', () => {
@@ -44,7 +44,7 @@ export default (args: TestContext) => {
     Object.keys(params).forEach((param) => { trackerParams[param] = params[param]; });
 
     const floatSafe = true;
-    assertPropsWithValue(trackerParams)(params, floatSafe);
+    assertPropsWithValue(trackerParams, params as any, floatSafe);
   });
 
   (cvVersionGreaterEqual(3, 4, 1) ? it : it.skip)('TrackerCSRTParams', () => {
@@ -84,7 +84,7 @@ export default (args: TestContext) => {
     Object.keys(params).forEach((param) => { trackerParams[param] = params[param]; });
 
     const floatSafe = true;
-    assertPropsWithValue(trackerParams)(params, floatSafe);
+    assertPropsWithValue(trackerParams, params, floatSafe);
   });
   it('TrackerMILParams', () => {
     const params = {
@@ -99,6 +99,6 @@ export default (args: TestContext) => {
 
     const trackerParams = new cv.TrackerMILParams();
     Object.keys(params).forEach((param) => { trackerParams[param] = params[param]; });
-    assertPropsWithValue(trackerParams)(params);
+    assertPropsWithValue(trackerParams, params);
   });
 };

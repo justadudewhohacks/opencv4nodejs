@@ -17,7 +17,7 @@ export interface APITestOpts {
     getClassInstance: () => any,
     classNameSpace?: string,
 
-    getRequiredArgs?: () => any,
+    getRequiredArgs?: () => any[],
     // getOptionalParamsMap?: () => Array<[string, any]|[string]|[number]>,
     getOptionalParams?: () => Array<string|number>,
     getOptionalParamsMap?: () => Array<[string, any]>,
@@ -34,7 +34,7 @@ export interface TestContext {
     cv: OpenCV,
     utils: {
         funcShouldRequireArgs: (func: () => any) => void;
-        assertPropsWithValue: (obj: any) => (props: any, floatSafe ?: boolean) => void;
+        assertPropsWithValue: (obj: {[key: string]: number | object | boolean | string} & any, props: {[key: string]: number | object | boolean | string}, floatSafe ?: boolean) => void;
         expectToBeVec2: (vec: Vec2 | Point2) => void;
         expectToBeVec3: (vec: Vec3 | Point3) => void;
         expectToBeVec4: (vec: Vec4) => void;
@@ -44,7 +44,7 @@ export interface TestContext {
         assertDataAlmostDeepEquals: (data0: any, data1: any) => void;
         assertMatValueAlmostEquals: (val0: number, val1: number) => void;
         assertMatValueEquals: (val0: number, val1: number) => void;
-        assertMetaData: (mat: Mat | number[]) => (arg0: any, cols?: any, type?: any) => void;
+        assertMetaData: (mat: Mat | number[]) => (arg0: number | {rows: number, cols: number, type: number}, cols?: number, type?: number) => void;
         dangerousDeepEquals: (obj0: any, obj1: any) => boolean;
         generateIts: (msg: string, testFunc: (t: number) => void, exclusions?: Set<string>) => void;
         isZeroMat: (mat: Mat) => boolean;

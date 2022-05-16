@@ -128,11 +128,11 @@ export class Mat {
   /**
    * @param type CV_8U, CV_8S, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F ...
    */
-  constructor(dataArray: number[][], type: number);
+  constructor(dataArray: number[][] | number[][][], type: number);
   /**
    * @param type CV_8U, CV_8S, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F ...
    */
-  constructor(dataArray: number[][][], type: number);
+  // constructor(dataArray: number[][][], type: number);
   /**
    * @param type CV_8U, CV_8S, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F ...
    */

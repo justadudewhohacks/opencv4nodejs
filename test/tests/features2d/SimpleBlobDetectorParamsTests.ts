@@ -33,7 +33,7 @@ export default function (args: TestContext) {
 
       const detectorParams = new cv.SimpleBlobDetectorParams();
       Object.keys(params).forEach((param) => { detectorParams[param] = params[param]; });
-      assertPropsWithValue(detectorParams)(params);
+      assertPropsWithValue(detectorParams, params);
     });
   });
 }
