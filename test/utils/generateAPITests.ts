@@ -12,7 +12,7 @@ export const getDefaultAPITestOpts = (opts: Partial<APITestOpts>): Partial<APITe
   otherAsyncPromisedTests: emptyFunc,
   beforeHook: null,
   afterHook: null,
-  ...opts
+  ...opts,
 });
 
 export const generateAPITests = (opts: Partial<APITestOpts>): void => {
@@ -28,7 +28,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
     otherAsyncCallbackedTests,
     otherAsyncPromisedTests,
     beforeHook,
-    afterHook
+    afterHook,
   } = getDefaultAPITestOpts(opts);
 
   const methodNameAsync = `${methodName}Async`;
@@ -122,7 +122,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
 
       assertError(
         () => dut[method].apply(dut, args),
-        errMsg
+        errMsg,
       );
       return done();
     };
@@ -159,7 +159,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
         it('should throw if opt arg object prop invalid', (done) => {
           const prop = getOptionalArgsMap()[0][0];
           const args = getRequiredArgs().slice().concat({
-            [prop]: undefined
+            [prop]: undefined,
           });
           expectError(args, propErrMsg(prop), done);
         });

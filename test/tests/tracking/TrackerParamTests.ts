@@ -1,11 +1,11 @@
-import { TestContext } from "../model";
+import { TestContext } from '../model';
 
 export default (args: TestContext) => {
   const { cv, utils } = args;
 
   const {
     assertPropsWithValue,
-    cvVersionGreaterEqual
+    cvVersionGreaterEqual,
   } = utils;
 
   it('TrackerBoostingParams', () => {
@@ -14,7 +14,7 @@ export default (args: TestContext) => {
       samplerOverlap: 1.5,
       samplerSearchFactor: 0.5,
       iterationInit: 10,
-      featureSetNumFeatures: 5
+      featureSetNumFeatures: 5,
     };
 
     const trackerParams = new cv.TrackerBoostingParams();
@@ -37,11 +37,11 @@ export default (args: TestContext) => {
       compressed_size: 32,
       detect_thresh: 0.5,
       desc_pca: cv.trackerKCFModes.GRAY,
-      desc_npca: cv.trackerKCFModes.CN
+      desc_npca: cv.trackerKCFModes.CN,
     };
 
     const trackerParams = new cv.TrackerKCFParams();
-    Object.keys(params).forEach(param => { trackerParams[param] = params[param]; });
+    Object.keys(params).forEach((param) => { trackerParams[param] = params[param]; });
 
     const floatSafe = true;
     assertPropsWithValue(trackerParams)(params, floatSafe);
@@ -74,9 +74,9 @@ export default (args: TestContext) => {
       use_rgb: true,
       use_segmentation: false,
       weights_lr: 0.03,
-      window_function: "kaiser"
+      window_function: 'kaiser',
     } as any;
-    if(cvVersionGreaterEqual(3, 4, 4)){
+    if (cvVersionGreaterEqual(3, 4, 4)) {
       params.psr_threshold = 0.4;
     }
 
@@ -94,12 +94,11 @@ export default (args: TestContext) => {
       samplerInitMaxNegNum: 64,
       samplerTrackMaxPosNum: 32,
       samplerTrackMaxNegNum: 16,
-      featureSetNumFeatures: 8
+      featureSetNumFeatures: 8,
     };
 
     const trackerParams = new cv.TrackerMILParams();
     Object.keys(params).forEach((param) => { trackerParams[param] = params[param]; });
     assertPropsWithValue(trackerParams)(params);
   });
-
 };

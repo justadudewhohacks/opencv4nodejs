@@ -7,4 +7,4 @@ export default function (args: TestContext) {
   describe('Vec', () => VecTests(args));
   describe('constructor', () => constructorTests(args));
   describe('operators', () => operatorTests(args));
-};
+}

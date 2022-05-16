@@ -1,6 +1,5 @@
-import { TestContext } from "../../model";
-
 import { expect } from 'chai';
+import { TestContext } from '../../model';
 
 export default function (args: TestContext) {
   const { cv, utils } = args;
@@ -9,7 +8,7 @@ export default function (args: TestContext) {
     assertError,
     assertDataDeepEquals,
     assertDataAlmostDeepEquals,
-    assertMetaData
+    assertMetaData,
   } = utils;
 
   const operatorRequiresArg = (func, isScalar?: boolean) => {
@@ -19,7 +18,7 @@ export default function (args: TestContext) {
           const mat = new cv.Mat();
           return mat[func].bind(mat)();
         },
-        `expected arg to be ${isScalar ? 'a Scalar' : 'an instance of Mat'}`
+        `expected arg to be ${isScalar ? 'a Scalar' : 'an instance of Mat'}`,
       );
     });
   };
@@ -30,11 +29,11 @@ export default function (args: TestContext) {
     it('add matrices', () => {
       const mat = new cv.Mat([
         [10, 20],
-        [10, 20]
+        [10, 20],
       ], cv.CV_8U);
       const expectedResult = [
         [20, 40],
-        [20, 40]
+        [20, 40],
       ];
       const res = mat.add(mat);
       assertMetaData(res)(2, 2, cv.CV_8U);
@@ -48,11 +47,11 @@ export default function (args: TestContext) {
     it('subtract matrices', () => {
       const mat0 = new cv.Mat([
         [20, 40],
-        [20, 40]
+        [20, 40],
       ], cv.CV_8U);
       const mat1 = new cv.Mat([
         [10, 20],
-        [10, 20]
+        [10, 20],
       ], cv.CV_8U);
       const expectedResult = mat1.getDataAsArray();
       const res = mat0.sub(mat1);
@@ -67,12 +66,12 @@ export default function (args: TestContext) {
     it('multiply matrix by scalar', () => {
       const mat = new cv.Mat([
         [20, 40],
-        [20, 40]
+        [20, 40],
       ], cv.CV_8U);
       const scalar = 2;
       const expectedResult = [
         [40, 80],
-        [40, 80]
+        [40, 80],
       ];
       const res = mat.mul(scalar);
       assertMetaData(res)(2, 2, cv.CV_8U);
@@ -86,12 +85,12 @@ export default function (args: TestContext) {
     it('divide matrix by scalar', () => {
       const mat = new cv.Mat([
         [20, 40],
-        [20, 40]
+        [20, 40],
       ], cv.CV_8U);
       const scalar = 2;
       const expectedResult = [
         [10, 20],
-        [10, 20]
+        [10, 20],
       ];
       const res = mat.div(scalar);
       assertMetaData(res)(2, 2, cv.CV_8U);
@@ -105,15 +104,15 @@ export default function (args: TestContext) {
     it('apply and to matrices', () => {
       const mat0 = new cv.Mat([
         [15, 15],
-        [15, 15]
+        [15, 15],
       ], cv.CV_8U);
       const mat1 = new cv.Mat([
         [15, 0],
-        [12, 3]
+        [12, 3],
       ], cv.CV_8U);
       const expectedResult = [
         [15, 0],
-        [12, 3]
+        [12, 3],
       ];
       const res = mat0.and(mat1);
       assertMetaData(res)(2, 2, cv.CV_8U);
@@ -127,15 +126,15 @@ export default function (args: TestContext) {
     it('apply or to matrices', () => {
       const mat0 = new cv.Mat([
         [15, 15],
-        [0, 0]
+        [0, 0],
       ], cv.CV_8U);
       const mat1 = new cv.Mat([
         [15, 0],
-        [12, 3]
+        [12, 3],
       ], cv.CV_8U);
       const expectedResult = [
         [15, 15],
-        [12, 3]
+        [12, 3],
       ];
       const res = mat0.or(mat1);
       assertMetaData(res)(2, 2, cv.CV_8U);
@@ -149,15 +148,15 @@ export default function (args: TestContext) {
     it('apply or to matrices', () => {
       const mat0 = new cv.Mat([
         [20, 40],
-        [60, 80]
+        [60, 80],
       ], cv.CV_8U);
       const mat1 = new cv.Mat([
         [5, 4],
-        [2, 1]
+        [2, 1],
       ], cv.CV_8U);
       const expectedResult = [
         [100, 160],
-        [120, 80]
+        [120, 80],
       ];
       const res = mat0.hMul(mat1);
       assertMetaData(res)(2, 2, cv.CV_8U);
@@ -171,15 +170,15 @@ export default function (args: TestContext) {
     it('apply or to matrices', () => {
       const mat0 = new cv.Mat([
         [20, 40],
-        [60, 80]
+        [60, 80],
       ], cv.CV_8U);
       const mat1 = new cv.Mat([
         [2, 5],
-        [10, 20]
+        [10, 20],
       ], cv.CV_8U);
       const expectedResult = [
         [10, 8],
-        [6, 4]
+        [6, 4],
       ];
       const res = mat0.hDiv(mat1);
       assertMetaData(res)(2, 2, cv.CV_8U);
@@ -193,11 +192,11 @@ export default function (args: TestContext) {
     it('apply or to matrices', () => {
       const mat0 = new cv.Mat([
         [20, 40],
-        [60, 80]
+        [60, 80],
       ], cv.CV_8U);
       const mat1 = new cv.Mat([
         [10, 10],
-        [10, 10]
+        [10, 10],
       ], cv.CV_8U);
       const res = mat0.dot(mat1);
       expect(res).to.equal(2000);
@@ -210,11 +209,11 @@ export default function (args: TestContext) {
     it('apply bitwiseAnd to matrices', () => {
       const mat0 = new cv.Mat([
         [[15, 15], [15, 15]],
-        [[15, 15], [15, 15]]
+        [[15, 15], [15, 15]],
       ], cv.CV_8UC2);
       const mat1 = new cv.Mat([
         [[15, 0], [0, 0]],
-        [[12, 12], [3, 3]]
+        [[12, 12], [3, 3]],
       ], cv.CV_8UC2);
       const res = mat0.bitwiseAnd(mat1);
       assertMetaData(res)(2, 2, cv.CV_8UC2);
@@ -226,11 +225,11 @@ export default function (args: TestContext) {
     it('apply bitwiseNot to matrix', () => {
       const mat0 = new cv.Mat([
         [[255, 127], [15, 7]],
-        [[63, 31], [3, 0]]
+        [[63, 31], [3, 0]],
       ], cv.CV_8UC2);
       const expectedResult = [
         [[0, 128], [240, 248]],
-        [[192, 224], [252, 255]]
+        [[192, 224], [252, 255]],
       ];
       const res = mat0.bitwiseNot();
       assertMetaData(res)(2, 2, cv.CV_8UC2);
@@ -244,11 +243,11 @@ export default function (args: TestContext) {
     it('apply bitwiseOr to matrices', () => {
       const mat0 = new cv.Mat([
         [[15, 15], [15, 15]],
-        [[15, 15], [15, 15]]
+        [[15, 15], [15, 15]],
       ], cv.CV_8UC2);
       const mat1 = new cv.Mat([
         [[15, 0], [0, 0]],
-        [[12, 12], [3, 3]]
+        [[12, 12], [3, 3]],
       ], cv.CV_8UC2);
       const res = mat0.bitwiseOr(mat1);
       assertMetaData(res)(2, 2, cv.CV_8UC2);
@@ -262,15 +261,15 @@ export default function (args: TestContext) {
     it('apply bitwiseXor to matrices', () => {
       const mat0 = new cv.Mat([
         [[15, 15], [15, 15]],
-        [[15, 15], [15, 15]]
+        [[15, 15], [15, 15]],
       ], cv.CV_8UC2);
       const mat1 = new cv.Mat([
         [[15, 0], [0, 0]],
-        [[12, 12], [3, 3]]
+        [[12, 12], [3, 3]],
       ], cv.CV_8UC2);
       const expectedResult = [
         [[0, 15], [15, 15]],
-        [[3, 3], [12, 12]]
+        [[3, 3], [12, 12]],
       ];
       const res = mat0.bitwiseXor(mat1);
       assertMetaData(res)(2, 2, cv.CV_8UC2);
@@ -284,15 +283,15 @@ export default function (args: TestContext) {
     it('apply absdiff to matrices', () => {
       const mat0 = new cv.Mat([
         [[255, 50], [255, 50]],
-        [[100, 0], [100, 0]]
+        [[100, 0], [100, 0]],
       ], cv.CV_8UC2);
       const mat1 = new cv.Mat([
         [[0, 0], [255, 255]],
-        [[0, 0], [255, 255]]
+        [[0, 0], [255, 255]],
       ], cv.CV_8UC2);
       const expectedResult = [
         [[255, 50], [0, 205]],
-        [[100, 0], [155, 255]]
+        [[100, 0], [155, 255]],
       ];
       const res = mat0.absdiff(mat1);
       assertMetaData(res)(2, 2, cv.CV_8UC2);
@@ -304,7 +303,7 @@ export default function (args: TestContext) {
     it('apply exp to matrix', () => {
       const res = new cv.Mat([
         [Math.log(1), Math.log(2)],
-        [0, Math.log(4)]
+        [0, Math.log(4)],
       ], cv.CV_64F).exp();
       assertMetaData(res)(2, 2, cv.CV_64F);
     });
@@ -312,10 +311,10 @@ export default function (args: TestContext) {
   describe('log', () => {
     it('apply log to matrix', () => {
       const res = new cv.Mat([
-        [Math.exp(0)]
+        [Math.exp(0)],
       ], cv.CV_64F).log();
       const expectedResult = [
-        [0]
+        [0],
       ];
 
       assertMetaData(res)(1, 1, cv.CV_64F);
@@ -327,11 +326,11 @@ export default function (args: TestContext) {
     it('apply sqrt to matrix', () => {
       const mat0 = new cv.Mat([
         [4, 16],
-        [0, 64]
+        [0, 64],
       ], cv.CV_64F);
       const expectedResult = [
         [2, 4],
-        [0, 8]
+        [0, 8],
       ];
 
       const res = mat0.sqrt();
@@ -345,11 +344,11 @@ export default function (args: TestContext) {
       const mat0 = new cv.Mat([
         [255, 0],
         [0, 255],
-        [0, 0]
+        [0, 0],
       ], cv.CV_8U);
       const expectedResult = [
         [255, 0, 0],
-        [0, 255, 0]
+        [0, 255, 0],
       ];
 
       const res = mat0.transpose();
@@ -357,45 +356,44 @@ export default function (args: TestContext) {
       assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
-  
+
   describe('inv', () => {
     it('apply inverse to matrix', () => {
       const mat0 = new cv.Mat([
         [4, 7],
-        [2, 6]
+        [2, 6],
       ], cv.CV_32F);
       const expectedResult = [
         [0.6, -0.7],
-        [-0.2, 0.4]
+        [-0.2, 0.4],
       ];
 
       const res = mat0.inv();
       assertMetaData(res)(2, 2, cv.CV_32F);
-      
+
       assertDataAlmostDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
-  
+
   describe('matMul', () => {
     operatorRequiresArg('matMul');
 
     it('apply matMul to matrices', () => {
       const mat0 = new cv.Mat([
         [20, 40],
-        [60, 80]
+        [60, 80],
       ], cv.CV_32F);
       const mat1 = new cv.Mat([
         [5, 4],
-        [2, 1]
+        [2, 1],
       ], cv.CV_32F);
       const expectedResult = [
         [180, 120],
-        [460, 320]
+        [460, 320],
       ];
       const res = mat0.matMul(mat1);
       assertMetaData(res)(2, 2, cv.CV_32F);
       assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
   });
-
-};
+}

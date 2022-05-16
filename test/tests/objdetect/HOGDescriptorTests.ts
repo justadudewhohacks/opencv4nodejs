@@ -11,7 +11,7 @@ export default function (args: TestContext) {
     assertError,
     // cvVersionGreaterEqual,
     clearTmpData,
-    getTmpDataFilePath
+    getTmpDataFilePath,
   } = utils;
 
   // const HISTOGRAM_NORM_TYPE = cvVersionGreaterEqual(4, 0, 0) ? cv.HOGHistogramNormType.L2Hys : 0
@@ -27,7 +27,7 @@ export default function (args: TestContext) {
     it('should be constructable with default args', () => {
       const hog = new cv.HOGDescriptor();
       ['winSize', 'blockSize', 'blockStride', 'cellSize'].forEach(
-        prop => expect(hog).to.have.property(prop).instanceOf(cv.Size)
+        (prop) => expect(hog).to.have.property(prop).instanceOf(cv.Size),
       );
     });
 
@@ -44,13 +44,13 @@ export default function (args: TestContext) {
         0.4,
         true,
         64,
-        true
+        true,
       );
       const toTest: {p: numFieldsType, dim: number}[] = [
         { p: 'winSize', dim: 40 },
         { p: 'blockSize', dim: 20 },
         { p: 'blockStride', dim: 10 },
-        { p: 'cellSize', dim: 30 }
+        { p: 'cellSize', dim: 30 },
       ];
       toTest.forEach(
         (pv) => {
@@ -58,7 +58,7 @@ export default function (args: TestContext) {
           const { width, height } = hog[pv.p];
           expect(width).to.equal(pv.dim);
           expect(height).to.equal(pv.dim);
-        }
+        },
       );
       expect(hog).to.have.property('nbins').to.equal(18);
       expect(hog).to.have.property('derivAperture').to.equal(2);
@@ -81,13 +81,13 @@ export default function (args: TestContext) {
         L2HysThreshold: 0.4,
         gammaCorrection: true,
         nlevels: 64,
-        signedGradient: true
+        signedGradient: true,
       });
       const toTest: { p: numFieldsType, dim: number}[] = [
         { p: 'winSize', dim: 40 },
         { p: 'blockSize', dim: 20 },
         { p: 'blockStride', dim: 10 },
-        { p: 'cellSize', dim: 30 }
+        { p: 'cellSize', dim: 30 },
       ];
       toTest.forEach(
         (pv) => {
@@ -95,7 +95,7 @@ export default function (args: TestContext) {
           const { width, height } = hog[pv.p];
           expect(width).to.equal(pv.dim);
           expect(height).to.equal(pv.dim);
-        }
+        },
       );
       expect(hog).to.have.property('nbins').to.equal(18);
       expect(hog).to.have.property('derivAperture').to.equal(2);
@@ -149,7 +149,7 @@ export default function (args: TestContext) {
         L2HysThreshold: 0.4,
         gammaCorrection: true,
         nlevels: 64,
-        signedGradient: true
+        signedGradient: true,
       });
       const file = getTmpDataFilePath('testHOG.xml');
       hog.save(file);
@@ -180,7 +180,7 @@ export default function (args: TestContext) {
       blockSize: new cv.Size(20, 20),
       blockStride: new cv.Size(10, 10),
       cellSize: new cv.Size(10, 10),
-      nbins: 9
+      nbins: 9,
     });
 
     const winStride = new cv.Size(3, 3);
@@ -190,7 +190,7 @@ export default function (args: TestContext) {
     const otherSyncTests = () => {
       it('should be callable with single channel img', () => {
         expectOutput(hog.compute(
-          getPeoplesTestImg()
+          getPeoplesTestImg(),
         ));
       });
 
@@ -200,9 +200,9 @@ export default function (args: TestContext) {
             getPeoplesTestImg(),
             winStride,
             padding,
-            invalidLocations
+            invalidLocations,
           ),
-          'expected array element at index 1 to be of type Point2'
+          'expected array element at index 1 to be of type Point2',
         );
       });
 
@@ -211,9 +211,9 @@ export default function (args: TestContext) {
           () => hog.compute(
             getPeoplesTestImg(),
             // @ts-expect-error
-            { locations: invalidLocations }
+            { locations: invalidLocations },
           ),
-          'expected array element at index 1 to be of type Point2'
+          'expected array element at index 1 to be of type Point2',
         );
       });
     };
@@ -223,7 +223,7 @@ export default function (args: TestContext) {
         await hog.computeAsync(
           getTestMatC1(),
         );
-        expectOutputCallbacked(done)
+        expectOutputCallbacked(done);
       });
 
       it('should throw if locations invalid', async () => {
@@ -232,7 +232,8 @@ export default function (args: TestContext) {
             getPeoplesTestImg(),
             winStride,
             padding,
-            invalidLocations)
+            invalidLocations,
+          );
         } catch (err) {
           try {
             expect(err).to.be.an('error');
@@ -258,7 +259,7 @@ export default function (args: TestContext) {
             } catch (e) {
               done(e);
             }
-          }
+          },
         );
       });
     };
@@ -266,7 +267,7 @@ export default function (args: TestContext) {
     const otherAsyncPromisedTests = () => {
       it('should be callable with single channel img', (done) => {
         hog.computeAsync(
-          getTestMatC1()
+          getTestMatC1(),
         ).then(expectOutputPromisified(done)).catch(done);
       });
     };
@@ -276,17 +277,17 @@ export default function (args: TestContext) {
       methodName: 'compute',
       methodNameSpace: 'HOGDescriptor',
       getRequiredArgs: () => ([
-        getPeoplesTestImg()
+        getPeoplesTestImg(),
       ]),
       getOptionalArgsMap: () => ([
         ['winStride', new cv.Size(3, 3)],
         ['padding', new cv.Size(3, 3)],
-        ['locations', [new cv.Point2(50, 50), new cv.Point2(150, 50), new cv.Point2(50, 150)]]
+        ['locations', [new cv.Point2(50, 50), new cv.Point2(150, 50), new cv.Point2(50, 150)]],
       ]),
       expectOutput,
       otherSyncTests,
       otherAsyncCallbackedTests,
-      otherAsyncPromisedTests
+      otherAsyncPromisedTests,
     });
   });
 
@@ -301,13 +302,13 @@ export default function (args: TestContext) {
       methodName: 'computeGradient',
       methodNameSpace: 'HOGDescriptor',
       getRequiredArgs: () => ([
-        getPeoplesTestImg()
+        getPeoplesTestImg(),
       ]),
       getOptionalArgsMap: () => ([
         ['paddingTL', new cv.Size(3, 3)],
-        ['paddingBr', new cv.Size(3, 3)]
+        ['paddingBr', new cv.Size(3, 3)],
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -331,15 +332,15 @@ export default function (args: TestContext) {
         methodName: 'detect',
         methodNameSpace: 'HOGDescriptor',
         getRequiredArgs: () => ([
-          getPeoplesTestImg()
+          getPeoplesTestImg(),
         ]),
         getOptionalArgsMap: () => ([
           ['hitThreshold', hitThreshold],
           ['winStride', winStride],
           ['padding', padding],
-          ['searchLocations', searchLocations]
+          ['searchLocations', searchLocations],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -356,14 +357,14 @@ export default function (args: TestContext) {
         methodNameSpace: 'HOGDescriptor',
         getRequiredArgs: () => ([
           getPeoplesTestImg(),
-          locations
+          locations,
         ]),
         getOptionalArgsMap: () => ([
           ['hitThreshold', hitThreshold],
           ['winStride', winStride],
-          ['padding', padding]
+          ['padding', padding],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -373,8 +374,8 @@ export default function (args: TestContext) {
         expect(result).to.have.property('foundWeights').be.an('array');
         expect(result.foundLocations.length).to.be.above(0);
         expect(result.foundWeights.length).to.be.above(0);
-        result.foundLocations.forEach(loc => expect(loc).instanceOf(cv.Rect));
-        result.foundWeights.forEach(loc => expect(loc).to.be.a('number'));
+        result.foundLocations.forEach((loc) => expect(loc).instanceOf(cv.Rect));
+        result.foundWeights.forEach((loc) => expect(loc).to.be.a('number'));
       };
 
       generateAPITests({
@@ -382,7 +383,7 @@ export default function (args: TestContext) {
         methodName: 'detectMultiScale',
         methodNameSpace: 'HOGDescriptor',
         getRequiredArgs: () => ([
-          getPeoplesTestImg()
+          getPeoplesTestImg(),
         ]),
         getOptionalArgsMap: () => ([
           ['hitThreshold', hitThreshold],
@@ -390,9 +391,9 @@ export default function (args: TestContext) {
           ['padding', padding],
           ['scale', 1.1],
           ['finalThreshold', 0.1],
-          ['useMeanshiftGrouping', true]
+          ['useMeanshiftGrouping', true],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -416,13 +417,13 @@ export default function (args: TestContext) {
         methodNameSpace: 'HOGDescriptor',
         getRequiredArgs: () => ([
           getPeoplesTestImg(),
-          locations
+          locations,
         ]),
         getOptionalArgsMap: () => ([
           ['hitThreshold', hitThreshold],
-          ['groupThreshold', 1]
+          ['groupThreshold', 1],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -430,7 +431,7 @@ export default function (args: TestContext) {
   describe('groupRectangles', () => {
     const expectOutput = (result: Rect[]) => {
       expect(result).to.be.an('array');
-      result.forEach(rect => expect(rect).instanceOf(cv.Rect));
+      result.forEach((rect) => expect(rect).instanceOf(cv.Rect));
     };
     const rectList = [new cv.Rect(0, 0, 10, 10), new cv.Rect(0, 0, 20, 20)];
     const weights = [0.5, 1.0];
@@ -445,10 +446,9 @@ export default function (args: TestContext) {
         rectList,
         weights,
         groupThreshold,
-        eps
+        eps,
       ]),
-      expectOutput
+      expectOutput,
     });
   });
-
-};
+}

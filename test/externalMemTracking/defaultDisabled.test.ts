@@ -1,6 +1,7 @@
 import { expect } from 'chai';
-import cv from '../../';
+import cv from '@u4/opencv4nodejs';
 import Utils from '../utils';
+
 const utils = Utils(cv);
 
 describe('External Memory Tracking', () => {

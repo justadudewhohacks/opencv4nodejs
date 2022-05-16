@@ -1,9 +1,6 @@
-import cv from '../../';
-import Utils from '../utils';
-
-
-const utils = Utils(cv);
 import { expect } from 'chai';
+import cv from '@u4/opencv4nodejs';
+import Utils from '../utils';
 import coreTestSuite from './core';
 import imgprocTestSuite from './imgproc';
 import calib3dTestSuite from './calib3d';
@@ -20,17 +17,18 @@ import videoTestSuite from './video';
 import xfeatures2dTestSuite from './xfeatures2d';
 import ximgprocTestSuite from './ximgproc';
 
+const utils = Utils(cv);
+
 const modules = [
   'core', 'imgproc', 'calib3d', 'features2d', 'io',
-  'dnn', 'ml', 'objdetect', 'photo', 'video'
-]
+  'dnn', 'ml', 'objdetect', 'photo', 'video',
+];
 
 const xmodules = [
-  'face', 'text', 'tracking', 'xfeatures2d', 'ximgproc'
-]
+  'face', 'text', 'tracking', 'xfeatures2d', 'ximgproc',
+];
 
 describe('cv', () => {
-
   const toTest = {
     core: true,
     imgproc: false, // to fix
@@ -47,7 +45,7 @@ describe('cv', () => {
     tracking: true,
     xfeatures2d: true,
     ximgproc: true,
-  }
+  };
   // Object.keys(toTest).forEach(m => toTest[m] =  false);
   // toTest.core = true;
 
@@ -73,30 +71,30 @@ describe('cv', () => {
     peoplesTestImg = utils.readPeoplesTestImage();
   });
 
-  let builtModules = modules.concat(xmodules)
+  let builtModules = modules.concat(xmodules);
   if (process.env.APPVEYOR_BUILD) {
     // OpenCV installed via choco does not include contrib modules
-    builtModules = modules
+    builtModules = modules;
   }
   if (process.env.TEST_MODULE_LIST) {
-    builtModules = process.env.TEST_MODULE_LIST.split(',')
+    builtModules = process.env.TEST_MODULE_LIST.split(',');
   }
   // dnn module for OpenCV 3.2 and lower not supported
   if (utils.cvVersionLowerThan(3, 3, 0)) {
-    builtModules = builtModules.filter(m => m !== 'dnn')
+    builtModules = builtModules.filter((m) => m !== 'dnn');
   }
 
-  const opencvVersionString = `${cv.version.major}.${cv.version.minor}.${cv.version.revision}`
+  const opencvVersionString = `${cv.version.major}.${cv.version.minor}.${cv.version.revision}`;
 
-  console.log('envs are:')
-  console.log('OPENCV_VERSION:', process.env.OPENCV_VERSION)
-  console.log('TEST_MODULE_LIST:', process.env.TEST_MODULE_LIST)
-  console.log('APPVEYOR_BUILD:', process.env.APPVEYOR_BUILD)
-  console.log('process.platform:', process.platform)
-  console.log()
-  console.log('OpenCV version is:', opencvVersionString)
-  console.log('compiled with the following modules:', cv.xmodules)
-  console.log('expected modules to be built:', builtModules)
+  console.log('envs are:');
+  console.log('OPENCV_VERSION:', process.env.OPENCV_VERSION);
+  console.log('TEST_MODULE_LIST:', process.env.TEST_MODULE_LIST);
+  console.log('APPVEYOR_BUILD:', process.env.APPVEYOR_BUILD);
+  console.log('process.platform:', process.platform);
+  console.log();
+  console.log('OpenCV version is:', opencvVersionString);
+  console.log('compiled with the following modules:', cv.xmodules);
+  console.log('expected modules to be built:', builtModules);
 
   // no more mandatory environement version variable
   // it('OpenCV version should match', () => {
@@ -107,8 +105,8 @@ describe('cv', () => {
   // })
 
   it('all modules should be built', () => {
-    builtModules.forEach(m => expect(cv.modules).to.have.property(m));
-  })
+    builtModules.forEach((m) => expect(cv.modules).to.have.property(m));
+  });
   if (toTest.core && cv.modules.core) {
     describe('core', () => coreTestSuite({ cv, utils, getTestImg }));
   }
@@ -131,7 +129,9 @@ describe('cv', () => {
     describe('machinelearning', () => machinelearningTestSuite({ cv, utils, getTestImg }));
   }
   if (toTest.objdetect && cv.modules.objdetect) {
-    describe('objdetect', () => objdetectTestSuite({ cv, utils, getTestImg, getPeoplesTestImg }));
+    describe('objdetect', () => objdetectTestSuite({
+      cv, utils, getTestImg, getPeoplesTestImg,
+    }));
   }
   if (toTest.photo && cv.modules.photo) {
     describe('photo', () => photoTestSuite({ cv, utils, getTestImg }));
@@ -154,4 +154,4 @@ describe('cv', () => {
   if (toTest.ximgproc && cv.modules.ximgproc) {
     describe('ximgproc', () => ximgprocTestSuite({ cv, utils, getTestImg }));
   }
-})
+});

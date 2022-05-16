@@ -6,7 +6,7 @@ export default function (args: TestContext) {
 
   const {
     assertMetaData,
-    getTestVideoPath
+    getTestVideoPath,
   } = utils;
 
   describe('constructor', () => {
@@ -51,13 +51,12 @@ export default function (args: TestContext) {
   describe('VideoCapture set', () => {
     it('should set properties', () => {
       const cap = new cv.VideoCapture(getTestVideoPath());
-      const wasSet = cap.set(cv.CAP_PROP_POS_MSEC, 1000)
+      const wasSet = cap.set(cv.CAP_PROP_POS_MSEC, 1000);
       const msec = cap.get(cv.CAP_PROP_POS_MSEC) | 0;
       // depending of openCV version, result can be 83 or 1001
       if (msec === 83) // openCV 3.4.6 and below
-        expect(msec).to.equal(83);
-      else // openCV 3.4.8 and over
-        expect(msec).to.equal(1001);
+      { expect(msec).to.equal(83); } else // openCV 3.4.8 and over
+      { expect(msec).to.equal(1001); }
       expect(wasSet).to.equal(true);
     });
   });
@@ -69,12 +68,10 @@ export default function (args: TestContext) {
       // depending of openCV version, result can be 83 or 1001
       const msec = cap.get(cv.CAP_PROP_POS_MSEC) | 0;
       if (msec === 83) // openCV 3.4.6 and below
-        expect(msec).to.equal(83);
-      else // openCV 3.4.8 and over
-        expect(msec).to.equal(1001);
+      { expect(msec).to.equal(83); } else // openCV 3.4.8 and over
+      { expect(msec).to.equal(1001); }
       expect(wasSet).to.equal(true);
       return true;
     });
   });
-
-};
+}

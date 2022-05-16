@@ -2,10 +2,10 @@ import { expect } from 'chai';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils} = args;
+  const { cv, utils } = args;
 
   const {
-    assertPropsWithValue
+    assertPropsWithValue,
   } = utils;
 
   describe('constructor', () => {
@@ -21,5 +21,4 @@ export default function (args: TestContext) {
       assertPropsWithValue(termCriteria)({ type, maxCount, epsilon });
     });
   });
-
-};
+}

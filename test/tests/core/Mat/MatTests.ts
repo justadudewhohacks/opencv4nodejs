@@ -15,21 +15,21 @@ export default function (args: TestContext) {
     MatValuesComparator,
     isZeroMat,
     cvVersionGreaterEqual,
-    cvVersionLowerThan
-  } = utils
+    cvVersionLowerThan,
+  } = utils;
 
   const srcMatData = [
     [doubleMin, doubleMax, 0],
     [doubleMax, 0, -doubleMax],
     [-doubleMax, 0, doubleMin],
-    [doubleMin, -doubleMax, 0]
+    [doubleMin, -doubleMax, 0],
   ];
   const srcMat = new cv.Mat(srcMatData, cv.CV_64F);
   const copyMask = new cv.Mat([
     [0, 0, 0],
     [1, 1, 1],
     [0, 0, 0],
-    [1, 1, 1]
+    [1, 1, 1],
   ], cv.CV_8U);
 
   describe('constructor from channels', () => {
@@ -39,14 +39,14 @@ export default function (args: TestContext) {
     it('should throw if rows mismatch', () => {
       assertError(
         () => new cv.Mat([matEmpty8U, new cv.Mat(5, 3, matEmpty8U.type)]),
-        'rows mismatch'
+        'rows mismatch',
       );
     });
 
     it('should throw if cols mismatch', () => {
       assertError(
         () => new cv.Mat([matEmpty8U, new cv.Mat(4, 2, matEmpty8U.type)]),
-        'cols mismatch'
+        'cols mismatch',
       );
     });
 
@@ -54,7 +54,7 @@ export default function (args: TestContext) {
       assertError(
         // @ts-ignore:next-line
         () => new cv.Mat([matEmpty8U, matEmpty8U, 'foo']),
-        'expected channel 2 to be an instance of Mat'
+        'expected channel 2 to be an instance of Mat',
       );
     });
 
@@ -85,20 +85,19 @@ export default function (args: TestContext) {
   });
   describe('constructor with steps', () => {
     const originMat = new cv.Mat([[1, 2], [3, 4]], cv.CV_8U);
-    const expected = originMat.getDataAsArray()
-    const data = originMat.getData()
+    const expected = originMat.getDataAsArray();
+    const data = originMat.getData();
 
     it('should work constructable from rows, cols, type, data', () => {
       assertDataDeepEquals(new cv.Mat(2, 2, cv.CV_8U, data).getDataAsArray(), expected);
     });
-    
 
     it('should work constructable from rows, cols, type, data linesize 2', () => {
       assertDataDeepEquals(new cv.Mat(2, 2, cv.CV_8U, data, 2).getDataAsArray(), expected);
     });
-    
-    const bigBuffer = Buffer.concat([data.slice(0,2),data.slice(0,1), data.slice(2), data.slice(0,1)])
-    
+
+    const bigBuffer = Buffer.concat([data.slice(0, 2), data.slice(0, 1), data.slice(2), data.slice(0, 1)]);
+
     it('should work constructable from rows, cols, type, data linesize 3', () => {
       assertDataDeepEquals(new cv.Mat(2, 2, cv.CV_8U, bigBuffer, 3).getDataAsArray(), expected);
     });
@@ -113,7 +112,7 @@ export default function (args: TestContext) {
       methodName: 'copy',
       methodNameSpace: 'Mat',
       getOptionalArg: () => copyMask,
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -127,10 +126,10 @@ export default function (args: TestContext) {
       methodName: 'copyTo',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
-        new cv.Mat()
+        new cv.Mat(),
       ]),
       getOptionalArg: () => copyMask,
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -144,13 +143,13 @@ export default function (args: TestContext) {
       methodName: 'convertTo',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
-        cv.CV_32S
+        cv.CV_32S,
       ]),
       getOptionalArgsMap: () => ([
         ['alpha', 0.5],
-        ['beta', 0.5]
+        ['beta', 0.5],
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -158,17 +157,17 @@ export default function (args: TestContext) {
     it('should calculate default normal value if no args passed', () => {
       const mat = new cv.Mat([
         [0, Math.sqrt(4), Math.sqrt(4)],
-        [Math.sqrt(8), Math.sqrt(16), Math.sqrt(32)]
+        [Math.sqrt(8), Math.sqrt(16), Math.sqrt(32)],
       ], cv.CV_64F);
       expect(mat.norm()).to.equal(8);
     });
 
     it('should calculate norm to other mat', () => {
       const mat = new cv.Mat([
-        [0, -0.5, 1.5]
+        [0, -0.5, 1.5],
       ], cv.CV_64F);
       const mat2 = new cv.Mat([
-        [1.0, 0.5, 0.5]
+        [1.0, 0.5, 0.5],
       ], cv.CV_64F);
       expect(mat.norm(mat2)).to.equal(Math.sqrt(3));
     });
@@ -182,7 +181,7 @@ export default function (args: TestContext) {
     it('should normalize range of CV_8U', () => {
       const mat = new cv.Mat([
         [0, 127, 255],
-        [63, 195, 7]
+        [63, 195, 7],
       ], cv.CV_8U);
       const normMat = mat.normalize({ normType: cv.NORM_MINMAX, alpha: 0, beta: 100 });
       const cmpVals = MatValuesComparator(mat, normMat);
@@ -198,7 +197,7 @@ export default function (args: TestContext) {
     (cvVersionGreaterEqual(3, 3, 0) ? it.skip : it)('should normalize range of CV_64F', () => {
       const mat = new cv.Mat([
         [0.5, 1000.12345, 1000],
-        [-1000.12345, 123.456, -123.456]
+        [-1000.12345, 123.456, -123.456],
       ], cv.CV_64F);
       const normMat = mat.normalize({ normType: cv.NORM_MINMAX, alpha: 0, beta: 10 });
       const cmpVals = MatValuesComparator(mat, normMat);
@@ -214,12 +213,12 @@ export default function (args: TestContext) {
   describe('getData', () => {
     const matC1 = new cv.Mat([
       [255, 255, 255],
-      [0, 0, 0]
+      [0, 0, 0],
     ], cv.CV_8U);
 
     const matC3 = new cv.Mat([
       [[255, 255, 255], [255, 255, 255], [255, 255, 255]],
-      [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+      [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
     ], cv.CV_8UC3);
 
     describe('sync', () => {
@@ -235,19 +234,19 @@ export default function (args: TestContext) {
     });
 
     it('getRegion out of bound should throw an error', () => {
-      assertError(() => matC3.getRegion(new cv.Rect(0, 0, 100, 100)), "Mat::GetRegion - OpenCV Error: (0 <= roi.x && 0 <= roi.width && roi.x + roi.width <= m.cols && 0 <= roi.y && 0 <= roi.height && roi.y + roi.height <= m.rows) in cv::Mat::Mat")
+      assertError(() => matC3.getRegion(new cv.Rect(0, 0, 100, 100)), 'Mat::GetRegion - OpenCV Error: (0 <= roi.x && 0 <= roi.width && roi.x + roi.width <= m.cols && 0 <= roi.y && 0 <= roi.height && roi.y + roi.height <= m.rows) in cv::Mat::Mat');
     });
 
     describe('getData after getRegion should throw an error', () => {
       it('should return buffer of with data of single channeled Mat', () => {
         const region = matC3.getRegion(new cv.Rect(0, 0, 2, 2));
-        assertError(() => region.getData(), "Mat::GetData - Cannot call GetData when Region of Interest is defined (i.e. after getRegion) use matrix.copyTo to copy ROI to a new matrix")
+        assertError(() => region.getData(), 'Mat::GetData - Cannot call GetData when Region of Interest is defined (i.e. after getRegion) use matrix.copyTo to copy ROI to a new matrix');
       });
     });
 
     describe('async', () => {
       it('should return buffer with data of single channeled Mat', async () => {
-        const buf = await matC1.getDataAsync()
+        const buf = await matC1.getDataAsync();
         expect(buf).instanceOf(Buffer).lengthOf(6);
         // done();
       });
@@ -255,7 +254,7 @@ export default function (args: TestContext) {
       it('should return buffer with data of triple channeled Mat', async () => {
         const buf = await matC3.getDataAsync();
         expect(buf).instanceOf(Buffer).lengthOf(18);
-        //done();
+        // done();
       });
     });
   });
@@ -265,7 +264,7 @@ export default function (args: TestContext) {
       [0.9, 0.9, 0, 0],
       [0.9, 0, -0.9, -0.9],
       [-0.9, 0, 0.9, -0.9],
-      [0.9, 0, -0.9, 0]
+      [0.9, 0, -0.9, 0],
     ], cv.CV_64F);
 
     const expectOutput = (res) => {
@@ -280,7 +279,7 @@ export default function (args: TestContext) {
         methodName: 'dct',
         methodNameSpace: 'Mat',
         getOptionalArg: () => flags,
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -290,7 +289,7 @@ export default function (args: TestContext) {
         methodName: 'idct',
         methodNameSpace: 'Mat',
         getOptionalArg: () => flags,
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -301,9 +300,9 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getOptionalArgsMap: () => ([
           ['flags', flags],
-          ['nonZeroRows', 0]
+          ['nonZeroRows', 0],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -314,9 +313,9 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getOptionalArgsMap: () => ([
           ['flags', flags],
-          ['nonZeroRows', 0]
+          ['nonZeroRows', 0],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -330,7 +329,7 @@ export default function (args: TestContext) {
     describe('cols > rows', () => {
       const mat = new cv.Mat([
         [[255, 255, 255], [0, 0, 0], [255, 255, 255]],
-        [[0, 0, 0], [255, 255, 255], [0, 0, 0]]
+        [[0, 0, 0], [255, 255, 255], [0, 0, 0]],
       ], cv.CV_8UC3);
 
       generateAPITests({
@@ -338,7 +337,7 @@ export default function (args: TestContext) {
         getOptionalArg: () => new cv.Vec3(255, 255, 255),
         methodName: 'padToSquare',
         methodNameSpace: 'Mat',
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -346,7 +345,7 @@ export default function (args: TestContext) {
       const mat = new cv.Mat([
         [[255, 255, 255], [0, 0, 0]],
         [[0, 0, 0], [255, 255, 255]],
-        [[0, 0, 0], [255, 255, 255]]
+        [[0, 0, 0], [255, 255, 255]],
       ], cv.CV_8UC3);
 
       generateAPITests({
@@ -354,7 +353,7 @@ export default function (args: TestContext) {
         getOptionalArg: () => new cv.Vec3(255, 255, 255),
         methodName: 'padToSquare',
         methodNameSpace: 'Mat',
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -362,7 +361,7 @@ export default function (args: TestContext) {
       const mat = new cv.Mat([
         [[255, 255, 255], [0, 0, 0], [0, 0, 0]],
         [[0, 0, 0], [255, 255, 255], [0, 0, 0]],
-        [[0, 0, 0], [255, 255, 255], [0, 0, 0]]
+        [[0, 0, 0], [255, 255, 255], [0, 0, 0]],
       ], cv.CV_8UC3);
 
       generateAPITests({
@@ -370,7 +369,7 @@ export default function (args: TestContext) {
         getOptionalArg: () => new cv.Vec3(255, 255, 255),
         methodName: 'padToSquare',
         methodNameSpace: 'Mat',
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -379,7 +378,7 @@ export default function (args: TestContext) {
     const src = new cv.Mat([
       [1, 0, 0],
       [1, 0, 0],
-      [1, 0, 0]
+      [1, 0, 0],
     ], cv.CV_64F);
 
     const expectOutput = (res) => {
@@ -388,7 +387,7 @@ export default function (args: TestContext) {
       assertDataDeepEquals([
         [0, 0, 1],
         [0, 0, 1],
-        [0, 0, 1]
+        [0, 0, 1],
       ], res.getDataAsArray());
     };
 
@@ -398,7 +397,7 @@ export default function (args: TestContext) {
       methodName: 'flip',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => [flipCode],
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -406,7 +405,7 @@ export default function (args: TestContext) {
     const src = new cv.Mat([
       [1, 0, 0],
       [1, 0, 0],
-      [1, 0, 0]
+      [1, 0, 0],
     ], cv.CV_64F);
 
     const expectOutput = (res) => {
@@ -415,7 +414,7 @@ export default function (args: TestContext) {
       assertDataDeepEquals([
         [1, 1, 1],
         [0, 0, 0],
-        [0, 0, 0]
+        [0, 0, 0],
       ], res.getDataAsArray());
     };
 
@@ -425,14 +424,14 @@ export default function (args: TestContext) {
       methodName: 'rotate',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => [rotateCode],
-      expectOutput
+      expectOutput,
     });
   });
 
   describe('pushBack', () => {
     const getPushBackData = () => [
       [0, 1, 2, 3],
-      [4, 5, 6, 7]
+      [4, 5, 6, 7],
     ];
 
     const expectOutput = (res) => {
@@ -440,26 +439,26 @@ export default function (args: TestContext) {
       expect(res.rows).to.equal(3);
       assertDataDeepEquals(
         [
-          [0, 0, 0, 0]
+          [0, 0, 0, 0],
         ].concat(getPushBackData()),
-        res.getDataAsArray()
+        res.getDataAsArray(),
       );
     };
 
     generateAPITests({
       getDut: () => new cv.Mat(
         [[0, 0, 0, 0]],
-        cv.CV_8U
+        cv.CV_8U,
       ),
       methodName: 'pushBack',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
         new cv.Mat(
           getPushBackData(),
-          cv.CV_8U
-        )
+          cv.CV_8U,
+        ),
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -468,9 +467,9 @@ export default function (args: TestContext) {
       [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
-        [0, 0, 0, 0]
+        [0, 0, 0, 0],
       ],
-      cv.CV_8U
+      cv.CV_8U,
     );
 
     const expectOutput = (res, _, args) => {
@@ -487,7 +486,7 @@ export default function (args: TestContext) {
       methodName: 'popBack',
       methodNameSpace: 'Mat',
       getOptionalArg: () => numRowsToPop,
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -501,7 +500,7 @@ export default function (args: TestContext) {
       top,
       bottom,
       left,
-      right
+      right,
     ]);
 
     const borderType = cv.BORDER_CONSTANT;
@@ -512,7 +511,7 @@ export default function (args: TestContext) {
       if (args[5] === 255 || (args[4] && args[4].value)) {
         const upperLeft = res.at(0, 0);
         if (typeof upperLeft === 'object') {
-          ['x', 'y', 'z', 'w'].forEach(k => expect(upperLeft[k]).to.eq(value[k]));
+          ['x', 'y', 'z', 'w'].forEach((k) => expect(upperLeft[k]).to.eq(value[k]));
         } else {
           expect(upperLeft).to.equal(value);
         }
@@ -527,9 +526,9 @@ export default function (args: TestContext) {
         getRequiredArgs,
         getOptionalArgsMap: () => ([
           ['borderType', borderType],
-          ['value', value]
+          ['value', value],
         ]),
-        expectOutput: makeExpectOutput(type, value)
+        expectOutput: makeExpectOutput(type, value),
       });
     };
 
@@ -546,9 +545,8 @@ export default function (args: TestContext) {
       assertError(
         // @ts-ignore:next-line
         () => img.getRegion(0, 1, 2, 3),
-        'Mat::GetRegion - Error: expected argument 0 to be of type Rect'
+        'Mat::GetRegion - Error: expected argument 0 to be of type Rect',
       );
     });
   });
-
-};
+}

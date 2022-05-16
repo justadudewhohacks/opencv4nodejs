@@ -2,12 +2,12 @@ import { assert, expect } from 'chai';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg  } = args;
+  const { cv, utils, getTestImg } = args;
 
   const {
     assertMetaData,
     assertPropsWithValue,
-    cvVersionGreaterEqual
+    cvVersionGreaterEqual,
   } = utils;
 
   describe('SuperpixelSEEDS', () => {
@@ -16,7 +16,7 @@ export default function (args: TestContext) {
 
     describe('constructor', () => {
       it('should throw if no args', () => {
-        //@ts-expect-error
+        // @ts-expect-error
         expect(() => new cv.SuperpixelSEEDS()).to.throw('SuperpixelSEEDS::New - Error: expected argument 0 to be of type');
       });
 
@@ -24,11 +24,11 @@ export default function (args: TestContext) {
         const superpixelSeeds = new cv.SuperpixelSEEDS(getTestImg().resizeToMax(250), num_superpixels, num_levels);
         expect(superpixelSeeds).to.have.property('image').instanceOf(cv.Mat);
         assertMetaData(superpixelSeeds.image)({
-          rows: 250, cols: 250, type: cv.CV_8UC3
+          rows: 250, cols: 250, type: cv.CV_8UC3,
         });
         assertPropsWithValue(superpixelSeeds)({
           num_superpixels,
-          num_levels
+          num_levels,
         });
       });
     });
@@ -40,7 +40,7 @@ export default function (args: TestContext) {
         superpixelSeeds.iterate();
         assert(superpixelSeeds.numCalculatedSuperpixels > 0, 'no superpixels calculated');
         assertPropsWithValue(superpixelSeeds.labels)({
-          rows: 250, cols: 250, type: cv.CV_32S
+          rows: 250, cols: 250, type: cv.CV_32S,
         });
       });
     });
@@ -60,10 +60,10 @@ export default function (args: TestContext) {
           const superpixel = new cv.SuperpixelSLIC(getTestImg().resizeToMax(250), algorithm);
           expect(superpixel).to.have.property('image').instanceOf(cv.Mat);
           assertMetaData(superpixel.image)({
-            rows: 250, cols: 250, type: cv.CV_8UC3
+            rows: 250, cols: 250, type: cv.CV_8UC3,
           });
           assertPropsWithValue(superpixel)({
-            algorithm
+            algorithm,
           });
         });
       });
@@ -74,12 +74,11 @@ export default function (args: TestContext) {
           superpixel.iterate();
           assert(superpixel.numCalculatedSuperpixels > 0, 'no superpixels calculated');
           assertPropsWithValue(superpixel.labels)({
-            rows: 250, cols: 250, type: cv.CV_32S
+            rows: 250, cols: 250, type: cv.CV_32S,
           });
         });
       });
     });
-
 
     describe('SuperpixelLSC', () => {
       describe('constructor', () => {
@@ -92,7 +91,7 @@ export default function (args: TestContext) {
           const superpixel = new cv.SuperpixelLSC(getTestImg().resizeToMax(250));
           expect(superpixel).to.have.property('image').instanceOf(cv.Mat);
           assertMetaData(superpixel.image)({
-            rows: 250, cols: 250, type: cv.CV_8UC3
+            rows: 250, cols: 250, type: cv.CV_8UC3,
           });
         });
       });
@@ -103,11 +102,10 @@ export default function (args: TestContext) {
           superpixel.iterate();
           assert(superpixel.numCalculatedSuperpixels > 0, 'no superpixels calculated');
           assertPropsWithValue(superpixel.labels)({
-            rows: 250, cols: 250, type: cv.CV_32S
+            rows: 250, cols: 250, type: cv.CV_32S,
           });
         });
       });
     });
   }
-
-};
+}

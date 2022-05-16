@@ -1,10 +1,10 @@
-import { TestContext } from "../model";
+import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils  } = args;
+  const { cv, utils } = args;
 
   const {
-    assertPropsWithValue
+    assertPropsWithValue,
   } = utils;
 
   describe('accessors', () => {
@@ -28,7 +28,7 @@ export default function (args: TestContext) {
         minConvexity: 2.5,
         filterByInertia: true,
         maxInertiaRatio: 1.5,
-        minInertiaRatio: 0.5
+        minInertiaRatio: 0.5,
       };
 
       const detectorParams = new cv.SimpleBlobDetectorParams();
@@ -36,6 +36,4 @@ export default function (args: TestContext) {
       assertPropsWithValue(detectorParams)(params);
     });
   });
-
-};
-
+}

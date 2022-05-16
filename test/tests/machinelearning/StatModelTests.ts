@@ -1,4 +1,4 @@
-import { TestContext } from "../model";
+import { TestContext } from '../model';
 
 export default (args: TestContext) => {
   describe('StatModel', () => {

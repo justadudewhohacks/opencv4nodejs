@@ -7,7 +7,7 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
     generateAPITests,
     clearTmpData,
     getTmpDataFilePath,
-    cvVersionLowerThan
+    cvVersionLowerThan,
   } = utils;
 
   describe('constructor', () => {
@@ -37,7 +37,7 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
         methodNameSpace: 'Facemark',
         getRequiredArgs: () => [callback],
         hasAsync: false,
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -49,7 +49,7 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
         methodName: 'getData',
         methodNameSpace: 'Facemark',
         hasAsync: true,
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -66,7 +66,7 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
         methodNameSpace: 'Facemark',
         getRequiredArgs: () => [getTestImg().bgrToGray()],
         hasAsync: false,
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -98,7 +98,7 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
         methodName: 'addTrainingSample',
         methodNameSpace: 'Facemark',
         getRequiredArgs: () => [getTestImg().bgrToGray(), landmarks],
-        expectOutput: () => {}
+        expectOutput: () => {},
       });
     });
   });
@@ -122,7 +122,7 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
         methodName: 'fit',
         methodNameSpace: 'Facemark',
         getRequiredArgs: () => [getTestImg().bgrToGray(), faces],
-        expectOutput
+        expectOutput,
       });
     });
 

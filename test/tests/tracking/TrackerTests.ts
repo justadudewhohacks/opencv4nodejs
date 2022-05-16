@@ -14,9 +14,9 @@ export default function (args: TestContext) {
   const {
     cvVersionGreaterEqual,
     cvVersionEqual,
-  } = utils
+  } = utils;
 
-  const TrackerTestGenerator = getTestImg => (trackerName) => {
+  const TrackerTestGenerator = (getTestImg) => (trackerName) => {
     const newTracker = (arg?: any) => new cv[trackerName]();
     const newTrackerParams = () => new cv[`${trackerName}Params`]();
 
@@ -26,7 +26,7 @@ export default function (args: TestContext) {
           expectImplementsMethods(newTracker());
         });
 
-        if (['TrackerBoosting', 'TrackerKCF', 'TrackerMIL'].some(name => name === trackerName)) {
+        if (['TrackerBoosting', 'TrackerKCF', 'TrackerMIL'].some((name) => name === trackerName)) {
           it('can be constructed with params', () => {
             expectImplementsMethods(newTracker(newTrackerParams()));
           });
@@ -82,7 +82,7 @@ export default function (args: TestContext) {
     'TrackerBoosting',
     'TrackerMedianFlow',
     'TrackerMIL',
-    'TrackerTLD'
+    'TrackerTLD',
   ];
 
   const hasCSRT = cvVersionGreaterEqual(3, 4, 1);
@@ -137,7 +137,7 @@ export default function (args: TestContext) {
         const ret = tracker.addKCF(getTestImg(), new cv.Rect(0, 0, 10, 10));
         expect(ret).to.true;
       });
-      if(hasCSRT){
+      if (hasCSRT) {
         it('addCSRT', () => {
           const tracker = new cv.MultiTracker();
           const ret = tracker.addCSRT(getTestImg(), new cv.Rect(0, 0, 10, 10));
@@ -145,7 +145,7 @@ export default function (args: TestContext) {
         });
       }
 
-      if(hasMOSSE){
+      if (hasMOSSE) {
         it('addMOSSE', () => {
           const tracker = new cv.MultiTracker();
           const ret = tracker.addMOSSE(getTestImg(), new cv.Rect(0, 0, 10, 10));
@@ -188,5 +188,4 @@ export default function (args: TestContext) {
       });
     });
   });
-
-};
+}

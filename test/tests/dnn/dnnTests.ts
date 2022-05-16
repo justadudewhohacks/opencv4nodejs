@@ -2,13 +2,13 @@ import { expect } from 'chai';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg  } = args;
+  const { cv, utils, getTestImg } = args;
 
   const {
     readTestImage,
     generateAPITests,
     assertMetaData,
-    cvVersionGreaterEqual
+    cvVersionGreaterEqual,
   } = utils;
 
   describe('blobFromImage', () => {
@@ -21,7 +21,7 @@ export default function (args: TestContext) {
       ['scalefactor', 0.8],
       ['size', new cv.Size(3, 3)],
       ['mean', new cv.Vec3(0.5, 0.5, 0.5)],
-      ['swapRB', true]
+      ['swapRB', true],
     ]);
 
     describe('blobFromImage', () => {
@@ -29,15 +29,15 @@ export default function (args: TestContext) {
         getDut: () => cv,
         methodName: 'blobFromImage',
         getRequiredArgs: () => ([
-          getTestImg().resizeToMax(250)
+          getTestImg().resizeToMax(250),
         ]),
         getOptionalArgsMap: () => ([
           ['scalefactor', 0.8],
           ['size', new cv.Size(3, 3)],
           ['mean', new cv.Vec3(0.5, 0.5, 0.5)],
-          ['swapRB', true]
+          ['swapRB', true],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -46,10 +46,10 @@ export default function (args: TestContext) {
         getDut: () => cv,
         methodName: 'blobFromImages',
         getRequiredArgs: () => ([
-          [getTestImg().resizeToMax(250), getTestImg().resizeToMax(250)]
+          [getTestImg().resizeToMax(250), getTestImg().resizeToMax(250)],
         ]),
         getOptionalArgsMap,
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -58,7 +58,7 @@ export default function (args: TestContext) {
         getDut: () => cv,
         methodName: 'blobFromImage',
         getRequiredArgs: () => ([
-          getTestImg().resizeToMax(250)
+          getTestImg().resizeToMax(250),
         ]),
         getOptionalArgsMap: () => ([
           ['scalefactor', 0.8],
@@ -66,9 +66,9 @@ export default function (args: TestContext) {
           ['mean', new cv.Vec3(0.5, 0.5, 0.5)],
           ['swapRB', true],
           ['crop', false],
-          ['ddepth', cv.CV_32F]
+          ['ddepth', cv.CV_32F],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -92,5 +92,4 @@ export default function (args: TestContext) {
       });
     });
   }
-
-};
+}

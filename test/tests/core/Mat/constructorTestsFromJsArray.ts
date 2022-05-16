@@ -1,6 +1,6 @@
-import { TestContext } from "../../model";
-
 import { assert } from 'chai';
+import { TestContext } from '../../model';
+
 import getExampleMatData from './getExampleMatData';
 
 export default function (args: TestContext) {
@@ -9,7 +9,7 @@ export default function (args: TestContext) {
   const {
     assertDataDeepEquals,
     assertDataAlmostDeepEquals,
-    assertMetaData
+    assertMetaData,
   } = utils;
 
   const createAndAssertMatDataEquals = (type: number) => {
@@ -17,7 +17,7 @@ export default function (args: TestContext) {
     const mat = new cv.Mat(matData as any, type);
 
     assertMetaData(mat)(4, 3, type);
-    if ([cv.CV_32FC1, cv.CV_32FC2, cv.CV_32FC3, cv.CV_32FC4].some(matType => matType === type)) {
+    if ([cv.CV_32FC1, cv.CV_32FC2, cv.CV_32FC3, cv.CV_32FC4].some((matType) => matType === type)) {
       assertDataAlmostDeepEquals(matData, mat.getDataAsArray());
     } else {
       assertDataDeepEquals(matData, mat.getDataAsArray());
@@ -42,7 +42,7 @@ export default function (args: TestContext) {
         const matData = [
           [1, 0, 0],
           [0, 1, 0],
-          [0, 0]
+          [0, 0],
         ];
         new cv.Mat(matData, cv.CV_8U);
       } catch (err) {
@@ -58,7 +58,7 @@ export default function (args: TestContext) {
         const matData = [
           [1, 0, 0],
           [0, 1, 0],
-          [0, 0, 1]
+          [0, 0, 1],
         ];
         new cv.Mat(matData, invalidMatType);
       } catch (err) {
@@ -179,5 +179,4 @@ export default function (args: TestContext) {
       createAndAssertMatDataEquals(cv.CV_64FC4);
     });
   });
-
-};
+}

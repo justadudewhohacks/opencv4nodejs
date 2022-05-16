@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => {
-    const { cv } = args;
+  const { cv } = args;
   it('should be constructable without args', () => {
     expect(new cv.DetectionROI()).to.be.instanceOf(cv.DetectionROI);
   });
@@ -12,7 +12,7 @@ export default (args: TestContext) => {
     const params = {
       scale: 1.5,
       locations: [new cv.Point2(0, 0), new cv.Point2(10, 0), new cv.Point2(0, 10)],
-      confidences: [1.5, 2.5, 3.5]
+      confidences: [1.5, 2.5, 3.5],
     };
 
     Object.keys(params).forEach((param) => { detectionROI[param] = params[param]; });
@@ -26,5 +26,4 @@ export default (args: TestContext) => {
       .lengthOf(3)
       .to.deep.equal(params.confidences);
   });
-
 };

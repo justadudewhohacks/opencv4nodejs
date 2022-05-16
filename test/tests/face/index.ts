@@ -4,17 +4,16 @@ import facemarkTestsFactory from './facemarkTests';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg  } = args;
+  const { cv, utils, getTestImg } = args;
 
   const {
-    cvVersionGreaterEqual
-  } = utils
+    cvVersionGreaterEqual,
+  } = utils;
 
-  const recognizerTests = recognizerTestsFactory({ cv, utils, getTestImg })
-  const facemarkTests = facemarkTestsFactory({ cv, utils, getTestImg })
+  const recognizerTests = recognizerTestsFactory({ cv, utils, getTestImg });
+  const facemarkTests = facemarkTestsFactory({ cv, utils, getTestImg });
 
   describe('FaceRecognizers', () => {
-
     describe('EigenFaceRecognizer', () => {
       const args = ['num_components', 'threshold'];
       const values = [10, 0.8];
@@ -32,23 +31,19 @@ export default function (args: TestContext) {
       const values = [2, 16, 16, 16];
       recognizerTests(args, values, cv.LBPHFaceRecognizer);
     });
-
   });
 
   if (cvVersionGreaterEqual(3, 4, 0)) {
     describe('FaceMark', () => {
+      facemarkStructsTests(args);
 
-        facemarkStructsTests(args);
+      describe('FacemarkLBF', () => {
+        facemarkTests(cv.FacemarkLBF, cv.FacemarkLBFParams);
+      });
 
-        describe('FacemarkLBF', () => {
-          facemarkTests(cv.FacemarkLBF, cv.FacemarkLBFParams);
-        });
-
-        describe('FacemarkAAM', () => {
-          facemarkTests(cv.FacemarkAAM, cv.FacemarkAAMParams);
-        });
+      describe('FacemarkAAM', () => {
+        facemarkTests(cv.FacemarkAAM, cv.FacemarkAAMParams);
+      });
     });
-
   }
-
-};
+}

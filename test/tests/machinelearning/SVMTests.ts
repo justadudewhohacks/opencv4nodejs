@@ -2,13 +2,13 @@ import { expect } from 'chai';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => {
-  const { cv, utils } = args
+  const { cv, utils } = args;
   const {
     generateAPITests,
     assertPropsWithValue,
     getTmpDataFilePath,
     clearTmpData,
-    cvVersionLowerThan
+    cvVersionLowerThan,
   } = utils;
 
   const samples = new cv.Mat([
@@ -23,13 +23,13 @@ export default (args: TestContext) => {
     [15, 15, 15],
     [15, 15, 20],
     [10, 10, 20],
-    [10, 10, 10]
+    [10, 10, 10],
   ], cv.CV_32F);
   const labels = new cv.Mat([[0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]], cv.CV_32S);
   const trainData = new cv.TrainData(
     samples,
     cv.ml.ROW_SAMPLE,
-    labels
+    labels,
   );
   const someArgs = {
     c: 0.1,
@@ -37,7 +37,7 @@ export default (args: TestContext) => {
     degree: Math.PI,
     nu: 0.4,
     p: 0.5,
-    kernelType: cv.ml.SVM.SIGMOID
+    kernelType: cv.ml.SVM.SIGMOID,
   };
 
   describe('constructor', () => {
@@ -73,20 +73,19 @@ export default (args: TestContext) => {
     it('should set only specified params', () => {
       const args = {
         c: 0.2,
-        coef0: 0.1
+        coef0: 0.1,
       };
       const svm = new cv.SVM(someArgs);
       svm.setParams(args);
       assertPropsWithValue(svm)(
-        Object.assign(
-          {},
-          someArgs,
-          args
-        )
+        {
+
+          ...someArgs,
+          ...args,
+        },
       );
     });
   });
-
 
   describe('training', () => {
     const expectOutput = (ret, svm) => {
@@ -102,10 +101,10 @@ export default (args: TestContext) => {
           methodName: 'train',
           methodNameSpace: 'SVM',
           getRequiredArgs: () => ([
-            trainData
+            trainData,
           ]),
           getOptionalArg: () => cv.statModel.RAW_OUTPUT,
-          expectOutput
+          expectOutput,
         });
       });
 
@@ -117,9 +116,9 @@ export default (args: TestContext) => {
           getRequiredArgs: () => ([
             samples,
             cv.ml.ROW_SAMPLE,
-            labels
+            labels,
           ]),
-          expectOutput
+          expectOutput,
         });
       });
     });
@@ -130,7 +129,7 @@ export default (args: TestContext) => {
         methodName: 'trainAuto',
         methodNameSpace: 'SVM',
         getRequiredArgs: () => ([
-          trainData
+          trainData,
         ]),
         getOptionalArgsMap: () => ([
           ['kFold', 20],
@@ -140,9 +139,9 @@ export default (args: TestContext) => {
           ['nuGrid', new cv.ParamGrid(cv.ml.SVM.NU)],
           ['coeffGrid', new cv.ParamGrid(cv.ml.SVM.COEF)],
           ['degreeGrid', new cv.ParamGrid(cv.ml.SVM.DEGREE)],
-          ['balanced', true]
+          ['balanced', true],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -212,14 +211,13 @@ export default (args: TestContext) => {
         const svmNew = new cv.SVM();
         svmNew.load(file);
 
-        const svm1 = Object.assign({}, svm);
-        const svm2 = Object.assign({}, svmNew);
+        const svm1 = { ...svm };
+        const svm2 = { ...svmNew };
         svm1.classWeights = null;
-        //@ts-ignore
+        // @ts-ignore
         svm2.classWeights = null;
         assertPropsWithValue(svm1)(svm2);
       });
     });
   });
-
 };

@@ -2,12 +2,12 @@ import { expect } from 'chai';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg  } = args;
+  const { cv, utils, getTestImg } = args;
 
   const {
     assertMetaData,
     assertPropsWithValue,
-    funcShouldRequireArgs
+    funcShouldRequireArgs,
   } = utils;
 
   const history = 1000;
@@ -23,12 +23,12 @@ export default function (args: TestContext) {
       const bgsubtractor = new cv.BackgroundSubtractorKNN(
         history,
         dist2Threshold,
-        detectShadows
+        detectShadows,
       );
       assertPropsWithValue(bgsubtractor)({
         history,
         dist2Threshold,
-        detectShadows
+        detectShadows,
       });
     });
 
@@ -36,12 +36,12 @@ export default function (args: TestContext) {
       const bgsubtractor = new cv.BackgroundSubtractorKNN({
         history,
         dist2Threshold,
-        detectShadows
+        detectShadows,
       });
       assertPropsWithValue(bgsubtractor)({
         history,
         dist2Threshold,
-        detectShadows
+        detectShadows,
       });
     });
 
@@ -73,5 +73,4 @@ export default function (args: TestContext) {
       assertMetaData(fgMask)(getTestImg().rows, getTestImg().cols, cv.CV_8U);
     });
   });
-
-};
+}

@@ -6,7 +6,7 @@ export default (args: TestContext) => {
 
   const {
     assertPropsWithValue,
-    expectFloat
+    expectFloat,
   } = utils;
 
   describe('constructor', () => {
@@ -18,12 +18,12 @@ export default (args: TestContext) => {
     const class_id = 2;
 
     it('has default constructor', () => {
-      //@ts-ignore:next-line
+      // @ts-ignore:next-line
       expect(() => new cv.KeyPoint()).to.not.throw();
     });
 
     it('should throw if insufficient args passed', () => {
-      //@ts-ignore:next-line
+      // @ts-ignore:next-line
       expect(() => new cv.KeyPoint2(pt, undefined)).to.throw();
     });
 
@@ -40,5 +40,4 @@ export default (args: TestContext) => {
       expectFloat(kp.response, response);
     });
   });
-
 };

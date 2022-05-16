@@ -1,5 +1,5 @@
-import { TestContext } from "../model";
 import { expect } from 'chai';
+import { TestContext } from '../model';
 
 const CV_CALIB_USE_INTRINSIC_GUESS = 1;
 
@@ -11,7 +11,7 @@ export default (args: TestContext) => {
     assertMetaData,
     generateAPITests,
     expectToBeVec3,
-    cvVersionGreaterEqual
+    cvVersionGreaterEqual,
   } = utils;
 
   const objectPoints = [
@@ -22,7 +22,7 @@ export default (args: TestContext) => {
     new cv.Point3(100, 100, 100),
     new cv.Point3(100.5, 100.5, 100.5),
     new cv.Point3(101.0, 101.0, 101.0),
-    new cv.Point3(101.0, 100.5, 100)
+    new cv.Point3(101.0, 100.5, 100),
   ];
   const imagePoints = [
     new cv.Point2(0, 0),
@@ -32,22 +32,21 @@ export default (args: TestContext) => {
     new cv.Point2(100, 100),
     new cv.Point2(100.5, 100.5),
     new cv.Point2(101.0, 101.0),
-    new cv.Point2(101.0, 100.5)
+    new cv.Point2(101.0, 100.5),
   ];
-  
+
   const rvecInit = new cv.Vec3(22, 45, 67);
   const tvecInit = new cv.Vec3(526, 315, 245);
   const distCoefficients = [0, 0.5, 1.0, 1.0];
 
   describe('findHomography', () => {
     const srcPointsJson = [{ x: 100, y: 100 }, { x: 100, y: -100 }, { x: -100, y: 100 }, { x: -100, y: -100 }];
-    const srcPoints = srcPointsJson.map(pt => new cv.Point2(pt.x, pt.y))
-    const dstPoints = srcPointsJson.map(srcPt => new cv.Point2(srcPt.x * 2, srcPt.y * 2));
+    const srcPoints = srcPointsJson.map((pt) => new cv.Point2(pt.x, pt.y));
+    const dstPoints = srcPointsJson.map((srcPt) => new cv.Point2(srcPt.x * 2, srcPt.y * 2));
     const method = cv.RANSAC;
     const ransacReprojThreshold = 2.5;
-		const maxIters = 1000;
+    const maxIters = 1000;
     const confidence = 0.9;
-
 
     const expectOutput = (res) => {
       assertPropsWithValue(res.homography)({ type: cv.CV_64F, rows: 3, cols: 3 });
@@ -58,15 +57,15 @@ export default (args: TestContext) => {
       methodName: 'findHomography',
       getRequiredArgs: () => ([
         srcPoints,
-        dstPoints
+        dstPoints,
       ]),
       getOptionalParamsMap: () => ([
         ['method', method],
         ['ransacReprojThreshold', ransacReprojThreshold],
         ['maxIters', maxIters],
-        ['confidence', confidence]
+        ['confidence', confidence],
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -96,9 +95,9 @@ export default (args: TestContext) => {
         rvec1,
         tvec1,
         rvec2,
-        tvec2
+        tvec2,
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -115,9 +114,9 @@ export default (args: TestContext) => {
       objectPoints,
       imagePoints,
       cv.Mat.eye(3, 3, cv.CV_64F),
-      distCoefficients
+      distCoefficients,
     ]);
-    
+
     describe('solvePnP with extrinsicGuess', () => {
       generateAPITests({
         getDut: () => cv,
@@ -128,9 +127,9 @@ export default (args: TestContext) => {
           ['rvec', rvecInit],
           ['tvec', tvecInit],
           ['useExtrinsicGuess', true],
-          ['flags', cv.SOLVEPNP_ITERATIVE]
+          ['flags', cv.SOLVEPNP_ITERATIVE],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -146,12 +145,12 @@ export default (args: TestContext) => {
           ['iterationsCount', 200],
           ['reprojectionError', 16.0],
           ['confidence', 0.9],
-          ['flags', cv.SOLVEPNP_DLS]
+          ['flags', cv.SOLVEPNP_DLS],
         ]),
         expectOutput: (res) => {
           expectOutput(res);
           expect(res).to.have.property('inliers').to.be.an('array');
-        }
+        },
       });
     });
 
@@ -163,10 +162,10 @@ export default (args: TestContext) => {
           objectPoints.slice(0, 3),
           imagePoints.slice(0, 3),
           cv.Mat.eye(3, 3, cv.CV_64F),
-          distCoefficients
+          distCoefficients,
         ]),
         getOptionalParams: () => ([
-          cv.SOLVEPNP_DLS
+          cv.SOLVEPNP_DLS,
         ]),
         expectOutput: (res) => {
           expect(res).to.have.property('returnValue').to.be.a('Boolean');
@@ -182,7 +181,7 @@ export default (args: TestContext) => {
             expect(vec).to.be.instanceOf(cv.Mat);
             assertMetaData(vec)(3, 1, cv.CV_64F);
           });
-        }
+        },
       });
     });
   });
@@ -199,16 +198,16 @@ export default (args: TestContext) => {
         rvec,
         tvec,
         cv.Mat.eye(3, 3, cv.CV_64F),
-        distCoefficients
+        distCoefficients,
       ],
       getOptionalParams: () => ([
-        aspectRatio
+        aspectRatio,
       ]),
       expectOutput: (res) => {
         expect(res).to.have.property('imagePoints').to.be.an('array').lengthOf(imagePoints.length);
         expect(res).to.have.property('jacobian').to.be.instanceOf(cv.Mat);
         assertMetaData(res.jacobian)(16, 14, cv.CV_64F);
-      }
+      },
     });
   });
 
@@ -221,15 +220,15 @@ export default (args: TestContext) => {
       getRequiredArgs: () => [
         [objectPoints, objectPoints],
         [imagePoints, imagePoints],
-        imageSize
+        imageSize,
       ],
       getOptionalParams: () => ([
-        aspectRatio
+        aspectRatio,
       ]),
       expectOutput: (res) => {
         expect(res).to.be.instanceOf(cv.Mat);
         assertMetaData(res)(3, 3, cv.CV_64F);
-      }
+      },
     });
   });
 
@@ -237,31 +236,31 @@ export default (args: TestContext) => {
     const expectOutput = (res) => {
       expect(res).to.have.property('returnValue').to.be.a('Number');
       expect(res).to.have.property('rvecs').to.be.an('array').lengthOf(2);
-      res.rvecs.forEach(vec => expectToBeVec3(vec));
+      res.rvecs.forEach((vec) => expectToBeVec3(vec));
       expect(res).to.have.property('tvecs').to.be.an('array').lengthOf(2);
-      res.tvecs.forEach(vec => expectToBeVec3(vec));
+      res.tvecs.forEach((vec) => expectToBeVec3(vec));
       expect(res).to.have.property('distCoeffs').to.be.an('array');
     };
     const _cameraMatrix = new cv.Mat([
       [800, 0, 100],
       [0, 800, 100],
-      [0, 0, 1]
+      [0, 0, 1],
     ], cv.CV_64F);
     const imageSize = new cv.Size(200, 200);
     // non-planar calibration expects z coordinates to be 0
-    const _objectPoints = objectPoints.map(pt => new cv.Point3(pt.x, pt.y, 0));
+    const _objectPoints = objectPoints.map((pt) => new cv.Point3(pt.x, pt.y, 0));
 
     const getRequiredArgs = () => [
       [_objectPoints, _objectPoints],
       [imagePoints, imagePoints],
       imageSize,
       _cameraMatrix,
-      distCoefficients
+      distCoefficients,
     ];
     // openCV3 only
     const getOptionalParamsMap = (): Array<[string, any]> => ([
       ['flags', CV_CALIB_USE_INTRINSIC_GUESS as number],
-      ['termCriteria', new cv.TermCriteria()]
+      ['termCriteria', new cv.TermCriteria()],
     ]);
 
     (cvVersionGreaterEqual(3, 1, 0) ? describe : describe.skip)('calibrateCamera', () => {
@@ -270,7 +269,7 @@ export default (args: TestContext) => {
         methodName: 'calibrateCamera',
         getRequiredArgs,
         getOptionalParamsMap,
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -287,7 +286,7 @@ export default (args: TestContext) => {
           expect(res).to.have.property('stdDeviationsExtrinsics').to.be.instanceOf(cv.Mat);
           assertMetaData(res.stdDeviationsExtrinsics)(12, 1, cv.CV_64F);
           expect(res).to.have.property('perViewErrors').to.be.an('array').lengthOf(2);
-        }
+        },
       });
     });
   });
@@ -320,13 +319,13 @@ export default (args: TestContext) => {
         distCoefficients,
         cv.Mat.eye(3, 3, cv.CV_64F),
         distCoefficients,
-        imageSize
+        imageSize,
       ],
       getOptionalParamsMap: () => ([
         ['flags', CV_CALIB_USE_INTRINSIC_GUESS],
-        ['termCriteria', new cv.TermCriteria()]
+        ['termCriteria', new cv.TermCriteria()],
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -350,12 +349,12 @@ export default (args: TestContext) => {
         imagePoints,
         imagePoints,
         F,
-        imageSize
+        imageSize,
       ],
       getOptionalParams: () => ([
-        threshold
+        threshold,
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -372,14 +371,14 @@ export default (args: TestContext) => {
       methodName: 'findFundamentalMat',
       getRequiredArgs: () => [
         imagePoints,
-        imagePoints
+        imagePoints,
       ],
       getOptionalParamsMap: () => ([
         ['method', cv.FM_LMEDS],
         ['param1', 1.0],
-        ['param2', 0.9]
+        ['param2', 0.9],
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -396,16 +395,16 @@ export default (args: TestContext) => {
       methodName: 'findEssentialMat',
       getRequiredArgs: () => [
         imagePoints,
-        imagePoints
+        imagePoints,
       ],
       getOptionalParamsMap: () => ([
         ['focal', 800.0],
         ['pp', new cv.Point2(100, 100)],
         ['method', cv.LMEDS],
         ['prob', 0.9],
-        ['threshold', 2.0]
+        ['threshold', 2.0],
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -427,21 +426,21 @@ export default (args: TestContext) => {
       getRequiredArgs: () => [
         E,
         imagePoints,
-        imagePoints
+        imagePoints,
       ],
       getOptionalParamsMap: () => ([
         ['focal', 800.0],
         ['pp', new cv.Point2(100, 100)],
-        ['mask', mask]
+        ['mask', mask],
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
   describe('computeCorrespondEpilines', () => {
     const expectOutput = (res) => {
       expect(res).to.be.an('array').lengthOf(imagePoints.length);
-      res.forEach(vec => expectToBeVec3(vec));
+      res.forEach((vec) => expectToBeVec3(vec));
     };
 
     const whichImg = 0;
@@ -453,9 +452,9 @@ export default (args: TestContext) => {
       getRequiredArgs: () => [
         imagePoints,
         whichImg,
-        F
+        F,
       ],
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -482,9 +481,9 @@ export default (args: TestContext) => {
         roi2,
         minDisparity,
         numberOfDisparities,
-        SADWindowSize
+        SADWindowSize,
       ],
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -502,13 +501,13 @@ export default (args: TestContext) => {
       methodName: 'estimateAffine3D',
       getRequiredArgs: () => [
         objectPoints,
-        objectPoints
+        objectPoints,
       ],
       getOptionalParamsMap: () => ([
         ['ransacThreshold', 1.0],
-        ['param2', 0.9]
+        ['param2', 0.9],
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -523,9 +522,9 @@ export default (args: TestContext) => {
       getRequiredArgs: () => [
         pt1,
         pt2,
-        F
+        F,
       ],
-      expectOutput: res => expect(res).to.be.a('number').to.be.above(0)
+      expectOutput: (res) => expect(res).to.be.a('number').to.be.above(0),
     });
   });
 
@@ -539,14 +538,14 @@ export default (args: TestContext) => {
 
     const getRequiredArgs = () => ([
       imagePoints,
-      imagePoints
+      imagePoints,
     ]);
     const getOptionalParamsMap = (): Array<[string, any]> => ([
-        ['method', cv.LMEDS],
-        ['ransacReprojThreshold', 1.0],
-        ['maxIters', 1000],
-        ['confidence', 0.9],
-        ['refineIters', 20]
+      ['method', cv.LMEDS],
+      ['ransacReprojThreshold', 1.0],
+      ['maxIters', 1000],
+      ['confidence', 0.9],
+      ['refineIters', 20],
     ]);
 
     describe('estimateAffine2D', () => {
@@ -555,7 +554,7 @@ export default (args: TestContext) => {
         methodName: 'estimateAffine2D',
         getRequiredArgs,
         getOptionalParamsMap,
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -565,25 +564,24 @@ export default (args: TestContext) => {
         methodName: 'estimateAffinePartial2D',
         getRequiredArgs,
         getOptionalParamsMap,
-        expectOutput
+        expectOutput,
       });
     });
   });
 
-
   if (cvVersionGreaterEqual(4, 0, 0)) {
     describe('undistortPoints', () => {
-      const cameraMatrix = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);
-      //const newCameraMatrix = new cv.Mat([[0.5, 0, 10],[0, 0.5, 10],[0, 0, 1]], cv.CV_32F);
+      const cameraMatrix = new cv.Mat([[1, 0, 10], [0, 1, 10], [0, 0, 1]], cv.CV_32F);
+      // const newCameraMatrix = new cv.Mat([[0.5, 0, 10],[0, 0.5, 10],[0, 0, 1]], cv.CV_32F);
       const distCoeffs = new cv.Mat([[0.1, 0.1, 1, 1]], cv.CV_32F);
       const srcPoints = [
-        [5,5], [5, 10], [5, 15]
-      ].map(p => new cv.Point2(p[0], p[1]));
+        [5, 5], [5, 10], [5, 15],
+      ].map((p) => new cv.Point2(p[0], p[1]));
       const expectedDestPoints = [
         [9.522233963012695, 9.522233963012695],
         [9.128815650939941, 9.661333084106445],
-        [9.76507568359375, 9.841306686401367]
-      ].map(p => new cv.Point2(p[0], p[1]));
+        [9.76507568359375, 9.841306686401367],
+      ].map((p) => new cv.Point2(p[0], p[1]));
 
       generateAPITests({
         getDut: () => cv,
@@ -591,17 +589,16 @@ export default (args: TestContext) => {
         getRequiredArgs: () => ([
           srcPoints,
           cameraMatrix,
-          distCoeffs
+          distCoeffs,
         ]),
-        expectOutput: destPoints => {
+        expectOutput: (destPoints) => {
           expect(destPoints.length).to.equal(expectedDestPoints.length);
-          for(var i = 0; i < destPoints.length; i++){
-            expect(destPoints[i].x).to.be.closeTo(expectedDestPoints[i].x, 0.001)
-            expect(destPoints[i].y).to.be.closeTo(expectedDestPoints[i].y, 0.001)
+          for (let i = 0; i < destPoints.length; i++) {
+            expect(destPoints[i].x).to.be.closeTo(expectedDestPoints[i].x, 0.001);
+            expect(destPoints[i].y).to.be.closeTo(expectedDestPoints[i].y, 0.001);
           }
-        }
+        },
       });
     });
-  };
-
+  }
 };

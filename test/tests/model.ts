@@ -1,5 +1,6 @@
-import { cv, Point2, Point3 } from '@u4/opencv4nodejs';
-import { Mat, Vec2, Vec3, Vec4 } from '@u4/opencv4nodejs';
+import {
+  cv, Point2, Point3, Mat, Vec2, Vec3, Vec4,
+} from '@u4/opencv4nodejs';
 
 export type OpenCV = typeof cv
 
@@ -8,9 +9,8 @@ export interface APITestOpts {
     methodName?: string,
     methodNameSpace?: string,
     expectOutput?: (res: any, dut: any, args: any) => void,
-    getOptionalArg?: () => any, 
+    getOptionalArg?: () => any,
     getOptionalArgsMap?: () => {[key: string]: any},
-
 
     getClassInstance: () => any,
     classNameSpace?: string,
@@ -25,7 +25,7 @@ export interface APITestOpts {
     otherAsyncCallbackedTests: () => void,
     otherAsyncPromisedTests: () => void,
     beforeHook: () => any,
-    afterHook: () => any  
+    afterHook: () => any
 }
 
 export interface TestContext {
@@ -36,7 +36,7 @@ export interface TestContext {
         expectToBeVec2: (vec: Vec2 | Point2) => void;
         expectToBeVec3: (vec: Vec3 | Point3) => void;
         expectToBeVec4: (vec: Vec4) => void;
-    
+
         assertError: (func: () => any, msg: string) => void;
         assertDataDeepEquals: (data0: any, data1: any) => void;
         assertDataAlmostDeepEquals: (data0: any, data1: any) => void;
@@ -72,4 +72,3 @@ export interface TestContext {
     getTestImg: () => Mat;
     getPeoplesTestImg?: () => Mat;
 }
-

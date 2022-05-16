@@ -1,11 +1,11 @@
-import { TestContext } from "../../model";
+import { TestContext } from '../../model';
 
 export default function (args: TestContext) {
   const { cv, utils } = args;
 
   const {
     assertError,
-    assertPropsWithValue
+    assertPropsWithValue,
   } = utils;
 
   describe('constructor', () => {
@@ -87,7 +87,9 @@ export default function (args: TestContext) {
         const x = 100;
         const y = 200;
         const z = 300;
-        assertPropsWithValue(new cv.Vec4(w, x, y, z))({ w, x, y, z });
+        assertPropsWithValue(new cv.Vec4(w, x, y, z))({
+          w, x, y, z,
+        });
       });
 
       it('should have double positions', () => {
@@ -95,7 +97,9 @@ export default function (args: TestContext) {
         const x = 100.12345;
         const y = 200.89764;
         const z = 300.034;
-        assertPropsWithValue(new cv.Vec4(w, x, y, z))({ w, x, y, z });
+        assertPropsWithValue(new cv.Vec4(w, x, y, z))({
+          w, x, y, z,
+        });
       });
 
       it('should have negative int positions', () => {
@@ -104,7 +108,9 @@ export default function (args: TestContext) {
           const x = -100;
           const y = -200;
           const z = -300;
-          assertPropsWithValue(new cv.Vec4(w, x, y, z))({ w, x, y, z });
+          assertPropsWithValue(new cv.Vec4(w, x, y, z))({
+            w, x, y, z,
+          });
         });
       });
 
@@ -113,7 +119,9 @@ export default function (args: TestContext) {
         const x = -100.12345;
         const y = -200.89764;
         const z = -300.034;
-        assertPropsWithValue(new cv.Vec4(w, x, y, z))({ w, x, y, z });
+        assertPropsWithValue(new cv.Vec4(w, x, y, z))({
+          w, x, y, z,
+        });
       });
     });
 
@@ -125,7 +133,9 @@ export default function (args: TestContext) {
         const x = 300;
         const y = 400;
         const z = 500;
-        assertPropsWithValue(new cv.Vec6(u, v, w, x, y, z))({ u, v, w, x, y, z });
+        assertPropsWithValue(new cv.Vec6(u, v, w, x, y, z))({
+          u, v, w, x, y, z,
+        });
       });
 
       it('should have double positions', () => {
@@ -135,7 +145,9 @@ export default function (args: TestContext) {
         const x = 300.034;
         const y = 400.254;
         const z = 500.543;
-        assertPropsWithValue(new cv.Vec6(u, v, w, x, y, z))({ u, v, w, x, y, z });
+        assertPropsWithValue(new cv.Vec6(u, v, w, x, y, z))({
+          u, v, w, x, y, z,
+        });
       });
 
       it('should have negative int positions', () => {
@@ -146,7 +158,9 @@ export default function (args: TestContext) {
           const x = -300;
           const y = -400;
           const z = -500;
-          assertPropsWithValue(new cv.Vec6(u, v, w, x, y, z))({ u, v, w, x, y, z });
+          assertPropsWithValue(new cv.Vec6(u, v, w, x, y, z))({
+            u, v, w, x, y, z,
+          });
         });
       });
 
@@ -157,8 +171,10 @@ export default function (args: TestContext) {
         const x = -300.034;
         const y = -400.254;
         const z = -500.543;
-        assertPropsWithValue(new cv.Vec6(u, v, w, x, y, z))({ u, v, w, x, y, z });
+        assertPropsWithValue(new cv.Vec6(u, v, w, x, y, z))({
+          u, v, w, x, y, z,
+        });
       });
     });
   });
-};
+}

@@ -5,7 +5,7 @@ export default (args: TestContext) => {
   const { cv, utils } = args;
 
   const {
-    assertMetaData
+    assertMetaData,
   } = utils;
 
   const cvVarType = cv.ml.VAR_ORDERED;
@@ -41,7 +41,7 @@ export default (args: TestContext) => {
         varIdx,
         sampleIdx,
         sampleWeights,
-        varType
+        varType,
       );
       expect(trainData).to.be.instanceOf(cv.TrainData);
       expect(trainData).to.have.property('varIdx');
@@ -58,7 +58,7 @@ export default (args: TestContext) => {
         new cv.Mat(3, 3, cv.CV_32F),
         cv.ml.ROW_SAMPLE,
         new cv.Mat(3, 1, cv.CV_32F),
-        varIdx
+        varIdx,
       );
       expect(trainData).to.be.instanceOf(cv.TrainData);
       expect(trainData).to.have.property('varIdx');
@@ -67,18 +67,17 @@ export default (args: TestContext) => {
 
     it('should be constructable with optional args object', () => {
       const opts = {
-        sampleWeights: [0, 0.1, 0.5]
+        sampleWeights: [0, 0.1, 0.5],
       };
       const trainData = new cv.TrainData(
         new cv.Mat(3, 3, cv.CV_32F),
         cv.ml.ROW_SAMPLE,
         new cv.Mat(3, 1, cv.CV_32F),
-        opts
+        opts,
       );
       expect(trainData).to.be.instanceOf(cv.TrainData);
       expect(trainData).to.have.property('sampleWeights');
       assertMetaData(trainData.sampleWeights)(1, 3, cv.CV_32F);
     });
   });
-
 };

@@ -2,10 +2,10 @@ import { expect } from 'chai';
 import { Point3 } from '../../../typings';
 import { TestContext } from '../model';
 
-let asyncHooks = null
+let asyncHooks = null;
 
 try {
-  asyncHooks = require('async_hooks')
+  asyncHooks = require('async_hooks');
 } catch (e) {
   //
 }
@@ -23,7 +23,7 @@ export default function (args: TestContext) {
     expectToBeVec2,
     expectToBeVec3,
     expectToBeVec4,
-    getNodeMajorVersion
+    getNodeMajorVersion,
   } = utils;
 
   const partitionTests = (createInstance) => {
@@ -58,7 +58,7 @@ export default function (args: TestContext) {
       getDut: () => cv,
       methodName: 'getBuildInformation',
       hasAsync: false,
-      expectOutput: () => {}
+      expectOutput: () => {},
     });
   });
 
@@ -98,7 +98,7 @@ export default function (args: TestContext) {
     // @ts-ignore:next-line
     funcShouldRequireArgs(() => cv.kmeans());
     const points2 = [
-      [0, 0], [1000, 900], [-1000, -900], [-1100, -1000], [1100, 1000], [10, 10]
+      [0, 0], [1000, 900], [-1000, -900], [-1100, -1000], [1100, 1000], [10, 10],
     ].map(([x, y]) => new cv.Point2(x, y));
 
     const k = 3;
@@ -138,7 +138,7 @@ export default function (args: TestContext) {
 
     // related to https://github.com/justadudewhohacks/opencv4nodejs/issues/379
     const points3: Point3[] = [
-      [255, 0, 0], [255, 0, 0], [255, 0, 255], [255, 0, 255], [255, 255, 255]
+      [255, 0, 0], [255, 0, 0], [255, 0, 255], [255, 0, 255], [255, 255, 255],
     ].map(([x, y, z]) => new cv.Point3(x, y, z));
 
     it('should return correct centers with Point3', () => {
@@ -176,10 +176,10 @@ export default function (args: TestContext) {
       getDut: () => cv,
       methodName: 'cartToPolar',
       getRequiredArgs: () => ([
-        x, y
+        x, y,
       ]),
       getOptionalArg: () => angleInDegrees,
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -199,10 +199,10 @@ export default function (args: TestContext) {
       getDut: () => cv,
       methodName: 'polarToCart',
       getRequiredArgs: () => ([
-        magnitude, angle
+        magnitude, angle,
       ]),
       getOptionalArg: () => angleInDegrees,
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -224,7 +224,6 @@ export default function (args: TestContext) {
     });
 
     it('should throw when the argument is not integer', () => {
-
       const expectError = (fn, msg) => {
         let err;
         try {
@@ -236,11 +235,15 @@ export default function (args: TestContext) {
         expect(err).to.be.equal(msg);
       };
 
-      //@ts-ignore:next-line
-      expectError(() => cv.setNumThreads('hello'),
-        'Core::SetNumThreads - Error: expected argument 0 to be of type int');
-      expectError(() => cv.setNumThreads(1.1),
-        'Core::SetNumThreads - Error: expected argument 0 to be of type int');
+      // @ts-ignore:next-line
+      expectError(
+        () => cv.setNumThreads('hello'),
+        'Core::SetNumThreads - Error: expected argument 0 to be of type int',
+      );
+      expectError(
+        () => cv.setNumThreads(1.1),
+        'Core::SetNumThreads - Error: expected argument 0 to be of type int',
+      );
     });
   });
 
@@ -268,31 +271,31 @@ export default function (args: TestContext) {
   if (asyncHooks && getNodeMajorVersion() > 8) {
     describe('async_hooks', () => {
       it('should trigger `init` callback in async_hooks', () => {
-        let typeFound = false
+        let typeFound = false;
         const hook = asyncHooks.createHook({
           init: (asyncId, type, triggerAsyncId, resource) => {
             if (type.indexOf('opencv4nodejs') === 0) {
-              typeFound = true
-              hook.disable()
+              typeFound = true;
+              hook.disable();
             }
           },
-        })
-        hook.enable()
+        });
+        hook.enable();
 
-        const createInstance = () => new cv.Point2(0, 0)
+        const createInstance = () => new cv.Point2(0, 0);
         const num = 5;
         const instances = Array(num).fill(0).map(() => createInstance());
         const { labels, numLabels } = cv.partition(instances, () => true);
-        expect(typeFound).to.be.equal(true)
-      })
-    })
+        expect(typeFound).to.be.equal(true);
+      });
+    });
   }
 
   describe('addWeighted', () => {
     const expectOutput = (res) => {
       assertDataDeepEquals([
         [120, 140, 160],
-        [180, 200, 220]
+        [180, 200, 220],
       ], res.getDataAsArray());
     };
 
@@ -302,11 +305,11 @@ export default function (args: TestContext) {
 
     const mat1 = new cv.Mat([
       [10, 20, 30],
-      [40, 50, 60]
+      [40, 50, 60],
     ], cv.CV_8U);
     const mat2 = new cv.Mat([
       [20, 40, 60],
-      [80, 100, 120]
+      [80, 100, 120],
     ], cv.CV_8U);
 
     generateClassMethodTests({
@@ -318,26 +321,25 @@ export default function (args: TestContext) {
         alpha,
         mat2,
         beta,
-        gamma
+        gamma,
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
   describe('minMaxLoc', () => {
-
     const mat = new cv.Mat([
       [0.1, 0.2, 0.3],
-      [0.4, 0.5, 0.6]
+      [0.4, 0.5, 0.6],
     ], cv.CV_64F);
 
     const mask = new cv.Mat([
       [0, 1, 1],
-      [1, 1, 0]
+      [1, 1, 0],
     ], cv.CV_8U);
 
     const expectOutput = (res, dut, args) => {
-      if (!args.some(arg => arg === mask)) {
+      if (!args.some((arg) => arg === mask)) {
         // without mask
         expect(res.minVal).to.equal(0.1);
         expect(res.maxVal).to.equal(0.6);
@@ -358,7 +360,7 @@ export default function (args: TestContext) {
       classNameSpace: 'Mat',
       methodNameSpace: 'Core',
       getOptionalArg: () => mask,
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -369,7 +371,7 @@ export default function (args: TestContext) {
 
     const mat = new cv.Mat([
       [1, 0, 1],
-      [0, 1, 0]
+      [0, 1, 0],
     ], cv.CV_8U);
 
     generateClassMethodTests({
@@ -377,7 +379,7 @@ export default function (args: TestContext) {
       methodName: 'findNonZero',
       classNameSpace: 'Mat',
       methodNameSpace: 'Core',
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -388,7 +390,7 @@ export default function (args: TestContext) {
 
     const mat = new cv.Mat([
       [1, 0, 1],
-      [0, 1, 0]
+      [0, 1, 0],
     ], cv.CV_8U);
 
     generateClassMethodTests({
@@ -396,7 +398,7 @@ export default function (args: TestContext) {
       methodName: 'countNonZero',
       classNameSpace: 'Mat',
       methodNameSpace: 'Core',
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -404,7 +406,7 @@ export default function (args: TestContext) {
     const mat = new cv.Mat(4, 3, cv.CV_8UC3);
     const expectOutput = (res) => {
       expect(res).to.be.an('array').lengthOf(3);
-      res.forEach(channel => assertMetaData(channel)(mat.rows, mat.cols, cv.CV_8U));
+      res.forEach((channel) => assertMetaData(channel)(mat.rows, mat.cols, cv.CV_8U));
     };
 
     generateClassMethodTests({
@@ -412,7 +414,7 @@ export default function (args: TestContext) {
       methodName: 'split',
       classNameSpace: 'Mat',
       methodNameSpace: 'Core',
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -421,7 +423,7 @@ export default function (args: TestContext) {
       [0.9, 0.9, 0, 0],
       [0.9, 0, -0.9, -0.9],
       [-0.9, 0, 0.9, -0.9],
-      [0.9, 0, -0.9, 0]
+      [0.9, 0, -0.9, 0],
     ], cv.CV_64F);
 
     const expectOutput = (res) => {
@@ -437,12 +439,12 @@ export default function (args: TestContext) {
       methodNameSpace: 'Core',
       getRequiredArgs: () => ([
         mat,
-        flags
+        flags,
       ]),
       getOptionalArgsMap: () => ([
-        ['conjB', true]
+        ['conjB', true],
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -462,7 +464,7 @@ export default function (args: TestContext) {
         classNameSpace: 'Mat',
         methodNameSpace: 'Core',
         getRequiredArgs: () => [M],
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -475,7 +477,7 @@ export default function (args: TestContext) {
         classNameSpace: 'Mat',
         methodNameSpace: 'Core',
         getRequiredArgs: () => [M],
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -484,7 +486,7 @@ export default function (args: TestContext) {
     describe('C1', () => {
       const src = new cv.Mat([
         [0.5, 0.5],
-        [0.5, 0.5]
+        [0.5, 0.5],
       ], cv.CV_64F);
 
       generateClassMethodTests({
@@ -494,14 +496,14 @@ export default function (args: TestContext) {
         methodNameSpace: 'Core',
         expectOutput: (res) => {
           expect(res).to.equal(2);
-        }
+        },
       });
     });
 
     describe('C2', () => {
       const src = new cv.Mat([
         [[0.5, 1.5], [0.5, 1.5]],
-        [[0.5, 1.5], [0.5, 1.5]]
+        [[0.5, 1.5], [0.5, 1.5]],
       ], cv.CV_64FC2);
 
       generateClassMethodTests({
@@ -513,14 +515,14 @@ export default function (args: TestContext) {
           expectToBeVec2(res);
           expect(res.x).to.equal(2);
           expect(res.y).to.equal(6);
-        }
+        },
       });
     });
 
     describe('C3', () => {
       const src = new cv.Mat([
         [[0.5, 1.5, 2.5], [0.5, 1.5, 2.5]],
-        [[0.5, 1.5, 2.5], [0.5, 1.5, 2.5]]
+        [[0.5, 1.5, 2.5], [0.5, 1.5, 2.5]],
       ], cv.CV_64FC3);
 
       generateClassMethodTests({
@@ -533,14 +535,14 @@ export default function (args: TestContext) {
           expect(res.x).to.equal(2);
           expect(res.y).to.equal(6);
           expect(res.z).to.equal(10);
-        }
+        },
       });
     });
 
     describe('C4', () => {
       const src = new cv.Mat([
         [[0.5, 1.5, 2.5, 3.5], [0.5, 1.5, 2.5, 3.5]],
-        [[0.5, 1.5, 2.5, 3.5], [0.5, 1.5, 2.5, 3.5]]
+        [[0.5, 1.5, 2.5, 3.5], [0.5, 1.5, 2.5, 3.5]],
       ], cv.CV_64FC4);
 
       generateClassMethodTests({
@@ -554,7 +556,7 @@ export default function (args: TestContext) {
           expect(res.x).to.equal(6);
           expect(res.y).to.equal(10);
           expect(res.z).to.equal(14);
-        }
+        },
       });
     });
   });
@@ -562,7 +564,7 @@ export default function (args: TestContext) {
   describe('convertScaleAbs', () => {
     const srcMat = new cv.Mat([
       [0.5, 0.5],
-      [0.5, 0.5]
+      [0.5, 0.5],
     ], cv.CV_64F);
 
     generateClassMethodTests({
@@ -572,12 +574,12 @@ export default function (args: TestContext) {
       methodNameSpace: 'Core',
       getOptionalArgsMap: () => ([
         ['alpha', 0.5],
-        ['beta', 0.5]
+        ['beta', 0.5],
       ]),
       expectOutput: (res) => {
         expect(srcMat).to.be.instanceOf(cv.Mat);
         assertMetaData(res)(srcMat.rows, srcMat.cols, cv.CV_8U);
-      }
+      },
     });
   });
 
@@ -585,7 +587,7 @@ export default function (args: TestContext) {
     const mask = new cv.Mat(1, 2, cv.CV_8U, 255);
     describe('C1', () => {
       const matData = [
-        [0.5, 1]
+        [0.5, 1],
       ];
 
       generateClassMethodTests({
@@ -596,13 +598,13 @@ export default function (args: TestContext) {
         getOptionalArg: () => mask,
         expectOutput: (res) => {
           expect(res.at(0)).to.eq(0.75);
-        }
+        },
       });
     });
 
     describe('C2', () => {
       const matData = [
-        [[0.5, 0.5], [1, 1.5]]
+        [[0.5, 0.5], [1, 1.5]],
       ];
 
       generateClassMethodTests({
@@ -614,13 +616,13 @@ export default function (args: TestContext) {
         expectOutput: (res) => {
           expect(res.at(0)).to.eq(0.75);
           expect(res.at(1)).to.eq(1);
-        }
+        },
       });
     });
 
     describe('C3', () => {
       const matData = [
-        [[0.5, 0.5, 0.5], [1, 1.5, 2.5]]
+        [[0.5, 0.5, 0.5], [1, 1.5, 2.5]],
       ];
 
       generateClassMethodTests({
@@ -633,13 +635,13 @@ export default function (args: TestContext) {
           expect(res.at(0)).to.eq(0.75);
           expect(res.at(1)).to.eq(1);
           expect(res.at(2)).to.eq(1.5);
-        }
+        },
       });
     });
 
     describe('C4', () => {
       const matData = [
-        [[0.5, 0.5, 0.5, 0.5], [1, 1.5, 2.5, 3.5]]
+        [[0.5, 0.5, 0.5, 0.5], [1, 1.5, 2.5, 3.5]],
       ];
 
       generateClassMethodTests({
@@ -653,7 +655,7 @@ export default function (args: TestContext) {
           expect(res.at(1)).to.eq(1);
           expect(res.at(2)).to.eq(1.5);
           expect(res.at(3)).to.eq(2);
-        }
+        },
       });
     });
   });
@@ -669,37 +671,37 @@ export default function (args: TestContext) {
       expectOutput: (res) => {
         expect(res).to.have.property('mean').to.be.instanceOf(cv.Mat);
         expect(res).to.have.property('stddev').to.be.instanceOf(cv.Mat);
-      }
+      },
     });
   });
 
   describe('reduce', () => {
     const makeTest = (dim, rtype, dtype, expectedResults) => () => {
       const rows = 1;
-      const cols = 3
+      const cols = 3;
       const type = cv.CV_8UC1;
       generateClassMethodTests({
         getClassInstance: () => new cv.Mat(rows, cols, type, [1]), // was [[1]]
         methodName: 'reduce',
         classNameSpace: 'Mat',
         methodNameSpace: 'Core',
-        getRequiredArgs: () => ([ dim, rtype, dtype ]),
+        getRequiredArgs: () => ([dim, rtype, dtype]),
         expectOutput: (res, _, args) => {
           expect(res).to.be.instanceOf(cv.Mat);
           expect(res.getDataAsArray()).to.eql(expectedResults);
-        }
+        },
       });
     };
 
-    describe('Column sum', makeTest(0, cv.REDUCE_SUM, cv.CV_32F, [ [ 1, 1, 1 ] ]));
-    describe('Column average', makeTest(0, cv.REDUCE_AVG, cv.CV_32F, [ [ 1, 1, 1 ] ]));
-    describe('Column max', makeTest(0, cv.REDUCE_MAX, -1, [ [ 1, 1, 1 ] ]));
-    describe('Column min', makeTest(0, cv.REDUCE_MIN, -1, [ [ 1, 1, 1 ] ]));
+    describe('Column sum', makeTest(0, cv.REDUCE_SUM, cv.CV_32F, [[1, 1, 1]]));
+    describe('Column average', makeTest(0, cv.REDUCE_AVG, cv.CV_32F, [[1, 1, 1]]));
+    describe('Column max', makeTest(0, cv.REDUCE_MAX, -1, [[1, 1, 1]]));
+    describe('Column min', makeTest(0, cv.REDUCE_MIN, -1, [[1, 1, 1]]));
 
-    describe('Row sum', makeTest(1, cv.REDUCE_SUM, cv.CV_32F, [ [ 3 ] ]));
-    describe('Row average', makeTest(1, cv.REDUCE_AVG, cv.CV_32F, [ [ 1 ] ]));
-    describe('Row max', makeTest(1, cv.REDUCE_MAX, -1, [ [ 1 ] ]));
-    describe('Row min', makeTest(1, cv.REDUCE_MIN, -1, [ [ 1 ] ]));
+    describe('Row sum', makeTest(1, cv.REDUCE_SUM, cv.CV_32F, [[3]]));
+    describe('Row average', makeTest(1, cv.REDUCE_AVG, cv.CV_32F, [[1]]));
+    describe('Row max', makeTest(1, cv.REDUCE_MAX, -1, [[1]]));
+    describe('Row min', makeTest(1, cv.REDUCE_MIN, -1, [[1]]));
   });
 
   describe('eigen', () => {
@@ -713,17 +715,17 @@ export default function (args: TestContext) {
           expect(res).to.be.instanceOf(cv.Mat);
           const arrayRes = res.getDataAsArray();
           const tolerance = 1e-6;
-          arrayRes.forEach((r,i1) => {
-            r.forEach((n,i2) => {
-              expect(n).to.be.at.least(expectedResults[i1][i2]-tolerance);
-              expect(n).to.be.at.most(expectedResults[i1][i2]+tolerance)
-            })
-          })
-        }
+          arrayRes.forEach((r, i1) => {
+            r.forEach((n, i2) => {
+              expect(n).to.be.at.least(expectedResults[i1][i2] - tolerance);
+              expect(n).to.be.at.most(expectedResults[i1][i2] + tolerance);
+            });
+          });
+        },
       });
     };
 
-    describe('eigen', makeTest([[2,1],[1,2]], [[3], [1]]))
+    describe('eigen', makeTest([[2, 1], [1, 2]], [[3], [1]]));
   });
 
   describe('solve', () => {
@@ -736,25 +738,24 @@ export default function (args: TestContext) {
         classNameSpace: 'Mat',
         methodNameSpace: 'Core',
         getOptionalArgsMap: () => ([
-          ['flags', flags]
+          ['flags', flags],
         ]),
         getRequiredArgs: () => ([m2]),
         expectOutput: (res, _, args) => {
           expect(res).to.be.instanceOf(cv.Mat);
           const arrayRes = res.getDataAsArray();
           const tolerance = 1e-6;
-          arrayRes.forEach((r,i1) => {
-            r.forEach((n,i2) => {
-              expect(n).to.be.at.least(expectedResults[i1][i2]-tolerance);
-              expect(n).to.be.at.most(expectedResults[i1][i2]+tolerance)
-            })
-          })
-        }
+          arrayRes.forEach((r, i1) => {
+            r.forEach((n, i2) => {
+              expect(n).to.be.at.least(expectedResults[i1][i2] - tolerance);
+              expect(n).to.be.at.most(expectedResults[i1][i2] + tolerance);
+            });
+          });
+        },
       });
     };
 
-    describe('Solve y = x equation on Id = X Id', makeTest([[1, 0, 0],[0, 1, 0],[0, 0, 1]], [[1, 0, 0],[0, 1, 0],[0, 0, 1]], cv.DECOMP_LU, [[1, 0, 0],[0, 1, 0],[0, 0, 1]]));
-    describe('Solve y = x equation on Id = X Id', makeTest([[1, 2],[3, 4]], [[5, 6],[7, 8]], cv.DECOMP_LU, [[-3, -4],[4, 5]]));
+    describe('Solve y = x equation on Id = X Id', makeTest([[1, 0, 0], [0, 1, 0], [0, 0, 1]], [[1, 0, 0], [0, 1, 0], [0, 0, 1]], cv.DECOMP_LU, [[1, 0, 0], [0, 1, 0], [0, 0, 1]]));
+    describe('Solve y = x equation on Id = X Id', makeTest([[1, 2], [3, 4]], [[5, 6], [7, 8]], cv.DECOMP_LU, [[-3, -4], [4, 5]]));
   });
-
-};
+}

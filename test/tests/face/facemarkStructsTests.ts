@@ -1,4 +1,4 @@
-import { TestContext } from "../model";
+import { TestContext } from '../model';
 
 export default (args: TestContext) => {
   const { cv, utils } = args;
@@ -8,7 +8,7 @@ export default (args: TestContext) => {
   describe('Facemark structures', () => {
     it('FacemarkAAMData', () => {
       const data = {
-        s0: [new cv.Point2(0, 0), new cv.Point2(0, 0)]
+        s0: [new cv.Point2(0, 0), new cv.Point2(0, 0)],
       };
 
       const facemarkData = new cv.FacemarkAAMData();
@@ -30,7 +30,7 @@ export default (args: TestContext) => {
         saveModel: true,
         scales: [3.0, 2.0],
         textureMaxM: 12,
-        verbose: true
+        verbose: true,
       };
 
       const facemarkParams = new cv.FacemarkAAMParams();
@@ -58,7 +58,7 @@ export default (args: TestContext) => {
         stagesN: 4,
         treeDepth: 3,
         treeN: 2,
-        verbose: true
+        verbose: true,
       };
 
       const facemarkParams = new cv.FacemarkLBFParams();

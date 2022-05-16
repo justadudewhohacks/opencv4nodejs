@@ -16,7 +16,7 @@ export default function (args: TestContext) {
     clearTmpData,
     getTmpDataFilePath,
     fileExists,
-    generateAPITests
+    generateAPITests,
   } = utils;
 
   let lenna: Mat;
@@ -36,7 +36,7 @@ export default function (args: TestContext) {
     got = cv.imread(getTestImagePath(false));
     lennaBase64Buf = Buffer.from(JSON.parse(lennaBase64File).data, 'base64');
     gotBase64Buf = Buffer.from(JSON.parse(gotBase64File).data, 'base64');
-    imageData = fs.readFileSync(getTestImagePath(true))
+    imageData = fs.readFileSync(getTestImagePath(true));
     imageDataCopy = Buffer.from(imageData);
   });
 
@@ -46,13 +46,13 @@ export default function (args: TestContext) {
       getDut: () => cv,
       methodName: 'imread',
       getRequiredArgs: () => ([
-        getTestImagePath()
+        getTestImagePath(),
       ]),
       getOptionalArg: () => flags,
       expectOutput: (img) => {
         expect(img).to.be.instanceOf(cv.Mat);
         assertMetaData(img)(512, 512, cv.CV_8UC3);
-      }
+      },
     });
   });
   describe('imwrite', () => {
@@ -65,12 +65,12 @@ export default function (args: TestContext) {
       methodName: 'imwrite',
       getRequiredArgs: () => ([
         file,
-        lenna
+        lenna,
       ]),
       getOptionalArg: () => flags,
       expectOutput: () => {
         expect(fileExists(file)).to.be.true;
-      }
+      },
     });
   });
 
@@ -85,12 +85,12 @@ export default function (args: TestContext) {
         methodName: 'imencode',
         getRequiredArgs: () => ([
           ext,
-          lenna
+          lenna,
         ]),
         getOptionalArg: () => flags,
         expectOutput: (enc) => {
           expect(enc.slice(0, pngPrefixLength)).to.deep.equal(getLennaBase64Buf().slice(0, pngPrefixLength));
-        }
+        },
       });
     });
 
@@ -104,12 +104,12 @@ export default function (args: TestContext) {
         methodName: 'imencode',
         getRequiredArgs: () => ([
           ext,
-          got
+          got,
         ]),
         getOptionalArg: () => flags,
         expectOutput: (enc) => {
           expect(enc.slice(0, jpgPrefixLength)).to.deep.equal(getGotBase64Buf().slice(0, jpgPrefixLength));
-        }
+        },
       });
     });
   });
@@ -135,11 +135,11 @@ export default function (args: TestContext) {
 
       it('should decode png', async () => {
         const dec = await cv.imdecodeAsync(getLennaBase64Buf());
-          assertDataDeepEquals(lenna.getDataAsArray(), dec.getDataAsArray());
+        assertDataDeepEquals(lenna.getDataAsArray(), dec.getDataAsArray());
       });
 
       it('should decode jpeg', async () => {
-        const dec = await cv.imdecodeAsync(getGotBase64Buf())
+        const dec = await cv.imdecodeAsync(getGotBase64Buf());
         assertDataDeepEquals(got.getDataAsArray(), dec.getDataAsArray());
       });
 
@@ -158,7 +158,7 @@ export default function (args: TestContext) {
       //     //  console.log('IHDRSize:     ' + IHDRSize.toString('hex'));
       //     //  console.log('IHDRSizeLess: ' + IHDRSizeLess.toString('hex'));
       //     //  console.log('IHDRCRC:      ' + IHDRCRC.toString('hex'));
-      //     //}  
+      //     //}
       //     // set wide to 0
       //     imageDataCopy[16] = 0;
       //     imageDataCopy[17] = 0;
@@ -174,5 +174,4 @@ export default function (args: TestContext) {
       // })
     });
   });
-
-};
+}

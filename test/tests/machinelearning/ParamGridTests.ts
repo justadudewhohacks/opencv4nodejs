@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => {
-    const { cv } = args;
+  const { cv } = args;
 
   describe('constructor', () => {
     it('should be constructable without args', () => {
@@ -22,5 +22,4 @@ export default (args: TestContext) => {
       expect(paramGrid).to.have.property('logStep').to.equal(1.5);
     });
   });
-
 };

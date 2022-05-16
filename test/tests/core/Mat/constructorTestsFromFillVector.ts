@@ -1,25 +1,27 @@
-import { TestContext } from "../../model";
+import { TestContext } from '../../model';
 
-import  { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
-  intMin, floatMin, floatMax, doubleMin, doubleMax } from './typeRanges';
+import {
+  charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
+  intMin, floatMin, floatMax, doubleMin, doubleMax,
+} from './typeRanges';
 
 export default function (args: TestContext) {
-    const { cv, utils } = args;
-  
+  const { cv, utils } = args;
+
   const {
     assertDataDeepEquals,
     assertDataAlmostDeepEquals,
-    assertMetaData
+    assertMetaData,
   } = utils;
 
   const rows = 4;
   const cols = 3;
-  const matDataFromValue = val => Array(rows).fill(Array(cols).fill(val));
+  const matDataFromValue = (val) => Array(rows).fill(Array(cols).fill(val));
   const createAndAssertMatFilled = (type, value) => {
     const mat = new cv.Mat(rows, cols, type, value);
 
     assertMetaData(mat)(rows, cols, type);
-    if ([cv.CV_32FC1, cv.CV_32FC2, cv.CV_32FC3, cv.CV_32FC4].some(matType => matType === type)) {
+    if ([cv.CV_32FC1, cv.CV_32FC2, cv.CV_32FC3, cv.CV_32FC4].some((matType) => matType === type)) {
       assertDataAlmostDeepEquals(matDataFromValue(value), mat.getDataAsArray());
     } else {
       assertDataDeepEquals(matDataFromValue(value), mat.getDataAsArray());
@@ -152,5 +154,4 @@ export default function (args: TestContext) {
       createAndAssertMatFilled(cv.CV_64FC4, [doubleMax, doubleMin, -doubleMax, -doubleMin]);
     });
   });
-
-};
+}

@@ -3,12 +3,12 @@ import { expect } from 'chai';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils} = args;
+  const { cv, utils } = args;
 
   const {
     assertMetaData,
     generateAPITests,
-    cvVersionGreaterEqual
+    cvVersionGreaterEqual,
   } = utils;
 
   describe('loadOCRHMMClassifierNM', () => {
@@ -16,11 +16,11 @@ export default function (args: TestContext) {
       getDut: () => cv,
       methodName: 'loadOCRHMMClassifierNM',
       getRequiredArgs: () => ([
-        path.resolve('../data/text-models/OCRHMM_knn_model_data.xml.gz')
+        path.resolve('../data/text-models/OCRHMM_knn_model_data.xml.gz'),
       ]),
       expectOutput: (classifier) => {
         expect(classifier).to.be.instanceOf(cv.OCRHMMClassifier);
-      }
+      },
     });
   });
 
@@ -30,11 +30,11 @@ export default function (args: TestContext) {
         getDut: () => cv,
         methodName: 'loadOCRHMMClassifierCNN',
         getRequiredArgs: () => ([
-          path.resolve('../data/text-models/OCRBeamSearch_CNN_model_data.xml.gz')
+          path.resolve('../data/text-models/OCRBeamSearch_CNN_model_data.xml.gz'),
         ]),
         expectOutput: (classifier) => {
           expect(classifier).to.be.instanceOf(cv.OCRHMMClassifier);
-        }
+        },
       });
     });
 
@@ -47,14 +47,13 @@ export default function (args: TestContext) {
         methodName: 'createOCRHMMTransitionsTable',
         getRequiredArgs: () => ([
           vocabulary,
-          lexicon
+          lexicon,
         ]),
         expectOutput: (transitionPTable) => {
           expect(transitionPTable).to.be.instanceOf(cv.Mat);
           assertMetaData(transitionPTable)(26, 26, cv.CV_64F);
-        }
+        },
       });
     });
   }
-
-};
+}

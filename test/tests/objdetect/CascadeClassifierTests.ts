@@ -5,7 +5,7 @@ export default function (args: TestContext) {
   const { cv, utils, getTestImg } = args;
   const {
     generateAPITests,
-    cvVersionEqual
+    cvVersionEqual,
   } = utils;
 
   describe('CascadeClassifier', () => {
@@ -43,16 +43,15 @@ export default function (args: TestContext) {
     });
 
     describe('detect', () => {
-
       const getRequiredArgs = () => ([
-        getTestImg()
+        getTestImg(),
       ]);
       const getOptionalArgsMap = () => ([
         ['scaleFactor', 1.2],
         ['minNeighbors', 5],
         ['flags', 0],
         ['minSize', new cv.Size(50, 50)],
-        ['maxSize', new cv.Size(250, 250)]
+        ['maxSize', new cv.Size(250, 250)],
       ]);
 
       describe('detectMultiScale', () => {
@@ -61,7 +60,7 @@ export default function (args: TestContext) {
           expect(ret).to.have.property('numDetections').to.be.an('array');
           expect(ret.objects.length).to.be.above(0);
           expect(ret.numDetections.length).to.be.above(0);
-          ret.objects.forEach(obj => expect(obj).instanceOf(cv.Rect));
+          ret.objects.forEach((obj) => expect(obj).instanceOf(cv.Rect));
         };
 
         generateAPITests({
@@ -70,7 +69,7 @@ export default function (args: TestContext) {
           methodNameSpace: 'CascadeClassifier',
           getRequiredArgs,
           getOptionalArgsMap,
-          expectOutput
+          expectOutput,
         });
       });
 
@@ -82,7 +81,7 @@ export default function (args: TestContext) {
           expect(ret.objects.length).to.be.above(0);
           expect(ret.rejectLevels.length).to.be.above(0);
           expect(ret.levelWeights.length).to.be.above(0);
-          ret.objects.forEach(obj => expect(obj).instanceOf(cv.Rect));
+          ret.objects.forEach((obj) => expect(obj).instanceOf(cv.Rect));
         };
 
         generateAPITests({
@@ -91,9 +90,9 @@ export default function (args: TestContext) {
           methodNameSpace: 'CascadeClassifier',
           getRequiredArgs,
           getOptionalArgsMap,
-          expectOutput
+          expectOutput,
         });
       });
     });
   });
-};
+}

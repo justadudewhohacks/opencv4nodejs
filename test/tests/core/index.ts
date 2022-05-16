@@ -13,4 +13,4 @@ export default function (args: TestContext) {
   describe('Point', () => PointTests(args));
   describe('Rect', () => RectTests(args));
   describe('TermCriteria', () => TermCriteriaTests(args));
-};
+}

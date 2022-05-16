@@ -13,7 +13,7 @@ const matTypeNames = [
   'CV_16SC1', 'CV_16SC2', 'CV_16SC3', 'CV_16SC4',
   'CV_32SC1', 'CV_32SC2', 'CV_32SC3', 'CV_32SC4',
   'CV_32FC1', 'CV_32FC2', 'CV_32FC3', 'CV_32FC4',
-  'CV_64FC1', 'CV_64FC2', 'CV_64FC3', 'CV_64FC4'
+  'CV_64FC1', 'CV_64FC2', 'CV_64FC3', 'CV_64FC4',
 ];
 
 const normalizeValue = (val: number | Vec4 | Array<number>) => ((val as Vec4).x !== undefined ? [(val as Vec4).w, (val as Vec4).x, (val as Vec4).y, (val as Vec4).z]
@@ -35,7 +35,7 @@ const AssertMatValueEquals = (cmpFunc) => (val0: number, val1: number): void => 
 };
 
 const assertMatValueAlmostEquals = AssertMatValueEquals(
-  (v0: number, v1: number) => (!v0 && !v1) || (((v0 - 0.0001) < v1) && (v1 < (v0 + 0.0001)))
+  (v0: number, v1: number) => (!v0 && !v1) || (((v0 - 0.0001) < v1) && (v1 < (v0 + 0.0001))),
 );
 
 const generateItsFactory = (cv: typeof openCV) => (msg: string, testFunc: Function, exclusions = new Set<string>()): void => matTypeNames.filter((type) => !exclusions.has(type)).forEach((type) => {
@@ -75,7 +75,7 @@ const assertMetaData = (mat: Mat) => (args0: any, cols: number, type: number): v
   const propsFromArg0 = {
     rows: args0.rows,
     cols: args0.cols,
-    type: args0.type
+    type: args0.type,
   };
   if (['rows', 'cols', 'type'].every((prop) => !isNaN(propsFromArg0[prop]))) {
     propsWithValues = propsFromArg0;
@@ -94,6 +94,6 @@ export default function (cv: typeof openCV) {
     generateIts: generateItsFactory(cv),
     isZeroMat,
     isUniformMat,
-    MatValuesComparator
+    MatValuesComparator,
   };
 }

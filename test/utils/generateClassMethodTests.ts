@@ -8,14 +8,14 @@ const generateClassMethodTestsFactory = (cv: typeof openCV) => (opts: Partial<AP
     classNameSpace,
     methodNameSpace,
     getRequiredArgs,
-    methodName
+    methodName,
   } = getDefaultAPITestOpts(opts);
 
   describe(`${classNameSpace}::${methodName}`, () => {
     generateAPITests({
       ...opts,
       getDut: getClassInstance,
-      methodNameSpace: classNameSpace
+      methodNameSpace: classNameSpace,
     });
   });
 
@@ -23,7 +23,7 @@ const generateClassMethodTestsFactory = (cv: typeof openCV) => (opts: Partial<AP
     generateAPITests({
       ...opts,
       getDut: () => cv,
-      getRequiredArgs: () => [getClassInstance()].concat(getRequiredArgs ? getRequiredArgs() : [])
+      getRequiredArgs: () => [getClassInstance()].concat(getRequiredArgs ? getRequiredArgs() : []),
     });
   });
 };

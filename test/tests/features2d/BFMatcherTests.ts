@@ -2,171 +2,167 @@ import { expect } from 'chai';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg  } = args;
+  const { cv, utils, getTestImg } = args;
 
-    const {
-        assertPropsWithValue,
-        generateAPITests
-    } = utils;
+  const {
+    assertPropsWithValue,
+    generateAPITests,
+  } = utils;
 
-    describe('constructor', () => {
-      const normType = cv.NORM_L2;
-      const crossCheck = true;
+  describe('constructor', () => {
+    const normType = cv.NORM_L2;
+    const crossCheck = true;
 
-      it('should throw if insufficient args passed', () => {
-        expect(() => new cv.BFMatcher(undefined)).to.throw();
+    it('should throw if insufficient args passed', () => {
+      expect(() => new cv.BFMatcher(undefined)).to.throw();
+    });
+
+    it('should throw if bag args are passed', () => {
+      expect(() => new cv.BFMatcher(normType, undefined)).to.throw();
+    });
+
+    it('should be constructable with required args', () => {
+      expect(() => new cv.BFMatcher(normType)).to.not.throw();
+    });
+
+    it('should initialize with correct values', () => {
+      const match = new cv.BFMatcher(normType, crossCheck);
+      assertPropsWithValue(match)({ normType, crossCheck });
+    });
+  });
+
+  describe('crossCheck match', () => {
+    let BFMatcher;
+    const crossCheck = true;
+
+    let kazeKps;
+    let kazeDesc;
+
+    before(() => {
+      BFMatcher = new cv.BFMatcher(cv.NORM_L2, crossCheck);
+
+      const kaze = new cv.KAZEDetector();
+      kazeKps = kaze.detect(getTestImg());
+      kazeDesc = kaze.compute(getTestImg(), kazeKps);
+    });
+
+    describe('match', () => {
+      it('sync', () => {
+        const matches = BFMatcher.match(kazeDesc, kazeDesc);
+        expect(kazeKps.length).to.be.above(0);
+        expect(matches).to.be.an('array').lengthOf(kazeKps.length);
+        matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
       });
 
-      it('should throw if bag args are passed', () => {
-        expect(() => new cv.BFMatcher(normType, undefined)).to.throw();
-      });
-
-      it('should be constructable with required args', () => {
-        expect(() => new cv.BFMatcher(normType)).to.not.throw();
-      });
-
-      it('should initialize with correct values', () => {
-        const match = new cv.BFMatcher(normType, crossCheck);
-        assertPropsWithValue(match)({ normType, crossCheck });
+      it('async', (done) => {
+        BFMatcher.matchAsync(kazeDesc, kazeDesc, (err, matches) => {
+          expect(kazeKps.length).to.be.above(0);
+          expect(matches).to.be.an('array').lengthOf(kazeKps.length);
+          matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
+          done();
+        });
       });
     });
 
-    describe('crossCheck match', () => {
-        let BFMatcher;
-        let crossCheck = true;
+    describe('knnMatch', () => {
+      const k = 1; // k can only be 1 if crossCheck is true
 
-        let kazeKps;
-        let kazeDesc;
+      it('sync', () => {
+        const matches = BFMatcher.knnMatch(kazeDesc, kazeDesc, k);
+        expect(kazeKps.length).to.be.above(0);
+        expect(matches).to.be.an('array').lengthOf(kazeKps.length);
 
-        before(() => {
-            BFMatcher = new cv.BFMatcher(cv.NORM_L2, crossCheck);
+        // if crossCheck is true, there can be points with no matches (empty arrays)
+        const matchesKnn = matches.filter((el) => el.length);
+        matchesKnn.forEach(
+          (match) => (
+            expect(match).to.be.an('array').lengthOf(k)
+                        && expect(match[0]).instanceOf(cv.DescriptorMatch)
+          ),
+        );
+      });
 
-            const kaze = new cv.KAZEDetector();
-            kazeKps = kaze.detect(getTestImg());
-            kazeDesc = kaze.compute(getTestImg(), kazeKps);
+      it('async', (done) => {
+        BFMatcher.knnMatchAsync(kazeDesc, kazeDesc, k, (err, matches) => {
+          expect(kazeKps.length).to.be.above(0);
+          expect(matches).to.be.an('array').lengthOf(kazeKps.length);
+
+          // if crossCheck is true, there can be points with no matches (empty arrays)
+          const matchesKnn = matches.filter((el) => el.length);
+          matchesKnn.forEach(
+            (match) => (
+              expect(match).to.be.an('array').lengthOf(k)
+                            && expect(match[0]).instanceOf(cv.DescriptorMatch)
+            ),
+          );
+          done();
         });
+      });
+    });
+  });
 
-        describe('match', () => {
-            it('sync', () => {
-                const matches = BFMatcher.match(kazeDesc, kazeDesc);
-                expect(kazeKps.length).to.be.above(0);
-                expect(matches).to.be.an('array').lengthOf(kazeKps.length);
-                matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
-            });
+  describe('no crossCheck match', () => {
+    let BFMatcher;
+    const crossCheck = false;
 
-            it('async', (done) => {
-                BFMatcher.matchAsync(kazeDesc, kazeDesc, (err, matches) => {
-                    expect(kazeKps.length).to.be.above(0);
-                    expect(matches).to.be.an('array').lengthOf(kazeKps.length);
-                    matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
-                    done();
-                });
-            });
-        });
+    let kazeKps;
+    let kazeDesc;
 
-        describe('knnMatch', () => {
-            let k = 1; //k can only be 1 if crossCheck is true
+    before(() => {
+      BFMatcher = new cv.BFMatcher(cv.NORM_L2, crossCheck);
 
-            it('sync', () => {
-                const matches = BFMatcher.knnMatch(kazeDesc, kazeDesc, k);
-                expect(kazeKps.length).to.be.above(0);
-                expect(matches).to.be.an('array').lengthOf(kazeKps.length);
-
-                // if crossCheck is true, there can be points with no matches (empty arrays)
-                const matchesKnn = matches.filter(el => el.length);
-                matchesKnn.forEach(
-                    match => (
-                        expect(match).to.be.an('array').lengthOf(k)
-                        &&
-                        expect(match[0]).instanceOf(cv.DescriptorMatch)
-                    )
-                );
-            });
-
-            it('async', (done) => {
-                BFMatcher.knnMatchAsync(kazeDesc, kazeDesc, k, (err, matches) => {
-                    expect(kazeKps.length).to.be.above(0);
-                    expect(matches).to.be.an('array').lengthOf(kazeKps.length);
-
-                    // if crossCheck is true, there can be points with no matches (empty arrays)
-                    const matchesKnn = matches.filter(el => el.length);
-                    matchesKnn.forEach(
-                        match => (
-                            expect(match).to.be.an('array').lengthOf(k)
-                            &&
-                            expect(match[0]).instanceOf(cv.DescriptorMatch)
-                        )
-                    );
-                    done();
-                });
-            });
-        });
+      const kaze = new cv.KAZEDetector();
+      kazeKps = kaze.detect(getTestImg());
+      kazeDesc = kaze.compute(getTestImg(), kazeKps);
     });
 
-    describe('no crossCheck match', () => {
-        let BFMatcher;
-        let crossCheck = false;
+    describe('match', () => {
+      it('sync', () => {
+        const matches = BFMatcher.match(kazeDesc, kazeDesc);
+        expect(kazeKps.length).to.be.above(0);
+        expect(matches).to.be.an('array').lengthOf(kazeKps.length);
+        matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
+      });
 
-        let kazeKps;
-        let kazeDesc;
-
-        before(() => {
-            BFMatcher = new cv.BFMatcher(cv.NORM_L2, crossCheck);
-
-            const kaze = new cv.KAZEDetector();
-            kazeKps = kaze.detect(getTestImg());
-            kazeDesc = kaze.compute(getTestImg(), kazeKps);
+      it('async', (done) => {
+        BFMatcher.matchAsync(kazeDesc, kazeDesc, (err, matches) => {
+          expect(kazeKps.length).to.be.above(0);
+          expect(matches).to.be.an('array').lengthOf(kazeKps.length);
+          matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
+          done();
         });
-
-        describe('match', () => {
-            it('sync', () => {
-                const matches = BFMatcher.match(kazeDesc, kazeDesc);
-                expect(kazeKps.length).to.be.above(0);
-                expect(matches).to.be.an('array').lengthOf(kazeKps.length);
-                matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
-            });
-
-            it('async', (done) => {
-                BFMatcher.matchAsync(kazeDesc, kazeDesc, (err, matches) => {
-                    expect(kazeKps.length).to.be.above(0);
-                    expect(matches).to.be.an('array').lengthOf(kazeKps.length);
-                    matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
-                    done();
-                });
-            });
-        });
-
-        describe('knnMatch', () => {
-            let k = 5; //crossCheck off so k can be larger.
-
-            it('sync', () => {
-                const matches = BFMatcher.knnMatch(kazeDesc, kazeDesc, k);
-                expect(kazeKps.length).to.be.above(0);
-                expect(matches).to.be.an('array').lengthOf(kazeKps.length);
-
-                matches.forEach(
-                    match => (
-                        expect(match).to.be.an('array').lengthOf(k)
-                        &&
-                        expect(match[0]).instanceOf(cv.DescriptorMatch)
-                    )
-                );
-            });
-
-            it('async', (done) => {
-                BFMatcher.knnMatchAsync(kazeDesc, kazeDesc, k, (err, matches) => {
-                    expect(kazeKps.length).to.be.above(0);
-                    expect(matches).to.be.an('array').lengthOf(kazeKps.length);
-                    matches.forEach(
-                        match => (
-                            expect(match).to.be.an('array').lengthOf(k)
-                            &&
-                            expect(match[0]).instanceOf(cv.DescriptorMatch)
-                        )
-                    );
-                    done();
-                });
-            });
-        });
+      });
     });
-};
+
+    describe('knnMatch', () => {
+      const k = 5; // crossCheck off so k can be larger.
+
+      it('sync', () => {
+        const matches = BFMatcher.knnMatch(kazeDesc, kazeDesc, k);
+        expect(kazeKps.length).to.be.above(0);
+        expect(matches).to.be.an('array').lengthOf(kazeKps.length);
+
+        matches.forEach(
+          (match) => (
+            expect(match).to.be.an('array').lengthOf(k)
+                        && expect(match[0]).instanceOf(cv.DescriptorMatch)
+          ),
+        );
+      });
+
+      it('async', (done) => {
+        BFMatcher.knnMatchAsync(kazeDesc, kazeDesc, k, (err, matches) => {
+          expect(kazeKps.length).to.be.above(0);
+          expect(matches).to.be.an('array').lengthOf(kazeKps.length);
+          matches.forEach(
+            (match) => (
+              expect(match).to.be.an('array').lengthOf(k)
+                            && expect(match[0]).instanceOf(cv.DescriptorMatch)
+            ),
+          );
+          done();
+        });
+      });
+    });
+  });
+}

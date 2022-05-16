@@ -2,10 +2,10 @@ import { expect } from 'chai';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg  } = args;
+  const { cv, utils, getTestImg } = args;
 
   const {
-    generateAPITests
+    generateAPITests,
   } = utils;
 
   describe('setInput', () => {
@@ -18,9 +18,9 @@ export default function (args: TestContext) {
       methodName: 'setInput',
       methodNameSpace: 'Net',
       getRequiredArgs: () => ([
-        cv.blobFromImage(getTestImg())
+        cv.blobFromImage(getTestImg()),
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -34,7 +34,7 @@ export default function (args: TestContext) {
       getDut: () => new cv.Net(),
       methodName: 'forward',
       methodNameSpace: 'Net',
-      expectOutput
+      expectOutput,
     });
   });
-};
+}

@@ -23,15 +23,15 @@ const assertErrorAsyncPromised = (func: () => any, msg: string): Promise<any> =>
   return ret.then(() => {
     assert(false, 'no error was thrown');
   })
-  .catch((err: any) => {
-    assert.include(err.toString(), msg);
-  });
+    .catch((err: any) => {
+      assert.include(err.toString(), msg);
+    });
 };
 
 const makeCompareValues = (floatSafe: boolean) => (val1: number, val2: number) => {
   if (floatSafe && typeof val1 === 'number' && typeof val2 === 'number') {
     return Math.abs(val1 - val2) < 0.001;
-  } else if (typeof val1 === 'object' && typeof val2 === 'object') {
+  } if (typeof val1 === 'object' && typeof val2 === 'object') {
     return JSON.stringify(val1) === JSON.stringify(val2);
   }
 
@@ -40,9 +40,7 @@ const makeCompareValues = (floatSafe: boolean) => (val1: number, val2: number) =
 
 export const assertPropsWithValue = (obj: any) => (props: any, floatSafe = false) => {
   const compareValues = makeCompareValues(floatSafe);
-  Object.keys(props).forEach(key =>
-    assert(compareValues(props[key], obj[key]), `${key} - expected: ${props[key]}, have: ${obj[key]}`)
-  );
+  Object.keys(props).forEach((key) => assert(compareValues(props[key], obj[key]), `${key} - expected: ${props[key]}, have: ${obj[key]}`));
 };
 
 export const funcShouldRequireArgs = (func: (...args: any[]) => any): void => {
@@ -60,20 +58,18 @@ export const _funcShouldRequireArgs = (func: (...args: any[]) => any) : void => 
 export const asyncFuncShouldRequireArgs = (func: (...args: any[]) => any): void => {
   it('should throw if no args', (done) => {
     assertErrorAsyncPromised(func, 'expected argument 0 to be')
-    .then(() => done());
+      .then(() => done());
   });
 };
-
 
 export const _asyncFuncShouldRequireArgs = (func: (...args: any[]) => any): void => {
   it('should throw if no args', (done) => {
     assertErrorAsyncPromised(func, 'expected arg 0 to be')
-    .then(() => done());
+      .then(() => done());
   });
 };
 
-export const expectFloat = (val: number, expected: number): Chai.Assertion =>
-  expect(val).to.be.a('number').above(expected - 0.01).below(expected + 0.01);
+export const expectFloat = (val: number, expected: number): Chai.Assertion => expect(val).to.be.a('number').above(expected - 0.01).below(expected + 0.01);
 
 const tmpdataDir = './tmpdata';
 

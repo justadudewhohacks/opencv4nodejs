@@ -5,15 +5,14 @@ import matTestUtilsFactory from './matTestUtils';
 import readExampleImagesFactory from './readExampleImages';
 import generateClassMethodTestsFactory from './generateClassMethodTests';
 
-const getNodeMajorVersion = () => parseInt(process.version.split('.')[0].slice(1))
+const getNodeMajorVersion = () => parseInt(process.version.split('.')[0].slice(1));
 
-export default function(cv: typeof openCV) {
+export default function (cv: typeof openCV) {
   const cvVersionGreaterEqual = (major: number, minor: number, revision: number): boolean => cv.version.major > major
     || (cv.version.major === major && cv.version.minor > minor)
-    || (cv.version.major === major && cv.version.minor === minor && cv.version.revision >= revision)
-  const cvVersionLowerThan = (major: number, minor: number, revision: number): boolean => !cvVersionGreaterEqual(major, minor, revision)
-  const cvVersionEqual = (major: number, minor: number, revision: number): boolean =>
-    cv.version.major === major && cv.version.minor === minor && cv.version.revision === revision
+    || (cv.version.major === major && cv.version.minor === minor && cv.version.revision >= revision);
+  const cvVersionLowerThan = (major: number, minor: number, revision: number): boolean => !cvVersionGreaterEqual(major, minor, revision);
+  const cvVersionEqual = (major: number, minor: number, revision: number): boolean => cv.version.major === major && cv.version.minor === minor && cv.version.revision === revision;
 
   const matTestUtils = matTestUtilsFactory(cv);
   const readExampleImages = readExampleImagesFactory(cv);
@@ -28,6 +27,6 @@ export default function(cv: typeof openCV) {
     cvVersionEqual,
     generateAPITests,
     generateClassMethodTests,
-    getNodeMajorVersion
+    getNodeMajorVersion,
   };
-};
+}

@@ -1,15 +1,14 @@
 import { assert, expect } from 'chai';
 import { TestContext } from '../model';
 
-export default function(args: TestContext) {
+export default function (args: TestContext) {
   const { cv, utils, getTestImg } = args;
   const {
     assertPropsWithValue,
-    generateAPITests
+    generateAPITests,
   } = utils;
 
   return (defaults, customProps, Detector, implementsCompute = true) => {
-
     const getDut = () => (typeof Detector === 'function' ? new Detector() : Detector);
 
     describe('constructor', () => {
@@ -60,13 +59,13 @@ export default function(args: TestContext) {
         methodName: 'detect',
         methodNameSpace: 'FeatureDetector',
         getRequiredArgs: () => ([
-          getTestImg()
+          getTestImg(),
         ]),
         expectOutput: (keyPoints) => {
           expect(keyPoints).to.be.a('array');
           assert(keyPoints.length > 0, 'no KeyPoints detected');
-          keyPoints.forEach(kp => assert(kp instanceof cv.KeyPoint));
-        }
+          keyPoints.forEach((kp) => assert(kp instanceof cv.KeyPoint));
+        },
       });
     });
 
@@ -84,13 +83,13 @@ export default function(args: TestContext) {
           methodNameSpace: 'FeatureDetector',
           getRequiredArgs: () => ([
             getTestImg(),
-            keyPoints
+            keyPoints,
           ]),
           expectOutput: (desc) => {
             assertPropsWithValue(desc)({ rows: keyPoints.length });
-          }
+          },
         });
       });
     }
   };
-};
+}

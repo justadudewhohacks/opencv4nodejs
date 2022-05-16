@@ -1,4 +1,4 @@
-import { TestContext } from "../../model";
+import { TestContext } from '../../model';
 
 import MatTests from './MatTests';
 import accessorTests from './accessorTests';
@@ -14,4 +14,4 @@ export default function (args: TestContext) {
     describe('from fill vector', () => constructorTestsFromFillVector(args));
   });
   describe('operators', () => operatorTests(args));
-};
+}

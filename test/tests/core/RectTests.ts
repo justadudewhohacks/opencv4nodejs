@@ -1,6 +1,5 @@
-import { TestContext } from "../model";
-
 import { expect } from 'chai';
+import { TestContext } from '../model';
 
 export default function (args: TestContext) {
   const { cv, utils } = args;
@@ -34,7 +33,7 @@ export default function (args: TestContext) {
         expect(res.width).to.equal(50);
         expect(res.height).to.equal(20);
       },
-      hasAsync: false
+      hasAsync: false,
     });
   });
 
@@ -51,7 +50,7 @@ export default function (args: TestContext) {
         expect(res.width).to.equal(50);
         expect(res.height).to.equal(50);
       },
-      hasAsync: false
+      hasAsync: false,
     });
   });
 
@@ -66,7 +65,7 @@ export default function (args: TestContext) {
           expect(res.y).to.equal(-10);
           expect(res.width).to.equal(50);
           expect(res.height).to.equal(50);
-        }
+        },
       });
     });
 
@@ -80,7 +79,7 @@ export default function (args: TestContext) {
           expect(res.y).to.equal(0);
           expect(res.width).to.equal(50);
           expect(res.height).to.equal(50);
-        }
+        },
       });
     });
 
@@ -94,7 +93,7 @@ export default function (args: TestContext) {
           expect(res.y).to.equal(0);
           expect(res.width).to.equal(50);
           expect(res.height).to.equal(50);
-        }
+        },
       });
     });
   });
@@ -112,7 +111,7 @@ export default function (args: TestContext) {
             expect(res.y).to.equal(25);
             expect(res.width).to.equal(50);
             expect(res.height).to.equal(50);
-          }
+          },
         });
       });
 
@@ -127,7 +126,7 @@ export default function (args: TestContext) {
             expect(res.y).to.equal(-50);
             expect(res.width).to.equal(200);
             expect(res.height).to.equal(200);
-          }
+          },
         });
       });
     });
@@ -143,7 +142,7 @@ export default function (args: TestContext) {
           expect(res.y).to.equal(-50);
           expect(res.width).to.equal(50);
           expect(res.height).to.equal(200);
-        }
+        },
       });
     });
   });
@@ -160,7 +159,7 @@ export default function (args: TestContext) {
           expect(res.y).to.equal(25);
           expect(res.width).to.equal(50);
           expect(res.height).to.equal(50);
-        }
+        },
       });
     });
 
@@ -175,9 +174,8 @@ export default function (args: TestContext) {
           expect(res.y).to.equal(100);
           expect(res.width).to.equal(200);
           expect(res.height).to.equal(200);
-        }
+        },
       });
     });
   });
-
-};
+}

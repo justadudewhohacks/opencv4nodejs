@@ -2,10 +2,10 @@ import { expect } from 'chai';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg  } = args;
+  const { cv, utils, getTestImg } = args;
 
   const {
-    cvVersionLowerThan
+    cvVersionLowerThan,
   } = utils;
 
   let kazeKps;
@@ -27,14 +27,14 @@ export default function (args: TestContext) {
       const matches = cv.matchFlannBased(kazeDesc, kazeDesc);
       expect(kazeKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(kazeKps.length);
-      matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+      matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
     });
 
     it('async', async () => {
       const matches = await cv.matchFlannBasedAsync(kazeDesc, kazeDesc);
       expect(kazeKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(kazeKps.length);
-      matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+      matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
     });
   });
 
@@ -43,14 +43,14 @@ export default function (args: TestContext) {
       const matches = cv.matchBruteForce(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
-      matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+      matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
     });
 
     it('async', async () => {
       const matches = await cv.matchBruteForceAsync(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
-      matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+      matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
     });
   });
 
@@ -59,14 +59,14 @@ export default function (args: TestContext) {
       const matches = cv.matchBruteForceL1(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
-      matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+      matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
     });
 
     it('async', async () => {
       const matches = await cv.matchBruteForceL1Async(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
-      matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+      matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
     });
   });
 
@@ -75,14 +75,14 @@ export default function (args: TestContext) {
       const matches = cv.matchBruteForceHamming(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
-      matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+      matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
     });
 
     it('async', async () => {
       const matches = await cv.matchBruteForceHammingAsync(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
-      matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+      matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
     });
   });
 
@@ -91,14 +91,14 @@ export default function (args: TestContext) {
       const matches = cv.matchBruteForceHammingLut(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
-      matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+      matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
     });
 
     it('matchBruteForceHammingLutAsync', async () => {
       const matches = await cv.matchBruteForceHammingAsync(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
-      matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+      matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
     });
   });
 
@@ -107,14 +107,14 @@ export default function (args: TestContext) {
       const matches = cv.matchBruteForceSL2(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
-      matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+      matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
     });
 
     it('matchBruteForceSL2Async', async () => {
-      const matches = await cv.matchBruteForceSL2Async(orbDesc, orbDesc)
+      const matches = await cv.matchBruteForceSL2Async(orbDesc, orbDesc);
       expect(orbKps.length).to.be.above(0);
       expect(matches).to.be.an('array').lengthOf(orbKps.length);
-      matches.forEach(match => expect(match).instanceOf(cv.DescriptorMatch));
+      matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
     });
   });
-};
+}

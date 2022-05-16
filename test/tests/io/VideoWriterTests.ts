@@ -2,12 +2,12 @@ import { expect } from 'chai';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils} = args;
+  const { cv, utils } = args;
 
   const {
     clearTmpData,
     fileExists,
-    getTmpDataFilePath
+    getTmpDataFilePath,
   } = utils;
 
   describe('constructor', () => {
@@ -32,7 +32,7 @@ export default function (args: TestContext) {
         getTmpDataFilePath('video.avi'),
         cv.VideoWriter.fourcc('MJPG'),
         24,
-        new cv.Size(800, 600)
+        new cv.Size(800, 600),
       );
     });
 
@@ -55,4 +55,4 @@ export default function (args: TestContext) {
       });
     });
   });
-};
+}

@@ -5,7 +5,7 @@ export default (args0: TestContext) => (args, values, Recognizer) => {
   const {
     generateAPITests,
     clearTmpData,
-    getTmpDataFilePath
+    getTmpDataFilePath,
   } = args0.utils;
   const { getTestImg } = args0;
   describe('constructor', () => {
@@ -35,9 +35,9 @@ export default (args0: TestContext) => (args, values, Recognizer) => {
       methodNameSpace: 'FaceRecognizer',
       getRequiredArgs: () => ([
         [getTestImg().bgrToGray(), getTestImg().bgrToGray()],
-        [1, 2]
+        [1, 2],
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -60,9 +60,9 @@ export default (args0: TestContext) => (args, values, Recognizer) => {
         methodName: 'predict',
         methodNameSpace: 'FaceRecognizer',
         getRequiredArgs: () => ([
-          getTestImg().bgrToGray()
+          getTestImg().bgrToGray(),
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 

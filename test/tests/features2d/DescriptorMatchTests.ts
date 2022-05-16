@@ -5,7 +5,7 @@ export default (args: TestContext) => {
   const { cv, utils } = args;
 
   const {
-    assertPropsWithValue
+    assertPropsWithValue,
   } = utils;
 
   describe('constructor', () => {
@@ -30,5 +30,4 @@ export default (args: TestContext) => {
       assertPropsWithValue(match)({ queryIdx, trainIdx, distance });
     });
   });
-
 };

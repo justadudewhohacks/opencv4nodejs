@@ -6,14 +6,14 @@ export default function (args: TestContext) {
 
   const {
     assertError,
-    assertPropsWithValue
+    assertPropsWithValue,
   } = utils;
 
-  const OperatorRequiresArg = pt => (func, isScalar?: boolean) => {
+  const OperatorRequiresArg = (pt) => (func, isScalar?: boolean) => {
     it('should throw if no args', () => {
       assertError(
         () => pt[func].bind(pt)(),
-        `expected arg to be ${isScalar ? 'a Scalar' : 'an instance of Point'}`
+        `expected arg to be ${isScalar ? 'a Scalar' : 'an instance of Point'}`,
       );
     });
   };
@@ -204,5 +204,4 @@ export default function (args: TestContext) {
       });
     });
   });
-
-};
+}

@@ -1,15 +1,17 @@
-import  { charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
-  intMin, floatMin, floatMax, doubleMin, doubleMax } from './typeRanges';
+import {
+  charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
+  intMin, floatMin, floatMax, doubleMin, doubleMax,
+} from './typeRanges';
 import type { OpenCV } from '../../model';
 
-export default function(cv: OpenCV, type: number) {
+export default function (cv: OpenCV, type: number) {
   switch (type) {
     case cv.CV_8UC1: {
       return ([
         [ucharMax, 0, 0],
         [0, ucharMax, 0],
         [0, 0, ucharMax],
-        [ucharMax, 0, 0]
+        [ucharMax, 0, 0],
       ]);
     }
     case cv.CV_8UC2: {
@@ -17,7 +19,7 @@ export default function(cv: OpenCV, type: number) {
         [[ucharMax, 0], [0, 0], [0, ucharMax]],
         [[0, 0], [ucharMax, 0], [0, ucharMax]],
         [[0, 0], [0, 0], [ucharMax, 0]],
-        [[ucharMax, 0], [0, 0], [0, 0]]
+        [[ucharMax, 0], [0, 0], [0, 0]],
       ]);
     }
     case cv.CV_8UC3: {
@@ -25,7 +27,7 @@ export default function(cv: OpenCV, type: number) {
         [[ucharMax, 0, 0], [0, 0, 0], [0, ucharMax, ucharMax]],
         [[0, 0, ucharMax], [ucharMax, 0, 0], [ucharMax, 0, ucharMax]],
         [[0, 0, ucharMax], [0, 0, 0], [ucharMax, 0, 0]],
-        [[ucharMax, 0, ucharMax], [0, 0, 0], [0, 0, ucharMax]]
+        [[ucharMax, 0, ucharMax], [0, 0, 0], [0, 0, ucharMax]],
       ]);
     }
     case cv.CV_8UC4: {
@@ -33,7 +35,7 @@ export default function(cv: OpenCV, type: number) {
         [[ucharMax, 0, 0, 0], [ucharMax, 0, 0, 0], [0, ucharMax, ucharMax, ucharMax]],
         [[0, 0, ucharMax, 0], [ucharMax, ucharMax, 0, 0], [ucharMax, 0, ucharMax, ucharMax]],
         [[0, 0, ucharMax, 0], [ucharMax, 0, 0, 0], [ucharMax, 0, 0, ucharMax]],
-        [[ucharMax, 0, ucharMax, 0], [ucharMax, 0, 0, 0], [0, 0, ucharMax, ucharMax]]
+        [[ucharMax, 0, ucharMax, 0], [ucharMax, 0, 0, 0], [0, 0, ucharMax, ucharMax]],
       ]);
     }
     case cv.CV_8SC1: {
@@ -41,7 +43,7 @@ export default function(cv: OpenCV, type: number) {
         [charMax, charMin, charMin],
         [charMin, charMax, charMin],
         [charMin, charMin, charMax],
-        [charMax, charMin, charMin]
+        [charMax, charMin, charMin],
       ]);
     }
     case cv.CV_8SC2: {
@@ -49,7 +51,7 @@ export default function(cv: OpenCV, type: number) {
         [[charMax, charMin], [charMin, charMin], [charMin, charMax]],
         [[charMin, charMin], [charMax, charMin], [charMin, charMax]],
         [[charMin, charMin], [charMin, charMin], [charMax, charMin]],
-        [[charMax, charMin], [charMin, charMin], [charMin, charMin]]
+        [[charMax, charMin], [charMin, charMin], [charMin, charMin]],
       ]);
     }
     case cv.CV_8SC3: {
@@ -57,7 +59,7 @@ export default function(cv: OpenCV, type: number) {
         [[charMax, charMin, charMin], [charMin, charMin, charMin], [charMin, charMax, charMax]],
         [[charMin, charMin, charMax], [charMax, charMin, charMin], [charMax, charMin, charMax]],
         [[charMin, charMin, charMax], [charMin, charMin, charMin], [charMax, charMin, charMin]],
-        [[charMax, charMin, charMax], [charMin, charMin, charMin], [charMin, charMin, charMax]]
+        [[charMax, charMin, charMax], [charMin, charMin, charMin], [charMin, charMin, charMax]],
       ]);
     }
     case cv.CV_8SC4: {
@@ -65,7 +67,7 @@ export default function(cv: OpenCV, type: number) {
         [[charMax, charMin, charMin, charMin], [charMax, charMin, charMin, charMin], [charMin, charMax, charMax, charMax]],
         [[charMin, charMin, charMax, charMin], [charMax, charMax, charMin, charMin], [charMax, charMin, charMax, charMax]],
         [[charMin, charMin, charMax, charMin], [charMax, charMin, charMin, charMin], [charMax, charMin, charMin, charMax]],
-        [[charMax, charMin, charMax, charMin], [charMax, charMin, charMin, charMin], [charMin, charMin, charMax, charMax]]
+        [[charMax, charMin, charMax, charMin], [charMax, charMin, charMin, charMin], [charMin, charMin, charMax, charMax]],
       ]);
     }
     case cv.CV_16UC1: {
@@ -73,7 +75,7 @@ export default function(cv: OpenCV, type: number) {
         [ushortMax, 0, 0],
         [0, ushortMax, 0],
         [0, 0, ushortMax],
-        [ushortMax, 0, 0]
+        [ushortMax, 0, 0],
       ]);
     }
     case cv.CV_16UC2: {
@@ -81,7 +83,7 @@ export default function(cv: OpenCV, type: number) {
         [[ushortMax, 0], [0, 0], [0, ushortMax]],
         [[0, 0], [ushortMax, 0], [0, ushortMax]],
         [[0, 0], [0, 0], [ushortMax, 0]],
-        [[ushortMax, 0], [0, 0], [0, 0]]
+        [[ushortMax, 0], [0, 0], [0, 0]],
       ]);
     }
     case cv.CV_16UC3: {
@@ -89,7 +91,7 @@ export default function(cv: OpenCV, type: number) {
         [[ushortMax, 0, 0], [0, 0, 0], [0, ushortMax, ushortMax]],
         [[0, 0, ushortMax], [ushortMax, 0, 0], [ushortMax, 0, ushortMax]],
         [[0, 0, ushortMax], [0, 0, 0], [ushortMax, 0, 0]],
-        [[ushortMax, 0, ushortMax], [0, 0, 0], [0, 0, ushortMax]]
+        [[ushortMax, 0, ushortMax], [0, 0, 0], [0, 0, ushortMax]],
       ]);
     }
     case cv.CV_16UC4: {
@@ -97,7 +99,7 @@ export default function(cv: OpenCV, type: number) {
         [[ushortMax, 0, 0, 0], [ushortMax, 0, 0, 0], [0, ushortMax, ushortMax, ushortMax]],
         [[0, 0, ushortMax, 0], [ushortMax, ushortMax, 0, 0], [ushortMax, 0, ushortMax, ushortMax]],
         [[0, 0, ushortMax, 0], [ushortMax, 0, 0, 0], [ushortMax, 0, 0, ushortMax]],
-        [[ushortMax, 0, ushortMax, 0], [ushortMax, 0, 0, 0], [0, 0, ushortMax, ushortMax]]
+        [[ushortMax, 0, ushortMax, 0], [ushortMax, 0, 0, 0], [0, 0, ushortMax, ushortMax]],
       ]);
     }
     case cv.CV_16SC1: {
@@ -105,7 +107,7 @@ export default function(cv: OpenCV, type: number) {
         [shortMax, shortMin, shortMin],
         [shortMin, shortMax, shortMin],
         [shortMin, shortMin, shortMax],
-        [shortMax, shortMin, shortMin]
+        [shortMax, shortMin, shortMin],
       ]);
     }
     case cv.CV_16SC2: {
@@ -113,7 +115,7 @@ export default function(cv: OpenCV, type: number) {
         [[shortMax, shortMin], [shortMin, shortMin], [shortMin, shortMax]],
         [[shortMin, shortMin], [shortMax, shortMin], [shortMin, shortMax]],
         [[shortMin, shortMin], [shortMin, shortMin], [shortMax, shortMin]],
-        [[shortMax, shortMin], [shortMin, shortMin], [shortMin, shortMin]]
+        [[shortMax, shortMin], [shortMin, shortMin], [shortMin, shortMin]],
       ]);
     }
     case cv.CV_16SC3: {
@@ -121,7 +123,7 @@ export default function(cv: OpenCV, type: number) {
         [[shortMax, shortMin, shortMin], [shortMin, shortMin, shortMin], [shortMin, shortMax, shortMax]],
         [[shortMin, shortMin, shortMax], [shortMax, shortMin, shortMin], [shortMax, shortMin, shortMax]],
         [[shortMin, shortMin, shortMax], [shortMin, shortMin, shortMin], [shortMax, shortMin, shortMin]],
-        [[shortMax, shortMin, shortMax], [shortMin, shortMin, shortMin], [shortMin, shortMin, shortMax]]
+        [[shortMax, shortMin, shortMax], [shortMin, shortMin, shortMin], [shortMin, shortMin, shortMax]],
       ]);
     }
     case cv.CV_16SC4: {
@@ -129,7 +131,7 @@ export default function(cv: OpenCV, type: number) {
         [[shortMax, shortMin, shortMin, shortMin], [shortMax, shortMin, shortMin, shortMin], [shortMin, shortMax, shortMax, shortMax]],
         [[shortMin, shortMin, shortMax, shortMin], [shortMax, shortMax, shortMin, shortMin], [shortMax, shortMin, shortMax, shortMax]],
         [[shortMin, shortMin, shortMax, shortMin], [shortMax, shortMin, shortMin, shortMin], [shortMax, shortMin, shortMin, shortMax]],
-        [[shortMax, shortMin, shortMax, shortMin], [shortMax, shortMin, shortMin, shortMin], [shortMin, shortMin, shortMax, shortMax]]
+        [[shortMax, shortMin, shortMax, shortMin], [shortMax, shortMin, shortMin, shortMin], [shortMin, shortMin, shortMax, shortMax]],
       ]);
     }
     case cv.CV_32SC1: {
@@ -137,7 +139,7 @@ export default function(cv: OpenCV, type: number) {
         [intMax, intMin, intMin],
         [intMin, intMax, intMin],
         [intMin, intMin, intMax],
-        [intMax, intMin, intMin]
+        [intMax, intMin, intMin],
       ]);
     }
     case cv.CV_32SC2: {
@@ -145,7 +147,7 @@ export default function(cv: OpenCV, type: number) {
         [[intMax, intMin], [intMin, intMin], [intMin, intMax]],
         [[intMin, intMin], [intMax, intMin], [intMin, intMax]],
         [[intMin, intMin], [intMin, intMin], [intMax, intMin]],
-        [[intMax, intMin], [intMin, intMin], [intMin, intMin]]
+        [[intMax, intMin], [intMin, intMin], [intMin, intMin]],
       ]);
     }
     case cv.CV_32SC3: {
@@ -153,7 +155,7 @@ export default function(cv: OpenCV, type: number) {
         [[intMax, intMin, intMin], [intMin, intMin, intMin], [intMin, intMax, intMax]],
         [[intMin, intMin, intMax], [intMax, intMin, intMin], [intMax, intMin, intMax]],
         [[intMin, intMin, intMax], [intMin, intMin, intMin], [intMax, intMin, intMin]],
-        [[intMax, intMin, intMax], [intMin, intMin, intMin], [intMin, intMin, intMax]]
+        [[intMax, intMin, intMax], [intMin, intMin, intMin], [intMin, intMin, intMax]],
       ]);
     }
     case cv.CV_32SC4: {
@@ -161,7 +163,7 @@ export default function(cv: OpenCV, type: number) {
         [[intMax, intMin, intMin, intMin], [intMax, intMin, intMin, intMin], [intMin, intMax, intMax, intMax]],
         [[intMin, intMin, intMax, intMin], [intMax, intMax, intMin, intMin], [intMax, intMin, intMax, intMax]],
         [[intMin, intMin, intMax, intMin], [intMax, intMin, intMin, intMin], [intMax, intMin, intMin, intMax]],
-        [[intMax, intMin, intMax, intMin], [intMax, intMin, intMin, intMin], [intMin, intMin, intMax, intMax]]
+        [[intMax, intMin, intMax, intMin], [intMax, intMin, intMin, intMin], [intMin, intMin, intMax, intMax]],
       ]);
     }
     case cv.CV_32FC1: {
@@ -169,7 +171,7 @@ export default function(cv: OpenCV, type: number) {
         [floatMax, floatMin, floatMin],
         [floatMin, -floatMax, -floatMin],
         [floatMin, -floatMin, -floatMax],
-        [floatMax, floatMin, floatMin]
+        [floatMax, floatMin, floatMin],
       ]);
     }
     case cv.CV_32FC2: {
@@ -177,7 +179,7 @@ export default function(cv: OpenCV, type: number) {
         [[floatMax, floatMin], [floatMin, floatMin], [floatMin, -floatMax]],
         [[floatMin, -floatMin], [floatMax, -floatMin], [-floatMin, floatMax]],
         [[floatMin, floatMin], [floatMin, -floatMin], [-floatMax, floatMin]],
-        [[floatMax, -floatMin], [floatMin, floatMin], [floatMin, floatMin]]
+        [[floatMax, -floatMin], [floatMin, floatMin], [floatMin, floatMin]],
       ]);
     }
     case cv.CV_32FC3: {
@@ -185,7 +187,7 @@ export default function(cv: OpenCV, type: number) {
         [[floatMax, -floatMin, floatMin], [floatMin, -floatMin, floatMin], [floatMin, -floatMax, floatMax]],
         [[floatMin, floatMin, -floatMax], [floatMax, floatMin, floatMin], [floatMax, floatMin, floatMax]],
         [[floatMin, floatMin, floatMax], [-floatMin, -floatMin, -floatMin], [floatMax, -floatMin, floatMin]],
-        [[-floatMax, floatMin, floatMax], [floatMin, -floatMin, -floatMin], [floatMin, floatMin, floatMax]]
+        [[-floatMax, floatMin, floatMax], [floatMin, -floatMin, -floatMin], [floatMin, floatMin, floatMax]],
       ]);
     }
     case cv.CV_32FC4: {
@@ -193,7 +195,7 @@ export default function(cv: OpenCV, type: number) {
         [[floatMax, -floatMin, -floatMin, floatMin], [floatMax, floatMin, floatMin, floatMin], [-floatMin, -floatMax, floatMax, floatMax]],
         [[floatMin, floatMin, floatMax, floatMin], [-floatMax, -floatMax, -floatMin, -floatMin], [floatMax, floatMin, floatMax, floatMax]],
         [[floatMin, floatMin, floatMax, -floatMin], [floatMax, floatMin, -floatMin, floatMin], [-floatMax, -floatMin, floatMin, floatMax]],
-        [[-floatMax, floatMin, floatMax, floatMin], [floatMax, floatMin, floatMin, -floatMin], [-floatMin, floatMin, floatMax, floatMax]]
+        [[-floatMax, floatMin, floatMax, floatMin], [floatMax, floatMin, floatMin, -floatMin], [-floatMin, floatMin, floatMax, floatMax]],
       ]);
     }
     case cv.CV_64FC1: {
@@ -201,7 +203,7 @@ export default function(cv: OpenCV, type: number) {
         [doubleMax, doubleMin, doubleMin],
         [doubleMin, -doubleMax, -doubleMin],
         [doubleMin, -doubleMin, -doubleMax],
-        [doubleMax, doubleMin, doubleMin]
+        [doubleMax, doubleMin, doubleMin],
       ]);
     }
     case cv.CV_64FC2: {
@@ -209,7 +211,7 @@ export default function(cv: OpenCV, type: number) {
         [[doubleMax, doubleMin], [doubleMin, doubleMin], [doubleMin, -doubleMax]],
         [[doubleMin, -doubleMin], [doubleMax, -doubleMin], [-doubleMin, doubleMax]],
         [[doubleMin, doubleMin], [doubleMin, -doubleMin], [-doubleMax, doubleMin]],
-        [[doubleMax, -doubleMin], [doubleMin, doubleMin], [doubleMin, doubleMin]]
+        [[doubleMax, -doubleMin], [doubleMin, doubleMin], [doubleMin, doubleMin]],
       ]);
     }
     case cv.CV_64FC3: {
@@ -217,7 +219,7 @@ export default function(cv: OpenCV, type: number) {
         [[doubleMax, -doubleMin, doubleMin], [doubleMin, -doubleMin, doubleMin], [doubleMin, -doubleMax, doubleMax]],
         [[doubleMin, doubleMin, -doubleMax], [doubleMax, doubleMin, doubleMin], [doubleMax, doubleMin, doubleMax]],
         [[doubleMin, doubleMin, doubleMax], [-doubleMin, -doubleMin, -doubleMin], [doubleMax, -doubleMin, doubleMin]],
-        [[-doubleMax, doubleMin, doubleMax], [doubleMin, -doubleMin, -doubleMin], [doubleMin, doubleMin, doubleMax]]
+        [[-doubleMax, doubleMin, doubleMax], [doubleMin, -doubleMin, -doubleMin], [doubleMin, doubleMin, doubleMax]],
       ]);
     }
     case cv.CV_64FC4: {
@@ -225,11 +227,11 @@ export default function(cv: OpenCV, type: number) {
         [[doubleMax, -doubleMin, -doubleMin, doubleMin], [doubleMax, doubleMin, doubleMin, doubleMin], [-doubleMin, -doubleMax, doubleMax, doubleMax]],
         [[doubleMin, doubleMin, doubleMax, doubleMin], [-doubleMax, -doubleMax, -doubleMin, -doubleMin], [doubleMax, doubleMin, doubleMax, doubleMax]],
         [[doubleMin, doubleMin, doubleMax, -doubleMin], [doubleMax, doubleMin, -doubleMin, doubleMin], [-doubleMax, -doubleMin, doubleMin, doubleMax]],
-        [[-doubleMax, doubleMin, doubleMax, doubleMin], [doubleMax, doubleMin, doubleMin, -doubleMin], [-doubleMin, doubleMin, doubleMax, doubleMax]]
+        [[-doubleMax, doubleMin, doubleMax, doubleMin], [doubleMax, doubleMin, doubleMin, -doubleMin], [-doubleMin, doubleMin, doubleMax, doubleMax]],
       ]);
     }
     default: {
       return null;
     }
   }
-};
+}
