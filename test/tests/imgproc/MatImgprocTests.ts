@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { TestContext } from "../model";
+import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg  } = args;
+  const { cv, utils, getTestImg } = args;
 
   const {
     generateAPITests,
@@ -15,14 +15,14 @@ export default function (args: TestContext) {
     expectToBeVec2,
     isZeroMat,
     isUniformMat,
-    cvVersionGreaterEqual
+    cvVersionGreaterEqual,
   } = utils;
 
   const rgbMatData = [
     Array(5).fill([255, 125, 0]),
     Array(5).fill([0, 0, 0]),
     Array(5).fill([125, 75, 125]),
-    Array(5).fill([75, 255, 75])
+    Array(5).fill([75, 255, 75]),
   ];
   const rgbMat = new cv.Mat(rgbMatData, cv.CV_8UC3);
 
@@ -40,9 +40,9 @@ export default function (args: TestContext) {
         methodName: 'rescale',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
-          factor
+          factor,
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -62,14 +62,14 @@ export default function (args: TestContext) {
           methodNameSpace: 'Mat',
           getRequiredArgs: () => ([
             rows,
-            cols
+            cols,
           ]),
           getOptionalArgsMap: () => ([
             ['fx', 0.5],
             ['fy', 0.5],
-            ['interpolation', cv.INTER_CUBIC]
+            ['interpolation', cv.INTER_CUBIC],
           ]),
-          expectOutput
+          expectOutput,
         });
       });
 
@@ -79,14 +79,14 @@ export default function (args: TestContext) {
           methodName: 'resize',
           methodNameSpace: 'Mat',
           getRequiredArgs: () => ([
-            new cv.Size(cols, rows)
+            new cv.Size(cols, rows),
           ]),
           getOptionalArgsMap: () => ([
             ['fx', 0.5],
             ['fy', 0.5],
-            ['interpolation', cv.INTER_CUBIC]
+            ['interpolation', cv.INTER_CUBIC],
           ]),
-          expectOutput
+          expectOutput,
         });
       });
     });
@@ -104,9 +104,9 @@ export default function (args: TestContext) {
         methodName: 'resizeToMax',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
-          maxRowsOrCols
+          maxRowsOrCols,
         ]),
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -120,7 +120,7 @@ export default function (args: TestContext) {
       getDut: () => rgbMat.copy(),
       methodName: 'bgrToGray',
       methodNameSpace: 'Mat',
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -135,9 +135,9 @@ export default function (args: TestContext) {
       methodName: 'cvtColor',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
-        cv.COLOR_BGR2Lab
+        cv.COLOR_BGR2Lab,
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -148,7 +148,7 @@ export default function (args: TestContext) {
     const optionalArgsMap = [
       ['anchor', new cv.Point2(0, 0)],
       ['iterations', 5],
-      ['borderType', cv.BORDER_REFLECT]
+      ['borderType', cv.BORDER_REFLECT],
     ];
 
     describe('erode', () => {
@@ -161,10 +161,10 @@ export default function (args: TestContext) {
         methodName: 'erode',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
-          kernel
+          kernel,
         ]),
         getOptionalArgsMap: () => optionalArgsMap,
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -178,10 +178,10 @@ export default function (args: TestContext) {
         methodName: 'dilate',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
-          kernel
+          kernel,
         ]),
         getOptionalArgsMap: () => optionalArgsMap,
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -198,10 +198,10 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           kernel,
-          op
+          op,
         ]),
         getOptionalArgsMap: () => optionalArgsMap,
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -222,16 +222,16 @@ export default function (args: TestContext) {
       [
         [0.5, 0, 0],
         [0, 0.5, 0],
-        [0, 0, 1]
+        [0, 0, 1],
       ],
-      cv.CV_64F
+      cv.CV_64F,
     );
     const transformationMatrixAffine = new cv.Mat(
       [
         [0.5, 0, 0],
-        [0, 0.5, 1]
+        [0, 0.5, 1],
       ],
-      cv.CV_64F
+      cv.CV_64F,
     );
 
     generateAPITests({
@@ -239,15 +239,15 @@ export default function (args: TestContext) {
       methodName: 'warpAffine',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
-        transformationMatrixAffine
+        transformationMatrixAffine,
       ]),
       getOptionalArgsMap: () => ([
         ['size', size],
         ['flags', cv.INTER_CUBIC],
         ['borderMode', cv.BORDER_CONSTANT],
-        ['borderValue', new cv.Vec3(255, 255, 255)]
+        ['borderValue', new cv.Vec3(255, 255, 255)],
       ]),
-      expectOutput
+      expectOutput,
     });
 
     generateAPITests({
@@ -255,15 +255,15 @@ export default function (args: TestContext) {
       methodName: 'warpPerspective',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
-        transformationMatrix
+        transformationMatrix,
       ]),
       getOptionalArgsMap: () => ([
         ['size', size],
         ['flags', cv.INTER_CUBIC],
         ['borderMode', cv.BORDER_CONSTANT],
-        ['borderValue', new cv.Vec3(255, 255, 255)]
+        ['borderValue', new cv.Vec3(255, 255, 255)],
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -274,7 +274,7 @@ export default function (args: TestContext) {
       ['color', new cv.Vec3(255, 255, 255)],
       ['thickness', 2],
       ['lineType', cv.LINE_4],
-      ['shift', 0]
+      ['shift', 0],
     ]);
 
     const expectOutput = (_, dut) => {
@@ -292,11 +292,11 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           ptFrom,
-          ptTo
+          ptTo,
         ]),
         getOptionalArgsMap: getDrawParams,
         expectOutput,
-        hasAsync: false
+        hasAsync: false,
       });
     });
 
@@ -317,11 +317,11 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           ptFrom,
-          ptTo
+          ptTo,
         ]),
         getOptionalArgsMap,
         expectOutput,
-        hasAsync: false
+        hasAsync: false,
       });
     });
 
@@ -336,11 +336,11 @@ export default function (args: TestContext) {
           methodNameSpace: 'Mat',
           getRequiredArgs: () => ([
             upperLeft,
-            bottomRight
+            bottomRight,
           ]),
           getOptionalArgsMap: getDrawParams,
           expectOutput,
-          hasAsync: false
+          hasAsync: false,
         });
       });
 
@@ -350,11 +350,11 @@ export default function (args: TestContext) {
           methodName: 'drawRectangle',
           methodNameSpace: 'Mat',
           getRequiredArgs: () => ([
-            new cv.Rect(1, 1, 8, 8)
+            new cv.Rect(1, 1, 8, 8),
           ]),
           getOptionalArgsMap: getDrawParams,
           expectOutput,
-          hasAsync: false
+          hasAsync: false,
         });
       });
     });
@@ -369,11 +369,11 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           center,
-          radius
+          radius,
         ]),
         getOptionalArgsMap: getDrawParams,
         expectOutput,
-        hasAsync: false
+        hasAsync: false,
       });
     });
 
@@ -389,13 +389,13 @@ export default function (args: TestContext) {
           methodName: 'drawEllipse',
           methodNameSpace: 'Mat',
           getRequiredArgs: () => ([
-            box
+            box,
           ]),
           getOptionalArgsMap: () => getDrawParams()
             // no shift
             .slice(0, 3),
           expectOutput,
-          hasAsync: false
+          hasAsync: false,
         });
       });
 
@@ -412,18 +412,18 @@ export default function (args: TestContext) {
             size,
             angle,
             startAngle,
-            endAngle
+            endAngle,
           ]),
           getOptionalArgsMap: getDrawParams,
           expectOutput,
-          hasAsync: false
+          hasAsync: false,
         });
       });
 
       describe('drawPolylines', () => {
         const pts = [
           [new cv.Point2(4, 4), new cv.Point2(4, 8), new cv.Point2(8, 8)],
-          [new cv.Point2(2, 2), new cv.Point2(2, 6), new cv.Point2(6, 6)]
+          [new cv.Point2(2, 2), new cv.Point2(2, 6), new cv.Point2(6, 6)],
         ];
         const isClosed = false;
 
@@ -433,18 +433,18 @@ export default function (args: TestContext) {
           methodNameSpace: 'Mat',
           getRequiredArgs: () => ([
             pts,
-            isClosed
+            isClosed,
           ]),
           getOptionalArgsMap: getDrawParams,
           expectOutput,
-          hasAsync: false
+          hasAsync: false,
         });
       });
 
       describe('drawFillPoly', () => {
         const pts = [
           [new cv.Point2(4, 4), new cv.Point2(4, 8), new cv.Point2(8, 8)],
-          [new cv.Point2(2, 2), new cv.Point2(2, 6), new cv.Point2(6, 6)]
+          [new cv.Point2(2, 2), new cv.Point2(2, 6), new cv.Point2(6, 6)],
         ];
 
         generateAPITests({
@@ -452,16 +452,16 @@ export default function (args: TestContext) {
           methodName: 'drawFillPoly',
           methodNameSpace: 'Mat',
           getRequiredArgs: () => ([
-            pts
+            pts,
           ]),
           getOptionalArgsMap: () => ([
             ['color', new cv.Vec3(255, 255, 255)],
             ['lineType', cv.LINE_4],
             ['shift', 0],
-            ['offset', new cv.Point2(0, 0)]
+            ['offset', new cv.Point2(0, 0)],
           ]),
           expectOutput,
-          hasAsync: false
+          hasAsync: false,
         });
       });
 
@@ -473,11 +473,11 @@ export default function (args: TestContext) {
           methodName: 'drawFillConvexPoly',
           methodNameSpace: 'Mat',
           getRequiredArgs: () => ([
-            pts
+            pts,
           ]),
           getOptionalArgsMap: getDrawParams,
           expectOutput,
-          hasAsync: false
+          hasAsync: false,
         });
       });
 
@@ -501,11 +501,11 @@ export default function (args: TestContext) {
             text,
             origin,
             fontFace,
-            fontScale
+            fontScale,
           ]),
           getOptionalArgsMap,
           expectOutput,
-          hasAsync: false
+          hasAsync: false,
         });
       });
     });
@@ -517,7 +517,7 @@ export default function (args: TestContext) {
       [0, 128, 255, 128, 0],
       [0, 255, 255, 255, 0],
       [0, 128, 255, 128, 0],
-      [0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0],
     ], cv.CV_8U);
     const distanceType = cv.DIST_L1;
     const maskSize = 3;
@@ -536,10 +536,10 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           distanceType,
-          maskSize
+          maskSize,
         ]),
         getOptionalArg: () => dstType,
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -559,10 +559,10 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           distanceType,
-          maskSize
+          maskSize,
         ]),
         getOptionalArg: () => distLabelType,
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -570,7 +570,7 @@ export default function (args: TestContext) {
   describe('thresholding', () => {
     const mat = new cv.Mat([
       [255, 255, 255],
-      [0, 100, 101]
+      [0, 100, 101],
     ], cv.CV_8U);
 
     describe('threshold', () => {
@@ -579,9 +579,9 @@ export default function (args: TestContext) {
         assertDataDeepEquals(
           [
             [255, 255, 255],
-            [0, 0, 255]
+            [0, 0, 255],
           ],
-          thresholded.getDataAsArray()
+          thresholded.getDataAsArray(),
         );
       };
 
@@ -596,9 +596,9 @@ export default function (args: TestContext) {
         getRequiredArgs: () => ([
           th,
           maxVal,
-          thresholdType
+          thresholdType,
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -622,9 +622,9 @@ export default function (args: TestContext) {
           adaptiveMethod,
           thresholdType,
           blockSize,
-          C
+          C,
         ]),
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -635,7 +635,7 @@ export default function (args: TestContext) {
       [0, 255, 255, 255, 0],
       [0, 255, 255, 255, 0],
       [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0],
     ], cv.CV_8U);
 
     const connectivity = 4;
@@ -653,9 +653,9 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getOptionalArgsMap: () => ([
           ['connectivity', connectivity],
-          ['ltype', ltype]
+          ['ltype', ltype],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -671,7 +671,7 @@ export default function (args: TestContext) {
         const label255 = res.labels.at(0, 1);
         const centroid = [
           res.centroids.at(label255, 0),
-          res.centroids.at(label255, 1)
+          res.centroids.at(label255, 1),
         ];
         const expectedCenter = [2, 1];
         (assertMatValueEquals as any)(centroid, expectedCenter);
@@ -693,9 +693,9 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getOptionalArgsMap: () => ([
           ['connectivity', connectivity],
-          ['ltype', ltype]
+          ['ltype', ltype],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -706,7 +706,7 @@ export default function (args: TestContext) {
       [[0, 0, 0], [255, 255, 255], [255, 255, 255], [255, 255, 255], [0, 0, 0]],
       [[0, 0, 0], [255, 255, 255], [255, 255, 255], [255, 255, 255], [0, 0, 0]],
       [[0, 0, 0], [255, 255, 255], [255, 255, 255], [255, 255, 255], [0, 0, 0]],
-      [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+      [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
     ], cv.CV_8UC3);
 
     const getMask = () => new cv.Mat([
@@ -714,7 +714,7 @@ export default function (args: TestContext) {
       [cv.GC_BGD, cv.GC_FGD, cv.GC_FGD, cv.GC_FGD, cv.GC_BGD],
       [cv.GC_BGD, cv.GC_FGD, cv.GC_FGD, cv.GC_FGD, cv.GC_BGD],
       [cv.GC_BGD, cv.GC_FGD, cv.GC_FGD, cv.GC_FGD, cv.GC_BGD],
-      [cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD]
+      [cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD, cv.GC_BGD],
     ], cv.CV_8U);
     const getBgdModel = () => new cv.Mat(1, 65, cv.CV_64F, 0);
     const getFgdModel = () => new cv.Mat(1, 65, cv.CV_64F, 0);
@@ -739,10 +739,10 @@ export default function (args: TestContext) {
           rect,
           getBgdModel(),
           getFgdModel(),
-          iterCount
+          iterCount,
         ]),
         getOptionalArg: () => mode,
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -765,7 +765,7 @@ export default function (args: TestContext) {
       [0, 0, 0, 0, 0],
       [0, 2, 0, 0, 0],
       [0, 0, 0, 1, 0],
-      [0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0],
     ], cv.CV_32S);
 
     generateAPITests({
@@ -773,13 +773,13 @@ export default function (args: TestContext) {
       methodName: 'watershed',
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
-        markers.copy()
+        markers.copy(),
       ]),
       expectOutput: (outMarkers) => {
         expect(outMarkers).to.be.instanceOf(cv.Mat);
         assertMetaData(markers)(outMarkers);
         expect(dangerousDeepEquals(markers.getDataAsArray(), outMarkers.getDataAsArray())).to.be.false;
-      }
+      },
     });
   });
 
@@ -795,7 +795,7 @@ export default function (args: TestContext) {
       methodName: 'moments',
       methodNameSpace: 'Mat',
       getOptionalArg: () => isBinaryImg,
-      expectOutput: res => expect(res).to.be.instanceOf(cv.Moments)
+      expectOutput: (res) => expect(res).to.be.instanceOf(cv.Moments),
     });
   });
 
@@ -815,7 +815,7 @@ export default function (args: TestContext) {
       expect(res.cols).to.equal((img.cols - templ.cols) + 1);
       expect(res.rows).to.equal((img.rows - templ.rows) + 1);
       expect(res).instanceOf(cv.Mat);
-      const minLoc = res.minMaxLoc().minLoc;
+      const { minLoc } = res.minMaxLoc();
       expect(minLoc.x).to.equal(templOffset.x);
       expect(minLoc.y).to.equal(templOffset.y);
     };
@@ -825,7 +825,7 @@ export default function (args: TestContext) {
       expect(res.cols).to.equal((img.cols - templ.cols) + 1);
       expect(res.rows).to.equal((img.rows - templ.rows) + 1);
       expect(res).instanceOf(cv.Mat);
-      const minLoc = res.minMaxLoc().minLoc;
+      const { minLoc } = res.minMaxLoc();
       expect(minLoc.x).to.equal(templOffset.x);
       expect(minLoc.y).to.equal(templOffset.y);
     };
@@ -889,15 +889,15 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           th1,
-          th2
+          th2,
         ]),
         getOptionalArgsMap: () => ([
           ['apertureSize', 5],
-          ['L2gradient', true]
+          ['L2gradient', true],
         ]),
         expectOutput: (binImg) => {
           assertMetaData(binImg)(img.rows, img.cols, cv.CV_8U);
-        }
+        },
       });
     });
 
@@ -913,15 +913,15 @@ export default function (args: TestContext) {
         getRequiredArgs: () => ([
           ddepth,
           dx,
-          dy
+          dy,
         ]),
         getOptionalArgsMap: () => ([
           ['ksize', 5],
           ['scale', 2],
           ['delta', 0.5],
-          ['borderType', cv.BORDER_CONSTANT]
+          ['borderType', cv.BORDER_CONSTANT],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -937,14 +937,14 @@ export default function (args: TestContext) {
         getRequiredArgs: () => ([
           ddepth,
           dx,
-          dy
+          dy,
         ]),
         getOptionalArgsMap: () => ([
           ['scale', 2],
           ['delta', 0.5],
-          ['borderType', cv.BORDER_CONSTANT]
+          ['borderType', cv.BORDER_CONSTANT],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -956,15 +956,15 @@ export default function (args: TestContext) {
         methodName: 'laplacian',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
-          ddepth
+          ddepth,
         ]),
         getOptionalArgsMap: () => ([
           ['ksize', 5],
           ['scale', 2],
           ['delta', 0.5],
-          ['borderType', cv.BORDER_CONSTANT]
+          ['borderType', cv.BORDER_CONSTANT],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -986,9 +986,9 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getOptionalArgsMap: () => ([
           ['size', sizeDown],
-          ['borderType', cv.BORDER_REFLECT]
+          ['borderType', cv.BORDER_REFLECT],
         ]),
-        expectOutput: outImg => assertMetaData(outImg)(sizeDown.height, sizeDown.width, cv.CV_8UC3)
+        expectOutput: (outImg) => assertMetaData(outImg)(sizeDown.height, sizeDown.width, cv.CV_8UC3),
       });
     });
 
@@ -999,9 +999,9 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getOptionalArgsMap: () => ([
           ['size', sizeUp],
-          ['borderType', cv.BORDER_DEFAULT]
+          ['borderType', cv.BORDER_DEFAULT],
         ]),
-        expectOutput: outImg => assertMetaData(outImg)(sizeUp.height, sizeUp.width, cv.CV_8UC3)
+        expectOutput: (outImg) => assertMetaData(outImg)(sizeUp.height, sizeUp.width, cv.CV_8UC3),
       });
     });
 
@@ -1010,7 +1010,7 @@ export default function (args: TestContext) {
         expect(pyramid).to.be.an('array').lengthOf(4);
         pyramid.forEach((outImg, i) => {
           /* eslint-disable no-restricted-properties */
-          const scale = 1 / Math.pow(2, i);
+          const scale = 1 / 2 ** i;
           expect(outImg).to.be.instanceOf(cv.Mat);
           assertMetaData(outImg)(img.rows * scale, img.cols * scale, cv.CV_8UC3);
         });
@@ -1023,10 +1023,10 @@ export default function (args: TestContext) {
         methodName: 'buildPyramid',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
-          maxlevel
+          maxlevel,
         ]),
         getOptionalArg: () => borderType,
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -1057,15 +1057,15 @@ export default function (args: TestContext) {
         getRequiredArgs: () => ([
           rho,
           theta,
-          threshold
+          threshold,
         ]),
         getOptionalArgsMap: () => ([
           ['srn', 0.5],
           ['stn', 0.5],
           ['min_theta', 0],
-          ['max_theta', Math.PI]
+          ['max_theta', Math.PI],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -1088,13 +1088,13 @@ export default function (args: TestContext) {
         getRequiredArgs: () => ([
           rho,
           theta,
-          threshold
+          threshold,
         ]),
         getOptionalArgsMap: () => ([
           ['minLineLength', 0.5],
-          ['maxLineGap', 0.5]
+          ['maxLineGap', 0.5],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -1121,15 +1121,15 @@ export default function (args: TestContext) {
         getRequiredArgs: () => ([
           method,
           dp,
-          minDist
+          minDist,
         ]),
         getOptionalArgsMap: () => ([
           ['param1', 50],
           ['param2', 50],
           ['minRadius', 4],
-          ['maxRadius', 40]
+          ['maxRadius', 40],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -1145,12 +1145,11 @@ export default function (args: TestContext) {
       assertMetaData(img)(out);
     };
 
-
     generateAPITests({
       getDut: () => img,
       methodName: 'equalizeHist',
       methodNameSpace: 'Mat',
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -1169,9 +1168,9 @@ export default function (args: TestContext) {
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
         H2,
-        method
+        method,
       ]),
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -1194,15 +1193,15 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           seedPoint,
-          newVal
+          newVal,
         ]),
         getOptionalArgsMap: () => ([
           ['mask', mask],
           ['loDiff', 100],
           ['upDiff', 255],
-          ['flags', flags]
+          ['flags', flags],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -1214,15 +1213,15 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           seedPoint,
-          newVal
+          newVal,
         ]),
         getOptionalArgsMap: () => ([
           ['mask', mask],
           ['loDiff', new cv.Vec3(100, 100, 100)],
           ['upDiff', new cv.Vec3(255, 255, 255)],
-          ['flags', flags]
+          ['flags', flags],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -1248,12 +1247,12 @@ export default function (args: TestContext) {
         getRequiredArgs: () => ([
           d,
           sigmaColor,
-          sigmaSpace
+          sigmaSpace,
         ]),
         getOptionalArg: () => borderType,
         expectOutput: (res) => {
           assertMetaData(res)(100, 100, cv.CV_8U);
-        }
+        },
       });
     });
 
@@ -1262,12 +1261,12 @@ export default function (args: TestContext) {
       const kSize = new cv.Size(3, 3);
       const getRequiredArgs = () => ([
         ddepth,
-        kSize
+        kSize,
       ]);
       const getOptionalArgsMap = () => ([
         ['anchor', anchor],
         ['normalize', normalize],
-        ['borderType', cv.BORDER_CONSTANT]
+        ['borderType', cv.BORDER_CONSTANT],
       ]);
 
       describe('boxFilter', () => {
@@ -1277,7 +1276,7 @@ export default function (args: TestContext) {
           methodNameSpace: 'Mat',
           getRequiredArgs,
           getOptionalArgsMap,
-          expectOutput
+          expectOutput,
         });
       });
 
@@ -1288,7 +1287,7 @@ export default function (args: TestContext) {
           methodNameSpace: 'Mat',
           getRequiredArgs,
           getOptionalArgsMap,
-          expectOutput
+          expectOutput,
         });
       });
     });
@@ -1297,7 +1296,7 @@ export default function (args: TestContext) {
       const getOptionalArgsMap = () => ([
         ['anchor', anchor],
         ['delta', 0.5],
-        ['borderType', cv.BORDER_CONSTANT]
+        ['borderType', cv.BORDER_CONSTANT],
       ]);
 
       describe('filter2D', () => {
@@ -1308,10 +1307,10 @@ export default function (args: TestContext) {
           methodNameSpace: 'Mat',
           getRequiredArgs: () => ([
             ddepth,
-            kernel
+            kernel,
           ]),
           getOptionalArgsMap,
-          expectOutput
+          expectOutput,
         });
       });
 
@@ -1325,10 +1324,10 @@ export default function (args: TestContext) {
           getRequiredArgs: () => ([
             ddepth,
             kernelX,
-            kernelY
+            kernelY,
           ]),
           getOptionalArgsMap,
-          expectOutput
+          expectOutput,
         });
       });
     });
@@ -1336,7 +1335,7 @@ export default function (args: TestContext) {
 
   describe('corner detection', () => {
     const getDut = () => getTestImg().bgrToGray();
-    const makeExpectOutput = expectedType => (out) => {
+    const makeExpectOutput = (expectedType) => (out) => {
       expect(out).to.be.instanceOf(cv.Mat);
       const { cols, rows } = getTestImg();
       assertMetaData(out)(cols, rows, expectedType);
@@ -1355,10 +1354,10 @@ export default function (args: TestContext) {
         getRequiredArgs: () => ([
           blockSize,
           ksize,
-          k
+          k,
         ]),
         getOptionalArg: () => borderType,
-        expectOutput: makeExpectOutput(cv.CV_32F)
+        expectOutput: makeExpectOutput(cv.CV_32F),
       });
     });
 
@@ -1375,11 +1374,11 @@ export default function (args: TestContext) {
           corners,
           winSize,
           zeroZone,
-          criteria
+          criteria,
         ]),
         expectOutput: (adjustedCorners) => {
           expect(adjustedCorners).to.be.an('array').lengthOf(corners.length);
-        }
+        },
       });
     });
 
@@ -1389,13 +1388,13 @@ export default function (args: TestContext) {
         methodName: 'cornerMinEigenVal',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
-          blockSize
+          blockSize,
         ]),
         getOptionalArgsMap: () => ([
           ['ksize', 5],
-          ['borderType', borderType]
+          ['borderType', borderType],
         ]),
-        expectOutput: makeExpectOutput(cv.CV_32F)
+        expectOutput: makeExpectOutput(cv.CV_32F),
       });
     });
 
@@ -1406,13 +1405,13 @@ export default function (args: TestContext) {
         methodName: 'cornerEigenValsAndVecs',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
-          blockSize
+          blockSize,
         ]),
         getOptionalArgsMap: () => ([
           ['ksize', 5],
-          ['borderType', borderType]
+          ['borderType', borderType],
         ]),
-        expectOutput: makeExpectOutput(cv32fc6)
+        expectOutput: makeExpectOutput(cv32fc6),
       });
     });
 
@@ -1423,13 +1422,13 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getOptionalArgsMap: () => ([
           ['sdepth', cv.CV_64F],
-          ['sqdepth', cv.CV_64F]
+          ['sqdepth', cv.CV_64F],
         ]),
         expectOutput: (res) => {
           expect(res).to.have.property('sum').to.be.instanceOf(cv.Mat);
           expect(res).to.have.property('sqsum').to.be.instanceOf(cv.Mat);
           expect(res).to.have.property('tilted').to.be.instanceOf(cv.Mat);
-        }
+        },
       });
     });
   });
@@ -1440,16 +1439,16 @@ export default function (args: TestContext) {
       assertDataDeepEquals(
         [
           [255, 255, 255],
-          [0, 0, 255]
+          [0, 0, 255],
         ],
-        inRangeMat.getDataAsArray()
+        inRangeMat.getDataAsArray(),
       );
     };
 
     describe('C1', () => {
       const mat = new cv.Mat([
         [255, 255, 255],
-        [0, 100, 101]
+        [0, 100, 101],
       ], cv.CV_8U);
 
       const lower = 101;
@@ -1461,16 +1460,16 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           lower,
-          upper
+          upper,
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
     describe('C3', () => {
       const mat = new cv.Mat([
         [[255, 255, 255], [255, 255, 255], [255, 255, 255]],
-        [[0, 0, 0], [100, 100, 100], [101, 101, 101]]
+        [[0, 0, 0], [100, 100, 100], [101, 101, 101]],
       ], cv.CV_8UC3);
 
       const lower = new cv.Vec3(101, 101, 101);
@@ -1482,16 +1481,16 @@ export default function (args: TestContext) {
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([
           lower,
-          upper
+          upper,
         ]),
-        expectOutput
+        expectOutput,
       });
     });
   });
 
   if (!cvVersionGreaterEqual(4, 0, 0)) {
     describe('undistort', () => {
-      const cameraMatrix = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);
+      const cameraMatrix = new cv.Mat([[1, 0, 10], [0, 1, 10], [0, 0, 1]], cv.CV_32F);
       const distCoeffs = new cv.Mat([[0.1, 0.1, 1, 1]], cv.CV_32F);
       generateAPITests({
         getDut: () => new cv.Mat(20, 20, cv.CV_8U, 0.5),
@@ -1500,8 +1499,8 @@ export default function (args: TestContext) {
         getRequiredArgs: () => ([cameraMatrix, distCoeffs]),
         expectOutput: (res, _, args) => {
           expect(res).to.be.instanceOf(cv.Mat);
-        }
+        },
       });
     });
   }
-};
+}

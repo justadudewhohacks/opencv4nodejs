@@ -9,6 +9,7 @@
   "rules": {
     "linebreak-style": 0,
     "comma-dangle": ["error", "always-multiline"],
+    "no-plusplus": "off",
     "func-names": 0,
     "import/no-unresolved": 0,
     "import/extensions": 0,

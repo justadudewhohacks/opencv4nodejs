@@ -5,7 +5,8 @@
       "error",
       "windows"
     ],
-    "comma-dangle": ["error", {"functions": "never"}],
+    "comma-dangle": ["error", "always-multiline"],
+    "no-plusplus": "off",
     "func-names": 0,
     "import/no-unresolved": 0,
     "import/extensions": 0,

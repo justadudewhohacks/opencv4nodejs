@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { Contour } from '../../../typings';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => {
@@ -7,7 +8,7 @@ export default (args: TestContext) => {
   const {
     generateAPITests,
     cvVersionLowerThan,
-    cvVersionGreaterEqual
+    cvVersionGreaterEqual,
   } = utils;
 
   // apparently cv version minor < 2 does not consider image borders
@@ -20,7 +21,7 @@ export default (args: TestContext) => {
     [0, 1, 0, 1, 0, 1, 1, 1, 0],
     [0, 1, 0, 1, 0, 1, 0, 1, 0],
     [0, 1, 1, 1, 0, 1, 1, 1, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ];
   const contoursImg = new cv.Mat(contoursData, cv.CV_8U);
   const mode = cv.RETR_EXTERNAL;
@@ -37,13 +38,13 @@ export default (args: TestContext) => {
         expect(contour).to.have.property('isConvex');
       });
 
-      expect(contours.some(c => c.area === 2)).to.be.true;
-      expect(contours.some(c => c.area === 4)).to.be.true;
-      expect(contours.some(c => c.area === 12)).to.be.true;
+      expect(contours.some((c) => c.area === 2)).to.be.true;
+      expect(contours.some((c) => c.area === 4)).to.be.true;
+      expect(contours.some((c) => c.area === 12)).to.be.true;
 
-      expect(contours.some(c => c.numPoints === 4)).to.be.true;
-      expect(contours.some(c => c.numPoints === 8)).to.be.true;
-      expect(contours.some(c => c.numPoints === 16)).to.be.true;
+      expect(contours.some((c) => c.numPoints === 4)).to.be.true;
+      expect(contours.some((c) => c.numPoints === 8)).to.be.true;
+      expect(contours.some((c) => c.numPoints === 16)).to.be.true;
     };
 
     const offset = new cv.Point2(0, 0);
@@ -53,10 +54,10 @@ export default (args: TestContext) => {
       methodNameSpace: 'Mat',
       getRequiredArgs: () => ([
         mode,
-        findContoursMethod
+        findContoursMethod,
       ]),
       getOptionalArg: () => offset,
-      expectOutput
+      expectOutput,
     });
   });
 
@@ -70,21 +71,20 @@ export default (args: TestContext) => {
       [0, 1, 0, 1, 1, 1, 0, 1, 0],
       [0, 1, 0, 1, 0, 1, 0, 1, 0],
       [0, 1, 1, 1, 0, 1, 1, 1, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
     const convexityDefectsImg = new cv.Mat(convexityDefectsData, cv.CV_8U);
 
-    let contours;
-    let convexityDefectsContours;
-    let leftmostContour;
-    let rightBottomContour;
+    let contours: Contour[];
+    let convexityDefectsContours: Contour[];
+    let leftmostContour: Contour;
+    let rightBottomContour: Contour;
 
     before(() => {
       contours = contoursImg.findContours(mode, findContoursMethod);
       convexityDefectsContours = convexityDefectsImg.findContours(mode, findContoursMethod);
       const sortedByArea = contours.sort((c0, c1) => c1.area - c0.area);
-      leftmostContour = sortedByArea[0];
-      rightBottomContour = sortedByArea[1];
+      [leftmostContour, rightBottomContour] = sortedByArea;
     });
 
     describe('approxPolyDP', () => {
@@ -117,10 +117,10 @@ export default (args: TestContext) => {
 
     describe('arcLength', () => {
       it('arcLength', () => {
-        const arcLengths = contours.map(c => c.arcLength(true));
-        expect(arcLengths.some(arc => arc < 5.7 && arc > 5.6)).to.be.true;
-        expect(arcLengths.some(arc => arc === 8)).to.be.true;
-        expect(arcLengths.some(arc => arc === 16)).to.be.true;
+        const arcLengths = contours.map((c) => c.arcLength(true));
+        expect(arcLengths.some((arc) => arc < 5.7 && arc > 5.6)).to.be.true;
+        expect(arcLengths.some((arc) => arc === 8)).to.be.true;
+        expect(arcLengths.some((arc) => arc === 16)).to.be.true;
       });
     });
 
@@ -141,7 +141,7 @@ export default (args: TestContext) => {
       it('should return convexHull indices', () => {
         const hullIndices = rightBottomContour.convexHullIndices();
         expect(hullIndices).to.be.an('array').lengthOf(4);
-        hullIndices.forEach(ind => expect(ind).to.be.a('number'));
+        hullIndices.forEach((ind) => expect(ind).to.be.a('number'));
       });
     });
 
@@ -224,7 +224,7 @@ export default (args: TestContext) => {
     });
 
     describe('matchShapes', () => {
-      // @ts-ignore:next-line
+      // @ts-expect-error multuple variable name depending on openCV version
       const method = cvVersionGreaterEqual(4, 0, 0) ? cv.CONTOURS_MATCH_I1 : cv.CV_CONTOURS_MATCH_I1;
       it('should return zero for same shapes', () => {
         const similarity = leftmostContour.matchShapes(leftmostContour, method);

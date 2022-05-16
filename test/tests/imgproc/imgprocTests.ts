@@ -1,8 +1,8 @@
-import { TestContext } from "../model";
 import { expect } from 'chai';
+import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg  } = args;
+  const { cv, utils, getTestImg } = args;
 
   const {
     assertError,
@@ -13,14 +13,14 @@ export default function (args: TestContext) {
     generateClassMethodTests,
     expectToBeVec4,
     cvVersionLowerThan,
-    cvVersionGreaterEqual
+    cvVersionGreaterEqual,
   } = utils;
 
   const rgbMatData = [
     Array(5).fill([255, 125, 0]),
     Array(5).fill([0, 0, 0]),
     Array(5).fill([125, 75, 125]),
-    Array(5).fill([75, 255, 75])
+    Array(5).fill([75, 255, 75]),
   ];
   const rgbMat = new cv.Mat(rgbMatData, cv.CV_8UC3);
 
@@ -31,21 +31,21 @@ export default function (args: TestContext) {
       classNameSpace: 'Mat',
       methodNameSpace: 'Imgproc',
       getRequiredArgs: () => ([
-        20, 0.04, 1
+        20, 0.04, 1,
       ]),
       getOptionalArgsMap: () => ([
         ['mask', new cv.Mat(512, 512, cv.CV_8U)],
         ['blockSize', 3],
         ['gradientSize', 3],
         ['useHarrisDetector', false],
-        ['harrisK', 0.04]
+        ['harrisK', 0.04],
       ]),
       expectOutput: (out) => {
         expect(out).to.be.instanceOf(Array);
         expect(out.length).to.be.equal(20);
         expect(out[0]).to.have.property('x');
         expect(out[0]).to.have.property('y');
-      }
+      },
     });
   });
 
@@ -64,13 +64,13 @@ export default function (args: TestContext) {
         classNameSpace: 'Mat',
         methodNameSpace: 'Imgproc',
         getRequiredArgs: () => ([
-          kSize
+          kSize,
         ]),
         getOptionalArgsMap: () => ([
           ['anchor', new cv.Point2(1, 1)],
-          ['borderType', cv.BORDER_CONSTANT]
+          ['borderType', cv.BORDER_CONSTANT],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -85,13 +85,13 @@ export default function (args: TestContext) {
         methodNameSpace: 'Imgproc',
         getRequiredArgs: () => ([
           kSize,
-          sigmaX
+          sigmaX,
         ]),
         getOptionalArgsMap: () => ([
           ['sigmaY', 1.2],
-          ['borderType', cv.BORDER_CONSTANT]
+          ['borderType', cv.BORDER_CONSTANT],
         ]),
-        expectOutput
+        expectOutput,
       });
     });
 
@@ -104,9 +104,9 @@ export default function (args: TestContext) {
         classNameSpace: 'Mat',
         methodNameSpace: 'Imgproc',
         getRequiredArgs: () => ([
-          kSize
+          kSize,
         ]),
-        expectOutput
+        expectOutput,
       });
     });
   });
@@ -119,14 +119,14 @@ export default function (args: TestContext) {
     const anchor = new cv.Point2(0, 1);
 
     it('should throw if no args', () => {
-      // @ts-expect-error
+      // @ts-expect-error nexpected argument 0 to be of type
       expect(() => cv.getStructuringElement()).to.throw('Imgproc::GetStructuringElement - Error: expected argument 0 to be of type');
     });
 
     it('should be constructable with required args', () => {
       const kernel = cv.getStructuringElement(
         shape,
-        kernelSize
+        kernelSize,
       );
       assertPropsWithValue(kernel)({ rows, cols });
     });
@@ -135,7 +135,7 @@ export default function (args: TestContext) {
       const kernel = cv.getStructuringElement(
         shape,
         kernelSize,
-        anchor
+        anchor,
       );
       assertPropsWithValue(kernel)({ rows, cols });
     });
@@ -143,59 +143,59 @@ export default function (args: TestContext) {
 
   describe('HistAxes', () => {
     it('should throw if no args', () => {
-      // @ts-ignore:next-line
+      // @ts-expect-error expected one argument
       expect(() => new cv.HistAxes()).to.throw('HistAxes::New - expected one argument');
     });
     it('should throw if incomplete args', () => {
-      // @ts-expect-error
+      // @ts-expect-error expected object to have ranges
       expect(() => new cv.HistAxes({})).to.throw('HistAxes::New - expected object to have ranges');
-      // @ts-expect-error
-      expect(() => new cv.HistAxes({ranges: []})).to.throw('HistAxes::New - expected object to have bins');
-      // @ts-expect-error
-      expect(() => new cv.HistAxes({ranges: [], bins: 0})).to.throw('HistAxes::New - expected object to have channel');
+      // @ts-expect-error expected object to have bins
+      expect(() => new cv.HistAxes({ ranges: [] })).to.throw('HistAxes::New - expected object to have bins');
+      // @ts-expect-error expected object to have channel
+      expect(() => new cv.HistAxes({ ranges: [], bins: 0 })).to.throw('HistAxes::New - expected object to have channel');
       expect(() => new cv.HistAxes({
-        // @ts-expect-error
+        // @ts-expect-error expext [ number, number ]
         ranges: [],
         bins: 0,
-        channel: 0
+        channel: 0,
       })).to.throw('HistAxes::New - expected ranges to be an array with 2 numbers');
       expect(() => new cv.HistAxes({
-        // @ts-expect-error
+        // @ts-expect-error expext [ number, number ]
         ranges: [1],
         bins: 0,
-        channel: 0
+        channel: 0,
       })).to.throw('HistAxes::New - expected ranges to be an array with 2 numbers');
       expect(() => new cv.HistAxes({
-        // @ts-expect-error
-        ranges: [1,2,3],
+        // @ts-expect-error expect [ number, number ]
+        ranges: [1, 2, 3],
         bins: 0,
-        channel: 0
+        channel: 0,
       })).to.throw('HistAxes::New - expected ranges to be an array with 2 numbers');
       expect(() => new cv.HistAxes({
-      // @ts-expect-error
-      ranges: [1,"2"],
+        // @ts-expect-error expect [ number, number ]
+        ranges: [1, '2'],
         bins: 0,
-        channel: 0
+        channel: 0,
       })).to.throw('HistAxes::New - expected ranges to be an array with 2 numbers');
     });
     it('should return HistAxes', () => {
       const h = new cv.HistAxes({
         channel: 0,
         bins: 8,
-        ranges: [0, 256]
+        ranges: [0, 256],
       });
-      assertPropsWithValue(h)({channel: 0, bins: 8, ranges: [0, 256]});
+      assertPropsWithValue(h)({ channel: 0, bins: 8, ranges: [0, 256] });
     });
   });
 
   describe('calcHist', () => {
     it('should throw if no args', () => {
-      // @ts-expect-error
+      // @ts-expect-error expected argument 0 to be of type
       expect(() => cv.calcHist()).to.throw('Imgproc::CalcHist - Error: expected argument 0 to be of type');
     });
 
     it('should throw if no HistAxes arg', () => {
-      // @ts-expect-error
+      // @ts-expect-error expected argument 1 to be of type array of HistAxes
       expect(() => cv.calcHist(getTestImg())).to.throw('Imgproc::CalcHist - Error: expected argument 1 to be of type array of HistAxes');
     });
 
@@ -204,8 +204,8 @@ export default function (args: TestContext) {
         {
           channel: 0,
           bins: 8,
-          ranges: [0, 256]
-        }
+          ranges: [0, 256] as [ number, number ],
+        },
       ];
       const hist1D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist1D)({ rows: 8, cols: 1, dims: 2 });
@@ -216,9 +216,9 @@ export default function (args: TestContext) {
         {
           channel: 0,
           bins: 8,
-          ranges: [0, 256]
-        } as { channel: number, bins: number, ranges: [number, number] }
-      ].map(x => new cv.HistAxes(x));
+          ranges: [0, 256],
+        } as { channel: number, bins: number, ranges: [number, number] },
+      ].map((x) => new cv.HistAxes(x));
       const hist1D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist1D)({ rows: 8, cols: 1, dims: 2 });
     });
@@ -228,14 +228,14 @@ export default function (args: TestContext) {
         {
           channel: 0,
           bins: 8,
-          ranges: [0, 256]
+          ranges: [0, 256],
         } as { channel: number, bins: number, ranges: [number, number] },
         {
           channel: 1,
           bins: 32,
-          ranges: [0, 256]
-        } as { channel: number, bins: number, ranges: [number, number] }
-      ].map(x => new cv.HistAxes(x));
+          ranges: [0, 256],
+        } as { channel: number, bins: number, ranges: [number, number] },
+      ].map((x) => new cv.HistAxes(x));
       const hist2D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist2D)({ rows: 8, cols: 32, dims: 2 });
     });
@@ -246,19 +246,19 @@ export default function (args: TestContext) {
         {
           channel: 0,
           bins: 8,
-          ranges: [0, 256]
+          ranges: [0, 256],
         } as { channel: number, bins: number, ranges: [number, number] },
         {
           channel: 1,
           bins: 8,
-          ranges: [0, 256]
+          ranges: [0, 256],
         } as { channel: number, bins: number, ranges: [number, number] },
         {
           channel: 2,
           bins: 8,
-          ranges: [0, 256]
-        } as { channel: number, bins: number, ranges: [number, number] }
-      ].map(x => new cv.HistAxes(x));
+          ranges: [0, 256],
+        } as { channel: number, bins: number, ranges: [number, number] },
+      ].map((x) => new cv.HistAxes(x));
       const hist3D = cv.calcHist(getTestImg(), histAxes);
       assertPropsWithValue(hist3D)({ dims: 3 });
     });
@@ -273,14 +273,14 @@ export default function (args: TestContext) {
     it('should throw if points array is empty', () => {
       assertError(
         () => cv.fitLine([], distType, param, reps, aeps),
-        'FitLine - expected arg0 to be an Array with atleast 2 Points'
+        'FitLine - expected arg0 to be an Array with atleast 2 Points',
       );
     });
 
     it('should throw if array contains insufficient number of points', () => {
       assertError(
         () => cv.fitLine([new cv.Point2(0, 0)], distType, param, reps, aeps),
-        'FitLine - expected arg0 to be an Array with atleast 2 Points'
+        'FitLine - expected arg0 to be an Array with atleast 2 Points',
       );
     });
 
@@ -288,7 +288,9 @@ export default function (args: TestContext) {
       const points2D = [new cv.Point2(0, 0), new cv.Point2(10, 10)];
       const lineParams = cv.fitLine(points2D, distType, param, reps, aeps);
       expectToBeVec4(lineParams);
-      const { x, y, z, w } = lineParams
+      const {
+        x, y, z, w,
+      } = lineParams;
       expect([x, y, z, w]).to.not.have.members(Array(4).fill(0));
     });
 
@@ -296,7 +298,9 @@ export default function (args: TestContext) {
       const points2D = [new cv.Point2(0, 0), new cv.Point2(10.9, 10.1)];
       const lineParams = cv.fitLine(points2D, distType, param, reps, aeps);
       expectToBeVec4(lineParams);
-      const { x, y, z, w } = lineParams
+      const {
+        x, y, z, w,
+      } = lineParams;
       expect([x, y, z, w]).to.not.have.members(Array(4).fill(0));
     });
 
@@ -322,16 +326,16 @@ export default function (args: TestContext) {
     const dx = new cv.Mat([
       [0, 0, 0, 0],
       [0, 9.9, 9.9, 0],
-      [0, 0, 0, 0]
+      [0, 0, 0, 0],
     ], cv.CV_16S);
     const dy = new cv.Mat([
       [0, 0, 0, 0],
       [0, 4.9, 4.9, 0],
-      [0, 0, 0, 0]
+      [0, 0, 0, 0],
     ], cv.CV_16S);
 
     it('should throw if no args', () => {
-      // @ts-expect-error
+      // @ts-expect-error Error: expected argument 0 to be of type
       expect(() => cv.canny()).to.throw('Imgproc::Canny - Error: expected argument 0 to be of type');
     });
 
@@ -356,10 +360,10 @@ export default function (args: TestContext) {
         methodName: 'getAffineTransform',
         getRequiredArgs: () => ([
           srcPoints,
-          dstPoints
+          dstPoints,
         ]),
         hasAsync: false,
-        expectOutput: res => expect(res).to.be.instanceOf(cv.Mat)
+        expectOutput: (res) => expect(res).to.be.instanceOf(cv.Mat),
       });
     });
 
@@ -369,45 +373,45 @@ export default function (args: TestContext) {
         methodName: 'getPerspectiveTransform',
         getRequiredArgs: () => ([
           srcPoints.concat(new cv.Point2(10, 0)),
-          dstPoints.concat(new cv.Point2(20, 0))
+          dstPoints.concat(new cv.Point2(20, 0)),
         ]),
         hasAsync: false,
-        expectOutput: res => expect(res).to.be.instanceOf(cv.Mat)
+        expectOutput: (res) => expect(res).to.be.instanceOf(cv.Mat),
       });
     });
 
     if (!cvVersionGreaterEqual(4, 0, 0)) {
       describe('undistortPoints', () => {
-        const cameraMatrix = new cv.Mat([[1, 0, 10],[0, 1, 10],[0, 0, 1]], cv.CV_32F);
-        //const newCameraMatrix = new cv.Mat([[0.5, 0, 10],[0, 0.5, 10],[0, 0, 1]], cv.CV_32F);
+        const cameraMatrix = new cv.Mat([[1, 0, 10], [0, 1, 10], [0, 0, 1]], cv.CV_32F);
+        // const newCameraMatrix = new cv.Mat([[0.5, 0, 10],[0, 0.5, 10],[0, 0, 1]], cv.CV_32F);
         const distCoeffs = new cv.Mat([[0.1, 0.1, 1, 1]], cv.CV_32F);
-        const srcPoints = [
-          [5,5], [5, 10], [5, 15]
-        ].map(p => new cv.Point2(p[0], p[1]));
+        const srcPoints2 = [
+          [5, 5], [5, 10], [5, 15],
+        ].map((p) => new cv.Point2(p[0], p[1]));
         const expectedDestPoints = [
           [9.522233963012695, 9.522233963012695],
           [9.128815650939941, 9.661333084106445],
-          [9.76507568359375, 9.841306686401367]
-        ].map(p => new cv.Point2(p[0], p[1]));
+          [9.76507568359375, 9.841306686401367],
+        ].map((p) => new cv.Point2(p[0], p[1]));
 
         generateAPITests({
           getDut: () => cv,
           methodName: 'undistortPoints',
           getRequiredArgs: () => ([
-            srcPoints,
+            srcPoints2,
             cameraMatrix,
-            distCoeffs
+            distCoeffs,
           ]),
-          expectOutput: destPoints => {
+          expectOutput: (destPoints) => {
             expect(destPoints.length).to.equal(expectedDestPoints.length);
-            for(var i = 0; i < destPoints.length; i++){
-              expect(destPoints[i].x).to.be.closeTo(expectedDestPoints[i].x, 0.001)
-              expect(destPoints[i].y).to.be.closeTo(expectedDestPoints[i].y, 0.001)
+            for (let i = 0; i < destPoints.length; i++) {
+              expect(destPoints[i].x).to.be.closeTo(expectedDestPoints[i].x, 0.001);
+              expect(destPoints[i].y).to.be.closeTo(expectedDestPoints[i].y, 0.001);
             }
-          }
+          },
         });
       });
-    };
+    }
   });
 
   describe('applyColorMap', () => {
@@ -441,9 +445,7 @@ export default function (args: TestContext) {
           new cv.Mat([[0, 1, 100]], cv.CV_8UC1),
           cv.COLORMAP_HOT,
         ]),
-        expectOutput: res => {
-          return expect(res).to.be.instanceOf(cv.Mat)
-        },
+        expectOutput: (res) => expect(res).to.be.instanceOf(cv.Mat),
       });
     });
 
@@ -456,9 +458,7 @@ export default function (args: TestContext) {
             new cv.Mat([[0, 1, 100]], cv.CV_8UC1),
             new cv.Mat(256, 1, cv.CV_8UC3),
           ]),
-          expectOutput: res => {
-            return expect(res).to.be.instanceOf(cv.Mat)
-          },
+          expectOutput: (res) => expect(res).to.be.instanceOf(cv.Mat),
         });
       });
     }
@@ -467,25 +467,25 @@ export default function (args: TestContext) {
   describe('accumulate', () => {
     const srcData = [
       [[1, 2, 3], [4, 5, 6]],
-      [[7, 8, 9], [10, 11, 12]]
-    ]
+      [[7, 8, 9], [10, 11, 12]],
+    ];
     const dstData = [
       [[1, 1, 1], [1, 1, 1]],
-      [[1, 1, 1], [1, 1, 1]]
-    ]
+      [[1, 1, 1], [1, 1, 1]],
+    ];
     const maskData = [
       [255, 0],
-      [0, 255]
-    ]
+      [0, 255],
+    ];
     const expectedData = [
       [[2, 3, 4], [1, 1, 1]],
-      [[1, 1, 1], [11, 12, 13]]
-    ]
-    const src = new cv.Mat(srcData, cv.CV_8UC3)
-    const dstDepth8 = new cv.Mat(dstData, cv.CV_8UC3)
-    let dst
-    const mask = new cv.Mat(maskData, cv.CV_8UC1)
-    
+      [[1, 1, 1], [11, 12, 13]],
+    ];
+    const src = new cv.Mat(srcData, cv.CV_8UC3);
+    const dstDepth8 = new cv.Mat(dstData, cv.CV_8UC3);
+    let dst;
+    const mask = new cv.Mat(maskData, cv.CV_8UC1);
+
     it('should throw if dst has not a depth of CV_32F or CV_64F', () => {
       expect(() => cv.accumulate(src, dstDepth8)).to.throw('Imgproc::Accumulate - dst must has a depth of CV_32F or CV_64F');
     });
@@ -494,14 +494,14 @@ export default function (args: TestContext) {
       getDut: () => cv,
       methodName: 'accumulate',
       methodNameSpace: 'Imgproc',
-      beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
+      beforeHook: () => { dst = new cv.Mat(dstData, cv.CV_32FC3); },
       getRequiredArgs: () => ([
         src,
         dst,
-        mask
+        mask,
       ]),
       expectOutput: () => {
-        const channelIndices = ['x', 'y', 'z']
+        const channelIndices = ['x', 'y', 'z'];
         for (let row = 0; row < dst.rows; row++) {
           for (let col = 0; col < dst.cols; col++) {
             for (let channel = 0; channel < dst.channels; channel++) {
@@ -509,37 +509,37 @@ export default function (args: TestContext) {
             }
           }
         }
-      }
+      },
     });
   });
 
   describe('accumulateProduct', () => {
     const srcData1 = [
       [[1, 2, 3], [4, 5, 6]],
-      [[7, 8, 9], [10, 11, 12]]
-    ]
+      [[7, 8, 9], [10, 11, 12]],
+    ];
     const srcData2 = [
       [[2, 2, 2], [2, 2, 2]],
-      [[2, 2, 2], [2, 2, 2]]
-    ]
+      [[2, 2, 2], [2, 2, 2]],
+    ];
     const dstData = [
       [[1, 1, 1], [1, 1, 1]],
-      [[1, 1, 1], [1, 1, 1]]
-    ]
+      [[1, 1, 1], [1, 1, 1]],
+    ];
     const maskData = [
       [255, 0],
-      [0, 255]
-    ]
+      [0, 255],
+    ];
     const expectedData = [
       [[3, 5, 7], [1, 1, 1]],
-      [[1, 1, 1], [21, 23, 25]]
-    ]
-  
-    const src1 = new cv.Mat(srcData1, cv.CV_8UC3)
-    const src2 = new cv.Mat(srcData2, cv.CV_8UC3)
-    let dst
-    const dstDepth8 = new cv.Mat(dstData, cv.CV_8UC3)
-    const mask = new cv.Mat(maskData, cv.CV_8UC1)
+      [[1, 1, 1], [21, 23, 25]],
+    ];
+
+    const src1 = new cv.Mat(srcData1, cv.CV_8UC3);
+    const src2 = new cv.Mat(srcData2, cv.CV_8UC3);
+    let dst;
+    const dstDepth8 = new cv.Mat(dstData, cv.CV_8UC3);
+    const mask = new cv.Mat(maskData, cv.CV_8UC1);
 
     it('should throw if dst has not a depth of CV_32F or CV_64F', () => {
       expect(() => cv.accumulateProduct(src1, src2, dstDepth8)).to.throw('Imgproc::AccumulateProduct - dst must has a depth of CV_32F or CV_64F');
@@ -549,15 +549,15 @@ export default function (args: TestContext) {
       getDut: () => cv,
       methodName: 'accumulateProduct',
       methodNameSpace: 'Imgproc',
-      beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
+      beforeHook: () => { dst = new cv.Mat(dstData, cv.CV_32FC3); },
       getRequiredArgs: () => ([
         src1,
         src2,
         dst,
-        mask
+        mask,
       ]),
       expectOutput: () => {
-        const channelIndices = ['x', 'y', 'z']
+        const channelIndices = ['x', 'y', 'z'];
         for (let row = 0; row < dst.rows; row++) {
           for (let col = 0; col < dst.cols; col++) {
             for (let channel = 0; channel < dst.channels; channel++) {
@@ -565,49 +565,49 @@ export default function (args: TestContext) {
             }
           }
         }
-      }
+      },
     });
   });
 
   describe('accumulateSquare', () => {
     const srcData = [
       [[1, 2, 3], [4, 5, 6]],
-      [[7, 8, 9], [10, 11, 12]]
-    ]
+      [[7, 8, 9], [10, 11, 12]],
+    ];
     const dstData = [
       [[1, 1, 1], [1, 1, 1]],
-      [[1, 1, 1], [1, 1, 1]]
-    ]
+      [[1, 1, 1], [1, 1, 1]],
+    ];
     const maskData = [
       [255, 0],
-      [0, 255]
-    ]
+      [0, 255],
+    ];
     const expectedData = [
       [[2, 5, 10], [1, 1, 1]],
-      [[1, 1, 1], [101, 122, 145]]
-    ]
-  
-    const src = new cv.Mat(srcData, cv.CV_8UC3)
-    let dst
-    const dstDepth8 = new cv.Mat(dstData, cv.CV_8UC3)
-    const mask = new cv.Mat(maskData, cv.CV_8UC1)
+      [[1, 1, 1], [101, 122, 145]],
+    ];
+
+    const src = new cv.Mat(srcData, cv.CV_8UC3);
+    let dst;
+    const dstDepth8 = new cv.Mat(dstData, cv.CV_8UC3);
+    const mask = new cv.Mat(maskData, cv.CV_8UC1);
 
     it('should throw if dst has not a depth of CV_32F or CV_64F', () => {
       expect(() => cv.accumulateSquare(src, dstDepth8)).to.throw('Imgproc::AccumulateSquare - dst must has a depth of CV_32F or CV_64F');
-    });    
+    });
 
     generateAPITests({
       getDut: () => cv,
       methodName: 'accumulateSquare',
       methodNameSpace: 'Imgproc',
-      beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
+      beforeHook: () => { dst = new cv.Mat(dstData, cv.CV_32FC3); },
       getRequiredArgs: () => ([
         src,
         dst,
-        mask
+        mask,
       ]),
       expectOutput: () => {
-        const channelIndices = ['x', 'y', 'z']
+        const channelIndices = ['x', 'y', 'z'];
         for (let row = 0; row < dst.rows; row++) {
           for (let col = 0; col < dst.cols; col++) {
             for (let channel = 0; channel < dst.channels; channel++) {
@@ -615,51 +615,51 @@ export default function (args: TestContext) {
             }
           }
         }
-      }
+      },
     });
   });
 
   describe('accumulateWeighted', () => {
     const srcData = [
       [[1, 2, 3], [4, 5, 6]],
-      [[7, 8, 9], [10, 11, 12]]
-    ]
+      [[7, 8, 9], [10, 11, 12]],
+    ];
     const dstData = [
       [[1, 1, 1], [1, 1, 1]],
-      [[1, 1, 1], [1, 1, 1]]
-    ]
-    const alpha = 0.7
+      [[1, 1, 1], [1, 1, 1]],
+    ];
+    const alpha = 0.7;
     const maskData = [
       [255, 0],
-      [0, 255]
-    ]
+      [0, 255],
+    ];
     const expectedData = [
       [[(1 - alpha) * 1 + alpha * 1, (1 - alpha) * 1 + alpha * 2, (1 - alpha) * 1 + alpha * 3], [1, 1, 1]],
-      [[1, 1, 1], [(1 - alpha) * 1 + alpha * 10, (1 - alpha) * 1 + alpha * 11, (1 - alpha) * 1 + alpha * 12]]
-    ]
-  
-    const src = new cv.Mat(srcData, cv.CV_8UC3)
-    let dst
-    const dstDepth8 = new cv.Mat(dstData, cv.CV_8UC3)
-    const mask = new cv.Mat(maskData, cv.CV_8UC1)
+      [[1, 1, 1], [(1 - alpha) * 1 + alpha * 10, (1 - alpha) * 1 + alpha * 11, (1 - alpha) * 1 + alpha * 12]],
+    ];
+
+    const src = new cv.Mat(srcData, cv.CV_8UC3);
+    let dst;
+    const dstDepth8 = new cv.Mat(dstData, cv.CV_8UC3);
+    const mask = new cv.Mat(maskData, cv.CV_8UC1);
 
     it('should throw if dst has not a depth of CV_32F or CV_64F', () => {
       expect(() => cv.accumulateWeighted(src, dstDepth8, alpha)).to.throw('Imgproc::AccumulateWeighted - dst must has a depth of CV_32F or CV_64F');
-    });    
+    });
 
     generateAPITests({
       getDut: () => cv,
       methodName: 'accumulateWeighted',
       methodNameSpace: 'Imgproc',
-      beforeHook: () => dst = new cv.Mat(dstData, cv.CV_32FC3),
+      beforeHook: () => { dst = new cv.Mat(dstData, cv.CV_32FC3); },
       getRequiredArgs: () => ([
         src,
         dst,
         alpha,
-        mask
+        mask,
       ]),
       expectOutput: () => {
-        const channelIndices = ['x', 'y', 'z']
+        const channelIndices = ['x', 'y', 'z'];
         for (let row = 0; row < dst.rows; row++) {
           for (let col = 0; col < dst.cols; col++) {
             for (let channel = 0; channel < dst.channels; channel++) {
@@ -667,7 +667,7 @@ export default function (args: TestContext) {
             }
           }
         }
-      }
+      },
     });
   });
-};
+}
