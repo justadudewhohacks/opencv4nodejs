@@ -14,10 +14,10 @@ export default function (args: TestContext) {
     generateIts,
   } = utils;
 
-  const isFloatType = (type) => [cv.CV_32FC1, cv.CV_32FC2, cv.CV_32FC3, cv.CV_32FC4]
+  const isFloatType = (type: number) => [cv.CV_32FC1, cv.CV_32FC2, cv.CV_32FC3, cv.CV_32FC4]
     .some((matType) => matType === type);
 
-  const createAndAssertAtReturnsCorrectValues = (type) => {
+  const createAndAssertAtReturnsCorrectValues = (type: number): void => {
     const matData = getExampleMatData(cv, type) as number[][];
     const mat = new cv.Mat(matData, type);
     const assertCmp = isFloatType(type) ? assertMatValueAlmostEquals : assertMatValueEquals;
@@ -28,7 +28,7 @@ export default function (args: TestContext) {
     }
   };
 
-  const createAndAssertSetsCorrectArrayValues = (type) => {
+  const createAndAssertSetsCorrectArrayValues = (type: number) => {
     const matData = getExampleMatData(cv, type);
     const mat = new cv.Mat(4, 3, type);
     for (let r = 0; r < 4; r += 1) {
@@ -43,7 +43,7 @@ export default function (args: TestContext) {
     }
   };
 
-  const createAndAssertSetsCorrectVecValues = (type) => {
+  const createAndAssertSetsCorrectVecValues = (type: number) => {
     const matData = getExampleMatData(cv, type) as number[][][];
     const mat = new cv.Mat(4, 3, type);
     for (let r = 0; r < 4; r += 1) {

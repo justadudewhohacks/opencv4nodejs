@@ -1,4 +1,4 @@
-import { assert, expect } from 'chai';
+import Chai, { assert, expect } from 'chai';
 import fs from 'fs';
 import { Vec2, Vec3, Vec4 } from '@u4/opencv4nodejs';
 
@@ -49,20 +49,20 @@ export const funcShouldRequireArgs = (func: (...args: any[]) => any): void => {
   });
 };
 
-export const _funcShouldRequireArgs = (func: (...args: any[]) => any) : void => {
+export const _funcShouldRequireArgs = (func: () => any) : void => {
   it('should throw if no args', () => {
     assertError(func, 'expected argument 0 to be');
   });
 };
 
-export const asyncFuncShouldRequireArgs = (func: (...args: any[]) => any): void => {
+export const asyncFuncShouldRequireArgs = (func: () => any): void => {
   it('should throw if no args', (done) => {
     assertErrorAsyncPromised(func, 'expected argument 0 to be')
       .then(() => done());
   });
 };
 
-export const _asyncFuncShouldRequireArgs = (func: (...args: any[]) => any): void => {
+export const _asyncFuncShouldRequireArgs = (func: () => any): void => {
   it('should throw if no args', (done) => {
     assertErrorAsyncPromised(func, 'expected arg 0 to be')
       .then(() => done());

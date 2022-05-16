@@ -77,7 +77,7 @@ const assertMetaData = (mat: Mat) => (args0: any, cols: number, type: number): v
     cols: args0.cols,
     type: args0.type,
   };
-  if (['rows', 'cols', 'type'].every((prop) => !isNaN(propsFromArg0[prop]))) {
+  if (['rows', 'cols', 'type'].every((prop) => !Number.isNaN(propsFromArg0[prop]))) {
     propsWithValues = propsFromArg0;
   }
   assertPropsWithValue(mat)(propsWithValues);

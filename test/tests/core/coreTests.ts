@@ -235,8 +235,8 @@ export default function (args: TestContext) {
         expect(err).to.be.equal(msg);
       };
 
-      // @ts-ignore:next-line
       expectError(
+        // @ts-expect-error expected argument 0 to be of type int
         () => cv.setNumThreads('hello'),
         'Core::SetNumThreads - Error: expected argument 0 to be of type int',
       );
@@ -258,7 +258,7 @@ export default function (args: TestContext) {
       let err;
 
       try {
-        // @ts-ignore:next-line
+        // @ts-expect-error must be call with new keyword
         cv.Mat();
       } catch (e) {
         err = e;

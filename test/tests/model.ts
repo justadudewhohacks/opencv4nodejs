@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import Chai from 'chai';
 import {
   cv, Point2, Point3, Mat, Vec2, Vec3, Vec4,
 } from '@u4/opencv4nodejs';
@@ -24,8 +26,8 @@ export interface APITestOpts {
     otherSyncTests: () => void,
     otherAsyncCallbackedTests: () => void,
     otherAsyncPromisedTests: () => void,
-    beforeHook: () => any,
-    afterHook: () => any
+    beforeHook: () => void,
+    afterHook: () => void
 }
 
 export interface TestContext {
@@ -44,7 +46,7 @@ export interface TestContext {
         assertMatValueEquals: (val0: number, val1: number) => void;
         assertMetaData: (mat: Mat | number[]) => (arg0: any, cols?: any, type?: any) => void;
         dangerousDeepEquals: (obj0: any, obj1: any) => boolean;
-        generateIts: (msg: string, testFunc: Function, exclusions?: Set<string>) => void;
+        generateIts: (msg: string, testFunc: (t: number) => void, exclusions?: Set<string>) => void;
         isZeroMat: (mat: Mat) => boolean;
         isUniformMat: (mat: Mat, matVal: number) => boolean;
         MatValuesComparator: (mat0: Mat, mat1: Mat) => (cmpFunc: (a: number, b: number) => void) => void;
