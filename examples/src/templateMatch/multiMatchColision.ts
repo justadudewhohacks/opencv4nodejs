@@ -1,4 +1,4 @@
-import cv, { Mat, Rect } from '@u4/opencv4nodejs';
+import cv, { Mat } from '@u4/opencv4nodejs';
 import { getResourcePath, wait4key } from '../utils';
 
 const confidence = 0.60;
@@ -41,8 +41,7 @@ const locateDiceDot = async (display: boolean): Promise<void> => {
   /** using faster raw data from getData */
   let getDataLoopTime = Date.now();
 
-  const { cols, rows } = matched;
-  const matchesRaw = cv.getScoreMax(matched, confidence, new Rect(0, 0, cols - metroMat.cols + 1, rows - metroMat.rows + 1));
+  const matchesRaw = cv.getScoreMax(matched, confidence);
   console.log(`matchesRaw is ${matchesRaw.length} length`)
   const matchesFiltered = cv.dropOverlappingZone(metroMat, matchesRaw);
   console.log(`matchesFiltered is ${matchesFiltered.length} length`)

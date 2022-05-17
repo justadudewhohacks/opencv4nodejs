@@ -1,4 +1,4 @@
-import cv, { Mat, Rect } from '@u4/opencv4nodejs';
+import cv, { Mat } from '@u4/opencv4nodejs';
 import { getResourcePath, wait4key } from '../utils';
 
 const confidence = 0.97;
@@ -58,8 +58,7 @@ const locateMetroStation = async (display: boolean): Promise<void> => {
   /** using faster raw data from getData */
   let getDataLoopTime = Date.now();
 
-  const { cols, rows } = matched;
-  const matches1 = cv.getScoreMax(matched, confidence, new Rect(0, 0, cols - metroMat.cols + 1, rows - metroMat.rows + 1)).map(m => new MatchCoord(m[0], m[1], m[2], metroMat))
+  const matches1 = cv.getScoreMax(matched, confidence).map(m => new MatchCoord(m[0], m[1], m[2], metroMat));
   getDataLoopTime = Date.now() - getDataLoopTime;
   matches1.sort((a, b) => b.value - a.value);
   console.log(`getData        processed in ${getDataLoopTime.toString().padStart(4, ' ')} ms to find ${matches1.length} region 1st: ${matches1[0]}`);
