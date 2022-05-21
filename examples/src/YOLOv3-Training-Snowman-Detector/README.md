@@ -1,0 +1,34 @@
+## Training YOLOv3 Object Detector - Snowman
+
+1. Install deps:
+
+`pnpm install`
+
+2. Get the relevant OpenImages files needed to locate images of our interest and OpenImagesV4
+
+`ts-node getDataFromOpenImages_snowman.ts`
+
+3. Create the train-test split
+
+`ts-node splitTrainAndTest.ts JPEGImages`
+
+4. Install Darknet, compile it and Get the pretrained model
+```
+cd ~
+git clone https://github.com/pjreddie/darknet
+cd darknet
+make
+wget https://pjreddie.com/media/files/darknet53.conv.74 -O darknet53.conv.74
+```
+
+5. Start the training as below, by giving the correct paths to all the files being used as arguments
+
+```bash
+./darknet detector train ../darknet.data  ../darknet-yolov3.cfg ./darknet53.conv.74 > ../train.log
+```
+
+6. Give the correct path to the modelConfiguration and modelWeights files in object_detection_yolo.py and test any image or video for snowman detection, e.g.
+
+`python3 object_detection_yolo.py --image=snowmanImage.jpg`
+
+ported from [YOLOv3-Training-Snowman-Detector](https://github.com/spmallick/learnopencv/tree/master/YOLOv3-Training-Snowman-Detector)
