@@ -17,6 +17,17 @@
 cd ~
 git clone https://github.com/pjreddie/darknet
 cd darknet
+```
+
+edit Makefile first lines:
+- GPU=0
+- CUDNN=0
+- OPENCV=0
+- OPENMP=0
+- DEBUG=0
+enable the option you want
+
+```
 make
 wget https://pjreddie.com/media/files/darknet53.conv.74 -O darknet53.conv.74
 ```

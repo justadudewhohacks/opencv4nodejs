@@ -32,8 +32,9 @@ NAN_METHOD(Highgui::setWindowProperty) {
   if (!info[2]->IsNumber()) {
     return tryCatch.throwError("expected arg2 (prop_value) to be a number");
   }
-  FF::IntConverter::arg(1, &prop_id, info);
-  FF::DoubleConverter::arg(2, &prop_value, info);
+  if (FF::IntConverter::arg(1, &prop_id, info) || FF::DoubleConverter::arg(2, &prop_value, info)) {
+    return tryCatch.reThrow();
+  }
   cv::setWindowProperty(FF::StringConverter::unwrapUnchecked(info[0]), prop_id, prop_value);
 }
 
