@@ -47,3 +47,9 @@ lib/src/*.js
 examples/src/JPEGImages/
 examples/labels/
 examples/*.txt
+examples/src/YOLOv3-Training-Snowman-Detector/JPEGImages/
+examples/src/YOLOv3-Training-Snowman-Detector/labels/
+examples/src/YOLOv3-Training-Snowman-Detector/*.txt
+examples/src/YOLOv3-Training-Snowman-Detector/*.csv
+examples/src/YOLOv3-Training-Snowman-Detector/darknet.data
+examples/src/YOLOv3-Training-Snowman-Detector/classes.names

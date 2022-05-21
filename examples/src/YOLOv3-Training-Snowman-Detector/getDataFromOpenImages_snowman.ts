@@ -1,5 +1,6 @@
 import { getCachedFile } from "../utils";
 import fs from 'fs';
+import path from 'path';
 // import rimraf from 'rimraf';
 import readline from 'readline';
 import pLimit from 'p-limit';
@@ -13,7 +14,9 @@ async function getDataFromOpenImages_snowman() {
     const runMode = "train";
     const classes = ["Snowman"];
 
-    const dataPath = "../../data/dnn/openimages";
+    const dataPath = __dirname; //  "../../data/dnn/openimages";
+    const JPEGImages = path.join(dataPath, 'JPEGImages');
+    const labels = path.join(dataPath, 'labels');
 
     const boxes = await getCachedFile(`${dataPath}/class-descriptions-boxable.csv`, 'https://storage.googleapis.com/openimages/2018_04/class-descriptions-boxable.csv');
     const trainAnotation = await getCachedFile(`${dataPath}/train-annotations-bbox.csv`, 'https://storage.googleapis.com/openimages/2018_04/train/train-annotations-bbox.csv');
@@ -23,9 +26,9 @@ async function getDataFromOpenImages_snowman() {
     boxesData.split(/[\r\n]+/g).map(line => line.split(',')).forEach(d => folderMapping[d[1]] = d[0]);
     //const dict_list = boxesData.split(/\r\n+/g).map(line => line.split(',')).map(d => ({ name: d[1], file: d[0] }));
     // rimraf.sync('JPEGImages');
-    fs.mkdirSync('JPEGImages', { recursive: true });
+    fs.mkdirSync(JPEGImages, { recursive: true });
     // rimraf.sync('labels');
-    fs.mkdirSync('labels', { recursive: true });
+    fs.mkdirSync(labels, { recursive: true });
 
     for (let ind = 0; ind < classes.length; ind++) {
         const className = classes[ind];
@@ -52,7 +55,7 @@ async function getDataFromOpenImages_snowman() {
         Promise.all(annotations.map((annotation, index) => limit(() => {
             const lineParts = annotation.split(',')
             try {
-            return getCachedFile(`JPEGImages/${lineParts[0]}.jpg`, `https://s3.amazonaws.com/open-images-dataset/${runMode}/${lineParts[0]}.jpg`, { notice: `get file#${index}: ${lineParts[0]}`, noProgress: true });
+            return getCachedFile(path.join(JPEGImages, `${lineParts[0]}.jpg`), `https://s3.amazonaws.com/open-images-dataset/${runMode}/${lineParts[0]}.jpg`, { notice: `get file#${index}: ${lineParts[0]}`, noProgress: true });
             } catch (e) {
                 console.error(`download ${lineParts[0]}.jpg failed`, e);
             }
@@ -67,7 +70,7 @@ async function getDataFromOpenImages_snowman() {
                 `${Number(lineParts[5]) - Number(lineParts[4])}`, // X1
                 `${Number(lineParts[7]) - Number(lineParts[6])}`, // y1
             ].join(' ') + '\n';
-            return fs.promises.writeFile(`labels/${lineParts[0]}.txt`, data, { encoding: 'utf8' });
+            return fs.promises.writeFile(path.join(labels, `${lineParts[0]}.txt`), data, { encoding: 'utf8' });
         })));
     }
 }
