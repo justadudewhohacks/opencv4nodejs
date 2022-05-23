@@ -1,5 +1,8 @@
 # changelog
 
+## Version 6.1.6
+* fix issues/33 
+
 ## Version 6.1.5
 
 * dump deps versions

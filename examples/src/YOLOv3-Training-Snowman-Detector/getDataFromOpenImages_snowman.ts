@@ -1,6 +1,6 @@
 import { getCachedFile } from "../utils";
 import fs from 'fs';
-import path, { join } from 'path';
+import path from 'path';
 // import rimraf from 'rimraf';
 import readline from 'readline';
 import pLimit from 'p-limit';
