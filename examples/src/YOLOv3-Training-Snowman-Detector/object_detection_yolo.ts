@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 import assert from 'assert';
 import { cv } from "../utils";
-import { Net, Mat, VideoCapture, VideoWriter, Size, Point2, Vec3 } from '@u4/opencv4nodejs';
+import { Net, Mat, VideoCapture, VideoWriter, Size, Point2, Vec3, Rect } from '@u4/opencv4nodejs';
 
 // # Usage example:  python3 object_detection_yolo.py --video=run.mp4
 // #                 python3 object_detection_yolo.py --image=bird.jpg
@@ -17,9 +17,10 @@ import { Net, Mat, VideoCapture, VideoWriter, Size, Point2, Vec3 } from '@u4/ope
 // import os.path
 
 //  Initialize the parameters
-const confThreshold = 0.5;//  #Confidence threshold
-const nmsThreshold = 0.4;//  #Non-maximum suppression threshold
-
+const conf = {
+    confThreshold: 0.5,//  #Confidence threshold
+    nmsThreshold: 0.4,//  #Non-maximum suppression threshold
+}
 const inpWidth = 416;//  #608     #Width of network's input image
 const inpHeight = 416;// #608     #Height of network's input image
 
@@ -41,7 +42,7 @@ const classes = fs.readFileSync(classesFile, { encoding: 'utf8' }).trim().split(
 //  Give the configuration and weight files for the model and load the network using them.
 
 const modelConfiguration = path.join(__dirname, 'darknet-yolov3.cfg');
-const modelWeights = path.join(__dirname, 'darknet-yolov3_final.weights'); // "/data-ssd/sunita/snowman/darknet-yolov3_final.weights";
+const modelWeights = path.join(__dirname, 'weights', 'darknet-yolov3_final.weights'); // "/data-ssd/sunita/snowman/darknet-yolov3_final.weights";
 
 const net = cv.readNetFromDarknet(modelConfiguration, modelWeights)
 if (args.device == "cpu") {
@@ -58,7 +59,8 @@ function getOutputsNames(net: Net): string[] {
     // Get the names of all the layers in the network
     const layersNames = net.getLayerNames()
     // Get the names of the output layers, i.e. the layers with unconnected outputs
-    return net.getUnconnectedOutLayers().map(i => layersNames[i]);
+    const outLayersIds = net.getUnconnectedOutLayers();
+    return outLayersIds.map(i => layersNames[i]).filter(a => a);
     // return [layersNames[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 }
 // Draw the predicted bounding box
@@ -88,8 +90,8 @@ function drawPred(frame: Mat, classId: number, conf: number, left: number, top: 
 
 // Remove the bounding boxes with low confidence using non-maxima suppression
 function postprocess(frame: Mat, outs: Mat[]) {
-    const frameHeight = frame.sizes[0]
-    const frameWidth = frame.sizes[1]
+    const frameHeight = frame.sizes[0] // 1024
+    const frameWidth = frame.sizes[1] // 1024
 
     const classIds: number[] = []
     const confidences: number[] = []
@@ -97,39 +99,52 @@ function postprocess(frame: Mat, outs: Mat[]) {
     // Scan through all the bounding boxes output from the network and keep only the
     // ones with high confidence scores. Assign the box's class label as the class with the highest score.
     for (const out of outs) {
-       console.log("out.shape : ", out.sizes)
-    // for (detection in out) {
-    //     #if detection[4]>0.001:
-    //     scores = detection[5:]
-    //     classId = np.argmax(scores)
-    //     #if scores[classId]>confThreshold:
-    //     confidence = scores[classId]
-    //     if detection[4]>confThreshold:
-    //         print(detection[4], " - ", scores[classId], " - th : ", confThreshold)
-    //         print(detection)
-    //     if confidence > confThreshold:
-    //         center_x = int(detection[0] * frameWidth)
-    //         center_y = int(detection[1] * frameHeight)
-    //         width = int(detection[2] * frameWidth)
-    //         height = int(detection[3] * frameHeight)
-    //         left = int(center_x - width / 2)
-    //         top = int(center_y - height / 2)
-    //         classIds.append(classId)
-    //         confidences.append(float(confidence))
-    //         boxes.append([left, top, width, height])
-    // }
-    // 
-    // # Perform non maximum suppression to eliminate redundant overlapping boxes with
-    // # lower confidences.
-    // indices = cv.dnn.NMSBoxes(boxes, confidences, confThreshold, nmsThreshold)
-    // for i in indices:
-    //     i = i[0]
-    //     box = boxes[i]
-    //     left = box[0]
-    //     top = box[1]
-    //     width = box[2]
-    //     height = box[3]
-    //     drawPred(classIds[i], confidences[i], left, top, left + width, top + height)
+        // (4) [1, 512, 13, 13]
+        // (4) [1, 256, 26, 26]
+        for (const detection of out.getDataAsArray()) { // failed returning NaN...
+            // scores = detection[5:]
+            const scores = detection.slice(5);
+
+            // classId = np.argmax(scores)
+            // confidence = scores[classId]
+            let classId = -1;
+            let confidence = 0;
+            for (let i = 0; i < scores.length; i++) {
+                if (scores[i] > confidence) {
+                    confidence = scores[i];
+                    classId = i;
+                }
+            }
+            if (detection[4] > conf.confThreshold) {
+                console.log(`${detection[4]} - ${scores[classId]} - th : ${conf.confThreshold}`)
+                console.log(detection);
+            }
+            if (confidence > conf.confThreshold) {
+                const [cx, cy, w, h] = detection;
+                const center_x = Math.round(cx * frameWidth)
+                const center_y = Math.round(cy * frameHeight)
+                const width = Math.round(w * frameWidth)
+                const height = Math.round(h * frameHeight)
+                const left = Math.round(center_x - width / 2)
+                const top = Math.round(center_y - height / 2)
+                classIds.push(classId)
+                confidences.push(confidence)
+                boxes.push(new Rect(left, top, width, height))
+            }
+        }
+        // Perform non maximum suppression to eliminate redundant overlapping boxes with
+        // lower confidences.
+        const indices = cv.NMSBoxes(boxes, confidences, conf.confThreshold, conf.nmsThreshold)
+        for (const i of indices) {
+            // i = i[0]
+            const box = boxes[i]
+            const left = box.x
+            const top = box.y
+            const width = box.width
+            const height = box.height
+            drawPred(frame, classIds[i], confidences[i], left, top, left + width, top + height)
+            //drawPred(classIds[i], confidences[i], left, top, left + width, top + height)
+        }
     }
 }
 
@@ -191,7 +206,8 @@ function main() {
         net.setInput(blob)
 
         // Runs the forward pass to get output of the output layers
-        const outs: Mat[] = net.forward(getOutputsNames(net))
+        const names = getOutputsNames(net);
+        const outs: Mat[] = net.forward(names);
         // 
         // Remove the bounding boxes with low confidence
         postprocess(frame, outs)
@@ -199,15 +215,15 @@ function main() {
         // Put efficiency information. The function getPerfProfile returns the overall time for inference(t) and the timings for each of the layers(in layersTimes)
         const { retval } = net.getPerfProfile()
         const label = `Inference time: ${(retval * 1000.0 / cv.getTickFrequency()).toFixed(2)} ms`
-        //  #cv.putText(frame, label, (0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255))
+        frame.putText(label, new Point2(0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, new Vec3(0, 0, 255))
         // 
         // Write the frame with the detection boxes
-        if (args.image) {
-            // cv.imwrite(outputFile, frame.astype(np.uint8));
-        } else {
-            //  vid_writer.write(frame.astype(np.uint8))
-        }
-        // 
+        if (vid_writer)
+            vid_writer.write(frame) //  vid_writer.write(frame.astype(np.uint8))
+        else
+            cv.imwrite(outputFile, frame) // cv.imwrite(outputFile, frame.astype(np.uint8));
         cv.imshow(winName, frame)
     }
 }
+
+main();

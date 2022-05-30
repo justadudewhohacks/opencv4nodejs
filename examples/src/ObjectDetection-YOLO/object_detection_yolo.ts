@@ -160,7 +160,7 @@ async function main() {
     const size = new Size(conf.inpWidth, conf.inpHeight);
     const mean = new Vec3(0, 0, 0);
     while (cv.waitKey(1) < 0) {
-        //# get frame from the video
+        // get frame from the video
         const frame: Mat = cap.read()
         // Stop the program if reached end of video
         if (!frame || frame.sizes.length === 0) { // hasFrame:
