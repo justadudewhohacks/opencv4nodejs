@@ -2,10 +2,13 @@
 
 1. Install deps:
 
-`pnpm install`
+```bash
+pnpm install
+pnpm install -g ts-node typescript @types/node
+```
 
 optional 
-export NODE_OPTIONS="-r ts-node/register --no-warnings"
+`export NODE_OPTIONS="-r ts-node/register --no-warnings"`
 
 2. Get the relevant OpenImages files needed to locate images of our interest and OpenImagesV4
 
@@ -22,9 +25,9 @@ ts-node splitTrainAndTest.ts JPEGImages
 4. Install Darknet, compile it and Get the pretrained model
 ```
 bash
-cd ~
-git clone https://github.com/sowson/darknet-vNext
-cd darknet-vNext
+cd ~;
+git clone https://github.com/sowson/darknet-vNext;
+cd darknet-vNext;
 ```
 
 edit Makefile first lines:
@@ -44,7 +47,7 @@ exit
 
 ```bash
 wget https://pjreddie.com/media/files/darknet53.conv.74 -O darknet53.conv.74
-~/darknet-vNext/darknet -nogpu detector train darknet.data darknet-yolov3.cfg darknet53.conv.74 > train.log
+~/darknet-vNext/darknet detector train darknet.data darknet-yolov3.cfg darknet53.conv.74 > train.log
 ```
 
 6. Give the correct path to the modelConfiguration and modelWeights files in object_detection_yolo.py and test any image or video for snowman detection, e.g.
