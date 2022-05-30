@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 specifiers:
   '@types/lodash.samplesize': ^4.2.7
@@ -23,7 +23,7 @@ devDependencies:
   '@types/node': 17.0.31
   '@types/rimraf': 3.0.2
   rimraf: 3.0.2
-  ts-node: 10.7.0_5f3e12794cebfbf3197131903b74d233
+  ts-node: 10.7.0_l47be6km5p57gglrggidw5gsgm
   typescript: 4.6.4
 
 packages:
@@ -197,7 +197,7 @@ packages:
       glob: 7.2.0
     dev: true
 
-  /ts-node/10.7.0_5f3e12794cebfbf3197131903b74d233:
+  /ts-node/10.7.0_l47be6km5p57gglrggidw5gsgm:
     resolution: {integrity: sha512-TbIGS4xgJoX2i3do417KSaep1uRAW/Lu+WAL2doDHC0D6ummjirVOXU5/7aiZotbQ5p1Zp9tP7U6cYhA0O7M8A==}
     hasBin: true
     peerDependencies:

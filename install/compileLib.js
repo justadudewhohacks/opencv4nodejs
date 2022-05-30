@@ -182,9 +182,8 @@ or use OPENCV4NODEJS_* env variable.`);
      */
     const libDir = getLibDir(builder.env);
     npmlog_1.default.info('install', 'Using lib dir: ' + libDir);
-    if (!fs_1.default.existsSync(libDir)) {
-        await builder.install();
-    }
+    //if (!fs.existsSync(libDir))
+    await builder.install();
     if (!fs_1.default.existsSync(libDir)) {
         throw new Error('library dir does not exist: ' + libDir);
     }

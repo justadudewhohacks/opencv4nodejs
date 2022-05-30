@@ -4,6 +4,9 @@
 
 `pnpm install`
 
+optional 
+export NODE_OPTIONS="-r ts-node/register --no-warnings"
+
 2. Get the relevant OpenImages files needed to locate images of our interest and OpenImagesV4
 
 `ts-node getDataFromOpenImages_snowman.ts`
@@ -14,6 +17,7 @@
 
 4. Install Darknet, compile it and Get the pretrained model
 ```
+bash
 cd ~
 git clone https://github.com/pjreddie/darknet
 cd darknet
@@ -29,13 +33,14 @@ enable the option you want
 
 ```
 make
-wget https://pjreddie.com/media/files/darknet53.conv.74 -O darknet53.conv.74
+exit
 ```
 
 5. Start the training as below, by giving the correct paths to all the files being used as arguments
 
 ```bash
-./darknet detector train ../darknet.data  ../darknet-yolov3.cfg ./darknet53.conv.74 > ../train.log
+wget https://pjreddie.com/media/files/darknet53.conv.74 -O darknet53.conv.74
+~/darknet/darknet detector train darknet.data darknet-yolov3.cfg darknet53.conv.74 > train.log
 ```
 
 6. Give the correct path to the modelConfiguration and modelWeights files in object_detection_yolo.py and test any image or video for snowman detection, e.g.

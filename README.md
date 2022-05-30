@@ -244,6 +244,14 @@ The following environment variables can be passed:
 - opencvLibDir
 - opencvBinDir
 
+
+## Using distrib prebuilt package
+
+```bash
+sudo apt install libopencv-dev
+build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --binDir=/usr/bin/ --nobuild rebuild
+```
+
 <a name="usage-with-docker"></a>
 
 ## Usage with Docker

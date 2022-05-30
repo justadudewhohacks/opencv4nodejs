@@ -39,6 +39,7 @@
     "install": "node bin/install.js auto",
     "install_Mac": "tsc && CXXFLAGS=\"-std=c++14 -Wno-c++11-narrowing\" node ./install/install.js --version 4.5.3 build",
     "install_default": "tsc && node bin/install.js rebuild",
+    "install_ubuntu": "echo call: sudo apt install libopencv-dev; build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --binDir=/usr/bin/ --nobuild rebuild",
     "install_macm1": "tsc && node bin/install.js --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64 -DWITH_FFMPEG=ON\" rebuild",
     "install_cuda": "tsc && node bin/install.js --version 4.5.5 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_FFMPEG=ON\" rebuild",
     "test": "cd test && pnpm install && pnpm run test",
@@ -51,7 +52,7 @@
     "build-debug": "tsc && BINDINGS_DEBUG=true node bin/install.js rebuild"
   },
   "dependencies": {
-    "@u4/opencv-build": "^0.5.0",
+    "@u4/opencv-build": "^0.5.3",
     "glob": "^8.0.3",
     "nan": "^2.15.0",
     "native-node-utils": "^0.2.7",

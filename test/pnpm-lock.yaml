@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 specifiers:
   '@types/chai': ^4.3.0
@@ -23,7 +23,7 @@ devDependencies:
   '@types/mocha': 9.1.0
   '@types/node': 17.0.13
   rimraf: 3.0.2
-  ts-node: 10.4.0_40146b36d18138e3202fbb722e5f65e4
+  ts-node: 10.4.0_iakgwnwrqe4ogibpxnzc4x3f4q
   typescript: 4.5.5
 
 packages:
@@ -148,10 +148,16 @@ packages:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
 
-  /debug/3.1.0:
+  /debug/3.1.0_supports-color@5.4.0:
     resolution: {integrity: sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
     dependencies:
       ms: 2.0.0
+      supports-color: 5.4.0
     dev: false
 
   /deep-eql/3.0.1:
@@ -389,7 +395,7 @@ packages:
     dependencies:
       browser-stdout: 1.3.1
       commander: 2.15.1
-      debug: 3.1.0
+      debug: 3.1.0_supports-color@5.4.0
       diff: 3.5.0
       escape-string-regexp: 1.0.5
       glob: 7.1.2
@@ -488,7 +494,7 @@ packages:
       has-flag: 3.0.0
     dev: false
 
-  /ts-node/10.4.0_40146b36d18138e3202fbb722e5f65e4:
+  /ts-node/10.4.0_iakgwnwrqe4ogibpxnzc4x3f4q:
     resolution: {integrity: sha512-g0FlPvvCXSIO1JDF6S232P5jPYqBkRL9qly81ZgAOSU7rwI0stphCgd2kLiCrU9DjQCrJMWEqcNSjQL02s6d8A==}
     hasBin: true
     peerDependencies:

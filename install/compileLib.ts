@@ -168,9 +168,7 @@ or configure configure a opencv4nodejs section in your package.json
 or use OPENCV4NODEJS_* env variable.`)
         return;
     }
-
     const options: OpenCVBuildEnvParams = args2Option(args)
-
     if (options.extra.jobs) {
         JOBS = options.extra.jobs;
     }
@@ -189,9 +187,8 @@ or use OPENCV4NODEJS_* env variable.`)
      */
     const libDir: string = getLibDir(builder.env);
     log.info('install', 'Using lib dir: ' + libDir)
-    if (!fs.existsSync(libDir)) {
-        await builder.install();
-    }
+    //if (!fs.existsSync(libDir))
+    await builder.install();
     if (!fs.existsSync(libDir)) {
         throw new Error('library dir does not exist: ' + libDir)
     }
