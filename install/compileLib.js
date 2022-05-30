@@ -208,7 +208,7 @@ or use OPENCV4NODEJS_* env variable.`);
     // --silly, --loglevel=silly	Log all progress to console
     // --verbose, --loglevel=verbose	Log most progress to console
     // --silent, --loglevel=silent	Don't log anything to console
-    if (process.env.BINDINGS_DEBUG)
+    if (process.env.BINDINGS_DEBUG || options.extra['debug'])
         flags += ' --debug';
     else
         flags += ' --release';
