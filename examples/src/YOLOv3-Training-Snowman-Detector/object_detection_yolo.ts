@@ -99,9 +99,11 @@ function postprocess(frame: Mat, outs: Mat[]) {
     // Scan through all the bounding boxes output from the network and keep only the
     // ones with high confidence scores. Assign the box's class label as the class with the highest score.
     for (const out of outs) {
+        console.log(`Mat Type is ${cv.toMatTypeName(out.type)} Dim: ${out.sizes}`);
         // (4) [1, 512, 13, 13]
         // (4) [1, 256, 26, 26]
-        for (const detection of out.getDataAsArray()) { // failed returning NaN...
+        const datas = out.getDataAsArray();
+        for (const detection of datas) { // failed returning NaN...
             // scores = detection[5:]
             const scores = detection.slice(5);
 

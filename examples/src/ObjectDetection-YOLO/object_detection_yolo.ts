@@ -86,6 +86,7 @@ async function main() {
         const confidences: number[] = []
         const boxes: Rect[] = []
         for (const out of outs) {
+            // console.log(`Mat Type is ${cv.toMatTypeName(out.type)} Dim: ${out.sizes}`);
             for (const detection of out.getDataAsArray()) {
                 const scores = detection.slice(5);
                 let classId = -1;
