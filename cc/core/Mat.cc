@@ -2,6 +2,7 @@
 #include "Mat.h"
 #include "MatBindings.h"
 #include "coreBindings.h"
+// #include <iostream>
 
 #ifdef HAVE_OPENCV_CALIB3D
 #include "../calib3d/MatCalib3d.h"
@@ -139,6 +140,90 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::Set(target,Nan::New("Mat").ToLocalChecked(), FF::getFunction(ctor));
 };
 
+// only used in Mat::At and Mat::AtRaw
+#define FF_MAT_AT(mat, val, get) \
+	if (mat.dims > 2) \
+		val = get(mat, info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[2]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value()); \
+	else \
+		val = get(mat, info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value());
+
+// only used in Mat::At
+#define FF_MAT_AT_ARRAY(mat, val, get) { \
+	std::vector<int> vec; \
+	if (FF::IntArrayConverter::arg(0, &vec, info)) { \
+		return tryCatch.reThrow(); \
+	} \
+	const int* idx = &vec.front(); \
+	val = get(mat, idx); \
+}
+
+// only used in Mat::Set
+#define FF_MAT_SET(mat, val, put) \
+  if (mat.dims > 2) \
+    put(mat, val, info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[2]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value()); \
+  else \
+    put(mat, val, info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value(), info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value());
+
+// only used in Mat::New
+#define FF_MAT_FILL(mat, vec, put) \
+	for (int r = 0; r < mat.rows; r++) { \
+		for (int c = 0; c < mat.cols; c++) { \
+			put(mat, vec, r, c); \
+		} \
+	}
+
+// only used in Mat::Set
+#define FF_ASSERT_CHANNELS(cn, have, what) \
+	if (cn != have) { \
+		return tryCatch.throwError(std::string(what) + " - expected vector with " \
+			+ std::to_string(cn) + " channels, have " + std::to_string(have));	\
+	}
+
+#define FF_MAT_APPLY_TYPED_OPERATOR(mat, arg, type, ITERATOR, OPERATOR) { \
+	switch (type) {\
+	case CV_8UC1:  ITERATOR(mat, arg, OPERATOR##Val<uchar>)   break;\
+	case CV_8UC2:  ITERATOR(mat, arg, OPERATOR##Vec2<uchar>)  break;\
+	case CV_8UC3:  ITERATOR(mat, arg, OPERATOR##Vec3<uchar>)  break;\
+	case CV_8UC4:  ITERATOR(mat, arg, OPERATOR##Vec4<uchar>)  break;\
+	case CV_8SC1:  ITERATOR(mat, arg, OPERATOR##Val<char>)    break;\
+	case CV_8SC2:  ITERATOR(mat, arg, OPERATOR##Vec2<char>)   break;\
+	case CV_8SC3:  ITERATOR(mat, arg, OPERATOR##Vec3<char>)   break;\
+	case CV_8SC4:  ITERATOR(mat, arg, OPERATOR##Vec4<char>)   break;\
+	case CV_16UC1: ITERATOR(mat, arg, OPERATOR##Val<ushort>)  break;\
+	case CV_16UC2: ITERATOR(mat, arg, OPERATOR##Vec2<ushort>) break;\
+	case CV_16UC3: ITERATOR(mat, arg, OPERATOR##Vec3<ushort>) break;\
+	case CV_16UC4: ITERATOR(mat, arg, OPERATOR##Vec4<ushort>) break;\
+	case CV_16SC1: ITERATOR(mat, arg, OPERATOR##Val<short>)   break;\
+	case CV_16SC2: ITERATOR(mat, arg, OPERATOR##Vec2<short>)  break;\
+	case CV_16SC3: ITERATOR(mat, arg, OPERATOR##Vec3<short>)  break;\
+	case CV_16SC4: ITERATOR(mat, arg, OPERATOR##Vec4<short>)  break;\
+	case CV_32SC1: ITERATOR(mat, arg, OPERATOR##Val<int>)     break;\
+	case CV_32SC2: ITERATOR(mat, arg, OPERATOR##Vec2<int>)    break;\
+	case CV_32SC3: ITERATOR(mat, arg, OPERATOR##Vec3<int>)    break;\
+	case CV_32SC4: ITERATOR(mat, arg, OPERATOR##Vec4<int>)    break;\
+	case CV_32FC1: ITERATOR(mat, arg, OPERATOR##Val<float>)   break;\
+	case CV_32FC2: ITERATOR(mat, arg, OPERATOR##Vec2<float>)  break;\
+	case CV_32FC3: ITERATOR(mat, arg, OPERATOR##Vec3<float>)  break;\
+	case CV_32FC4: ITERATOR(mat, arg, OPERATOR##Vec4<float>)  break;\
+	case CV_64FC1: ITERATOR(mat, arg, OPERATOR##Val<double>)  break;\
+	case CV_64FC2: ITERATOR(mat, arg, OPERATOR##Vec2<double>) break;\
+	case CV_64FC3: ITERATOR(mat, arg, OPERATOR##Vec3<double>) break;\
+	case CV_64FC4: ITERATOR(mat, arg, OPERATOR##Vec4<double>) break;\
+	default:\
+		return tryCatch.throwError("invalid matType: " + std::to_string(type));\
+		break;\
+	}\
+}
+
+// only used in Mat::New
+#define FF_MAT_FROM_JS_ARRAY(mat, rowArray, put) \
+	for (int r = 0; r < mat.rows; r++) { \
+		v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, r).ToLocalChecked());	\
+		for (int c = 0; c < mat.cols; c++) { \
+			put(mat, Nan::Get(colArray, c).ToLocalChecked(), r, c); \
+		} \
+	}
+
 NAN_METHOD(Mat::New) {
 	FF::TryCatch tryCatch("Mat::New");
 	FF_ASSERT_CONSTRUCT_CALL();
@@ -146,6 +231,8 @@ NAN_METHOD(Mat::New) {
   /* from channels
    * constructor(channels: Mat[]);
    */
+   // prepare debug for next big release
+   //  std::cout << "New Mat: args: " << info.Length() << std::endl;
   if (info.Length() == 1 && info[0]->IsArray()) {
     v8::Local<v8::Array> jsChannelMats = v8::Local<v8::Array>::Cast(info[0]);
     std::vector<cv::Mat> channels;
@@ -178,6 +265,8 @@ NAN_METHOD(Mat::New) {
    * constructor(dataArray: number[][][], type: number);
   */
   else if (info.Length() == 2 && info[0]->IsArray() && info[1]->IsInt32()) {
+    // std::cout << "Case 3 2 args Array + type" << std::endl;
+    // cast Args array + type
     v8::Local<v8::Array> rowArray = v8::Local<v8::Array>::Cast(info[0]);
     int type = info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
 
@@ -392,6 +481,86 @@ NAN_METHOD(Mat::SetToAsync) {
   );
 }
 
+// std::vector<int> pt; pt.push_back(0); pt.push_back(0); pt.push_back(0); pt.push_back(0);
+// Nan::Set(depth2Array, pt[3], get(mat, pt));
+// Nan::Set(depthArray, pt[3], get(mat, &pt));
+// int pt[4];
+// cv::Vec<int,4> pt;
+/*
+#define FF_JS_ARRAY_FROM_MAT_4D(mat, rowArray, get) \
+  { std::cout << "STARTT\n"; \
+  int* pt = (int*)malloc(4*sizeof(int)); \
+  std::cout << "Alloc Ok " << pt << "\n"; \
+  for (pt[0] = 0; pt[0] < mat.size[0]; pt[0]++) { \
+    v8::Local<v8::Array> colArray = Nan::New<v8::Array>(mat.size[1]); \
+    for (pt[1] = 0; pt[1] < mat.size[1]; pt[1]++) { \
+      v8::Local<v8::Array> depthArray = Nan::New<v8::Array>(mat.size[2]); \
+	  for (pt[2] = 0; pt[2] < mat.size[2]; pt[2]++) { \
+        v8::Local<v8::Array> depth2Array = Nan::New<v8::Array>(mat.size[3]); \
+        for (pt[3] = 0; pt[3] < mat.size[3]; pt[3]++) { \
+			Nan::Set(depthArray, pt[3], get(mat, pt)); \
+        } \
+        Nan::Set(depthArray, pt[2], depth2Array); \
+      } \
+      Nan::Set(colArray, pt[1], depthArray); \
+    } \
+    Nan::Set(rowArray, pt[0], colArray); \
+	free(pt); \
+  }}
+*/
+/*
+#define FF_JS_ARRAY_FROM_MAT_4D(mat, rowArray, get) \
+  std::cout << "STARTT\n" << std::flush; \
+  for (int r = 0; r < mat.size[0]; r++) { \
+    v8::Local<v8::Array> colArray = Nan::New<v8::Array>(mat.size[1]); \
+    for (int c = 0; c < mat.size[1]; c++) { \
+      v8::Local<v8::Array> depthArray = Nan::New<v8::Array>(mat.size[2]); \
+      for (int z = 0; z < mat.size[2]; z++) { \
+        Nan::Set(depthArray, z, get(mat, r, c, z)); \
+      } \
+      Nan::Set(colArray, c, depthArray); \
+    } \
+    Nan::Set(rowArray, r, colArray); \
+  }
+*/
+/*
+#define FF_JS_ARRAY_FROM_MAT_4D(mat, rowArray, get) \
+  std::cout << "STARTT\n" << std::flush; \
+  for (int r = 0; r < mat.size[0]; r++) { \
+    v8::Local<v8::Array> colArray = Nan::New<v8::Array>(mat.size[1]); \
+    for (int c = 0; c < mat.size[1]; c++) { \
+      v8::Local<v8::Array> depthArray = Nan::New<v8::Array>(mat.size[2]); \
+      for (int z = 0; z < mat.size[2]; z++) { \
+        Nan::Set(depthArray, z, get(mat, r, c, z)); \
+      } \
+      Nan::Set(colArray, c, depthArray); \
+    } \
+    Nan::Set(rowArray, r, colArray); \
+  }
+*/
+
+#define FF_JS_ARRAY_FROM_MAT_2D(mat, rowArray, get) \
+	for (int r = 0; r < mat.rows; r++) { \
+		v8::Local<v8::Array> colArray = Nan::New<v8::Array>(mat.cols); \
+		for (int c = 0; c < mat.cols; c++) { \
+			Nan::Set(colArray, c, get(mat, r, c)); \
+		} \
+		Nan::Set(rowArray, r, colArray); \
+	}
+
+ #define FF_JS_ARRAY_FROM_MAT_3D(mat, rowArray, get) \
+   for (int r = 0; r < mat.size[0]; r++) { \
+     v8::Local<v8::Array> colArray = Nan::New<v8::Array>(mat.size[1]); \
+     for (int c = 0; c < mat.size[1]; c++) { \
+       v8::Local<v8::Array> depthArray = Nan::New<v8::Array>(mat.size[2]); \
+       for (int z = 0; z < mat.size[2]; z++) { \
+         Nan::Set(depthArray, z, get(mat, r, c, z)); \
+       } \
+       Nan::Set(colArray, c, depthArray); \
+     } \
+     Nan::Set(rowArray, r, colArray); \
+   }
+
 NAN_METHOD(Mat::GetDataAsArray) {
 	FF::TryCatch tryCatch("Mat::GetDataAsArray");
   cv::Mat mat = Mat::unwrapSelf(info);
@@ -399,7 +568,7 @@ NAN_METHOD(Mat::GetDataAsArray) {
   if (mat.dims > 2) { // 3D
     FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT_3D, FF::matGet);
   } else { // 2D
-    FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT, FF::matGet);
+    FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT_2D, FF::matGet);
   }
   info.GetReturnValue().Set(rowArray);
 }
