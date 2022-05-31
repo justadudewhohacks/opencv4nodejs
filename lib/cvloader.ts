@@ -48,7 +48,12 @@ function getOpenCV(opt?: OpenCVBuildEnvParams): OpenCVType {
   if (isElectronWebpack()) {
     requirePath = '../build/Release/opencv4nodejs.node';
   } else {
-    requirePath = path.join(__dirname, process.env.BINDINGS_DEBUG ? '../build/Debug/opencv4nodejs' : '../build/Release/opencv4nodejs')
+    requirePath = path.join(__dirname, '../build/Debug/opencv4nodejs.node');
+    if (!fs.existsSync(requirePath)) {
+      requirePath = path.join(__dirname, '../build/Release/opencv4nodejs.node');
+    }
+    requirePath = requirePath.replace(/\.node$/, '');
+    // path.join(__dirname, process.env.BINDINGS_DEBUG ? '../build/Debug/opencv4nodejs' : '../build/Release/opencv4nodejs')
   }
   try {
     logDebug('require', `require path is ${pc.yellow(requirePath)}`)
