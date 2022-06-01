@@ -2,14 +2,62 @@
 
 [![NPM Version](https://img.shields.io/npm/v/@u4/opencv4nodejs.svg?style=flat)](https://www.npmjs.org/package/@u4/opencv4nodejs)
 
-## Fork changes
+## Getting starts
 
-- I recomand you to only define an global OPENCV_BUILD_ROOT=~/opencv to boost you develepoment speed and reduce you hard disk usage.
-- `node-gyp` is not run during `npm install`, It must be launch from the project with `build-opencv`. (if you forgot to do so some help message will assis you :wink:)
-- All javascript code had been converted to Typesscript.
-- This version depend on [@u4/opencv-build](https://www.npmjs.com/package/@u4/opencv-build).
-- This version had been test under windows / MacOs X / Debian environnement.
-- This version **Works** with new elecron.
+Opencv4nodejs can be link to a prebuild openCV 3 or 4. or can build it's own openCV using [@u4/opencv-build](https://www.npmjs.com/package/@u4/opencv-build).
+You have to choose witch version you want to link.
+
+In all case define the env variable `OPENCV_BUILD_ROOT` to speedup your developpement.
+ex:
+```bash
+OPENCV_BUILD_ROOT=~/opencv
+```
+
+### To use your own openCV build
+
+Define environement variable:
+- OPENCV4NODEJS_DISABLE_AUTOBUILD
+- OPENCV_INCLUDE_DIR
+- OPENCV_LIB_DIR
+- OPENCV_BIN_DIR
+
+Define a opencv4nodejs section in your package.json like:
+```json
+opencv4nodejs {
+  "disableAutoBuild": "1",
+  "OPENCV_INCLUDE_DIR": "",
+  "OPENCV_LIB_DIR": "",
+  "OPENCV_BIN_DIR": "",
+}
+```
+
+Call `build-opencv` once like:
+```bash
+npm link
+build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --binDir=/usr/bin/ --nobuild rebuild
+```
+
+### To build you own openCV
+
+Define environement variable:
+- OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION
+
+Define a opencv4nodejs section in your package.json like:
+```json
+opencv4nodejs {
+  "autoBuildOpencvVersion": "1",
+}
+```
+
+Call `build-opencv` once like:
+```bash
+npm link
+build-opencv --version 3.5.5 rebuild
+```
+
+## for advanced option
+
+- [@u4/opencv-build](https://github.com/UrielCh/npm-opencv-build) for info.
 
 ![opencv4nodejs](https://user-images.githubusercontent.com/31125521/37272906-67187fdc-25d8-11e8-9704-40e9e94c1e80.jpg)
 
