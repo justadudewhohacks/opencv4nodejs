@@ -1,3 +1,9 @@
+
+/**
+ * const syntax:
+ * 
+ * CV_[The number of bits per item][Signed or Unsigned][Type Prefix]C[The channel number]
+ */
 export const CV_8U: number;
 export const CV_8S: number;
 export const CV_16U: number;

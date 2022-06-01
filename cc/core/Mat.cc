@@ -19,6 +19,69 @@
 
 Nan::Persistent<v8::FunctionTemplate> Mat::constructor;
 
+
+
+
+
+
+namespace FF {
+	/**
+	 * 2,3-Dimmentions Macro seters for a single Value
+	 */
+	template<typename type>
+	static inline void matPutVal(cv::Mat mat, v8::Local<v8::Value> value, const std::vector<int> &idx) {
+		mat.at<type>(idx) = (type)value->ToNumber(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+	}
+
+	/**
+	 * 2,3-Dimmentions Macro seters for a Vec<2> Value
+	 */
+
+	template<typename type>
+	static inline void matPutVec2(cv::Mat mat, v8::Local<v8::Value> vector, const std::vector<int> &idx) {
+		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
+		mat.at< cv::Vec<type, 2> >(idx) = cv::Vec<type, 2>(
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked())
+		);
+	}
+	/**
+	 * 2,3-Dimmentions Macro seters for a Vec<3> Value
+	 */
+
+	template<typename type>
+	static inline void matPutVec3(cv::Mat mat, v8::Local<v8::Value> vector, const std::vector<int> &idx) {
+		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
+		mat.at< cv::Vec<type, 3> >(idx) = cv::Vec<type, 3>(
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 2).ToLocalChecked())
+		);
+	}
+	/**
+	 * 2,3-Dimmentions Macro seters for a Vec<4> Value
+	 */
+
+	template<typename type>
+	static inline void matPutVec4(cv::Mat mat, v8::Local<v8::Value> vector, const std::vector<int> &idx) {
+		v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(vector);
+		mat.at< cv::Vec<type, 4> >(idx) = cv::Vec<type, 4>(
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 2).ToLocalChecked()),
+			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 3).ToLocalChecked())
+		);
+	}
+}
+
+
+
+
+
+
+
+
+
 NAN_MODULE_INIT(Mat::Init) {
 
   v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Mat::New);
@@ -216,13 +279,28 @@ NAN_MODULE_INIT(Mat::Init) {
 }
 
 // only used in Mat::New
-#define FF_MAT_FROM_JS_ARRAY(mat, rowArray, put) \
+#define FF_MAT_FROM_JS_ARRAY_2D(mat, rowArray, put) \
 	for (int r = 0; r < mat.rows; r++) { \
 		v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, r).ToLocalChecked());	\
 		for (int c = 0; c < mat.cols; c++) { \
 			put(mat, Nan::Get(colArray, c).ToLocalChecked(), r, c); \
 		} \
 	}
+
+
+#define FF_MAT_FROM_JS_ARRAY_3D(mat, rowArray, put) { \
+  cv::MatSize sizes = mat.size; \
+  std::vector<int> cur = { 0, 0, 0 }; \
+	for (cur.at(0) = 0; cur.at(0) < sizes[0]; cur.at(0)++) { \
+		v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, cur.at(0)).ToLocalChecked());	\
+		for (cur.at(1) = 0; cur.at(1) < sizes[1]; cur.at(1)++) { \
+      v8::Local<v8::Array> colArray2 = v8::Local<v8::Array>::Cast(Nan::Get(colArray, cur.at(1)).ToLocalChecked()); \
+    		for (cur.at(2) = 0; cur.at(2) < sizes[2]; cur.at(2)++) { \
+          /* put(mat, Nan::Get(colArray2, cur.at(2)).ToLocalChecked(), cur);*/ \
+	  	  } \
+		} \
+	} \
+}
 
 NAN_METHOD(Mat::New) {
 	FF::TryCatch tryCatch("Mat::New");
@@ -265,26 +343,91 @@ NAN_METHOD(Mat::New) {
    * constructor(dataArray: number[][][], type: number);
   */
   else if (info.Length() == 2 && info[0]->IsArray() && info[1]->IsInt32()) {
-    // std::cout << "Case 3 2 args Array + type" << std::endl;
-    // cast Args array + type
-    v8::Local<v8::Array> rowArray = v8::Local<v8::Array>::Cast(info[0]);
+    // get Type
     int type = info[1]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+    // get channel count
+    int channel = (type >> CV_CN_SHIFT) + 1;
 
-    long numCols = -1;
-    for (uint i = 0; i < rowArray->Length(); i++) {
-      if (!Nan::Get(rowArray, i).ToLocalChecked()->IsArray()) {
-        return tryCatch.throwError("Mat::New - Column should be an array, at column: " + std::to_string(i));
-      }
-      v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, i).ToLocalChecked());
-      if (numCols != -1 && numCols != colArray->Length()) {
-        return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i));
-      }
-      numCols = colArray->Length();
+    // check data concistency
+    v8::Local<v8::Array> rowArray0 = v8::Local<v8::Array>::Cast(info[0]);
+    int dim = 1;
+    while (Nan::Get(rowArray0, 0).ToLocalChecked()->IsArray()) {
+      dim = dim + 1;
+      rowArray0 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray0, 0).ToLocalChecked());
     }
+    if (channel > 1)
+      dim--;
+    std::cout << "GET a " << dim << " dim array channels:" << channel << std::endl;
 
-    cv::Mat mat = cv::Mat(rowArray->Length(), numCols, type);
-    FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, type, FF_MAT_FROM_JS_ARRAY, FF::matPut);
-    self->setNativeObject(mat);
+    if (dim == 1) {
+      return tryCatch.throwError("Mat::New - Mat must have at least 2 Dimentions");
+    } else if (dim == 2) {
+      long rows = rowArray0->Length();
+      long numCols = -1;
+      for (uint i = 0; i < rows; i++) {
+        if (!Nan::Get(rowArray0, i).ToLocalChecked()->IsArray()) return tryCatch.throwError("Mat::New - Column should be an array, at column: " + std::to_string(i));
+        v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray0, i).ToLocalChecked());
+        if (numCols != -1 && numCols != colArray->Length()) return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i));
+        numCols = colArray->Length();
+      }
+      // 	Mat (int rows, int cols, int type)
+      cv::Mat mat = cv::Mat(rows, numCols, type);
+      FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray0, type, FF_MAT_FROM_JS_ARRAY_2D, FF::matPut);
+      self->setNativeObject(mat);
+    } else if (dim == 3) {
+      std::vector<int> sizes = { (int) rowArray0->Length(), -1, -1 };
+      for (int i = 0; i < sizes.at(0); i++) {
+        if (!Nan::Get(rowArray0, i).ToLocalChecked()->IsArray()) return tryCatch.throwError("Mat::New - Column should be an array, at column: " + std::to_string(i));
+        v8::Local<v8::Array> rowArray1 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray0, i).ToLocalChecked());
+        if (sizes.at(1) != -1 && sizes.at(1) != (int)rowArray1->Length()) return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i));
+        sizes.at(1) = rowArray1->Length();
+        for (int j = 0; j < sizes.at(1); j++) {
+          if (!Nan::Get(rowArray1, j).ToLocalChecked()->IsArray()) return tryCatch.throwError("Mat::New - Column should be an array, at column: " + std::to_string(j));
+          v8::Local<v8::Array> rowArray2 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray1, j).ToLocalChecked());
+          if (sizes.at(2) != -1 && sizes.at(2) != (int)rowArray2->Length()) return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(j));
+          sizes.at(2) = rowArray2->Length();
+        }
+      }
+      // Mat (const std::vector< int > &sizes, int type)
+      cv::Mat mat = cv::Mat(sizes, type);
+      // cv::MatSize size = mat.size;
+
+
+
+
+
+      FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray0, type, FF_MAT_FROM_JS_ARRAY_3D, FF::matPut);
+      self->setNativeObject(mat);
+    } else if (dim == 4) {
+      // std::vector<int> sizes(dim);// = { (int) rowArray0->Length(), -1, -1 };
+      // std::vector<int> iter(dim);// = { (int) rowArray0->Length(), -1, -1 };
+      // for (int i=0; i < dim; ++i) { sizes[i] = -1; iter[i] = 0;}
+      // sizes[0] = (int) rowArray0->Length();
+      // int c = 0;
+      std::vector<int> sizes = { (int) rowArray0->Length(), -1, -1, -1 };
+      for (int i = 0; i < sizes.at(0); i++) {
+        if (!Nan::Get(rowArray0, i).ToLocalChecked()->IsArray()) return tryCatch.throwError("Mat::New - Column should be an array, at column: " + std::to_string(i));
+        v8::Local<v8::Array> rowArray1 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray0, i).ToLocalChecked());
+        if (sizes.at(1) != -1 && sizes.at(1) != (int)rowArray1->Length()) return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i));
+        sizes.at(1) = rowArray1->Length();
+        for (int j = 0; j < sizes.at(1); j++) {
+          if (!Nan::Get(rowArray1, j).ToLocalChecked()->IsArray()) return tryCatch.throwError("Mat::New - Column should be an array, at column: " + std::to_string(j));
+          v8::Local<v8::Array> rowArray2 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray1, j).ToLocalChecked());
+          if (sizes.at(2) != -1 && sizes.at(2) != (int)rowArray2->Length()) return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(j));
+          sizes.at(2) = rowArray2->Length();
+          for (int k = 0; k < sizes.at(1); k++) {
+            if (!Nan::Get(rowArray2, k).ToLocalChecked()->IsArray()) return tryCatch.throwError("Mat::New - Column should be an array, at column: " + std::to_string(k));
+            v8::Local<v8::Array> rowArray3 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray2, k).ToLocalChecked());
+            if (sizes.at(3) != -1 && sizes.at(3) != (int)rowArray2->Length()) return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(k));
+            sizes.at(3) = rowArray3->Length();
+          }
+        }
+      }
+      // Mat (const std::vector< int > &sizes, int type)
+      cv::Mat mat = cv::Mat(sizes, type);
+      // FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray0, type, FF_MAT_FROM_JS_ARRAY_4D, FF::matPut);
+      self->setNativeObject(mat);
+    }
   }
   /* row, col, type
    * constructor(rows: number, cols: number, type: number, fillValue?: number | number[]);
