@@ -67,11 +67,41 @@ namespace FF {
 			(type)FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 3).ToLocalChecked())
 		);
 	}
+
+
+  template<typename type, int n>
+	static inline v8::Local<v8::Value> matGetVal(cv::Mat mat, cv:: Vec<int, n>& idx) {
+		return Nan::New(mat.at<type>(idx));
+	}
+
+	template<typename type, int n>
+	static inline v8::Local<v8::Value> matGetVec2(cv::Mat mat, const cv:: Vec<int, n>& idx) {
+		v8::Local<v8::Array> vec = Nan::New<v8::Array>(2);
+		Nan::Set(vec, 0, Nan::New(mat.at< cv::Vec<type, 2> >(idx)[0]));
+		Nan::Set(vec, 1, Nan::New(mat.at< cv::Vec<type, 2> >(idx)[1]));
+		return vec;
+	}
+
+  template<typename type, int n>
+	static inline v8::Local<v8::Value> matGetVec3(cv::Mat mat, const cv:: Vec<int, n>& idx) {
+		v8::Local<v8::Array> vec = Nan::New<v8::Array>(3);
+		Nan::Set(vec, 0, Nan::New(mat.at< cv::Vec<type, 3> >(idx)[0]));
+		Nan::Set(vec, 1, Nan::New(mat.at< cv::Vec<type, 3> >(idx)[1]));
+		Nan::Set(vec, 2, Nan::New(mat.at< cv::Vec<type, 3> >(idx)[2]));
+		return vec;
+	}
+
+	template<typename type, int n>
+	static inline v8::Local<v8::Value> matGetVec4(cv::Mat mat, const cv:: Vec<int, n>& idx) {
+		v8::Local<v8::Array> vec = Nan::New<v8::Array>(4);
+		Nan::Set(vec, 0, Nan::New(mat.at< cv::Vec<type, 4> >(idx)[0]));
+		Nan::Set(vec, 1, Nan::New(mat.at< cv::Vec<type, 4> >(idx)[1]));
+		Nan::Set(vec, 2, Nan::New(mat.at< cv::Vec<type, 4> >(idx)[2]));
+		Nan::Set(vec, 3, Nan::New(mat.at< cv::Vec<type, 4> >(idx)[3]));
+		return vec;
+	}
+
 }
-
-
-
-
 
 NAN_MODULE_INIT(Mat::Init) {
 
@@ -283,9 +313,9 @@ NAN_MODULE_INIT(Mat::Init) {
   cv::MatSize sizes = mat.size; \
   cv::Vec3i cur = cv::Vec3b(0, 0, 0); \
 	for (cur[0] = 0; cur[0] < sizes[0]; cur[0]++) { \
-		v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, cur[0]).ToLocalChecked());	\
+		v8::Local<v8::Array> colArray1 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, cur[0]).ToLocalChecked());	\
 		for (cur[1] = 0; cur[1] < sizes[1]; cur[1]++) { \
-      v8::Local<v8::Array> colArray2 = v8::Local<v8::Array>::Cast(Nan::Get(colArray, cur[1]).ToLocalChecked()); \
+      v8::Local<v8::Array> colArray2 = v8::Local<v8::Array>::Cast(Nan::Get(colArray1, cur[1]).ToLocalChecked()); \
     		for (cur[2] = 0; cur[2] < sizes[2]; cur[2]++) { \
           put(mat, Nan::Get(colArray2, cur[2]).ToLocalChecked(), cur); \
 	  	  } \
@@ -297,16 +327,36 @@ NAN_MODULE_INIT(Mat::Init) {
   cv::MatSize sizes = mat.size; \
   cv::Vec4i cur = cv::Vec4b(0, 0, 0, 0); \
 	for (cur[0] = 0; cur[0] < sizes[0]; cur[0]++) { \
-		v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, cur[0]).ToLocalChecked()); \
+		v8::Local<v8::Array> colArray1 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, cur[0]).ToLocalChecked()); \
 		for (cur[1] = 0; cur[1] < sizes[1]; cur[1]++) { \
-      v8::Local<v8::Array> colArray2 = v8::Local<v8::Array>::Cast(Nan::Get(colArray, cur[1]).ToLocalChecked()); \
+      v8::Local<v8::Array> colArray2 = v8::Local<v8::Array>::Cast(Nan::Get(colArray1, cur[1]).ToLocalChecked()); \
   		for (cur[2] = 0; cur[2] < sizes[2]; cur[2]++) { \
         v8::Local<v8::Array> colArray3 = v8::Local<v8::Array>::Cast(Nan::Get(colArray2, cur[2]).ToLocalChecked()); \
       	for (cur[3] = 0; cur[3] < sizes[3]; cur[3]++) { \
-          put(mat, Nan::Get(colArray3, cur[2]).ToLocalChecked(), cur); \
+          put(mat, Nan::Get(colArray3, cur[3]).ToLocalChecked(), cur); \
 	  	  } \
    	  } \
 		} \
+	} \
+}
+
+#define FF_MAT_FROM_JS_ARRAY_5D(mat, rowArray, put) { \
+  cv::MatSize sizes = mat.size; \
+  cv::Vec4i cur = cv::Vec5b(0, 0, 0, 0, 0); \
+	for (cur[0] = 0; cur[0] < sizes[0]; cur[0]++) { \
+		v8::Local<v8::Array> colArray1 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray, cur[0]).ToLocalChecked()); \
+		for (cur[1] = 0; cur[1] < sizes[1]; cur[1]++) { \
+			v8::Local<v8::Array> colArray2 = v8::Local<v8::Array>::Cast(Nan::Get(colArray1, cur[1]).ToLocalChecked()); \
+			for (cur[2] = 0; cur[2] < sizes[2]; cur[2]++) { \
+       	v8::Local<v8::Array> colArray3 = v8::Local<v8::Array>::Cast(Nan::Get(colArray2, cur[2]).ToLocalChecked()); \
+    		for (cur[3] = 0; cur[3] < sizes[3]; cur[3]++) { \
+       	  v8::Local<v8::Array> colArray4 = v8::Local<v8::Array>::Cast(Nan::Get(colArray3, cur[2]).ToLocalChecked()); \
+       		for (cur[4] = 0; cur[4] < sizes[4]; cur[4]++) { \
+       	    put(mat, Nan::Get(colArray4, cur[4]).ToLocalChecked(), cur); \
+  	      } \
+     	  } \
+	  	} \
+   	} \
 	} \
 }
 
@@ -649,21 +699,45 @@ NAN_METHOD(Mat::SetToAsync) {
 
  #define FF_JS_ARRAY_FROM_MAT_4D(mat, rowArray, get) { \
    cv::MatSize sizes = mat.size; \
-   cv::Vec4i cur = cv::Vec4b(0, 0, 0, 0); \
-   for (cur[0] = 0; cur[0] < size[0]; cur[0]++) { \
-     v8::Local<v8::Array> colArray = Nan::New<v8::Array>(mat.size[1]); \
-     for (cur[1] = 0; cur[1] < size[1]; cur[1]++) { \
-       v8::Local<v8::Array> depthArray = Nan::New<v8::Array>(mat.size[2]); \
-       for (cur[2] = 0; cur[2] < size[2]; cur[2]++) { \
-         v8::Local<v8::Array> deptherArray = Nan::New<v8::Array>(mat.size[3]); \
-         for (cur[3] = 0; cur[3] < size[3]; cur[3]++) { \
-          Nan::Set(deptherArray, z, get(mat, cur)); \
+   cv::Vec4i cur = cv::Vec4i(0, 0, 0, 0); \
+   for (cur[0] = 0; cur[0] < sizes[0]; cur[0]++) { \
+     v8::Local<v8::Array> array1 = Nan::New<v8::Array>(sizes[1]); \
+     for (cur[1] = 0; cur[1] < sizes[1]; cur[1]++) { \
+       v8::Local<v8::Array> array2 = Nan::New<v8::Array>(sizes[2]); \
+       for (cur[2] = 0; cur[2] < sizes[2]; cur[2]++) { \
+         v8::Local<v8::Array> array3 = Nan::New<v8::Array>(sizes[3]); \
+         for (cur[3] = 0; cur[3] < sizes[3]; cur[3]++) { \
+          Nan::Set(array3, cur[3], get(mat, cur)); \
         } \
-        Nan::Set(depthArray, c, deptherArray); \
+        Nan::Set(array2, cur[2], array3); \
        } \
-       Nan::Set(colArray, c, depthArray); \
+       Nan::Set(array1, cur[1], array2); \
      } \
-     Nan::Set(rowArray, r, colArray); \
+    Nan::Set(rowArray, cur[0], array1); \
+   } \
+ }
+
+ #define FF_JS_ARRAY_FROM_MAT_5D(mat, rowArray, get) { \
+   cv::MatSize sizes = mat.size; \
+   cv::Vec4i cur = cv::Vec5i(0, 0, 0, 0, 0); \
+   for (cur[0] = 0; cur[0] < sizes[0]; cur[0]++) { \
+     v8::Local<v8::Array> array1 = Nan::New<v8::Array>(sizes[1]); \
+     for (cur[1] = 0; cur[1] < sizes[1]; cur[1]++) { \
+       v8::Local<v8::Array> array2 = Nan::New<v8::Array>(sizes[2]); \
+       for (cur[2] = 0; cur[2] < sizes[2]; cur[2]++) { \
+         v8::Local<v8::Array> array3 = Nan::New<v8::Array>(sizes[3]); \
+         for (cur[3] = 0; cur[3] < sizes[3]; cur[3]++) { \
+           v8::Local<v8::Array> array4 = Nan::New<v8::Array>(sizes[4]); \
+           for (cur[4] = 0; cur[4] < sizes[4]; cur[4]++) { \
+            Nan::Set(array4, cur[4], get(mat, cur)); \
+          } \
+          Nan::Set(array3, cur[3], array3); \
+        } \
+        Nan::Set(array2, cur[2], array3); \
+       } \
+       Nan::Set(array1, cur[1], array2); \
+     } \
+    Nan::Set(rowArray, cur[0], array1); \
    } \
  }
 
@@ -673,9 +747,10 @@ NAN_METHOD(Mat::GetDataAsArray) {
   v8::Local<v8::Array> rowArray = Nan::New<v8::Array>(mat.size[0]);
   
 	switch (mat.dims) {
-	case 2:  FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT_2D, FF::matGet);   break;
+	case 2:  FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT_2D, FF::matGet);  break;
 	case 3:  FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT_3D, FF::matGet);  break;
-	// case 4:  FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT_4D, FF::matGet);  break;
+	case 4:  FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT_4D, FF::matGet);  break;
+	// case 5:  FF_MAT_APPLY_TYPED_OPERATOR(mat, rowArray, mat.type(), FF_JS_ARRAY_FROM_MAT_5D, FF::matGet);  break;
   default: return tryCatch.throwError("not implemented yet - mat dims:" + std::to_string(mat.dims));
   }
   info.GetReturnValue().Set(rowArray);
