@@ -39,6 +39,52 @@ export default function (args: TestContext) {
     //   assert.include(errMsg, 'Mat::New - Mat must have at least 2 Dimentions');
     // });
 
+    it('should detect non uniforme data in 3D Mat', () => {
+      let errMsg = '';
+      try {
+        const matData = [
+          [
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 0],
+          ], [
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0],
+          ]
+        ];
+        new cv.Mat(matData, cv.CV_8U);
+      } catch (err) {
+        errMsg = err.toString();
+      }
+      console.log(errMsg);
+      assert.include(errMsg, 'Mat cols must be of uniform length');
+    });
+
+    it('should detect non uniforme data in 4D Mat', () => {
+      let errMsg = '';
+      try {
+        const matData = [
+            [
+            [
+              [1, 0, 0],
+              [0, 1, 0],
+              [0, 0, 0],
+            ], [
+              [1, 0, 0],
+              [0, 1, 0],
+              [0, 0],
+            ]
+          ]
+        ];
+        new cv.Mat(matData, cv.CV_8U);
+      } catch (err) {
+        errMsg = err.toString();
+      }
+      console.log(errMsg);
+      assert.include(errMsg, 'Mat cols must be of uniform length');
+    });
+
     it('should throw columns must be of uniform length', () => {
       let errMsg = '';
       try {
@@ -51,7 +97,7 @@ export default function (args: TestContext) {
       } catch (err) {
         errMsg = err.toString();
       }
-      assert.include(errMsg, 'must be of uniform length, at column: 2');
+      assert.include(errMsg, 'must be of uniform length'); // , at column: 2
     });
 
     it('should throw invalid matType', () => {

@@ -2,7 +2,7 @@
 #include "Mat.h"
 #include "MatBindings.h"
 #include "coreBindings.h"
-// #include <iostream>
+#include <string>
 
 #ifdef HAVE_OPENCV_CALIB3D
 #include "../calib3d/MatCalib3d.h"
@@ -433,10 +433,10 @@ NAN_METHOD(Mat::New) {
       long rows = rowArray0->Length();
       long numCols = -1;
       for (uint i = 0; i < rows; i++) {
-        if (!Nan::Get(rowArray0, i).ToLocalChecked()->IsArray()) return tryCatch.throwError("Mat::New - Column should be an array, at column: " + std::to_string(i));
+        if (!Nan::Get(rowArray0, i).ToLocalChecked()->IsArray()) return tryCatch.throwError("Column should be an array, at column: " + std::to_string(i));
         v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray0, i).ToLocalChecked());
         if (numCols == -1) numCols = colArray->Length();
-        else if (numCols != colArray->Length()) return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i));
+        else if (numCols != colArray->Length()) return tryCatch.throwError("Mat cols must be of uniform length, at column: " + std::to_string(i));
       }
       // 	Mat (int rows, int cols, int type)
       cv::Mat mat = cv::Mat(rows, numCols, type);
@@ -445,15 +445,15 @@ NAN_METHOD(Mat::New) {
     } else if (dim == 3) {
       std::vector<int> sizes = { (int) rowArray0->Length(), -1, -1 };
       for (int i = 0; i < sizes[0]; i++) {
-        if (!Nan::Get(rowArray0, i).ToLocalChecked()->IsArray()) return tryCatch.throwError("Mat::New - Column should be an array, at column: " + std::to_string(i));
+        if (!Nan::Get(rowArray0, i).ToLocalChecked()->IsArray()) return tryCatch.throwError("Column should be an array, at column: " + std::to_string(i));
         v8::Local<v8::Array> rowArray1 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray0, i).ToLocalChecked());
         if (sizes[1] == -1) sizes[1] = rowArray1->Length();
-        else if (sizes[1] != (int)rowArray1->Length()) return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i));
+        else if (sizes[1] != (int)rowArray1->Length()) return tryCatch.throwError("Mat cols must be of uniform length, at column: " + std::to_string(i));
         for (int j = 0; j < sizes[1]; j++) {
-          if (!Nan::Get(rowArray1, j).ToLocalChecked()->IsArray()) return tryCatch.throwError("Mat::New - Column should be an array, at column: " + std::to_string(i) + ", " + std::to_string(j));
+          if (!Nan::Get(rowArray1, j).ToLocalChecked()->IsArray()) return tryCatch.throwError("Column should be an array, at column: " + std::to_string(i) + ", " + std::to_string(j));
           v8::Local<v8::Array> rowArray2 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray1, j).ToLocalChecked());
           if (sizes[2] == -1) sizes[2] = rowArray2->Length();
-          else if (sizes[2] != (int)rowArray2->Length()) return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(i) + ", " + std::to_string(j));
+          else if (sizes[2] != (int)rowArray2->Length()) return tryCatch.throwError("Mat cols must be of uniform length, at column: " + std::to_string(i) + ", " + std::to_string(j));
         }
       }
       // Mat (const std::vector< int > &sizes, int type)
@@ -462,23 +462,25 @@ NAN_METHOD(Mat::New) {
       self->setNativeObject(mat);
     } else if (dim == 4) {
       std::vector<int> sizes = { (int) rowArray0->Length(), -1, -1, -1 };
+      std::vector<v8::Local<v8::Array>> arrs(4);
       cv::Vec3i cur = cv::Vec3i(0, 0, 0);
-      
+
+      arrs[0] = rowArray0;
       for (cur[0] = 0; cur[0] < sizes[0]; cur[0]++) {
-        if (!Nan::Get(rowArray0, cur[0]).ToLocalChecked()->IsArray()) return tryCatch.throwError("Mat::New - All array in dimention 1 should be array, at position: " + std::to_string(cur[0]));
-        v8::Local<v8::Array> rowArray1 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray0, cur[0]).ToLocalChecked());
-        if (sizes[1] == -1) sizes[1] = rowArray1->Length();
-        else if (sizes[1] != (int)rowArray1->Length()) return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(cur[0]) + " find " + std::to_string(rowArray1->Length()) + " expecting " + std::to_string(sizes[1]));
+        if (!Nan::Get(arrs[0], cur[0]).ToLocalChecked()->IsArray()) return tryCatch.throwError("All array in dimension 1 should be array, at position: " + std::to_string(cur[0]));
+        arrs[1] = v8::Local<v8::Array>::Cast(Nan::Get(arrs[0], cur[0]).ToLocalChecked());
+        if (sizes[1] == -1) sizes[1] = arrs[1]->Length();
+        else if (sizes[1] != (int)arrs[1]->Length()) return tryCatch.throwError("Mat cols must be of uniform length, at column: " + std::to_string(cur[0]) + " find " + std::to_string(arrs[1]->Length()) + " expecting " + std::to_string(sizes[1]));
         for (cur[1] = 0; cur[1] < sizes[1]; cur[1]++) {
-          if (!Nan::Get(rowArray1, cur[1]).ToLocalChecked()->IsArray()) return tryCatch.throwError("Mat::New - All array in dimention 2 should be array, at position:" + std::to_string(cur[0]) + ", " + std::to_string(cur[1]));
-          v8::Local<v8::Array> rowArray2 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray1, cur[1]).ToLocalChecked());
-          if (sizes[2] == -1) sizes[2] = rowArray2->Length();
-          else if (sizes[2] != (int)rowArray2->Length()) return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(cur[0]) + ", " + std::to_string(cur[1]) + " find " + std::to_string(rowArray2->Length()) + " expecting " + std::to_string(sizes[2]));
+          if (!Nan::Get(arrs[1], cur[1]).ToLocalChecked()->IsArray()) return tryCatch.throwError("All array in dimension 2 should be array, at position:" + std::to_string(cur[0]) + ", " + std::to_string(cur[1]));
+          arrs[2] = v8::Local<v8::Array>::Cast(Nan::Get(arrs[1], cur[1]).ToLocalChecked());
+          if (sizes[2] == -1) sizes[2] = arrs[2]->Length();
+          else if (sizes[2] != (int)arrs[2]->Length()) return tryCatch.throwError("Mat cols must be of uniform length, at column: " + std::to_string(cur[0]) + ", " + std::to_string(cur[1]) + " find " + std::to_string(arrs[2]->Length()) + " expecting " + std::to_string(sizes[2]));
           for (cur[2] = 0; cur[2] < sizes[2]; cur[2]++) {
-            if (!Nan::Get(rowArray2, cur[2]).ToLocalChecked()->IsArray()) return tryCatch.throwError("Mat::New - All array in dimention 3 should be array, at position: " + std::to_string(cur[0]) + ", " + std::to_string(cur[1]) + "," + std::to_string(cur[2]));
-            v8::Local<v8::Array> rowArray3 = v8::Local<v8::Array>::Cast(Nan::Get(rowArray2, cur[2]).ToLocalChecked());
-            if (sizes[3] == -1) sizes[3] = rowArray3->Length();
-            else if (sizes[3] != (int)rowArray3->Length()) return tryCatch.throwError("Mat::New - Mat cols must be of uniform length, at column: " + std::to_string(cur[0]) + ", " + std::to_string(cur[1]) + ", " + std::to_string(cur[2]) + " find " + std::to_string(rowArray3->Length()) + " expecting " + std::to_string(sizes[3]));
+            if (!Nan::Get(arrs[2], cur[2]).ToLocalChecked()->IsArray()) return tryCatch.throwError("All array in dimension 3 should be array, at position: " + std::to_string(cur[0]) + ", " + std::to_string(cur[1]) + "," + std::to_string(cur[2]));
+            arrs[3] = v8::Local<v8::Array>::Cast(Nan::Get(arrs[2], cur[2]).ToLocalChecked());
+            if (sizes[3] == -1) sizes[3] = arrs[3]->Length();
+            else if (sizes[3] != (int)arrs[3]->Length()) return tryCatch.throwError("Mat cols must be of uniform length, at column: " + std::to_string(cur[0]) + ", " + std::to_string(cur[1]) + ", " + std::to_string(cur[2]) + " find " + std::to_string(arrs[3]->Length()) + " expecting " + std::to_string(sizes[3]));
           }
         }
       }
@@ -595,7 +597,6 @@ NAN_METHOD(Mat::At) {
   cv::Mat matSelf = Mat::unwrapSelf(info);
   v8::Local<v8::Value> val;
   v8::Local<v8::Value> jsVal;
-
   if (info[0]->IsArray()) {
     if ((long)v8::Local<v8::Array>::Cast(info[0])->Length() != matSelf.dims) {
 		  tryCatch.throwError("expected array length to be equal to the dims, get " + std::to_string((long)v8::Local<v8::Array>::Cast(info[0])->Length()) + " expecting " + std::to_string(matSelf.dims));
@@ -620,8 +621,37 @@ NAN_METHOD(Mat::At) {
       jsVec = Vec4::Converter::wrap(cv::Vec4d(FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 0).ToLocalChecked()), FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 1).ToLocalChecked()), FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 2).ToLocalChecked()), FF::DoubleConverter::unwrapUnchecked(Nan::Get(vec, 3).ToLocalChecked())));
     }
     jsVal = jsVec;
-  }
-  else {
+  } else {
+    //  std::string str;
+    //  if (matSelf.dims == 4) {
+    //    auto sizes = matSelf.size;
+    //    std::vector<v8::Local<v8::Array>> arrs(4);
+    //    // cv::Vec4i
+    //    // cv::Vec<int, 4> cur = cv::Vec4i(0, 0, 0, 0);
+    //    std::vector<int> cur(4);
+    //    //  = cv::Vec4i(0, 0, 0, 0);
+    //    str += "Iter ";
+    //    str += std::to_string(sizes[0]);
+    //    str += "\n";
+    //    for (cur[0] = 0; cur[0] < sizes[0]; cur[0]++) {
+    //      for (cur[1] = 0; cur[1] < sizes[1]; cur[1]++) {
+    //        for (cur[2] = 0; cur[2] < sizes[2]; cur[2]++) {
+    //          for (cur[3] = 0; cur[3] < sizes[3]; cur[3]++) {
+    //            int* ptr = (int*)cur.data();
+    //            //cv::Vec4i a;
+    //            // Point b;
+    //         		// , 0, Nan::New(mat.at< cv::Vec<type, 4> >(idx)[0]));
+    //            auto value = matSelf.at< cv::Vec<double, 4> >(ptr);
+    //            str += std::to_string(value[0]);
+    //            str += ", ";
+    //            // Mat((int)sizes.size(), (int*)sizes.begin(), traits::Type<_Tp>::value, (uchar*)list.begin()).copyTo(*this);
+    //          }
+    //          str += "\n";
+    //        }
+    //      }
+    //    }
+    //  }
+    // tryCatch.throwError(str);
     jsVal = v8::Local<v8::Value>::Cast(val);
   }
   info.GetReturnValue().Set(jsVal);

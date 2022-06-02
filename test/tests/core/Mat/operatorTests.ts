@@ -39,6 +39,35 @@ export default function (args: TestContext) {
       assertMetaData(res)(2, 2, cv.CV_8U);
       assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
+
+    it('add matrices 3D', () => {
+      const mat = new cv.Mat([[
+        [10, 20],
+        [10, 20],
+      ]], cv.CV_8U);
+      const expectedResult = [[
+        [20, 40],
+        [20, 40],
+      ]];
+      const res = mat.add(mat);
+      // assertMetaData(res)(2, 2, cv.CV_8U);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
+    });
+
+    it('add matrices 4D', () => {
+      const mat = new cv.Mat([[[
+        [10, 20],
+        [10, 20],
+      ]]], cv.CV_8U);
+      const expectedResult = [[[
+        [20, 40],
+        [20, 40],
+      ]]];
+      const res = mat.add(mat);
+      // assertMetaData(res)(2, 2, cv.CV_8U);
+      assertDataDeepEquals(res.getDataAsArray(), expectedResult);
+    });
+
   });
 
   describe('sub', () => {
