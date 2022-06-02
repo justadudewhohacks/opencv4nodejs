@@ -33,7 +33,9 @@ export default function (args: TestContext) {
       } catch (err) {
         errMsg = err.toString();
       }
-      assert.include(errMsg, 'Column should be an array, at column: 0');
+      // old Error message wa 'Column should be an array, at column: 0'
+      // changed with multi dimmention support.
+      assert.include(errMsg, 'Mat::New - Mat must have at least 2 Dimentions');
     });
 
     it('should throw columns must be of uniform length', () => {
