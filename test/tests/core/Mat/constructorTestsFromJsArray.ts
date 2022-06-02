@@ -25,18 +25,19 @@ export default function (args: TestContext) {
   };
 
   describe('constructor from js array', () => {
-    it('should throw column must be an array', () => {
-      let errMsg = '';
-      try {
-        const matData = [1, 1, 1];
-        new cv.Mat(matData as any, cv.CV_8U);
-      } catch (err) {
-        errMsg = err.toString();
-      }
-      // old Error message wa 'Column should be an array, at column: 0'
-      // changed with multi dimmention support.
-      assert.include(errMsg, 'Mat::New - Mat must have at least 2 Dimentions');
-    });
+    // since v6.2.0 if args[0] is a simple array it is read as an sizes[]
+    // it('should throw column must be an array', () => {
+    //   let errMsg = '';
+    //   try {
+    //     const matData = [1, 1, 1];
+    //     new cv.Mat(matData as any, cv.CV_8U);
+    //   } catch (err) {
+    //     errMsg = err.toString();
+    //   }
+    //   // old Error message wa 'Column should be an array, at column: 0'
+    //   // changed with multi dimmention support.
+    //   assert.include(errMsg, 'Mat::New - Mat must have at least 2 Dimentions');
+    // });
 
     it('should throw columns must be of uniform length', () => {
       let errMsg = '';
