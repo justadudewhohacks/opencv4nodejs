@@ -293,7 +293,6 @@ NAN_MODULE_INIT(Mat::Init) {
 	} \
 }
 
-
 #define FF_MAT_FROM_JS_ARRAY_4D(mat, rowArray, put) { \
   cv::MatSize sizes = mat.size; \
   cv::Vec4i cur = cv::Vec4b(0, 0, 0, 0); \
@@ -303,7 +302,7 @@ NAN_MODULE_INIT(Mat::Init) {
       v8::Local<v8::Array> colArray2 = v8::Local<v8::Array>::Cast(Nan::Get(colArray, cur[1]).ToLocalChecked()); \
   		for (cur[2] = 0; cur[2] < sizes[2]; cur[2]++) { \
         v8::Local<v8::Array> colArray3 = v8::Local<v8::Array>::Cast(Nan::Get(colArray2, cur[2]).ToLocalChecked()); \
-      	for (cur[2] = 0; cur[2] < sizes[2]; cur[2]++) { \
+      	for (cur[3] = 0; cur[3] < sizes[3]; cur[3]++) { \
           put(mat, Nan::Get(colArray3, cur[2]).ToLocalChecked(), cur); \
 	  	  } \
    	  } \
@@ -647,6 +646,26 @@ NAN_METHOD(Mat::SetToAsync) {
      } \
      Nan::Set(rowArray, r, colArray); \
    }
+
+ #define FF_JS_ARRAY_FROM_MAT_4D(mat, rowArray, get) { \
+   cv::MatSize sizes = mat.size; \
+   cv::Vec4i cur = cv::Vec4b(0, 0, 0, 0); \
+   for (cur[0] = 0; cur[0] < size[0]; cur[0]++) { \
+     v8::Local<v8::Array> colArray = Nan::New<v8::Array>(mat.size[1]); \
+     for (cur[1] = 0; cur[1] < size[1]; cur[1]++) { \
+       v8::Local<v8::Array> depthArray = Nan::New<v8::Array>(mat.size[2]); \
+       for (cur[2] = 0; cur[2] < size[2]; cur[2]++) { \
+         v8::Local<v8::Array> deptherArray = Nan::New<v8::Array>(mat.size[3]); \
+         for (cur[3] = 0; cur[3] < size[3]; cur[3]++) { \
+          Nan::Set(deptherArray, z, get(mat, cur)); \
+        } \
+        Nan::Set(depthArray, c, deptherArray); \
+       } \
+       Nan::Set(colArray, c, depthArray); \
+     } \
+     Nan::Set(rowArray, r, colArray); \
+   } \
+ }
 
 NAN_METHOD(Mat::GetDataAsArray) {
 	FF::TryCatch tryCatch("Mat::GetDataAsArray");
