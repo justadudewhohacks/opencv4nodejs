@@ -64,6 +64,15 @@ export 	function namedWindow(winname: string, flags?: number): void;
 //  
 // void 	cv::resizeWindow (const String &winname, int width, int height)
 //  	Resizes the window to the specified size. More...
+/**
+ * Resize a window.
+ * https://docs.opencv.org/4.0.0/d7/dfc/group__highgui.html#gab4e70200bf54be967129cf08ac5e18bc
+ * @param winname	Name of the window.
+ * @param width	The new width of the window.
+ * @param height	The new height of the window.
+ */
+ export 	function resizeWindow(winname: string, width: number, height: number): void;
+
 //  
 // void 	cv::resizeWindow (const String &winname, const cv::Size &size)
 //  
