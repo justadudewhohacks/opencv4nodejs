@@ -16,7 +16,7 @@ NAN_MODULE_INIT(Highgui::Init) {
     Nan::SetMethod(target, "setWindowTitle", setWindowTitle);
     Nan::SetMethod(target, "moveWindow", moveWindow);
     Nan::SetMethod(target, "namedWindow", namedWindow);
-
+    Nan::SetMethod(target, "resizeWindow", resizeWindow);
 };
 
 NAN_METHOD(Highgui::setWindowProperty) {
@@ -94,7 +94,6 @@ NAN_METHOD(Highgui::getWindowProperty) {
   info.GetReturnValue().Set(Nan::New(cv::getWindowProperty(FF::StringConverter::unwrapUnchecked(info[0]), prop_id)));
 }
 
-
 NAN_METHOD(Highgui::namedWindow) {
   FF::TryCatch tryCatch("Highgui::namedWindow");
 
@@ -107,6 +106,28 @@ NAN_METHOD(Highgui::namedWindow) {
   FF::IntConverter::optArg(1, &flags, info);
   FF::StringConverter::arg(0, &winName, info);
   cv::namedWindow(FF::StringConverter::unwrapUnchecked(info[0]), flags);
+}
+
+NAN_METHOD(Highgui::resizeWindow) {
+  FF::TryCatch tryCatch("Highgui::resizeWindow");
+  int width;
+  int height;
+
+  if (!info[0]->IsString()) {
+    return tryCatch.throwError("expected arg0 to be the window name");
+  }
+
+  if (!info[1]->IsNumber()) {
+    return tryCatch.throwError("expected arg1 (width) to be a number");
+  }
+
+  if (!info[2]->IsNumber()) {
+    return tryCatch.throwError("expected arg2 (height) to be a number");
+  }
+
+  FF::IntConverter::arg(1, &width, info);
+  FF::IntConverter::arg(2, &height, info);
+  cv::resizeWindow(FF::StringConverter::unwrapUnchecked(info[0]), width, height);
 }
 
 
