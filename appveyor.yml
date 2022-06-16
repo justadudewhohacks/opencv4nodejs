@@ -34,26 +34,26 @@ environment:
     #   OPENCVV: 4.5.4
     #   NODEV: 16
     #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    # - 
-    #   OPENCVV: 4.4.0
-    #   NODEV: 16
-    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    # - 
-    #   OPENCVV: 4.3.0
-    #   NODEV: 16
-    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    # - 
-    #   OPENCVV: 4.2.0
-    #   NODEV: 16
-    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    - 
+      OPENCVV: 4.4.0
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    - 
+      OPENCVV: 4.3.0
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    - 
+      OPENCVV: 4.2.0
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     # - 
     #   OPENCVV: 4.1.2
     #   NODEV: 16
     #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    # - 
-    #   OPENCVV: 3.4.16
-    #   NODEV: 16
-    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    - 
+      OPENCVV: 3.4.16
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     #- 
     #  OPENCVV: 3.4.15
     #  NODEV: 16
@@ -66,10 +66,10 @@ environment:
     #  OPENCVV: 3.4.0
     #  NODEV: 16
     #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    #- 
-    #  OPENCVV: 3.3.1
-    #  NODEV: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    - 
+      OPENCVV: 3.3.1
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     #- # minimal supported value
     #  OPENCVV: 3.2.0
     #  NODEV: 16
