@@ -54,7 +54,7 @@
   "dependencies": {
     "@u4/opencv-build": "^0.5.3",
     "glob": "^8.0.3",
-    "nan": "^2.15.0",
+    "nan": "^2.16.0",
     "native-node-utils": "^0.2.7",
     "node-gyp": "^9.0.0",
     "npmlog": "^6.0.2",
@@ -63,21 +63,21 @@
   "devDependencies": {
     "@types/glob": "^7.2.0",
     "@types/mri": "^1.1.1",
-    "@types/node": "^17.0.33",
+    "@types/node": "^18.0.0",
     "@types/npmlog": "^4.1.4",
     "@types/progress": "^2.0.5",
-    "@typescript-eslint/eslint-plugin": "^5.23.0",
-    "@typescript-eslint/parser": "^5.23.0",
+    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/parser": "^5.28.0",
     "axios": "^0.27.2",
-    "eslint": "^8.15.0",
+    "eslint": "^8.18.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.29.4",
-    "eslint-plugin-react-hooks": "^4.5.0",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "progress": "^2.0.3",
     "rimraf": "^3.0.2",
-    "typescript": "^4.6.4"
+    "typescript": "^4.7.4"
   },
   "files": [
     "cc",
