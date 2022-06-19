@@ -1,4 +1,4 @@
-name: MSBuild
+name: Build using prebuild openCV
 
 on:
   push:

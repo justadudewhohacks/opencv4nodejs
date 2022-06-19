@@ -1,7 +1,11 @@
-name: build all from source
+name: Build all from source
 
 on:
- workflow_dispatch:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
       name:
@@ -12,6 +16,7 @@ on:
 env:
   SOLUTION_FILE_PATH: .
   BUILD_CONFIGURATION: Release
+  OPENCV_BUILD_ROOT: D:/opencv
 
 permissions:
   contents: read
