@@ -14,8 +14,12 @@ shallow_clone: true
 
 # what combinations to test
 environment:
-  OPENCV3_LATEST: 3.4.16
-  OPENCV4_LATEST: 4.5.4
+  OPENCV3_LATEST: 3.4.16 # 2021-10-11
+  OPENCV4_LATEST: 4.6.0 # 2022-06-12
+  # OPENCV3_N-1: 3.4.16 # 2021-10-11
+  OPENCV4_N-1: 4.5.5 # 2021-12-30
+  OPENCV4_N-2: 4.4.0 # 2020-07-18
+
   PYTHON_VERSION: 3.8
   PYTHON: "C:\\Python38-x64"
   # use self build
@@ -23,132 +27,39 @@ environment:
 
   matrix:
     - 
-      OPENCVV: 4.5.5
+      OPENCVV: "%OPENCV4_LATEST%"
       NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    # - 
-    #   OPENCVV: 4.5.5
-    #   NODEV: 14
-    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    # - 
-    #   OPENCVV: 4.5.4
-    #   NODEV: 16
-    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
     - 
-      OPENCVV: 4.4.0
+      OPENCVV: "%OPENCV4_N-1"
       NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
     - 
-      OPENCVV: 4.3.0
+      OPENCVV: "%OPENCV4_N-2"
       NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
     - 
-      OPENCVV: 4.2.0
+      OPENCVV: "%OPENCV3_LATEST%"
       NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    # - 
-    #   OPENCVV: 4.1.2
-    #   NODEV: 16
-    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 3.4.16
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    #- 
-    #  OPENCVV: 3.4.15
-    #  NODEV: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    #- 
-    #  OPENCVV: 3.4.6
-    #  NODEV: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    #- 
-    #  OPENCVV: 3.4.0
-    #  NODEV: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - 
-      OPENCVV: 3.3.1
-      NODEV: 16
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    #- # minimal supported value
-    #  OPENCVV: 3.2.0
-    #  NODEV: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
 
-    #- 
-    #  OPENCVV: 4.5.5
-    #  NODEV: 14
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #- 
-    #  OPENCVV: 4.5.4
-    #  NODEV: 14
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #- 
-    #  OPENCVV: 4.4.0
-    #  NODEV: 14
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #- 
-    #  OPENCVV: 4.3.0
-    #  NODEV: 14
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #- 
-    #  OPENCVV: 4.2.0
-    #  NODEV: 14
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #- 
-    #  OPENCVV: 4.1.2
-    #  NODEV: 14
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #- 
-    #  OPENCVV: 3.4.16
-    #  NODEV: 14
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #- 
-    #  OPENCVV: 3.4.15
-    #  NODEV: 14
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #- 
-    #  OPENCVV: 3.4.6
-    #  NODEV: 14
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #- 
-    #  OPENCVV: 3.4.0
-    #  NODEV: 14
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #- 
-    #  OPENCVV: 3.3.1
-    #  NODEV: 14
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #- # minimal supported value
-    #  OPENCVV: 3.2.0
-    #  NODEV: 14
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
-    # - 
-    #   OPENCVV: "%OPENCV3_LATEST%"
-    #   NODEV: 16
-    #   APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    #- 
-    #  OPENCVV: 4.5.5
-    #  NODEV: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
-    #- 
-    #  OPENCVV: "%OPENCV4_LATEST%"
-    #  NODEV: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
-    #- 
-    #  OPENCVV: "%OPENCV3_LATEST%"
-    #  NODEV: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
-    #- 
-    #  OPENCVV: "%OPENCV4_LATEST%"
-    #  NODEV: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #- 
-    #  OPENCVV: "%OPENCV3_LATEST%"
-    #  NODEV: 16
-    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #  # BUILD_TASK: "ENVS"
+    - 
+      OPENCVV: "%OPENCV4_LATEST%"
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    - 
+      OPENCVV: "%OPENCV4_N-1"
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    - 
+      OPENCVV: "%OPENCV4_N-2"
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    - 
+      OPENCVV: "%OPENCV3_LATEST%"
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 
 install:
   - cmd: choco install OpenCV -y --version %OPENCVV%
