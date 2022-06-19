@@ -1,5 +1,8 @@
 # changelog
 
+## Version 6.2.0
+* add support for 3D and 4D Mat.
+
 ## Version 6.1.6
 * fix issues/33 
 

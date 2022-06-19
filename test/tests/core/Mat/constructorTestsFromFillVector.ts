@@ -16,8 +16,8 @@ export default function (args: TestContext) {
 
   const rows = 4;
   const cols = 3;
-  const matDataFromValue = (val) => Array(rows).fill(Array(cols).fill(val));
-  const createAndAssertMatFilled = (type, value) => {
+  const matDataFromValue = (val: number | number[]) => Array(rows).fill(Array(cols).fill(val));
+  const createAndAssertMatFilled = (type: number, value: number | number[]) => {
     const mat = new cv.Mat(rows, cols, type, value);
 
     assertMetaData(mat)(rows, cols, type);
@@ -27,6 +27,12 @@ export default function (args: TestContext) {
       assertDataDeepEquals(matDataFromValue(value), mat.getDataAsArray());
     }
   };
+
+  describe('constructor fill a 3D Mat', () => {
+    const sizes = [2,3,4];
+    const mat = new cv.Mat(sizes, cv.CV_8UC1);
+    assertDataDeepEquals(mat.sizes, sizes);
+  })
 
   describe('constructor fill with value', () => {
     it('should initialize CV_8UC1 with correct data', () => {

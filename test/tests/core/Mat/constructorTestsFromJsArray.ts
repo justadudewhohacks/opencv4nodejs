@@ -25,15 +25,64 @@ export default function (args: TestContext) {
   };
 
   describe('constructor from js array', () => {
-    it('should throw column must be an array', () => {
+    // since v6.2.0 if args[0] is a simple array it is read as an sizes[]
+    // it('should throw column must be an array', () => {
+    //   let errMsg = '';
+    //   try {
+    //     const matData = [1, 1, 1];
+    //     new cv.Mat(matData as any, cv.CV_8U);
+    //   } catch (err) {
+    //     errMsg = err.toString();
+    //   }
+    //   // old Error message wa 'Column should be an array, at column: 0'
+    //   // changed with multi dimmention support.
+    //   assert.include(errMsg, 'Mat::New - Mat must have at least 2 Dimentions');
+    // });
+
+    it('should detect non uniforme data in 3D Mat', () => {
       let errMsg = '';
       try {
-        const matData = [1, 1, 1];
-        new cv.Mat(matData as any, cv.CV_8U);
+        const matData = [
+          [
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 0],
+          ], [
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0],
+          ]
+        ];
+        new cv.Mat(matData, cv.CV_8U);
       } catch (err) {
         errMsg = err.toString();
       }
-      assert.include(errMsg, 'Column should be an array, at column: 0');
+      console.log(errMsg);
+      assert.include(errMsg, 'Mat cols must be of uniform length');
+    });
+
+    it('should detect non uniforme data in 4D Mat', () => {
+      let errMsg = '';
+      try {
+        const matData = [
+            [
+            [
+              [1, 0, 0],
+              [0, 1, 0],
+              [0, 0, 0],
+            ], [
+              [1, 0, 0],
+              [0, 1, 0],
+              [0, 0],
+            ]
+          ]
+        ];
+        new cv.Mat(matData, cv.CV_8U);
+      } catch (err) {
+        errMsg = err.toString();
+      }
+      console.log(errMsg);
+      assert.include(errMsg, 'Mat cols must be of uniform length');
     });
 
     it('should throw columns must be of uniform length', () => {
@@ -48,7 +97,7 @@ export default function (args: TestContext) {
       } catch (err) {
         errMsg = err.toString();
       }
-      assert.include(errMsg, 'must be of uniform length, at column: 2');
+      assert.include(errMsg, 'must be of uniform length'); // , at column: 2
     });
 
     it('should throw invalid matType', () => {
