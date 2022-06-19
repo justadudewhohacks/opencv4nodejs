@@ -12,6 +12,7 @@ env:
   OPENCV_INCLUDE_DIR: c:\tools\opencv\build\include
   OPENCV_LIB_DIR: c:\tools\opencv\build\x64\vc14\lib
   OPENCV_BIN_DIR: c:\tools\opencv\build\x64\vc14\bin
+  OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
@@ -58,10 +59,6 @@ jobs:
     - name: install deps in test
       working-directory: ./test
       run: pnpm install
-
-    - name: call opencv-build-npm
-      working-directory: ./test
-      run: opencv-build-npm
 
     - name: run test-appveyor test
       working-directory: ./test
