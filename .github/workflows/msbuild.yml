@@ -24,7 +24,16 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
-
+    strategy:
+      matrix:
+        opencv_version:
+          - 4.5.5
+          - 3.4.16
+        node_version:
+          - 14
+          - 18
+        architecture:
+          - x64
     steps:
     - uses: actions/checkout@v3
 
@@ -34,7 +43,8 @@ jobs:
         version: 7.3.0
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: ${{ matrix.node_version }}
+        architecture: ${{ matrix.architecture }}
         cache: 'pnpm'
     
     - name: Add MSBuild to PATH
