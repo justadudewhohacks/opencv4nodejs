@@ -38,14 +38,14 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
 
     - name: run pnpm install
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: pnpm run prepack
       run: pnpm run prepack
 
     - name: install deps in test
       working-directory: ./test
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: build OpenCV
       working-directory: ./test
