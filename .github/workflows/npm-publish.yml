@@ -21,18 +21,18 @@ jobs:
       - name: Install libopencv
         run: sudo apt-get install -y libopencv-dev libopencv-features2d-dev
       - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 7.3.0
+      #- uses: pnpm/action-setup@v2
+      #  with:
+      #    version: 7.3.0
       - uses: actions/setup-node@v3
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-          cache: 'pnpm'
-      - run: pnpm install
+          cache: 'npm'
+      - run: npm install
       - run: cd test
-      - run: pnpm install
-      - run: pnpm run test
+      - run: npm install ..
+      - run: npm run test
       - run: cd ..
 #      - run: pnpm publish
 #        env:
