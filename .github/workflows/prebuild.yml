@@ -76,14 +76,14 @@ jobs:
        value: $env:PATH;$env:OPENCV_BIN_DIR
      
     - name: run pnpm install
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: pnpm run prepack
       run: pnpm run prepack
 
     - name: install deps in test
       working-directory: ./test
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: run test-appveyor test
       working-directory: ./test

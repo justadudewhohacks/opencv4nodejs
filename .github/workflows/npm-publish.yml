@@ -29,9 +29,9 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
           cache: 'pnpm'
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
       - run: pnpm run prepack
-      - run: cd test && pnpm install ..
+      - run: cd test && pnpm install --frozen-lockfile
       - run: cd test && pnpm run test
       - run: pnpm publish
         env:
