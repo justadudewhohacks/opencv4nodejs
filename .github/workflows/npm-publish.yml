@@ -1,7 +1,7 @@
 # This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
 # For more information see: https://help.github.com/actions/language-and-framework-guides/publishing-nodejs-packages
 
-name: Node.js Package
+name: publish on npmjs
 
 on:
   release:
@@ -21,18 +21,18 @@ jobs:
       - name: Install libopencv
         run: sudo apt-get install -y libopencv-dev libopencv-features2d-dev
       - uses: actions/checkout@v3
-      #- uses: pnpm/action-setup@v2
-      #  with:
-      #    version: 7.3.0
-      # - uses: actions/setup-node@v3
-      #   with:
-      #     node-version: 16
-      #     registry-url: https://registry.npmjs.org/
-      #     cache: 'npm'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 7.3.0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+          cache: 'pnpm'
       - run: node --version
-      - run: npm install
-      - run: cd test && npm install ..
-      - run: cd test && npm run test
+      - run: pnpm install
+      - run: cd test && pnpm install ..
+      - run: cd test && pnpm run test
 #      - run: pnpm publish
 #        env:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
