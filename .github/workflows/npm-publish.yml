@@ -31,10 +31,8 @@ jobs:
       #     cache: 'npm'
       - run: node --version
       - run: npm install
-      - run: cd test
-      - run: npm install ..
-      - run: npm run test
-      - run: cd ..
+      - run: cd test && npm install ..
+      - run: cd test && npm run test
 #      - run: pnpm publish
 #        env:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
