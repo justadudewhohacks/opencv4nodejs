@@ -59,6 +59,10 @@ jobs:
       working-directory: ./test
       run: pnpm install
 
+    - name: call opencv-build-npm
+      working-directory: ./test
+      run: opencv-build-npm
+
     - name: run test-appveyor test
       working-directory: ./test
       run: pnpm run test-appveyor
