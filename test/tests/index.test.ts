@@ -106,7 +106,8 @@ describe('cv', () => {
   // })
 
   it('all modules should be built', () => {
-    builtModules.forEach((m) => expect(cv.modules).to.have.property(m));
+    // xfeatures2d is a non free module not available on debian disto
+    builtModules.filter((m) => m !== 'xfeatures2d').forEach((m) => expect(cv.modules).to.have.property(m));
   });
   if (toTest.core && cv.modules.core) {
     describe('core', () => coreTestSuite({ cv, utils, getTestImg }));
