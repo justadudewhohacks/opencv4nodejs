@@ -34,6 +34,6 @@ jobs:
       - run: pnpm run prepack
       - run: cd test && pnpm install ..
       - run: cd test && pnpm run test
-#      - run: pnpm publish
-#        env:
-#          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+      - run: pnpm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
