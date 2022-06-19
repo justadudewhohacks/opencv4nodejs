@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install libopencv
-        run: sudo apt-get install -y libopencv-dev
+        run: sudo apt-get install -y libopencv-dev libopencv-features2d-dev
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
         with:
@@ -29,9 +29,11 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run install
+      - run: pnpm install
+      - run: cd test
+      - run: pnpm install
       - run: pnpm run test
+      - run: cd ..
 #      - run: pnpm publish
 #        env:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}

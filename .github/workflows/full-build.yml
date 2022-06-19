@@ -1,10 +1,10 @@
 name: Build all from source
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  # push:
+  #   branches: [ "master" ]
+  # pull_request:
+  #   branches: [ "master" ]
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
