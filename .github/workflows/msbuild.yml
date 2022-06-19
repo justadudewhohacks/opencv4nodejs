@@ -27,7 +27,8 @@ jobs:
     strategy:
       matrix:
         opencv_version:
-          - 4.5.5
+          - 4.5.5 # 2019-12-23 ubuntu 22.04
+          - 4.2.0 # 2019-12-23 ubuntu 20.04
           # - 3.4.16
         node_version:
           # - 14
