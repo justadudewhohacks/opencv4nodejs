@@ -6,28 +6,32 @@ name: Node.js Package
 on:
   release:
     types: [created]
+  workflow_dispatch:
+
+env:
+  OPENCV_INCLUDE_DIR: /usr/include/opencv4/
+  OPENCV_LIB_DIR: /usr/lib/x86_64-linux-gnu/
+  OPENCV_BIN_DIR: /usr/bin/
+  OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Install xmllint
-        run: sudo apt-get install -y opencv
+      - name: Install libopencv
+        run: sudo apt-get install -y libopencv-dev
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v2
         with:
-          node-version: 16
-      - run: pnpm run test
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+          version: 7.3.0
       - uses: actions/setup-node@v3
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      - run: pnpm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run install
+      - run: pnpm run test
+#      - run: pnpm publish
+#        env:
+#          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
