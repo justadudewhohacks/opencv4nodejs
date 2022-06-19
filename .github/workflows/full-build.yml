@@ -21,8 +21,6 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
-
-    - uses: actions/checkout@v3
     - uses: pnpm/action-setup@v2
       with:
         version: 7.3.0
@@ -46,7 +44,7 @@ jobs:
 
     - name: build OpenCV
       working-directory: ./test
-      run: build-opencv --version ${{ github.event.inputs.name }} rebuild
+      run: pnpm build-opencv --version ${{ github.event.inputs.name }} rebuild
 
     - name: run test-appveyor test
       working-directory: ./test
