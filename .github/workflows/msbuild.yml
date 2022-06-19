@@ -50,17 +50,15 @@ jobs:
        value: $env:PATH;$env:OPENCV_BIN_DIR
      
     - name: run pnpm install
-      working-directory: ${{env.GITHUB_WORKSPACE}}
       run: pnpm install
 
     - name: pnpm run prepack
-      working-directory: ${{env.GITHUB_WORKSPACE}}
       run: pnpm run prepack
 
     - name: install deps in test
-      working-directory: ${{env.GITHUB_WORKSPACE}}\test
+      working-directory: ./test
       run: pnpm install
 
     - name: run test-appveyor test
-      working-directory: ${{env.GITHUB_WORKSPACE}}\test
+      working-directory: ./test
       run: pnpm run test-appveyor
