@@ -1,7 +1,9 @@
 # changelog
 
 ## Version 6.2.0
-* add support for 3D and 4D Mat.
+* PR https://github.com/UrielCh/opencv4nodejs/pull/37
+* add support for 1, 3 and 4 dimmentionals Mat
+* improve debug binding usability
 
 ## Version 6.1.6
 * fix issues/33 
