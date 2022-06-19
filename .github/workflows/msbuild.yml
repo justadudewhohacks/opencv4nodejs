@@ -28,9 +28,9 @@ jobs:
       matrix:
         opencv_version:
           - 4.5.5
-          - 3.4.16
+          # - 3.4.16
         node_version:
-          - 14
+          # - 14
           - 18
         architecture:
           - x64

@@ -1,0 +1,53 @@
+name: build all from source
+
+on:
+ workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        description: 'build all from source'
+        default: '4.6.0'
+        required: true
+
+env:
+  SOLUTION_FILE_PATH: .
+  BUILD_CONFIGURATION: Release
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 7.3.0
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'pnpm'
+    
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: run pnpm install
+      run: pnpm install
+
+    - name: pnpm run prepack
+      run: pnpm run prepack
+
+    - name: install deps in test
+      working-directory: ./test
+      run: pnpm install
+
+    - name: build OpenCV
+      working-directory: ./test
+      run: build-opencv --version ${{ github.event.inputs.name }} rebuild
+
+    - name: run test-appveyor test
+      working-directory: ./test
+      run: pnpm run test-appveyor
