@@ -31,6 +31,7 @@ jobs:
           cache: 'pnpm'
       - run: node --version
       - run: pnpm install
+      - run: pnpm run prepack
       - run: cd test && pnpm install ..
       - run: cd test && pnpm run test
 #      - run: pnpm publish
