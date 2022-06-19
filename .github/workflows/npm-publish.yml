@@ -29,7 +29,6 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
           cache: 'pnpm'
-      - run: node --version
       - run: pnpm install
       - run: pnpm run prepack
       - run: cd test && pnpm install ..

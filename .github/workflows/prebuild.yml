@@ -3,8 +3,24 @@ name: Build using prebuild openCV
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - "cc/**"
+      - "install/**"
+      - "lib/**"
+      - "test/**"
+      - "typings/**"
+      - "package.json"
+      - ".github/workflows/prebuild.yml"
   pull_request:
     branches: [ "master" ]
+    paths:
+      - "cc/**"
+      - "install/**"
+      - "lib/**"
+      - "test/**"
+      - "typings/**"
+      - "package.json"
+      - ".github/workflows/prebuild.yml"
 
 env:
   # Path to the solution file relative to the root of the project.
