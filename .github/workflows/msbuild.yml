@@ -26,6 +26,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Setup Node
+    - uses: actions/checkout@v3
     - uses: pnpm/action-setup@v2
       with:
         version: 7.3.0
@@ -36,10 +39,6 @@ jobs:
     
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
-
-    - name: Restore NuGet packages
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
     - name: Install OpenCV
       run: |
