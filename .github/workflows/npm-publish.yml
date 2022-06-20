@@ -33,6 +33,6 @@ jobs:
       - run: pnpm run prepack
       - run: cd test && pnpm install --frozen-lockfile
       - run: cd test && pnpm run test
-      - run: pnpm publish
+      - run: pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
