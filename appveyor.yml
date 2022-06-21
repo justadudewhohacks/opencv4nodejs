@@ -45,7 +45,7 @@ environment:
 
 
     - 
-      OPENCVV: "%OPENCV4_M0%"
+      OPENCVV: "%OPENCV4_N0%"
       NODEV: 16
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - 
