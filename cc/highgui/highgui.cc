@@ -17,6 +17,7 @@ NAN_MODULE_INIT(Highgui::Init) {
     Nan::SetMethod(target, "moveWindow", moveWindow);
     Nan::SetMethod(target, "namedWindow", namedWindow);
     Nan::SetMethod(target, "resizeWindow", resizeWindow);
+    Nan::SetMethod(target, "startWindowThread", startWindowThread);
 };
 
 NAN_METHOD(Highgui::setWindowProperty) {
@@ -130,5 +131,10 @@ NAN_METHOD(Highgui::resizeWindow) {
   cv::resizeWindow(FF::StringConverter::unwrapUnchecked(info[0]), width, height);
 }
 
+NAN_METHOD(Highgui::startWindowThread) {
+  FF::TryCatch tryCatch("Highgui::startWindowThread");
+  int retval = cv::startWindowThread();
+  info.GetReturnValue().Set(Nan::New(retval));
+}
 
 #endif
