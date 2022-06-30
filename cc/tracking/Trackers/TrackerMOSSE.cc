@@ -27,7 +27,11 @@ NAN_METHOD(TrackerMOSSE::New) {
 	FF_ASSERT_CONSTRUCT_CALL();
 
 	TrackerMOSSE* self = new TrackerMOSSE();
+#if CV_VERSION_GREATER_EQUAL(4, 5, 2)
+	self->tracker = cv::legacy::TrackerMOSSE::create();
+#else
 	self->tracker = cv::TrackerMOSSE::create();
+#endif
 	self->Wrap(info.Holder());
 	info.GetReturnValue().Set(info.Holder());
 };
