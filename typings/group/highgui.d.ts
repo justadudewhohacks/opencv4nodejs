@@ -76,7 +76,7 @@ export 	function namedWindow(winname: string, flags?: number): void;
  * without relying on waitKey(), e.g., imshow().
  * @returns The return value;
  */
-export  function startWindowThread(): number;
+export function startWindowThread(): number;
 
 // Rect 	cv::selectROI (const String &windowName, InputArray img, bool showCrosshair=true, bool fromCenter=false)
 //  	Allows users to select a ROI on the given image. More...
@@ -105,8 +105,6 @@ export  function startWindowThread(): number;
 //  	Updates window title. More...
 export function setWindowTitle(winName: string, title: string): void;
 
-// int 	cv::startWindowThread ()
-//  
 // int 	cv::waitKey (int delay=0)
 //  	Waits for a pressed key. More...
 export function waitKey(delay?: number): number;

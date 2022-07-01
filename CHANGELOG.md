@@ -2,6 +2,7 @@
 
 ## Version 6.2.1
 * fix error message annalyse in cvLoader
+* add startWindowThread()
 
 ## Version 6.2.0
 * PR https://github.com/UrielCh/opencv4nodejs/pull/37
