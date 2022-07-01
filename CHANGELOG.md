@@ -1,5 +1,8 @@
 # changelog
 
+## Version 6.2.1
+* fix error message annalyse in cvLoader
+
 ## Version 6.2.0
 * PR https://github.com/UrielCh/opencv4nodejs/pull/37
 * add support for 1, 3 and 4 dimmentionals Mat

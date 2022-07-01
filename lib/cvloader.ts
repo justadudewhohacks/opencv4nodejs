@@ -93,7 +93,7 @@ function getOpenCV(opt?: OpenCVBuildEnvParams): OpenCVType {
           
           PS: a 'npm link' may help
           `;
-        } else if (message === 'The specified module could not be found.') {
+        } else if (message.startsWith('The specified module could not be found.')) {
           msg = `require("${pc.yellow(requirePath)}"); 
           Failed with: ${pc.red(message)}, openCV module looks broken, clean you builds directory and rebuild everything
           rm -r <path to your build directory>
