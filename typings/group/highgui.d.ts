@@ -71,9 +71,13 @@ export 	function namedWindow(winname: string, flags?: number): void;
  */
  export 	function resizeWindow(winname: string, width: number, height: number): void;
 
-//  
-// void 	cv::resizeWindow (const String &winname, const cv::Size &size)
-//  
+/**
+ * Start a background thread that services windows events and updates
+ * without relying on waitKey(), e.g., imshow().
+ * @returns The return value;
+ */
+export  function startWindowThread(): number;
+
 // Rect 	cv::selectROI (const String &windowName, InputArray img, bool showCrosshair=true, bool fromCenter=false)
 //  	Allows users to select a ROI on the given image. More...
 //  

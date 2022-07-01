@@ -15,6 +15,7 @@ public:
   static NAN_METHOD(moveWindow);
   static NAN_METHOD(namedWindow);
   static NAN_METHOD(resizeWindow);
+  static NAN_METHOD(startWindowThread);
 };
 
 #endif
