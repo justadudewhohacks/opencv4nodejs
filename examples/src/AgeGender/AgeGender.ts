@@ -28,7 +28,11 @@ function getFaceBox(net: Net, frame: Mat, conf_threshold = 0.7): { frameFace: Ma
             const x2 = detections.at([0, 0, i, 5]) * frameWidth;
             const y2 = detections.at([0, 0, i, 6]) * frameHeight;
             bboxes.push(new Rect(x1, y1, x2 - x1, y2 - y1))
-            frameOpencvDnn.drawRectangle(new Point2(x1, y1), new Point2(x2, y2), new Vec3(0, 255, 0), Math.round(frameHeight / 150), cv.LINE_8);
+            frameOpencvDnn.drawRectangle(new Point2(x1, y1), new Point2(x2, y2), {
+                color: new Vec3(0, 255, 0),
+                thickness: Math.round(frameHeight / 150),
+                lineType: cv.LINE_8,
+            });
         }
     }
     return { frameFace: frameOpencvDnn, bboxes };

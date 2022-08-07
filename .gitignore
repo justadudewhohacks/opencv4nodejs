@@ -56,3 +56,4 @@ examples/src/YOLOv3-Training-Snowman-Detector/classes.names
 examples/src/YOLOv3-Training-Snowman-Detector/train.log
 examples/src/YOLOv3-Training-Snowman-Detector/darknet53.conv.74
 examples/src/YOLOv3-Training-Snowman-Detector/weights
+docs/

@@ -78,7 +78,7 @@ function getOPENCV4NODEJS_DEFINES(libsFoundInDir: OpencvModule[]): string[] {
     const defines = libsFoundInDir
         .map(lib => `OPENCV4NODEJS_FOUND_LIBRARY_${lib.opencvModule.toUpperCase()}`)
     log.info('defines', `${EOL}Setting the following defines:`)
-    const longest = Math.max(...defines.map(a=>a.length));
+    const longest = Math.max(...defines.map(a => a.length));
     let next = '';
     for (const define of defines) {
         if (next.length > 80) {
@@ -163,7 +163,7 @@ export async function compileLib(args: string[]) {
         }
     }
     if (action === 'auto') {
-        console.log(`Use 'build-opencv rebuild' script to start node-gyp, use --help to check all options.
+        console.log(`Use 'npx build-opencv rebuild' script to start node-gyp, use --help to check all options.
 or configure configure a opencv4nodejs section in your package.json
 or use OPENCV4NODEJS_* env variable.`)
         return;

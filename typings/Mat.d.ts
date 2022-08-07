@@ -286,6 +286,15 @@ export class Mat {
   drawPolylines(pts: Point2[][], isClosed: boolean, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
   drawRectangle(pt0: Point2, pt1: Point2, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
   // alternate signature
+  /**
+   * 
+   * @param pt0 Vertex of the rectangle.
+   * @param pt1 Vertex of the rectangle opposite to pt1 . 
+   * @param opt.color 	Rectangle color or brightness (grayscale image). 
+   * @param opt.thickness 	Thickness of lines that make up the rectangle. Negative values, like FILLED, mean that the function has to draw a filled rectangle. {@see https://docs.opencv.org/4.x/d6/d6e/group__imgproc__draw.html#ggaf076ef45de481ac96e0ab3dc2c29a777a89c5f6beef080e6df347167f85e07b9e}
+   * @param opt.lineType	Type of the line. See LineTypes {@see https://docs.opencv.org/4.x/d6/d6e/group__imgproc__draw.html#gaf076ef45de481ac96e0ab3dc2c29a777}
+   * @param opt.shift	shift	Number of fractional bits in the point coordinates. 
+   */
   drawRectangle(pt0: Point2, pt1: Point2, opt: { color?: Vec3, thickness?: number, lineType?: number, shift?: number }): void;
   drawRectangle(rect: Rect, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
   eigen(): Mat;

@@ -89,7 +89,7 @@ function getOpenCV(opt?: OpenCVBuildEnvParams): OpenCVType {
           Failed with: ${pc.red(message)}, openCV binding not available, reed: 
           build-opencv --help
           And build missing file with:
-          build-opencv --version 4.5.4 rebuild
+          npx build-opencv --version 4.5.4 rebuild
           
           PS: a 'npm link' may help
           `;
@@ -97,7 +97,7 @@ function getOpenCV(opt?: OpenCVBuildEnvParams): OpenCVType {
           msg = `require("${pc.yellow(requirePath)}"); 
           Failed with: ${pc.red(message)}, openCV module looks broken, clean you builds directory and rebuild everything
           rm -r <path to your build directory>
-          build-opencv --version 4.5.4 rebuild
+          npx build-opencv --version 4.5.4 rebuild
           `;
         } else {
           msg = `require("${pc.yellow(requirePath)}"); 
