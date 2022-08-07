@@ -44,7 +44,7 @@ Define environement variable:
 
 Define a opencv4nodejs section in your package.json like:
 ```json
-opencv4nodejs {
+"opencv4nodejs" {
   "autoBuildOpencvVersion": "1",
 }
 ```
