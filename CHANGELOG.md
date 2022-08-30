@@ -1,5 +1,8 @@
 # changelog
 
+## Version 6.2.4
+* update @u4/opencv-build
+
 ## Version 6.2.3
 * update @u4/opencv-build
 

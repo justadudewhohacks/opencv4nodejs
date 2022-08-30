@@ -1,6 +1,6 @@
 {
   "name": "@u4/opencv4nodejs",
-  "version": "6.2.3",
+  "version": "6.2.4",
   "description": "Asynchronous OpenCV 3.x / 4.x nodejs bindings with JavaScript and TypeScript API.",
   "keywords": [
     "opencv",
@@ -52,7 +52,7 @@
     "build-debug": "tsc && BINDINGS_DEBUG=true node bin/install.js rebuild"
   },
   "dependencies": {
-    "@u4/opencv-build": "^0.5.5",
+    "@u4/opencv-build": "^0.5.6",
     "glob": "^8.0.3",
     "nan": "^2.16.0",
     "native-node-utils": "^0.2.7",
