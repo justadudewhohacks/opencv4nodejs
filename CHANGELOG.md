@@ -1,5 +1,9 @@
 # changelog
 
+## Version 6.2.2
+* update deps including @u4/opencv-build
+* autobuild now work out of the box on common setup. (chocolatey, brew, apt)
+
 ## Version 6.2.1
 * fix error message annalyse in cvLoader
 * add startWindowThread()
