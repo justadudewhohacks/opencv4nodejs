@@ -159,7 +159,7 @@ async function compileLib(args) {
         }
     }
     if (action === 'auto') {
-        console.log(`Use 'build-opencv rebuild' script to start node-gyp, use --help to check all options.
+        console.log(`Use 'npx build-opencv rebuild' script to start node-gyp, use --help to check all options.
 or configure configure a opencv4nodejs section in your package.json
 or use OPENCV4NODEJS_* env variable.`);
         return;
