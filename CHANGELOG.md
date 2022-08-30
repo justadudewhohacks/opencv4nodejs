@@ -1,5 +1,8 @@
 # changelog
 
+## Version 6.2.3
+* update @u4/opencv-build
+
 ## Version 6.2.2
 * update deps including @u4/opencv-build
 * autobuild now work out of the box on common setup. (chocolatey, brew, apt)

@@ -8,7 +8,7 @@ specifiers:
   '@types/progress': ^2.0.5
   '@typescript-eslint/eslint-plugin': ^5.36.1
   '@typescript-eslint/parser': ^5.36.1
-  '@u4/opencv-build': ^0.5.4
+  '@u4/opencv-build': ^0.5.5
   axios: ^0.27.2
   eslint: ^8.23.0
   eslint-config-airbnb: ^19.0.4
@@ -27,7 +27,7 @@ specifiers:
   typescript: ^4.8.2
 
 dependencies:
-  '@u4/opencv-build': 0.5.4
+  '@u4/opencv-build': 0.5.5
   glob: 8.0.3
   nan: 2.16.0
   native-node-utils: 0.2.7
@@ -322,8 +322,8 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@u4/opencv-build/0.5.4:
-    resolution: {integrity: sha512-lu0LTJPwuUksQk3eJDB7KqLl8jUezUh/E/HnjLvHBa2dAqLmlQoLeS8a4s3Lnru8Vxlrha8Q0GxGGudGa3ka6Q==}
+  /@u4/opencv-build/0.5.5:
+    resolution: {integrity: sha512-LjJwW9oMwpT4dmyKCsHUPLW4bR4gahBwq/CmlBCtM5eqYnG7hQ7Kw8Y8rql4o30vMMQrBPr8tTvIxBIrsze1fQ==}
     hasBin: true
     dependencies:
       npmlog: 6.0.2
