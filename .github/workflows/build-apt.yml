@@ -6,8 +6,14 @@ name: Node.js CI
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    paths:
+      - "cc/**"
+      - "install/**"
+      - "lib/**"
+      - "test/**"
+      - "typings/**"
+      - "package.json"
+      - ".github/workflows/build-apt.yml"
 
 jobs:
   build:

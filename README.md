@@ -4,24 +4,22 @@
 
 ## Getting starts
 
-Opencv4nodejs can be link to a prebuild openCV 3 or 4. or can build it's own openCV using [@u4/opencv-build](https://www.npmjs.com/package/@u4/opencv-build).
-You have to choose witch version you want to link.
-
-In all case define the env variable `OPENCV_BUILD_ROOT` to speedup your developpement.
-ex:
-```bash
-OPENCV_BUILD_ROOT=~/opencv
-```
+Opencv4nodejs can be link to a prebuild openCV 3 or 4. or can build it's own openCV using [@u4/opencv-build](https://www.npmjs.com/package/@u4/opencv-build),
+In this case you have to choose witch version you want to link.
 
 ### To use your own openCV build
 
-Define environement variable:
-- OPENCV4NODEJS_DISABLE_AUTOBUILD
-- OPENCV_INCLUDE_DIR
-- OPENCV_LIB_DIR
-- OPENCV_BIN_DIR
+**3 way to use your own openCV**
 
-Define a opencv4nodejs section in your package.json like:
+#### Environement variable
+Define environement variable:
+- `OPENCV4NODEJS_DISABLE_AUTOBUILD`=`1`
+- `OPENCV_INCLUDE_DIR`=`include path`
+- `OPENCV_LIB_DIR`=`lib path`
+- `OPENCV_BIN_DIR`=`binary path`
+
+#### package.json
+Define an opencv4nodejs section in your package.json like:
 ```json
 "opencv4nodejs" {
   "disableAutoBuild": "1",
@@ -31,28 +29,41 @@ Define a opencv4nodejs section in your package.json like:
 }
 ```
 
+#### use build-opencv
 Call `build-opencv` once like:
 ```bash
 npm link
 build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --binDir=/usr/bin/ --nobuild rebuild
 ```
 
-### To build you own openCV
+### To build you own openCV using included builder
 
+If you wan to build OpenCV define the environement variable `OPENCV_BUILD_ROOT` to speedup your developpement, so openCV build will be processed pout of your node_modules
+
+ex:
+```bash
+OPENCV_BUILD_ROOT=~/opencv
+```
+
+**3 way to build openCV 4.5.5**
+
+#### Environement variable
 Define environement variable:
-- OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION
+- `OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION`="4.5.5"
 
-Define a opencv4nodejs section in your package.json like:
+#### package.json
+Define an opencv4nodejs section in your package.json like:
 ```json
 "opencv4nodejs" {
-  "autoBuildOpencvVersion": "1",
+  "autoBuildOpencvVersion": "4.5.5",
 }
 ```
 
+#### use build-opencv
 Call `build-opencv` once like:
 ```bash
 npm link
-build-opencv --version 3.5.5 rebuild
+build-opencv --version 4.5.5 rebuild
 ```
 
 ## for advanced option
