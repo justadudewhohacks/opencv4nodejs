@@ -1,8 +1,8 @@
-name: publish image to DockerHub
+name: Publish image to DockerHub
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - "cc/**"
       - "install/**"
