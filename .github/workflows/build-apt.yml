@@ -31,8 +31,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
     - run: pnpm install --frozen-lockfile
-    #  - run: npm run build --if-present
-    - run: npx build-opencv rebuild
       env:
           OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
-    #- run: npm test
+    #  - run: npm run build --if-present
+    # - run: npx build-opencv rebuild
+     run: npm test
