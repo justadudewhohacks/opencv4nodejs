@@ -35,4 +35,4 @@ jobs:
           OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
     #  - run: npm run build --if-present
     # - run: npx build-opencv rebuild
-     run: npm test
+    - run: npm test
