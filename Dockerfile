@@ -1,4 +1,4 @@
-FROM node:18 As build
+FROM node:18.8.0-alpine3.16 As build
 
 WORKDIR /usr/src/app
 RUN npm install -g rimraf pnpm
@@ -9,7 +9,8 @@ COPY cc ./cc
 COPY install ./install
 COPY typings ./typings
 RUN pnpm install --frozen-lockfile
-RUN apt update && apt -y upgrade && apt -y install build-essential cmake
+# RUN apt update && apt -y upgrade && apt -y install build-essential cmake
+RUN apk add --no-cache alpine-sdk cmake linux-headers
 ENV OPENCV_BUILD_ROOT=/usr/src/opencv
 ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.5.5
 RUN npm run install
@@ -27,7 +28,7 @@ RUN rimraf /usr/src/opencv/opencv-4.5.5-ecae4/build/share/opencv4/testdata
 RUN rimraf /usr/src/opencv/opencv-4.5.5-ecae4/build/share/
 RUN find /usr/src/opencv/ -type d -empty -delete
 
-FROM node:18 As production
+FROM node:18.8.0-alpine3.16 As production
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 WORKDIR /usr/src/app
