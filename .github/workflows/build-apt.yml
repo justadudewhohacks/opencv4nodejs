@@ -33,6 +33,7 @@ jobs:
     - run: pnpm install --frozen-lockfile
       env:
           OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+    - run: pnpm run prepack
     #  - run: npm run build --if-present
     # - run: npx build-opencv rebuild
-    - run: npm test
+    # - run: npm test
