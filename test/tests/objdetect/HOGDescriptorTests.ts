@@ -1,5 +1,5 @@
 import { assert, expect } from 'chai';
-import { Point2, Rect } from '../../../typings';
+import { Point2, Rect } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
 
 type numFieldsType = 'winSize' | 'blockSize' | 'blockStride' | 'cellSize';
@@ -46,7 +46,7 @@ export default function (args: TestContext) {
         64,
         true,
       );
-      const toTest: {p: numFieldsType, dim: number}[] = [
+      const toTest: { p: numFieldsType, dim: number }[] = [
         { p: 'winSize', dim: 40 },
         { p: 'blockSize', dim: 20 },
         { p: 'blockStride', dim: 10 },
@@ -83,7 +83,7 @@ export default function (args: TestContext) {
         nlevels: 64,
         signedGradient: true,
       });
-      const toTest: { p: numFieldsType, dim: number}[] = [
+      const toTest: { p: numFieldsType, dim: number }[] = [
         { p: 'winSize', dim: 40 },
         { p: 'blockSize', dim: 20 },
         { p: 'blockStride', dim: 10 },

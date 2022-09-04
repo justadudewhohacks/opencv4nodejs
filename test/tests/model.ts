@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import Chai from 'chai';
 import {
-  cv, Point2, Point3, Mat, Vec2, Vec3, Vec4,
+    cv, Point2, Point3, Mat, Vec2, Vec3, Vec4,
 } from '@u4/opencv4nodejs';
 
 export type OpenCV = typeof cv
@@ -12,14 +12,14 @@ export interface APITestOpts {
     methodNameSpace?: string,
     expectOutput?: (res: any, dut: any, args: any) => void,
     getOptionalArg?: () => any,
-    getOptionalArgsMap?: () => {[key: string]: any},
+    getOptionalArgsMap?: () => { [key: string]: any },
 
     getClassInstance: () => any,
     classNameSpace?: string,
 
     getRequiredArgs?: () => any[],
     // getOptionalParamsMap?: () => Array<[string, any]|[string]|[number]>,
-    getOptionalParams?: () => Array<string|number>,
+    getOptionalParams?: () => Array<string | number>,
     getOptionalParamsMap?: () => Array<[string, any]>,
 
     hasAsync: boolean,
@@ -34,7 +34,7 @@ export interface TestContext {
     cv: OpenCV,
     utils: {
         funcShouldRequireArgs: (func: () => any) => void;
-        assertPropsWithValue: (obj: {[key: string]: number | object | boolean | string} & any, props: {[key: string]: number | object | boolean | string}, floatSafe ?: boolean) => void;
+        assertPropsWithValue: (obj: { [key: string]: number | object | boolean | string } & any, props: { [key: string]: number | object | boolean | string }, floatSafe?: boolean) => void;
         expectToBeVec2: (vec: Vec2 | Point2) => void;
         expectToBeVec3: (vec: Vec3 | Point3) => void;
         expectToBeVec4: (vec: Vec4) => void;
@@ -44,7 +44,7 @@ export interface TestContext {
         assertDataAlmostDeepEquals: (data0: any, data1: any) => void;
         assertMatValueAlmostEquals: (val0: number, val1: number) => void;
         assertMatValueEquals: (val0: number, val1: number) => void;
-        assertMetaData: (mat: Mat | number[]) => (arg0: number | {rows: number, cols: number, type: number}, cols?: number, type?: number) => void;
+        assertMetaData: (mat: Mat | number[]) => (arg0: number | { rows: number, cols: number, type: number }, cols?: number, type?: number) => void;
         dangerousDeepEquals: (obj0: any, obj1: any) => boolean;
         generateIts: (msg: string, testFunc: (t: number) => void, exclusions?: Set<string>) => void;
         isZeroMat: (mat: Mat) => boolean;

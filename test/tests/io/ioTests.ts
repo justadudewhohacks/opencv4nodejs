@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { expect } from 'chai';
+import { Mat } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
-import { Mat } from '../../../typings';
 
 export default function (args: TestContext) {
   const { cv, utils } = args;

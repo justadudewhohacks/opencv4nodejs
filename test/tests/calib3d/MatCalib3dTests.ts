@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { TestContext } from '../model';
 import {
   CalibrationMatrixValues, Mat, OptimalNewCameraMatrix, StereoRectify,
-} from '../../../typings';
+} from '@u4/opencv4nodejs';
+import { TestContext } from '../model';
 
 export default (args: TestContext) => {
   const { cv, utils } = args;
@@ -30,7 +30,7 @@ export default (args: TestContext) => {
   const distCoefficients = [0, 0.5, 1.0, 1.0];
 
   describe('rodrigues', () => {
-    const expectOutput = (res: {jacobian: Mat, dst: Mat}) => {
+    const expectOutput = (res: { jacobian: Mat, dst: Mat }) => {
       expect(res).to.have.property('dst').to.be.instanceOf(cv.Mat);
       assertMetaData(res.dst)(3, 1, cv.CV_64F);
       expect(res).to.have.property('jacobian').to.be.instanceOf(cv.Mat);
@@ -94,7 +94,7 @@ export default (args: TestContext) => {
   });
 
   describe('matMulDeriv', () => {
-    const expectOutput = (res: {dABdA: Mat, dABdB: Mat}) => {
+    const expectOutput = (res: { dABdA: Mat, dABdB: Mat }) => {
       expect(res).to.have.property('dABdA').to.be.instanceOf(cv.Mat);
       assertMetaData(res.dABdA)(9, 9, cv.CV_64F);
       expect(res).to.have.property('dABdB').to.be.instanceOf(cv.Mat);
@@ -115,7 +115,7 @@ export default (args: TestContext) => {
   });
 
   describe('findChessboardCorners', () => {
-    const expectOutput = (res: {returnValue: boolean, corners: Array<any>}) => {
+    const expectOutput = (res: { returnValue: boolean, corners: Array<any> }) => {
       expect(res).to.have.property('returnValue').to.be.a('boolean');
       expect(res).to.have.property('corners').to.be.an('array');
     };

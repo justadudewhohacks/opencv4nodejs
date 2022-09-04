@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Point3 } from '../../../typings';
+import { Point3 } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
 
 let asyncHooks = null;
@@ -58,7 +58,7 @@ export default function (args: TestContext) {
       getDut: () => cv,
       methodName: 'getBuildInformation',
       hasAsync: false,
-      expectOutput: () => {},
+      expectOutput: () => { },
     });
   });
 
@@ -214,14 +214,14 @@ export default function (args: TestContext) {
 
   describe('setNumThreads', () => {
     it('should try to set the number of threads'
-        + ' that used by OpenCV', () => {
-      const number = 2;
-      cv.setNumThreads(number);
-      // OpenCV will **try** to set the number of threads for the
-      // next parallel region so that `cv.getNumThreads()` don't react
-      // to this immediately.
-      // expect(cv.getNumThreads()).to.be.equal(number);
-    });
+      + ' that used by OpenCV', () => {
+        const number = 2;
+        cv.setNumThreads(number);
+        // OpenCV will **try** to set the number of threads for the
+        // next parallel region so that `cv.getNumThreads()` don't react
+        // to this immediately.
+        // expect(cv.getNumThreads()).to.be.equal(number);
+      });
 
     it('should throw when the argument is not integer', () => {
       const expectError = (fn, msg) => {

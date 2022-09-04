@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Contour } from '../../../typings';
+import { Contour } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => {
