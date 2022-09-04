@@ -317,10 +317,10 @@ build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --bi
 
 ### [opencv-express](https://github.com/justadudewhohacks/opencv-express) - example for opencv4nodejs with express.js and docker
 
-Or simply pull from [justadudewhohacks/opencv-nodejs](https://hub.docker.com/r/justadudewhohacks/opencv-nodejs/) for opencv-3.2 + contrib-3.2 with opencv4nodejs globally installed:
+Or simply pull from [justadudewhohacks/opencv-nodejs](https://hub.docker.com/r/urielch/opencv-nodejs) for opencv-4.5.5 contrib with opencv4nodejs binary globally installed:
 
 ``` docker
-FROM justadudewhohacks/opencv-nodejs
+FROM urielch/opencv-nodejs
 ```
 
 **Note**: The aforementioned Docker image already has ```opencv4nodejs``` installed globally. In order to prevent build errors during an ```npm install```, your ```package.json``` should not include ```opencv4nodejs```, and instead should include/require the global package either by requiring it by absolute path or setting the ```NODE_PATH``` environment variable to ```/usr/lib/node_modules``` in your Dockerfile and requiring the package as you normally would.

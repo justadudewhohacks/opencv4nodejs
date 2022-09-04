@@ -31,8 +31,6 @@ FROM node:18 As production
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 WORKDIR /usr/src/app
-COPY test test
-COPY data data
 COPY --from=build /usr/src/opencv /usr/src/opencv
 ENV OPENCV_BUILD_ROOT=/usr/src/opencv
 ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.5.5
