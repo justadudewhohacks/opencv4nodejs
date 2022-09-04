@@ -21,14 +21,14 @@ jobs:
     steps:
     - name: Install opencv pkg
       run: sudo apt-get install -y build-essential libopencv-contrib-dev libopencv-dev
-    #- uses: actions/checkout@v3
-    #- name: Use Node.js ${{ matrix.node-version }}
-    #  uses: actions/setup-node@v3
-    #  with:
-    #    node-version: ${{ matrix.node-version }}
-    #    cache: 'npm'
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'pnpm'
     #- run: npm run build --if-present
-    #- run: npx build-opencv rebuild
-    #  env:
-    #      OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+    - run: npx build-opencv rebuild
+      env:
+          OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
     #- run: npm test
