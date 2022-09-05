@@ -36,5 +36,5 @@ jobs:
       run: echo ${{ steps.buildx.outputs.platforms }}
     -
       name: Build the Docker image
-      run: docker buildx build --platform linux/amd64,linux/arm64 -t urielch/opencv-nodejs:latest -t urielch/opencv-nodejs:$(date +%Y-%m-%d_%H%M%S) --push .
+      run: docker buildx build -f Dockerfile-debian --platform linux/amd64,linux/arm64 -t urielch/opencv-nodejs:latest -t urielch/opencv-nodejs:$(date +%Y-%m-%d_%H%M%S) --push .
 

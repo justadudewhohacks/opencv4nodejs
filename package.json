@@ -51,7 +51,9 @@
     "cleanjs": "rimraf {install,lib,examples}/**/*.{d.ts,js,map}",
     "build-debug": "tsc && BINDINGS_DEBUG=true node bin/install.js rebuild",
     "docker:build": "docker build --pull --rm -f Dockerfile -t urielch/opencv-nodejs:latest .",
-    "docker:buildx": "docker buildx build --platform linux/amd64,linux/arm64 -t urielch/opencv-nodejs:latest --push .",
+    "docker:buildx1": "docker buildx build -f Dockerfile-debian --platform linux/amd64,linux/arm64 -t urielch/opencv-nodejs:6.2.4 --push .",
+    "docker:buildx2": "docker buildx build -f Dockerfile-alpine --platform linux/amd64,linux/arm64 -t urielch/opencv-nodejs:6.2.4-alpine --push .",
+
     "docker:debug": "docker run -it --rm urielch/opencv-nodejs:latest /bin/bash"
   },
   "dependencies": {
