@@ -1,5 +1,5 @@
 FROM node:18 As build
-# WORKDIR /usr/src/app
+
 RUN apt update && apt -y upgrade && apt -y install build-essential cmake
 ENV OPENCV_BUILD_ROOT=/usr/src/opencv
 ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.5.5
@@ -19,24 +19,17 @@ RUN rimraf /usr/src/opencv/opencv-*/build/share/
 RUN find /usr/src/opencv/ -type f -empty -print -delete
 RUN find /usr/src/opencv/ -type d -empty -print -delete
 
-
-
-
-#FROM node:18 As production
-#ENV OPENCV_BUILD_ROOT=/usr/src/opencv
-#ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.5.5
-#ARG NODE_ENV=production
+FROM node:18 As production
+ENV OPENCV_BUILD_ROOT=/usr/src/opencv
+ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.5.5
+# ARG NODE_ENV=production
 #ENV NODE_ENV=${NODE_ENV}
 WORKDIR /usr/src/app
-
-#COPY --from=build /usr/src/opencv /usr/src/opencv
-#COPY --from=build /usr/local/lib/node_modules/@u4 /usr/local/lib/node_modules/@u4
-#COPY --from=build /usr/local/lib/node_modules /usr/local/lib/node_modules
-
-COPY test ./
-COPY data ../data
-RUN npm remove @u4/opencv4nodejs
-#npm link @u4/opencv4nodejs
-RUN npm install && npm link @u4/opencv4nodejs
-
+COPY --from=build /usr/src/opencv /usr/src/opencv
+COPY --from=build /usr/local/lib/node_modules/@u4 /usr/local/lib/node_modules/@u4
+# COPY test ./
+# COPY data ../data
+# RUN npm remove @u4/opencv4nodejs
+# RUN npm install
+# RUN npm link @u4/opencv4nodejs
 # docker run -it --rm urielch/opencv-nodejs:test npm run test
