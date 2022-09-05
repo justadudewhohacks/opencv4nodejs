@@ -13,7 +13,7 @@ export default function (args: TestContext) {
 
     describe('constructor', () => {
       it('should throw if no args', () => {
-        // @ts-expect-error
+        // @ts-expect-error should throw if no args
         expect(() => new cv.CascadeClassifier()).to.throw('CascadeClassifier::New - Error: expected argument 0 to be of type string');
       });
 
