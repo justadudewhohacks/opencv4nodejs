@@ -210,7 +210,7 @@ export default function (args: TestContext) {
         assertError(
           () => hog.compute(
             getPeoplesTestImg(),
-            // @ts-expect-error
+            // @ts-expect-error wrong parameter type
             { locations: invalidLocations },
           ),
           'expected array element at index 1 to be of type Point2',
@@ -235,21 +235,15 @@ export default function (args: TestContext) {
             invalidLocations,
           );
         } catch (err) {
-          try {
-            expect(err).to.be.an('error');
-            assert.include(err.toString(), 'expected array element at index 1 to be of type Point2');
-            // done();
-          } catch (e) {
-            throw e;
-            // done(e);
-          }
+          expect(err).to.be.an('error');
+          assert.include(err.toString(), 'expected array element at index 1 to be of type Point2');
         }
       });
 
       it('should throw if locations invalid for opt arg object', (done) => {
         hog.computeAsync(
           getPeoplesTestImg(),
-          // @ts-expect-error
+          // @ts-expect-error wrong parameter type
           { locations: invalidLocations },
           (err) => {
             try {

@@ -29,10 +29,10 @@ export default function (args: TestContext) {
   };
 
   describe('constructor fill a 3D Mat', () => {
-    const sizes = [2,3,4];
+    const sizes = [2, 3, 4];
     const mat = new cv.Mat(sizes, cv.CV_8UC1);
     assertDataDeepEquals(mat.sizes, sizes);
-  })
+  });
 
   describe('constructor fill with value', () => {
     it('should initialize CV_8UC1 with correct data', () => {

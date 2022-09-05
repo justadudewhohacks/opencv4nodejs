@@ -51,7 +51,7 @@ export default function (args: TestContext) {
             [1, 0, 0],
             [0, 1, 0],
             [0, 0],
-          ]
+          ],
         ];
         new cv.Mat(matData, cv.CV_8U);
       } catch (err) {
@@ -65,7 +65,7 @@ export default function (args: TestContext) {
       let errMsg = '';
       try {
         const matData = [
-            [
+          [
             [
               [1, 0, 0],
               [0, 1, 0],
@@ -74,8 +74,8 @@ export default function (args: TestContext) {
               [1, 0, 0],
               [0, 1, 0],
               [0, 0],
-            ]
-          ]
+            ],
+          ],
         ];
         new cv.Mat(matData, cv.CV_8U);
       } catch (err) {

@@ -115,7 +115,7 @@ export default (args: TestContext) => {
   });
 
   describe('findChessboardCorners', () => {
-    const expectOutput = (res: { returnValue: boolean, corners: Array<any> }) => {
+    const expectOutput = (res: { returnValue: boolean, corners: Array<unknown> }) => {
       expect(res).to.have.property('returnValue').to.be.a('boolean');
       expect(res).to.have.property('corners').to.be.an('array');
     };
@@ -536,7 +536,7 @@ export default (args: TestContext) => {
         methodName: 'undistort',
         methodNameSpace: 'Mat',
         getRequiredArgs: () => ([cameraMatrix, distCoeffs]),
-        expectOutput: (res, _, args) => {
+        expectOutput: (res) => {
           expect(res).to.be.instanceOf(cv.Mat);
         },
       });
