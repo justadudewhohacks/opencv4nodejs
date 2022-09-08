@@ -22,14 +22,17 @@ RUN find /usr/src/opencv/ -type d -empty -print -delete
 FROM node:18 As production
 ENV OPENCV_BUILD_ROOT=/usr/src/opencv
 ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.5.5
-# ARG NODE_ENV=production
-#ENV NODE_ENV=${NODE_ENV}
 WORKDIR /usr/src/app
 COPY --from=build /usr/src/opencv /usr/src/opencv
 COPY --from=build /usr/local/lib/node_modules/@u4 /usr/local/lib/node_modules/@u4
+
 # COPY test ./
 # COPY data ../data
 # RUN npm remove @u4/opencv4nodejs
 # RUN npm install
 # RUN npm link @u4/opencv4nodejs
-# docker run -it --rm urielch/opencv-nodejs:test npm run test
+# docker build --pull --rm -f Dockerfile-debian -t urielch/opencv-nodejs:test .
+# docker run -it --rm urielch/opencv-nodejs:test bash
+# docker buildx build -f Dockerfile-debian --platform linux/amd64,linux/arm64 -t urielch/opencv-nodejs:6.2.4 -t urielch/opencv-nodejs:latest --push .
+# docker buildx build -f Dockerfile-alpine --platform linux/amd64,linux/arm64 -t urielch/opencv-nodejs:6.2.4-alpine --push .
+# docker run -it --rm urielch/opencv-nodejs:latest /bin/bash
