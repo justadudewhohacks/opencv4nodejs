@@ -8,7 +8,7 @@ RUN npm install -g @u4/opencv4nodejs
 RUN rimraf /usr/local/lib/node_modules/**/*.{md,map,txt}
 RUN rimraf /usr/local/lib/node_modules/{@eslint}
 RUN rimraf /usr/local/lib/node_modules/**/{LICENSE,.github,.npmignore,LICENSE.txt,.travis.yml,.eslintrc,sponsors}
-RUN rimraf /usr/local/lib/node_modules/*/{test}
+RUN rimraf /usr/local/lib/node_modules/*/test
 RUN find /usr/local/lib/node_modules/ -type f -empty -print -delete
 RUN find /usr/local/lib/node_modules/ -type d -empty -print -delete
 RUN rimraf /usr/src/opencv/opencv-*/build/{doc,3rdparty,*.txt,*.cmake,*.tmp,tmp,downloads,opencv_python_tests.cfg}
@@ -33,6 +33,7 @@ COPY --from=build /usr/local/lib/node_modules/@u4 /usr/local/lib/node_modules/@u
 # RUN npm link @u4/opencv4nodejs
 # docker build --pull --rm -f Dockerfile-debian -t urielch/opencv-nodejs:test .
 # docker run -it --rm urielch/opencv-nodejs:test bash
+# docker build -f Dockerfile-debian -t urielch/opencv-nodejs:arm64-6.2.4 --push .
 # docker buildx build -f Dockerfile-debian --platform linux/amd64,linux/arm64 -t urielch/opencv-nodejs:6.2.4 -t urielch/opencv-nodejs:latest --push .
 # docker buildx build -f Dockerfile-alpine --platform linux/amd64,linux/arm64 -t urielch/opencv-nodejs:6.2.4-alpine --push .
 # docker run -it --rm urielch/opencv-nodejs:latest /bin/bash
