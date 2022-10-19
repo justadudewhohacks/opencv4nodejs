@@ -160,7 +160,7 @@ or use OPENCV4NODEJS_* env variable.`);
         const summery = opencv_build_1.OpenCVBuildEnv.autoLocatePrebuild();
         npmlog_1.default.info('envAutodetect', `autodetect ${picocolors_1.default.green('%d')} changes`, summery.changes);
         for (const txt of summery.summery) {
-            npmlog_1.default.info('envAutodetect', `- ${picocolors_1.default.yellow('%d')}`, txt);
+            npmlog_1.default.info('envAutodetect', `- ${picocolors_1.default.yellow('%s')}`, txt);
         }
     }
     if (options.extra['dry-run'] || options.extra['dryrun']) {
