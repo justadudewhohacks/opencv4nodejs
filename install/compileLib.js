@@ -123,17 +123,6 @@ function getExistingBin(dir, name) {
     }
     return '';
 }
-// function getParents(dir: string) {
-//     const out = [dir];
-//     while (true) {
-//         const next = path.resolve(dir, '..');
-//         if (next === dir)
-//             break;
-//         dir = next;
-//         out.push(dir);
-//     }
-//     return out;
-// }
 async function compileLib(args) {
     let dryRun = false;
     let JOBS = 'max';
@@ -144,16 +133,16 @@ async function compileLib(args) {
         console.log((0, opencv_build_1.genHelp)());
         return;
     }
+    const env = process.env;
+    const npmEnv = opencv_build_1.OpenCVBuildEnv.readEnvsFromPackageJson() || {};
     if (action === 'auto') {
-        const env = process.env;
         if (env.OPENCV4NODEJS_DISABLE_AUTOBUILD) {
             action = 'rebuild';
         }
         if (env.OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION) {
             action = 'rebuild';
         }
-        const npmEnv = opencv_build_1.OpenCVBuildEnv.readEnvsFromPackageJson();
-        if (npmEnv && Object.keys(npmEnv).length) {
+        if (Object.keys(npmEnv).length) {
             action = 'rebuild';
         }
     }
@@ -166,6 +155,9 @@ or use OPENCV4NODEJS_* env variable.`);
     const options = (0, opencv_build_1.args2Option)(args);
     if (options.extra.jobs) {
         JOBS = options.extra.jobs;
+    }
+    if (options.disableAutoBuild || env.OPENCV4NODEJS_DISABLE_AUTOBUILD || npmEnv.disableAutoBuild) {
+        opencv_build_1.OpenCVBuildEnv.autoLocatePrebuild();
     }
     if (options.extra['dry-run'] || options.extra['dryrun']) {
         dryRun = true;
@@ -180,16 +172,16 @@ or use OPENCV4NODEJS_* env variable.`);
      * prepare environment variable
      */
     const libDir = getLibDir(builder.env);
-    npmlog_1.default.info('install', 'Using lib dir: ' + libDir);
+    npmlog_1.default.info('install', `Using lib dir: ${picocolors_1.default.green('%s')}`, libDir);
     //if (!fs.existsSync(libDir))
     await builder.install();
     if (!fs_1.default.existsSync(libDir)) {
-        throw new Error('library dir does not exist: ' + libDir);
+        throw new Error(`library dir does not exist: ${picocolors_1.default.green(libDir)}'`);
     }
     const libsInDir = builder.getLibs.getLibs();
     const libsFoundInDir = libsInDir.filter(lib => lib.libPath);
     if (!libsFoundInDir.length) {
-        throw new Error('no OpenCV libraries found in lib dir: ' + libDir);
+        throw new Error(`no OpenCV libraries found in lib dir: ${picocolors_1.default.green(libDir)}`);
     }
     npmlog_1.default.info('install', `${os_1.EOL}Found the following libs:`);
     libsFoundInDir.forEach(lib => npmlog_1.default.info('install', `${picocolors_1.default.yellow('%s')}: ${picocolors_1.default.green('%s')}`, lib.opencvModule, lib.libPath));

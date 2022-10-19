@@ -126,18 +126,6 @@ function getExistingBin(dir: string, name: string): string {
     return '';
 }
 
-// function getParents(dir: string) {
-//     const out = [dir];
-//     while (true) {
-//         const next = path.resolve(dir, '..');
-//         if (next === dir)
-//             break;
-//         dir = next;
-//         out.push(dir);
-//     }
-//     return out;
-// }
-
 export async function compileLib(args: string[]) {
     let dryRun = false;
     let JOBS = 'max';
@@ -148,16 +136,16 @@ export async function compileLib(args: string[]) {
         console.log(genHelp());
         return;
     }
+    const env = process.env;
+    const npmEnv = OpenCVBuildEnv.readEnvsFromPackageJson() || {};
     if (action === 'auto') {
-        const env = process.env;
         if (env.OPENCV4NODEJS_DISABLE_AUTOBUILD) {
             action = 'rebuild'
         }
         if (env.OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION) {
             action = 'rebuild'
         }
-        const npmEnv = OpenCVBuildEnv.readEnvsFromPackageJson();
-        if (npmEnv && Object.keys(npmEnv).length) {
+        if (Object.keys(npmEnv).length) {
             action = 'rebuild';
         }
     }
@@ -170,6 +158,10 @@ or use OPENCV4NODEJS_* env variable.`)
     const options: OpenCVBuildEnvParams = args2Option(args)
     if (options.extra.jobs) {
         JOBS = options.extra.jobs;
+    }
+
+    if (options.disableAutoBuild || env.OPENCV4NODEJS_DISABLE_AUTOBUILD || npmEnv.disableAutoBuild) {
+        OpenCVBuildEnv.autoLocatePrebuild();
     }
 
     if (options.extra['dry-run'] || options.extra['dryrun']) {
@@ -185,16 +177,17 @@ or use OPENCV4NODEJS_* env variable.`)
      * prepare environment variable
      */
     const libDir: string = getLibDir(builder.env);
-    log.info('install', 'Using lib dir: ' + libDir)
+    log.info('install', `Using lib dir: ${pc.green('%s')}`, libDir)
     //if (!fs.existsSync(libDir))
     await builder.install();
+
     if (!fs.existsSync(libDir)) {
-        throw new Error('library dir does not exist: ' + libDir)
+        throw new Error(`library dir does not exist: ${pc.green(libDir)}'`)
     }
     const libsInDir: OpencvModule[] = builder.getLibs.getLibs();
     const libsFoundInDir: OpencvModule[] = libsInDir.filter(lib => lib.libPath)
     if (!libsFoundInDir.length) {
-        throw new Error('no OpenCV libraries found in lib dir: ' + libDir)
+        throw new Error(`no OpenCV libraries found in lib dir: ${pc.green(libDir)}`)
     }
     log.info('install', `${EOL}Found the following libs:`)
     libsFoundInDir.forEach(lib => log.info('install', `${pc.yellow('%s')}: ${pc.green('%s')}`, lib.opencvModule, lib.libPath))
