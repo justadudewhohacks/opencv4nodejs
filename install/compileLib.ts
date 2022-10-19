@@ -7,7 +7,6 @@ import pc from 'picocolors'
 import path from 'path'
 import { EOL } from 'os'
 import blob from '@u4/tiny-glob';
-import { promisify } from 'util';
 
 const defaultDir = '/usr/local'
 const defaultLibDir = `${defaultDir}/lib`

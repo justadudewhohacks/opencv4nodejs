@@ -12,8 +12,7 @@ const commons_1 = require("../lib/commons");
 const picocolors_1 = __importDefault(require("picocolors"));
 const path_1 = __importDefault(require("path"));
 const os_1 = require("os");
-const glob_1 = __importDefault(require("glob"));
-const util_1 = require("util");
+const tiny_glob_1 = __importDefault(require("@u4/tiny-glob"));
 const defaultDir = '/usr/local';
 const defaultLibDir = `${defaultDir}/lib`;
 const defaultIncludeDir = `${defaultDir}/include`;
@@ -255,9 +254,9 @@ or use OPENCV4NODEJS_* env variable.`);
     if (options.extra.vscode) {
         // const nan = require('nan');
         // const nativeNodeUtils = require('native-node-utils');
-        const pblob = (0, util_1.promisify)(glob_1.default);
-        const openCvModuleInclude = await pblob(path_1.default.join(builder.env.opencvSrc, 'modules', '*', 'include'));
-        const openCvContribModuleInclude = await pblob(path_1.default.join(builder.env.opencvContribSrc, 'modules', '*', 'include'));
+        // const pblob = promisify(blob)
+        const openCvModuleInclude = await (0, tiny_glob_1.default)(path_1.default.join(builder.env.opencvSrc, 'modules', '*', 'include'));
+        const openCvContribModuleInclude = await (0, tiny_glob_1.default)(path_1.default.join(builder.env.opencvContribSrc, 'modules', '*', 'include'));
         const cvVersion = builder.env.opencvVersion.split('.');
         const config = {
             "name": "opencv4nodejs",
