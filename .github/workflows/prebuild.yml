@@ -69,7 +69,7 @@ jobs:
 
     - name: Install OpenCV
       run: |
-        choco install OpenCV -y --version ${{ opencv_version }}
+        choco install OpenCV -y --version $opencv_version
 
     - name: add path to PATH environment variable
       uses: myci-actions/export-env-var-powershell@1
