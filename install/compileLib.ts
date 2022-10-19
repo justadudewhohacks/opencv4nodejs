@@ -164,7 +164,7 @@ or use OPENCV4NODEJS_* env variable.`)
         const summery = OpenCVBuildEnv.autoLocatePrebuild();
         log.info('envAutodetect', `autodetect ${pc.green('%d')} changes`, summery.changes)
         for (const txt of summery.summery) {
-            log.info('envAutodetect', `- ${pc.yellow('%d')}`, txt)
+            log.info('envAutodetect', `- ${pc.yellow('%s')}`, txt)
         }
     }
 
