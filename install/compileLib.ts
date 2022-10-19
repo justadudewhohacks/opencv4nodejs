@@ -161,7 +161,11 @@ or use OPENCV4NODEJS_* env variable.`)
     }
 
     if (options.disableAutoBuild || env.OPENCV4NODEJS_DISABLE_AUTOBUILD || npmEnv.disableAutoBuild) {
-        OpenCVBuildEnv.autoLocatePrebuild();
+        const summery = OpenCVBuildEnv.autoLocatePrebuild();
+        log.info('envAutodetect', `autodetect ${pc.green('%d')} changes`, summery.changes)
+        for (const txt of summery.summery) {
+            log.info('envAutodetect', `- ${pc.yellow('%d')}`, txt)
+        }
     }
 
     if (options.extra['dry-run'] || options.extra['dryrun']) {

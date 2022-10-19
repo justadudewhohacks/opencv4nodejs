@@ -2,7 +2,7 @@ FROM node:18 As build
 
 RUN apt update && apt -y upgrade && apt -y install build-essential cmake
 ENV OPENCV_BUILD_ROOT=/usr/src/opencv
-ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.5.5
+ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.6.0
 RUN npm install -g rimraf
 RUN npm install -g @u4/opencv4nodejs
 RUN rimraf /usr/local/lib/node_modules/**/*.{md,map,txt}
