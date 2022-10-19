@@ -44,8 +44,9 @@ jobs:
     strategy:
       matrix:
         opencv_version:
+          - 4.6.0
           - 4.5.5 # 2019-12-23 ubuntu 22.04
-          - 4.2.0 # 2019-12-23 ubuntu 20.04
+          # - 4.2.0 # 2019-12-23 ubuntu 20.04
           - 3.4.16
         node_version:
           # - 16
@@ -68,7 +69,7 @@ jobs:
 
     - name: Install OpenCV
       run: |
-        choco install OpenCV -y --version 4.5.5
+        choco install OpenCV -y --version ${{ opencv_version }}
 
     - name: add path to PATH environment variable
       uses: myci-actions/export-env-var-powershell@1
