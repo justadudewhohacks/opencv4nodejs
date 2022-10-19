@@ -157,7 +157,11 @@ or use OPENCV4NODEJS_* env variable.`);
         JOBS = options.extra.jobs;
     }
     if (options.disableAutoBuild || env.OPENCV4NODEJS_DISABLE_AUTOBUILD || npmEnv.disableAutoBuild) {
-        opencv_build_1.OpenCVBuildEnv.autoLocatePrebuild();
+        const summery = opencv_build_1.OpenCVBuildEnv.autoLocatePrebuild();
+        npmlog_1.default.info('envAutodetect', `autodetect ${picocolors_1.default.green('%d')} changes`, summery.changes);
+        for (const txt of summery.summery) {
+            npmlog_1.default.info('envAutodetect', `- ${picocolors_1.default.yellow('%d')}`, txt);
+        }
     }
     if (options.extra['dry-run'] || options.extra['dryrun']) {
         dryRun = true;
