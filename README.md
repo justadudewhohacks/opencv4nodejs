@@ -470,7 +470,7 @@ cv.imreadAsync('./path/img.jpg', (err, mat) => {
 
 // save image
 cv.imwrite('./path/img.png', mat);
-cv.imwriteAsync('./path/img.jpg', mat,(err) => {
+cv.imwriteAsync('./path/img.jpg', mat, (err) => {
   ...
 })
 
