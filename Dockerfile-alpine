@@ -22,7 +22,7 @@ RUN find /usr/src/opencv/ -type d -empty -print -delete
 
 FROM node:18.8.0-alpine3.16 As production
 ENV OPENCV_BUILD_ROOT=/usr/src/opencv
-ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.5.5
+ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.6.0
 # ARG NODE_ENV=production
 #ENV NODE_ENV=${NODE_ENV}
 WORKDIR /usr/src/app

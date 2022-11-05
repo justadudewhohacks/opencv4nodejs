@@ -21,7 +21,7 @@ RUN find /usr/src/opencv/ -type d -empty -print -delete
 
 FROM node:18 As production
 ENV OPENCV_BUILD_ROOT=/usr/src/opencv
-ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.5.5
+ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.6.0
 WORKDIR /usr/src/app
 COPY --from=build /usr/src/opencv /usr/src/opencv
 COPY --from=build /usr/local/lib/node_modules/@u4 /usr/local/lib/node_modules/@u4
