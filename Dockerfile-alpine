@@ -1,4 +1,4 @@
-FROM node:18.8.0-alpine3.16 As build
+FROM node:18-alpine3.16 As build
 
 RUN apk add --no-cache alpine-sdk cmake linux-headers
 ENV OPENCV_BUILD_ROOT=/usr/src/opencv
@@ -20,7 +20,7 @@ RUN rimraf /usr/src/opencv/opencv-*/build/share/
 RUN find /usr/src/opencv/ -type f -empty -print -delete
 RUN find /usr/src/opencv/ -type d -empty -print -delete
 
-FROM node:18.8.0-alpine3.16 As production
+FROM node:18-alpine3.16 As production
 ENV OPENCV_BUILD_ROOT=/usr/src/opencv
 ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.6.0
 # ARG NODE_ENV=production
