@@ -10,9 +10,9 @@ NC="\e[0m"
 
 if [ ! $# -eq 1 ]
 then
- echo "usage $0 version_number"
+ printf "Usage ${GREEN}${0} version_number${NC}\n"
  # echo "vesion number not profig using ${VERSION} from package.json"
- echo "Check previous version at https://hub.docker.com/repository/docker/${IMG}"
+ printf "Check previous version at https://hub.docker.com/repository/docker/${IMG}\n"
  exit 1;
 else
  VERSION="$1"
@@ -22,15 +22,13 @@ git pull
 
 if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
 then
- echo -e "version_number \"${GREEN}${VERSION}${NC}\" must be a like 1.0.0"
+ printf "version_number \"${GREEN}${VERSION}${NC}\" must be a like 1.0.0\n"
  exit 1
 fi
 
 set -e
 
-echo ""
-echo -e "Building ${RED}${IMG}${NC} version \"${GREEN}${BASE}-${VERSION}${NC}\""
-echo ""
+printf \n"Building ${RED}${IMG}${NC} version \"${GREEN}${BASE}-${VERSION}${NC}\"\n\n"
 
 ARCH=$(arch)
 if [ $ARCH == 'aarch64' ]; then ARCH=arm64; fi
@@ -39,12 +37,11 @@ if [ $ARCH == 'x86_64'  ]; then ARCH=amd64; fi
 # prebuild image:
 time docker build --build-arg VERSION=${VERSION} --pull --rm -f Dockerfile-${BASE}  -t ${IMG}:${VERSION}-${BASE}-${ARCH} .
 
-echo -e "Pushing Image ${RED}:${VERSION}-${BASE}-${ARCH}${NC}"
+printf "Pushing Image ${RED}:${VERSION}-${BASE}-${ARCH}${NC}\n"
 docker push ${IMG}:${VERSION}-${BASE}-${ARCH}
 
-echo -e "Image ${RED}${IMG}${NC}:${GREEN}${VERSION}-${BASE}-${ARCH}${NC} Ready"
-echo -e "Building manifest for version \"${GREEN}${VERSION}-${BASE}${NC}\""
-echo ""
+printf "Image ${RED}${IMG}${NC}:${GREEN}${VERSION}-${BASE}-${ARCH}${NC} Ready\n"
+printf "Building manifest for version \"${GREEN}${VERSION}-${BASE}${NC}\"\n\n"
 
 for FINAL in ${IMG}:${VERSION}-${BASE} ${IMG}:latest
 do
@@ -56,5 +53,5 @@ do
   docker manifest inspect  ${FINAL};
 done
 
-echo -e ${RED}${IMG}${NC} VERSION ${GREEN}${VERSION}-${BASE}${NC} is now published. You can safely delete single arch tags from:
-echo "https://hub.docker.com/repository/docker/${IMG}/tags"
+printf "${RED}${IMG}${NC} VERSION ${GREEN}${VERSION}-${BASE}${NC} is now published. You can safely delete single arch tags from:\n"
+printf "${GREEN}https://hub.docker.com/repository/docker/${IMG}/tags${NC}\n"
