@@ -5,6 +5,8 @@ RED="\e[31m"
 GREEN="\e[32m"
 NC="\e[0m"
 
+VARIANTS=(-debian -alpine)
+
 # $(grep '"version"' package.json | cut -d : -f2 | cut '-d"' -f2)
 
 if [ ! $# -eq 1 ]
@@ -24,26 +26,29 @@ then
  printf "version_number \"${GREEN}${VERSION}${NC}\" must be a like 1.0.0\n"
  exit 1
 fi
+
 set -e
 ARCH=$(arch)
 if [ $ARCH == 'aarch64' ]; then ARCH=arm64; fi
-if [ $ARCH == 'x86_64'  ]; then ARCH=amd64; fi
+if [ $ARCH == 'x86_64' ]; then ARCH=amd64; fi
 
-for VARIANT in -debian -alpine
+for VARIANT in "${VARIANTS[@]}"
 do
   printf "\nBuilding ${RED}${IMG}${NC} version \"${GREEN}${VERSION}${VARIANT}${NC}\"\n\n"
   # prebuild image:
-  time docker build --build-arg VERSION=${VERSION} --pull --rm -f Dockerfile${VARIANT}  -t ${IMG}:${VERSION}${VARIANT}-${ARCH} .
+  time docker build --build-arg VERSION=${VERSION} --pull --rm -f Dockerfile${VARIANT} -t ${IMG}:${VERSION}${VARIANT}-${ARCH} .
   printf "Pushing Image ${RED}${IMG}${NC}:${GREEN}${VERSION}${VARIANT}-${ARCH}${NC}\n"
   docker push ${IMG}:${VERSION}${VARIANT}-${ARCH}
   printf "Image ${RED}${IMG}${NC}:${GREEN}${VERSION}${VARIANT}-${ARCH}${NC} Ready\n"
 done
-for VARIANT in -debian -alpine
+
+for VARIANT in "${VARIANTS[@]}"
 do
   printf "Building manifest for version \"${GREEN}${VERSION}${VARIANT}${NC}\"\n\n"
   TO_PUSH=(${IMG}:${VERSION}${VARIANT})
   [ ${VARIANT} == '-debian' ] && TO_PUSH+=(${IMG}:latest)
   [ ${VARIANT} == '-debian' ] && TO_PUSH+=(${IMG}:${VERSION})
+
   for FINAL in ${TO_PUSH[@]}
   do
     docker manifest rm       ${FINAL} 2> /dev/null || true
@@ -53,6 +58,7 @@ do
     docker manifest push     ${FINAL};
     docker manifest inspect  ${FINAL};
   done
-  printf "${RED}${IMG}${NC} VERSION ${GREEN}${VERSION}${VARIANT}${NC} is now published. You can safely delete single arch tags from:\n"
-  printf "${GREEN}https://hub.docker.com/repository/docker/${IMG}/tags${NC}\n"
+  printf "${RED}${IMG}${NC} VERSION ${GREEN}${VERSION}${VARIANT}${NC} is now published."
 done
+
+printf "You can safely delete single arch tags from:\n${GREEN}https://hub.docker.com/repository/docker/${IMG}/tags${NC}\n"
