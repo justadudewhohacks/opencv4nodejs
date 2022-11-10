@@ -30,7 +30,7 @@ export function getCachedFile(localName: string, url: string, opts?: { notice?: 
       method: 'GET',
       responseType: 'stream',
     });
-    const totalLength = headers['content-length'];
+    const totalLength = headers['content-length'] || "0";
     console.log(`Starting download ${localName}`);
     const writer = fs.createWriteStream(localFile);
     if (!opts?.noProgress) {

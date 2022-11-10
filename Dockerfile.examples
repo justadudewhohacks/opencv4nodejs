@@ -1,0 +1,34 @@
+# docker build --build-arg VERSION=1.0.0 -t test -f Dockerfile.examples .
+FROM urielch/opencv-nodejs:6.2.5-debian As build
+
+WORKDIR /usr/src/app
+ENV NODE_ENV=development
+RUN npm install -g rimraf@3.0.2 typescript@4.8.4
+COPY examples/package.json examples/tsconfig.json ./
+RUN sed -i -r "s/\"@u4\/opencv4nodejs\": \"link:..\",//g" package.json
+# create sym links, longest step
+RUN npm install
+RUN npm link @u4/opencv4nodejs
+COPY examples/src ./src
+RUN npx tsc
+RUN rimraf node_modules/**/*.{md,ts,map,h,c,cc,cpp,gyp,yml,txt}
+RUN rimraf node_modules/{types,@eslint}
+RUN rimraf node_modules/**/{LICENSE,.github,.npmignore,LICENSE.txt,.travis.yml,.eslintrc,sponsors}
+RUN rimraf node_modules/*/{test,binding.gyp}
+RUN rimraf dist/**/{*.map,*.ts}
+RUN find . -type f -empty -print -delete
+RUN find . -type d -empty -print -delete
+
+FROM urielch/opencv-nodejs:6.2.5-debian As production
+ARG NODE_ENV=production
+ENV NODE_ENV=production
+WORKDIR /usr/src/app
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/package* ./
+COPY --from=build /usr/src/app/src ./src
+COPY ./data /usr/src/data
+ARG VERSION
+ENV VERSION=$VERSION
+CMD ["node", "src/applyColorMap"]
+
+# docker run -it --rm test bash
