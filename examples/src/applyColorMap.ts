@@ -11,6 +11,7 @@ export async function applyColorMap() {
 
     const windowName = "applyColorMap";
     cv_imshow(windowName, processedImage);
+    // display windows applyColorMap MD5:d03d0f333e79a36f50b00746a83ebb5e
     cv_setWindowProperty(windowName, cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
     // console.log('FULLSCREEN:', cv.getWindowProperty(windowName, cv.WND_PROP_FULLSCREEN));
     // console.log('AUTOSIZE:', cv.getWindowProperty(windowName, cv.WND_PROP_AUTOSIZE));

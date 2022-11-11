@@ -1,0 +1,40 @@
+# docker build --build-arg VERSION=1.0.0 -t test-debian -f Dockerfile.debian.examples .
+# docker run --rm test-debian
+# docker run -it --rm test-debian bash
+
+##############
+# First step transpile Typescript to JS files with NODE_ENV=development
+FROM urielch/opencv-nodejs:6.2.5-debian As build
+WORKDIR /usr/src/app
+ENV NODE_ENV=development
+RUN npm install -g rimraf@3.0.2
+COPY examples/package.json ./
+COPY examples/tsconfig.prod.json ./tsconfig.json
+RUN sed -i -r "s/\"@u4\/opencv4nodejs\": \"link:..\",//g" package.json
+RUN npm install && npm cache clean --force
+RUN npm link @u4/opencv4nodejs
+COPY examples/src/applyColorMap.ts examples/src/utils.ts ./src/
+# do not need data at transpile step
+# COPY ./data/Lenna.png /usr/src/data/Lenna.png
+RUN npx tsc
+
+##############
+# Second step Build finAal image and clean node_nodules content this time NODE_ENV=production
+FROM urielch/opencv-nodejs:6.2.5-debian
+WORKDIR /usr/src/app
+ENV NODE_ENV=production
+COPY --from=build /usr/src/app/package*.json ./
+RUN npm install -g rimraf@3.0.2 && \
+    npm install && \
+    rimraf node_modules/**/*.{md,ts,map,h,c,cc,cpp,gyp,yml,txt} node_modules/**/{LICENSE,.github,.npmignore,LICENSE.txt,.travis.yml,.eslintrc,sponsors} && \
+    npm uninstall -g rimraf@3.0.2 && \
+    npm cache clean --force && \
+    find . -type f -empty -print -delete && \
+    find . -type d -empty -print -delete && \
+    npm link @u4/opencv4nodejs
+COPY ./data/Lenna.png /usr/src/data/Lenna.png
+COPY --from=build /usr/src/app/src/*.js ./src/
+# ARG VERSION
+# ENV VERSION=$VERSION
+ENV HEADLESS=1
+CMD ["node", "src/applyColorMap"]
