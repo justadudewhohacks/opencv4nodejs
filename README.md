@@ -14,23 +14,28 @@ In this case you have to choose witch version you want to link.
 #### Environement variable
 Define environement variable:
 - `OPENCV4NODEJS_DISABLE_AUTOBUILD`=`1`
-- `OPENCV_INCLUDE_DIR`=`include path`
-- `OPENCV_LIB_DIR`=`lib path`
-- `OPENCV_BIN_DIR`=`binary path`
+
+If you do not install openCV with a common setup like chocolote, apt or brew, you may need to also define:
+ `OPENCV_INCLUDE_DIR`=`include path` , `OPENCV_LIB_DIR`=`lib path`, `OPENCV_BIN_DIR`=`binary path`
 
 #### package.json
 Define an opencv4nodejs section in your package.json like:
 ```json
 "opencv4nodejs" {
   "disableAutoBuild": "1",
-  "OPENCV_INCLUDE_DIR": "",
-  "OPENCV_LIB_DIR": "",
-  "OPENCV_BIN_DIR": "",
 }
 ```
+If you do not install openCV with a common setup like chocolote, apt or brew, you may need to also define:
+  `"OPENCV_INCLUDE_DIR"`, `"OPENCV_LIB_DIR"`, `"OPENCV_BIN_DIR"`
 
 #### use build-opencv
 Call `build-opencv` once like:
+```bash
+npm link
+build-opencv --nobuild rebuild
+```
+
+If you do not install openCV with a common setup like chocolote, apt or brew, you may need to also define:
 ```bash
 npm link
 build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --binDir=/usr/bin/ --nobuild rebuild
@@ -45,17 +50,17 @@ ex:
 OPENCV_BUILD_ROOT=~/opencv
 ```
 
-**3 way to build openCV 4.5.5**
+**3 way to build openCV 4.6.0**
 
 #### Environement variable
 Define environement variable:
-- `OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION`="4.5.5"
+- `OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION`="4.6.0"
 
 #### package.json
 Define an opencv4nodejs section in your package.json like:
 ```json
 "opencv4nodejs" {
-  "autoBuildOpencvVersion": "4.5.5",
+  "autoBuildOpencvVersion": "4.6.0",
 }
 ```
 
@@ -63,8 +68,13 @@ Define an opencv4nodejs section in your package.json like:
 Call `build-opencv` once like:
 ```bash
 npm link
-build-opencv --version 4.5.5 rebuild
+build-opencv --version 4.6.0 rebuild
 ```
+
+** make it portable use Docker **
+You can also use my [docker image](https://hub.docker.com/repository/docker/urielch/opencv-nodejs) I use it on my raspberry Pi 4, and build them on an ~~Oracle Ampere~~ (they delete all my stuff and do not reply to my requests) Mac Mini M1
+
+check Docker sample down below
 
 ## for advanced option
 
@@ -315,9 +325,13 @@ build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --bi
 
 ## Usage with Docker
 
+### a sample DockerBuild script is available [here](https://github.com/UrielCh/opencv4nodejs/blob/master/Dockerfile.debian.examples)
+
+This is a optimized 2 stages images working on ARM64 and AMD64, tested on raspberry Pi4, and Apple silicon, intel Core, and AMD Ryzen CPU.
+
 ### [opencv-express](https://github.com/justadudewhohacks/opencv-express) - example for opencv4nodejs with express.js and docker
 
-Or simply pull from [justadudewhohacks/opencv-nodejs](https://hub.docker.com/r/urielch/opencv-nodejs) for opencv-4.5.5 contrib with opencv4nodejs binary globally installed:
+Or simply pull from [urielch/opencv-nodejs](https://hub.docker.com/r/urielch/opencv-nodejs) for opencv-4.6.0 contrib with opencv4nodejs binary globally installed:
 
 ``` docker
 FROM urielch/opencv-nodejs
