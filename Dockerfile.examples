@@ -1,4 +1,5 @@
 # docker build --build-arg VERSION=1.0.0 -t test -f Dockerfile.examples .
+# docker run -it --rm test bash
 FROM urielch/opencv-nodejs:6.2.5-debian As build
 
 WORKDIR /usr/src/app
@@ -29,6 +30,5 @@ COPY --from=build /usr/src/app/src ./src
 COPY ./data /usr/src/data
 ARG VERSION
 ENV VERSION=$VERSION
+ENV HEADLESS=1
 CMD ["node", "src/applyColorMap"]
-
-# docker run -it --rm test bash

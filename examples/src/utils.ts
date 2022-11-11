@@ -5,6 +5,7 @@ export { default as cv } from '@u4/opencv4nodejs';
 import Axios from 'axios';
 import ProgressBar from 'progress';
 import pc from 'picocolors';
+import crypto from 'crypto';
 
 export const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -135,8 +136,13 @@ export const drawRect = (image: Mat, rect: Rect, color: Vec3, opts = { thickness
     cv.LINE_8
   );
 
+const { HEADLESS } = process.env;
 
 export async function wait4key(): Promise<'terminal' | 'window'> {
+  if (HEADLESS) {
+    await delay(100);
+    return 'terminal';
+  }
   // console.log('press a key to continue.');
   if (process.stdin.isTTY)
     process.stdin.setRawMode(true);
@@ -163,6 +169,27 @@ export async function wait4key(): Promise<'terminal' | 'window'> {
   if (process.stdin.isTTY)
     process.stdin.setRawMode(false);
   return done;
+}
+
+/**
+ * call cv.imshow() if HEADLESS is not set
+ * else display image md5
+ */
+export function cv_imshow(winName: string, img: Mat): void {
+  if (HEADLESS) {
+    const md5sum = crypto.createHash('md5');
+    const buffer = img.getData();
+    md5sum.update(buffer)
+    console.log(`display windows ${winName} MD5:${md5sum.digest('hex')}`);
+  } else {
+    return cv.imshow(winName, img);
+  }
+}
+
+export function cv_setWindowProperty(winName: string, prop_id: number, prop_value: number): void {
+  if (!HEADLESS) {
+    return cv.setWindowProperty(winName, prop_id, prop_value);
+  }
 }
 
 export const drawBlueRect = (image: Mat, rect: Rect, opts = { thickness: 2 }) =>
