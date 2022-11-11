@@ -10,7 +10,7 @@ ENV NODE_ENV=development
 RUN npm install -g rimraf@3.0.2
 COPY examples/package.json ./
 COPY examples/tsconfig.prod.json ./tsconfig.json
-RUN sed -i -r "s/\"@u4\/opencv4nodejs\": \"link:..\",//g" package.json
+RUN sed -i -r "s/\"@u4\/opencv4nodejs\": \".+\",//g" package.json
 RUN npm install && npm cache clean --force
 RUN npm link @u4/opencv4nodejs
 COPY examples/src/applyColorMap.ts examples/src/utils.ts ./src/
