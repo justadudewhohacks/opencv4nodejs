@@ -2,13 +2,15 @@
 # start MacOS docker:
 # open -a /Applications/Docker.app
 # security -v unlock-keychain ~/Library/Keychains/login.keychain-db
-# setip doc: https://github.com/docker/for-mac/issues/6504
+# Headless docker on MacOS doc: https://github.com/docker/for-mac/issues/6504
+
 VERSION="6.2.5"
 IMG=urielch/opencv-nodejs;
 RED="\e[31m"
 GREEN="\e[32m"
 NC="\e[0m"
 VARIANTS=(-debian -alpine)
+# ARCHS=(arm64 amd64 s390x ppc64le mips64le 386 armv5 armv7 armv8)
 ARCHS=(arm64 amd64)
 LATEST_VARIANT=${VARIANTS[0]}
 NAMESPACE=${IMG%/*}
@@ -56,7 +58,7 @@ set -e
 ARCH=$(arch)
 if [ $ARCH == 'aarch64' ]; then ARCH=arm64; fi
 if [ $ARCH == 'x86_64' ]; then ARCH=amd64; fi
-
+# TODO add aliases for s390x ppc64le mips64le 386 armv5 armv7 armv8
 for VARIANT in "${VARIANTS[@]}"
 do
   printf "\nBuilding ${RED}${IMG}${NC} version \"${GREEN}${VERSION}${VARIANT}${NC}\"\n\n"
@@ -77,13 +79,10 @@ do
   for FINAL in ${TO_PUSH[@]}
   do
     docker manifest rm       ${FINAL} 2> /dev/null || true
-    # docker manifest create   ${FINAL} ${IMG}:${VERSION}${VARIANT}-arm64 ${IMG}:${VERSION}${VARIANT}-amd64;
-
     CREATE_CMD=(docker manifest create ${FINAL})
     for ARCH in "${ARCHS[@]}"; do CREATE_CMD+=(${IMG}:${VERSION}${VARIANT}-${ARCH}); done
     ${CREATE_CMD[@]}
-    
-    for ARCH in "${ARCHS[@]}"; do docker manifest annotate ${FINAL} ${IMG}:${VERSION}${VARIANT}-${ARCH} --arch ${ARCH}; done
+    for ARCH in "${ARCHS[@]}"; do docker manifest annotate ${FINAL} ${IMG}:${VERSION}${VARIANT}-${ARCH} --arch ${ARCH}; done;
     docker manifest push     ${FINAL};
     docker manifest inspect  ${FINAL};
   done
