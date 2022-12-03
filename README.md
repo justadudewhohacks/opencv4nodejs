@@ -230,8 +230,8 @@ set OPENCV4NODEJS_DISABLE_AUTOBUILD=1
 You can install any of the OpenCV 3 or OpenCV 4 [releases](https://github.com/opencv/opencv/releases/) manually or via the [Chocolatey](https://chocolatey.org/) package manager:
 
 ``` bash
-# to install OpenCV 4.1.0
-choco install OpenCV -y -version 4.1.0
+# to install OpenCV 4.6.0
+choco install OpenCV -y -version 4.6.0
 ```
 
 Note, this will come without contrib modules. To install OpenCV under windows with contrib modules you have to build the library from source or you can use the auto build script.
@@ -276,7 +276,7 @@ This is an advanced customization and you should have knowledge regarding the Op
 ### Installing a Specific Version of OpenCV
 
 You can specify the Version of OpenCV you want to install via the script by setting an environment variable:
-`export OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.1.0`
+`export OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.6.0`
 
 ### Installing only a Subset of OpenCV modules
 
