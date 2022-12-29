@@ -11,11 +11,11 @@ In this case you have to choose witch version you want to link.
 
 **3 way to use your own openCV**
 
-#### Environement variable
-Define environement variable:
+#### Environment variable
+Define environment variable:
 - `OPENCV4NODEJS_DISABLE_AUTOBUILD`=`1`
 
-If you do not install openCV with a common setup like chocolote, apt or brew, you may need to also define:
+If you do not install openCV with a common setup like chocolate, apt or brew, you may need to also define:
  `OPENCV_INCLUDE_DIR`=`include path` , `OPENCV_LIB_DIR`=`lib path`, `OPENCV_BIN_DIR`=`binary path`
 
 #### package.json
@@ -41,9 +41,9 @@ npm link
 build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --binDir=/usr/bin/ --nobuild rebuild
 ```
 
-### To build you own openCV using included builder
+### To build your own openCV using included builder
 
-If you wan to build OpenCV define the environement variable `OPENCV_BUILD_ROOT` to speedup your developpement, so openCV build will be processed pout of your node_modules
+If you want to build OpenCV define the environement variable `OPENCV_BUILD_ROOT` to speedup your development, so openCV build will be processed out of your node_modules
 
 ex:
 ```bash
@@ -52,8 +52,8 @@ OPENCV_BUILD_ROOT=~/opencv
 
 **3 way to build openCV 4.6.0**
 
-#### Environement variable
-Define environement variable:
+#### Environment variable
+Define environment variable:
 - `OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION`="4.6.0"
 
 #### package.json
