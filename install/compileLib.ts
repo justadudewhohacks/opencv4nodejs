@@ -1,4 +1,4 @@
-import { OpencvModule, OpenCVBuilder, OpenCVBuildEnv, OpenCVBuildEnvParams, args2Option, genHelp } from '@u4/opencv-build'
+import { type OpencvModule, OpenCVBuilder, OpenCVBuildEnv, type OpenCVBuildEnvParams, args2Option, genHelp } from '@u4/opencv-build'
 import child_process from 'child_process'
 import fs from 'fs'
 import log from 'npmlog'
@@ -12,6 +12,15 @@ const defaultDir = '/usr/local'
 const defaultLibDir = `${defaultDir}/lib`
 const defaultIncludeDir = `${defaultDir}/include`
 const defaultIncludeDirOpenCV4 = `${defaultIncludeDir}/opencv4`
+
+function toBool(value?: string | null) {
+    if (!value)
+        return false;
+    value = value.toLowerCase();
+    if (value === '0' || value === 'false' || value === 'off' || value.startsWith('disa'))
+        return false;
+    return true;
+}
 
 /**
  * @returns global system include paths
@@ -139,7 +148,7 @@ export async function compileLib(args: string[]) {
     const env = process.env;
     const npmEnv = OpenCVBuildEnv.readEnvsFromPackageJson() || {};
     if (action === 'auto') {
-        if (env.OPENCV4NODEJS_DISABLE_AUTOBUILD) {
+        if (toBool(env.OPENCV4NODEJS_DISABLE_AUTOBUILD)) {
             action = 'rebuild'
         }
         if (env.OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION) {
@@ -149,12 +158,10 @@ export async function compileLib(args: string[]) {
             action = 'rebuild';
         }
     }
-    if (action === 'auto') {
-        console.log(`Use 'npx build-opencv rebuild' script to start node-gyp, use --help to check all options.
-or configure configure a opencv4nodejs section in your package.json
-or use OPENCV4NODEJS_* env variable.`)
-        return;
-    }
+
+    let builder: OpenCVBuilder | null = null;
+
+
     const options: OpenCVBuildEnvParams = args2Option(args)
     if (options.extra.jobs) {
         JOBS = options.extra.jobs;
@@ -175,7 +182,26 @@ or use OPENCV4NODEJS_* env variable.`)
     for (const K in ['autoBuildFlags']) {
         if (options[K]) console.log(`using ${K}:`, options[K]);
     }
-    const builder = new OpenCVBuilder(options);
+
+    try {
+        builder = new OpenCVBuilder({ ...options, prebuild: 'latestBuild' });
+    } catch (_e) {
+        // ignore
+    }
+    if (action === 'auto' && builder) action = 'rebuild';
+
+
+    if (action === 'auto' && !builder) {
+        console.log(`Use 'npx build-opencv rebuild' script to start node-gyp, use --help to check all options.
+or configure configure a opencv4nodejs section in your package.json
+or use OPENCV4NODEJS_* env variable.`)
+        return;
+    }
+
+    if (!builder) {
+        builder = new OpenCVBuilder(options);
+    }
+
     log.info('install', `Using openCV ${pc.green('%s')}`, builder.env.opencvVersion)
     /**
      * prepare environment variable

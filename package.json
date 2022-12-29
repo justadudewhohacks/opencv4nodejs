@@ -1,6 +1,6 @@
 {
   "name": "@u4/opencv4nodejs",
-  "version": "6.2.5",
+  "version": "6.3.0",
   "description": "Asynchronous OpenCV 3.x / 4.x nodejs bindings with JavaScript and TypeScript API.",
   "keywords": [
     "opencv",
@@ -41,7 +41,7 @@
     "install_default": "tsc && node bin/install.js rebuild",
     "install_ubuntu": "echo call: sudo apt install libopencv-dev; build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --binDir=/usr/bin/ --nobuild rebuild",
     "install_macm1": "tsc && node bin/install.js --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64 -DWITH_FFMPEG=ON\" rebuild",
-    "install_cuda": "tsc && node bin/install.js --version 4.5.5 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_FFMPEG=ON\" rebuild",
+    "install_cuda": "tsc && cross-env OPENCV4NODEJS_DISABLE_AUTOBUILD= node bin/install.js --version 4.6.0 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_FFMPEG=ON\" rebuild",
     "test": "cd test && pnpm install && pnpm run test",
     "samples": "cd examples && pnpm install && tsc && node ./src/templateMatch/multiMatchBench.js && node ./src/templateMatch/multiMatchColision.js && node ./src/applyColorMap.js && node ./src/asyncMatchFeatures.js && node ./src/faceDetect/asyncFaceDetection.js",
     "do-build": "tsc && node bin/install.js --version 4.5.5 --jobs MAX build",
@@ -52,31 +52,32 @@
     "build-debug": "tsc && BINDINGS_DEBUG=true node bin/install.js rebuild"
   },
   "dependencies": {
-    "@u4/opencv-build": "^0.5.12",
+    "@u4/opencv-build": "^0.6.0",
     "@u4/tiny-glob": "^0.3.1",
     "nan": "^2.17.0",
     "native-node-utils": "^0.2.7",
-    "node-gyp": "^9.3.0",
+    "node-gyp": "^9.3.1",
     "npmlog": "^7.0.1",
     "picocolors": "^1.0.0"
   },
   "devDependencies": {
     "@types/mri": "^1.1.1",
-    "@types/node": "^18.11.2",
+    "@types/node": "^18.11.18",
     "@types/npmlog": "^4.1.4",
     "@types/progress": "^2.0.5",
-    "@typescript-eslint/eslint-plugin": "^5.40.1",
-    "@typescript-eslint/parser": "^5.40.1",
-    "axios": "^1.1.3",
-    "eslint": "^8.25.0",
+    "@typescript-eslint/eslint-plugin": "^5.47.1",
+    "@typescript-eslint/parser": "^5.47.1",
+    "axios": "^1.2.2",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.30.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.6.0",
     "progress": "^2.0.3",
     "rimraf": "^3.0.2",
-    "typescript": "^4.8.4"
+    "typescript": "^4.9.4"
   },
   "files": [
     "cc",

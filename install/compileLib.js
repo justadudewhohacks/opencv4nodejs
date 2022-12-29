@@ -17,6 +17,14 @@ const defaultDir = '/usr/local';
 const defaultLibDir = `${defaultDir}/lib`;
 const defaultIncludeDir = `${defaultDir}/include`;
 const defaultIncludeDirOpenCV4 = `${defaultIncludeDir}/opencv4`;
+function toBool(value) {
+    if (!value)
+        return false;
+    value = value.toLowerCase();
+    if (value === '0' || value === 'false' || value === 'off' || value.startsWith('disa'))
+        return false;
+    return true;
+}
 /**
  * @returns global system include paths
  */
@@ -136,7 +144,7 @@ async function compileLib(args) {
     const env = process.env;
     const npmEnv = opencv_build_1.OpenCVBuildEnv.readEnvsFromPackageJson() || {};
     if (action === 'auto') {
-        if (env.OPENCV4NODEJS_DISABLE_AUTOBUILD) {
+        if (toBool(env.OPENCV4NODEJS_DISABLE_AUTOBUILD)) {
             action = 'rebuild';
         }
         if (env.OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION) {
@@ -146,12 +154,7 @@ async function compileLib(args) {
             action = 'rebuild';
         }
     }
-    if (action === 'auto') {
-        console.log(`Use 'npx build-opencv rebuild' script to start node-gyp, use --help to check all options.
-or configure configure a opencv4nodejs section in your package.json
-or use OPENCV4NODEJS_* env variable.`);
-        return;
-    }
+    let builder = null;
     const options = (0, opencv_build_1.args2Option)(args);
     if (options.extra.jobs) {
         JOBS = options.extra.jobs;
@@ -170,7 +173,23 @@ or use OPENCV4NODEJS_* env variable.`);
         if (options[K])
             console.log(`using ${K}:`, options[K]);
     }
-    const builder = new opencv_build_1.OpenCVBuilder(options);
+    try {
+        builder = new opencv_build_1.OpenCVBuilder({ ...options, prebuild: 'latestBuild' });
+    }
+    catch (_e) {
+        // ignore
+    }
+    if (action === 'auto' && builder)
+        action = 'rebuild';
+    if (action === 'auto' && !builder) {
+        console.log(`Use 'npx build-opencv rebuild' script to start node-gyp, use --help to check all options.
+or configure configure a opencv4nodejs section in your package.json
+or use OPENCV4NODEJS_* env variable.`);
+        return;
+    }
+    if (!builder) {
+        builder = new opencv_build_1.OpenCVBuilder(options);
+    }
     npmlog_1.default.info('install', `Using openCV ${picocolors_1.default.green('%s')}`, builder.env.opencvVersion);
     /**
      * prepare environment variable

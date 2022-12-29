@@ -1,5 +1,8 @@
 # changelog
 
+## Version 6.3.0
+* use new @u4/opencv-build@0.6.0
+
 ## Version 6.2.5
 * update @u4/opencv-build
 * replace tiny-glob by @u4/tiny-glob

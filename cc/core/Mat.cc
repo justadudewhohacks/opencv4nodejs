@@ -432,7 +432,7 @@ NAN_METHOD(Mat::New) {
     } else if (dim == 2) {
       long rows = rowArray0->Length();
       long numCols = -1;
-      for (uint i = 0; i < rows; i++) {
+      for (long i = 0; i < rows; i++) {
         if (!Nan::Get(rowArray0, i).ToLocalChecked()->IsArray()) return tryCatch.throwError("Column should be an array, at column: " + std::to_string(i));
         v8::Local<v8::Array> colArray = v8::Local<v8::Array>::Cast(Nan::Get(rowArray0, i).ToLocalChecked());
         if (numCols == -1) numCols = colArray->Length();
