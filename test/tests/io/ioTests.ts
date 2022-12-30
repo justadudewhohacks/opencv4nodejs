@@ -26,8 +26,8 @@ export default function (args: TestContext) {
 
   const getLennaBase64Buf = () => lennaBase64Buf;
   const getGotBase64Buf = () => gotBase64Buf;
-  let imageData: Buffer;
-  let imageDataCopy: Buffer;
+  // let imageData: Buffer;
+  // let imageDataCopy: Buffer;
 
   const lennaBase64File = fs.readFileSync(path.join(__dirname, 'data/lennaBase64.json'), { encoding: 'utf8', flag: 'r' });
   const gotBase64File = fs.readFileSync(path.join(__dirname, 'data/gotBase64.json'), { encoding: 'utf8', flag: 'r' });
@@ -36,8 +36,8 @@ export default function (args: TestContext) {
     got = cv.imread(getTestImagePath(false));
     lennaBase64Buf = Buffer.from(JSON.parse(lennaBase64File).data, 'base64');
     gotBase64Buf = Buffer.from(JSON.parse(gotBase64File).data, 'base64');
-    imageData = fs.readFileSync(getTestImagePath(true));
-    imageDataCopy = Buffer.from(imageData);
+    // imageData = fs.readFileSync(getTestImagePath(true));
+    // imageDataCopy = Buffer.from(imageData);
   });
 
   describe('imread', () => {
@@ -74,8 +74,8 @@ export default function (args: TestContext) {
     });
   });
 
-  describe('imencode', () => {
-    describe('png', () => {
+  describe('io imencode', () => {
+    describe('io imencode png', () => {
       const pngPrefixLength = 18;
 
       const ext = '.png';
@@ -94,7 +94,7 @@ export default function (args: TestContext) {
       });
     });
 
-    describe('jpg', () => {
+    describe('io imencode jpg', () => {
       const jpgPrefixLength = 12;
 
       const ext = '.jpg';
@@ -114,8 +114,9 @@ export default function (args: TestContext) {
     });
   });
 
-  describe('imdecode', () => {
-    describe('sync', () => {
+  describe('io imdecode', () => {
+    describe('io imdecode sync', () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore:next-line
       funcShouldRequireArgs(cv.imdecode);
 
@@ -130,7 +131,7 @@ export default function (args: TestContext) {
       });
     });
 
-    describe('async', () => {
+    describe('io imdecode async', () => {
       _asyncFuncShouldRequireArgs(cv.imdecodeAsync);
 
       it('should decode png', async () => {

@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { assert, expect } from 'chai';
 
 import { assertError, asyncFuncShouldRequireArgs, _funcShouldRequireArgs as funcShouldRequireArgs } from './testUtils';
 
 import { emptyFunc, getEmptyArray } from './commons';
-import { APITestOpts } from '../tests/model';
+import { APITestOpts, OpenCV } from '../tests/model';
 
 export const getDefaultAPITestOpts = (opts: Partial<APITestOpts>): Partial<APITestOpts> => ({
   hasAsync: true,
@@ -14,6 +15,9 @@ export const getDefaultAPITestOpts = (opts: Partial<APITestOpts>): Partial<APITe
   afterHook: null,
   ...opts,
 });
+
+// eslint-disable-next-line no-unused-vars
+type DoneError = (err?: unknown) => void;
 
 export const generateAPITests = (opts: Partial<APITestOpts>): void => {
   const {
@@ -48,16 +52,16 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
   const hasOptArgs = !!getOptionalArg || !!getOptionalArgsMap;
   const hasOptArgsObject = !!getOptionalArgsMap;
 
-  const expectAsyncOutput = (done: (err?: any) => void, dut, args, res) => {
+  const expectAsyncOutput = (done: DoneError, dut: OpenCV, args: any[], res: any) => {
     try {
       expectOutput(res, dut, args);
       done();
-    } catch (err) {
-      done(err);
+    } catch (err2) {
+      done(err2);
     }
   };
 
-  const expectOutputCallbacked = (done, dut, args) => (err, res) => {
+  const expectOutputCallbacked = (done: DoneError, dut: OpenCV, args: any[]) => (err: Error | null, res: any) => {
     if (err) {
       done(err);
     } else {
@@ -65,7 +69,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
     }
   };
 
-  const expectOutputPromisified = (done, dut, args) => (res) => expectAsyncOutput(done, dut, args, res);
+  const expectOutputPromisified = (done: DoneError, dut: OpenCV, args: any[]) => (res: any) => expectAsyncOutput(done, dut, args, res);
 
   const generateTests = (type?: 'callbacked' | 'promised') => {
     const isCallbacked = type === 'callbacked';
@@ -79,7 +83,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
     const typeErrMsg = (argN) => `${getErrPrefix()} expected argument ${argN} to be of type`;
     const propErrMsg = (prop) => `${getErrPrefix()} expected property ${prop} to be of type`;
 
-    const expectSuccess = (args, done) => {
+    const expectSuccess = (args: any[], done: DoneError) => {
       const dut = getDut();
       if (isPromised) {
         return dut[method].apply(dut, args)
@@ -93,7 +97,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
       return done();
     };
 
-    const expectError = (args, errMsg, done) => {
+    const expectError = (args: any[], errMsg: string, done: DoneError) => {
       const dut = getDut();
       if (isPromised) {
         return dut[method].apply(dut, args)
@@ -108,7 +112,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
       }
 
       if (isCallbacked) {
-        const argsWithCb = args.concat((err) => {
+        const argsWithCb = args.concat((err: Error) => {
           try {
             expect(err).to.be.an('error');
             assert.include(err.toString(), errMsg);
@@ -128,36 +132,36 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
       return done();
     };
 
-    it('should be callable with required args', (done) => {
+    it('should be callable with required args', (done: DoneError) => {
       const args = getRequiredArgs().slice();
       expectSuccess(args, done);
     });
 
     if (hasRequiredArgs) {
-      it('should throw if required arg invalid', (done) => {
+      it('should throw if required arg invalid', (done: DoneError) => {
         const args = [undefined];
         expectError(args, typeErrMsg(0), done);
       });
     }
 
     if (hasOptArgs) {
-      it('should be callable with optional args', (done) => {
+      it('should be callable with optional args', (done: DoneError) => {
         const args = getRequiredArgs().slice().concat(getOptionalArgs());
         expectSuccess(args, done);
       });
 
-      it('should throw if opt arg invalid', (done) => {
+      it('should throw if opt arg invalid', (done: DoneError) => {
         const args = getRequiredArgs().slice().concat(undefined);
         expectError(args, typeErrMsg(getRequiredArgs().length), done);
       });
 
       if (hasOptArgsObject) {
-        it('should be callable with optional args object', (done) => {
+        it('should be callable with optional args object', (done: DoneError) => {
           const args = getRequiredArgs().slice().concat(getOptionalArgsObject());
           expectSuccess(args, done);
         });
 
-        it('should throw if opt arg object prop invalid', (done) => {
+        it('should throw if opt arg object prop invalid', (done: DoneError) => {
           const prop = getOptionalArgsMap()[0][0];
           const args = getRequiredArgs().slice().concat({
             [prop]: undefined,

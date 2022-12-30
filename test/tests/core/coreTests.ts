@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Point3 } from '@u4/opencv4nodejs';
+import { Mat, Point3 } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
 
 let asyncHooks = null;
@@ -165,7 +165,7 @@ export default function (args: TestContext) {
     const y = new cv.Mat([[0, 1, 100]], cv.CV_32F);
     const angleInDegrees = true;
 
-    const expectOutput = (res) => {
+    const expectOutput = (res: { magnitude: Mat, angle: Mat }) => {
       expect(res).to.have.property('magnitude').to.be.instanceOf(cv.Mat);
       expect(res).to.have.property('angle').to.be.instanceOf(cv.Mat);
       assertMetaData(res.magnitude)(1, 3, cv.CV_32F);

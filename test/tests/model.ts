@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
 import Chai from 'chai';
 import {
@@ -7,7 +8,7 @@ import {
 export type OpenCV = typeof cv
 
 export interface APITestOpts {
-    getDut?: any,
+    getDut?: () => OpenCV,
     methodName?: string,
     methodNameSpace?: string,
     expectOutput?: (res: any, dut: any, args: any) => void,
