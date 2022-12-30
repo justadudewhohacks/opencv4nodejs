@@ -1,3 +1,4 @@
+import { VideoWriter } from '@u4/opencv4nodejs';
 import { expect } from 'chai';
 import { TestContext } from '../model';
 
@@ -25,7 +26,7 @@ export default function (args: TestContext) {
   });
 
   describe('write', () => {
-    let writer;
+    let writer: VideoWriter | undefined;
     before(() => {
       clearTmpData();
       writer = new cv.VideoWriter(

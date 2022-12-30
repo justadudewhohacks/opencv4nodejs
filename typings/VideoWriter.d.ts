@@ -9,4 +9,5 @@ export class VideoWriter {
   set(property: number, value: number): void;
   write(img: Mat): void;
   writeAsync(img: Mat): Promise<void>;
+  writeAsync(img: Mat, callback: () => void): void;
 }

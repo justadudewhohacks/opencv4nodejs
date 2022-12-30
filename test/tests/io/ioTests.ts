@@ -88,8 +88,10 @@ export default function (args: TestContext) {
           lenna,
         ]),
         getOptionalArg: () => flags,
-        expectOutput: (enc) => {
-          expect(enc.slice(0, pngPrefixLength)).to.deep.equal(getLennaBase64Buf().slice(0, pngPrefixLength));
+        expectOutput: (enc: Uint8Array) => {
+          const encPrefix = enc.slice(0, pngPrefixLength);
+          const lennaPrefix = getLennaBase64Buf().slice(0, pngPrefixLength);
+          expect(encPrefix).to.deep.equal(lennaPrefix);
         },
       });
     });
@@ -107,8 +109,10 @@ export default function (args: TestContext) {
           got,
         ]),
         getOptionalArg: () => flags,
-        expectOutput: (enc) => {
-          expect(enc.slice(0, jpgPrefixLength)).to.deep.equal(getGotBase64Buf().slice(0, jpgPrefixLength));
+        expectOutput: (enc: Uint8Array) => {
+          const encPrefix = enc.slice(0, jpgPrefixLength);
+          const lennaPrefix = getGotBase64Buf().slice(0, jpgPrefixLength);
+          expect(encPrefix).to.deep.equal(lennaPrefix);
         },
       });
     });
