@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const isFn = (obj: unknown) => typeof obj === 'function';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const isAsyncFn = (fn: (...args: any[]) => any) => fn.prototype.constructor.name.endsWith('Async');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const promisify = (fn: () => any) => function (...params: any[]) {
   if (isFn(params[params.length - 1])) {
     return fn.apply(this, params);
@@ -10,7 +10,6 @@ const promisify = (fn: () => any) => function (...params: any[]) {
 
   return new Promise((resolve, reject) => {
     const args = Array.prototype.slice.call(params);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     args.push(function(err: Error, res: any) {
       if (err) {
         return reject(err);

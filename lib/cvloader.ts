@@ -1,7 +1,7 @@
 import { OpenCVBuilder, type OpenCVBuildEnvParams } from '@u4/opencv-build';
 import * as fs from 'fs';
 import * as path from 'path';
-import { isElectronWebpack, resolvePath } from './commons';
+import { isElectronWebpack, resolvePath } from './commons.js';
 import * as pc from 'picocolors'
 import { info } from 'npmlog';
 import type * as openCV from '..';

@@ -174,9 +174,6 @@ export async function compileLib(args: string[]) {
     const env = process.env;
     const npmEnv = OpenCVBuildEnv.readEnvsFromPackageJson() || {};
     if (action === 'auto') {
-        console.log('NEW build DETECTION START')
-        console.log('NEW build DETECTION START')
-        console.log('NEW build DETECTION START')
         try {
             const openCV = getOpenCV({ prebuild: 'latestBuild' });
             const version = openCV.version;
@@ -187,9 +184,6 @@ export async function compileLib(args: string[]) {
             console.log(_e);
             // no build available
         }
-        console.log('NEW build DETECTION END')
-        console.log('NEW build DETECTION END')
-        console.log('NEW build DETECTION END')
 
         if (toBool(env.OPENCV4NODEJS_DISABLE_AUTOBUILD)) {
             action = 'rebuild'
