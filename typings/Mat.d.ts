@@ -9,7 +9,6 @@ import { Vec2 } from './Vec2.d';
 import { Vec3 } from './Vec3.d';
 import { Vec4 } from './Vec4.d';
 
-
 export class DrawContoursOptions {
   /**
    * Maximal level for drawn contours. If it is 0, only the specified contour is drawn. If it is 1, the function draws the contour(s) and all the nested contours. If it is 2, the function draws the contours, all the nested contours, all the nested-to-nested contours, and so on. This parameter is only taken into account when there is hierarchy available.

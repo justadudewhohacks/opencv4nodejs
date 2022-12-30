@@ -1,8 +1,8 @@
 import { OpenCVBuilder, type OpenCVBuildEnvParams } from '@u4/opencv-build';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 import { isElectronWebpack, resolvePath } from './commons';
-import pc from 'picocolors'
+import * as pc from 'picocolors'
 import { info } from 'npmlog';
 import type * as openCV from '..';
 declare type OpenCVType = typeof openCV;

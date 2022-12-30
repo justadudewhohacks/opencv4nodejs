@@ -1,18 +1,15 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.compileLib = void 0;
 const opencv_build_1 = require("@u4/opencv-build");
-const child_process_1 = __importDefault(require("child_process"));
-const fs_1 = __importDefault(require("fs"));
-const npmlog_1 = __importDefault(require("npmlog"));
-const commons_1 = require("../lib/commons");
-const picocolors_1 = __importDefault(require("picocolors"));
-const path_1 = __importDefault(require("path"));
+const child_process = require("child_process");
+const fs = require("fs");
+const log = require("npmlog");
+const commons_js_1 = require("../lib/commons.js");
+const pc = require("picocolors");
+const path = require("path");
 const os_1 = require("os");
-const tiny_glob_1 = __importDefault(require("@u4/tiny-glob"));
+const tiny_glob_1 = require("@u4/tiny-glob");
 const cvloader_js_1 = require("../lib/cvloader.js");
 const defaultDir = '/usr/local';
 const defaultLibDir = `${defaultDir}/lib`;
@@ -30,7 +27,7 @@ function toBool(value) {
  * @returns global system include paths
  */
 function getDefaultIncludeDirs(env) {
-    npmlog_1.default.info('install', 'OPENCV_INCLUDE_DIR is not set, looking for default include dir');
+    log.info('install', 'OPENCV_INCLUDE_DIR is not set, looking for default include dir');
     if (env.isWin) {
         throw new Error('OPENCV_INCLUDE_DIR has to be defined on windows when auto build is disabled');
     }
@@ -40,7 +37,7 @@ function getDefaultIncludeDirs(env) {
  * @returns return a path like /usr/local/lib
  */
 function getDefaultLibDir(env) {
-    npmlog_1.default.info('install', 'OPENCV_LIB_DIR is not set, looking for default lib dir');
+    log.info('install', 'OPENCV_LIB_DIR is not set, looking for default lib dir');
     if (env.isWin) {
         throw new Error('OPENCV_LIB_DIR has to be defined on windows when auto build is disabled');
     }
@@ -51,10 +48,10 @@ function getDefaultLibDir(env) {
  */
 function getLibDir(env) {
     if (env.isAutoBuildDisabled) {
-        return (0, commons_1.resolvePath)(process.env.OPENCV_LIB_DIR) || getDefaultLibDir(env);
+        return (0, commons_js_1.resolvePath)(process.env.OPENCV_LIB_DIR) || getDefaultLibDir(env);
     }
     else {
-        const dir = (0, commons_1.resolvePath)(env.opencvLibDir);
+        const dir = (0, commons_js_1.resolvePath)(env.opencvLibDir);
         if (!dir) {
             throw Error('failed to resolve opencvLibDir path');
         }
@@ -63,18 +60,18 @@ function getLibDir(env) {
 }
 function getOPENCV4NODEJS_LIBRARIES(env, libDir, libsFoundInDir) {
     const libs = env.isWin
-        ? libsFoundInDir.map(lib => (0, commons_1.resolvePath)(lib.libPath))
+        ? libsFoundInDir.map(lib => (0, commons_js_1.resolvePath)(lib.libPath))
         // dynamically link libs if not on windows
         : ['-L' + libDir]
             .concat(libsFoundInDir.map(lib => '-lopencv_' + lib.opencvModule))
             .concat('-Wl,-rpath,' + libDir);
     if (libs.length > 0) {
-        const dir = path_1.default.dirname(libs[0]);
-        const names = libs.map(lib => path_1.default.basename(lib));
-        npmlog_1.default.info('libs', `${os_1.EOL}Setting lib from ${picocolors_1.default.green(dir)} : ${names.map(picocolors_1.default.yellow).join(', ')}`);
+        const dir = path.dirname(libs[0]);
+        const names = libs.map(lib => path.basename(lib));
+        log.info('libs', `${os_1.EOL}Setting lib from ${pc.green(dir)} : ${names.map(pc.yellow).join(', ')}`);
     }
     else {
-        npmlog_1.default.info('libs', `${os_1.EOL}no Libs available`);
+        log.info('libs', `${os_1.EOL}no Libs available`);
     }
     return libs;
 }
@@ -86,18 +83,18 @@ function getOPENCV4NODEJS_LIBRARIES(env, libDir, libsFoundInDir) {
 function getOPENCV4NODEJS_DEFINES(libsFoundInDir) {
     const defines = libsFoundInDir
         .map(lib => `OPENCV4NODEJS_FOUND_LIBRARY_${lib.opencvModule.toUpperCase()}`);
-    npmlog_1.default.info('defines', `${os_1.EOL}Setting the following defines:`);
+    log.info('defines', `${os_1.EOL}Setting the following defines:`);
     const longest = Math.max(...defines.map(a => a.length));
     let next = '';
     for (const define of defines) {
         if (next.length > 80) {
-            npmlog_1.default.info('defines', picocolors_1.default.yellow(next));
+            log.info('defines', pc.yellow(next));
             next = '';
         }
         next += define.padEnd(longest + 1, ' ');
     }
     if (next)
-        npmlog_1.default.info('defines', picocolors_1.default.yellow(next));
+        log.info('defines', pc.yellow(next));
     return defines;
 }
 /**
@@ -109,25 +106,25 @@ function getOPENCV4NODEJS_INCLUDES(env) {
     const { OPENCV_INCLUDE_DIR } = process.env;
     let explicitIncludeDir = '';
     if (OPENCV_INCLUDE_DIR) {
-        explicitIncludeDir = (0, commons_1.resolvePath)(OPENCV_INCLUDE_DIR);
+        explicitIncludeDir = (0, commons_js_1.resolvePath)(OPENCV_INCLUDE_DIR);
     }
     const includes = env.isAutoBuildDisabled
         ? (explicitIncludeDir ? [explicitIncludeDir] : getDefaultIncludeDirs(env))
-        : [(0, commons_1.resolvePath)(env.opencvInclude), (0, commons_1.resolvePath)(env.opencv4Include)];
-    npmlog_1.default.info('install', `${os_1.EOL}Setting the following includes:`);
-    includes.forEach(inc => npmlog_1.default.info('includes', picocolors_1.default.green(inc)));
+        : [(0, commons_js_1.resolvePath)(env.opencvInclude), (0, commons_js_1.resolvePath)(env.opencv4Include)];
+    log.info('install', `${os_1.EOL}Setting the following includes:`);
+    includes.forEach(inc => log.info('includes', pc.green(inc)));
     return includes;
 }
 function getExistingNodeModulesBin(dir, name) {
-    const binPath = path_1.default.join(dir, 'node_modules', '.bin', name);
-    if (fs_1.default.existsSync(binPath)) {
+    const binPath = path.join(dir, 'node_modules', '.bin', name);
+    if (fs.existsSync(binPath)) {
         return binPath;
     }
     return '';
 }
 function getExistingBin(dir, name) {
-    const binPath = path_1.default.join(dir, name);
-    if (fs_1.default.existsSync(binPath)) {
+    const binPath = path.join(dir, name);
+    if (fs.existsSync(binPath)) {
         return binPath;
     }
     return '';
@@ -148,19 +145,19 @@ async function compileLib(args) {
         const buildDir = opencv_build_1.OpenCVBuildEnv.getBuildDir(buildOptions);
         const builds = opencv_build_1.OpenCVBuildEnv.listBuild(buildDir);
         if (!builds.length) {
-            console.log(`${picocolors_1.default.red('NO Build available on your system in')} ${picocolors_1.default.green(buildDir)}`);
+            console.log(`${pc.red('NO Build available on your system in')} ${pc.green(buildDir)}`);
         }
         else {
-            console.log(`${picocolors_1.default.green(builds.length.toString())} Build avilible on your system in ${picocolors_1.default.green(buildDir)}`);
+            console.log(`${pc.green(builds.length.toString())} Build avilible on your system in ${pc.green(buildDir)}`);
         }
         for (const build of builds) {
             const { dir, date, buildInfo } = build;
-            let line = ` - build ${picocolors_1.default.green(dir)} build on ${picocolors_1.default.red(date.toISOString())}`;
+            let line = ` - build ${pc.green(dir)} build on ${pc.red(date.toISOString())}`;
             if (buildInfo.env.buildWithCuda) {
-                line += ` [${picocolors_1.default.green('CUDA')}]`;
+                line += ` [${pc.green('CUDA')}]`;
             }
             if (buildInfo.env.cudaArch) {
-                line += ` ${picocolors_1.default.green('cuda_arch:' + buildInfo.env.cudaArch)}`;
+                line += ` ${pc.green('cuda_arch:' + buildInfo.env.cudaArch)}`;
             }
             console.log(line);
         }
@@ -176,7 +173,7 @@ async function compileLib(args) {
             const openCV = (0, cvloader_js_1.getOpenCV)({ prebuild: 'latestBuild' });
             const version = openCV.version;
             const txt = `${version.major}.${version.minor}.${version.revision}`;
-            console.log(`${picocolors_1.default.yellow(txt)} already ready no build needed.`);
+            console.log(`${pc.yellow(txt)} already ready no build needed.`);
             return;
         }
         catch (_e) {
@@ -201,9 +198,9 @@ async function compileLib(args) {
     }
     if (buildOptions.disableAutoBuild || env.OPENCV4NODEJS_DISABLE_AUTOBUILD || npmEnv.disableAutoBuild) {
         const summery = opencv_build_1.OpenCVBuildEnv.autoLocatePrebuild();
-        npmlog_1.default.info('envAutodetect', `autodetect ${picocolors_1.default.green('%d')} changes`, summery.changes);
+        log.info('envAutodetect', `autodetect ${pc.green('%d')} changes`, summery.changes);
         for (const txt of summery.summery) {
-            npmlog_1.default.info('envAutodetect', `- ${picocolors_1.default.yellow('%s')}`, txt);
+            log.info('envAutodetect', `- ${pc.yellow('%s')}`, txt);
         }
     }
     if (buildOptions.extra['dry-run'] || buildOptions.extra['dryrun']) {
@@ -230,24 +227,24 @@ or use OPENCV4NODEJS_* env variable.`);
     if (!builder) {
         builder = new opencv_build_1.OpenCVBuilder(buildOptions);
     }
-    npmlog_1.default.info('install', `Using openCV ${picocolors_1.default.green('%s')}`, builder.env.opencvVersion);
+    log.info('install', `Using openCV ${pc.green('%s')}`, builder.env.opencvVersion);
     /**
      * prepare environment variable
      */
     const libDir = getLibDir(builder.env);
-    npmlog_1.default.info('install', `Using lib dir: ${picocolors_1.default.green('%s')}`, libDir);
+    log.info('install', `Using lib dir: ${pc.green('%s')}`, libDir);
     //if (!fs.existsSync(libDir))
     await builder.install();
-    if (!fs_1.default.existsSync(libDir)) {
-        throw new Error(`library dir does not exist: ${picocolors_1.default.green(libDir)}'`);
+    if (!fs.existsSync(libDir)) {
+        throw new Error(`library dir does not exist: ${pc.green(libDir)}'`);
     }
     const libsInDir = builder.getLibs.getLibs();
     const libsFoundInDir = libsInDir.filter(lib => lib.libPath);
     if (!libsFoundInDir.length) {
-        throw new Error(`no OpenCV libraries found in lib dir: ${picocolors_1.default.green(libDir)}`);
+        throw new Error(`no OpenCV libraries found in lib dir: ${pc.green(libDir)}`);
     }
-    npmlog_1.default.info('install', `${os_1.EOL}Found the following libs:`);
-    libsFoundInDir.forEach(lib => npmlog_1.default.info('install', `${picocolors_1.default.yellow('%s')}: ${picocolors_1.default.green('%s')}`, lib.opencvModule, lib.libPath));
+    log.info('install', `${os_1.EOL}Found the following libs:`);
+    libsFoundInDir.forEach(lib => log.info('install', `${pc.yellow('%s')}: ${pc.green('%s')}`, lib.opencvModule, lib.libPath));
     const OPENCV4NODEJS_DEFINES = getOPENCV4NODEJS_DEFINES(libsFoundInDir).join(';');
     const OPENCV4NODEJS_INCLUDES = getOPENCV4NODEJS_INCLUDES(builder.env).join(';');
     const OPENCV4NODEJS_LIBRARIES = getOPENCV4NODEJS_LIBRARIES(builder.env, libDir, libsFoundInDir).join(';');
@@ -267,14 +264,14 @@ or use OPENCV4NODEJS_* env variable.`);
     else
         flags += ' --release';
     // --thin=yes
-    const cwd = path_1.default.join(__dirname, '..');
+    const cwd = path.join(__dirname, '..');
     // const arch = 'x86_64' / 'x64'
     // flags += --arch=${arch} --target_arch=${arch}
     const cmdOptions = buildOptions.extra['node-gyp-options'] || '';
     flags += ` ${cmdOptions}`;
     const nodegyp = buildOptions.extra.electron ? 'electron-rebuild' : 'node-gyp';
     let nodegypCmd = '';
-    for (const dir of process.env.PATH.split(path_1.default.delimiter)) {
+    for (const dir of process.env.PATH.split(path.delimiter)) {
         nodegypCmd = getExistingBin(dir, nodegyp);
         if (nodegypCmd) {
             // no need to use full path
@@ -289,7 +286,7 @@ or use OPENCV4NODEJS_* env variable.`);
                 nodegypCmd = getExistingNodeModulesBin(dir, nodegyp);
                 if (nodegypCmd)
                     break;
-                const next = path_1.default.resolve(dir, '..');
+                const next = path.resolve(dir, '..');
                 if (next === dir) {
                     break;
                 }
@@ -305,13 +302,13 @@ or use OPENCV4NODEJS_* env variable.`);
     }
     // flags starts with ' '
     nodegypCmd += ` ${action}${flags}`;
-    npmlog_1.default.info('install', `Spawning in directory:${cwd} node-gyp process: ${nodegypCmd}`);
+    log.info('install', `Spawning in directory:${cwd} node-gyp process: ${nodegypCmd}`);
     if (buildOptions.extra.vscode) {
         // const nan = require('nan');
         // const nativeNodeUtils = require('native-node-utils');
         // const pblob = promisify(blob)
-        const openCvModuleInclude = await (0, tiny_glob_1.default)(path_1.default.join(builder.env.opencvSrc, 'modules', '*', 'include'));
-        const openCvContribModuleInclude = await (0, tiny_glob_1.default)(path_1.default.join(builder.env.opencvContribSrc, 'modules', '*', 'include'));
+        const openCvModuleInclude = await (0, tiny_glob_1.default)(path.join(builder.env.opencvSrc, 'modules', '*', 'include'));
+        const openCvContribModuleInclude = await (0, tiny_glob_1.default)(path.join(builder.env.opencvContribSrc, 'modules', '*', 'include'));
         const cvVersion = builder.env.opencvVersion.split('.');
         const config = {
             "name": "opencv4nodejs",
@@ -359,15 +356,15 @@ or use OPENCV4NODEJS_* env variable.`);
         console.log('');
     }
     else {
-        const child = child_process_1.default.exec(nodegypCmd, { maxBuffer: Infinity, cwd }, function (error /*, stdout, stderr*/) {
+        const child = child_process.exec(nodegypCmd, { maxBuffer: Infinity, cwd }, function (error /*, stdout, stderr*/) {
             // fs.unlinkSync(realGyp);
             const bin = buildOptions.extra.electron ? 'electron-rebuild' : 'node-gyp';
             if (error) {
                 console.log(`error: `, error);
-                npmlog_1.default.error('install', `${bin} failed and return ${error.name} ${error.message} return code: ${error.code}`);
+                log.error('install', `${bin} failed and return ${error.name} ${error.message} return code: ${error.code}`);
             }
             else {
-                npmlog_1.default.info('install', `${bin} complete successfully`);
+                log.info('install', `${bin} complete successfully`);
             }
         });
         if (child.stdout)

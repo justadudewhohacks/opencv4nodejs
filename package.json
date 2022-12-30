@@ -17,7 +17,7 @@
     "typescript"
   ],
   "contributors": [
-    "Uriel Chemouni <uchemouni@gmail.com> (https://urielch.github.io/)",
+    "Uriel Chemouni <uchemouni@gmail.com> (https://uriel.ovh/)",
     "justadudewhohacks (https://github.com/justadudewhohacks)"
   ],
   "license": "MIT",
@@ -35,26 +35,27 @@
   "main": "./lib/opencv4nodejs.js",
   "typings": "./typings/index.d.ts",
   "scripts": {
-    "prepack": "tsc",
+    "build": "tsc --pretty --project .",
+    "prepack": "npm run build",
     "install": "node bin/install.js auto",
-    "install_Mac": "tsc && CXXFLAGS=\"-std=c++14 -Wno-c++11-narrowing\" node ./install/install.js --version 4.5.3 build",
-    "install_default": "tsc && node bin/install.js rebuild",
+    "install_Mac": "npm run build && CXXFLAGS=\"-std=c++14 -Wno-c++11-narrowing\" node ./install/install.js --version 4.5.3 build",
+    "install_default": "npm run build && node bin/install.js rebuild",
     "install_ubuntu": "echo call: sudo apt install libopencv-dev; build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --binDir=/usr/bin/ --nobuild rebuild",
-    "install_macm1": "tsc && node bin/install.js --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64 -DWITH_FFMPEG=ON\" rebuild",
-    "install_cuda": "tsc && cross-env OPENCV4NODEJS_DISABLE_AUTOBUILD= node bin/install.js --version 4.6.0 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_FFMPEG=ON\" rebuild",
-    "install_4_6_0_cuda_30XX": "tsc && cross-env OPENCV4NODEJS_DISABLE_AUTOBUILD= node bin/install.js --keepsource --version 4.6.0 --cuda --cudaArch=8.6",
+    "install_macm1": "npm run build && node bin/install.js --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64 -DWITH_FFMPEG=ON\" rebuild",
+    "install_cuda": "npm run build && cross-env OPENCV4NODEJS_DISABLE_AUTOBUILD= node bin/install.js --version 4.6.0 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON -DWITH_FFMPEG=ON\" rebuild",
+    "install_4_6_0_cuda_30XX": "npm run build && cross-env OPENCV4NODEJS_DISABLE_AUTOBUILD= node bin/install.js --keepsource --version 4.6.0 --cuda --cudaArch=8.6",
     "test": "cd test && pnpm install && pnpm run test",
-    "samples": "cd examples && pnpm install && tsc && node ./src/templateMatch/multiMatchBench.js && node ./src/templateMatch/multiMatchColision.js && node ./src/applyColorMap.js && node ./src/asyncMatchFeatures.js && node ./src/faceDetect/asyncFaceDetection.js",
-    "do-build": "tsc && node bin/install.js --version 4.5.5 --jobs MAX build",
-    "do-rebuild": "tsc && node bin/install.js --version 4.5.5 --jobs MAX rebuild",
+    "samples": "cd examples && pnpm install && npm run build && node ./src/templateMatch/multiMatchBench.js && node ./src/templateMatch/multiMatchColision.js && node ./src/applyColorMap.js && node ./src/asyncMatchFeatures.js && node ./src/faceDetect/asyncFaceDetection.js",
+    "do-build": "npm run build && node bin/install.js --version 4.5.5 --jobs MAX build",
+    "do-rebuild": "npm run build && node bin/install.js --version 4.5.5 --jobs MAX rebuild",
     "lint": "eslint examples/**/*.ts lib/**/*.ts typings/**/*.ts ",
     "clean": "node-gyp clean",
     "cleanjs": "rimraf {install,lib,examples}/**/*.{d.ts,js,map}",
-    "build-debug": "tsc && BINDINGS_DEBUG=true node bin/install.js rebuild"
+    "build-debug": "npm run build && BINDINGS_DEBUG=true node bin/install.js rebuild"
   },
   "dependencies": {
-    "@u4/opencv-build": "^0.6.1",
-    "@u4/tiny-glob": "^0.3.1",
+    "@u4/opencv-build": "^0.6.2",
+    "@u4/tiny-glob": "^0.3.2",
     "nan": "^2.17.0",
     "native-node-utils": "^0.2.7",
     "node-gyp": "^9.3.1",
