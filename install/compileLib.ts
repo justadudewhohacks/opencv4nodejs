@@ -7,6 +7,7 @@ import pc from 'picocolors'
 import path from 'path'
 import { EOL } from 'os'
 import blob from '@u4/tiny-glob';
+import getOpenCV from '../lib/cvloader'
 
 const defaultDir = '/usr/local'
 const defaultLibDir = `${defaultDir}/lib`
@@ -136,18 +137,54 @@ function getExistingBin(dir: string, name: string): string {
 }
 
 export async function compileLib(args: string[]) {
+    let builder: OpenCVBuilder | null = null;
     let dryRun = false;
     let JOBS = 'max';
     const validAction = ['build', 'clean', 'configure', 'rebuild', 'install', 'list', 'remove', 'auto']
     let action = args[args.length - 1];
     if (args.includes('--help') || args.includes('-h') || !validAction.includes(action)) {
-        console.log(`Usage: build-opencv build|rebuild|configure|install [--version=<version>] [--vscode] [--jobs=<thread>] [--electron] [--node-gyp-options=<options>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] ${validAction.join('|')}`);
+        console.log(`Usage: build-opencv build|rebuild|configure|install [--version=<version>] [--vscode] [--jobs=<thread>] [--electron] [--node-gyp-options=<options>] [--dry-run] [--flags=<flags>] [--cuda] [--cudaArch=<value>] [--nocontrib] [--nobuild] ${validAction.join('|')}`);
         console.log(genHelp());
         return;
     }
+    const buildOptions: OpenCVBuildEnvParams = args2Option(args)
+
+    if (action === 'list') {
+        const buildDir = OpenCVBuildEnv.getBuildDir(buildOptions);
+        const builds = OpenCVBuildEnv.listBuild(buildDir);
+        if (!builds.length) {
+            console.log(`${pc.red('NO Build available on your system in')} ${pc.green(buildDir)}`);
+        } else {
+            console.log(`${pc.green(builds.length.toString())} Build avilible on your system in ${pc.green(buildDir)}`);
+        }
+        for (const build of builds) {
+            const {dir, date, buildInfo} = build;
+            let line = ` - build ${pc.green(dir)} build on ${pc.red(date.toISOString())}`;
+            if (buildInfo.env.buildWithCuda) {
+                line += ` [${pc.green('CUDA')}]`;
+            }
+            if (buildInfo.env.cudaArch) {
+                line += ` ${pc.green('cuda_arch:' + buildInfo.env.cudaArch)}`;
+            }
+            console.log(line);
+        }
+        return;
+    }
+
     const env = process.env;
     const npmEnv = OpenCVBuildEnv.readEnvsFromPackageJson() || {};
     if (action === 'auto') {
+        try {
+            const openCV = getOpenCV({ prebuild: 'latestBuild' }, true);
+            const version = openCV.version;
+            const txt = `${version.major}.${version.minor}.${version.revision}`;
+            console.log(`${pc.yellow(txt)} already ready no build needed.`);
+            return;
+        } catch (_e) {
+            console.log(_e);
+            // no build available
+        }
+
         if (toBool(env.OPENCV4NODEJS_DISABLE_AUTOBUILD)) {
             action = 'rebuild'
         }
@@ -159,15 +196,11 @@ export async function compileLib(args: string[]) {
         }
     }
 
-    let builder: OpenCVBuilder | null = null;
-
-
-    const options: OpenCVBuildEnvParams = args2Option(args)
-    if (options.extra.jobs) {
-        JOBS = options.extra.jobs;
+    if (buildOptions.extra.jobs) {
+        JOBS = buildOptions.extra.jobs;
     }
 
-    if (options.disableAutoBuild || env.OPENCV4NODEJS_DISABLE_AUTOBUILD || npmEnv.disableAutoBuild) {
+    if (buildOptions.disableAutoBuild || env.OPENCV4NODEJS_DISABLE_AUTOBUILD || npmEnv.disableAutoBuild) {
         const summery = OpenCVBuildEnv.autoLocatePrebuild();
         log.info('envAutodetect', `autodetect ${pc.green('%d')} changes`, summery.changes)
         for (const txt of summery.summery) {
@@ -175,16 +208,16 @@ export async function compileLib(args: string[]) {
         }
     }
 
-    if (options.extra['dry-run'] || options.extra['dryrun']) {
+    if (buildOptions.extra['dry-run'] || buildOptions.extra['dryrun']) {
         dryRun = true;
     }
 
     for (const K in ['autoBuildFlags']) {
-        if (options[K]) console.log(`using ${K}:`, options[K]);
+        if (buildOptions[K]) console.log(`using ${K}:`, buildOptions[K]);
     }
 
     try {
-        builder = new OpenCVBuilder({ ...options, prebuild: 'latestBuild' });
+        builder = new OpenCVBuilder({ ...buildOptions, prebuild: 'latestBuild' });
     } catch (_e) {
         // ignore
     }
@@ -199,7 +232,7 @@ or use OPENCV4NODEJS_* env variable.`)
     }
 
     if (!builder) {
-        builder = new OpenCVBuilder(options);
+        builder = new OpenCVBuilder(buildOptions);
     }
 
     log.info('install', `Using openCV ${pc.green('%s')}`, builder.env.opencvVersion)
@@ -240,7 +273,7 @@ or use OPENCV4NODEJS_* env variable.`)
     // --verbose, --loglevel=verbose	Log most progress to console
     // --silent, --loglevel=silent	Don't log anything to console
 
-    if (process.env.BINDINGS_DEBUG || options.extra['debug'])
+    if (process.env.BINDINGS_DEBUG || buildOptions.extra['debug'])
         flags += ' --debug';
     else
         flags += ' --release';
@@ -251,10 +284,10 @@ or use OPENCV4NODEJS_* env variable.`)
 
     // const arch = 'x86_64' / 'x64'
     // flags += --arch=${arch} --target_arch=${arch}
-    const cmdOptions = options.extra['node-gyp-options'] || '';
+    const cmdOptions = buildOptions.extra['node-gyp-options'] || '';
     flags += ` ${cmdOptions}`;
 
-    const nodegyp = options.extra.electron ? 'electron-rebuild' : 'node-gyp';
+    const nodegyp = buildOptions.extra.electron ? 'electron-rebuild' : 'node-gyp';
     let nodegypCmd = '';
     for (const dir of process.env.PATH.split(path.delimiter)) {
         nodegypCmd = getExistingBin(dir, nodegyp);
@@ -291,7 +324,7 @@ or use OPENCV4NODEJS_* env variable.`)
 
     log.info('install', `Spawning in directory:${cwd} node-gyp process: ${nodegypCmd}`)
 
-    if (options.extra.vscode) {
+    if (buildOptions.extra.vscode) {
         // const nan = require('nan');
         // const nativeNodeUtils = require('native-node-utils');
         // const pblob = promisify(blob)
@@ -343,7 +376,7 @@ or use OPENCV4NODEJS_* env variable.`)
     } else {
         const child = child_process.exec(nodegypCmd, { maxBuffer: Infinity, cwd }, function (error/*, stdout, stderr*/) {
             // fs.unlinkSync(realGyp);
-            const bin = options.extra.electron ? 'electron-rebuild' : 'node-gyp';
+            const bin = buildOptions.extra.electron ? 'electron-rebuild' : 'node-gyp';
             if (error) {
                 console.log(`error: `, error);
                 log.error('install', `${bin} failed and return ${error.name} ${error.message} return code: ${error.code}`);

@@ -13,6 +13,7 @@ const picocolors_1 = __importDefault(require("picocolors"));
 const path_1 = __importDefault(require("path"));
 const os_1 = require("os");
 const tiny_glob_1 = __importDefault(require("@u4/tiny-glob"));
+const cvloader_1 = __importDefault(require("../lib/cvloader"));
 const defaultDir = '/usr/local';
 const defaultLibDir = `${defaultDir}/lib`;
 const defaultIncludeDir = `${defaultDir}/include`;
@@ -132,18 +133,53 @@ function getExistingBin(dir, name) {
     return '';
 }
 async function compileLib(args) {
+    let builder = null;
     let dryRun = false;
     let JOBS = 'max';
     const validAction = ['build', 'clean', 'configure', 'rebuild', 'install', 'list', 'remove', 'auto'];
     let action = args[args.length - 1];
     if (args.includes('--help') || args.includes('-h') || !validAction.includes(action)) {
-        console.log(`Usage: build-opencv build|rebuild|configure|install [--version=<version>] [--vscode] [--jobs=<thread>] [--electron] [--node-gyp-options=<options>] [--dry-run] [--flags=<flags>] [--cuda] [--nocontrib] [--nobuild] ${validAction.join('|')}`);
+        console.log(`Usage: build-opencv build|rebuild|configure|install [--version=<version>] [--vscode] [--jobs=<thread>] [--electron] [--node-gyp-options=<options>] [--dry-run] [--flags=<flags>] [--cuda] [--cudaArch=<value>] [--nocontrib] [--nobuild] ${validAction.join('|')}`);
         console.log((0, opencv_build_1.genHelp)());
+        return;
+    }
+    const buildOptions = (0, opencv_build_1.args2Option)(args);
+    if (action === 'list') {
+        const buildDir = opencv_build_1.OpenCVBuildEnv.getBuildDir(buildOptions);
+        const builds = opencv_build_1.OpenCVBuildEnv.listBuild(buildDir);
+        if (!builds.length) {
+            console.log(`${picocolors_1.default.red('NO Build available on your system in')} ${picocolors_1.default.green(buildDir)}`);
+        }
+        else {
+            console.log(`${picocolors_1.default.green(builds.length.toString())} Build avilible on your system in ${picocolors_1.default.green(buildDir)}`);
+        }
+        for (const build of builds) {
+            const { dir, date, buildInfo } = build;
+            let line = ` - build ${picocolors_1.default.green(dir)} build on ${picocolors_1.default.red(date.toISOString())}`;
+            if (buildInfo.env.buildWithCuda) {
+                line += ` [${picocolors_1.default.green('CUDA')}]`;
+            }
+            if (buildInfo.env.cudaArch) {
+                line += ` ${picocolors_1.default.green('cuda_arch:' + buildInfo.env.cudaArch)}`;
+            }
+            console.log(line);
+        }
         return;
     }
     const env = process.env;
     const npmEnv = opencv_build_1.OpenCVBuildEnv.readEnvsFromPackageJson() || {};
     if (action === 'auto') {
+        try {
+            const openCV = (0, cvloader_1.default)({ prebuild: 'latestBuild' }, true);
+            const version = openCV.version;
+            const txt = `${version.major}.${version.minor}.${version.revision}`;
+            console.log(`${picocolors_1.default.yellow(txt)} already ready no build needed.`);
+            return;
+        }
+        catch (_e) {
+            console.log(_e);
+            // no build available
+        }
         if (toBool(env.OPENCV4NODEJS_DISABLE_AUTOBUILD)) {
             action = 'rebuild';
         }
@@ -154,27 +190,25 @@ async function compileLib(args) {
             action = 'rebuild';
         }
     }
-    let builder = null;
-    const options = (0, opencv_build_1.args2Option)(args);
-    if (options.extra.jobs) {
-        JOBS = options.extra.jobs;
+    if (buildOptions.extra.jobs) {
+        JOBS = buildOptions.extra.jobs;
     }
-    if (options.disableAutoBuild || env.OPENCV4NODEJS_DISABLE_AUTOBUILD || npmEnv.disableAutoBuild) {
+    if (buildOptions.disableAutoBuild || env.OPENCV4NODEJS_DISABLE_AUTOBUILD || npmEnv.disableAutoBuild) {
         const summery = opencv_build_1.OpenCVBuildEnv.autoLocatePrebuild();
         npmlog_1.default.info('envAutodetect', `autodetect ${picocolors_1.default.green('%d')} changes`, summery.changes);
         for (const txt of summery.summery) {
             npmlog_1.default.info('envAutodetect', `- ${picocolors_1.default.yellow('%s')}`, txt);
         }
     }
-    if (options.extra['dry-run'] || options.extra['dryrun']) {
+    if (buildOptions.extra['dry-run'] || buildOptions.extra['dryrun']) {
         dryRun = true;
     }
     for (const K in ['autoBuildFlags']) {
-        if (options[K])
-            console.log(`using ${K}:`, options[K]);
+        if (buildOptions[K])
+            console.log(`using ${K}:`, buildOptions[K]);
     }
     try {
-        builder = new opencv_build_1.OpenCVBuilder({ ...options, prebuild: 'latestBuild' });
+        builder = new opencv_build_1.OpenCVBuilder({ ...buildOptions, prebuild: 'latestBuild' });
     }
     catch (_e) {
         // ignore
@@ -188,7 +222,7 @@ or use OPENCV4NODEJS_* env variable.`);
         return;
     }
     if (!builder) {
-        builder = new opencv_build_1.OpenCVBuilder(options);
+        builder = new opencv_build_1.OpenCVBuilder(buildOptions);
     }
     npmlog_1.default.info('install', `Using openCV ${picocolors_1.default.green('%s')}`, builder.env.opencvVersion);
     /**
@@ -222,7 +256,7 @@ or use OPENCV4NODEJS_* env variable.`);
     // --silly, --loglevel=silly	Log all progress to console
     // --verbose, --loglevel=verbose	Log most progress to console
     // --silent, --loglevel=silent	Don't log anything to console
-    if (process.env.BINDINGS_DEBUG || options.extra['debug'])
+    if (process.env.BINDINGS_DEBUG || buildOptions.extra['debug'])
         flags += ' --debug';
     else
         flags += ' --release';
@@ -230,9 +264,9 @@ or use OPENCV4NODEJS_* env variable.`);
     const cwd = path_1.default.join(__dirname, '..');
     // const arch = 'x86_64' / 'x64'
     // flags += --arch=${arch} --target_arch=${arch}
-    const cmdOptions = options.extra['node-gyp-options'] || '';
+    const cmdOptions = buildOptions.extra['node-gyp-options'] || '';
     flags += ` ${cmdOptions}`;
-    const nodegyp = options.extra.electron ? 'electron-rebuild' : 'node-gyp';
+    const nodegyp = buildOptions.extra.electron ? 'electron-rebuild' : 'node-gyp';
     let nodegypCmd = '';
     for (const dir of process.env.PATH.split(path_1.default.delimiter)) {
         nodegypCmd = getExistingBin(dir, nodegyp);
@@ -266,7 +300,7 @@ or use OPENCV4NODEJS_* env variable.`);
     // flags starts with ' '
     nodegypCmd += ` ${action}${flags}`;
     npmlog_1.default.info('install', `Spawning in directory:${cwd} node-gyp process: ${nodegypCmd}`);
-    if (options.extra.vscode) {
+    if (buildOptions.extra.vscode) {
         // const nan = require('nan');
         // const nativeNodeUtils = require('native-node-utils');
         // const pblob = promisify(blob)
@@ -321,7 +355,7 @@ or use OPENCV4NODEJS_* env variable.`);
     else {
         const child = child_process_1.default.exec(nodegypCmd, { maxBuffer: Infinity, cwd }, function (error /*, stdout, stderr*/) {
             // fs.unlinkSync(realGyp);
-            const bin = options.extra.electron ? 'electron-rebuild' : 'node-gyp';
+            const bin = buildOptions.extra.electron ? 'electron-rebuild' : 'node-gyp';
             if (error) {
                 console.log(`error: `, error);
                 npmlog_1.default.error('install', `${bin} failed and return ${error.name} ${error.message} return code: ${error.code}`);

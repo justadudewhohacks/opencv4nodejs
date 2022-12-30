@@ -1,7 +1,10 @@
 # changelog
 
 ## Version 6.3.0
-* use new @u4/opencv-build@0.6.0
+* use new @u4/opencv-build@0.6.1
+* improve cuda support add `--cudaArch <value>` to choose your cuda target, for example I use --cudaArch=8.6 for my RTX 3060, check https://en.wikipedia.org/wiki/CUDA for full list.
+* `build-opencv` support a new action: `list` that will list ixisting openCV build
+* `build-opencv auto` will not rebuild anything if the current build is working 
 
 ## Version 6.2.5
 * update @u4/opencv-build
