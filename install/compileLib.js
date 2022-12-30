@@ -13,7 +13,7 @@ const picocolors_1 = __importDefault(require("picocolors"));
 const path_1 = __importDefault(require("path"));
 const os_1 = require("os");
 const tiny_glob_1 = __importDefault(require("@u4/tiny-glob"));
-const cvloader_1 = __importDefault(require("../lib/cvloader"));
+const cvloader_js_1 = require("../lib/cvloader.js");
 const defaultDir = '/usr/local';
 const defaultLibDir = `${defaultDir}/lib`;
 const defaultIncludeDir = `${defaultDir}/include`;
@@ -169,8 +169,11 @@ async function compileLib(args) {
     const env = process.env;
     const npmEnv = opencv_build_1.OpenCVBuildEnv.readEnvsFromPackageJson() || {};
     if (action === 'auto') {
+        console.log('NEW build DETECTION START');
+        console.log('NEW build DETECTION START');
+        console.log('NEW build DETECTION START');
         try {
-            const openCV = (0, cvloader_1.default)({ prebuild: 'latestBuild' });
+            const openCV = (0, cvloader_js_1.getOpenCV)({ prebuild: 'latestBuild' });
             const version = openCV.version;
             const txt = `${version.major}.${version.minor}.${version.revision}`;
             console.log(`${picocolors_1.default.yellow(txt)} already ready no build needed.`);
@@ -180,6 +183,9 @@ async function compileLib(args) {
             console.log(_e);
             // no build available
         }
+        console.log('NEW build DETECTION END');
+        console.log('NEW build DETECTION END');
+        console.log('NEW build DETECTION END');
         if (toBool(env.OPENCV4NODEJS_DISABLE_AUTOBUILD)) {
             action = 'rebuild';
         }
