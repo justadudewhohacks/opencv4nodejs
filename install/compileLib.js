@@ -174,7 +174,7 @@ async function compileLib(args) {
             return;
         }
         catch (_e) {
-            console.log(_e);
+            // console.log(_e);
             // no build available
         }
         if (toBool(env.OPENCV4NODEJS_DISABLE_AUTOBUILD)) {

@@ -181,7 +181,7 @@ export async function compileLib(args: string[]) {
             console.log(`${pc.yellow(txt)} already ready no build needed.`);
             return;
         } catch (_e) {
-            console.log(_e);
+            // console.log(_e);
             // no build available
         }
 

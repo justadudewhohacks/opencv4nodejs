@@ -8,7 +8,7 @@ import {
 export type OpenCV = typeof cv
 
 export interface APITestOpts {
-    getDut?: () => OpenCV,
+    getDut?: () => any,
     methodName?: string,
     methodNameSpace?: string,
     expectOutput?: (res: any, dut: any, args: any) => void,
