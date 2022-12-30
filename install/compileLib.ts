@@ -175,7 +175,7 @@ export async function compileLib(args: string[]) {
     const npmEnv = OpenCVBuildEnv.readEnvsFromPackageJson() || {};
     if (action === 'auto') {
         try {
-            const openCV = getOpenCV({ prebuild: 'latestBuild' }, true);
+            const openCV = getOpenCV({ prebuild: 'latestBuild' });
             const version = openCV.version;
             const txt = `${version.major}.${version.minor}.${version.revision}`;
             console.log(`${pc.yellow(txt)} already ready no build needed.`);

@@ -170,7 +170,7 @@ async function compileLib(args) {
     const npmEnv = opencv_build_1.OpenCVBuildEnv.readEnvsFromPackageJson() || {};
     if (action === 'auto') {
         try {
-            const openCV = (0, cvloader_1.default)({ prebuild: 'latestBuild' }, true);
+            const openCV = (0, cvloader_1.default)({ prebuild: 'latestBuild' });
             const version = openCV.version;
             const txt = `${version.major}.${version.minor}.${version.revision}`;
             console.log(`${picocolors_1.default.yellow(txt)} already ready no build needed.`);
