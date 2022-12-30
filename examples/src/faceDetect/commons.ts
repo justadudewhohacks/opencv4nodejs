@@ -3,8 +3,15 @@ import loadFacenet from '../dnn/loadFacenet';
 import { extractResults } from '../dnn/ssdUtils';
 import { Mat, Net, Rect } from '@u4/opencv4nodejs';
 
-export const runVideoFaceDetection = (src: string | number, detectFaces: (img: Mat) => Rect[]) => grabFrames(src, 1, (frame) => {
-  console.time('detection time');
+/**
+ * 
+ * @param src video file name or capture device ID
+ * @param detectFaces sync face detection method
+ * @returns 
+ */
+export const runVideoFaceDetection = (src: string | number, detectFaces: (img: Mat) => Rect[]) => grabFrames(src, 1, (frame, frmId) => {
+  const timerName = `detection time ${frmId}`
+  console.time(timerName);
   const frameResized = frame.resizeToMax(800);
 
   // detect faces
@@ -13,10 +20,26 @@ export const runVideoFaceDetection = (src: string | number, detectFaces: (img: M
     // draw detection
     faceRects.forEach(faceRect => drawBlueRect(frameResized, faceRect));
   }
+  cv.imshow('face detection', frameResized);
+  console.timeEnd(timerName);
+});
+
+
+export const runVideoFaceDetectionAsync = (src: string | number, detectFaces: (img: Mat) => Promise<Rect[]>) => grabFrames(src, 1, async (frame, frmId) => {
+  const timerName = `detection time ${frmId}`
+  console.time(timerName);
+  const frameResized = await frame.resizeToMaxAsync(800);
+  // detect faces
+  const faceRects = await detectFaces(frameResized);
+  if (faceRects.length) {
+    // draw detection
+    faceRects.forEach(faceRect => drawBlueRect(frameResized, faceRect));
+  }
 
   cv.imshow('face detection', frameResized);
-  console.timeEnd('detection time');
+  console.timeEnd(timerName);
 });
+
 
 function classifyImg(net: Net, img: Mat) {
   // facenet model works with 300 x 300 images

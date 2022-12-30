@@ -78,25 +78,32 @@ export const getResourcePath = (name?: string): string => {
   return fullpath;
 };
 
-export const grabFrames = (videoFile: number | string, delay: number, onFrame: (mat: Mat) => void): void => {
+export const grabFrames = async (videoFile: number | string, kpDelay: number, onFrame: (mat: Mat, frameid: number) => void | Promise<void>): Promise<void> => {
   const cap = new cv.VideoCapture(videoFile);
   let done = false;
-  const intvl = setInterval(() => {
+  let frameid = 0;
+  //const intvl = setInterval(async () => {
+  for (; ;) {
     let frame = cap.read();
     // loop back to start on end of stream reached
     if (frame.empty) {
       cap.reset();
       frame = cap.read();
     }
-    onFrame(frame);
-
-    const key = cv.waitKey(delay);
+    frameid++;
+    const p = onFrame(frame, frameid);
+    if (p)
+      await p;
+    const key = cv.waitKey(kpDelay);
     done = key !== -1 && key !== 255;
     if (done) {
-      clearInterval(intvl);
+      //clearInterval(intvl);
       console.log('Key pressed, exiting.');
+      return;
     }
-  }, 0);
+     await delay(0);
+  }
+  //}, 0);
 };
 
 export const runVideoDetection = (src: number, detect: (mat: Mat) => void): void => {
