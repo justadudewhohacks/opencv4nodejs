@@ -7,7 +7,7 @@ import pc from 'picocolors'
 import path from 'path'
 import { EOL } from 'os'
 import blob from '@u4/tiny-glob';
-import { getOpenCV } from '../lib/cvloader'
+import { getOpenCV } from '../lib/cvloader.js'
 
 const defaultDir = '/usr/local'
 const defaultLibDir = `${defaultDir}/lib`
