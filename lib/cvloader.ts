@@ -37,7 +37,7 @@ function tryGetOpencvBinDir(builder: OpenCVBuilder) {
   return null
 }
 
-function getOpenCV(opt?: OpenCVBuildEnvParams): OpenCVType {
+export function getOpenCV(opt?: OpenCVBuildEnvParams): OpenCVType {
   if (!opt)
     opt = { prebuild: 'latestBuild' }
   const builder = new OpenCVBuilder(opt);
@@ -119,4 +119,4 @@ function getOpenCV(opt?: OpenCVBuildEnvParams): OpenCVType {
   return opencvBuild;
 }
 
-export = getOpenCV;
+export default getOpenCV;
