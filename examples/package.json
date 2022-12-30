@@ -11,7 +11,7 @@
   "dependencies": {
     "@types/lodash.samplesize": "^4.2.7",
     "@u4/opencv4nodejs": "link:..",
-    "axios": "^1.1.3",
+    "axios": "^1.2.2",
     "lodash.samplesize": "^4.2.0",
     "mri": "^1.2.0",
     "p-limit": "3.1.0",
@@ -19,11 +19,11 @@
     "progress": "^2.0.3"
   },
   "devDependencies": {
-    "@types/node": "^18.0.0",
+    "@types/node": "^18.11.18",
     "@types/progress": "^2.0.5",
     "@types/rimraf": "^3.0.2",
     "rimraf": "^3.0.2",
-    "ts-node": "^10.8.1",
-    "typescript": "^4.7.4"
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
   }
 }
