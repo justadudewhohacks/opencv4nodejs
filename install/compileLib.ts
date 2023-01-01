@@ -200,7 +200,7 @@ export async function compileLib(args: string[]) {
         JOBS = buildOptions.extra.jobs;
     }
 
-    if (buildOptions.disableAutoBuild || env.OPENCV4NODEJS_DISABLE_AUTOBUILD || npmEnv.disableAutoBuild) {
+    if (buildOptions.disableAutoBuild || toBool(env.OPENCV4NODEJS_DISABLE_AUTOBUILD) || npmEnv.disableAutoBuild) {
         const summery = OpenCVBuildEnv.autoLocatePrebuild();
         log.info('envAutodetect', `autodetect ${pc.green('%d')} changes`, summery.changes)
         for (const txt of summery.summery) {

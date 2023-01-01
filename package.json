@@ -46,15 +46,15 @@
     "install_4_6_0_cuda_30XX": "npm run build && cross-env OPENCV4NODEJS_DISABLE_AUTOBUILD= node bin/install.js --keepsource --version 4.6.0 --cuda --cudaArch=8.6",
     "test": "cd test && pnpm install && pnpm run test",
     "samples": "cd examples && pnpm install && npm run build && node ./src/templateMatch/multiMatchBench.js && node ./src/templateMatch/multiMatchColision.js && node ./src/applyColorMap.js && node ./src/asyncMatchFeatures.js && node ./src/faceDetect/asyncFaceDetection.js",
-    "do-build": "npm run build && node bin/install.js --version 4.5.5 --jobs MAX build",
-    "do-rebuild": "npm run build && node bin/install.js --version 4.5.5 --jobs MAX rebuild",
+    "do-build": "npm run build && node bin/install.js --version 4.6.0 --jobs MAX build",
+    "do-rebuild": "npm run build && node bin/install.js --version 4.6.0 --jobs MAX rebuild",
     "lint": "eslint examples/**/*.ts lib/**/*.ts typings/**/*.ts ",
     "clean": "node-gyp clean",
     "cleanjs": "rimraf {install,lib,examples}/**/*.{d.ts,js,map}",
     "build-debug": "npm run build && BINDINGS_DEBUG=true node bin/install.js rebuild"
   },
   "dependencies": {
-    "@u4/opencv-build": "0.6.1",
+    "@u4/opencv-build": "0.6.3",
     "@u4/tiny-glob": "^0.3.2",
     "nan": "^2.17.0",
     "native-node-utils": "^0.2.7",

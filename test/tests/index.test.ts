@@ -30,7 +30,7 @@ const xmodules = [
 ];
 
 describe('cv', () => {
-  const toTest = {
+  const toTest: {[key: string]: boolean} = {
     core: true,
     imgproc: false, // to fix
     calib3d: true,

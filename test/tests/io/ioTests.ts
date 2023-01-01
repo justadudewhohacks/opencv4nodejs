@@ -81,6 +81,7 @@ export default function (args: TestContext) {
       const ext = '.png';
       const flags = [cv.IMWRITE_PNG_COMPRESSION];
       generateAPITests({
+        prefix: 'io imencode png',
         getDut: () => cv,
         methodName: 'imencode',
         getRequiredArgs: () => ([
@@ -102,6 +103,7 @@ export default function (args: TestContext) {
       const ext = '.jpg';
       const flags = [cv.IMWRITE_JPEG_QUALITY];
       generateAPITests({
+        prefix: 'io imencode jpg',
         getDut: () => cv,
         methodName: 'imencode',
         getRequiredArgs: () => ([

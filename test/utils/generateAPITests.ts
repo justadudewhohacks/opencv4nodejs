@@ -48,6 +48,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
     getOptionalArgsMap().forEach(([k, v]: [string, any]) => { optionalArgsObject[k] = v; });
     return optionalArgsObject;
   };
+  const prefix = opts.prefix ? `${opts.prefix} ` : '';
   const hasRequiredArgs = !!opts.getRequiredArgs;
   const hasOptArgs = !!getOptionalArg || !!getOptionalArgsMap;
   const hasOptArgsObject = !!getOptionalArgsMap;
@@ -77,7 +78,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
     const isAsync = isCallbacked || isPromised;
 
     const method = isAsync ? methodNameAsync : methodName;
-    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+    const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
     const getErrPrefix = () => `${(methodNameSpace ? `${methodNameSpace}::` : '')}${capitalize(method)} - Error:`;
     const typeErrMsg = (argN) => `${getErrPrefix()} expected argument ${argN} to be of type`;
@@ -132,36 +133,36 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
       return done();
     };
 
-    it('should be callable with required args', (done: DoneError) => {
+    it(`${prefix}should be callable with required args`, (done: DoneError) => {
       const args = getRequiredArgs().slice();
       expectSuccess(args, done);
     });
 
     if (hasRequiredArgs) {
-      it('should throw if required arg invalid', (done: DoneError) => {
+      it(`${prefix}should throw if required arg invalid`, (done: DoneError) => {
         const args = [undefined];
         expectError(args, typeErrMsg(0), done);
       });
     }
 
     if (hasOptArgs) {
-      it('should be callable with optional args', (done: DoneError) => {
+      it(`${prefix}should be callable with optional args`, (done: DoneError) => {
         const args = getRequiredArgs().slice().concat(getOptionalArgs());
         expectSuccess(args, done);
       });
 
-      it('should throw if opt arg invalid', (done: DoneError) => {
+      it(`${prefix}should throw if opt arg invalid`, (done: DoneError) => {
         const args = getRequiredArgs().slice().concat(undefined);
         expectError(args, typeErrMsg(getRequiredArgs().length), done);
       });
 
       if (hasOptArgsObject) {
-        it('should be callable with optional args object', (done: DoneError) => {
+        it(`${prefix}should be callable with optional args object`, (done: DoneError) => {
           const args = getRequiredArgs().slice().concat(getOptionalArgsObject());
           expectSuccess(args, done);
         });
 
-        it('should throw if opt arg object prop invalid', (done: DoneError) => {
+        it(`${prefix}should throw if opt arg object prop invalid`, (done: DoneError) => {
           const prop = getOptionalArgsMap()[0][0];
           const args = getRequiredArgs().slice().concat({
             [prop]: undefined,
@@ -190,12 +191,12 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
   });
 
   if (hasAsync) {
-    describe('async', () => {
+    describe(`${prefix}async`, () => {
       if (hasRequiredArgs) {
         asyncFuncShouldRequireArgs(() => getDut()[methodNameAsync]());
       }
 
-      describe('callbacked', () => {
+      describe(`${prefix}callbacked`, () => {
         if (beforeHook) {
           beforeEach(() => beforeHook());
         }
@@ -208,7 +209,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
         otherAsyncCallbackedTests();
       });
 
-      describe('promisified', () => {
+      describe(`${prefix}promisified`, () => {
         if (beforeHook) {
           beforeEach(() => beforeHook());
         }
