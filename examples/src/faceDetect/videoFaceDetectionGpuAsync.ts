@@ -9,12 +9,12 @@ const videoFile = getResourcePath('people.mp4');
 
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
 
-function detectFaces(img: Mat) {
+async function detectFaces(img: Mat) {
   const options = {
     scaleFactor: 1.1,
     minNeighbors: 10,
   };
-  return classifier.detectMultiScaleGpuAsync(img.bgrToGray(), options);// .objects;
+  return (await classifier.detectMultiScaleGpuAsync(img.bgrToGray(), options)).objects;
 }
 
 runVideoFaceDetectionAsync(videoFile, detectFaces);

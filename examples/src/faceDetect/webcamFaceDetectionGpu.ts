@@ -13,7 +13,8 @@ function detectFaces(img: Mat) {
     scaleFactor: 1.2,
     minNeighbors: 10,
   };
-  return classifier.detectMultiScaleGpu(img.bgrToGray(), options); // .objects
+  const rects = classifier.detectMultiScaleGpu(img.bgrToGray(), options);
+  return rects.objects;
 }
 
 runVideoFaceDetection(webcamPort, detectFaces);
