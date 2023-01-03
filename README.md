@@ -197,7 +197,7 @@ It's possible to specify build environment variables by inserting them into the 
     "opencv4nodejs": "^X.X.X"
   },
   "opencv4nodejs": {
-    "disableAutoBuild": 1,
+    "disableAutoBuild": "1",
     "opencvIncludeDir": "C:\\tools\\opencv\\build\\include",
     "opencvLibDir": "C:\\tools\\opencv\\build\\x64\\vc14\\lib",
     "opencvBinDir": "C:\\tools\\opencv\\build\\x64\\vc14\\bin"
