@@ -2,21 +2,31 @@
   "name": "opencv4nodejs_test",
   "version": "1.1.0",
   "scripts": {
-    "test": "mocha --timeout 30000 ./tests/index.test.js",
-    "test-appveyor": "set APPVEYOR_BUILD=true && mocha --timeout 30000 ./tests/index.test.js",
-    "test-docker": "DOCKER_BUILD=true mocha --timeout 60000 ./tests/index.test.js",
-    "test-externalMemTrackingOther": "mocha --timeout 30000 ./externalMemTracking/other/index.test.js",
-    "test-externalMemTracking-testDisableWithEnv": "mocha ./externalMemTracking/disableWithEnv.test.js",
-    "test-externalMemTracking-testDefaultDisabled": "mocha ./externalMemTracking/defaultDisabled.test.js",
+    "test": "mocha -r ts-node/register --timeout 30000 ./tests/index.test.ts",
+    "test-appveyor": "set APPVEYOR_BUILD=true && mocha -r ts-node/register --timeout 30000 ./tests/index.test.ts",
+    "test-docker": "DOCKER_BUILD=true mocha -r ts-node/register --timeout 60000 ./tests/index.test.ts",
+    "test-externalMemTrackingOther": "mocha -r ts-node/register --timeout 30000 ./externalMemTracking/other/index.test.ts",
+    "test-externalMemTracking-testDisableWithEnv": "mocha -r ts-node/register ./externalMemTracking/disableWithEnv.test.ts",
+    "test-externalMemTracking-testDefaultDisabled": "mocha -r ts-node/register ./externalMemTracking/defaultDisabled.test.ts",
     "test-externalMemTracking": "npm run test-externalMemTracking-testDefaultDisabled && npm run test-externalMemTracking-testDisableWithEnv && npm run test-externalMemTrackingOther",
-    "gc": "set WITH_GC=true &&mocha --expose-gc --timeout 2000 ./tests/index.test.js",
-    "cover": "BINDINGS_DEBUG=true istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --timeout 30000 ./tests/index.test.js"
+    "gc": "set WITH_GC=true && mocha -r ts-node/register --expose-gc --timeout 2000 ./tests/index.test.ts",
+    "cover": "BINDINGS_DEBUG=true istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --timeout 30000 ./tests/index.test.ts",
+    "clean": "rimraf tests/**/*.js utils/*.js"
   },
   "author": "justadudewhohacks",
   "license": "MIT",
   "dependencies": {
-    "chai": "^4.2.0",
+    "@u4/opencv4nodejs": "link:..",
+    "chai": "^4.3.6",
     "istanbul": "^0.4.5",
-    "mocha": "^5.2.0"
+    "mocha": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.1",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^18.0.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4"
   }
 }

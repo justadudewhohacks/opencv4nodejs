@@ -1,0 +1,45 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI using prebuilt openCV
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+      - "cc/**"
+      - "install/**"
+      - "lib/**"
+      - "test/**"
+      - "typings/**"
+      - "package.json"
+      - ".github/workflows/build-apt.yml"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - name: Install opencv pkg
+      run: sudo apt-get install -y build-essential libopencv-contrib-dev libopencv-dev
+    - uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 7.3.0
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'pnpm'
+    - run: pnpm install --frozen-lockfile
+      env:
+          OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+    - run: pnpm run prepack
+    #  - run: npm run build --if-present
+    # - run: npx build-opencv rebuild
+    # - run: npm test

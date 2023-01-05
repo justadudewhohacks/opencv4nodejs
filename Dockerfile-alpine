@@ -1,0 +1,36 @@
+FROM node:18-alpine3.16 As build
+
+RUN apk add --no-cache alpine-sdk cmake linux-headers
+ENV OPENCV_BUILD_ROOT=/usr/src/opencv
+ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.5.5
+RUN mkdir -p /usr/src/opencv
+RUN npm install -g rimraf
+RUN npm install -g @u4/opencv4nodejs
+RUN rimraf /usr/local/lib/node_modules/**/*.{md,map,txt}
+RUN rimraf /usr/local/lib/node_modules/{@eslint}
+RUN rimraf /usr/local/lib/node_modules/**/{LICENSE,.github,.npmignore,LICENSE.txt,.travis.yml,.eslintrc,sponsors}
+RUN rimraf /usr/local/lib/node_modules/*/{test}
+RUN find /usr/local/lib/node_modules/ -type f -empty -print -delete
+RUN find /usr/local/lib/node_modules/ -type d -empty -print -delete
+RUN rimraf /usr/src/opencv/opencv-*/build/{doc,3rdparty,*.txt,*.cmake,*.tmp,tmp,downloads,opencv_python_tests.cfg}
+RUN rimraf /usr/src/opencv/opencv-*/**/{cmake,*.txt,*.cmake,*.make,*.tmp,*.o,*.md,*.cpp,Makefile,CMakeFiles,*.sh}
+RUN rimraf /usr/src/opencv/opencv-*/build/modules/.firstpass/
+RUN rimraf /usr/src/opencv/opencv-*/build/share/opencv4/testdata
+RUN rimraf /usr/src/opencv/opencv-*/build/share/
+RUN find /usr/src/opencv/ -type f -empty -print -delete
+RUN find /usr/src/opencv/ -type d -empty -print -delete
+
+FROM node:18-alpine3.16 As production
+ENV OPENCV_BUILD_ROOT=/usr/src/opencv
+ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.6.0
+# ARG NODE_ENV=production
+#ENV NODE_ENV=${NODE_ENV}
+WORKDIR /usr/src/app
+COPY --from=build /usr/src/opencv /usr/src/opencv
+COPY --from=build /usr/local/lib/node_modules/@u4 /usr/local/lib/node_modules/@u4
+# COPY test ./
+# COPY data ../data
+# RUN npm remove @u4/opencv4nodejs
+# RUN npm install
+# RUN npm link @u4/opencv4nodejs
+# docker run -it --rm urielch/opencv-nodejs:test npm run test

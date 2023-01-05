@@ -1,0 +1,93 @@
+name: Build using prebuild openCV
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+      - "cc/**"
+      - "install/**"
+      - "lib/**"
+      - "test/**"
+      - "typings/**"
+      - "package.json"
+      - ".github/workflows/prebuild.yml"
+  pull_request:
+    branches: [ "master" ]
+    paths:
+      - "cc/**"
+      - "install/**"
+      - "lib/**"
+      - "test/**"
+      - "typings/**"
+      - "package.json"
+      - ".github/workflows/prebuild.yml"
+
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: .
+  # define common env value no more needed since V 6.2.2
+  # OPENCV_INCLUDE_DIR: c:\tools\opencv\build\include
+  # OPENCV_LIB_DIR: c:\tools\opencv\build\x64\vc14\lib
+  # OPENCV_BIN_DIR: c:\tools\opencv\build\x64\vc14\bin
+  OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
+  # Configuration type to build.
+  # You can convert this to a build matrix if you need coverage of multiple configuration types.
+  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+  BUILD_CONFIGURATION: Release
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        opencv_version:
+          # - 4.7.0 not available yet
+          - 4.6.0
+          # - 4.5.5 # 2019-12-23 ubuntu 22.04
+          # - 4.2.0 # 2019-12-23 ubuntu 20.04
+          # - 3.4.16
+        node_version:
+          # - 16
+          - 18
+        architecture:
+          - x64
+    steps:
+    - uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 7.3.0
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node_version }}
+        architecture: ${{ matrix.architecture }}
+        cache: 'pnpm'
+    
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Install OpenCV
+      run: |
+        choco install OpenCV -y --version ${{ matrix.opencv_version }}
+
+    - name: add path to PATH environment variable
+      uses: myci-actions/export-env-var-powershell@1
+      with:
+       name: PATH
+       value: $env:PATH;$env:OPENCV_BIN_DIR
+     
+    - name: run pnpm install
+      run: pnpm install --frozen-lockfile
+
+    - name: pnpm run prepack
+      run: pnpm run prepack
+
+    - name: install deps in test
+      working-directory: ./test
+      run: pnpm install --frozen-lockfile
+
+    - name: run test-appveyor test
+      working-directory: ./test
+      run: pnpm run test-appveyor

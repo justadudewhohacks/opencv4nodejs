@@ -1,5 +1,8 @@
 #include "macros.h"
 #include <opencv2/tracking.hpp>
+#if CV_VERSION_GREATER_EQUAL(4, 5, 2)
+#include <opencv2/tracking/tracking_legacy.hpp>
+#endif
 #include "Mat.h"
 #include "Rect.h"
 
@@ -8,7 +11,11 @@
 #ifndef __FF_MULTITRACKER_H__
 #define __FF_MULTITRACKER_H__
 
+#if CV_VERSION_GREATER_EQUAL(4, 5, 2)
+class MultiTracker : public FF::ObjectWrap<MultiTracker, cv::Ptr<cv::legacy::MultiTracker>> {
+#else
 class MultiTracker : public FF::ObjectWrap<MultiTracker, cv::Ptr<cv::MultiTracker>> {
+#endif
 public:
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 

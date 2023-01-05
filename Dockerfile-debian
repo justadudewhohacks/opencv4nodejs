@@ -1,0 +1,39 @@
+FROM node:18 As build
+
+RUN apt update && apt -y upgrade && apt -y install build-essential cmake
+ENV OPENCV_BUILD_ROOT=/usr/src/opencv
+ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.6.0
+RUN npm install -g rimraf
+RUN npm install -g @u4/opencv4nodejs
+RUN rimraf /usr/local/lib/node_modules/**/*.{md,map,txt}
+RUN rimraf /usr/local/lib/node_modules/{@eslint}
+RUN rimraf /usr/local/lib/node_modules/**/{LICENSE,.github,.npmignore,LICENSE.txt,.travis.yml,.eslintrc,sponsors}
+RUN rimraf /usr/local/lib/node_modules/*/test
+RUN find /usr/local/lib/node_modules/ -type f -empty -print -delete
+RUN find /usr/local/lib/node_modules/ -type d -empty -print -delete
+RUN rimraf /usr/src/opencv/opencv-*/build/{doc,3rdparty,*.txt,*.cmake,*.tmp,tmp,downloads,opencv_python_tests.cfg}
+RUN rimraf /usr/src/opencv/opencv-*/**/{cmake,*.txt,*.cmake,*.make,*.tmp,*.o,*.md,*.cpp,Makefile,CMakeFiles,*.sh}
+RUN rimraf /usr/src/opencv/opencv-*/build/modules/.firstpass/
+RUN rimraf /usr/src/opencv/opencv-*/build/share/opencv4/testdata
+RUN rimraf /usr/src/opencv/opencv-*/build/share/
+RUN find /usr/src/opencv/ -type f -empty -print -delete
+RUN find /usr/src/opencv/ -type d -empty -print -delete
+
+FROM node:18 As production
+ENV OPENCV_BUILD_ROOT=/usr/src/opencv
+ENV OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION=4.6.0
+WORKDIR /usr/src/app
+COPY --from=build /usr/src/opencv /usr/src/opencv
+COPY --from=build /usr/local/lib/node_modules/@u4 /usr/local/lib/node_modules/@u4
+
+# COPY test ./
+# COPY data ../data
+# RUN npm remove @u4/opencv4nodejs
+# RUN npm install
+# RUN npm link @u4/opencv4nodejs
+# docker build --pull --rm -f Dockerfile-debian -t urielch/opencv-nodejs:test .
+# docker run -it --rm urielch/opencv-nodejs:test bash
+# docker build -f Dockerfile-debian -t urielch/opencv-nodejs:arm64-6.2.4 --push .
+# docker buildx build -f Dockerfile-debian --platform linux/amd64,linux/arm64 -t urielch/opencv-nodejs:6.2.4 -t urielch/opencv-nodejs:latest --push .
+# docker buildx build -f Dockerfile-alpine --platform linux/amd64,linux/arm64 -t urielch/opencv-nodejs:6.2.4-alpine --push .
+# docker run -it --rm urielch/opencv-nodejs:latest /bin/bash

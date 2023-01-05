@@ -1,0 +1,26 @@
+{
+  "ignorePatterns": [ "**/*.js" ],
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+   "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/eslint-recommended", "plugin:@typescript-eslint/recommended"],
+  "rules": {
+    "linebreak-style": 0,
+    "comma-dangle": ["error", "always-multiline"],
+    "no-plusplus": "off",
+    "func-names": 0,
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
+    "import/no-extraneous-dependencies": 0,
+    "no-underscore-dangle": 0,
+    "no-nested-ternary": 0,
+    "no-async-promise-executor": 0,
+    "radix": 0
+  },
+  "env": {
+    "es6": true,
+    "node": true
+  }
+}

@@ -3,6 +3,10 @@
 #include "opencv_modules.h"
 
 #include "core/core.h"
+
+#ifdef HAVE_OPENCV_HIGHGUI
+#include "highgui/highgui.h"
+#endif
 #ifdef HAVE_OPENCV_CALIB3D
 #include "calib3d/calib3d.h"
 #endif
@@ -60,7 +64,7 @@ int customCvErrorHandler(int status, const char* func_name, const char* err_msg,
     return 0;
 }
 
-void init(v8::Local<v8::Object> target) {
+NAN_MODULE_INIT(init) {
 	// can be disabled by defining env variable: OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING
 	ExternalMemTracking::Init(target);
 
@@ -68,18 +72,27 @@ void init(v8::Local<v8::Object> target) {
 	// instead, which can be catched and forwarded to node process
 	cv::redirectError(customCvErrorHandler);
 
-
+	// hand craft version object { major: number; minor: number; revision: number;}
 	v8::Local<v8::Object> version = Nan::New<v8::Object>();
 	Nan::Set(version, FF::newString("major"), Nan::New(CV_VERSION_MAJOR));
 	Nan::Set(version, FF::newString("minor"), Nan::New(CV_VERSION_MINOR));
 	Nan::Set(version, FF::newString("revision"), Nan::New(CV_VERSION_REVISION));
+	// attache the newly created version object
 	Nan::Set(target, FF::newString("version"), version);
 
+	// hand craft modules Object containing available modules {modulename: true; ...}
 	v8::Local<v8::Object> modules = Nan::New<v8::Object>();
+	// attache the newly created modules object
 	Nan::Set(target, FF::newString("modules"), modules);
+	Nan::Set(target, FF::newString("xmodules"), modules);
 
 	Nan::Set(modules, FF::newString("core"), Nan::New(true));
 	Core::Init(target);
+
+#ifdef HAVE_OPENCV_HIGHGUI
+	Nan::Set(modules, FF::newString("highgui"), Nan::New(true));
+	Highgui::Init(target);
+#endif
 #ifdef HAVE_OPENCV_CALIB3D
 	Nan::Set(modules, FF::newString("calib3d"), Nan::New(true));
 	Calib3d::Init(target);
@@ -142,4 +155,8 @@ void init(v8::Local<v8::Object> target) {
 #endif
 };
 
+#if NODE_MAJOR_VERSION >= 10
+NAN_MODULE_WORKER_ENABLED(opencv4nodejs, init)
+#else
 NODE_MODULE(opencv4nodejs, init)
+#endif

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "commonjs",
+    "strict": false,
+    "esModuleInterop": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  //"files": [ "./install/install.ts", "./install/parseEnv.ts" ]
+  "include": [ "./install/*.ts", "./lib/**/*.ts" ]
+}

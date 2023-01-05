@@ -22,8 +22,8 @@ public:
 
 	static NAN_MODULE_INIT(Init);
 
-	FF_GETTER(rows, FF::IntConverter);
-	FF_GETTER(cols, FF::IntConverter);
+  FF_GETTER_CUSTOM(rows, FF::IntConverter, self.rows);
+  FF_GETTER_CUSTOM(cols, FF::IntConverter, self.cols);
 	FF_GETTER_CUSTOM(type, FF::IntConverter, self.type());
 	FF_GETTER_CUSTOM(channels, FF::IntConverter, self.channels());
 	FF_GETTER_CUSTOM(dims, FF::IntConverter, self.dims);

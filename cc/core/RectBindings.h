@@ -90,6 +90,9 @@ namespace RectBindings {
       return "";
     }
   
+    /**
+     * args[0] can be a cv::Size2d or a number
+     */
     bool unwrapRequiredArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
       bool isSizeArg = Size::hasInstance(info[0]);
       double f = 1;

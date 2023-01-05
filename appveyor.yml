@@ -8,68 +8,103 @@ clone_folder: c:\projects\opencv4nodejs
 
 init:
   - git config --global core.autocrlf true
-
+shallow_clone: true
 # cache:
  # - c:\tools\opencv
 
 # what combinations to test
 environment:
-  OPENCV3_LATEST: 3.4.6
-  OPENCV4_LATEST: 4.1.0
-  PYTHON_VERSION: 2.7
-  PYTHON: "C:\\Python27-x64"
+  OPENCV3_N0: 3.4.16 # 2021-10-11
+  #OPENCV4_N_0: 4.6.0 # 2022-06-12
+  OPENCV4_N0: 4.5.5 # 2022-06-12
+  OPENCV4_N1: 4.5.0 # 2021-12-30
+  OPENCV4_N2: 4.4.0 # 2020-07-18
+
+  # OPENCV4_N0: 4.5.3 #
+  # OPENCV4_N1: 4.5.2 #
+  # OPENCV4_N2: 4.5.1 #
+  # OPENCV3_N0: 4.5.0 #
+
+  PYTHON_VERSION: 3.8
+  PYTHON: "C:\\Python38-x64"
   # use self build
   OPENCV4NODEJS_DISABLE_AUTOBUILD: 1
 
   matrix:
-    - nodejs_version: 12
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 12
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV3_LATEST%"
-    - nodejs_version: 12
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 11
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 10
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 8
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 6
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-    - nodejs_version: 12
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      OPENCV_VERSION: "%OPENCV4_LATEST%"
-      BUILD_TASK: "ENVS"
+    - 
+      OPENCVV: "%OPENCV4_N0%"
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
+    #- 
+    #  OPENCVV: "%OPENCV4_N1%"
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
+    #- 
+    #  OPENCVV: "%OPENCV4_N2%"
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
+    #- 
+    #  OPENCVV: "%OPENCV3_N0%"
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
+
+
+    - 
+      OPENCVV: "%OPENCV4_N0%"
+      NODEV: 16
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: "%OPENCV4_N1%"
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: "%OPENCV4_N2%"
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- 
+    #  OPENCVV: "%OPENCV3_N0%"
+    #  NODEV: 16
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 
 install:
-  - cmd: choco install OpenCV -y -version %OPENCV_VERSION%
+  - cmd: choco install OpenCV -y --version %OPENCVV%
   - if not "%BUILD_TASK%" == "ENVS" SET OPENCV_INCLUDE_DIR=c:\tools\opencv\build\include
   - if not "%BUILD_TASK%" == "ENVS" SET OPENCV_LIB_DIR=c:\tools\opencv\build\x64\vc14\lib
   - if not "%BUILD_TASK%" == "ENVS" SET OPENCV_BIN_DIR=c:\tools\opencv\build\x64\vc14\bin
   - if not "%BUILD_TASK%" == "ENVS" SET PATH=%PATH%;%OPENCV_BIN_DIR%;
-  - ps: Install-Product node $env:nodejs_version x64
-  - node --version
+  - ps: Install-Product node $env:NODEV x64
+  # - node --version
 
-build: off
+build: false
 
 test_script:
   - node --version
-  - if "%BUILD_TASK%" == "ENVS" (
-      cd c:\projects\opencv4nodejs\ci\envs &&
-      npm install &&
-      npm test
-    ) else (
-      cd c:\projects\opencv4nodejs &&
-      npm install &&
-      cd c:\projects\opencv4nodejs\test &&
-      npm install &&
-      npm run test-appveyor &&
-      npm run test-externalMemTracking
-    )
+  - npm install -g pnpm
+  # - pnpm install -g node-gyp
+  - cd c:\projects\opencv4nodejs
+  - pnpm install
+  - pnpm run prepack
+  # - npm link
+  # - build-opencv rebuild
+  # - cd c:\projects\opencv4nodejs\ci\envs && build-opencv rebuild && pnpm install && pnpm test
+  - cd c:\projects\opencv4nodejs\test
+  - pnpm install
+  - pnpm run test-appveyor
+  - echo Success
+  # - SET OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING=1
+  # - pnpm run test-externalMemTracking
+  # - SET OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING=
+  # - pnpm run test-externalMemTracking
+
+  #- if "%BUILD_TASK%" == "ENVS" (
+  #    cd c:\projects\opencv4nodejs\ci\envs &&
+  #    pnpm install &&
+  #    pnpm test
+  #  ) else (
+  #    cd c:\projects\opencv4nodejs &&
+  #    pnpm install &&
+  #    cd c:\projects\opencv4nodejs\test &&
+  #    pnpm install &&
+  #    pnpm run test-appveyor &&
+  #    pnpm run test-externalMemTracking
+  #  )

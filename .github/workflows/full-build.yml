@@ -1,0 +1,56 @@
+name: Build all from source
+
+on:
+  # push:
+  #   branches: [ "master" ]
+  # pull_request:
+  #   branches: [ "master" ]
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        description: 'build all from source'
+        default: '4.7.0'
+        required: true
+
+env:
+  SOLUTION_FILE_PATH: .
+  BUILD_CONFIGURATION: Release
+  OPENCV_BUILD_ROOT: D:/opencv
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 7.3.0
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'pnpm'
+    
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.1.3
+
+    - name: run pnpm install
+      run: pnpm install --frozen-lockfile
+
+    - name: pnpm run prepack
+      run: pnpm run prepack
+
+    - name: install deps in test
+      working-directory: ./test
+      run: pnpm install --frozen-lockfile
+
+    - name: build OpenCV
+      working-directory: ./test
+      run: pnpm build-opencv --version ${{ github.event.inputs.name }} rebuild
+
+    - name: run test-appveyor test
+      working-directory: ./test
+      run: pnpm run test-appveyor

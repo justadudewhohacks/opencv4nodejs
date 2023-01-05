@@ -112,15 +112,17 @@
 			"cc/features2d/detectors/SimpleBlobDetector.cc",
 			"cc/features2d/detectors/SimpleBlobDetectorParams.cc",
 			"cc/xfeatures2d/xfeatures2d.cc",
-			# "cc/xfeatures2d/SIFTDetector.cc", https://github.com/justadudewhohacks/opencv4nodejs/issues/805#issuecomment-806314329
+			"cc/xfeatures2d/SIFTDetector.cc",
 			"cc/xfeatures2d/SURFDetector.cc",
 			"cc/img_hash/img_hash.cc",
 			"cc/img_hash/ImgHashBase.cc",
 			"cc/img_hash/PHash.cc"
+			"cc/highgui/highgui.cc",
+			"cc/highgui/highguiConstants.cc",
 		],
 
 		"cflags" : [
-			"-std=c++11"
+			"-std=c++14"
 		],
 		"cflags!" : [
 			"-fno-exceptions"
@@ -134,11 +136,11 @@
 		],
 		"xcode_settings": {
 			"OTHER_CFLAGS": [
-				"-std=c++11",
+				"-std=c++14",
 				"-stdlib=libc++"
 			],
 			"GCC_ENABLE_CPP_EXCEPTIONS": "YES",
-			"MACOSX_DEPLOYMENT_TARGET": "10.9"
+			"MACOSX_DEPLOYMENT_TARGET": "11.0"
 		},
 
 		"conditions": [
