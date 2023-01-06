@@ -116,7 +116,7 @@
 			"cc/xfeatures2d/SURFDetector.cc",
 			"cc/img_hash/img_hash.cc",
 			"cc/img_hash/ImgHashBase.cc",
-			"cc/img_hash/PHash.cc"
+			"cc/img_hash/PHash.cc",
 			"cc/highgui/highgui.cc",
 			"cc/highgui/highguiConstants.cc",
 		],
