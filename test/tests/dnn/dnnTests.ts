@@ -5,7 +5,7 @@ export default function (args: TestContext) {
   const { cv, utils, getTestImg } = args;
 
   const {
-    readTestImage,
+    // readTestImage,
     generateAPITests,
     assertMetaData,
     cvVersionGreaterEqual,

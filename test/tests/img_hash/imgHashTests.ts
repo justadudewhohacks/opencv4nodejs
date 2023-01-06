@@ -1,12 +1,12 @@
-const { expect } = require('chai');
+import { expect } from 'chai';
+import { PHash } from '../../../typings';
+import { TestContext } from '../model';
 
-module.exports = ({ cv, utils, getTestImg }) => (ImgHash) => {
+export default (args: TestContext) => (ImgHash: typeof PHash) => {
+  const { utils, getTestImg } = args;
 
   const {
     generateAPITests,
-    clearTmpData,
-    getTmpDataFilePath,
-    cvVersionLowerThan
   } = utils;
 
   describe('constructor', () => {
@@ -15,9 +15,8 @@ module.exports = ({ cv, utils, getTestImg }) => (ImgHash) => {
     });
   });
 
-
   describe('api tests', () => {
-    let imgHash;
+    let imgHash: PHash;
 
     before(() => {
       imgHash = new ImgHash();
@@ -33,9 +32,8 @@ module.exports = ({ cv, utils, getTestImg }) => (ImgHash) => {
         methodName: 'compute',
         methodNameSpace: 'ImgHashBase',
         getRequiredArgs: () => [getTestImg().bgrToGray()],
-        expectOutput
+        expectOutput,
       });
     });
-
   });
 };

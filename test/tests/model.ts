@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
-import Chai from 'chai';
+import type Chai from 'chai';
 import {
-    cv, Point2, Point3, Mat, Vec2, Vec3, Vec4,
+  cv, Point2, Point3, Mat, Vec2, Vec3, Vec4,
 } from '@u4/opencv4nodejs';
 
 export type OpenCV = typeof cv
@@ -45,7 +45,7 @@ export interface TestContext {
         assertDataDeepEquals: (data0: any, data1: any) => void;
         assertDataAlmostDeepEquals: (data0: any, data1: any) => void;
         assertMatValueAlmostEquals: (val0: number, val1: number) => void;
-        assertMatValueEquals: (val0: number, val1: number) => void;
+        assertMatValueEquals: (val0: number | number[], val1: number | number[]) => void;
         assertMetaData: (mat: Mat | number[]) => (arg0: number | { rows: number, cols: number, type: number }, cols?: number, type?: number) => void;
         dangerousDeepEquals: (obj0: any, obj1: any) => boolean;
         generateIts: (msg: string, testFunc: (t: number) => void, exclusions?: Set<string>) => void;

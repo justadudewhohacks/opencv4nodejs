@@ -4,6 +4,7 @@ import type openCV from '@u4/opencv4nodejs';
 import { assertPropsWithValue } from './testUtils';
 
 // TODO: proper deepEquals
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dangerousDeepEquals = (obj0: any, obj1: any) => JSON.stringify(obj0) === JSON.stringify(obj1);
 
 const matTypeNames = [

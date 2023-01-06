@@ -16,8 +16,9 @@ export default function (args: TestContext) {
     cvVersionEqual,
   } = utils;
 
-  const TrackerTestGenerator = (getTestImg) => (trackerName) => {
-    const newTracker = (arg?: any) => new cv[trackerName]();
+  const TrackerTestGenerator = (getTestImg2) => (trackerName) => {
+    // eslint-disable-next-line no-unused-vars
+    const newTracker = (_arg2?: unknown) => new cv[trackerName]();
     const newTrackerParams = () => new cv[`${trackerName}Params`]();
 
     describe(trackerName, () => {
@@ -44,7 +45,7 @@ export default function (args: TestContext) {
         });
 
         it('can be called with frame and initial box', () => {
-          const ret = newTracker().init(getTestImg(), new cv.Rect(0, 0, 10, 10));
+          const ret = newTracker().init(getTestImg2(), new cv.Rect(0, 0, 10, 10));
           expect(ret).to.true;
         });
       });
@@ -61,8 +62,8 @@ export default function (args: TestContext) {
         )) {
           it('returns bounding box', () => {
             const tracker = newTracker();
-            tracker.init(getTestImg(), new cv.Rect(0, 0, 10, 10));
-            const rect = tracker.update(getTestImg());
+            tracker.init(getTestImg2(), new cv.Rect(0, 0, 10, 10));
+            const rect = tracker.update(getTestImg2());
             if (rect !== null) {
               expect(rect).to.be.instanceOf(cv.Rect);
             }
@@ -71,7 +72,7 @@ export default function (args: TestContext) {
       });
 
       describe('getModel', () => {
-
+        // missing
       });
     });
   };
@@ -156,7 +157,7 @@ export default function (args: TestContext) {
 
     describe('update', () => {
       it('should throw if no args', () => {
-        // @ts-expect-error
+        // @ts-expect-error Error: expected argument 0 to be of type
         expect(() => (new cv.MultiTracker()).update()).to.throw('MultiTracker::Update - Error: expected argument 0 to be of type');
       });
 

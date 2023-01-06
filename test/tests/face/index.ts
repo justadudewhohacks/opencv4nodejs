@@ -15,21 +15,21 @@ export default function (args: TestContext) {
 
   describe('FaceRecognizers', () => {
     describe('EigenFaceRecognizer', () => {
-      const args = ['num_components', 'threshold'];
+      const args2 = ['num_components', 'threshold'];
       const values = [10, 0.8];
-      recognizerTests(args, values, cv.EigenFaceRecognizer);
+      recognizerTests(args2, values, cv.EigenFaceRecognizer);
     });
 
     describe('FisherFaceRecognizer', () => {
-      const args = ['num_components', 'threshold'];
+      const args2 = ['num_components', 'threshold'];
       const values = [10, 0.8];
-      recognizerTests(args, values, cv.FisherFaceRecognizer);
+      recognizerTests(args2, values, cv.FisherFaceRecognizer);
     });
 
     describe('LBPHFaceRecognizer', () => {
-      const args = ['radius', 'neighbors', 'grid_x', 'grid_y'];
+      const args2 = ['radius', 'neighbors', 'grid_x', 'grid_y'];
       const values = [2, 16, 16, 16];
-      recognizerTests(args, values, cv.LBPHFaceRecognizer);
+      recognizerTests(args2, values, cv.LBPHFaceRecognizer);
     });
   });
 

@@ -28,7 +28,7 @@ export default (args: TestContext) => {
   const findContoursMethod = cv.CHAIN_APPROX_NONE;
 
   describe('findContours', () => {
-    const expectOutput = (contours) => {
+    const expectOutput = (contours: Contour[]) => {
       expect(contours).to.be.an('array').lengthOf(3);
 
       contours.forEach((contour) => {

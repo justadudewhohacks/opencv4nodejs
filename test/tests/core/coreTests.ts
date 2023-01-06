@@ -58,7 +58,7 @@ export default function (args: TestContext) {
       getDut: () => cv,
       methodName: 'getBuildInformation',
       hasAsync: false,
-      expectOutput: () => { },
+      expectOutput: () => { /* empty */ },
     });
   });
 
@@ -213,15 +213,14 @@ export default function (args: TestContext) {
   });
 
   describe('setNumThreads', () => {
-    it('should try to set the number of threads'
-      + ' that used by OpenCV', () => {
-        const number = 2;
-        cv.setNumThreads(number);
-        // OpenCV will **try** to set the number of threads for the
-        // next parallel region so that `cv.getNumThreads()` don't react
-        // to this immediately.
-        // expect(cv.getNumThreads()).to.be.equal(number);
-      });
+    it('should try to set the number of threads that used by OpenCV', () => {
+      const number = 2;
+      cv.setNumThreads(number);
+      // OpenCV will **try** to set the number of threads for the
+      // next parallel region so that `cv.getNumThreads()` don't react
+      // to this immediately.
+      // expect(cv.getNumThreads()).to.be.equal(number);
+    });
 
     it('should throw when the argument is not integer', () => {
       const expectError = (fn, msg) => {
@@ -273,7 +272,8 @@ export default function (args: TestContext) {
       it('should trigger `init` callback in async_hooks', () => {
         let typeFound = false;
         const hook = asyncHooks.createHook({
-          init: (asyncId, type, triggerAsyncId, resource) => {
+          // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+          init: (_asyncId, type, _triggerAsyncId, _resource) => {
             if (type.indexOf('opencv4nodejs') === 0) {
               typeFound = true;
               hook.disable();
@@ -285,6 +285,7 @@ export default function (args: TestContext) {
         const createInstance = () => new cv.Point2(0, 0);
         const num = 5;
         const instances = Array(num).fill(0).map(() => createInstance());
+        // eslint-disable-next-line no-unused-vars
         const { labels, numLabels } = cv.partition(instances, () => true);
         expect(typeFound).to.be.equal(true);
       });
@@ -338,8 +339,8 @@ export default function (args: TestContext) {
       [1, 1, 0],
     ], cv.CV_8U);
 
-    const expectOutput = (res, dut, args) => {
-      if (!args.some((arg) => arg === mask)) {
+    const expectOutput = (res, dut, args2) => {
+      if (!args2.some((arg) => arg === mask)) {
         // without mask
         expect(res.minVal).to.equal(0.1);
         expect(res.maxVal).to.equal(0.6);
@@ -686,7 +687,8 @@ export default function (args: TestContext) {
         classNameSpace: 'Mat',
         methodNameSpace: 'Core',
         getRequiredArgs: () => ([dim, rtype, dtype]),
-        expectOutput: (res, _, args) => {
+        // eslint-disable-next-line no-unused-vars
+        expectOutput: (res, _, args2) => {
           expect(res).to.be.instanceOf(cv.Mat);
           expect(res.getDataAsArray()).to.eql(expectedResults);
         },
@@ -711,7 +713,8 @@ export default function (args: TestContext) {
         methodName: 'eigen',
         classNameSpace: 'Mat',
         methodNameSpace: 'Core',
-        expectOutput: (res, _, args) => {
+        // eslint-disable-next-line no-unused-vars
+        expectOutput: (res, _, args2) => {
           expect(res).to.be.instanceOf(cv.Mat);
           const arrayRes = res.getDataAsArray();
           const tolerance = 1e-6;
@@ -741,7 +744,8 @@ export default function (args: TestContext) {
           ['flags', flags],
         ]),
         getRequiredArgs: () => ([m2]),
-        expectOutput: (res, _, args) => {
+        // eslint-disable-next-line no-unused-vars
+        expectOutput: (res, _, args2) => {
           expect(res).to.be.instanceOf(cv.Mat);
           const arrayRes = res.getDataAsArray();
           const tolerance = 1e-6;
