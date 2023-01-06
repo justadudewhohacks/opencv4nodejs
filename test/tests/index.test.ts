@@ -17,6 +17,7 @@ import trackingTestSuite from './tracking';
 import videoTestSuite from './video';
 import xfeatures2dTestSuite from './xfeatures2d';
 import ximgprocTestSuite from './ximgproc';
+import imgHashTestSuite from './img_hash'
 
 const utils = Utils(cv);
 
@@ -26,7 +27,7 @@ const modules = [
 ];
 
 const xmodules = [
-  'face', 'text', 'tracking', 'xfeatures2d', 'ximgproc',
+  'face', 'text', 'tracking', 'xfeatures2d', 'ximgproc', 'img_hash'
 ];
 
 describe('cv', () => {
@@ -155,5 +156,8 @@ describe('cv', () => {
   }
   if (toTest.ximgproc && cv.modules.ximgproc) {
     describe('ximgproc', () => ximgprocTestSuite({ cv, utils, getTestImg }));
+  }
+  if (cv.modules.img_hash) {
+    describe('img_hash', () => imgHashTestSuite({ cv, utils, getTestImg }));
   }
 });

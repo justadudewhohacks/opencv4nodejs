@@ -49,6 +49,9 @@
 #ifdef HAVE_OPENCV_XIMGPROC
 #include "ximgproc/ximgproc.h"
 #endif
+#ifdef HAVE_OPENCV_IMG_HASH
+#include "img_hash/img_hash.h"
+#endif
 
 int customCvErrorHandler(int status, const char* func_name, const char* err_msg, const char* file_name, int line, void* userdata) {
     std::string msg = "OpenCV Error: (" + std::string(err_msg) + ")"
@@ -145,6 +148,10 @@ NAN_MODULE_INIT(init) {
 #ifdef HAVE_OPENCV_XIMGPROC
 	Nan::Set(modules, FF::newString("ximgproc"), Nan::New(true));
 	XImgproc::Init(target);
+#endif
+#ifdef HAVE_OPENCV_IMG_HASH
+	Nan::Set(modules, FF::newString("img_hash"), Nan::New(true));
+	ImgHash::Init(target);
 #endif
 };
 
