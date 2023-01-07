@@ -61,6 +61,13 @@ function getLibDir(env) {
         return dir;
     }
 }
+/**
+ * convert lib list to existing parameter for the linker
+ * @param env
+ * @param libDir
+ * @param libsFoundInDir
+ * @returns
+ */
 function getOPENCV4NODEJS_LIBRARIES(env, libDir, libsFoundInDir) {
     const libs = env.isWin
         ? libsFoundInDir.map(lib => (0, commons_js_1.resolvePath)(lib.libPath))
@@ -235,6 +242,7 @@ or use OPENCV4NODEJS_* env variable.`);
     if (!fs.existsSync(libDir)) {
         throw new Error(`library dir does not exist: ${pc.green(libDir)}'`);
     }
+    // get module list from auto-build.json
     const libsInDir = builder.getLibs.getLibs();
     const libsFoundInDir = libsInDir.filter(lib => lib.libPath);
     if (!libsFoundInDir.length) {

@@ -49,8 +49,9 @@ describe('cv', () => {
     ximgproc: true,
     img_hash: true,
   };
-  // Object.keys(toTest).forEach(m => toTest[m] =  false);
-  // toTest.core = true;
+  // phash branch only
+  // Object.keys(toTest).forEach((m) => { toTest[m] = false; });
+  // toTest.img_hash = true;
 
   let testImg = null;
   let peoplesTestImg = null;
@@ -97,7 +98,9 @@ describe('cv', () => {
   console.log();
   console.log('OpenCV version is:', opencvVersionString);
   console.log('compiled with the following modules:', cv.xmodules);
-  console.log('expected modules to be built:', builtModules);
+  console.log(`${builtModules.length} expected modules to be built:`, builtModules);
+  const liveModules = Object.entries(cv.modules).filter((a) => a[1]).map((a) => a[0]);
+  console.log(`${liveModules.length} visible  modules:`, liveModules);
 
   // no more mandatory environement version variable
   // it('OpenCV version should match', () => {
