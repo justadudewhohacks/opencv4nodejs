@@ -18,7 +18,10 @@ const defaultIncludeDirOpenCV4 = `${defaultIncludeDir}/opencv4`;
 function toBool(value) {
     if (!value)
         return false;
-    value = value.toLowerCase();
+    if (typeof value === "boolean")
+        return value;
+    if (typeof value === "number")
+        return value !== 0;
     if (value === '0' || value === 'false' || value === 'off' || value.startsWith('disa'))
         return false;
     return true;
