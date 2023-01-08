@@ -1,10 +1,9 @@
 import { expect } from 'chai';
+import { generateAPITests } from '../../utils/generateAPITests';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-
-  const { generateAPITests } = utils;
+  const { cv } = args;
 
   describe('constructor', () => {
     it('can be created', () => {

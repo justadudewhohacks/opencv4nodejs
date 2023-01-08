@@ -1,13 +1,10 @@
 import { expect } from 'chai';
+import { generateAPITests } from '../../utils/generateAPITests';
 import { clearTmpData, getTmpDataFilePath } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => (Facemark, FacemarkParams) => {
-  const { cv, utils, getTestImg } = args;
-  const {
-    generateAPITests,
-    cvVersionLowerThan,
-  } = utils;
+  const { cv, cvVersionLowerThan, getTestImg } = args;
 
   describe('constructor', () => {
     it('is constructable without args', () => {

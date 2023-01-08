@@ -3,14 +3,10 @@ import { assertMetaData, isZeroMat } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 import detectorTestsFactory from './detectorTests';
 
-export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
+export default function (ctxt: TestContext) {
+  const { cv, cvVersionGreaterEqual, getTestImg } = ctxt;
 
-  const {
-    cvVersionGreaterEqual,
-  } = utils;
-
-  const detectorTests = detectorTestsFactory({ cv, utils, getTestImg });
+  const detectorTests = detectorTestsFactory(ctxt);
 
   describe('AGASTDetector', () => {
     const TYPE_DEFAULT = cvVersionGreaterEqual(4, 0, 0) ? cv.AGASTDetectorType.OAST_9_16 : 3;

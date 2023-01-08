@@ -1,13 +1,10 @@
 import { expect } from 'chai';
 import { PHash } from '../../../typings';
+import { generateAPITests } from '../../utils/generateAPITests';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => (ImgHash: typeof PHash) => {
-  const { utils, getTestImg } = args;
-
-  const {
-    generateAPITests,
-  } = utils;
+  const { getTestImg } = args;
 
   describe('constructor', () => {
     it('is constructable without args', () => {

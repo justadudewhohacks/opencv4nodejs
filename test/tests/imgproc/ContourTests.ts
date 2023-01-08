@@ -1,15 +1,10 @@
 import { expect } from 'chai';
 import { Contour } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
+import { generateAPITests } from '../../utils/generateAPITests';
 
 export default (args: TestContext) => {
-  const { cv, utils } = args;
-
-  const {
-    generateAPITests,
-    cvVersionLowerThan,
-    cvVersionGreaterEqual,
-  } = utils;
+  const { cv, cvVersionLowerThan, cvVersionGreaterEqual } = args;
 
   // apparently cv version minor < 2 does not consider image borders
   const contoursData = [

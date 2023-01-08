@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { generateAPITests } from '../../../utils/generateAPITests';
 import {
   assertDataDeepEquals,
   assertMetaData,
@@ -10,13 +11,12 @@ import { TestContext } from '../../model';
 import { doubleMin, doubleMax } from './typeRanges';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-
   const {
-    generateAPITests,
+    cv,
+    getTestImg,
     cvVersionGreaterEqual,
     cvVersionLowerThan,
-  } = utils;
+  } = args;
 
   const srcMatData = [
     [doubleMin, doubleMax, 0],

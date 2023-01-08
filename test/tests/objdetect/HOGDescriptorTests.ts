@@ -2,14 +2,12 @@ import { assert, expect } from 'chai';
 import { Point2, Rect } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
 import { assertError, clearTmpData, getTmpDataFilePath } from '../../utils/testUtils';
+import { generateAPITests } from '../../utils/generateAPITests';
 
 type numFieldsType = 'winSize' | 'blockSize' | 'blockStride' | 'cellSize';
 
-export default function (args: TestContext) {
-  const { cv, utils, getPeoplesTestImg } = args;
-  const {
-    generateAPITests,
-  } = utils;
+export default function (ctxt: TestContext) {
+  const { cv, getPeoplesTestImg } = ctxt;
 
   // const HISTOGRAM_NORM_TYPE = cvVersionGreaterEqual(4, 0, 0) ? cv.HOGHistogramNormType.L2Hys : 0
   const HISTOGRAM_NORM_TYPE = 0;

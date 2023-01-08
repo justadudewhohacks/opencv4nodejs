@@ -1,12 +1,10 @@
 import { assert, expect } from 'chai';
+import { generateAPITests } from '../../utils/generateAPITests';
 import { assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-  const {
-    generateAPITests,
-  } = utils;
+  const { cv, getTestImg } = args;
 
   return (defaults, customProps, Detector, implementsCompute = true) => {
     const getDut = () => (typeof Detector === 'function' ? new Detector() : Detector);

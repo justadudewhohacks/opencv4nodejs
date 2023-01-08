@@ -7,8 +7,10 @@ import {
   expectToBeVec2,
   expectToBeVec3,
   expectToBeVec4,
+  funcShouldRequireArgs,
 } from '../../utils/testUtils';
 import { assertDataDeepEquals, assertMetaData } from '../../utils/matTestUtils';
+import { generateAPITests } from '../../utils/generateAPITests';
 
 // let asyncHooks = null;
 // try {
@@ -18,14 +20,11 @@ import { assertDataDeepEquals, assertMetaData } from '../../utils/matTestUtils';
 // }
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-
   const {
-    funcShouldRequireArgs,
-    generateAPITests,
+    cv,
     generateClassMethodTests,
     getNodeMajorVersion,
-  } = utils;
+  } = args;
 
   const partitionTests = (createInstance: () => any) => {
     it('should return labels and numLabels', () => {

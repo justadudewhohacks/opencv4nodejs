@@ -4,16 +4,21 @@ import { expect } from 'chai';
 import { Mat } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
 import { assertDataDeepEquals, assertMetaData } from '../../utils/matTestUtils';
-import { clearTmpData, fileExists, getTmpDataFilePath, _asyncFuncShouldRequireArgs } from '../../utils/testUtils';
+import {
+  clearTmpData,
+  fileExists,
+  funcShouldRequireArgs,
+  getTmpDataFilePath,
+  _asyncFuncShouldRequireArgs,
+}
+  from '../../utils/testUtils';
+import { generateAPITests } from '../../utils/generateAPITests';
 
-export default function (args: TestContext) {
-  const { cv, utils } = args;
-
+export default function (ctxt: TestContext) {
   const {
-    funcShouldRequireArgs,
+    cv,
     getTestImagePath,
-    generateAPITests,
-  } = utils;
+  } = ctxt;
 
   let lenna: Mat;
   let got: Mat;

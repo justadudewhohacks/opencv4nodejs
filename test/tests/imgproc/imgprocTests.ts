@@ -1,17 +1,17 @@
 import { expect } from 'chai';
+import { generateAPITests } from '../../utils/generateAPITests';
 import { assertMetaData, dangerousDeepEquals } from '../../utils/matTestUtils';
 import { assertError, assertPropsWithValue, expectToBeVec4 } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
-export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-
+export default function (ctxt: TestContext) {
   const {
-    generateAPITests,
+    cv,
+    getTestImg,
     generateClassMethodTests,
     cvVersionLowerThan,
     cvVersionGreaterEqual,
-  } = utils;
+  } = ctxt;
 
   const rgbMatData = [
     Array(5).fill([255, 125, 0]),

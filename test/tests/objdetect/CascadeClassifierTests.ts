@@ -1,12 +1,9 @@
 import { expect } from 'chai';
+import { generateAPITests } from '../../utils/generateAPITests';
 import { TestContext } from '../model';
 
-export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-  const {
-    generateAPITests,
-    cvVersionEqual,
-  } = utils;
+export default function (ctxt: TestContext) {
+  const { cv, cvVersionEqual, getTestImg } = ctxt;
 
   describe('CascadeClassifier', () => {
     const xmlHaarFile = cv.HAAR_FRONTALFACE_DEFAULT;

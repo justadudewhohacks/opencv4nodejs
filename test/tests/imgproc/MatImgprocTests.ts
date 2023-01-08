@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { Vec3, Mat } from '../../../typings';
+import { generateAPITests } from '../../utils/generateAPITests';
 import {
   assertDataDeepEquals,
   assertMatValueEquals,
@@ -12,12 +13,7 @@ import { asyncFuncShouldRequireArgs, expectToBeVec2, _funcShouldRequireArgs } fr
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-
-  const {
-    generateAPITests,
-    cvVersionGreaterEqual,
-  } = utils;
+  const { cv, cvVersionGreaterEqual, getTestImg } = args;
 
   const rgbMatData = [
     Array(5).fill([255, 125, 0]),

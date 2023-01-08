@@ -2,12 +2,8 @@ import { expect } from 'chai';
 import { KeyPoint, Mat } from '../../../typings';
 import { TestContext } from '../model';
 
-export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-
-  const {
-    cvVersionLowerThan,
-  } = utils;
+export default function (ctxt: TestContext) {
+  const { cv, cvVersionLowerThan, getTestImg } = ctxt;
 
   let kazeKps: KeyPoint[];
   let kazeDesc: Mat;

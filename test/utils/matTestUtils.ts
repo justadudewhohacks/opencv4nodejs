@@ -39,7 +39,7 @@ export const assertMatValueAlmostEquals = AssertMatValueEquals(
   (v0: number, v1: number) => (!v0 && !v1) || (((v0 - 0.0001) < v1) && (v1 < (v0 + 0.0001))),
 );
 
-const generateItsFactory = (cv: typeof openCV) => (msg: string, testFunc: Function, exclusions = new Set<string>()): void => matTypeNames.filter((type) => !exclusions.has(type)).forEach((type) => {
+export const generateItsFactory = (cv: typeof openCV) => (msg: string, testFunc: Function, exclusions = new Set<string>()): void => matTypeNames.filter((type) => !exclusions.has(type)).forEach((type) => {
   it(`${type} ${msg}`, () => testFunc(cv[type]));
 });
 
@@ -84,15 +84,6 @@ export const assertMetaData = (mat: Mat | number[]) => (args0: number | { rows: 
 
 export default function (cv: typeof openCV) {
   return {
-    // assertDataDeepEquals,
-    // assertDataAlmostDeepEquals,
-    // assertMatValueAlmostEquals,
-    // assertMatValueEquals,
-    // assertMetaData,
-    // dangerousDeepEquals,
     generateIts: generateItsFactory(cv),
-    // isZeroMat,
-    // isUniformMat,
-    // MatValuesComparator,
   };
 }

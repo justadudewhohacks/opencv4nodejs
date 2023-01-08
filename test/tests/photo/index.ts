@@ -3,11 +3,7 @@ import { assertMetaData } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-
-  const {
-    generateClassMethodTests,
-  } = utils;
+  const { cv, generateClassMethodTests } = args;
 
   describe('inpaint', () => {
     it('should have constants', () => {

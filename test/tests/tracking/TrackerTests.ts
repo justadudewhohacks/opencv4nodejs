@@ -9,12 +9,12 @@ const expectImplementsMethods = (tracker) => {
 };
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-
   const {
+    cv,
     cvVersionGreaterEqual,
     cvVersionEqual,
-  } = utils;
+    getTestImg,
+  } = args;
 
   const TrackerTestGenerator = (getTestImg2) => (trackerName) => {
     // eslint-disable-next-line no-unused-vars

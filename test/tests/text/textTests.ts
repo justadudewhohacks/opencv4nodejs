@@ -2,14 +2,10 @@ import path from 'path';
 import { expect } from 'chai';
 import { TestContext } from '../model';
 import { assertMetaData } from '../../utils/matTestUtils';
+import { generateAPITests } from '../../utils/generateAPITests';
 
-export default function (args: TestContext) {
-  const { cv, utils } = args;
-
-  const {
-    generateAPITests,
-    cvVersionGreaterEqual,
-  } = utils;
+export default function (ctxt: TestContext) {
+  const { cv, cvVersionGreaterEqual } = ctxt;
 
   describe('loadOCRHMMClassifierNM', () => {
     generateAPITests({

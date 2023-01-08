@@ -3,15 +3,11 @@ import recognizerTestsFactory from './recognizerTests';
 import facemarkTestsFactory from './facemarkTests';
 import { TestContext } from '../model';
 
-export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
+export default function (ctxt: TestContext) {
+  const { cv, cvVersionGreaterEqual } = ctxt;
 
-  const {
-    cvVersionGreaterEqual,
-  } = utils;
-
-  const recognizerTests = recognizerTestsFactory({ cv, utils, getTestImg });
-  const facemarkTests = facemarkTestsFactory({ cv, utils, getTestImg });
+  const recognizerTests = recognizerTestsFactory(ctxt);
+  const facemarkTests = facemarkTestsFactory(ctxt);
 
   describe('FaceRecognizers', () => {
     describe('EigenFaceRecognizer', () => {
@@ -35,7 +31,7 @@ export default function (args: TestContext) {
 
   if (cvVersionGreaterEqual(3, 4, 0)) {
     describe('FaceMark', () => {
-      facemarkStructsTests(args);
+      facemarkStructsTests(ctxt);
 
       describe('FacemarkLBF', () => {
         facemarkTests(cv.FacemarkLBF, cv.FacemarkLBFParams);

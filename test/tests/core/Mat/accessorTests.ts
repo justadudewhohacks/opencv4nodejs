@@ -10,11 +10,7 @@ import { TestContext } from '../../model';
 import getExampleMatData from './getExampleMatData';
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-
-  const {
-    generateIts,
-  } = utils;
+  const { cv, generateIts } = args;
 
   const isFloatType = (type: number) => [cv.CV_32FC1, cv.CV_32FC2, cv.CV_32FC3, cv.CV_32FC4]
     .some((matType) => matType === type);

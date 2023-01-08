@@ -1,15 +1,10 @@
 import { expect } from 'chai';
+import { generateAPITests } from '../../utils/generateAPITests';
 import { assertMetaData } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-
-  const {
-    // readTestImage,
-    generateAPITests,
-    cvVersionGreaterEqual,
-  } = utils;
+  const { cv, getTestImg, cvVersionGreaterEqual } = args;
 
   describe('blobFromImage', () => {
     const expectOutput = (res) => {

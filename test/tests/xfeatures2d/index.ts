@@ -1,9 +1,10 @@
 import detectorTestsFactory from '../features2d/detectorTests';
 import { TestContext } from '../model';
 
-export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-  const detectorTests = detectorTestsFactory({ cv, utils, getTestImg: () => getTestImg().resizeToMax(250) });
+export default function (ctxt: TestContext) {
+  const { cv, getTestImg } = ctxt;
+  const subCtxt = new TestContext(cv, () => getTestImg().resizeToMax(250));
+  const detectorTests = detectorTestsFactory(subCtxt);
   describe('SIFTDetector', () => {
     const defaults = {
       sigma: 1.6,

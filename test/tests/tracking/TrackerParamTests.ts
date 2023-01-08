@@ -3,11 +3,7 @@ import { assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => {
-  const { cv, utils } = args;
-
-  const {
-    cvVersionGreaterEqual,
-  } = utils;
+  const { cv, cvVersionGreaterEqual } = args;
 
   it('TrackerBoostingParams', () => {
     const params: TrackerBoostingParams = {

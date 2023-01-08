@@ -1,12 +1,9 @@
+import { generateAPITests } from '../../utils/generateAPITests';
 import { assertMetaData } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 
-export default (args: TestContext) => {
-  const { cv, utils } = args;
-
-  const {
-    generateAPITests,
-  } = utils;
+export default (ctxt: TestContext) => {
+  const { cv } = ctxt;
 
   describe('guidedFilter', () => {
     if (!cv.modules.ximgproc) {
