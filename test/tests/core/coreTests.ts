@@ -1,14 +1,21 @@
 import { expect } from 'chai';
 import { Mat, Point3 } from '@u4/opencv4nodejs';
+import asyncHooks from 'async_hooks';
 import { TestContext } from '../model';
+import {
+  assertPropsWithValue,
+  expectToBeVec2,
+  expectToBeVec3,
+  expectToBeVec4,
+} from '../../utils/testUtils';
+import { assertDataDeepEquals, assertMetaData } from '../../utils/matTestUtils';
 
-let asyncHooks = null;
-
-try {
-  asyncHooks = require('async_hooks');
-} catch (e) {
-  //
-}
+// let asyncHooks = null;
+// try {
+//   asyncHooks = require('async_hooks');
+// } catch (e) {
+//   //
+// }
 
 export default function (args: TestContext) {
   const { cv, utils } = args;
@@ -17,12 +24,6 @@ export default function (args: TestContext) {
     funcShouldRequireArgs,
     generateAPITests,
     generateClassMethodTests,
-    assertMetaData,
-    assertPropsWithValue,
-    assertDataDeepEquals,
-    expectToBeVec2,
-    expectToBeVec3,
-    expectToBeVec4,
     getNodeMajorVersion,
   } = utils;
 
@@ -95,7 +96,7 @@ export default function (args: TestContext) {
   });
 
   describe('kmeans', () => {
-    // @ts-ignore:next-line
+    // @ts-expect-error kmeans constructor expect partameters
     funcShouldRequireArgs(() => cv.kmeans());
     const points2 = [
       [0, 0], [1000, 900], [-1000, -900], [-1100, -1000], [1100, 1000], [10, 10],

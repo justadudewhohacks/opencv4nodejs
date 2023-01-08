@@ -1,5 +1,14 @@
 import { expect } from 'chai';
 import { Vec3, Mat } from '../../../typings';
+import {
+  assertDataDeepEquals,
+  assertMatValueEquals,
+  assertMetaData,
+  dangerousDeepEquals,
+  isUniformMat,
+  isZeroMat,
+} from '../../utils/matTestUtils';
+import { asyncFuncShouldRequireArgs, expectToBeVec2, _funcShouldRequireArgs } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
@@ -7,15 +16,6 @@ export default function (args: TestContext) {
 
   const {
     generateAPITests,
-    asyncFuncShouldRequireArgs,
-    _funcShouldRequireArgs,
-    assertMetaData,
-    assertDataDeepEquals,
-    assertMatValueEquals,
-    dangerousDeepEquals,
-    expectToBeVec2,
-    isZeroMat,
-    isUniformMat,
     cvVersionGreaterEqual,
   } = utils;
 

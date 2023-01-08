@@ -1,12 +1,12 @@
 import path from 'path';
 import { expect } from 'chai';
 import { TestContext } from '../model';
+import { assertMetaData } from '../../utils/matTestUtils';
 
 export default function (args: TestContext) {
   const { cv, utils } = args;
 
   const {
-    assertMetaData,
     generateAPITests,
     cvVersionGreaterEqual,
   } = utils;

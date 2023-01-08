@@ -3,19 +3,15 @@ import path from 'path';
 import { expect } from 'chai';
 import { Mat } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
+import { assertDataDeepEquals, assertMetaData } from '../../utils/matTestUtils';
+import { clearTmpData, fileExists, getTmpDataFilePath, _asyncFuncShouldRequireArgs } from '../../utils/testUtils';
 
 export default function (args: TestContext) {
   const { cv, utils } = args;
 
   const {
-    assertDataDeepEquals,
-    assertMetaData,
-    _asyncFuncShouldRequireArgs,
     funcShouldRequireArgs,
     getTestImagePath,
-    clearTmpData,
-    getTmpDataFilePath,
-    fileExists,
     generateAPITests,
   } = utils;
 

@@ -1,12 +1,9 @@
 import { expect } from 'chai';
+import { assertError, assertPropsWithValue } from '../../../utils/testUtils';
 import { TestContext } from '../../model';
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-  const {
-    assertError,
-    assertPropsWithValue,
-  } = utils;
+  const { cv } = args;
 
   const OperatorRequiresArg = (vec) => (func, isScalar?: boolean) => {
     it('should throw if no args', () => {

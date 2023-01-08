@@ -1,15 +1,16 @@
+import { TrackerBoostingParams } from '../../../typings';
+import { assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => {
   const { cv, utils } = args;
 
   const {
-    assertPropsWithValue,
     cvVersionGreaterEqual,
   } = utils;
 
   it('TrackerBoostingParams', () => {
-    const params = {
+    const params: TrackerBoostingParams = {
       numClassifiers: 100,
       samplerOverlap: 1.5,
       samplerSearchFactor: 0.5,

@@ -1,6 +1,7 @@
 import { assert, expect } from 'chai';
 import { Point2, Rect } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
+import { assertError, clearTmpData, getTmpDataFilePath } from '../../utils/testUtils';
 
 type numFieldsType = 'winSize' | 'blockSize' | 'blockStride' | 'cellSize';
 
@@ -8,10 +9,6 @@ export default function (args: TestContext) {
   const { cv, utils, getPeoplesTestImg } = args;
   const {
     generateAPITests,
-    assertError,
-    // cvVersionGreaterEqual,
-    clearTmpData,
-    getTmpDataFilePath,
   } = utils;
 
   // const HISTOGRAM_NORM_TYPE = cvVersionGreaterEqual(4, 0, 0) ? cv.HOGHistogramNormType.L2Hys : 0
@@ -165,12 +162,12 @@ export default function (args: TestContext) {
       expect(desc.length).to.be.above(0);
     };
 
-    const expectOutputCallbacked = (done: Mocha.Done) => (err, desc) => {
+    const expectOutputCallbacked = (done: () => void) => (err, desc) => {
       expectOutput(desc);
       done();
     };
 
-    const expectOutputPromisified = (done: Mocha.Done) => (desc) => {
+    const expectOutputPromisified = (done: () => void) => (desc) => {
       expectOutput(desc);
       done();
     };

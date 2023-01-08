@@ -1,17 +1,14 @@
 import { expect } from 'chai';
+import { assertMetaData, dangerousDeepEquals } from '../../utils/matTestUtils';
+import { assertError, assertPropsWithValue, expectToBeVec4 } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
   const { cv, utils, getTestImg } = args;
 
   const {
-    assertError,
-    assertPropsWithValue,
-    assertMetaData,
-    dangerousDeepEquals,
     generateAPITests,
     generateClassMethodTests,
-    expectToBeVec4,
     cvVersionLowerThan,
     cvVersionGreaterEqual,
   } = utils;

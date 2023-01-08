@@ -3,16 +3,14 @@ import {
   CalibrationMatrixValues, Mat, OptimalNewCameraMatrix, StereoRectify,
 } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
+import { assertMetaData } from '../../utils/matTestUtils';
+import { expectToBeVec2, expectToBeVec3, expectToBeVec4 } from '../../utils/testUtils';
 
 export default (args: TestContext) => {
   const { cv, utils } = args;
 
   const {
-    assertMetaData,
     generateAPITests,
-    expectToBeVec2,
-    expectToBeVec3,
-    expectToBeVec4,
     cvVersionLowerThan,
     cvVersionGreaterEqual,
   } = utils;

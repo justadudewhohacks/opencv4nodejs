@@ -1,11 +1,8 @@
+import { assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-
-  const {
-    assertPropsWithValue,
-  } = utils;
+  const { cv } = args;
 
   describe('accessors', () => {
     it('properties are set correctly', () => {

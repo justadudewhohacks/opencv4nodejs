@@ -1,17 +1,14 @@
 import { expect } from 'chai';
+import { assertMetaData } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => {
-  const { cv, utils } = args;
-
-  const {
-    assertMetaData,
-  } = utils;
+  const { cv } = args;
 
   const cvVarType = cv.ml.VAR_ORDERED;
   describe('constructor', () => {
     it('should throw if without args', () => {
-      // @ts-ignore:next-line
+      // @ts-expect-error TrainData will throw
       expect(() => new cv.TrainData()).to.throw();
     });
 

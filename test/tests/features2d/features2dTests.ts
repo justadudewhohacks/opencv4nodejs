@@ -1,4 +1,5 @@
 import { assert, expect } from 'chai';
+import { assertMetaData, isZeroMat } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 import detectorTestsFactory from './detectorTests';
 
@@ -6,8 +7,6 @@ export default function (args: TestContext) {
   const { cv, utils, getTestImg } = args;
 
   const {
-    assertMetaData,
-    isZeroMat,
     cvVersionGreaterEqual,
   } = utils;
 

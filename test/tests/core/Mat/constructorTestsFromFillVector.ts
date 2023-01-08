@@ -1,3 +1,4 @@
+import { assertDataAlmostDeepEquals, assertDataDeepEquals, assertMetaData } from '../../../utils/matTestUtils';
 import { TestContext } from '../../model';
 
 import {
@@ -6,13 +7,7 @@ import {
 } from './typeRanges';
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-
-  const {
-    assertDataDeepEquals,
-    assertDataAlmostDeepEquals,
-    assertMetaData,
-  } = utils;
+  const { cv } = args;
 
   const rows = 4;
   const cols = 3;

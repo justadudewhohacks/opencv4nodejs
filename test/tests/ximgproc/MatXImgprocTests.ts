@@ -1,3 +1,4 @@
+import { assertMetaData } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => {
@@ -5,7 +6,6 @@ export default (args: TestContext) => {
 
   const {
     generateAPITests,
-    assertMetaData,
   } = utils;
 
   describe('guidedFilter', () => {

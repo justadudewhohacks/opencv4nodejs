@@ -1,14 +1,10 @@
 /* eslint-disable camelcase */
 import { expect } from 'chai';
+import { assertPropsWithValue, expectFloat } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => {
-  const { cv, utils } = args;
-
-  const {
-    assertPropsWithValue,
-    expectFloat,
-  } = utils;
+  const { cv } = args;
 
   describe('constructor', () => {
     const pt = new cv.Point2(50, 50);
@@ -36,7 +32,7 @@ export default (args: TestContext) => {
       const kp = new cv.KeyPoint(pt, size, angle, response, octave, class_id);
       assertPropsWithValue(kp, { size, octave, class_id });
       expect(kp).to.have.property('pt');
-      assertPropsWithValue(kp.pt, pt as any);
+      assertPropsWithValue(kp.pt, pt);
       expectFloat(kp.angle, angle);
       expectFloat(kp.response, response);
     });

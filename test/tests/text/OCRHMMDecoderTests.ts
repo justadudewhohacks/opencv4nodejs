@@ -16,7 +16,7 @@ export default function (args: TestContext) {
   const getMask = () => new cv.Mat(getTestImg().rows, getTestImg().cols, cv.CV_8U, 1);
 
   describe('constructor', () => {
-
+    /* missing */
   });
 
   const vocabulary = 'abcdefghijklmnopqrstuvwxyz';

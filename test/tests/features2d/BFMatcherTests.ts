@@ -1,12 +1,9 @@
 import { expect } from 'chai';
+import { assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-
-  const {
-    assertPropsWithValue,
-  } = utils;
+  const { cv, getTestImg } = args;
 
   describe('constructor', () => {
     const normType = cv.NORM_L2;

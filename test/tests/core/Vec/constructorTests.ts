@@ -1,12 +1,8 @@
+import { assertError, assertPropsWithValue } from '../../../utils/testUtils';
 import { TestContext } from '../../model';
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-
-  const {
-    assertError,
-    assertPropsWithValue,
-  } = utils;
+  const { cv } = args;
 
   describe('constructor', () => {
     it('should throw if args empty', () => {

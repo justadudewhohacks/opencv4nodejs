@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { assertMetaData } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
@@ -7,7 +8,6 @@ export default function (args: TestContext) {
   const {
     // readTestImage,
     generateAPITests,
-    assertMetaData,
     cvVersionGreaterEqual,
   } = utils;
 
