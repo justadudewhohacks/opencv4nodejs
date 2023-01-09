@@ -7,11 +7,15 @@ import {
 import { assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
+type Mutable<T> = {
+  -readonly [k in keyof T]: T[k];
+};
+
 export default (args: TestContext) => {
   const { cv, cvVersionGreaterEqual } = args;
 
   it('TrackerBoostingParams', () => {
-    const params: TrackerBoostingParams = {
+    const params: Mutable<TrackerBoostingParams> = {
       numClassifiers: 100,
       samplerOverlap: 1.5,
       samplerSearchFactor: 0.5,
@@ -19,8 +23,8 @@ export default (args: TestContext) => {
       featureSetNumFeatures: 5,
     };
 
-    const trackerParams = new cv.TrackerBoostingParams();
-    Object.keys(params).forEach((param) => { trackerParams[param] = params[param]; });
+    const trackerParams: Mutable<TrackerBoostingParams> = new cv.TrackerBoostingParams();
+    Object.keys(params).forEach((param: keyof TrackerBoostingParams) => { trackerParams[param] = params[param]; });
     assertPropsWithValue(trackerParams, params);
   });
 
@@ -42,15 +46,15 @@ export default (args: TestContext) => {
       desc_npca: cv.trackerKCFModes.CN,
     };
 
-    const trackerParams = new cv.TrackerKCFParams();
-    Object.keys(params).forEach((param) => { trackerParams[param] = params[param]; });
+    const trackerParams: Mutable<TrackerKCFParams> = new cv.TrackerKCFParams();
+    Object.keys(params).forEach((param: keyof TrackerKCFParams) => { (trackerParams as any)[param] = params[param]; });
 
     const floatSafe = true;
     assertPropsWithValue(trackerParams, params as any, floatSafe);
   });
 
   (cvVersionGreaterEqual(3, 4, 1) ? it : it.skip)('TrackerCSRTParams', () => {
-    const params: TrackerCSRTParams = {
+    const params: Mutable<TrackerCSRTParams> = {
       admm_iterations: 22,
       background_ratio: 3,
       cheb_attenuation: 43,
@@ -82,8 +86,8 @@ export default (args: TestContext) => {
       params.psr_threshold = 0.4;
     }
 
-    const trackerParams = new cv.TrackerCSRTParams();
-    Object.keys(params).forEach((param) => { trackerParams[param] = params[param]; });
+    const trackerParams: Mutable<TrackerCSRTParams> = new cv.TrackerCSRTParams();
+    Object.keys(params).forEach((param: keyof TrackerCSRTParams) => { (trackerParams as any)[param] = params[param]; });
 
     const floatSafe = true;
     assertPropsWithValue(trackerParams, params, floatSafe);
@@ -99,8 +103,8 @@ export default (args: TestContext) => {
       featureSetNumFeatures: 8,
     };
 
-    const trackerParams = new cv.TrackerMILParams();
-    Object.keys(params).forEach((param) => { trackerParams[param] = params[param]; });
+    const trackerParams: Mutable<TrackerMILParams> = new cv.TrackerMILParams();
+    Object.keys(params).forEach((param: keyof TrackerMILParams) => { trackerParams[param] = params[param]; });
     assertPropsWithValue(trackerParams, params);
   });
 };

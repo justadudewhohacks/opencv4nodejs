@@ -1,5 +1,10 @@
 import { assert, expect } from 'chai';
-import { BRISKDetectorProps, GFTTDetectorProps, MSERDetectorProps } from '../../../typings';
+import {
+  BRISKDetectorProps,
+  GFTTDetectorProps,
+  KeyPoint,
+  MSERDetectorProps,
+} from '../../../typings';
 import { assertMetaData, isZeroMat } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 import detectorTestsFactory from './detectorTests';
@@ -164,7 +169,7 @@ export default function (ctxt: TestContext) {
   });
 
   describe('drawing', () => {
-    let kps;
+    let kps: KeyPoint[];
 
     before(() => {
       kps = new cv.ORBDetector().detect(getTestImg());

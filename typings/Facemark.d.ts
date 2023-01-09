@@ -3,8 +3,9 @@ import { Rect } from "./Rect.d";
 import { Point2 } from "./Point2.d";
 
 export class Facemark {
-  addTrainingSample(image: Mat, landmarks: number[][]): boolean;
-  addTrainingSampleAsync(image: Mat, landmarks: number[][]): Promise<boolean>;
+  addTrainingSample(image: Mat, landmarks: (number[] | Point2)[]): boolean;
+  addTrainingSampleAsync(image: Mat, landmarks: (number[] | Point2)[]): Promise<boolean>;
+
   loadModel(model: string): void;
   loadModelAsync(model: string): Promise<void>;
   getFaces(image: Mat): Rect[];

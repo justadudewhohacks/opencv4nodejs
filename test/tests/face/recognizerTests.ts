@@ -1,12 +1,13 @@
 import { expect } from 'chai';
+import { EigenFaceRecognizer, FaceRecognizer, FaceRecognizerpredictRet, FisherFaceRecognizer, LBPHFaceRecognizer } from '../../../typings';
 import { generateAPITests } from '../../utils/generateAPITests';
 import { clearTmpData, getTmpDataFilePath } from '../../utils/testUtils';
 import { TestContext } from '../model';
 // { utils, getTestImg }
-export default (args0: TestContext) => (args, values, Recognizer) => {
+export default (args0: TestContext) => (args: string[], values: number[], Recognizer: typeof FisherFaceRecognizer | typeof EigenFaceRecognizer | typeof LBPHFaceRecognizer) => {
   const { getTestImg } = args0;
   describe('constructor', () => {
-    const props = {};
+    const props: any = {};
     args.forEach((arg, i) => {
       props[arg] = values[i];
     });
@@ -39,7 +40,7 @@ export default (args0: TestContext) => (args, values, Recognizer) => {
   });
 
   describe('trained model tests', () => {
-    let recognizer;
+    let recognizer: FaceRecognizer;
 
     before(() => {
       recognizer = new Recognizer();
@@ -47,7 +48,7 @@ export default (args0: TestContext) => (args, values, Recognizer) => {
     });
 
     describe('predict', () => {
-      const expectOutput = (res) => {
+      const expectOutput = (res: FaceRecognizerpredictRet) => {
         expect(res).to.have.property('label');
         expect(res).to.have.property('confidence');
       };

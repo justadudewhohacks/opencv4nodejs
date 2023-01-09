@@ -1,9 +1,10 @@
 import { expect } from 'chai';
+import { FacemarkAAM, FacemarkAAMParams, FacemarkLBF, FacemarkLBFParams, Point2, Rect } from '../../../typings';
 import { generateAPITests } from '../../utils/generateAPITests';
 import { clearTmpData, getTmpDataFilePath } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
-export default (args: TestContext) => (Facemark, FacemarkParams) => {
+export default (args: TestContext) => (Facemark: typeof FacemarkLBF | typeof FacemarkAAM, FacemarkParams: typeof FacemarkLBFParams | typeof FacemarkAAMParams) => {
   const { cv, cvVersionLowerThan, getTestImg } = args;
 
   describe('constructor', () => {
@@ -13,12 +14,12 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
 
     it('is constructable from args', () => {
       const params = new FacemarkParams();
-      expect(() => new Facemark(params).to.not.throw());
+      expect(() => new (Facemark as any)(params).to.not.throw());
     });
   });
 
   (cvVersionLowerThan(3, 2, 0) ? describe : describe.skip)('face detection tests', () => {
-    let facemark;
+    let facemark: FacemarkLBF | FacemarkAAM;
     before(() => {
       facemark = new Facemark();
     });
@@ -68,15 +69,16 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
   });
 
   (cvVersionLowerThan(3, 2, 0) ? describe : describe.skip)('train', () => {
-    let facemark;
+    let facemark: FacemarkLBF | FacemarkAAM;
 
-    const landmarks = [];
+    // const landmarks: number[][] = [];
+    const landmarks: Point2[] = [];
     for (let i = 0; i < 68; i++) {
       landmarks[i] = new cv.Point2(Math.random() * 250, Math.random() * 250);
     }
 
     before(() => {
-      const params = new FacemarkParams();
+      const params = new FacemarkParams() as any;
       params.cascadeFace = '../lib/haarcascades/haarcascade_frontalcatface.xml';
       params.modelFilename = 'modelFilename.model';
       params.nLandmarks = 68;
@@ -85,7 +87,7 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
       params.treeN = 6;
       params.treeDepth = 5;
 
-      facemark = new Facemark(params);
+      facemark = new Facemark(params as any);
     });
 
     describe('addTrainingSample', () => {
@@ -94,24 +96,26 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
         methodName: 'addTrainingSample',
         methodNameSpace: 'Facemark',
         getRequiredArgs: () => [getTestImg().bgrToGray(), landmarks],
-        expectOutput: () => { /* empty */ },
+        expectOutput: (ret: boolean) => {
+          expect(ret).to.be.a('boolean');
+        },
       });
     });
   });
 
   describe('trained model tests', () => {
-    let facemark;
+    let facemark: FacemarkLBF | FacemarkAAM;
 
     before(() => {
       facemark = new Facemark();
     });
 
     describe('fit', () => {
-      const expectOutput = (res) => {
+      const expectOutput = (res: Point2[][]) => {
         expect(res).to.be.an('array');
       };
 
-      const faces = [];
+      const faces: Rect[] = [];
 
       generateAPITests({
         getDut: () => facemark,

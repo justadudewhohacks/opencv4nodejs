@@ -1,25 +1,35 @@
+import {
+  FacemarkAAMData,
+  FacemarkAAMParams,
+  FacemarkLBFParams,
+  Point2,
+} from '../../../typings';
 import { assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
+
+type Mutable<T> = {
+  -readonly [k in keyof T]: T[k];
+};
 
 export default (args: TestContext) => {
   const { cv } = args;
 
   describe('Facemark structures', () => {
     it('FacemarkAAMData', () => {
-      const data = {
-        s0: [new cv.Point2(0, 0), new cv.Point2(0, 0)],
-      };
+      const data: Mutable<FacemarkAAMData> = {
+        s0: [new cv.Point2(0, 0), new cv.Point2(0, 0)] as Point2[],
+      } as const;
 
       const facemarkData = new cv.FacemarkAAMData();
-      Object.keys(data).forEach((item) => {
-        facemarkData[item] = data[item];
+      Object.keys(data).forEach((item: 's0') => {
+        (facemarkData as any)[item] = data[item];
       });
 
       assertPropsWithValue(facemarkData, data);
     });
 
     it('FacemarkAAMParams', () => {
-      const params = {
+      const params: FacemarkAAMParams = {
         m: 10,
         n: 10,
         maxM: 30,
@@ -27,25 +37,25 @@ export default (args: TestContext) => {
         modelFilename: 'filename.xml',
         nIter: 4,
         saveModel: true,
-        scales: [3.0, 2.0],
+        scales: [3.0, 2.0] as number[],
         textureMaxM: 12,
         verbose: true,
-      };
+      } as const;
 
-      const facemarkParams = new cv.FacemarkAAMParams();
-      Object.keys(params).forEach((param) => {
-        facemarkParams[param] = params[param];
+      const facemarkParams: Mutable<FacemarkAAMParams> = new cv.FacemarkAAMParams();
+      Object.keys(params).forEach((param: keyof FacemarkAAMParams) => {
+        (facemarkParams as any)[param] = params[param];
       });
 
       assertPropsWithValue(facemarkParams, params);
     });
 
     it('FacemarkLBFParams', () => {
-      const params = {
+      const params: Mutable<FacemarkLBFParams> = {
         baggingOverlap: 2.5,
         cascadeFile: 'cascadeFile.xml',
         detectROI: new cv.Rect(0, 0, 10, 10),
-        featsM: [5, 4, 3, 2, 1],
+        featsM: [5, 4, 3, 2, 1] as number[],
         initShapeN: 32,
         modelFilename: 'modelFilename.xml',
         nLandmarks: 68,
@@ -60,9 +70,9 @@ export default (args: TestContext) => {
         verbose: true,
       };
 
-      const facemarkParams = new cv.FacemarkLBFParams();
-      Object.keys(params).forEach((param) => {
-        facemarkParams[param] = params[param];
+      const facemarkParams: Mutable<FacemarkLBFParams> = new cv.FacemarkLBFParams();
+      Object.keys(params).forEach((param: keyof FacemarkLBFParams) => {
+        (facemarkParams as any)[param] = params[param];
       });
 
       assertPropsWithValue(facemarkParams, params);

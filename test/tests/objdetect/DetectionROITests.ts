@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { TestContext } from '../model';
 
-export default (args: TestContext) => {
-  const { cv } = args;
+export default (ctxt: TestContext) => {
+  const { cv } = ctxt;
   it('should be constructable without args', () => {
     expect(new cv.DetectionROI()).to.be.instanceOf(cv.DetectionROI);
   });
@@ -15,7 +15,7 @@ export default (args: TestContext) => {
       confidences: [1.5, 2.5, 3.5],
     };
 
-    Object.keys(params).forEach((param) => { detectionROI[param] = params[param]; });
+    Object.keys(params).forEach((param) => { (detectionROI as any)[param] = (params as any)[param]; });
     expect(detectionROI).to.have.property('scale').to.equal(params.scale);
     expect(detectionROI).to.have.property('locations')
       .to.be.an('array')

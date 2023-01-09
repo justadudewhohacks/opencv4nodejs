@@ -474,7 +474,7 @@ export default function (args: TestContext) {
       cv.CV_8U,
     );
 
-    const expectOutput = (res, _, args2) => {
+    const expectOutput = (res: Mat, _: unknown, args2: [numRows?: number]) => {
       expect(res).to.be.instanceOf(cv.Mat);
 
       const origRows = getDut().rows;
@@ -507,13 +507,13 @@ export default function (args: TestContext) {
 
     const borderType = cv.BORDER_CONSTANT;
 
-    const makeExpectOutput = (type: number, value) => (res: Mat, _, args2) => {
+    const makeExpectOutput = (type: number, value: number | Vec) => (res: Mat, _: unknown, args2: Parameters<Mat['copyMakeBorder']>) => {
       expect(res).to.be.instanceOf(cv.Mat);
       assertMetaData(res)(22, 22, type);
-      if (args2[5] === 255 || (args2[4] && args2[4].value)) {
+      if ((args2 as unknown as number[])[5] === 255 || (args2[4] && args2[4].value)) {
         const upperLeft = res.at(0, 0);
         if (typeof upperLeft === 'object') {
-          ['x', 'y', 'z', 'w'].forEach((k) => expect((upperLeft as Vec4)[k]).to.eq(value[k]));
+          (['x', 'y', 'z', 'w'] as const).forEach((k) => expect((upperLeft as Vec4)[k]).to.eq((value as Vec4)[k]));
         } else {
           expect(upperLeft).to.equal(value);
         }
