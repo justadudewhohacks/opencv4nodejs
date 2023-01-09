@@ -1,5 +1,11 @@
 import { expect } from 'chai';
-import { Vec3, Mat } from '../../../typings';
+import {
+  Vec3,
+  Mat,
+  Size,
+  Vec2,
+  Vec4,
+} from '../../../typings';
 import { generateAPITests } from '../../utils/generateAPITests';
 import {
   assertDataDeepEquals,
@@ -28,7 +34,7 @@ export default function (args: TestContext) {
       const mat = new cv.Mat(16, 16, cv.CV_8UC3);
       const factor = 2.0;
 
-      const expectOutput = (res) => {
+      const expectOutput = (res: Mat) => {
         assertMetaData(res)(mat.rows * 2, mat.cols * 2, cv.CV_8UC3);
       };
 
@@ -48,7 +54,7 @@ export default function (args: TestContext) {
       const cols = 8;
       const mat = new cv.Mat(16, 16, cv.CV_8UC3);
 
-      const expectOutput = (res) => {
+      const expectOutput = (res: Mat) => {
         assertMetaData(res)(rows, cols, cv.CV_8UC3);
       };
 
@@ -92,7 +98,7 @@ export default function (args: TestContext) {
       const mat = new cv.Mat(16, 32, cv.CV_8UC3);
       const maxRowsOrCols = 8;
 
-      const expectOutput = (res) => {
+      const expectOutput = (res: Mat) => {
         assertMetaData(res)(4, 8, cv.CV_8UC3);
       };
 
@@ -109,7 +115,7 @@ export default function (args: TestContext) {
   });
 
   describe('bgrToGray', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       assertMetaData(res)(rgbMat.rows, rgbMat.cols, cv.CV_8U);
     };
 
@@ -122,7 +128,7 @@ export default function (args: TestContext) {
   });
 
   describe('cvtColor', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       assertMetaData(res)(rgbMat.rows, rgbMat.cols, cv.CV_8UC3);
       expect(dangerousDeepEquals(res.getDataAsArray(), rgbMatData)).to.be.false;
     };
@@ -149,7 +155,7 @@ export default function (args: TestContext) {
     ];
 
     describe('erode', () => {
-      const expectOutput = (eroded) => {
+      const expectOutput = (eroded: Mat) => {
         assertDataDeepEquals(Array(5).fill(Array(5).fill(0)), eroded.getDataAsArray());
       };
 
@@ -166,7 +172,7 @@ export default function (args: TestContext) {
     });
 
     describe('dilate', () => {
-      const expectOutput = (dilated) => {
+      const expectOutput = (dilated: Mat) => {
         assertDataDeepEquals(Array(5).fill(Array(5).fill(255)), dilated.getDataAsArray());
       };
 
@@ -183,7 +189,7 @@ export default function (args: TestContext) {
     });
 
     describe('morphologyEx', () => {
-      const expectOutput = (morphed) => {
+      const expectOutput = (morphed: Mat) => {
         assertMetaData(mat)(morphed);
       };
 
@@ -204,14 +210,14 @@ export default function (args: TestContext) {
   });
 
   describe('warping', () => {
-    let img;
-    let size;
+    let img: Mat;
+    let size: Size;
     before(() => {
       img = getTestImg();
       size = new cv.Size(img.cols, img.rows);
     });
 
-    const expectOutput = (warped) => {
+    const expectOutput = (warped: Mat) => {
       assertMetaData(warped)(img.rows, img.cols, img.type);
     };
 
@@ -274,7 +280,7 @@ export default function (args: TestContext) {
       ['shift', 0],
     ]);
 
-    const expectOutput = (_, dut) => {
+    const expectOutput = (_: void, dut: Mat) => {
       assertMetaData(getDut())(dut);
       expect(isUniformMat(dut, 128)).to.be.false;
     };
@@ -522,7 +528,7 @@ export default function (args: TestContext) {
     describe('distanceTransform', () => {
       const dstType = cv.CV_8U;
 
-      const expectOutput = (res, dut, args2) => {
+      const expectOutput = (res: Mat, dut: Mat, args2: Parameters<Mat['distanceTransform']>) => {
         const assertType = args2.length > 2 && args2[2] === cv.CV_8U ? cv.CV_8U : cv.CV_32F;
         assertMetaData(res)(grayMat.rows, grayMat.cols, assertType);
       };
@@ -543,7 +549,7 @@ export default function (args: TestContext) {
     describe('distanceTransformWithLabels', () => {
       const distLabelType = cv.DIST_LABEL_PIXEL;
 
-      const expectOutput = (res) => {
+      const expectOutput = (res: ReturnType<Mat['distanceTransformWithLabels']>) => {
         expect(res).to.have.property('dst').instanceOf(cv.Mat);
         expect(res).to.have.property('labels').instanceOf(cv.Mat);
         assertMetaData(res.dst)(grayMat.rows, grayMat.cols, cv.CV_32F);
@@ -571,7 +577,7 @@ export default function (args: TestContext) {
     ], cv.CV_8U);
 
     describe('threshold', () => {
-      const expectOutput = (thresholded) => {
+      const expectOutput = (thresholded: Mat) => {
         assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
         assertDataDeepEquals(
           [
@@ -600,7 +606,7 @@ export default function (args: TestContext) {
     });
 
     describe('adaptiveThreshold', () => {
-      const expectOutput = (thresholded) => {
+      const expectOutput = (thresholded: Mat) => {
         assertMetaData(thresholded)(mat.rows, mat.cols, cv.CV_8U);
       };
 
@@ -639,8 +645,9 @@ export default function (args: TestContext) {
     const ltype = cv.CV_16U;
 
     describe('connectedComponents', () => {
-      const expectOutput = (res, dut, args2) => {
-        const assertType = (args2[1] === cv.CV_16U || (args2[0] && args2[0].ltype === cv.CV_16U)) ? cv.CV_16U : cv.CV_32S;
+      // [number, number] | {connectivity?: number, ltype?: number}
+      const expectOutput = (res: Mat, dut: Mat, args2: Parameters<Mat['connectedComponents']>) => {
+        const assertType = ((args2 as unknown as [number, number])[1] === cv.CV_16U || (args2[0] && args2[0].ltype === cv.CV_16U)) ? cv.CV_16U : cv.CV_32S;
         assertMetaData(res)(connectedComponentsMat.rows, connectedComponentsMat.cols, assertType);
       };
 
@@ -657,8 +664,8 @@ export default function (args: TestContext) {
     });
 
     describe('connectedComponentsWithStats', () => {
-      const expectOutput = (res: { labels: Mat, stats: Mat, centroids: Mat }, dut, args2) => {
-        const assertType = (args2[1] === cv.CV_16U || (args2[0] && args2[0].ltype === cv.CV_16U)) ? cv.CV_16U : cv.CV_32S;
+      const expectOutput = (res: { labels: Mat, stats: Mat, centroids: Mat }, dut: Mat, args2: Parameters<Mat['connectedComponentsWithStats']>) => {
+        const assertType = ((args2 as any)[1] === cv.CV_16U || (args2[0] && args2[0].ltype === cv.CV_16U)) ? cv.CV_16U : cv.CV_32S;
         expect(res).to.have.property('labels').instanceOf(cv.Mat);
         expect(res).to.have.property('stats').instanceOf(cv.Mat);
         expect(res).to.have.property('centroids').instanceOf(cv.Mat);
@@ -718,7 +725,7 @@ export default function (args: TestContext) {
     const iterCount = 4;
 
     describe('with mask', () => {
-      const expectOutput = (res, dut, args2) => {
+      const expectOutput = (_res: void, _dut: Mat, args2: Parameters<Mat['grabCutAsync']>) => {
         const bgdModel = args2[2];
         const fgdModel = args2[3];
         expect(isZeroMat(bgdModel)).to.be.false;
@@ -781,7 +788,7 @@ export default function (args: TestContext) {
   });
 
   describe('moments', () => {
-    let grayImg;
+    let grayImg: Mat;
     before(() => {
       grayImg = getTestImg().bgrToGray();
     });
@@ -797,9 +804,9 @@ export default function (args: TestContext) {
   });
 
   describe('matchTemplate', () => {
-    let img;
+    let img: Mat;
     const templOffset = { x: 10, y: 10 };
-    let templ;
+    let templ: Mat;
     before(() => {
       img = getTestImg().bgrToGray();
       templ = img.getRegion(new cv.Rect(templOffset.x, templOffset.y, img.cols / 8, img.rows / 8));
@@ -807,7 +814,7 @@ export default function (args: TestContext) {
 
     const getImg = () => img;
 
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       expect(res).instanceOf(cv.Mat);
       expect(res.cols).to.equal((img.cols - templ.cols) + 1);
       expect(res.rows).to.equal((img.rows - templ.rows) + 1);
@@ -817,7 +824,7 @@ export default function (args: TestContext) {
       expect(minLoc.y).to.equal(templOffset.y);
     };
 
-    const expectWithMaskOutput = (res) => {
+    const expectWithMaskOutput = (res: Mat) => {
       expect(res).instanceOf(cv.Mat);
       expect(res.cols).to.equal((img.cols - templ.cols) + 1);
       expect(res.rows).to.equal((img.rows - templ.rows) + 1);
@@ -828,6 +835,7 @@ export default function (args: TestContext) {
     };
 
     describe('sync', () => {
+      // @ts-expect-error need args
       _funcShouldRequireArgs(() => getImg().matchTemplate());
 
       it('should return match results', () => {
@@ -844,10 +852,11 @@ export default function (args: TestContext) {
     });
 
     describe('async', () => {
+      // @ts-expect-error need args
       asyncFuncShouldRequireArgs(() => getImg().matchTemplateAsync());
 
       it('should return match results', (done) => {
-        img.matchTemplateAsync(templ, cv.TM_SQDIFF_NORMED, (err, res) => {
+        img.matchTemplateAsync(templ, cv.TM_SQDIFF_NORMED, (err: unknown, res: Mat) => {
           expectOutput(res);
           done();
         });
@@ -867,12 +876,12 @@ export default function (args: TestContext) {
   });
 
   describe('derivative filters', () => {
-    let img;
+    let img: Mat;
     before(() => {
       img = getTestImg();
     });
 
-    const expectOutput = (binImg) => {
+    const expectOutput = (binImg: Mat) => {
       assertMetaData(binImg)(img.rows, img.cols, cv.CV_64FC3);
     };
 
@@ -967,9 +976,9 @@ export default function (args: TestContext) {
   });
 
   describe('pyramid', () => {
-    let img;
-    let sizeDown;
-    let sizeUp;
+    let img: Mat;
+    let sizeDown: Size;
+    let sizeUp: Size;
     before(() => {
       img = getTestImg();
       sizeDown = new cv.Size(img.cols / 2, img.rows / 2);
@@ -1003,7 +1012,7 @@ export default function (args: TestContext) {
     });
 
     describe('buildPyramid', () => {
-      const expectOutput = (pyramid) => {
+      const expectOutput = (pyramid: Mat[]) => {
         expect(pyramid).to.be.an('array').lengthOf(4);
         pyramid.forEach((outImg, i) => {
           /* eslint-disable no-restricted-properties */
@@ -1029,7 +1038,7 @@ export default function (args: TestContext) {
   });
 
   describe('hough', () => {
-    let img;
+    let img: Mat;
     before(() => {
       img = getTestImg().rescale(0.25).bgrToGray();
     });
@@ -1039,7 +1048,7 @@ export default function (args: TestContext) {
     const threshold = 100;
 
     describe('houghLines', () => {
-      const expectOutput = (out) => {
+      const expectOutput = (out: Vec2[]) => {
         expect(out).to.be.an('array');
         expect(out.length).to.be.above(0);
         out.forEach((vec) => {
@@ -1067,7 +1076,7 @@ export default function (args: TestContext) {
     });
 
     describe('houghLinesP', () => {
-      const expectOutput = (out) => {
+      const expectOutput = (out: Vec4[]) => {
         expect(out).to.be.an('array');
         expect(out.length).to.be.above(0);
         out.forEach((vec) => {
@@ -1096,7 +1105,7 @@ export default function (args: TestContext) {
     });
 
     describe('houghCircles', () => {
-      const expectOutput = (out) => {
+      const expectOutput = (out: Vec3[]) => {
         expect(out).to.be.an('array');
         expect(out.length).to.be.above(0);
         out.forEach((vec) => {
@@ -1132,12 +1141,12 @@ export default function (args: TestContext) {
   });
 
   describe('equalizeHist', () => {
-    let img;
+    let img: Mat;
     before(() => {
       img = getTestImg().rescale(0.25).bgrToGray();
     });
 
-    const expectOutput = (out) => {
+    const expectOutput = (out: Mat) => {
       expect(out).to.be.instanceOf(cv.Mat);
       assertMetaData(img)(out);
     };
@@ -1151,7 +1160,7 @@ export default function (args: TestContext) {
   });
 
   describe('compareHist', () => {
-    const expectOutput = (out) => {
+    const expectOutput = (out: number) => {
       expect(out).to.be.a('number').above(0);
     };
 
@@ -1172,7 +1181,7 @@ export default function (args: TestContext) {
   });
 
   describe('floodFill', () => {
-    const expectOutput = (out) => {
+    const expectOutput = (out: number) => {
       expect(!!out).to.be.true;
       expect(out).to.have.property('returnValue').to.be.a('number');
       expect(out).to.have.property('rect').to.be.instanceOf(cv.Rect);
@@ -1224,7 +1233,7 @@ export default function (args: TestContext) {
   });
 
   describe('filters', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       assertMetaData(res)(100, 100, cv.CV_32F);
     };
 
@@ -1247,7 +1256,7 @@ export default function (args: TestContext) {
           sigmaSpace,
         ]),
         getOptionalArg: () => borderType,
-        expectOutput: (res) => {
+        expectOutput: (res: Mat) => {
           assertMetaData(res)(100, 100, cv.CV_8U);
         },
       });
@@ -1332,7 +1341,7 @@ export default function (args: TestContext) {
 
   describe('corner detection', () => {
     const getDut = () => getTestImg().bgrToGray();
-    const makeExpectOutput = (expectedType) => (out) => {
+    const makeExpectOutput = (expectedType: number) => (out: Mat) => {
       expect(out).to.be.instanceOf(cv.Mat);
       const { cols, rows } = getTestImg();
       assertMetaData(out)(cols, rows, expectedType);
@@ -1431,7 +1440,7 @@ export default function (args: TestContext) {
   });
 
   describe('inRange', () => {
-    const expectOutput = (inRangeMat) => {
+    const expectOutput = (inRangeMat: Mat) => {
       assertMetaData(inRangeMat)(2, 3, cv.CV_8U);
       assertDataDeepEquals(
         [

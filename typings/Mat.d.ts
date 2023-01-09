@@ -93,6 +93,12 @@ export class OptimalNewCameraMatrix {
   validPixROI: Rect;
 }
 
+export interface ConnectedComponentsWithStatsRet {
+  labels: Mat;
+  stats: Mat;
+  centroids: Mat;
+}
+
 export class Mat {
   /**
    * Mat height like python .shape[0]
@@ -165,10 +171,13 @@ export class Mat {
   at(idx: number[]): Vec4;
   atRaw(row: number, col: number): number;
   atRaw(row: number, col: number): number[];
+  
   bgrToGray(): Mat;
   bgrToGrayAsync(): Promise<Mat>;
+  
   bilateralFilter(d: number, sigmaColor: number, sigmaSpace: number, borderType?: number): Mat;
   bilateralFilterAsync(d: number, sigmaColor: number, sigmaSpace: number, borderType?: number): Promise<Mat>;
+  
   bitwiseAnd(otherMat: Mat): Mat;
   bitwiseNot(): Mat;
   bitwiseOr(otherMat: Mat): Mat;
@@ -177,6 +186,7 @@ export class Mat {
   blurAsync(kSize: Size, anchor?: Point2, borderType?: number): Promise<Mat>;
   boxFilter(ddepth: number, ksize: Size, anchor?: Point2, normalize?: boolean, borderType?: number): Mat;
   boxFilterAsync(ddepth: number, ksize: Size, anchor?: Point2, normalize?: boolean, borderType?: number): Promise<Mat>;
+
   buildPyramid(maxLevel: number, borderType?: number): Mat[];
   buildPyramidAsync(maxLevel: number, borderType?: number): Promise<Mat[]>;
 
@@ -195,12 +205,20 @@ export class Mat {
   calibrationMatrixValuesAsync(imageSize: Size, apertureWidth: number, apertureHeight: number): Promise<CalibrationMatrixValues>;
   canny(threshold1: number, threshold2: number, apertureSize?: number, L2gradient?: boolean): Mat;
   cannyAsync(threshold1: number, threshold2: number, apertureSize?: number, L2gradient?: boolean): Promise<Mat>;
+  
   compareHist(H2: Mat, method: number): number;
   compareHistAsync(H2: Mat, method: number): Promise<number>;
+  
   connectedComponents(connectivity?: number, ltype?: number): Mat;
+  connectedComponents(opts: {connectivity?: number, ltype?: number}): Mat;
   connectedComponentsAsync(connectivity?: number, ltype?: number): Promise<Mat>;
-  connectedComponentsWithStats(connectivity?: number, ltype?: number): { labels: Mat, stats: Mat, centroids: Mat };
-  connectedComponentsWithStatsAsync(connectivity?: number, ltype?: number): Promise<{ labels: Mat, stats: Mat, centroids: Mat }>;
+  connectedComponentsAsync(opts: {connectivity?: number, ltype?: number}): Promise<Mat>;
+
+  connectedComponentsWithStats(connectivity?: number, ltype?: number): ConnectedComponentsWithStatsRet;
+  connectedComponentsWithStats(opts: {connectivity?: number, ltype?: number}): ConnectedComponentsWithStatsRet;
+  connectedComponentsWithStatsAsync(connectivity?: number, ltype?: number): Promise<ConnectedComponentsWithStatsRet>;
+  connectedComponentsWithStatsAsync(opts: {connectivity?: number, ltype?: number}): Promise<ConnectedComponentsWithStatsRet>;
+
   convertScaleAbs(alpha: number, beta: number): Mat;
   convertScaleAbsAsync(alpha: number, beta: number): Promise<Mat>;
   convertTo(type: number, alpha?: number, beta?: number): Mat;
@@ -213,8 +231,10 @@ export class Mat {
   copyToAsync(dst: Mat, mask?: Mat): Promise<Mat>;
   cornerEigenValsAndVecs(blockSize: number, ksize?: number, borderType?: number): Mat;
   cornerEigenValsAndVecsAsync(blockSize: number, ksize?: number, borderType?: number): Promise<Mat>;
+  
   cornerHarris(blockSize: number, ksize: number, k: number, borderType?: number): Mat;
   cornerHarrisAsync(blockSize: number, ksize: number, k: number, borderType?: number): Promise<Mat>;
+  
   cornerMinEigenVal(blockSize: number, ksize?: number, borderType?: number): Mat;
   cornerMinEigenValAsync(blockSize: number, ksize?: number, borderType?: number): Promise<Mat>;
   cornerSubPix(corners: Point2[], winSize: Size, zeroZone: Size, criteria: TermCriteria): Point2[];
@@ -249,8 +269,8 @@ export class Mat {
    */
   distanceTransform(distanceType: number, maskSize: number, dstType?: number): Mat;
   distanceTransformAsync(distanceType: number, maskSize: number, dstType?: number): Promise<Mat>;
-  distanceTransformWithLabels(distanceType: number, maskSize: number, labelType?: number): { labels: Mat, dist: Mat };
-  distanceTransformWithLabelsAsync(distanceType: number, maskSize: number, labelType?: number): Promise<{ labels: Mat, dist: Mat }>;
+  distanceTransformWithLabels(distanceType: number, maskSize: number, labelType?: number): { labels: Mat, dst: Mat }; // fixed was dist insted of dst
+  distanceTransformWithLabelsAsync(distanceType: number, maskSize: number, labelType?: number): Promise<{ labels: Mat, dst: Mat }>; // fixed was dist insted of dst
   div(s: number): Mat;
   dot(m?: Mat): Mat;
   drawArrowedLine(pt0: Point2, pt1: Point2, color?: Vec3, thickness?: number, lineType?: number, shift?: number, tipLength?: number): void;
@@ -304,10 +324,13 @@ export class Mat {
   erodeAsync(kernel: Mat, anchor?: Point2, iterations?: number, borderType?: number): Promise<Mat>;
   exp(): Mat;
   log(): Mat;
+  
   filter2D(ddepth: number, kernel: Mat, anchor?: Point2, delta?: number, borderType?: number): Mat;
   filter2DAsync(ddepth: number, kernel: Mat, anchor?: Point2, delta?: number, borderType?: number): Promise<Mat>;
+  
   filterSpeckles(newVal: number, maxSpeckleSize: number, maxDiff: number): { newPoints1: Point2[], newPoints2: Point2[] };
   filterSpecklesAsync(newVal: number, maxSpeckleSize: number, maxDiff: number): Promise<{ newPoints1: Point2[], newPoints2: Point2[] }>;
+  
   find4QuadCornerSubpix(corners: Point2[], regionSize: Size): boolean;
   find4QuadCornerSubpixAsync(corners: Point2[], regionSize: Size): Promise<boolean>;
   findChessboardCorners(patternSize: Size, flags?: number): { returnValue: boolean, corners: Point2[] };
@@ -378,18 +401,24 @@ export class Mat {
   getRegion(region: Rect): Mat;
   goodFeaturesToTrack(maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Point2[];
   goodFeaturesToTrackAsync(maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Promise<Point2[]>;
+  
   grabCut(mask: Mat, rect: Rect, bgdModel: Mat, fgdModel: Mat, iterCount: number, mode: number): void;
   grabCutAsync(mask: Mat, rect: Rect, bgdModel: Mat, fgdModel: Mat, iterCount: number, mode: number): Promise<void>;
+  
   guidedFilter(guide: Mat, radius: number, eps: number, ddepth?: number): Mat;
   guidedFilterAsync(guide: Mat, radius: number, eps: number, ddepth?: number): Promise<Mat>;
   hDiv(otherMat: Mat): Mat;
   hMul(otherMat: Mat): Mat;
+
   houghCircles(method: number, dp: number, minDist: number, param1?: number, param2?: number, minRadius?: number, maxRadius?: number): Vec3[];
   houghCirclesAsync(method: number, dp: number, minDist: number, param1?: number, param2?: number, minRadius?: number, maxRadius?: number): Promise<Vec3[]>;
+  
   houghLines(rho: number, theta: number, threshold: number, srn?: number, stn?: number, min_theta?: number, max_theta?: number): Vec2[];
   houghLinesAsync(rho: number, theta: number, threshold: number, srn?: number, stn?: number, min_theta?: number, max_theta?: number): Promise<Vec2[]>;
+  
   houghLinesP(rho: number, theta: number, threshold: number, minLineLength?: number, maxLineGap?: number): Vec4[];
   houghLinesPAsync(rho: number, theta: number, threshold: number, minLineLength?: number, maxLineGap?: number): Promise<Vec4[]>;
+  
   idct(flags?: number): Mat;
   idctAsync(flags?: number): Promise<Mat>;
   idft(flags?: number, nonzeroRows?: number): Mat;
@@ -432,6 +461,9 @@ export class Mat {
    */
   matchTemplate(template: Mat, method: number, mask?: Mat): Mat;
   matchTemplateAsync(template: Mat, method: number, mask?: Mat): Promise<Mat>;
+  matchTemplateAsync(template: Mat, method: number, callback?: (err: unknown, res: Mat) => void): void;
+  matchTemplateAsync(template: Mat, method: number, mask?: Mat, callback?: (err: unknown, res: Mat) => void): void;
+
   mean(): Vec4;
   meanAsync(): Promise<Vec4>;
   meanStdDev(mask?: Mat): { mean: Mat, stddev: Mat };
