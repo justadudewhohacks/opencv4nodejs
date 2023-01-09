@@ -91,11 +91,13 @@ export class TestContext {
     return `${this.dataPrefix}/traffic.mp4`;
   };
 
-  public readTestImage = () => {
-    return new this.cv.Mat(fs.readFileSync(path.resolve(__dirname, '../utils/Lenna.data')), 512, 512, this.cv.CV_8UC3);
+  public readTestImage = (): Mat => {
+    const file = path.resolve(__dirname, '../utils/Lenna.data');
+    return new this.cv.Mat(fs.readFileSync(file), 512, 512, this.cv.CV_8UC3);
   };
 
-  public readPeoplesTestImage = () => {
-    return new this.cv.Mat(fs.readFileSync(path.resolve(__dirname, '../utils/people.data')), 360, 640, this.cv.CV_8UC3);
+  public readPeoplesTestImage = (): Mat => {
+    const file = path.resolve(__dirname, '../utils/people.data');
+    return new this.cv.Mat(fs.readFileSync(file), 360, 640, this.cv.CV_8UC3);
   };
 }
