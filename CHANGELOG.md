@@ -1,5 +1,10 @@
 # changelog
 
+## Version 6.4.0
+- refactor test
+- fix types errors
+- add img_hash PR#65
+
 ## Version 6.3.0
 * use new @u4/opencv-build@0.6.1
 * improve cuda support add `--cudaArch <value>` to choose your cuda target, for example I use --cudaArch=8.6 for my RTX 3060, check https://en.wikipedia.org/wiki/CUDA for full list.

@@ -144,13 +144,6 @@ export function sampsonDistanceAsync(pt1: Vec2, pt2: Vec2, F: Mat): Promise<numb
 export function seamlessClone(src: Mat, dst: Mat, mask: Mat, p: Point2, flags: number): Mat;
 export function seamlessCloneAsync(src: Mat, dst: Mat, mask: Mat, p: Point2, flags: number): Promise<Mat>;
 
-export function solveP3P(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], flags?: number): { returnValue: boolean, rvecs: Mat[], tvecs: Mat[] };
-export function solveP3PAsync(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], flags?: number): Promise<{ returnValue: boolean, rvecs: Mat[], tvecs: Mat[] }>;
-export function solvePnP(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], useExtrinsicGuess?: boolean, flags?: number): { returnValue: boolean, rvec: Vec3, tvec: Vec3 };
-export function solvePnP(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], useExtrinsicGuess?: boolean, iterationsCount?: number, reprojectionError?: number, confidence?: number, flags?: number): { returnValue: boolean, rvec: Vec3, tvec: Vec3, inliers: number[] };
-export function solvePnPAsync(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], useExtrinsicGuess?: boolean, flags?: number): Promise<{ returnValue: boolean, rvec: Vec3, tvec: Vec3 }>;
-export function solvePnPAsync(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], useExtrinsicGuess?: boolean, iterationsCount?: number, reprojectionError?: number, confidence?: number, flags?: number): Promise<{ returnValue: boolean, rvec: Vec3, tvec: Vec3, inliers: number[] }>;
-
 export function isCustomMatAllocatorEnabled(): boolean;
 export function dangerousEnableCustomMatAllocator(): boolean;
 export function dangerousDisableCustomMatAllocator(): boolean;

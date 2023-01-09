@@ -1,6 +1,6 @@
 {
   "name": "@u4/opencv4nodejs",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "description": "Asynchronous OpenCV 3.x / 4.x nodejs bindings with JavaScript and TypeScript API.",
   "keywords": [
     "opencv",
