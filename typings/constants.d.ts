@@ -11,34 +11,47 @@ export const CV_16S: number;
 export const CV_32S: number;
 export const CV_32F: number;
 export const CV_64F: number;
+export const CV_16F: number; // NEW
+
 export const CV_8UC1: number;
 export const CV_8UC2: number;
 export const CV_8UC3: number;
 export const CV_8UC4: number;
+
 export const CV_8SC1: number;
 export const CV_8SC2: number;
 export const CV_8SC3: number;
 export const CV_8SC4: number;
+
 export const CV_16UC1: number;
 export const CV_16UC2: number;
 export const CV_16UC3: number;
 export const CV_16UC4: number;
+
 export const CV_16SC1: number;
 export const CV_16SC2: number;
 export const CV_16SC3: number;
 export const CV_16SC4: number;
+
 export const CV_32SC1: number;
 export const CV_32SC2: number;
 export const CV_32SC3: number;
 export const CV_32SC4: number;
+
 export const CV_32FC1: number;
 export const CV_32FC2: number;
 export const CV_32FC3: number;
 export const CV_32FC4: number;
+
 export const CV_64FC1: number;
 export const CV_64FC2: number;
 export const CV_64FC3: number;
 export const CV_64FC4: number;
+
+export const CV_16FC1: number;
+export const CV_16FC2: number;
+export const CV_16FC3: number;
+export const CV_16FC4: number;
 
 // TODO inject value of REDUCE_SUM REDUCE_...
 export const REDUCE_SUM: number;

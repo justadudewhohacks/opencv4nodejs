@@ -15,6 +15,7 @@ static void initMatTypes(v8::Local<v8::Object> module) {
 	FF_MAT_TYPE(CV_32S);
 	FF_MAT_TYPE(CV_32F);
 	FF_MAT_TYPE(CV_64F);
+	FF_MAT_TYPE(CV_16F);
 
 	FF_MAT_TYPE(CV_8UC1);
 	FF_MAT_TYPE(CV_8UC2);
@@ -50,6 +51,11 @@ static void initMatTypes(v8::Local<v8::Object> module) {
 	FF_MAT_TYPE(CV_64FC2);
 	FF_MAT_TYPE(CV_64FC3);
 	FF_MAT_TYPE(CV_64FC4);
+
+	FF_MAT_TYPE(CV_16FC1);
+	FF_MAT_TYPE(CV_16FC2);
+	FF_MAT_TYPE(CV_16FC3);
+	FF_MAT_TYPE(CV_16FC4);
 }
 
 #endif

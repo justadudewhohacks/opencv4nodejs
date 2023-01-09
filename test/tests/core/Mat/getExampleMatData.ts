@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import {
   charMax, charMin, ucharMax, shortMax, shortMin, ushortMax, intMax,
   intMin, floatMin, floatMax, doubleMin, doubleMax,

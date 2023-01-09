@@ -355,7 +355,7 @@ NAN_MODULE_INIT(Mat::Init) {
 			for (cur[2] = 0; cur[2] < sizes[2]; cur[2]++) { \
        	v8::Local<v8::Array> colArray3 = v8::Local<v8::Array>::Cast(Nan::Get(colArray2, cur[2]).ToLocalChecked()); \
     		for (cur[3] = 0; cur[3] < sizes[3]; cur[3]++) { \
-       	  v8::Local<v8::Array> colArray4 = v8::Local<v8::Array>::Cast(Nan::Get(colArray3, cur[2]).ToLocalChecked()); \
+       	  v8::Local<v8::Array> colArray4 = v8::Local<v8::Array>::Cast(Nan::Get(colArray3, cur[3]).ToLocalChecked()); \
        		for (cur[4] = 0; cur[4] < sizes[4]; cur[4]++) { \
        	    put(mat, Nan::Get(colArray4, cur[4]).ToLocalChecked(), cur); \
   	      } \
