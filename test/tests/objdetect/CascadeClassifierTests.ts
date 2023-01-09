@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { DetectMultiScaleRet, DetectMultiScaleWithRejectLevels, Rect } from '../../../typings';
 import { generateAPITests } from '../../utils/generateAPITests';
 import { TestContext } from '../model';
 
@@ -52,12 +53,12 @@ export default function (ctxt: TestContext) {
       ]);
 
       describe('detectMultiScale', () => {
-        const expectOutput = (ret) => {
+        const expectOutput = (ret: DetectMultiScaleRet) => {
           expect(ret).to.have.property('objects').to.be.an('array');
           expect(ret).to.have.property('numDetections').to.be.an('array');
           expect(ret.objects.length).to.be.above(0);
           expect(ret.numDetections.length).to.be.above(0);
-          ret.objects.forEach((obj) => expect(obj).instanceOf(cv.Rect));
+          ret.objects.forEach((obj: Rect) => expect(obj).instanceOf(cv.Rect));
         };
 
         generateAPITests({
@@ -71,7 +72,7 @@ export default function (ctxt: TestContext) {
       });
 
       (cvVersionEqual(3, 1, 0) ? describe.skip : describe)('detectMultiScaleWithRejectLevels', () => {
-        const expectOutput = (ret) => {
+        const expectOutput = (ret: DetectMultiScaleWithRejectLevels) => {
           expect(ret).to.have.property('objects').to.be.an('array');
           expect(ret).to.have.property('rejectLevels').to.be.an('array');
           expect(ret).to.have.property('levelWeights').to.be.an('array');
