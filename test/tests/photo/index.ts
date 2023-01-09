@@ -1,18 +1,15 @@
 import { expect } from 'chai';
+import { Mat } from '../../../typings';
+import { assertMetaData } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-
-  const {
-    assertMetaData,
-    generateClassMethodTests,
-  } = utils;
+  const { cv, generateClassMethodTests } = args;
 
   describe('inpaint', () => {
     it('should have constants', () => {
-      expect(isNaN(cv.INPAINT_TELEA)).to.be.equal(false);
-      expect(isNaN(cv.INPAINT_NS)).to.be.equal(false);
+      expect(Number.isNaN(cv.INPAINT_TELEA)).to.be.equal(false);
+      expect(Number.isNaN(cv.INPAINT_NS)).to.be.equal(false);
     });
 
     it('should perform inpainting', () => {
@@ -57,9 +54,9 @@ export default function (args: TestContext) {
 
   describe('seamlessClone', () => {
     it('should have constants', () => {
-      expect(isNaN(cv.NORMAL_CLONE)).to.be.equal(false);
-      expect(isNaN(cv.MIXED_CLONE)).to.be.equal(false);
-      expect(isNaN(cv.MONOCHROME_TRANSFER)).to.be.equal(false);
+      expect(Number.isNaN(cv.NORMAL_CLONE)).to.be.equal(false);
+      expect(Number.isNaN(cv.MIXED_CLONE)).to.be.equal(false);
+      expect(Number.isNaN(cv.MONOCHROME_TRANSFER)).to.be.equal(false);
     });
 
     const src = new cv.Mat(5, 5, cv.CV_8UC3, [128, 128, 128]);
@@ -68,7 +65,7 @@ export default function (args: TestContext) {
     const center = new cv.Point2(5, 5);
     const cloneType = cv.NORMAL_CLONE;
 
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       assertMetaData(res)(dest.rows, dest.cols, cv.CV_8UC3);
     };
 

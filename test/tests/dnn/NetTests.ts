@@ -1,12 +1,9 @@
 import { expect } from 'chai';
+import { generateAPITests } from '../../utils/generateAPITests';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-
-  const {
-    generateAPITests,
-  } = utils;
+  const { cv, getTestImg } = args;
 
   describe('setInput', () => {
     const expectOutput = () => {

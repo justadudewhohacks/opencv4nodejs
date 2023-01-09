@@ -1,9 +1,9 @@
 import { expect } from 'chai';
+import { assertError } from '../../../utils/testUtils';
 import { TestContext } from '../../model';
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-  const { assertError } = utils;
+  const { cv } = args;
 
   describe('at', () => {
     describe('Vec2', () => {

@@ -1,18 +1,20 @@
 import { assert, expect } from 'chai';
-import { Point2, Rect } from '@u4/opencv4nodejs';
+import {
+  DetectMultiScaleROIRet,
+  HOGDescriptorComputeGradientRet,
+  HOGDescriptorDetectRet,
+  HOGDescriptorDetectROIRet,
+  Point2,
+  Rect,
+} from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
+import { assertError, clearTmpData, getTmpDataFilePath } from '../../utils/testUtils';
+import { generateAPITests } from '../../utils/generateAPITests';
 
 type numFieldsType = 'winSize' | 'blockSize' | 'blockStride' | 'cellSize';
 
-export default function (args: TestContext) {
-  const { cv, utils, getPeoplesTestImg } = args;
-  const {
-    generateAPITests,
-    assertError,
-    // cvVersionGreaterEqual,
-    clearTmpData,
-    getTmpDataFilePath,
-  } = utils;
+export default function (ctxt: TestContext) {
+  const { cv, getPeoplesTestImg } = ctxt;
 
   // const HISTOGRAM_NORM_TYPE = cvVersionGreaterEqual(4, 0, 0) ? cv.HOGHistogramNormType.L2Hys : 0
   const HISTOGRAM_NORM_TYPE = 0;
@@ -160,17 +162,17 @@ export default function (args: TestContext) {
   });
 
   describe('compute', () => {
-    const expectOutput = (desc: any[]): void => {
+    const expectOutput = (desc: number[]): void => {
       expect(desc).to.be.an('array');
       expect(desc.length).to.be.above(0);
     };
 
-    const expectOutputCallbacked = (done: Mocha.Done) => (err, desc) => {
+    const expectOutputCallbacked = (done: () => void) => (err: unknown, desc: number[]) => {
       expectOutput(desc);
       done();
     };
 
-    const expectOutputPromisified = (done: Mocha.Done) => (desc) => {
+    const expectOutputPromisified = (done: () => void) => (desc: number[]) => {
       expectOutput(desc);
       done();
     };
@@ -286,7 +288,7 @@ export default function (args: TestContext) {
   });
 
   describe('computeGradient', () => {
-    const expectOutput = (result) => {
+    const expectOutput = (result: HOGDescriptorComputeGradientRet) => {
       expect(result).to.have.property('grad').instanceOf(cv.Mat);
       expect(result).to.have.property('angleOfs').instanceOf(cv.Mat);
     };
@@ -314,7 +316,7 @@ export default function (args: TestContext) {
     const searchLocations = [];
 
     describe('detect', () => {
-      const expectOutput = (result) => {
+      const expectOutput = (result: HOGDescriptorDetectRet) => {
         expect(result).to.have.property('foundLocations').be.an('array');
         expect(result).to.have.property('weights').be.an('array');
         expect(result.foundLocations.length).to.be.above(0);
@@ -339,7 +341,7 @@ export default function (args: TestContext) {
     });
 
     describe('detectROI', () => {
-      const expectOutput = (result) => {
+      const expectOutput = (result: HOGDescriptorDetectROIRet) => {
         expect(result).to.have.property('foundLocations').be.an('array');
         expect(result).to.have.property('confidences').be.an('array');
       };
@@ -363,7 +365,7 @@ export default function (args: TestContext) {
     });
 
     describe('detectMultiScale', () => {
-      const expectOutput = (result) => {
+      const expectOutput = (result: DetectMultiScaleROIRet) => {
         expect(result).to.have.property('foundLocations').be.an('array');
         expect(result).to.have.property('foundWeights').be.an('array');
         expect(result.foundLocations.length).to.be.above(0);
@@ -392,7 +394,7 @@ export default function (args: TestContext) {
     });
 
     describe('detectMultiScaleROI', () => {
-      const expectOutput = (result: any[]) => {
+      const expectOutput = (result: Rect[]) => {
         expect(result).be.an('array');
       };
 

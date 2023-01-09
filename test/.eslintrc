@@ -6,6 +6,7 @@
       "windows"
     ],
     "comma-dangle": ["error", "always-multiline"],
+    "quotes": [2, "single", { "avoidEscape": true }],
     "no-plusplus": "off",
     "func-names": 0,
     "import/no-unresolved": 0,

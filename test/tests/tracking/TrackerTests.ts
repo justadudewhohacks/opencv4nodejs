@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 import { TestContext } from '../model';
 
+type TrackerNames = 'TrackerBoosting' | 'TrackerMedianFlow' | 'TrackerMIL' | 'TrackerTLD' | 'TrackerKCF' | 'TrackerCSRT' | 'TrackerMOSSE';
+
 const expectImplementsMethods = (tracker) => {
   expect(tracker).to.have.property('clear').to.be.a('function');
   expect(tracker).to.have.property('init').to.be.a('function');
@@ -9,15 +11,16 @@ const expectImplementsMethods = (tracker) => {
 };
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-
   const {
+    cv,
     cvVersionGreaterEqual,
     cvVersionEqual,
-  } = utils;
+    getTestImg,
+  } = args;
 
-  const TrackerTestGenerator = (getTestImg) => (trackerName) => {
-    const newTracker = (arg?: any) => new cv[trackerName]();
+  const TrackerTestGenerator = (getTestImg2) => (trackerName: TrackerNames) => {
+    // eslint-disable-next-line no-unused-vars
+    const newTracker = (_arg2?: unknown) => new cv[trackerName]();
     const newTrackerParams = () => new cv[`${trackerName}Params`]();
 
     describe(trackerName, () => {
@@ -40,17 +43,19 @@ export default function (args: TestContext) {
 
       describe('init', () => {
         it('should throw if no args', () => {
+          // @ts-expect-error missing args
           expect(() => newTracker().init()).to.throw('Tracker::Init - Error: expected argument 0 to be of type');
         });
 
         it('can be called with frame and initial box', () => {
-          const ret = newTracker().init(getTestImg(), new cv.Rect(0, 0, 10, 10));
+          const ret = newTracker().init(getTestImg2(), new cv.Rect(0, 0, 10, 10));
           expect(ret).to.true;
         });
       });
 
       describe('update', () => {
         it('should throw if no args', () => {
+          // @ts-expect-error missing args
           expect(() => newTracker().update()).to.throw('Tracker::Update - Error: expected argument 0 to be of type');
         });
 
@@ -61,8 +66,8 @@ export default function (args: TestContext) {
         )) {
           it('returns bounding box', () => {
             const tracker = newTracker();
-            tracker.init(getTestImg(), new cv.Rect(0, 0, 10, 10));
-            const rect = tracker.update(getTestImg());
+            tracker.init(getTestImg2(), new cv.Rect(0, 0, 10, 10));
+            const rect = tracker.update(getTestImg2());
             if (rect !== null) {
               expect(rect).to.be.instanceOf(cv.Rect);
             }
@@ -71,14 +76,14 @@ export default function (args: TestContext) {
       });
 
       describe('getModel', () => {
-
+        // missing
       });
     });
   };
 
   const generateTrackerTests = TrackerTestGenerator(getTestImg);
 
-  const trackerNames = [
+  const trackerNames: TrackerNames[] = [
     'TrackerBoosting',
     'TrackerMedianFlow',
     'TrackerMIL',
@@ -156,7 +161,7 @@ export default function (args: TestContext) {
 
     describe('update', () => {
       it('should throw if no args', () => {
-        // @ts-expect-error
+        // @ts-expect-error Error: expected argument 0 to be of type
         expect(() => (new cv.MultiTracker()).update()).to.throw('MultiTracker::Update - Error: expected argument 0 to be of type');
       });
 

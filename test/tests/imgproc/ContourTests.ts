@@ -1,15 +1,10 @@
 import { expect } from 'chai';
 import { Contour } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
+import { generateAPITests } from '../../utils/generateAPITests';
 
 export default (args: TestContext) => {
-  const { cv, utils } = args;
-
-  const {
-    generateAPITests,
-    cvVersionLowerThan,
-    cvVersionGreaterEqual,
-  } = utils;
+  const { cv, cvVersionLowerThan, cvVersionGreaterEqual } = args;
 
   // apparently cv version minor < 2 does not consider image borders
   const contoursData = [
@@ -28,7 +23,7 @@ export default (args: TestContext) => {
   const findContoursMethod = cv.CHAIN_APPROX_NONE;
 
   describe('findContours', () => {
-    const expectOutput = (contours) => {
+    const expectOutput = (contours: Contour[]) => {
       expect(contours).to.be.an('array').lengthOf(3);
 
       contours.forEach((contour) => {

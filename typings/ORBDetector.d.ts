@@ -1,5 +1,17 @@
 import { FeatureDetector } from './FeatureDetector.d';
 
+export interface ORBDetectorProps {
+  maxFeatures?: number;
+  scaleFactor?: number;
+  nLevels?: number;
+  edgeThreshold?: number;
+  firstLevel?: number;
+  WTA_K?: number;
+  scoreType?: number;
+  patchSize?: number;
+  fastThreshold?: number;
+}
+
 export class ORBDetector extends FeatureDetector {
   readonly maxFeatures: number;
   readonly nLevels: number;
@@ -11,7 +23,7 @@ export class ORBDetector extends FeatureDetector {
   readonly fastThreshold: number;
   readonly scaleFactor: number;
   constructor(maxFeatures?: number, scaleFactor?: number, nLevels?: number, edgeThreshold?: number, firstLevel?: number, WTA_K?: number, scoreType?: number, patchSize?: number, fastThreshold?: number);
-  constructor(params: { maxFeatures?: number, scaleFactor?: number, nLevels?: number, edgeThreshold?: number, firstLevel?: number, WTA_K?: number, scoreType?: number, patchSize?: number, fastThreshold?: number });
+  constructor(params: ORBDetectorProps);
 }
 
 export class ORBScoreType {

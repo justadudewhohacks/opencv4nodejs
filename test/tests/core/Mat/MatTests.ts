@@ -1,22 +1,22 @@
 import { expect } from 'chai';
+import { generateAPITests } from '../../../utils/generateAPITests';
+import {
+  assertDataDeepEquals,
+  assertMetaData,
+  isZeroMat,
+  MatValuesComparator,
+} from '../../../utils/matTestUtils';
+import { assertError, assertPropsWithValue } from '../../../utils/testUtils';
 import { TestContext } from '../../model';
 import { doubleMin, doubleMax } from './typeRanges';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-
   const {
-    generateAPITests,
-    assertError,
-    assertPropsWithValue,
-    assertMetaData,
-    assertDataDeepEquals,
-    // readTestImage,
-    MatValuesComparator,
-    isZeroMat,
+    cv,
+    getTestImg,
     cvVersionGreaterEqual,
     cvVersionLowerThan,
-  } = utils;
+  } = args;
 
   const srcMatData = [
     [doubleMin, doubleMax, 0],
@@ -473,11 +473,11 @@ export default function (args: TestContext) {
       cv.CV_8U,
     );
 
-    const expectOutput = (res, _, args) => {
+    const expectOutput = (res, _, args2) => {
       expect(res).to.be.instanceOf(cv.Mat);
 
       const origRows = getDut().rows;
-      const expectedRows = origRows - ((typeof args[0] === 'number' && args[0]) || 1);
+      const expectedRows = origRows - ((typeof args2[0] === 'number' && args2[0]) || 1);
       expect(res.rows).to.equal(expectedRows);
     };
 
@@ -506,10 +506,10 @@ export default function (args: TestContext) {
 
     const borderType = cv.BORDER_CONSTANT;
 
-    const makeExpectOutput = (type, value) => (res, _, args) => {
+    const makeExpectOutput = (type, value) => (res, _, args2) => {
       expect(res).to.be.instanceOf(cv.Mat);
       assertMetaData(res)(22, 22, type);
-      if (args[5] === 255 || (args[4] && args[4].value)) {
+      if (args2[5] === 255 || (args2[4] && args2[4].value)) {
         const upperLeft = res.at(0, 0);
         if (typeof upperLeft === 'object') {
           ['x', 'y', 'z', 'w'].forEach((k) => expect(upperLeft[k]).to.eq(value[k]));

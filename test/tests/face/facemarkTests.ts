@@ -1,14 +1,10 @@
 import { expect } from 'chai';
+import { generateAPITests } from '../../utils/generateAPITests';
+import { clearTmpData, getTmpDataFilePath } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => (Facemark, FacemarkParams) => {
-  const { cv, utils, getTestImg } = args;
-  const {
-    generateAPITests,
-    clearTmpData,
-    getTmpDataFilePath,
-    cvVersionLowerThan,
-  } = utils;
+  const { cv, cvVersionLowerThan, getTestImg } = args;
 
   describe('constructor', () => {
     it('is constructable without args', () => {
@@ -28,8 +24,8 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
     });
 
     describe('setFaceDetector', () => {
-      const expectOutput = () => {};
-      const callback = () => {};
+      const expectOutput = () => { /* empty */ };
+      const callback = () => { /* empty */ };
 
       generateAPITests({
         getDut: () => facemark,
@@ -42,7 +38,7 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
     });
 
     describe('getData', () => {
-      const expectOutput = () => {};
+      const expectOutput = () => { /* empty */ };
 
       generateAPITests({
         getDut: () => facemark,
@@ -54,7 +50,7 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
     });
 
     describe('getFaces', () => {
-      const expectOutput = () => {};
+      const expectOutput = () => { /* empty */ };
 
       it('setFaceDetector', () => {
         facemark.setFaceDetector(() => []);
@@ -98,7 +94,7 @@ export default (args: TestContext) => (Facemark, FacemarkParams) => {
         methodName: 'addTrainingSample',
         methodNameSpace: 'Facemark',
         getRequiredArgs: () => [getTestImg().bgrToGray(), landmarks],
-        expectOutput: () => {},
+        expectOutput: () => { /* empty */ },
       });
     });
   });

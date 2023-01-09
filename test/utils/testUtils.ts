@@ -1,6 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-unused-vars */
 import { assert, expect } from 'chai';
 import fs from 'fs';
-import { Vec2, Vec3, Vec4 } from '@u4/opencv4nodejs';
+import {
+  Point2,
+  Vec2,
+  Vec3,
+  Vec4,
+} from '@u4/opencv4nodejs';
+import type Chai from 'chai';
 
 export const assertError = (func: () => any, msg: string): void => {
   let errMsg = '';
@@ -38,7 +46,8 @@ const makeCompareValues = (floatSafe: boolean) => (val1: number | object | boole
   return val1 === val2;
 };
 
-export const assertPropsWithValue = (obj: {[key: string]: number | object | boolean | string} & any, props: {[key: string]: number | object | boolean | string}, floatSafe = false) => {
+// Direct Acces Ok
+export const assertPropsWithValue = (obj: { [key: string]: number | object | boolean | string } & any, props: { [key: string]: number | object | boolean | string } & any, floatSafe = false) => {
   const compareValues = makeCompareValues(floatSafe);
   Object.keys(props).forEach((key) => assert(compareValues(props[key], obj[key]), `${key} - expected: ${props[key]}, have: ${obj[key]}`));
 };
@@ -49,7 +58,7 @@ export const funcShouldRequireArgs = (func: (...args: any[]) => any): void => {
   });
 };
 
-export const _funcShouldRequireArgs = (func: (...args: any[]) => any) : void => {
+export const _funcShouldRequireArgs = (func: (...args: any[]) => any): void => {
   it('should throw if no args', () => {
     assertError(func, 'expected argument 0 to be');
   });
@@ -100,7 +109,7 @@ export const getTmpDataFilePath = (file: string): string => {
 
 export const fileExists = (filePath: string) => fs.existsSync(filePath);
 
-export const expectToBeVec2 = (vec: Vec2): void => {
+export const expectToBeVec2 = (vec: Vec2 | Point2): void => {
   expect(vec).to.have.property('x');
   expect(vec).to.have.property('y');
   expect(vec).to.not.have.property('z');

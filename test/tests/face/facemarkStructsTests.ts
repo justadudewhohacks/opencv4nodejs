@@ -1,9 +1,8 @@
+import { assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => {
-  const { cv, utils } = args;
-
-  const { assertPropsWithValue } = utils;
+  const { cv } = args;
 
   describe('Facemark structures', () => {
     it('FacemarkAAMData', () => {

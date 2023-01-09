@@ -1,15 +1,10 @@
 import { expect } from 'chai';
+import { generateAPITests } from '../../utils/generateAPITests';
+import { assertPropsWithValue, clearTmpData, getTmpDataFilePath } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default (args: TestContext) => {
-  const { cv, utils } = args;
-  const {
-    generateAPITests,
-    assertPropsWithValue,
-    getTmpDataFilePath,
-    clearTmpData,
-    cvVersionLowerThan,
-  } = utils;
+  const { cv, cvVersionLowerThan } = args;
 
   const samples = new cv.Mat([
     [100, 200, 200],

@@ -3,39 +3,35 @@ import recognizerTestsFactory from './recognizerTests';
 import facemarkTestsFactory from './facemarkTests';
 import { TestContext } from '../model';
 
-export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
+export default function (ctxt: TestContext) {
+  const { cv, cvVersionGreaterEqual } = ctxt;
 
-  const {
-    cvVersionGreaterEqual,
-  } = utils;
-
-  const recognizerTests = recognizerTestsFactory({ cv, utils, getTestImg });
-  const facemarkTests = facemarkTestsFactory({ cv, utils, getTestImg });
+  const recognizerTests = recognizerTestsFactory(ctxt);
+  const facemarkTests = facemarkTestsFactory(ctxt);
 
   describe('FaceRecognizers', () => {
     describe('EigenFaceRecognizer', () => {
-      const args = ['num_components', 'threshold'];
+      const args2 = ['num_components', 'threshold'];
       const values = [10, 0.8];
-      recognizerTests(args, values, cv.EigenFaceRecognizer);
+      recognizerTests(args2, values, cv.EigenFaceRecognizer);
     });
 
     describe('FisherFaceRecognizer', () => {
-      const args = ['num_components', 'threshold'];
+      const args2 = ['num_components', 'threshold'];
       const values = [10, 0.8];
-      recognizerTests(args, values, cv.FisherFaceRecognizer);
+      recognizerTests(args2, values, cv.FisherFaceRecognizer);
     });
 
     describe('LBPHFaceRecognizer', () => {
-      const args = ['radius', 'neighbors', 'grid_x', 'grid_y'];
+      const args2 = ['radius', 'neighbors', 'grid_x', 'grid_y'];
       const values = [2, 16, 16, 16];
-      recognizerTests(args, values, cv.LBPHFaceRecognizer);
+      recognizerTests(args2, values, cv.LBPHFaceRecognizer);
     });
   });
 
   if (cvVersionGreaterEqual(3, 4, 0)) {
     describe('FaceMark', () => {
-      facemarkStructsTests(args);
+      facemarkStructsTests(ctxt);
 
       describe('FacemarkLBF', () => {
         facemarkTests(cv.FacemarkLBF, cv.FacemarkLBFParams);

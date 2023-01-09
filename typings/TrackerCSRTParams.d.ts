@@ -13,7 +13,8 @@ export class TrackerCSRTParams {
   readonly num_hog_channels_used: number;
   readonly number_of_scales: number;
   readonly padding: number;
-  //readonly psr_threshold: number;
+  // since openCV 3.4.4
+  psr_threshold?: number;
   readonly scale_lr: number;
   readonly scale_model_max_area: number;
   readonly scale_sigma_factor: number;

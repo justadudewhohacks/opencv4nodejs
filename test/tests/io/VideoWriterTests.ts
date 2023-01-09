@@ -1,15 +1,10 @@
 import { VideoWriter } from '@u4/opencv4nodejs';
 import { expect } from 'chai';
+import { clearTmpData, fileExists, getTmpDataFilePath } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-
-  const {
-    clearTmpData,
-    fileExists,
-    getTmpDataFilePath,
-  } = utils;
+  const { cv } = args;
 
   describe('constructor', () => {
     beforeEach(() => { clearTmpData(); });

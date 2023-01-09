@@ -1,12 +1,9 @@
 import { expect } from 'chai';
+import { generateAPITests } from '../../utils/generateAPITests';
+import { clearTmpData, getTmpDataFilePath } from '../../utils/testUtils';
 import { TestContext } from '../model';
 // { utils, getTestImg }
 export default (args0: TestContext) => (args, values, Recognizer) => {
-  const {
-    generateAPITests,
-    clearTmpData,
-    getTmpDataFilePath,
-  } = args0.utils;
   const { getTestImg } = args0;
   describe('constructor', () => {
     const props = {};

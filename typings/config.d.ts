@@ -14,6 +14,7 @@ export const xmodules: {
   objdetect: boolean;
   machinelearning: boolean;
   video: boolean;
+  img_hash: boolean;
 }
 
 export const version: {

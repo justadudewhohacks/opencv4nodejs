@@ -1,15 +1,10 @@
 import { expect } from 'chai';
+import { assertDataAlmostDeepEquals, assertDataDeepEquals, assertMetaData } from '../../../utils/matTestUtils';
+import { assertError } from '../../../utils/testUtils';
 import { TestContext } from '../../model';
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-
-  const {
-    assertError,
-    assertDataDeepEquals,
-    assertDataAlmostDeepEquals,
-    assertMetaData,
-  } = utils;
+  const { cv } = args;
 
   const operatorRequiresArg = (func, isScalar?: boolean) => {
     it('should throw if no args', () => {
@@ -67,7 +62,6 @@ export default function (args: TestContext) {
       // assertMetaData(res)(2, 2, cv.CV_8U);
       assertDataDeepEquals(res.getDataAsArray(), expectedResult);
     });
-
   });
 
   describe('sub', () => {

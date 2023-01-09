@@ -2,10 +2,12 @@ lockfileVersion: 5.4
 
 specifiers:
   '@types/chai': ^4.3.1
+  '@types/chai-arrays': ^2.0.0
   '@types/mocha': ^9.1.1
   '@types/node': ^18.0.0
   '@u4/opencv4nodejs': link:..
   chai: ^4.3.6
+  chai-arrays: ^2.2.0
   istanbul: ^0.4.5
   mocha: ^10.0.0
   rimraf: ^3.0.2
@@ -20,8 +22,10 @@ dependencies:
 
 devDependencies:
   '@types/chai': 4.3.1
+  '@types/chai-arrays': 2.0.0
   '@types/mocha': 9.1.1
   '@types/node': 18.0.0
+  chai-arrays: 2.2.0
   rimraf: 3.0.2
   ts-node: 10.8.1_qiyc72axg2v44xl4yovan2v55u
   typescript: 4.7.4
@@ -65,6 +69,12 @@ packages:
 
   /@tsconfig/node16/1.0.2:
     resolution: {integrity: sha512-eZxlbI8GZscaGS7kkc/trHTT5xgrjH3/1n2JDwusC9iahPKWMRvRjJSAN5mCXviuTGQ/lHnhvv8Q1YTpnfz9gA==}
+    dev: true
+
+  /@types/chai-arrays/2.0.0:
+    resolution: {integrity: sha512-5h5jnAC9C64YnD7WJpA5gBG7CppF/QmoWytOssJ6ysENllW49NBdpsTx6uuIBOpnzAnXThb8jBICgB62wezTLQ==}
+    dependencies:
+      '@types/chai': 4.3.1
     dev: true
 
   /@types/chai/4.3.1:
@@ -186,6 +196,11 @@ packages:
     resolution: {integrity: sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==}
     engines: {node: '>=10'}
     dev: false
+
+  /chai-arrays/2.2.0:
+    resolution: {integrity: sha512-4awrdGI2EH8owJ9I58PXwG4N56/FiM8bsn4CVSNEgr4GKAM6Kq5JPVApUbhUBjDakbZNuRvV7quRSC38PWq/tg==}
+    engines: {node: '>=0.10'}
+    dev: true
 
   /chai/4.3.6:
     resolution: {integrity: sha512-bbcp3YfHCUzMOvKqsztczerVgBKSsEijCySNlHHbX3VG1nskvqjz5Rfso1gGwD6w6oOV3eI60pKuMOV5MV7p3Q==}

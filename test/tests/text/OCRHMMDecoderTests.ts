@@ -1,13 +1,11 @@
 import path from 'path';
 import { expect } from 'chai';
 import { TestContext } from '../model';
+import { generateAPITests } from '../../utils/generateAPITests';
+import { OCRHMMDecoderRunWithInfoRet, OCRHMMDecoder } from '../../../typings';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-  const {
-    generateAPITests,
-    cvVersionGreaterEqual,
-  } = utils;
+  const { cv, cvVersionGreaterEqual, getTestImg } = args;
 
   const getClassifier = () => (cvVersionGreaterEqual(3, 1, 0)
     ? cv.loadOCRHMMClassifierCNN(path.resolve('../data/text-models/OCRBeamSearch_CNN_model_data.xml.gz'))
@@ -16,7 +14,7 @@ export default function (args: TestContext) {
   const getMask = () => new cv.Mat(getTestImg().rows, getTestImg().cols, cv.CV_8U, 1);
 
   describe('constructor', () => {
-
+    /* missing */
   });
 
   const vocabulary = 'abcdefghijklmnopqrstuvwxyz';
@@ -26,7 +24,7 @@ export default function (args: TestContext) {
   describe('run', () => {
     const confidence = 1;
 
-    let dut;
+    let dut: OCRHMMDecoder;
     before(() => {
       dut = new cv.OCRHMMDecoder(getClassifier(), vocabulary, transitionP, emissionP);
     });
@@ -40,14 +38,14 @@ export default function (args: TestContext) {
         confidence,
       ]),
       getOptionalArg: cvVersionGreaterEqual(3, 1, 0) ? getMask : undefined,
-      expectOutput: (ret) => {
+      expectOutput: (ret: string) => {
         expect(ret).to.be.an('string');
       },
     });
   });
 
   describe('runWithInfo', () => {
-    let dut;
+    let dut: OCRHMMDecoder;
     before(() => {
       dut = new cv.OCRHMMDecoder(getClassifier(), vocabulary, transitionP, emissionP);
     });
@@ -60,7 +58,7 @@ export default function (args: TestContext) {
         getTestImg().bgrToGray(),
       ]),
       getOptionalArg: cvVersionGreaterEqual(3, 1, 0) ? getMask : undefined,
-      expectOutput: (ret) => {
+      expectOutput: (ret: OCRHMMDecoderRunWithInfoRet) => {
         expect(ret).to.have.property('outputText');
         expect(ret).to.have.property('rects');
         expect(ret).to.have.property('words');

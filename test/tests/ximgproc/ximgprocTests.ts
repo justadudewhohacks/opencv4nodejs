@@ -1,15 +1,11 @@
 /* eslint-disable camelcase */
 import { assert, expect } from 'chai';
+import { assertMetaData } from '../../utils/matTestUtils';
+import { assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils, getTestImg } = args;
-
-  const {
-    assertMetaData,
-    assertPropsWithValue,
-    cvVersionGreaterEqual,
-  } = utils;
+  const { cv, cvVersionGreaterEqual, getTestImg } = args;
 
   describe('SuperpixelSEEDS', () => {
     const num_superpixels = 100;

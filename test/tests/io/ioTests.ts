@@ -3,21 +3,22 @@ import path from 'path';
 import { expect } from 'chai';
 import { Mat } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
+import { assertDataDeepEquals, assertMetaData } from '../../utils/matTestUtils';
+import {
+  clearTmpData,
+  fileExists,
+  funcShouldRequireArgs,
+  getTmpDataFilePath,
+  _asyncFuncShouldRequireArgs,
+}
+  from '../../utils/testUtils';
+import { generateAPITests } from '../../utils/generateAPITests';
 
-export default function (args: TestContext) {
-  const { cv, utils } = args;
-
+export default function (ctxt: TestContext) {
   const {
-    assertDataDeepEquals,
-    assertMetaData,
-    _asyncFuncShouldRequireArgs,
-    funcShouldRequireArgs,
+    cv,
     getTestImagePath,
-    clearTmpData,
-    getTmpDataFilePath,
-    fileExists,
-    generateAPITests,
-  } = utils;
+  } = ctxt;
 
   let lenna: Mat;
   let got: Mat;
@@ -45,11 +46,11 @@ export default function (args: TestContext) {
     generateAPITests({
       getDut: () => cv,
       methodName: 'imread',
-      getRequiredArgs: () => ([
+      getRequiredArgs: (): string[] => ([
         getTestImagePath(),
       ]),
       getOptionalArg: () => flags,
-      expectOutput: (img) => {
+      expectOutput: (img: Mat) => {
         expect(img).to.be.instanceOf(cv.Mat);
         assertMetaData(img)(512, 512, cv.CV_8UC3);
       },

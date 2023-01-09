@@ -1,11 +1,12 @@
+/* eslint-disable arrow-body-style */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
-import Chai from 'chai';
-import {
-    cv, Point2, Point3, Mat, Vec2, Vec3, Vec4,
-} from '@u4/opencv4nodejs';
+import { cv as realCV, Mat } from '@u4/opencv4nodejs';
+import fs from 'fs';
+import path from 'path';
+import generateClassMethodTestsFactory from '../utils/generateClassMethodTests';
 
-export type OpenCV = typeof cv
+export type OpenCV = typeof realCV
 
 export interface APITestOpts {
     prefix?: string,
@@ -32,47 +33,96 @@ export interface APITestOpts {
     afterHook: () => void
 }
 
-export interface TestContext {
-    cv: OpenCV,
-    utils: {
-        funcShouldRequireArgs: (func: () => any) => void;
-        assertPropsWithValue: (obj: { [key: string]: number | object | boolean | string } & any, props: { [key: string]: number | object | boolean | string }, floatSafe?: boolean) => void;
-        expectToBeVec2: (vec: Vec2 | Point2) => void;
-        expectToBeVec3: (vec: Vec3 | Point3) => void;
-        expectToBeVec4: (vec: Vec4) => void;
+const matTypeNames = [
+  'CV_8UC1', 'CV_8UC2', 'CV_8UC3', 'CV_8UC4',
+  'CV_8SC1', 'CV_8SC2', 'CV_8SC3', 'CV_8SC4',
+  'CV_16UC1', 'CV_16UC2', 'CV_16UC3', 'CV_16UC4',
+  'CV_16SC1', 'CV_16SC2', 'CV_16SC3', 'CV_16SC4',
+  'CV_32SC1', 'CV_32SC2', 'CV_32SC3', 'CV_32SC4',
+  'CV_32FC1', 'CV_32FC2', 'CV_32FC3', 'CV_32FC4',
+  'CV_64FC1', 'CV_64FC2', 'CV_64FC3', 'CV_64FC4',
+];
 
-        assertError: (func: () => any, msg: string) => void;
-        assertDataDeepEquals: (data0: any, data1: any) => void;
-        assertDataAlmostDeepEquals: (data0: any, data1: any) => void;
-        assertMatValueAlmostEquals: (val0: number, val1: number) => void;
-        assertMatValueEquals: (val0: number, val1: number) => void;
-        assertMetaData: (mat: Mat | number[]) => (arg0: number | { rows: number, cols: number, type: number }, cols?: number, type?: number) => void;
-        dangerousDeepEquals: (obj0: any, obj1: any) => boolean;
-        generateIts: (msg: string, testFunc: (t: number) => void, exclusions?: Set<string>) => void;
-        isZeroMat: (mat: Mat) => boolean;
-        isUniformMat: (mat: Mat, matVal: number) => boolean;
-        MatValuesComparator: (mat0: Mat, mat1: Mat) => (cmpFunc: (a: number, b: number) => void) => void;
+export class TestContext {
+  /**
+   * lerna cached image
+   */
+  private lerna512?: Mat;
 
-        cvVersionGreaterEqual: (major: number, minor: number, revision: number) => boolean;
-        cvVersionLowerThan: (major: number, minor: number, revision: number) => boolean;
-        cvVersionEqual: (major: number, minor: number, revision: number) => boolean;
-        generateAPITests: (opts: Partial<APITestOpts>) => void,
-        generateClassMethodTests: (opts) => void;
-        getNodeMajorVersion: () => number;
+  /**
+   * people cached image
+   */
+  private people360?: Mat;
 
-        getTestVideoPath?: () => string;
-        getTestImagePath?: (isPng?: boolean) => string;
+  /**
+   * lerna cached image resized too 250
+   */
+  private lerna250?: Mat;
 
-        clearTmpData?: () => void;
-        getTmpDataFilePath?: (file: string) => string;
-        fileExists?: (filePath: string) => boolean;
-        _asyncFuncShouldRequireArgs?: (func: (...args: any[]) => any) => void;
-        asyncFuncShouldRequireArgs?: (func: (...args: any[]) => any) => void;
-        _funcShouldRequireArgs?: (func: () => any) => void
-        expectFloat?: (val: number, expected: number) => Chai.Assertion;
-        readTestImage?: () => Mat;
-        readPeoplesTestImage?: () => Mat;
-    },
-    getTestImg: () => Mat;
-    getPeoplesTestImg?: () => Mat;
+  public dataPrefix = '../data';
+
+  public getTestImg: () => Mat = () => {
+    if (!this.lerna512) {
+      const file = path.resolve(__dirname, '../utils/Lenna.data');
+      this.lerna512 = new this.cv.Mat(fs.readFileSync(file), 512, 512, this.cv.CV_8UC3);
+    }
+    return this.lerna512;
+  };
+
+  /**
+   * @returns lerna image resize to a 250 px square
+   */
+  public getTestImg250: () => Mat = () => {
+    if (!this.lerna250) {
+      this.lerna250 = this.getTestImg().resizeToMax(250);
+    }
+    return this.lerna250;
+  };
+
+  public getPeoplesTestImg: () => Mat = () => {
+    if (!this.people360) {
+      const file = path.resolve(__dirname, '../utils/people.data');
+      this.people360 = new this.cv.Mat(fs.readFileSync(file), 360, 640, this.cv.CV_8UC3);
+    }
+    return this.people360;
+  };
+
+  constructor(public cv: OpenCV) {
+    this.generateClassMethodTests = generateClassMethodTestsFactory(cv);
+  }
+
+  public generateIts = (msg: string, testFunc: (type: number) => void, exclusions = new Set<string>()): void => {
+    return matTypeNames.filter((type) => !exclusions.has(type)).forEach((type) => {
+      it(`${type} ${msg}`, () => testFunc(this.cv[type]));
+    });
+  };
+
+  public cvVersionGreaterEqual = (major: number, minor: number, revision: number): boolean => {
+    return this.cv.version.major > major
+            || (this.cv.version.major === major && this.cv.version.minor > minor)
+            || (this.cv.version.major === major && this.cv.version.minor === minor && this.cv.version.revision >= revision);
+  };
+
+  public cvVersionLowerThan = (major: number, minor: number, revision: number): boolean => {
+    return !this.cvVersionGreaterEqual(major, minor, revision);
+  };
+
+  public cvVersionEqual = (major: number, minor: number, revision: number): boolean => {
+    return this.cv.version.major === major && this.cv.version.minor === minor && this.cv.version.revision === revision;
+  };
+
+  // eslint-disable-next-line class-methods-use-this
+  public getNodeMajorVersion = (): number => {
+    return parseInt(process.version.split('.')[0].slice(1));
+  };
+
+  public generateClassMethodTests: (opts: Partial<APITestOpts>) => void;
+
+  public getTestImagePath = (isPng = true): string => {
+    return this.dataPrefix + (isPng ? '/Lenna.png' : '/got.jpg');
+  };
+
+  public getTestVideoPath = (): string => {
+    return `${this.dataPrefix}/traffic.mp4`;
+  };
 }

@@ -1,17 +1,18 @@
 name: Build all from source
 
 on:
-  # push:
-  #   branches: [ "master" ]
+  #push:
+  #   branches: [ "master", "phash" ]
   # pull_request:
   #   branches: [ "master" ]
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      name:
+      cv_version:
         description: 'build all from source'
         default: '4.7.0'
         required: true
+        type: string
 
 env:
   SOLUTION_FILE_PATH: .
@@ -47,9 +48,9 @@ jobs:
       working-directory: ./test
       run: pnpm install --frozen-lockfile
 
-    - name: build OpenCV
+    - name: build OpenCV ${{ inputs.cv_version }}
       working-directory: ./test
-      run: pnpm build-opencv --version ${{ github.event.inputs.name }} rebuild
+      run: pnpm build-opencv --version ${{ inputs.cv_version }} rebuild
 
     - name: run test-appveyor test
       working-directory: ./test

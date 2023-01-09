@@ -1,18 +1,13 @@
 import { expect } from 'chai';
+import { generateAPITests } from '../../utils/generateAPITests';
+import { assertMetaData } from '../../utils/matTestUtils';
+import { assertPropsWithValue, expectToBeVec3 } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 const CV_CALIB_USE_INTRINSIC_GUESS = 1;
 
 export default (args: TestContext) => {
-  const { cv, utils } = args;
-
-  const {
-    assertPropsWithValue,
-    assertMetaData,
-    generateAPITests,
-    expectToBeVec3,
-    cvVersionGreaterEqual,
-  } = utils;
+  const { cv, cvVersionGreaterEqual } = args;
 
   const objectPoints = [
     new cv.Point3(0, 0, 0),

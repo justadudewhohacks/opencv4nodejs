@@ -2,15 +2,11 @@
 import { VideoCapture } from '@u4/opencv4nodejs';
 import { expect } from 'chai';
 import * as path from 'path';
+import { assertMetaData } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
-  const { cv, utils } = args;
-
-  const {
-    assertMetaData,
-    getTestVideoPath,
-  } = utils;
+  const { cv, getTestVideoPath } = args;
 
   describe('constructor', () => {
     it(`can be opened from valid video file ${path.resolve(getTestVideoPath())}`, () => {
