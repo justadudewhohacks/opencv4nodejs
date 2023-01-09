@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { expect } from 'chai';
+import chai from 'chai';
 import cv from '@u4/opencv4nodejs';
 import coreTestSuite from './core';
 import imgprocTestSuite from './imgproc';
@@ -18,6 +18,9 @@ import xfeatures2dTestSuite from './xfeatures2d';
 import ximgprocTestSuite from './ximgproc';
 import imgHashTestSuite from './img_hash';
 import { TestContext } from './model';
+
+const { expect } = chai
+chai.use(require('chai-arrays'))
 
 const modules = [
   'core', 'imgproc', 'calib3d', 'features2d', 'io',
