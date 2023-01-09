@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { Mat } from '../../../typings';
 import { generateAPITests } from '../../utils/generateAPITests';
 import { TestContext } from '../model';
 
@@ -23,7 +24,7 @@ export default function (args: TestContext) {
 
   // TODO: load an actual model in tests
   describe.skip('forward', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       expect(res).to.be.instanceOf(cv.Mat);
     };
 

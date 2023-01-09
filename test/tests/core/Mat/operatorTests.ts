@@ -6,7 +6,7 @@ import { TestContext } from '../../model';
 export default function (args: TestContext) {
   const { cv } = args;
 
-  const operatorRequiresArg = (func, isScalar?: boolean) => {
+  const operatorRequiresArg = (func: 'add' | 'sub' | 'mul' | 'div' | 'and' | 'or' | 'hMul' | 'hDiv' | 'dot' | 'bitwiseOr' | 'bitwiseAnd' | 'bitwiseXor' | 'absdiff' | 'matMul', isScalar?: boolean) => {
     it('should throw if no args', () => {
       assertError(
         () => {

@@ -13,8 +13,15 @@ import { TermCriteria } from '../TermCriteria.d';
 // 
 //double 	cv::calibrateCamera (InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints, Size imageSize, InputOutputArray cameraMatrix, InputOutputArray distCoeffs, OutputArrayOfArrays rvecs, OutputArrayOfArrays tvecs, int flags=0, TermCriteria criteria=TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 30, DBL_EPSILON))
 
-export function calibrateCamera(objectPoints: Point3[], imagePoints: Point2[], imageSize: Size, cameraMatrix: Mat, distCoeffs: number[], flags?: number, criteria?: TermCriteria): { returnValue: number, rvecs: Vec3[], tvecs: Vec3[], distCoeffs: number[] };
-export function calibrateCameraAsync(objectPoints: Point3[], imagePoints: Point2[], imageSize: Size, cameraMatrix: Mat, distCoeffs: number[], flags?: number, criteria?: TermCriteria): Promise<{ returnValue: number, rvecs: Vec3[], tvecs: Vec3[], distCoeffs: number[] }>;
+export interface CalibrateCameraRet {
+    returnValue: number;
+    rvecs: Vec3[];
+    tvecs: Vec3[];
+    distCoeffs: number[];
+}
+
+export function calibrateCamera(objectPoints: Point3[], imagePoints: Point2[], imageSize: Size, cameraMatrix: Mat, distCoeffs: number[], flags?: number, criteria?: TermCriteria): CalibrateCameraRet;
+export function calibrateCameraAsync(objectPoints: Point3[], imagePoints: Point2[], imageSize: Size, cameraMatrix: Mat, distCoeffs: number[], flags?: number, criteria?: TermCriteria): Promise<CalibrateCameraRet>;
 
 export function calibrateCameraExtended(objectPoints: Point3[], imagePoints: Point2[], imageSize: Size, cameraMatrix: Mat, distCoeffs: number[], flags?: number, criteria?: TermCriteria): { returnValue: number, rvecs: Vec3[], tvecs: Vec3[], distCoeffs: number[], stdDeviationsIntrinsics: Mat, stdDeviationsExtrinsics: Mat, perViewErrors: number[] };
 export function calibrateCameraExtendedAsync(objectPoints: Point3[], imagePoints: Point2[], imageSize: Size, cameraMatrix: Mat, distCoeffs: number[], flags?: number, criteria?: TermCriteria): Promise<{ returnValue: number, rvecs: Vec3[], tvecs: Vec3[], distCoeffs: number[], stdDeviationsIntrinsics: Mat, stdDeviationsExtrinsics: Mat, perViewErrors: number[] }>;
@@ -36,6 +43,23 @@ export function calibrateCameraExtendedAsync(objectPoints: Point3[], imagePoints
 // 
 //bool 	cv::checkChessboard (InputArray img, Size size)
 // 
+
+export interface ComposeRTRet {
+    rvec3: Vec3;
+    tvec3: Vec3;
+    dr3dr1: Mat;
+    dr3dt1: Mat;
+    dr3dr2: Mat;
+    dr3dt2: Mat;
+    dt3dr1: Mat;
+    dt3dt1: Mat;
+    dt3dr2: Mat;
+    dt3dt2: Mat;
+}
+
+export function composeRT(rvec1: Vec3, tvec1: Vec3, rvec2: Vec3, tvec2: Vec3): ComposeRTRet;
+export function composeRTAsync(rvec1: Vec3, tvec1: Vec3, rvec2: Vec3, tvec2: Vec3): Promise<ComposeRTRet>;
+
 //void 	cv::composeRT (InputArray rvec1, InputArray tvec1, InputArray rvec2, InputArray tvec2, OutputArray rvec3, OutputArray tvec3, OutputArray dr3dr1=noArray(), OutputArray dr3dt1=noArray(), OutputArray dr3dr2=noArray(), OutputArray dr3dt2=noArray(), OutputArray dt3dr1=noArray(), OutputArray dt3dt1=noArray(), OutputArray dt3dr2=noArray(), OutputArray dt3dt2=noArray())
 // 	Combines two rotation-and-shift transformations. More...
 // 
@@ -72,24 +96,37 @@ export function calibrateCameraExtendedAsync(objectPoints: Point3[], imagePoints
 //cv::Mat 	cv::estimateAffine2D (InputArray from, InputArray to, OutputArray inliers=noArray(), int method=RANSAC, double ransacReprojThreshold=3, size_t maxIters=2000, double confidence=0.99, size_t refineIters=10)
 // 	Computes an optimal affine transformation between two 2D point sets. More...
 // 
+
+export interface EstimateAffine2DRet {
+    out: Mat;
+    inliers: Mat;
+}
+
 //cv::Mat 	cv::estimateAffine2D (InputArray pts1, InputArray pts2, OutputArray inliers, const UsacParams &params)
-export function estimateAffine2D(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): { out: Mat, inliers: Mat };
-export function estimateAffine2DAsync(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): Promise<{ out: Mat, inliers: Mat }>;
+export function estimateAffine2D(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): EstimateAffine2DRet;
+export function estimateAffine2DAsync(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): Promise<EstimateAffine2DRet>;
 
 //int 	cv::estimateAffine3D (InputArray src, InputArray dst, OutputArray out, OutputArray inliers, double ransacThreshold=3, double confidence=0.99)
 // 	Computes an optimal affine transformation between two 3D point sets. More...
 // 
 //cv::Mat 	cv::estimateAffine3D (InputArray src, InputArray dst, double *scale=nullptr, bool force_rotation=true)
 // 	Computes an optimal affine transformation between two 3D point sets. More...
-export function estimateAffine3D(src: Point3[], dst: Point3[], ransacThreshold?: number, confidence?: number): { returnValue: number, out: Mat, inliers: Mat };
-export function estimateAffine3D(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): { out: Mat, inliers: Mat };
-export function estimateAffine3DAsync(src: Point3[], dst: Point3[], ransacThreshold?: number, confidence?: number): Promise<{ returnValue: number, out: Mat, inliers: Mat }>;
-export function estimateAffine3DAsync(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): Promise<{ out: Mat, inliers: Mat }>;
+
+export interface EstimateAffine3DRet {
+    returnValue: number; // optional ?
+    out: Mat;
+    inliers: Mat;
+}
+
+export function estimateAffine3D(src: Point3[], dst: Point3[], ransacThreshold?: number, confidence?: number): EstimateAffine3DRet;
+export function estimateAffine3D(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): EstimateAffine3DRet;
+export function estimateAffine3DAsync(src: Point3[], dst: Point3[], ransacThreshold?: number, confidence?: number): Promise<EstimateAffine3DRet>;
+export function estimateAffine3DAsync(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): Promise<EstimateAffine3DRet>;
 
 //cv::Mat 	cv::estimateAffinePartial2D (InputArray from, InputArray to, OutputArray inliers=noArray(), int method=RANSAC, double ransacReprojThreshold=3, size_t maxIters=2000, double confidence=0.99, size_t refineIters=10)
 // 	Computes an optimal limited affine transformation with 4 degrees of freedom between two 2D point sets. More...
-export function estimateAffinePartial2D(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): { out: Mat, inliers: Mat };
-export function estimateAffinePartial2DAsync(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): Promise<{ out: Mat, inliers: Mat }>;
+export function estimateAffinePartial2D(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number):EstimateAffine2DRet;
+export function estimateAffinePartial2DAsync(from: Point2[], to: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number, refineIters?: number): Promise<EstimateAffine2DRet>;
 
 
 //Scalar 	cv::estimateChessboardSharpness (InputArray image, Size patternSize, InputArray corners, float rise_distance=0.8F, bool vertical=false, OutputArray sharpness=noArray())
@@ -144,6 +181,14 @@ export function estimateAffinePartial2DAsync(from: Point2[], to: Point2[], metho
 //Mat 	cv::findFundamentalMat (InputArray points1, InputArray points2, OutputArray mask, const UsacParams &params)
 // 
 //Mat 	cv::findHomography (InputArray srcPoints, InputArray dstPoints, int method=0, double ransacReprojThreshold=3, OutputArray mask=noArray(), const int maxIters=2000, const double confidence=0.995)
+
+export interface FindHomographyRet {
+    homography: Mat;
+    mask: Mat;
+}
+
+export function findHomography(srcPoints: Point2[], dstPoints: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number): FindHomographyRet;
+
 // 	Finds a perspective transformation between two planes. More...
 // 
 //Mat 	cv::findHomography (InputArray srcPoints, InputArray dstPoints, OutputArray mask, int method=0, double ransacReprojThreshold=3)
@@ -204,12 +249,34 @@ export function estimateAffinePartial2DAsync(from: Point2[], to: Point2[], metho
 //double 	cv::sampsonDistance (InputArray pt1, InputArray pt2, InputArray F)
 // 	Calculates the Sampson Distance between two points. More...
 // 
+
+
+export interface SolveP3PRet {
+    returnValue: boolean;
+    rvecs: Mat[];
+    tvecs: Mat[];
+}
+
 //int 	cv::solveP3P (InputArray objectPoints, InputArray imagePoints, InputArray cameraMatrix, InputArray distCoeffs, OutputArrayOfArrays rvecs, OutputArrayOfArrays tvecs, int flags)
 // 	Finds an object pose from 3 3D-2D point correspondences. More...
-// 
+export function solveP3P(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], flags?: number): SolveP3PRet;
+export function solveP3PAsync(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], flags?: number): Promise<SolveP3PRet>;
+
+
+export interface SolvePnPRet {
+    returnValue: boolean;
+    rvec: Vec3;
+    tvec: Vec3;
+}
+
 //bool 	cv::solvePnP (InputArray objectPoints, InputArray imagePoints, InputArray cameraMatrix, InputArray distCoeffs, OutputArray rvec, OutputArray tvec, bool useExtrinsicGuess=false, int flags=SOLVEPNP_ITERATIVE)
 // 	Finds an object pose from 3D-2D point correspondences. More...
-// 
+export function solvePnP(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], useExtrinsicGuess?: boolean, flags?: number): SolvePnPRet;
+export function solvePnP(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], useExtrinsicGuess?: boolean, iterationsCount?: number, reprojectionError?: number, confidence?: number, flags?: number): SolvePnPRet;
+
+export function solvePnPAsync(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], useExtrinsicGuess?: boolean, flags?: number): Promise<SolvePnPRet>;
+export function solvePnPAsync(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], useExtrinsicGuess?: boolean, iterationsCount?: number, reprojectionError?: number, confidence?: number, flags?: number): Promise<SolvePnPRet>;
+
 //int 	cv::solvePnPGeneric (InputArray objectPoints, InputArray imagePoints, InputArray cameraMatrix, InputArray distCoeffs, OutputArrayOfArrays rvecs, OutputArrayOfArrays tvecs, bool useExtrinsicGuess=false, SolvePnPMethod flags=SOLVEPNP_ITERATIVE, InputArray rvec=noArray(), InputArray tvec=noArray(), OutputArray reprojectionError=noArray())
 // 	Finds an object pose from 3D-2D point correspondences. More...
 // 
@@ -218,6 +285,23 @@ export function estimateAffinePartial2DAsync(from: Point2[], to: Point2[], metho
 // 
 //bool 	cv::solvePnPRansac (InputArray objectPoints, InputArray imagePoints, InputOutputArray cameraMatrix, InputArray distCoeffs, OutputArray rvec, OutputArray tvec, OutputArray inliers, const UsacParams &params=UsacParams())
 // 
+
+export interface SolvePnPRansacRet extends SolvePnPRet {
+    inliers: number[];
+}
+
+export function solvePnPRansac(objectPoints: Point3[], imagePoints: Point2[], cameraMatrix: Mat, distCoeffs: number[], args: {
+    rvec: Vec3,
+    tvec: Vec3,
+    useExtrinsicGuess: boolean,
+    iterationsCount: number,
+    reprojectionError: number,
+    confidence: number,
+    flags: number,
+}): SolvePnPRansacRet;
+
+
+
 //void 	cv::solvePnPRefineLM (InputArray objectPoints, InputArray imagePoints, InputArray cameraMatrix, InputArray distCoeffs, InputOutputArray rvec, InputOutputArray tvec, TermCriteria criteria=TermCriteria(TermCriteria::EPS+TermCriteria::COUNT, 20, FLT_EPSILON))
 // 	Refine a pose (the translation and the rotation that transform a 3D point expressed in the object coordinate frame to the camera coordinate frame) from a 3D-2D point correspondences and starting from an initial solution. More...
 // 
@@ -228,8 +312,20 @@ export function estimateAffinePartial2DAsync(from: Point2[], to: Point2[], metho
 // 	Calibrates a stereo camera set up. This function finds the intrinsic parameters for each of the two cameras and the extrinsic parameters between the two cameras. More...
 //double 	cv::stereoCalibrate (InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints1, InputArrayOfArrays imagePoints2, InputOutputArray cameraMatrix1, InputOutputArray distCoeffs1, InputOutputArray cameraMatrix2, InputOutputArray distCoeffs2, Size imageSize, OutputArray R, OutputArray T, OutputArray E, OutputArray F, int flags=CALIB_FIX_INTRINSIC, TermCriteria criteria=TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 30, 1e-6))
 // 
-export function stereoCalibrate(objectPoints: Point3[], imagePoints1: Point2[], imagePoints2: Point2[], cameraMatrix1: Mat, distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], imageSize: Size, flags?: number, criteria?: TermCriteria): { returnValue: number, R: Mat, T: Vec3[], E: Mat, F: Mat, distCoeffs1: number[], distCoeffs2: number[] };
-export function stereoCalibrateAsync(objectPoints: Point3[], imagePoints1: Point2[], imagePoints2: Point2[], cameraMatrix1: Mat, distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], imageSize: Size, flags?: number, criteria?: TermCriteria): Promise<{ returnValue: number, R: Mat, T: Vec3[], E: Mat, F: Mat, distCoeffs1: number[], distCoeffs2: number[] }>;
+
+
+export interface stereoCalibrateRet {
+    returnValue: number;
+    R: Mat;
+    T: Vec3;// [];
+    E: Mat;
+    F: Mat;
+    distCoeffs1: number[];
+    distCoeffs2: number[];
+}
+
+export function stereoCalibrate(objectPoints: Point3[], imagePoints1: Point2[], imagePoints2: Point2[], cameraMatrix1: Mat, distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], imageSize: Size, flags?: number, criteria?: TermCriteria): stereoCalibrateRet;
+export function stereoCalibrateAsync(objectPoints: Point3[], imagePoints1: Point2[], imagePoints2: Point2[], cameraMatrix1: Mat, distCoeffs1: number[], cameraMatrix2: Mat, distCoeffs2: number[], imageSize: Size, flags?: number, criteria?: TermCriteria): Promise<stereoCalibrateRet>;
 
 
 //void 	cv::stereoRectify (InputArray cameraMatrix1, InputArray distCoeffs1, InputArray cameraMatrix2, InputArray distCoeffs2, Size imageSize, InputArray R, InputArray T, OutputArray R1, OutputArray R2, OutputArray P1, OutputArray P2, OutputArray Q, int flags=CALIB_ZERO_DISPARITY, double alpha=-1, Size newImageSize=Size(), Rect *validPixROI1=0, Rect *validPixROI2=0)
@@ -238,8 +334,13 @@ export function stereoCalibrateAsync(objectPoints: Point3[], imagePoints1: Point
 //bool 	cv::stereoRectifyUncalibrated (InputArray points1, InputArray points2, InputArray F, Size imgSize, OutputArray H1, OutputArray H2, double threshold=5)
 // 	Computes a rectification transform for an uncalibrated stereo camera. More...
 
-export function stereoRectifyUncalibrated(points1: Point2[], points2: Point2[], F: Mat, imageSize: Size, threshold?: number): { returnValue: boolean, H1: Mat, H2: Mat };
-export function stereoRectifyUncalibratedAsync(points1: Point2[], points2: Point2[], F: Mat, imageSize: Size, threshold?: number): Promise<{ returnValue: boolean, H1: Mat, H2: Mat }>;
+export interface StereoRectifyUncalibratedRet  {
+    returnValue: boolean;
+    H1: Mat;
+    H2: Mat;
+}
+export function stereoRectifyUncalibrated(points1: Point2[], points2: Point2[], F: Mat, imageSize: Size, threshold?: number): StereoRectifyUncalibratedRet;
+export function stereoRectifyUncalibratedAsync(points1: Point2[], points2: Point2[], F: Mat, imageSize: Size, threshold?: number): Promise<StereoRectifyUncalibratedRet>;
 
 
 

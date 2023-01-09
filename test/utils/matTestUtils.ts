@@ -7,19 +7,22 @@ import { assertPropsWithValue } from './testUtils';
 export const dangerousDeepEquals = (obj0: any, obj1: any) => JSON.stringify(obj0) === JSON.stringify(obj1);
 
 const normalizeValue = (val: number | Vec4 | Array<number>) => ((val as Vec4).x !== undefined ? [(val as Vec4).w, (val as Vec4).x, (val as Vec4).y, (val as Vec4).z]
-  : ((val as Array<number>).length !== 4 ? [undefined, val[0], val[1], val[2]] : val)
+  : ((val as Array<number>).length !== 4 ? [undefined, (val as number[])[0], (val as number[])[1], (val as number[])[2]] : val)
 );
 
-export const AssertMatValueEquals = (cmpFunc) => (val0: number | number[], val1: number | number[]): void => {
+// eslint-disable-next-line no-unused-vars
+type Comparator<T> = (a: T, b: T) => boolean;
+
+export const AssertMatValueEquals = (cmpFunc: Comparator<number | number[] | Vec4>) => (val0: number | number[], val1: number | number[]): void => {
   assert(typeof val0 === typeof val1, 'expected mat values to have same type');
   if (typeof val0 === 'number') {
-    assert(cmpFunc(val0, val1), 'expected mat flat values to be equal');
+    assert(cmpFunc(val0, val1 as number), 'expected mat flat values to be equal');
   } else {
     assert(typeof val0 === 'object', 'expected val0 to be an object');
     assert(typeof val1 === 'object', 'expected val1 to be an object');
 
-    const v0 = normalizeValue(val0);
-    const v1 = normalizeValue(val1);
+    const v0 = normalizeValue(val0) as number[];
+    const v1 = normalizeValue(val1) as number[];
     [0, 1, 2, 3].forEach((n) => assert(cmpFunc(v0[n], v1[n]), `expected mat values to be equal at index ${n}`));
   }
 };

@@ -38,8 +38,7 @@ export function calcHist(img: Mat, histAxes: HistAxes[], mask?: Mat): Mat;
 export function calcHistAsync(img: Mat, histAxes: HistAxes[], mask?: Mat): Promise<Mat>;
 
 export function canny(dx: Mat, dy: Mat, threshold1: number, threshold2: number, L2gradient?: boolean): Mat;
-export function composeRT(rvec1: Vec3, tvec1: Vec3, rvec2: Vec3, tvec2: Vec3): { rvec3: Vec3, tvec3: Vec3, dr3dr1: Mat, dr3dt1: Mat, dr3dr2: Mat, dr3dt2: Mat, dt3dr1: Mat, dt3dt1: Mat, dt3dr2: Mat, dt3dt2: Mat };
-export function composeRTAsync(rvec1: Vec3, tvec1: Vec3, rvec2: Vec3, tvec2: Vec3): Promise<{ rvec3: Vec3, tvec3: Vec3, dr3dr1: Mat, dr3dt1: Mat, dr3dr2: Mat, dr3dt2: Mat, dt3dr1: Mat, dt3dt1: Mat, dt3dr2: Mat, dt3dt2: Mat }>;
+
 export function computeCorrespondEpilines(points: Point2[], whichImage: number, F: Mat): Vec3[];
 export function computeCorrespondEpilinesAsync(points: Point2[], whichImage: number, F: Mat): Promise<Vec3[]>;
 
@@ -51,11 +50,13 @@ export function drawMatches(img1: Mat, img2: Mat, keyPoints1: KeyPoint[], keyPoi
 export function fastNlMeansDenoisingColored(src: Mat, h?: number, hColor?: number, templateWindowSize?: number, searchWindowSize?: number): Mat;
 export function inpaint(src: Mat, mask: Mat, inpaintRadius: number, flags: number): Mat;
 export function inpaintAsync(src: Mat, mask: Mat, inpaintRadius: number, flags: number): Promise<Mat>;
+
 export function findEssentialMat(points1: Point2[], points2: Point2[], focal?: number, pp?: Point2, method?: number, prob?: number, threshold?: number): { E: Mat, mask: Mat };
 export function findEssentialMatAsync(points1: Point2[], points2: Point2[], focal?: number, pp?: Point2, method?: number, prob?: number, threshold?: number): Promise<{ E: Mat, mask: Mat }>;
+
 export function findFundamentalMat(points1: Point2[], points2: Point2[], method?: number, param1?: number, param2?: number): { F: Mat, mask: Mat };
 export function findFundamentalMatAsync(points1: Point2[], points2: Point2[], method?: number, param1?: number, param2?: number): Promise<{ F: Mat, mask: Mat }>;
-export function findHomography(srcPoints: Point2[], dstPoints: Point2[], method?: number, ransacReprojThreshold?: number, maxIters?: number, confidence?: number): { homography: Mat, mask: Mat };
+
 export function fitLine(points: Point2[], distType: number, param: number, reps: number, aeps: number): Vec4;
 export function fitLine(points: Point3[], distType: number, param: number, reps: number, aeps: number): number[];
 export function getAffineTransform(srcPoints: Point2[], dstPoints: Point2[]): Mat;
@@ -84,6 +85,7 @@ export function getTextSizeAsync(text: string, fontFace: number, fontScale: numb
 
 export function getValidDisparityROI(roi1: Rect[], roi2: Rect[], minDisparity: number, numberOfDisparities: number, SADWindowSize: number): Rect;
 export function getValidDisparityROIAsync(roi1: Rect[], roi2: Rect[], minDisparity: number, numberOfDisparities: number, SADWindowSize: number): Promise<Rect>;
+
 export function goodFeaturesToTrack(mat: Mat, maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Point2[];
 export function goodFeaturesToTrackAsync(mat: Mat, maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Promise<Point2[]>;
 
@@ -129,13 +131,16 @@ export function plot1DHist(hist: Mat, plotImg: Mat, color: Vec3, lineType?: numb
 export function getNumThreads(): number;
 export function setNumThreads(nthreads: number): void;
 export function getThreadNum(): number;
+
 export function projectPoints(objectPoints: Point3[], imagePoints: Point2[], rvec: Vec3, tvec: Vec3, cameraMatrix: Mat, distCoeffs: number[], aspectRatio?: number): { imagePoints: Point2[], jacobian: Mat };
 export function projectPointsAsync(objectPoints: Point3[], imagePoints: Point2[], rvec: Vec3, tvec: Vec3, cameraMatrix: Mat, distCoeffs: number[], aspectRatio?: number): Promise<{ imagePoints: Point2[], jacobian: Mat }>;
 
 export function recoverPose(E: Mat, points1: Point2[], points2: Point2[], focal?: number, pp?: Point2, mask?: Mat): { returnValue: number, R: Mat, T: Vec3 };
 export function recoverPoseAsync(E: Mat, points1: Point2[], points2: Point2[], focal?: number, pp?: Point2, mask?: Mat): Promise<{ returnValue: number, R: Mat, T: Vec3 }>;
+
 export function sampsonDistance(pt1: Vec2, pt2: Vec2, F: Mat): number;
 export function sampsonDistanceAsync(pt1: Vec2, pt2: Vec2, F: Mat): Promise<number>;
+
 export function seamlessClone(src: Mat, dst: Mat, mask: Mat, p: Point2, flags: number): Mat;
 export function seamlessCloneAsync(src: Mat, dst: Mat, mask: Mat, p: Point2, flags: number): Promise<Mat>;
 

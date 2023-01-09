@@ -1,11 +1,12 @@
 import { expect } from 'chai';
+import { Vec } from '../../../../typings';
 import { assertError, assertPropsWithValue } from '../../../utils/testUtils';
 import { TestContext } from '../../model';
 
 export default function (args: TestContext) {
   const { cv } = args;
 
-  const OperatorRequiresArg = (vec) => (func, isScalar?: boolean) => {
+  const OperatorRequiresArg0 = (vec: Vec) => (func: keyof Vec, isScalar?: boolean) => {
     it('should throw if no args', () => {
       assertError(
         () => vec[func].bind(vec)(),
@@ -19,7 +20,7 @@ export default function (args: TestContext) {
       const vec0 = new cv.Vec2(100, 200);
       const vec1 = new cv.Vec2(25, 50);
       const vec2 = new cv.Vec2(5, 4);
-      const operatorRequiresArg = OperatorRequiresArg(vec0);
+      const operatorRequiresArg = OperatorRequiresArg0(vec0);
       describe('add', () => {
         operatorRequiresArg('add');
 
@@ -106,7 +107,7 @@ export default function (args: TestContext) {
       const vec0 = new cv.Vec3(100, 200, 300);
       const vec1 = new cv.Vec3(25, 50, 75);
       const vec2 = new cv.Vec3(5, 4, 3);
-      const operatorRequiresArg = OperatorRequiresArg(vec0);
+      const operatorRequiresArg = OperatorRequiresArg0(vec0);
       describe('add', () => {
         operatorRequiresArg('add');
 
@@ -201,7 +202,7 @@ export default function (args: TestContext) {
       const vec0 = new cv.Vec4(50, 100, 200, 300);
       const vec1 = new cv.Vec4(10, 25, 50, 75);
       const vec2 = new cv.Vec4(2, 5, 4, 3);
-      const operatorRequiresArg = OperatorRequiresArg(vec0);
+      const operatorRequiresArg = OperatorRequiresArg0(vec0);
       describe('add', () => {
         operatorRequiresArg('add');
 
@@ -306,7 +307,7 @@ export default function (args: TestContext) {
       const vec0 = new cv.Vec6(50, 100, 200, 300, 400, 500);
       const vec1 = new cv.Vec6(10, 25, 50, 75, 100, 125);
       const vec2 = new cv.Vec6(2, 5, 4, 3, 2, 1);
-      const operatorRequiresArg = OperatorRequiresArg(vec0);
+      const operatorRequiresArg = OperatorRequiresArg0(vec0);
       describe('add', () => {
         operatorRequiresArg('add');
 

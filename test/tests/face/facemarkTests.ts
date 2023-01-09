@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { expect } from 'chai';
-import { FacemarkAAM, FacemarkAAMParams, FacemarkLBF, FacemarkLBFParams, Point2, Rect } from '../../../typings';
+import {
+  FacemarkAAM, FacemarkAAMParams, FacemarkLBF, FacemarkLBFParams, Point2, Rect,
+} from '../../../typings';
 import { generateAPITests } from '../../utils/generateAPITests';
 import { clearTmpData, getTmpDataFilePath } from '../../utils/testUtils';
 import { TestContext } from '../model';

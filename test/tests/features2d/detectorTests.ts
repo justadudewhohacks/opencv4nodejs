@@ -75,7 +75,7 @@ export default function (args: TestContext) {
         getRequiredArgs: () => ([
           getTestImg250(),
         ]),
-        expectOutput: (keyPoints) => {
+        expectOutput: (keyPoints: KeyPoint[]) => {
           expect(keyPoints).to.be.a('array');
           assert(keyPoints.length > 0, 'no KeyPoints detected');
           keyPoints.forEach((kp) => assert(kp instanceof cv.KeyPoint));

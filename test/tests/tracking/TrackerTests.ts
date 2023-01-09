@@ -1,9 +1,10 @@
 import { expect } from 'chai';
+import { Mat, TrackerBoosting, TrackerCSRT, TrackerKCF, TrackerMedianFlow, TrackerMIL, TrackerMOSSE, TrackerTLD } from '../../../typings';
 import { TestContext } from '../model';
 
-type TrackerNames = 'TrackerBoosting' | 'TrackerMedianFlow' | 'TrackerMIL' | 'TrackerTLD' | 'TrackerKCF' | 'TrackerCSRT' | 'TrackerMOSSE';
+type TrackerNames = 'TrackerBoosting' | 'TrackerMIL' | 'TrackerKCF' | 'TrackerCSRT' | 'TrackerMedianFlow' | 'TrackerTLD' | 'TrackerMOSSE';
 
-const expectImplementsMethods = (tracker) => {
+const expectImplementsMethods = (tracker: TrackerBoosting | TrackerMedianFlow | TrackerMIL | TrackerTLD | TrackerKCF | TrackerCSRT | TrackerMOSSE) => {
   expect(tracker).to.have.property('clear').to.be.a('function');
   expect(tracker).to.have.property('init').to.be.a('function');
   expect(tracker).to.have.property('update').to.be.a('function');
@@ -18,10 +19,15 @@ export default function (args: TestContext) {
     getTestImg,
   } = args;
 
-  const TrackerTestGenerator = (getTestImg2) => (trackerName: TrackerNames) => {
+  const TrackerTestGenerator = (getTestImg2: () => Mat) => (trackerName: TrackerNames) => {
     // eslint-disable-next-line no-unused-vars
     const newTracker = (_arg2?: unknown) => new cv[trackerName]();
-    const newTrackerParams = () => new cv[`${trackerName}Params`]();
+    const newTrackerParams = () => {
+      if (trackerName === 'TrackerBoosting' || trackerName === 'TrackerKCF' || trackerName === 'TrackerMIL') {
+        return new cv[`${trackerName}Params`]();
+      }
+      throw Error(`non supported ${trackerName}params`);
+    };
 
     describe(trackerName, () => {
       describe('constructor', () => {
@@ -167,7 +173,8 @@ export default function (args: TestContext) {
 
       it('returns bounding box', () => {
         const tracker = new cv.MultiTracker();
-        const methods = ['addMIL', 'addBOOSTING', 'addMEDIANFLOW', 'addTLD', 'addKCF'];
+        const methods0 = ['addMIL', 'addBOOSTING', 'addMEDIANFLOW', 'addTLD', 'addKCF'] as const;
+        const methods = [...methods0] as Array <typeof methods0[number] | 'addCSRT' | 'addMOSSE'>;
         if (hasKCF) {
           methods.push('addKCF');
         }

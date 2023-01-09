@@ -99,6 +99,43 @@ export interface ConnectedComponentsWithStatsRet {
   centroids: Mat;
 }
 
+export interface DecomposeHomographyMatRet {
+  returnValue: number;
+  rotations: Mat[];
+  translations: Mat[];
+  normals: Mat[];
+}
+
+export interface CorrectMatchesRet {
+  newPoints1: Point2[];
+  newPoints2: Point2[]
+}
+
+export interface DecomposeEssentialMatRet {
+  R1: Mat;
+  R2: Mat;
+  T: Vec3;
+}
+
+export interface DecomposeProjectionMatrixRet {
+  cameraMatrix: Mat;
+  rotMatrix: Mat;
+  transVect: Vec4;
+  rotMatrixX: Mat;
+  rotMatrixY: Mat;
+  rotMatrixZ: Mat;
+  eulerAngles: Mat;
+}
+
+export interface RqDecomp3x3Ret {
+  returnValue: Vec3;
+  mtxR: Mat;
+  mtxQ: Mat;
+  Qx: Mat;
+  Qy: Mat;
+  Qz: Mat;
+}
+
 export class Mat {
   /**
    * Mat height like python .shape[0]
@@ -243,20 +280,25 @@ export class Mat {
   cornerMinEigenValAsync(blockSize: number, ksize?: number, borderType?: number): Promise<Mat>;
   cornerSubPix(corners: Point2[], winSize: Size, zeroZone: Size, criteria: TermCriteria): Point2[];
   cornerSubPixAsync(corners: Point2[], winSize: Size, zeroZone: Size, criteria: TermCriteria): Promise<Point2[]>;
-  correctMatches(points1: Point2[], points2: Point2[]): { newPoints1: Point2[], newPoints2: Point2[] };
-  correctMatchesAsync(points1: Point2[], points2: Point2[]): Promise<{ newPoints1: Point2[], newPoints2: Point2[] }>;
+  
+  correctMatches(points1: Point2[], points2: Point2[]): CorrectMatchesRet;
+  correctMatchesAsync(points1: Point2[], points2: Point2[]): Promise<CorrectMatchesRet>;
+  
   countNonZero(): number;
   countNonZeroAsync(): Promise<number>;
   cvtColor(code: number, dstCn?: number): Mat;
   cvtColorAsync(code: number, dstCn?: number): Promise<Mat>;
   dct(flags?: number): Mat;
   dctAsync(flags?: number): Promise<Mat>;
-  decomposeEssentialMat(): { R1: Mat, R2: Mat, T: Vec3 };
-  decomposeEssentialMatAsync(): Promise<{ R1: Mat, R2: Mat, T: Vec3 }>;
-  decomposeHomographyMat(K: Mat): { returnValue: number, rotations: Mat[], translations: Mat[], normals: Mat[] };
-  decomposeHomographyMatAsync(K: Mat): Promise<{ returnValue: number, rotations: Mat[], translations: Mat[], normals: Mat[] }>;
-  decomposeProjectionMatrix(): { cameraMatrix: Mat, rotMatrix: Mat, transVect: Vec4, rotMatrixX: Mat, rotMatrixY: Mat, rotMatrixZ: Mat, eulerAngles: Mat };
-  decomposeProjectionMatrixAsync(): Promise<{ cameraMatrix: Mat, rotMatrix: Mat, transVect: Vec4, rotMatrixX: Mat, rotMatrixY: Mat, rotMatrixZ: Mat, eulerAngles: Mat }>;
+
+  decomposeEssentialMat(): DecomposeEssentialMatRet;
+  decomposeEssentialMatAsync(): Promise<DecomposeEssentialMatRet>;
+  
+  decomposeHomographyMat(K: Mat): DecomposeHomographyMatRet;
+  decomposeHomographyMatAsync(K: Mat): Promise<DecomposeHomographyMatRet>;
+  
+  decomposeProjectionMatrix(): DecomposeProjectionMatrixRet;
+  decomposeProjectionMatrixAsync(): Promise<DecomposeProjectionMatrixRet>;
   determinant(): number;
   dft(flags?: number, nonzeroRows?: number): Mat;
   dftAsync(flags?: number, nonzeroRows?: number): Promise<Mat>;
@@ -561,8 +603,8 @@ export class Mat {
   rodriguesAsync(): Promise<{ dst: Mat, jacobian: Mat }>;
   rotate(rotateCode: number): Mat;
   rotateAsync(rotateCode: number): Promise<Mat>;
-  rqDecomp3x3(): { returnValue: Vec3, mtxR: Mat, mtxQ: Mat, Qx: Mat, Qy: Mat, Qz: Mat };
-  rqDecomp3x3Async(): Promise<{ returnValue: Vec3, mtxR: Mat, mtxQ: Mat, Qx: Mat, Qy: Mat, Qz: Mat }>;
+  rqDecomp3x3(): RqDecomp3x3Ret;
+  rqDecomp3x3Async(): Promise<RqDecomp3x3Ret>;
   scharr(ddepth: number, dx: number, dy: number, scale?: number, delta?: number, borderType?: number): Mat;
   scharrAsync(ddepth: number, dx: number, dy: number, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
   seamlessClone(dst: Mat, mask: Mat, p: Point2, flags: number): Mat;

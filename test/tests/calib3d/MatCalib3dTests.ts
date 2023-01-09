@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import {
-  CalibrationMatrixValues, Mat, OptimalNewCameraMatrix, StereoRectify,
+  CalibrationMatrixValues, CorrectMatchesRet, DecomposeEssentialMatRet, DecomposeHomographyMatRet, DecomposeProjectionMatrixRet, Mat, OptimalNewCameraMatrix, RqDecomp3x3Ret, StereoRectify, Vec3,
 } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
 import { assertMetaData } from '../../utils/matTestUtils';
@@ -43,7 +43,7 @@ export default (args: TestContext) => {
   });
 
   describe('rqDecomp3x3', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: RqDecomp3x3Ret) => {
       expect(res).to.have.property('returnValue');
       expectToBeVec3(res.returnValue);
       expect(res).to.have.property('mtxR').to.be.instanceOf(cv.Mat);
@@ -67,7 +67,7 @@ export default (args: TestContext) => {
   });
 
   describe('decomposeProjectionMatrix', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: DecomposeProjectionMatrixRet) => {
       expect(res).to.have.property('cameraMatrix').to.be.instanceOf(cv.Mat);
       assertMetaData(res.cameraMatrix)(3, 3, cv.CV_64F);
       expect(res).to.have.property('rotMatrix').to.be.instanceOf(cv.Mat);
@@ -323,7 +323,7 @@ export default (args: TestContext) => {
   });
 
   describe('decomposeEssentialMat', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: DecomposeEssentialMatRet) => {
       expect(res).to.have.property('R1').to.be.instanceOf(cv.Mat);
       assertMetaData(res.R1)(3, 3, cv.CV_64F);
       expect(res).to.have.property('R2').to.be.instanceOf(cv.Mat);
@@ -341,7 +341,7 @@ export default (args: TestContext) => {
   });
 
   describe('triangulatePoints', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       expect(res).to.be.instanceOf(cv.Mat);
       assertMetaData(res)(4, imagePoints.length, cv.CV_64F);
     };
@@ -360,7 +360,7 @@ export default (args: TestContext) => {
   });
 
   describe('correctMatches', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: CorrectMatchesRet) => {
       expect(res).to.have.property('newPoints1').to.be.an('array').lengthOf(imagePoints.length);
       expect(res).to.have.property('newPoints2').to.be.an('array').lengthOf(imagePoints.length);
       res.newPoints1.forEach((pt) => expectToBeVec2(pt));
@@ -424,7 +424,7 @@ export default (args: TestContext) => {
   });
 
   describe('reprojectImageTo3D', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       expect(res).to.be.instanceOf(cv.Mat);
       assertMetaData(res)(200, 200, cv.CV_32FC3);
     };
@@ -447,7 +447,7 @@ export default (args: TestContext) => {
   });
 
   describe('decomposeHomographyMat', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: DecomposeHomographyMatRet) => {
       expect(res).to.have.property('returnValue').to.be.a('number');
       expect(res).to.have.property('rotations').to.be.an('array');
       expect(res.rotations.length).to.be.above(0);
@@ -474,7 +474,7 @@ export default (args: TestContext) => {
   });
 
   (cvVersionLowerThan(3, 1, 0) ? describe.skip : describe)('findEssentialMat', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: { E: Mat, mask: Mat }) => {
       expect(res).to.have.property('E').to.be.instanceOf(cv.Mat);
       assertMetaData(res.E)(3, 3, cv.CV_64F);
       expect(res).to.have.property('mask').to.be.instanceOf(cv.Mat);
@@ -498,7 +498,7 @@ export default (args: TestContext) => {
   });
 
   (cvVersionLowerThan(3, 1, 0) ? describe.skip : describe)('recoverPose', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: { returnValue: number, R: Mat, T: Vec3 }) => {
       expect(res).to.have.property('returnValue').to.be.a('Number');
       expect(res).to.have.property('R').to.be.instanceOf(cv.Mat);
       assertMetaData(res.R)(3, 3, cv.CV_64F);

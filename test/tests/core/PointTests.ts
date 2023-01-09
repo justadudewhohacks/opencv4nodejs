@@ -1,11 +1,12 @@
 import { expect } from 'chai';
+import { Point, Point2 } from '../../../typings';
 import { assertError, assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
 export default function (args: TestContext) {
   const { cv } = args;
 
-  const OperatorRequiresArg = (pt) => (func, isScalar?: boolean) => {
+  const OperatorRequiresArg = (pt: Point2) => (func: keyof Point, isScalar?: boolean) => {
     it('should throw if no args', () => {
       assertError(
         () => pt[func].bind(pt)(),

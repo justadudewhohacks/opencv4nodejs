@@ -1,4 +1,7 @@
 import { expect } from 'chai';
+import {
+  CalibrateCameraRet, ComposeRTRet, EstimateAffine2DRet, EstimateAffine3DRet, FindHomographyRet, Mat, Rect, SolveP3PRet, SolvePnPRansacRet, SolvePnPRet, stereoCalibrateRet, StereoRectifyUncalibratedRet, Vec3,
+} from '../../../typings';
 import { generateAPITests } from '../../utils/generateAPITests';
 import { assertMetaData } from '../../utils/matTestUtils';
 import { assertPropsWithValue, expectToBeVec3 } from '../../utils/testUtils';
@@ -43,7 +46,7 @@ export default (args: TestContext) => {
     const maxIters = 1000;
     const confidence = 0.9;
 
-    const expectOutput = (res) => {
+    const expectOutput = (res: FindHomographyRet) => {
       assertPropsWithValue(res.homography, { type: cv.CV_64F, rows: 3, cols: 3 });
     };
 
@@ -65,17 +68,17 @@ export default (args: TestContext) => {
   });
 
   describe('composeRT', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: ComposeRTRet) => {
       expect(res).to.have.property('rvec3');
       expectToBeVec3(res.rvec3);
       expect(res).to.have.property('tvec3');
       expectToBeVec3(res.tvec3);
-      ['dr3dr1', 'dr3dt1', 'dr3dr2', 'dr3dt2', 'dt3dr1', 'dt3dt1', 'dt3dr2', 'dt3dt2']
-        .forEach((prop) => {
-          expect(res).to.have.property(prop);
-          expect(res[prop]).to.be.instanceOf(cv.Mat);
-          assertMetaData(res[prop])(3, 3, cv.CV_64F);
-        });
+      const fields = ['dr3dr1', 'dr3dt1', 'dr3dr2', 'dr3dt2', 'dt3dr1', 'dt3dt1', 'dt3dr2', 'dt3dt2'] as const;
+      fields.forEach((prop) => {
+        expect(res).to.have.property(prop);
+        expect(res[prop]).to.be.instanceOf(cv.Mat);
+        assertMetaData(res[prop])(3, 3, cv.CV_64F);
+      });
     };
 
     const rvec1 = new cv.Vec3(0.5, 0, 0);
@@ -97,7 +100,7 @@ export default (args: TestContext) => {
   });
 
   describe('solvePxP', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: SolvePnPRet) => {
       expect(res).to.have.property('returnValue').to.be.a('Boolean');
       expect(res).to.have.property('rvec');
       expectToBeVec3(res.rvec);
@@ -142,7 +145,7 @@ export default (args: TestContext) => {
           ['confidence', 0.9],
           ['flags', cv.SOLVEPNP_DLS],
         ]),
-        expectOutput: (res) => {
+        expectOutput: (res: SolvePnPRansacRet) => {
           expectOutput(res);
           expect(res).to.have.property('inliers').to.be.an('array');
         },
@@ -162,7 +165,7 @@ export default (args: TestContext) => {
         getOptionalParams: () => ([
           cv.SOLVEPNP_DLS,
         ]),
-        expectOutput: (res) => {
+        expectOutput: (res: SolveP3PRet) => {
           expect(res).to.have.property('returnValue').to.be.a('Boolean');
           expect(res).to.have.property('rvecs').to.be.an('array');
           expect(res.rvecs.length).to.be.above(0);
@@ -228,7 +231,7 @@ export default (args: TestContext) => {
   });
 
   describe('calibrateCamera', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: CalibrateCameraRet) => {
       expect(res).to.have.property('returnValue').to.be.a('Number');
       expect(res).to.have.property('rvecs').to.be.an('array').lengthOf(2);
       res.rvecs.forEach((vec) => expectToBeVec3(vec));
@@ -287,7 +290,7 @@ export default (args: TestContext) => {
   });
 
   describe('stereoCalibrate', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: stereoCalibrateRet) => {
       expect(res).to.have.property('returnValue').to.be.a('Number');
       expect(res).to.have.property('R').to.be.instanceOf(cv.Mat);
       assertMetaData(res.R)(3, 3, cv.CV_64F);
@@ -325,7 +328,7 @@ export default (args: TestContext) => {
   });
 
   describe('stereoRectifyUncalibrated', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: StereoRectifyUncalibratedRet) => {
       expect(res).to.have.property('returnValue').to.be.a('Boolean');
       expect(res).to.have.property('H1').to.be.instanceOf(cv.Mat);
       assertMetaData(res.H1)(3, 3, cv.CV_64F);
@@ -354,7 +357,7 @@ export default (args: TestContext) => {
   });
 
   describe('findFundamentalMat', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: { F: Mat, mask: Mat }) => {
       expect(res).to.have.property('F').to.be.instanceOf(cv.Mat);
       assertMetaData(res.F)(3, 3, cv.CV_64F);
       expect(res).to.have.property('mask').to.be.instanceOf(cv.Mat);
@@ -378,7 +381,7 @@ export default (args: TestContext) => {
   });
 
   describe('findEssentialMat', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: { E: Mat, mask: Mat }) => {
       expect(res).to.have.property('E').to.be.instanceOf(cv.Mat);
       assertMetaData(res.E)(3, 3, cv.CV_64F);
       expect(res).to.have.property('mask').to.be.instanceOf(cv.Mat);
@@ -404,7 +407,7 @@ export default (args: TestContext) => {
   });
 
   describe('recoverPose', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: { returnValue: number, R: Mat, T: Vec3 }) => {
       expect(res).to.have.property('returnValue').to.be.a('Number');
       expect(res).to.have.property('R').to.be.instanceOf(cv.Mat);
       assertMetaData(res.R)(3, 3, cv.CV_64F);
@@ -433,7 +436,7 @@ export default (args: TestContext) => {
   });
 
   describe('computeCorrespondEpilines', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: Vec3[]) => {
       expect(res).to.be.an('array').lengthOf(imagePoints.length);
       res.forEach((vec) => expectToBeVec3(vec));
     };
@@ -454,7 +457,7 @@ export default (args: TestContext) => {
   });
 
   describe('getValidDisparityROI', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: Rect) => {
       expect(res).to.be.instanceOf(cv.Rect);
       expect(res.height).to.not.equals(0);
       expect(res.width).to.not.equals(0);
@@ -483,7 +486,7 @@ export default (args: TestContext) => {
   });
 
   describe('estimateAffine3D', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: EstimateAffine3DRet) => {
       expect(res).to.have.property('returnValue').to.be.a('number');
       expect(res).to.have.property('out').to.be.instanceOf(cv.Mat);
       assertMetaData(res.out)(3, 4, cv.CV_64F);
@@ -524,7 +527,7 @@ export default (args: TestContext) => {
   });
 
   (cvVersionGreaterEqual(3, 2, 0) ? describe : describe.skip)('estimateAffine2D', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: EstimateAffine2DRet) => {
       expect(res).to.have.property('out').to.be.instanceOf(cv.Mat);
       assertMetaData(res.out)(2, 3, cv.CV_64F);
       expect(res).to.have.property('inliers').to.be.instanceOf(cv.Mat);
