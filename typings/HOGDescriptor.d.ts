@@ -3,7 +3,6 @@ import { Size } from './Size.d';
 import { Rect } from './Rect.d';
 import { Point2 } from './Point2.d';
 
-
 export interface HOGDescriptorArgs {
   winSize?: Size;
   blockSize?: Size;

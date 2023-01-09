@@ -1,12 +1,12 @@
+import { SIFTDetectorParams, SURFDetectorPrams } from '../../../typings';
 import detectorTestsFactory from '../features2d/detectorTests';
 import { TestContext } from '../model';
 
 export default function (ctxt: TestContext) {
-  const { cv, getTestImg } = ctxt;
-  const subCtxt = new TestContext(cv, () => getTestImg().resizeToMax(250));
-  const detectorTests = detectorTestsFactory(subCtxt);
+  const { cv } = ctxt;
+  const detectorTests = detectorTestsFactory(ctxt);
   describe('SIFTDetector', () => {
-    const defaults = {
+    const defaults: SIFTDetectorParams = {
       sigma: 1.6,
       edgeThreshold: 10,
       contrastThreshold: 0.04,
@@ -22,7 +22,7 @@ export default function (ctxt: TestContext) {
   });
 
   describe('SURFDetector', () => {
-    const defaults = {
+    const defaults: SURFDetectorPrams = {
       upright: false,
       extended: false,
       nOctaveLayers: 3,

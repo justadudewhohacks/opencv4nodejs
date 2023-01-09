@@ -1,4 +1,10 @@
 import { expect } from 'chai';
+import {
+  BFMatcher,
+  DescriptorMatch,
+  KeyPoint,
+  Mat,
+} from '../../../typings';
 import { assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
@@ -28,14 +34,14 @@ export default function (args: TestContext) {
   });
 
   describe('crossCheck match', () => {
-    let BFMatcher;
+    let bfMatcher: BFMatcher;
     const crossCheck = true;
 
-    let kazeKps;
-    let kazeDesc;
+    let kazeKps: KeyPoint[];
+    let kazeDesc: Mat;
 
     before(() => {
-      BFMatcher = new cv.BFMatcher(cv.NORM_L2, crossCheck);
+      bfMatcher = new cv.BFMatcher(cv.NORM_L2, crossCheck);
 
       const kaze = new cv.KAZEDetector();
       kazeKps = kaze.detect(getTestImg());
@@ -44,14 +50,14 @@ export default function (args: TestContext) {
 
     describe('match', () => {
       it('sync', () => {
-        const matches = BFMatcher.match(kazeDesc, kazeDesc);
+        const matches = bfMatcher.match(kazeDesc, kazeDesc);
         expect(kazeKps.length).to.be.above(0);
         expect(matches).to.be.an('array').lengthOf(kazeKps.length);
         matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
       });
 
       it('async', (done) => {
-        BFMatcher.matchAsync(kazeDesc, kazeDesc, (err, matches) => {
+        bfMatcher.matchAsync(kazeDesc, kazeDesc, (err: unknown, matches: DescriptorMatch[]) => {
           expect(kazeKps.length).to.be.above(0);
           expect(matches).to.be.an('array').lengthOf(kazeKps.length);
           matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
@@ -64,7 +70,7 @@ export default function (args: TestContext) {
       const k = 1; // k can only be 1 if crossCheck is true
 
       it('sync', () => {
-        const matches = BFMatcher.knnMatch(kazeDesc, kazeDesc, k);
+        const matches = bfMatcher.knnMatch(kazeDesc, kazeDesc, k);
         expect(kazeKps.length).to.be.above(0);
         expect(matches).to.be.an('array').lengthOf(kazeKps.length);
 
@@ -79,7 +85,7 @@ export default function (args: TestContext) {
       });
 
       it('async', (done) => {
-        BFMatcher.knnMatchAsync(kazeDesc, kazeDesc, k, (err, matches) => {
+        bfMatcher.knnMatchAsync(kazeDesc, kazeDesc, k, (err, matches) => {
           expect(kazeKps.length).to.be.above(0);
           expect(matches).to.be.an('array').lengthOf(kazeKps.length);
 
@@ -98,14 +104,14 @@ export default function (args: TestContext) {
   });
 
   describe('no crossCheck match', () => {
-    let BFMatcher;
+    let bfMatcher: BFMatcher;
     const crossCheck = false;
 
-    let kazeKps;
-    let kazeDesc;
+    let kazeKps: KeyPoint[];
+    let kazeDesc: Mat;
 
     before(() => {
-      BFMatcher = new cv.BFMatcher(cv.NORM_L2, crossCheck);
+      bfMatcher = new cv.BFMatcher(cv.NORM_L2, crossCheck);
 
       const kaze = new cv.KAZEDetector();
       kazeKps = kaze.detect(getTestImg());
@@ -114,14 +120,14 @@ export default function (args: TestContext) {
 
     describe('match', () => {
       it('sync', () => {
-        const matches = BFMatcher.match(kazeDesc, kazeDesc);
+        const matches = bfMatcher.match(kazeDesc, kazeDesc);
         expect(kazeKps.length).to.be.above(0);
         expect(matches).to.be.an('array').lengthOf(kazeKps.length);
         matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
       });
 
       it('async', (done) => {
-        BFMatcher.matchAsync(kazeDesc, kazeDesc, (err, matches) => {
+        bfMatcher.matchAsync(kazeDesc, kazeDesc, (err, matches) => {
           expect(kazeKps.length).to.be.above(0);
           expect(matches).to.be.an('array').lengthOf(kazeKps.length);
           matches.forEach((match) => expect(match).instanceOf(cv.DescriptorMatch));
@@ -134,7 +140,7 @@ export default function (args: TestContext) {
       const k = 5; // crossCheck off so k can be larger.
 
       it('sync', () => {
-        const matches = BFMatcher.knnMatch(kazeDesc, kazeDesc, k);
+        const matches = bfMatcher.knnMatch(kazeDesc, kazeDesc, k);
         expect(kazeKps.length).to.be.above(0);
         expect(matches).to.be.an('array').lengthOf(kazeKps.length);
 
@@ -147,7 +153,7 @@ export default function (args: TestContext) {
       });
 
       it('async', (done) => {
-        BFMatcher.knnMatchAsync(kazeDesc, kazeDesc, k, (err, matches) => {
+        bfMatcher.knnMatchAsync(kazeDesc, kazeDesc, k, (err, matches) => {
           expect(kazeKps.length).to.be.above(0);
           expect(matches).to.be.an('array').lengthOf(kazeKps.length);
           matches.forEach(

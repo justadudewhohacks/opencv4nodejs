@@ -46,11 +46,11 @@ export default function (ctxt: TestContext) {
     generateAPITests({
       getDut: () => cv,
       methodName: 'imread',
-      getRequiredArgs: () => ([
+      getRequiredArgs: (): string[] => ([
         getTestImagePath(),
       ]),
       getOptionalArg: () => flags,
-      expectOutput: (img) => {
+      expectOutput: (img: Mat) => {
         expect(img).to.be.instanceOf(cv.Mat);
         assertMetaData(img)(512, 512, cv.CV_8UC3);
       },

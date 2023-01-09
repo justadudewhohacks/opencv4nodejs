@@ -15,7 +15,6 @@ export class FacemarkAAMParams {
   constructor();
 }
 
-
 export class FacemarkAAMData {
   s0: string;
 }

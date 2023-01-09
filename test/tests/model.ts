@@ -44,15 +44,50 @@ const matTypeNames = [
 ];
 
 export class TestContext {
+  /**
+   * lerna cached image
+   */
+  private lerna512?: Mat;
+
+  /**
+   * people cached image
+   */
+  private people360?: Mat;
+
+  /**
+   * lerna cached image resized too 250
+   */
+  private lerna250?: Mat;
+
   public dataPrefix = '../data';
 
-  public getTestImg: () => Mat;
+  public getTestImg: () => Mat = () => {
+    if (!this.lerna512) {
+      const file = path.resolve(__dirname, '../utils/Lenna.data');
+      this.lerna512 = new this.cv.Mat(fs.readFileSync(file), 512, 512, this.cv.CV_8UC3);
+    }
+    return this.lerna512;
+  };
 
-  public getPeoplesTestImg?: () => Mat;
+  /**
+   * @returns lerna image resize to a 250 px square
+   */
+  public getTestImg250: () => Mat = () => {
+    if (!this.lerna250) {
+      this.lerna250 = this.getTestImg().resizeToMax(250);
+    }
+    return this.lerna250;
+  };
 
-  constructor(public cv: OpenCV, getTestImg: () => Mat, getPeoplesTestImg?: () => Mat) {
-    this.getTestImg = getTestImg;
-    this.getPeoplesTestImg = getPeoplesTestImg;
+  public getPeoplesTestImg: () => Mat = () => {
+    if (!this.people360) {
+      const file = path.resolve(__dirname, '../utils/people.data');
+      this.people360 = new this.cv.Mat(fs.readFileSync(file), 360, 640, this.cv.CV_8UC3);
+    }
+    return this.people360;
+  };
+
+  constructor(public cv: OpenCV) {
     this.generateClassMethodTests = generateClassMethodTestsFactory(cv);
   }
 
@@ -89,15 +124,5 @@ export class TestContext {
 
   public getTestVideoPath = (): string => {
     return `${this.dataPrefix}/traffic.mp4`;
-  };
-
-  public readTestImage = (): Mat => {
-    const file = path.resolve(__dirname, '../utils/Lenna.data');
-    return new this.cv.Mat(fs.readFileSync(file), 512, 512, this.cv.CV_8UC3);
-  };
-
-  public readPeoplesTestImage = (): Mat => {
-    const file = path.resolve(__dirname, '../utils/people.data');
-    return new this.cv.Mat(fs.readFileSync(file), 360, 640, this.cv.CV_8UC3);
   };
 }

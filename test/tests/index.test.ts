@@ -54,23 +54,6 @@ describe('cv', () => {
   // Object.keys(toTest).forEach((m) => { toTest[m] = false; });
   // toTest.img_hash = true;
 
-  let testImg = null;
-  let peoplesTestImg = null;
-
-  const getTestImg = () => {
-    if (testImg === null) {
-      throw new Error('getTestImg not defined, before hook not called yet');
-    }
-    return testImg;
-  };
-
-  const getPeoplesTestImg = () => {
-    if (peoplesTestImg === null) {
-      throw new Error('getPeoplesTestImg not defined, before hook not called yet');
-    }
-    return peoplesTestImg;
-  };
-
   let builtModules = modules.concat(xmodules);
   if (process.env.APPVEYOR_BUILD) {
     // OpenCV installed via choco does not include contrib modules
@@ -90,11 +73,12 @@ describe('cv', () => {
   //   )
   // })
 
-  const ctxt = new TestContext(cv, getTestImg, getPeoplesTestImg);
+  const ctxt = new TestContext(cv);
 
   before(() => {
-    testImg = ctxt.readTestImage();
-    peoplesTestImg = ctxt.readPeoplesTestImage();
+    // force images preload
+    ctxt.getTestImg();
+    ctxt.getPeoplesTestImg();
   });
 
   // dnn module for OpenCV 3.2 and lower not supported

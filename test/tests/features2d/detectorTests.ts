@@ -1,13 +1,27 @@
 import { assert, expect } from 'chai';
+import {
+  AGASTDetectorProps,
+  BRISKDetectorProps,
+  FeatureDetector,
+  GFTTDetectorProps,
+  KeyPoint,
+  MSERDetectorProps,
+  SIFTDetectorParams,
+  SURFDetectorPrams,
+} from '../../../typings';
 import { generateAPITests } from '../../utils/generateAPITests';
 import { assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
-export default function (args: TestContext) {
-  const { cv, getTestImg } = args;
+// type AllDetector = SURFDetector | SIFTDetector | AKAZEDetector | BRISKDetector | MSERDetector | ORBDetector;
 
-  return (defaults, customProps, Detector, implementsCompute = true) => {
-    const getDut = () => (typeof Detector === 'function' ? new Detector() : Detector);
+type DetectorProps = BRISKDetectorProps | GFTTDetectorProps | MSERDetectorProps | AGASTDetectorProps | SIFTDetectorParams | SURFDetectorPrams;
+
+export default function (args: TestContext) {
+  const { cv, getTestImg250 } = args;
+
+  return (defaults: DetectorProps, customProps, Detector, implementsCompute = true) => {
+    const getDut = (): FeatureDetector => (typeof Detector === 'function' ? new Detector() : Detector);
 
     describe('constructor', () => {
       if (defaults) {
@@ -57,7 +71,7 @@ export default function (args: TestContext) {
         methodName: 'detect',
         methodNameSpace: 'FeatureDetector',
         getRequiredArgs: () => ([
-          getTestImg(),
+          getTestImg250(),
         ]),
         expectOutput: (keyPoints) => {
           expect(keyPoints).to.be.a('array');
@@ -69,18 +83,18 @@ export default function (args: TestContext) {
 
     if (implementsCompute) {
       describe('compute', () => {
-        let dut;
-        let keyPoints;
+        let dut: FeatureDetector;
+        let keyPoints : KeyPoint[];
         before(() => {
           dut = getDut();
-          keyPoints = dut.detect(getTestImg());
+          keyPoints = dut.detect(getTestImg250());
         });
         generateAPITests({
           getDut,
           methodName: 'compute',
           methodNameSpace: 'FeatureDetector',
           getRequiredArgs: () => ([
-            getTestImg(),
+            getTestImg250(),
             keyPoints,
           ]),
           expectOutput: (desc) => {

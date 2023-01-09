@@ -1,4 +1,5 @@
 import { assert, expect } from 'chai';
+import { BRISKDetectorProps, GFTTDetectorProps, MSERDetectorProps } from '../../../typings';
 import { assertMetaData, isZeroMat } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 import detectorTestsFactory from './detectorTests';
@@ -48,7 +49,7 @@ export default function (ctxt: TestContext) {
   });
 
   describe('BRISKDetector', () => {
-    const defaults = {
+    const defaults: BRISKDetectorProps = {
       patternScale: 1.0,
       octaves: 3,
       thresh: 30,
@@ -79,7 +80,7 @@ export default function (ctxt: TestContext) {
   });
 
   describe('GFTTDetector', () => {
-    const defaults = {
+    const defaults: GFTTDetectorProps = {
       k: 0.04,
       harrisDetector: false,
       blockSize: 3,
@@ -116,7 +117,7 @@ export default function (ctxt: TestContext) {
   });
 
   describe('MSERDetector', () => {
-    const defaults = {
+    const defaults: MSERDetectorProps = {
       edgeBlurSize: 5,
       minMargin: 0.003,
       areaThreshold: 1.01,
