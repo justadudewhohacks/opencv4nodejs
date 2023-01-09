@@ -2,6 +2,7 @@ import path from 'path';
 import { expect } from 'chai';
 import { TestContext } from '../model';
 import { generateAPITests } from '../../utils/generateAPITests';
+import { OCRHMMClassifierEvalRet } from '../../../typings';
 
 export default function (args: TestContext) {
   const { cv, cvVersionGreaterEqual, getTestImg } = args;
@@ -18,7 +19,7 @@ export default function (args: TestContext) {
       getRequiredArgs: () => ([
         getTestImg().bgrToGray(),
       ]),
-      expectOutput: (ret) => {
+      expectOutput: (ret: OCRHMMClassifierEvalRet) => {
         expect(ret).to.have.property('classes').to.be.an('array');
         expect(ret).to.have.property('confidences').to.be.an('array');
       },

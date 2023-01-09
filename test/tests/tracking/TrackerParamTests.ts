@@ -1,4 +1,9 @@
-import { TrackerBoostingParams } from '../../../typings';
+import {
+  TrackerBoostingParams,
+  TrackerCSRTParams,
+  TrackerKCFParams,
+  TrackerMILParams,
+} from '../../../typings';
 import { assertPropsWithValue } from '../../utils/testUtils';
 import { TestContext } from '../model';
 
@@ -20,7 +25,7 @@ export default (args: TestContext) => {
   });
 
   (cvVersionGreaterEqual(3, 1, 0) ? it : it.skip)('TrackerKCFParams', () => {
-    const params = {
+    const params: TrackerKCFParams = {
       sigma: 0.9,
       lambda: 0.8,
       interp_factor: 0.7,
@@ -45,7 +50,7 @@ export default (args: TestContext) => {
   });
 
   (cvVersionGreaterEqual(3, 4, 1) ? it : it.skip)('TrackerCSRTParams', () => {
-    const params = {
+    const params: TrackerCSRTParams = {
       admm_iterations: 22,
       background_ratio: 3,
       cheb_attenuation: 43,
@@ -72,7 +77,7 @@ export default (args: TestContext) => {
       use_segmentation: false,
       weights_lr: 0.03,
       window_function: 'kaiser',
-    } as any;
+    };
     if (cvVersionGreaterEqual(3, 4, 4)) {
       params.psr_threshold = 0.4;
     }
@@ -84,7 +89,7 @@ export default (args: TestContext) => {
     assertPropsWithValue(trackerParams, params, floatSafe);
   });
   it('TrackerMILParams', () => {
-    const params = {
+    const params: TrackerMILParams = {
       samplerInitInRadius: 2.5,
       samplerSearchWinSize: 1.5,
       samplerTrackInRadius: 0.5,

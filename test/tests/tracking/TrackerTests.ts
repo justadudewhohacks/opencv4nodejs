@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 import { TestContext } from '../model';
 
+type TrackerNames = 'TrackerBoosting' | 'TrackerMedianFlow' | 'TrackerMIL' | 'TrackerTLD' | 'TrackerKCF' | 'TrackerCSRT' | 'TrackerMOSSE';
+
 const expectImplementsMethods = (tracker) => {
   expect(tracker).to.have.property('clear').to.be.a('function');
   expect(tracker).to.have.property('init').to.be.a('function');
@@ -16,7 +18,7 @@ export default function (args: TestContext) {
     getTestImg,
   } = args;
 
-  const TrackerTestGenerator = (getTestImg2) => (trackerName) => {
+  const TrackerTestGenerator = (getTestImg2) => (trackerName: TrackerNames) => {
     // eslint-disable-next-line no-unused-vars
     const newTracker = (_arg2?: unknown) => new cv[trackerName]();
     const newTrackerParams = () => new cv[`${trackerName}Params`]();
@@ -41,6 +43,7 @@ export default function (args: TestContext) {
 
       describe('init', () => {
         it('should throw if no args', () => {
+          // @ts-expect-error missing args
           expect(() => newTracker().init()).to.throw('Tracker::Init - Error: expected argument 0 to be of type');
         });
 
@@ -52,6 +55,7 @@ export default function (args: TestContext) {
 
       describe('update', () => {
         it('should throw if no args', () => {
+          // @ts-expect-error missing args
           expect(() => newTracker().update()).to.throw('Tracker::Update - Error: expected argument 0 to be of type');
         });
 
@@ -79,7 +83,7 @@ export default function (args: TestContext) {
 
   const generateTrackerTests = TrackerTestGenerator(getTestImg);
 
-  const trackerNames = [
+  const trackerNames: TrackerNames[] = [
     'TrackerBoosting',
     'TrackerMedianFlow',
     'TrackerMIL',

@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { Mat } from '../../../typings';
 import { assertMetaData } from '../../utils/matTestUtils';
 import { TestContext } from '../model';
 
@@ -64,7 +65,7 @@ export default function (args: TestContext) {
     const center = new cv.Point2(5, 5);
     const cloneType = cv.NORMAL_CLONE;
 
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       assertMetaData(res)(dest.rows, dest.cols, cv.CV_8UC3);
     };
 
