@@ -247,7 +247,7 @@ export default function (ctxt: TestContext) {
           getPeoplesTestImg(),
           // @ts-expect-error wrong parameter type
           { locations: invalidLocations },
-          (err) => {
+          (err: unknown) => {
             try {
               expect(err).to.be.an('error');
               assert.include(err.toString(), 'expected array element at index 1 to be of type Point2');
@@ -313,7 +313,7 @@ export default function (ctxt: TestContext) {
     const winStride = new cv.Size(8, 8);
     const padding = new cv.Size(4, 4);
 
-    const searchLocations = [];
+    const searchLocations: Point2[] = [];
 
     describe('detect', () => {
       const expectOutput = (result: HOGDescriptorDetectRet) => {

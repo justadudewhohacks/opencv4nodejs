@@ -81,8 +81,8 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
     const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
     const getErrPrefix = () => `${(methodNameSpace ? `${methodNameSpace}::` : '')}${capitalize(method)} - Error:`;
-    const typeErrMsg = (argN) => `${getErrPrefix()} expected argument ${argN} to be of type`;
-    const propErrMsg = (prop) => `${getErrPrefix()} expected property ${prop} to be of type`;
+    const typeErrMsg = (argN: number) => `${getErrPrefix()} expected argument ${argN} to be of type`;
+    const propErrMsg = (prop: string) => `${getErrPrefix()} expected property ${prop} to be of type`;
 
     const expectSuccess = (args: any[], done: DoneError) => {
       const dut = getDut();
@@ -105,7 +105,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
           .then(() => {
             done('expected an error to be thrown');
           })
-          .catch((err) => {
+          .catch((err: unknown) => {
             assert.include(err.toString(), errMsg);
             done();
           })
@@ -140,7 +140,7 @@ export const generateAPITests = (opts: Partial<APITestOpts>): void => {
 
     if (hasRequiredArgs) {
       it(`${prefix}should throw if required arg invalid`, (done: DoneError) => {
-        const args = [undefined];
+        const args: [undefined] = [undefined];
         expectError(args, typeErrMsg(0), done);
       });
     }

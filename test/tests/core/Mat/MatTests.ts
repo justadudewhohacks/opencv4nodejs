@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { Mat, Vec, Vec4 } from '../../../../typings';
 import { generateAPITests } from '../../../utils/generateAPITests';
 import {
   assertDataDeepEquals,
@@ -103,7 +104,7 @@ export default function (args: TestContext) {
     });
   });
   describe('copy', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       assertMetaData(res)(srcMat.rows, srcMat.cols, srcMat.type);
     };
 
@@ -117,7 +118,7 @@ export default function (args: TestContext) {
   });
 
   describe('copyTo', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       assertMetaData(res)(srcMat.rows, srcMat.cols, srcMat.type);
     };
 
@@ -134,7 +135,7 @@ export default function (args: TestContext) {
   });
 
   describe('convertTo', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       assertMetaData(res)(srcMat.rows, srcMat.cols, cv.CV_32S);
     };
 
@@ -268,7 +269,7 @@ export default function (args: TestContext) {
       [0.9, 0, -0.9, 0],
     ], cv.CV_64F);
 
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       assertMetaData(res)(dtMat.rows, dtMat.cols, cv.CV_64F);
     };
 
@@ -322,7 +323,7 @@ export default function (args: TestContext) {
   });
 
   describe('padToSquare', () => {
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       expect(res).to.be.instanceOf(cv.Mat);
       assertMetaData(res)(3, 3, cv.CV_8UC3);
     };
@@ -382,7 +383,7 @@ export default function (args: TestContext) {
       [1, 0, 0],
     ], cv.CV_64F);
 
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       expect(res).to.be.instanceOf(cv.Mat);
       assertMetaData(src)(res);
       assertDataDeepEquals([
@@ -409,7 +410,7 @@ export default function (args: TestContext) {
       [1, 0, 0],
     ], cv.CV_64F);
 
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       expect(res).to.be.instanceOf(cv.Mat);
       assertMetaData(src)(res);
       assertDataDeepEquals([
@@ -435,7 +436,7 @@ export default function (args: TestContext) {
       [4, 5, 6, 7],
     ];
 
-    const expectOutput = (res) => {
+    const expectOutput = (res: Mat) => {
       expect(res).to.be.instanceOf(cv.Mat);
       expect(res.rows).to.equal(3);
       assertDataDeepEquals(
@@ -506,20 +507,20 @@ export default function (args: TestContext) {
 
     const borderType = cv.BORDER_CONSTANT;
 
-    const makeExpectOutput = (type, value) => (res, _, args2) => {
+    const makeExpectOutput = (type: number, value) => (res: Mat, _, args2) => {
       expect(res).to.be.instanceOf(cv.Mat);
       assertMetaData(res)(22, 22, type);
       if (args2[5] === 255 || (args2[4] && args2[4].value)) {
         const upperLeft = res.at(0, 0);
         if (typeof upperLeft === 'object') {
-          ['x', 'y', 'z', 'w'].forEach((k) => expect(upperLeft[k]).to.eq(value[k]));
+          ['x', 'y', 'z', 'w'].forEach((k) => expect((upperLeft as Vec4)[k]).to.eq(value[k]));
         } else {
           expect(upperLeft).to.equal(value);
         }
       }
     };
 
-    const makeTest = (type, defaultValue, value) => () => {
+    const makeTest = (type: number, defaultValue: number | number[], value: number | Vec) => () => {
       generateAPITests({
         getDut: () => new cv.Mat(20, 20, type, defaultValue),
         methodName: 'copyMakeBorder',

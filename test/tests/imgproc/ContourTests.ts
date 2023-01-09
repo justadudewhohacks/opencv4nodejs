@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Contour } from '@u4/opencv4nodejs';
+import { Contour, Moments } from '@u4/opencv4nodejs';
 import { TestContext } from '../model';
 import { generateAPITests } from '../../utils/generateAPITests';
 
@@ -233,7 +233,7 @@ export default (args: TestContext) => {
     });
 
     describe('moments', () => {
-      let moments;
+      let moments: Moments;
 
       before(() => {
         moments = leftmostContour.moments();

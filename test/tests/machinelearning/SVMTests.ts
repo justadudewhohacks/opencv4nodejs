@@ -2,9 +2,10 @@ import { expect } from 'chai';
 import { generateAPITests } from '../../utils/generateAPITests';
 import { assertPropsWithValue, clearTmpData, getTmpDataFilePath } from '../../utils/testUtils';
 import { TestContext } from '../model';
+import { SVM } from '../../../typings';
 
 export default (args: TestContext) => {
-  const { cv, cvVersionLowerThan } = args;
+  const { cv } = args;
 
   const samples = new cv.Mat([
     [100, 200, 200],
@@ -83,7 +84,7 @@ export default (args: TestContext) => {
   });
 
   describe('training', () => {
-    const expectOutput = (ret, svm) => {
+    const expectOutput = (ret: boolean, svm: SVM) => {
       expect(ret).to.be.a('boolean');
       expect(svm).to.have.property('isTrained').to.be.true;
       expect(svm).to.have.property('varCount').to.equal(samples.cols);
@@ -142,7 +143,7 @@ export default (args: TestContext) => {
   });
 
   describe('trained model tests', () => {
-    let svm;
+    let svm: SVM;
     const predictSample = [10, 10.5, 10.5];
     const predictSamplesMat = new cv.Mat([[10, 20, 15], [100, 200, 200]], cv.CV_32F);
 
@@ -177,11 +178,12 @@ export default (args: TestContext) => {
       });
     });
 
-    describe('getUncompressedSupportVectors', () => {
-      (cvVersionLowerThan(3, 2, 0) ? it.skip : it)('should return support vectors', () => {
-        expect(svm.getUncompressedSupportVectors()).to.be.instanceOf(cv.Mat);
-      });
-    });
+    // deprecated. to old
+    // describe('getUncompressedSupportVectors', () => {
+    //   (cvVersionLowerThan(3, 2, 0) ? it.skip : it)('should return support vectors', () => {
+    //     expect(svm.getUncompressedSupportVectors()).to.be.instanceOf(cv.Mat);
+    //   });
+    // });
 
     describe('getDecisionFunction', () => {
       it('should return decision function', () => {
@@ -210,7 +212,7 @@ export default (args: TestContext) => {
         const svm2 = { ...svmNew };
         svm1.classWeights = null;
         svm2.classWeights = null;
-        assertPropsWithValue(svm1, svm2 as any);
+        assertPropsWithValue(svm1, svm2);
       });
     });
   });

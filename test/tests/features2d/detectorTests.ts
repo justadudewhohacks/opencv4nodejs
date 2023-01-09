@@ -8,6 +8,7 @@ import {
   MSERDetectorProps,
   SIFTDetectorParams,
   SURFDetectorPrams,
+  // KeyPointDetector,
 } from '../../../typings';
 import { generateAPITests } from '../../utils/generateAPITests';
 import { assertPropsWithValue } from '../../utils/testUtils';
@@ -20,7 +21,8 @@ type DetectorProps = BRISKDetectorProps | GFTTDetectorProps | MSERDetectorProps 
 export default function (args: TestContext) {
   const { cv, getTestImg250 } = args;
 
-  return (defaults: DetectorProps, customProps, Detector, implementsCompute = true) => {
+  // KeyPointDetector | typeof KeyPointDetector
+  return (defaults: DetectorProps, customProps: {args: string[], values: Array<number | boolean>}, Detector: any, implementsCompute = true) => {
     const getDut = (): FeatureDetector => (typeof Detector === 'function' ? new Detector() : Detector);
 
     describe('constructor', () => {
@@ -36,8 +38,8 @@ export default function (args: TestContext) {
 
       if (customProps) {
         it('should be constructable with custom props', () => {
-          const props = {};
-          customProps.args.forEach((arg, i) => {
+          const props: {[key: string]: number | boolean} = {};
+          customProps.args.forEach((arg: string, i) => {
             props[arg] = customProps.values[i];
           });
           /* eslint-disable new-parens */
@@ -46,8 +48,8 @@ export default function (args: TestContext) {
         });
 
         it('should be constructable with custom props object', () => {
-          const props = {};
-          customProps.args.forEach((arg, i) => {
+          const props: {[key: string]: number | boolean} = {};
+          customProps.args.forEach((arg: string, i) => {
             props[arg] = customProps.values[i];
           });
           assertPropsWithValue(new Detector(props), props);
