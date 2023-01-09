@@ -56,7 +56,7 @@ export class TestContext {
     this.generateClassMethodTests = generateClassMethodTestsFactory(cv);
   }
 
-  public generateIts = (msg: string, testFunc: Function, exclusions = new Set<string>()): void => {
+  public generateIts = (msg: string, testFunc: (type: number) => void, exclusions = new Set<string>()): void => {
     return matTypeNames.filter((type) => !exclusions.has(type)).forEach((type) => {
       it(`${type} ${msg}`, () => testFunc(this.cv[type]));
     });
