@@ -54,7 +54,7 @@
     "build-debug": "npm run build && BINDINGS_DEBUG=true node bin/install.js rebuild"
   },
   "dependencies": {
-    "@u4/opencv-build": "0.7.3",
+    "@u4/opencv-build": "0.7.4",
     "@u4/tiny-glob": "^0.3.2",
     "nan": "^2.17.0",
     "native-node-utils": "^0.2.7",
