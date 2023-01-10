@@ -4,6 +4,7 @@
 - refactor test
 - fix types errors
 - add img_hash PR#65
+- use new @u4/opencv-build@0.7.3 (unnecessary builds, add a sym-link latest build directory)
 
 ## Version 6.3.0
 * use new @u4/opencv-build@0.6.1
