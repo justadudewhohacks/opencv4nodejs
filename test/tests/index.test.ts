@@ -96,7 +96,7 @@ describe('cv', () => {
   console.log('compiled with the following modules:', cv.xmodules);
   console.log(`${builtModules.length} expected modules to be built:`, builtModules);
   const liveModules = Object.entries(cv.modules).filter((a) => a[1]).map((a) => a[0]);
-  console.log(`${liveModules.length} visible  modules:`, liveModules);
+  console.log(`${liveModules.length} visible modules:`, liveModules);
 
   it('all modules should be built', () => {
     // xfeatures2d is a non free module not available on debian disto

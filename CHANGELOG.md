@@ -1,5 +1,10 @@
 # changelog
 
+## Version 6.4.1
+- add Mat.ones
+- add Mat.zeros
+- start splitting tests.
+
 ## Version 6.4.0
 - refactor test
 - fix types errors

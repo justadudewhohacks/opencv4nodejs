@@ -208,13 +208,13 @@ export class Mat {
   at(idx: number[]): Vec4;
   atRaw(row: number, col: number): number;
   atRaw(row: number, col: number): number[];
-  
+
   bgrToGray(): Mat;
   bgrToGrayAsync(): Promise<Mat>;
-  
+
   bilateralFilter(d: number, sigmaColor: number, sigmaSpace: number, borderType?: number): Mat;
   bilateralFilterAsync(d: number, sigmaColor: number, sigmaSpace: number, borderType?: number): Promise<Mat>;
-  
+
   bitwiseAnd(otherMat: Mat): Mat;
   bitwiseNot(): Mat;
   bitwiseOr(otherMat: Mat): Mat;
@@ -242,19 +242,19 @@ export class Mat {
   calibrationMatrixValuesAsync(imageSize: Size, apertureWidth: number, apertureHeight: number): Promise<CalibrationMatrixValues>;
   canny(threshold1: number, threshold2: number, apertureSize?: number, L2gradient?: boolean): Mat;
   cannyAsync(threshold1: number, threshold2: number, apertureSize?: number, L2gradient?: boolean): Promise<Mat>;
-  
+
   compareHist(H2: Mat, method: number): number;
   compareHistAsync(H2: Mat, method: number): Promise<number>;
-  
+
   connectedComponents(connectivity?: number, ltype?: number): Mat;
-  connectedComponents(opts: {connectivity?: number, ltype?: number}): Mat;
+  connectedComponents(opts: { connectivity?: number, ltype?: number }): Mat;
   connectedComponentsAsync(connectivity?: number, ltype?: number): Promise<Mat>;
-  connectedComponentsAsync(opts: {connectivity?: number, ltype?: number}): Promise<Mat>;
+  connectedComponentsAsync(opts: { connectivity?: number, ltype?: number }): Promise<Mat>;
 
   connectedComponentsWithStats(connectivity?: number, ltype?: number): ConnectedComponentsWithStatsRet;
-  connectedComponentsWithStats(opts: {connectivity?: number, ltype?: number}): ConnectedComponentsWithStatsRet;
+  connectedComponentsWithStats(opts: { connectivity?: number, ltype?: number }): ConnectedComponentsWithStatsRet;
   connectedComponentsWithStatsAsync(connectivity?: number, ltype?: number): Promise<ConnectedComponentsWithStatsRet>;
-  connectedComponentsWithStatsAsync(opts: {connectivity?: number, ltype?: number}): Promise<ConnectedComponentsWithStatsRet>;
+  connectedComponentsWithStatsAsync(opts: { connectivity?: number, ltype?: number }): Promise<ConnectedComponentsWithStatsRet>;
 
   convertScaleAbs(alpha: number, beta: number): Mat;
   convertScaleAbsAsync(alpha: number, beta: number): Promise<Mat>;
@@ -262,28 +262,28 @@ export class Mat {
   convertToAsync(type: number, alpha?: number, beta?: number): Promise<Mat>;
   copy(mask?: Mat): Mat;
   copyAsync(mask?: Mat): Promise<Mat>;
-  
+
   copyMakeBorder(top: number, bottom: number, left: number, right: number, borderType?: number, value?: number | Vec2 | Vec3 | Vec4): Mat;
-  copyMakeBorder(top: number, bottom: number, left: number, right: number, args: {borderType?: number, value?: number | Vec2 | Vec3 | Vec4}): Mat;
+  copyMakeBorder(top: number, bottom: number, left: number, right: number, args: { borderType?: number, value?: number | Vec2 | Vec3 | Vec4 }): Mat;
   copyMakeBorderAsync(top: number, bottom: number, left: number, right: number, borderType?: number, value?: number | Vec2 | Vec3 | Vec4): Promise<Mat>;
-  copyMakeBorderAsync(top: number, bottom: number, left: number, right: number, args: {borderType?: number, value?: number | Vec2 | Vec3 | Vec4}): Promise<Mat>;
-  
+  copyMakeBorderAsync(top: number, bottom: number, left: number, right: number, args: { borderType?: number, value?: number | Vec2 | Vec3 | Vec4 }): Promise<Mat>;
+
   copyTo(dst: Mat, mask?: Mat): Mat;
   copyToAsync(dst: Mat, mask?: Mat): Promise<Mat>;
   cornerEigenValsAndVecs(blockSize: number, ksize?: number, borderType?: number): Mat;
   cornerEigenValsAndVecsAsync(blockSize: number, ksize?: number, borderType?: number): Promise<Mat>;
-  
+
   cornerHarris(blockSize: number, ksize: number, k: number, borderType?: number): Mat;
   cornerHarrisAsync(blockSize: number, ksize: number, k: number, borderType?: number): Promise<Mat>;
-  
+
   cornerMinEigenVal(blockSize: number, ksize?: number, borderType?: number): Mat;
   cornerMinEigenValAsync(blockSize: number, ksize?: number, borderType?: number): Promise<Mat>;
   cornerSubPix(corners: Point2[], winSize: Size, zeroZone: Size, criteria: TermCriteria): Point2[];
   cornerSubPixAsync(corners: Point2[], winSize: Size, zeroZone: Size, criteria: TermCriteria): Promise<Point2[]>;
-  
+
   correctMatches(points1: Point2[], points2: Point2[]): CorrectMatchesRet;
   correctMatchesAsync(points1: Point2[], points2: Point2[]): Promise<CorrectMatchesRet>;
-  
+
   countNonZero(): number;
   countNonZeroAsync(): Promise<number>;
   cvtColor(code: number, dstCn?: number): Mat;
@@ -293,10 +293,10 @@ export class Mat {
 
   decomposeEssentialMat(): DecomposeEssentialMatRet;
   decomposeEssentialMatAsync(): Promise<DecomposeEssentialMatRet>;
-  
+
   decomposeHomographyMat(K: Mat): DecomposeHomographyMatRet;
   decomposeHomographyMatAsync(K: Mat): Promise<DecomposeHomographyMatRet>;
-  
+
   decomposeProjectionMatrix(): DecomposeProjectionMatrixRet;
   decomposeProjectionMatrixAsync(): Promise<DecomposeProjectionMatrixRet>;
   determinant(): number;
@@ -370,13 +370,13 @@ export class Mat {
   erodeAsync(kernel: Mat, anchor?: Point2, iterations?: number, borderType?: number): Promise<Mat>;
   exp(): Mat;
   log(): Mat;
-  
+
   filter2D(ddepth: number, kernel: Mat, anchor?: Point2, delta?: number, borderType?: number): Mat;
   filter2DAsync(ddepth: number, kernel: Mat, anchor?: Point2, delta?: number, borderType?: number): Promise<Mat>;
-  
+
   filterSpeckles(newVal: number, maxSpeckleSize: number, maxDiff: number): { newPoints1: Point2[], newPoints2: Point2[] };
   filterSpecklesAsync(newVal: number, maxSpeckleSize: number, maxDiff: number): Promise<{ newPoints1: Point2[], newPoints2: Point2[] }>;
-  
+
   find4QuadCornerSubpix(corners: Point2[], regionSize: Size): boolean;
   find4QuadCornerSubpixAsync(corners: Point2[], regionSize: Size): Promise<boolean>;
   findChessboardCorners(patternSize: Size, flags?: number): { returnValue: boolean, corners: Point2[] };
@@ -447,10 +447,10 @@ export class Mat {
   getRegion(region: Rect): Mat;
   goodFeaturesToTrack(maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Point2[];
   goodFeaturesToTrackAsync(maxCorners: number, qualityLevel: number, minDistance: number, mask?: Mat, blockSize?: number, gradientSize?: number, useHarrisDetector?: boolean, harrisK?: number): Promise<Point2[]>;
-  
+
   grabCut(mask: Mat, rect: Rect, bgdModel: Mat, fgdModel: Mat, iterCount: number, mode: number): void;
   grabCutAsync(mask: Mat, rect: Rect, bgdModel: Mat, fgdModel: Mat, iterCount: number, mode: number): Promise<void>;
-  
+
   guidedFilter(guide: Mat, radius: number, eps: number, ddepth?: number): Mat;
   guidedFilterAsync(guide: Mat, radius: number, eps: number, ddepth?: number): Promise<Mat>;
   hDiv(otherMat: Mat): Mat;
@@ -458,13 +458,13 @@ export class Mat {
 
   houghCircles(method: number, dp: number, minDist: number, param1?: number, param2?: number, minRadius?: number, maxRadius?: number): Vec3[];
   houghCirclesAsync(method: number, dp: number, minDist: number, param1?: number, param2?: number, minRadius?: number, maxRadius?: number): Promise<Vec3[]>;
-  
+
   houghLines(rho: number, theta: number, threshold: number, srn?: number, stn?: number, min_theta?: number, max_theta?: number): Vec2[];
   houghLinesAsync(rho: number, theta: number, threshold: number, srn?: number, stn?: number, min_theta?: number, max_theta?: number): Promise<Vec2[]>;
-  
+
   houghLinesP(rho: number, theta: number, threshold: number, minLineLength?: number, maxLineGap?: number): Vec4[];
   houghLinesPAsync(rho: number, theta: number, threshold: number, minLineLength?: number, maxLineGap?: number): Promise<Vec4[]>;
-  
+
   idct(flags?: number): Mat;
   idctAsync(flags?: number): Promise<Mat>;
   idft(flags?: number, nonzeroRows?: number): Mat;
@@ -739,8 +739,28 @@ export class Mat {
   warpAffineAsync(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number, borderValue?: Vec3): Promise<Mat>;
   warpPerspective(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number, borderValue?: Vec3): Mat;
   warpPerspectiveAsync(transforMationMatrix: Mat, size?: Size, flags?: number, borderMode?: number, borderValue?: Vec3): Promise<Mat>;
+  /**
+   * Performs a marker-based image segmentation using the watershed algorithm.
+   * 
+   * The function implements one of the variants of watershed, non-parametric marker-based segmentation algorithm, described in [173] .
+   * 
+   * Before passing the image to the function, you have to roughly outline the desired regions in the image markers with positive (>0) indices. So, every region is represented as one or more connected components with the pixel values 1, 2, 3, and so on. Such markers can be retrieved from a binary mask using findContours and drawContours (see the watershed.cpp demo). The markers are "seeds" of the future image regions. All the other pixels in markers , whose relation to the outlined regions is not known and should be defined by the algorithm, should be set to 0's. In the function output, each pixel in markers is set to a value of the "seed" components or to -1 at boundaries between the regions.
+   * 
+   * Note
+   * Any two neighbor connected components are not necessarily separated by a watershed boundary (-1's pixels); for example, they can touch each other in the initial marker image passed to the function.
+   * https://docs.opencv.org/4.6.0/d3/d47/group__imgproc__segmentation.html#ga3267243e4d3f95165d55a618c65ac6e1
+   * @param markers Input/output 32-bit single-channel image (map) of markers. It should have the same size as image.
+   */
   watershed(markers: Mat): Mat;
   watershedAsync(markers: Mat): Promise<Mat>;
+  /**
+   * Decrements the reference counter and deallocates the matrix if needed.
+   * 
+   * The method decrements the reference counter associated with the matrix data. When the reference counter reaches 0, the matrix data is deallocated and the data and the reference counter pointers are set to NULL's. If the matrix header points to an external data set (see Mat::Mat ), the reference counter is NULL, and the method has no effect in this case.
+   * 
+   * This method can be called manually to force the matrix data deallocation. But since this method is automatically called in the destructor, or by any other method that changes the data pointer, it is usually not needed. The reference counter decrement and check for 0 is an atomic operation on the platforms that support it. Thus, it is safe to operate on the same matrices asynchronously in different threads.
+   * https://docs.opencv.org/4.6.0/d3/d63/classcv_1_1Mat.html#ae48d4913285518e2c21a3457017e716e
+   */
   release(): void;
   /**
    * Returns an identity matrix of the specified size and type.
@@ -757,4 +777,35 @@ export class Mat {
    * @param type Created matrix type.
    */
   static eye(rows: number, cols: number, type: number): Mat;
+  /**
+   * Returns an array of all 1's of the specified size and type.
+   * 
+   * The method returns a Matlab-style 1's array initializer, similarly to Mat::zeros. Note that using this method you can initialize an array with an arbitrary value, using the following Matlab idiom:
+   * 
+   * Mat A = Mat::ones(100, 100, CV_8U)*3; // make 100x100 matrix filled with 3.
+   * The above operation does not form a 100x100 matrix of 1's and then multiply it by 3. Instead, it just remembers the scale factor (3 in this case) and use it when actually invoking the matrix initializer.
+   * 
+   * Note
+   * In case of multi-channels type, only the first channel will be initialized with 1's, the others will be set to 0's.
+   * https://docs.opencv.org/4.x/d3/d63/classcv_1_1Mat.html#a5e10227b777425407986727e2d26fcdc
+   * @param rows 
+   * @param cols 
+   * @param type 
+   */
+  static ones(rows: number, cols: number, type: number): Mat;
+  /**
+   * Returns a zero array of the specified size and type.
+   * 
+   * The method returns a Matlab-style zero array initializer. It can be used to quickly form a constant array as a function parameter, part of a matrix expression, or as a matrix initializer:
+   * 
+   * Mat A;
+   * A = Mat::zeros(3, 3, CV_32F);
+   * 
+   * In the example above, a new matrix is allocated only if A is not a 3x3 floating-point matrix. Otherwise, the existing matrix A is filled with zeros.
+   * https://docs.opencv.org/4.x/d3/d63/classcv_1_1Mat.html#a56daa006391a670e9cb0cd08e3168c99
+   * @param rows Number of rows.
+   * @param cols Number of columns.
+   * @param type Created matrix type.
+   */
+  static zeros(rows: number, cols: number, type: number): Mat;
 }

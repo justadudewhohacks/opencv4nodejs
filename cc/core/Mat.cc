@@ -119,8 +119,10 @@ NAN_MODULE_INIT(Mat::Init) {
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("sizes").ToLocalChecked(), Mat::GetSizes);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("elemSize").ToLocalChecked(), Mat::GetElemSize);
   Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("step").ToLocalChecked(), Mat::GetStep);
-
+  // Mat static metodas
   Nan::SetMethod(ctor, "eye", Eye);
+  Nan::SetMethod(ctor, "ones", Ones);
+  Nan::SetMethod(ctor, "zeros", Zeros);
   Nan::SetPrototypeMethod(ctor, "flattenFloat", FlattenFloat);
 
   Nan::SetPrototypeMethod(ctor, "at", At);
@@ -574,6 +576,32 @@ NAN_METHOD(Mat::Eye) {
 		return tryCatch.reThrow();
 	}
 	info.GetReturnValue().Set(Mat::Converter::wrap(cv::Mat::eye(cv::Size(cols, rows), type)));
+}
+
+NAN_METHOD(Mat::Ones) {
+	FF::TryCatch tryCatch("Mat::Ones");
+	int rows, cols, type;
+	if (
+		FF::IntConverter::arg(0, &rows, info) ||
+		FF::IntConverter::arg(1, &cols, info) ||
+		FF::IntConverter::arg(2, &type, info)
+	) {
+		return tryCatch.reThrow();
+	}
+	info.GetReturnValue().Set(Mat::Converter::wrap(cv::Mat::ones(cv::Size(cols, rows), type)));
+}
+
+NAN_METHOD(Mat::Zeros) {
+	FF::TryCatch tryCatch("Mat::Zero");
+	int rows, cols, type;
+	if (
+		FF::IntConverter::arg(0, &rows, info) ||
+		FF::IntConverter::arg(1, &cols, info) ||
+		FF::IntConverter::arg(2, &type, info)
+	) {
+		return tryCatch.reThrow();
+	}
+	info.GetReturnValue().Set(Mat::Converter::wrap(cv::Mat::zeros(cv::Size(cols, rows), type)));
 }
 
 NAN_METHOD(Mat::FlattenFloat) {
