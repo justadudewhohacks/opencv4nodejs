@@ -2,7 +2,7 @@ name: Build all from source
 
 on:
   #push:
-  #   branches: [ "master", "phash" ]
+  #   branches: [ "master" ]
   # pull_request:
   #   branches: [ "master" ]
   workflow_dispatch:

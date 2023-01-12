@@ -5,7 +5,7 @@ name: Node.js CI using prebuilt openCV
 
 on:
   push:
-    branches: [ "master", "phash" ]
+    branches: [ "master" ]
     paths:
       - "cc/**"
       - "install/**"

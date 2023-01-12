@@ -2,7 +2,7 @@ name: Build using prebuild openCV
 
 on:
   push:
-    branches: [ "master", "phash" ]
+    branches: [ "master" ]
     paths:
       - "cc/**"
       - "install/**"
@@ -12,7 +12,7 @@ on:
       - "package.json"
       - ".github/workflows/prebuild.yml"
   pull_request:
-    branches: [ "master", "phash" ]
+    branches: [ "master" ]
     paths:
       - "cc/**"
       - "install/**"
@@ -46,7 +46,8 @@ jobs:
         opencv_version:
           # - 4.7.0 not available yet
           - 4.6.0
-          # - 4.5.5 # 2019-12-23 ubuntu 22.04
+          - 4.5.5 # 2019-12-23 ubuntu 22.04
+          - 4.5.1 # raspberry Pi version
           # - 4.2.0 # 2019-12-23 ubuntu 20.04
           # - 3.4.16
         node_version:
