@@ -7,18 +7,18 @@
 Opencv4nodejs can be link to a prebuild openCV 3 or 4. or can build it's own openCV using [@u4/opencv-build](https://www.npmjs.com/package/@u4/opencv-build),
 In this case you have to choose witch version you want to link.
 
-### To use your own openCV build
+### To use your OWN openCV build
 
-**3 way to use your own openCV**
+**3 way to use your own openCV (Without automatic building)**
 
-#### Environment variable
+#### 1) Environment variable
 Define environment variable:
 - `OPENCV4NODEJS_DISABLE_AUTOBUILD`=`1`
 
 If you do not install openCV with a common setup like chocolate, apt or brew, you may need to also define:
  `OPENCV_INCLUDE_DIR`=`include path` , `OPENCV_LIB_DIR`=`lib path`, `OPENCV_BIN_DIR`=`binary path`
 
-#### package.json
+#### 2) package.json
 Define an opencv4nodejs section in your package.json like:
 ```json
 "opencv4nodejs" {
@@ -28,7 +28,7 @@ Define an opencv4nodejs section in your package.json like:
 If you do not install openCV with a common setup like chocolote, apt or brew, you may need to also define:
   `"OPENCV_INCLUDE_DIR"`, `"OPENCV_LIB_DIR"`, `"OPENCV_BIN_DIR"`
 
-#### use build-opencv
+#### 3) use build-opencv
 Call `build-opencv` once like:
 ```bash
 npm link
@@ -41,7 +41,7 @@ npm link
 build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --binDir=/usr/bin/ --nobuild rebuild
 ```
 
-### To build your own openCV using included builder
+### To build openCV using the built-in builder
 
 If you want to build OpenCV define the environement variable `OPENCV_BUILD_ROOT` to speedup your development, so openCV build will be processed out of your node_modules
 
@@ -52,11 +52,11 @@ OPENCV_BUILD_ROOT=~/opencv
 
 **3 way to build openCV 4.6.0**
 
-#### Environment variable
+#### 1) Environment variable
 Define environment variable:
 - `OPENCV4NODEJS_AUTOBUILD_OPENCV_VERSION`="4.6.0"
 
-#### package.json
+#### 2) package.json
 Define an opencv4nodejs section in your package.json like:
 ```json
 "opencv4nodejs" {
@@ -64,7 +64,7 @@ Define an opencv4nodejs section in your package.json like:
 }
 ```
 
-#### use build-opencv
+#### 3) use build-opencv
 Call `build-opencv` once like:
 ```bash
 npm link
