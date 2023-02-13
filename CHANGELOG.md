@@ -1,5 +1,8 @@
 # changelog
 
+## Version 6.4.2
+- update dependencies
+
 ## Version 6.4.1
 - add Mat.ones
 - add Mat.zeros
