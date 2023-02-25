@@ -1,5 +1,8 @@
 # changelog
 
+## Version 6.4.3
+- update dependencies
+
 ## Version 6.4.2
 - update dependencies
 
