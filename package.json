@@ -87,6 +87,7 @@
     "lib",
     "bin",
     "typings",
-    "binding.gyp"
+    "binding.gyp",
+    "tsconfig.json"
   ]
 }
