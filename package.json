@@ -37,7 +37,7 @@
   "scripts": {
     "build": "tsc --pretty --project .",
     "prepack": "npm run build",
-    "install": "node bin/install.js auto",
+    "install": "npm run build && node bin/install.js auto",
     "install_Mac": "npm run build && CXXFLAGS=\"-std=c++14 -Wno-c++11-narrowing\" node ./install/install.js --version 4.5.3 build",
     "install_default": "npm run build && node bin/install.js rebuild",
     "install_ubuntu": "echo call: sudo apt install libopencv-dev; build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --binDir=/usr/bin/ --nobuild rebuild",
