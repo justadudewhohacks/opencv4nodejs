@@ -99,7 +99,7 @@ export default function (cv: typeof openCV): void {
     return textLines.reduce((height, textLine) => height + getLineHeight(textLine, opts), 0)
   }
 
-  cv.drawTextBox = (img: Mat, upperLeft: { x: number, y: number }, textLines: TextLines[], alpha: number): Mat => {
+  cv.drawTextBox = function drawTextBox(img: Mat, upperLeft: { x: number, y: number }, textLines: TextLines[], alpha: number): Mat {
     const padding = 10
     const linePadding = 10
 
@@ -122,7 +122,7 @@ export default function (cv: typeof openCV): void {
     return img
   }
 
-  cv.drawDetection = (img: Mat, inputRect: Rect, opts = {} as DrawParams & { segmentFraction?: number }): Rect => {
+  cv.drawDetection = function drawDetection(img: Mat, inputRect: Rect, opts = {} as DrawParams & { segmentFraction?: number }): Rect {
     const rect = inputRect.toSquare()
 
     const { x, y, width, height } = rect
