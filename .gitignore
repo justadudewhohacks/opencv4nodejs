@@ -54,3 +54,5 @@ examples/src/YOLOv3-Training-Snowman-Detector/train.log
 examples/src/YOLOv3-Training-Snowman-Detector/darknet53.conv.74
 examples/src/YOLOv3-Training-Snowman-Detector/weights
 docs/
+lib/*.d.ts.map
+install/*.d.ts.map

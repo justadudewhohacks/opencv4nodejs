@@ -1,5 +1,11 @@
 # changelog
 
+## Version 6.4.5
+- drop .ts files from npm package.
+- add .d.ts file for ts files in npm package.
+- add .d.ts.map file for ts files in npm package.
+- fix [issue 81](https://github.com/UrielCh/opencv4nodejs/issues/81)
+  
 ## Version 6.4.4
 - remove typescript requirement at setup [PR-78](https://github.com/UrielCh/opencv4nodejs/pull/78)
 - [PR-80](https://github.com/UrielCh/opencv4nodejs/pull/80)

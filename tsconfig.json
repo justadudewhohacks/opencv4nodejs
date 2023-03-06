@@ -6,7 +6,9 @@
     "esModuleInterop": false,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
   },
   //"files": [ "./install/install.ts", "./install/parseEnv.ts" ]
   "include": [ "./install/*.ts", "./lib/**/*.ts" ]
