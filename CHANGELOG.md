@@ -1,5 +1,9 @@
 # changelog
 
+## Version 6.4.4
+- remove typescript requirement at setup [PR-78](https://github.com/UrielCh/opencv4nodejs/pull/78)
+- [PR-80](https://github.com/UrielCh/opencv4nodejs/pull/80)
+
 ## Version 6.4.3
 - update dependencies
 

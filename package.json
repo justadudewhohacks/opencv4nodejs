@@ -1,6 +1,6 @@
 {
   "name": "@u4/opencv4nodejs",
-  "version": "6.4.3",
+  "version": "6.4.4",
   "description": "Asynchronous OpenCV 3.x / 4.x nodejs bindings with JavaScript and TypeScript API.",
   "keywords": [
     "opencv",
@@ -37,7 +37,7 @@
   "scripts": {
     "build": "tsc --pretty --project .",
     "prepack": "npm run build",
-    "install": "node bin/install.js auto",
+    "install": "npm run build && node bin/install.js auto",
     "install_Mac": "npm run build && CXXFLAGS=\"-std=c++14 -Wno-c++11-narrowing\" node ./install/install.js --version 4.5.3 build",
     "install_default": "npm run build && node bin/install.js rebuild",
     "install_ubuntu": "echo call: sudo apt install libopencv-dev; build-opencv --incDir /usr/include/opencv4/ --libDir /lib/x86_64-linux-gnu/ --binDir=/usr/bin/ --nobuild rebuild",
@@ -64,14 +64,14 @@
   },
   "devDependencies": {
     "@types/mri": "^1.1.1",
-    "@types/node": "^18.14.1",
+    "@types/node": "^18.14.6",
     "@types/npmlog": "^4.1.4",
     "@types/progress": "^2.0.5",
-    "@typescript-eslint/eslint-plugin": "^5.53.0",
-    "@typescript-eslint/parser": "^5.53.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
     "axios": "^1.3.4",
     "cross-env": "^7.0.3",
-    "eslint": "^8.34.0",
+    "eslint": "^8.35.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
@@ -87,6 +87,7 @@
     "lib",
     "bin",
     "typings",
-    "binding.gyp"
+    "binding.gyp",
+    "tsconfig.json"
   ]
 }

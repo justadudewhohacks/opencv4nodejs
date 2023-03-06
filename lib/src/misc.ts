@@ -13,7 +13,7 @@ export default function (cv: typeof openCV): void {
      * non Natif code
      * @param type Mat type as int value
      */
-    cv.toMatTypeName = (type: number): MatTypes | undefined => {
+    cv.toMatTypeName = function toMatTypeName(type: number): MatTypes | undefined {
         for (const t of allTypes) {
             if (cv[t] === type) return t;
         }
@@ -28,7 +28,7 @@ export default function (cv: typeof openCV): void {
      * @param region search region
      * @returns a list of matchs
      */
-    cv.getScoreMax = (scoreMat: Mat, threshold: number, region?: Rect): Array<[number, number, number]> => {
+    cv.getScoreMax = function getScoreMax(scoreMat: Mat, threshold: number, region?: Rect): Array<[number, number, number]> {
         if (scoreMat.type !== cv.CV_32F)
             throw Error('this method can only be call on a CV_32F Mat');
         if (scoreMat.dims !== 2)
@@ -68,7 +68,7 @@ export default function (cv: typeof openCV): void {
      * @param matches list of matches as a list in [x,y,score]. (this data will be altered)
      * @returns best match without colisions
      */
-    cv.dropOverlappingZone = (template: Mat, matches: Array<[number, number, number]>): Array<[number, number, number]> => {
+    cv.dropOverlappingZone = function dropOverlappingZone(template: Mat, matches: Array<[number, number, number]>): Array<[number, number, number]> {
         const total = matches.length;
         const width = template.cols / 2;
         const height = template.rows / 2;
