@@ -194,6 +194,7 @@ export class Mat {
   accumulateWeightedAsync(src: Mat, alpha: number, mask?: Mat): Promise<Mat>;
   adaptiveThreshold(maxVal: number, adaptiveMethod: number, thresholdType: number, blockSize: number, C: number): Mat;
   adaptiveThresholdAsync(maxVal: number, adaptiveMethod: number, thresholdType: number, blockSize: number, C: number): Promise<Mat>;
+
   add(otherMat: Mat): Mat;
   addWeighted(alpha: number, mat2: Mat, beta: number, gamma: number, dtype?: number): Mat;
   addWeightedAsync(alpha: number, mat2: Mat, beta: number, gamma: number, dtype?: number): Promise<Mat>;
@@ -362,10 +363,13 @@ export class Mat {
    */
   drawRectangle(pt0: Point2, pt1: Point2, opt: { color?: Vec3, thickness?: number, lineType?: number, shift?: number }): void;
   drawRectangle(rect: Rect, color?: Vec3, thickness?: number, lineType?: number, shift?: number): void;
-  eigen(): Mat;
-  eigenAsync(): Promise<Mat>;
-  equalizeHist(): Mat;
-  equalizeHistAsync(): Promise<Mat>;
+
+  eigen(this: Mat): Mat;
+  eigenAsync(this: Mat): Promise<Mat>;
+
+  equalizeHist(this: Mat): Mat;
+  equalizeHistAsync(this: Mat): Promise<Mat>;
+  
   erode(kernel: Mat, anchor?: Point2, iterations?: number, borderType?: number): Mat;
   erodeAsync(kernel: Mat, anchor?: Point2, iterations?: number, borderType?: number): Promise<Mat>;
   exp(): Mat;
@@ -539,17 +543,19 @@ export class Mat {
   norm(src2: Mat, normType?: number, mask?: Mat): number;
   norm(normType?: number, mask?: Mat): number;
 
-  normalize(alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat): Mat;
-  normalize(opt: { alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat }): Mat;
-
-  normalizeAsync(alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat): Promise<Mat>;
-  normalizeAsync(opt: { alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat }): Promise<Mat>;
+  /**
+   *
+   */
+  normalize(this: Mat, alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat): Mat;
+  normalize(this: Mat, opt: { alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat }): Mat;
+  normalizeAsync(this: Mat, alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat): Promise<Mat>;
+  normalizeAsync(this: Mat, opt: { alpha?: number, beta?: number, normType?: number, dtype?: number, mask?: Mat }): Promise<Mat>;
 
   or(otherMat: Mat): Mat;
   padToSquare(color: Vec3): Mat;
 
-  perspectiveTransform(m: Mat): Mat;
-  perspectiveTransformAsync(m: Mat): Promise<Mat>;
+  perspectiveTransform(this: Mat, m: Mat): Mat;
+  perspectiveTransformAsync(this: Mat, m: Mat): Promise<Mat>;
 
   pop_back(numRows?: number): Mat;
   pop_backAsync(numRows?: number): Promise<Mat>;
@@ -648,8 +654,9 @@ export class Mat {
   sobelAsync(ddepth: number, dx: number, dy: number, ksize?: 1 | 3 | 5 | 7, scale?: number, delta?: number, borderType?: number): Promise<Mat>;
   sobelAsync(ddepth: number, dx: number, dy: number, opts: { ksize?: 1 | 3 | 5 | 7, scale?: number, delta?: number, borderType?: number }): Promise<Mat>;
 
-  solve(mat2: Mat, flags?: number): Mat;
-  solveAsync(mat2: Mat, flags?: number): Promise<Mat>;
+  solve(this: Mat, mat2: Mat, flags?: number): Mat;
+  solveAsync(this: Mat, mat2: Mat, flags?: number): Promise<Mat>;
+
   split(): Mat[];
   splitAsync(): Promise<Mat[]>;
   splitChannels(): Mat[];
@@ -681,8 +688,8 @@ export class Mat {
    * https://docs.opencv.org/4.x/d2/de8/group__core__array.html#ga716e10a2dd9e228e4d3c95818f106722
    * Mat must have from 1 to 4 channels.
    */
-  sum(): number | Vec2 | Vec3 | Vec4;
-  sumAsync(): Promise<number | Vec2 | Vec3 | Vec4>;
+  sum(this: Mat): number | Vec2 | Vec3 | Vec4;
+  sumAsync(this: Mat): Promise<number | Vec2 | Vec3 | Vec4>;
   /**
    * Applies a fixed-level threshold to each array element.
    *

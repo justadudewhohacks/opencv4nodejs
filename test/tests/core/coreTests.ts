@@ -340,7 +340,7 @@ export default function (args: TestContext) {
       [1, 1, 0],
     ], cv.CV_8U);
 
-    const expectOutput = (res: { minVal: any; maxVal: any; minLoc: any; maxLoc: any; }, dut: any, args2: any[]) => {
+    const expectOutput = (res: { minVal: number; maxVal: number; minLoc: { x: number, y: number }; maxLoc: { x: number, y: number }; }, dut: any, args2: any[]) => {
       if (!args2.some((arg: Mat) => arg === mask)) {
         // without mask
         expect(res.minVal).to.equal(0.1);
