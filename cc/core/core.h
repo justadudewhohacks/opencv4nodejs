@@ -55,6 +55,10 @@ public:
 	static NAN_METHOD(MeanStdDevAsync);
 	static NAN_METHOD(Reduce);
 	static NAN_METHOD(ReduceAsync);
+	static NAN_METHOD(Min);
+	static NAN_METHOD(MinAsync);
+	static NAN_METHOD(Max);
+	static NAN_METHOD(MaxAsync);
 	static NAN_METHOD(Eigen);
 	static NAN_METHOD(EigenAsync);
 	static NAN_METHOD(Solve);

@@ -219,6 +219,32 @@ namespace CoreBindings {
 		};
 	};
 
+	class Min: public CvBinding {
+	public:
+		void setup() {
+			auto src1 = req<Mat::Converter>();
+			auto src2 = req<Mat::Converter>();
+			auto dest = ret<Mat::Converter>("dest", cv::noArray().getMat());
+
+			executeBinding = [=]() {
+				cv::min(src1->ref(), src2->ref(), dest->ref());
+			};
+		};
+	};
+
+	class Max: public CvBinding {
+	public:
+		void setup() {
+			auto src1 = req<Mat::Converter>();
+			auto src2 = req<Mat::Converter>();
+			// auto dest = opt<Mat::Converter>("dest", cv::noArray().getMat());
+			auto dest = ret<Mat::Converter>("dest"); //, cv::noArray().getMat());
+			executeBinding = [=]() {
+				cv::max(src1->ref(), src2->ref(), dest->ref());
+			};
+		};
+	};
+
 	class Eigen : public CvClassMethodBinding<Mat> {
 	public:
 		void createBinding(std::shared_ptr<FF::Value<cv::Mat>> self) {

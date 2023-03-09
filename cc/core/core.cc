@@ -52,8 +52,16 @@ NAN_MODULE_INIT(Core::Init) {
   Nan::SetMethod(target, "meanStdDevAsync", MeanStdDevAsync);
   Nan::SetMethod(target, "reduce", Reduce);
   Nan::SetMethod(target, "reduceAsync", ReduceAsync);
+
   Nan::SetMethod(target, "eigen", Eigen);
   Nan::SetMethod(target, "eigenAsync", EigenAsync);
+
+  Nan::SetMethod(target, "min", Min);
+  Nan::SetMethod(target, "minAsync", MinAsync);
+
+  Nan::SetMethod(target, "max", Max);
+  Nan::SetMethod(target, "maxAsync", MaxAsync);
+
   Nan::SetMethod(target, "solve", Solve);
   Nan::SetMethod(target, "solveAsync", SolveAsync);
 
@@ -370,6 +378,22 @@ NAN_METHOD(Core::Eigen) {
 
 NAN_METHOD(Core::EigenAsync) {
 	FF::asyncBinding<CoreBindings::Eigen>("Core", "Eigen", info);
+}
+
+NAN_METHOD(Core::Min) {
+	FF::syncBinding<CoreBindings::Min>("Core", "Min", info);
+}
+
+NAN_METHOD(Core::MinAsync) {
+	FF::asyncBinding<CoreBindings::Min>("Core", "Min", info);
+}
+
+NAN_METHOD(Core::Max) {
+	FF::syncBinding<CoreBindings::Max>("Core", "Max", info);
+}
+
+NAN_METHOD(Core::MaxAsync) {
+	FF::asyncBinding<CoreBindings::Max>("Core", "Max", info);
 }
 
 NAN_METHOD(Core::Solve) {

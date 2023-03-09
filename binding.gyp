@@ -9,7 +9,7 @@
 			"cc",
 			"cc/core",
 			"<!(node -e \"require('nan')\")",
-			"<!(node -e \"require('native-node-utils')\")"
+			"cc/native-node-utils",
 		],
 		"libraries": [
 			"<!@(node ./install/parseEnv.js OPENCV4NODEJS_LIBRARIES)",
