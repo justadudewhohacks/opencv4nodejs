@@ -122,13 +122,27 @@ namespace FF {
 			return val;
 		}
 
-		template <class Converter>
+		/**
+		 * @brief Returned value from the binding
+		 * 
+		 * @tparam Converter 
+		 * @param name 
+		 * @return std::shared_ptr<Value<typename Converter::Type>> 
+		 */		template <class Converter>
 		std::shared_ptr<Value<typename Converter::Type>> ret(std::string name) {
 			std::shared_ptr<NamedValue<Converter>> val = std::make_shared<NamedValue<Converter>>(name);
 			returnValues.push_back(val);
 			return val;
 		}
 
+		/**
+		 * @brief Returned value from the binding with default value
+		 * 
+		 * @tparam Converter 
+		 * @param name 
+		 * @param defaultValue 
+		 * @return std::shared_ptr<Value<typename Converter::Type>> 
+		 */
 		template <class Converter>
 		std::shared_ptr<Value<typename Converter::Type>> ret(std::string name, typename Converter::Type defaultValue) {
 			std::shared_ptr<NamedValue<Converter>> val = std::make_shared<NamedValue<Converter>>(name, defaultValue);

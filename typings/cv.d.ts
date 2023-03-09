@@ -200,3 +200,10 @@ export function getScoreMax(scoreMat: Mat, threshold: number, region?: Rect): Ar
  * @returns best match without colisions
  */
 export function dropOverlappingZone(template: Mat, matches: Array<[number, number, number]>): Array<[number, number, number]>;
+
+// experimental, need improvements / rewrite
+export function min(src1: Mat, src2: Mat, dst: Mat): Mat;
+export function minAsync(src1: Mat, src2: Mat, dst: Mat): Promise<Mat>;
+
+export function max(src1: Mat, src2: Mat, dst: Mat): Mat;
+export function maxAsync(src1: Mat, src2: Mat, dst: Mat): Promise<Mat>;

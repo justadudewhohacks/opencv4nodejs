@@ -1,5 +1,10 @@
 # changelog
 
+## Version 6.5.0
+- integrate native-node-utils code inside cc/native-node-utils
+- add comments in native-node-utils
+- add cv.min cv.max
+
 ## Version 6.4.5
 - drop .ts files from npm package.
 - add .d.ts file for ts files in npm package.

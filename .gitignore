@@ -11,7 +11,6 @@ data/dnn
 .idea/
 dist
 .DS_Store
-native-node-utils
 */**.js.map
 examples/typed/*.js
 examples/typed/faceDetect/*.js
