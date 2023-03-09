@@ -7,7 +7,7 @@
 FROM urielch/opencv-nodejs:6.2.5-debian As build
 WORKDIR /usr/src/app
 ENV NODE_ENV=development
-RUN npm install -g rimraf@3.0.2
+RUN npm install -g rimraf@4.4.0
 COPY examples/package.json ./
 COPY examples/tsconfig.prod.json ./tsconfig.json
 RUN sed -i -r "s/\"@u4\/opencv4nodejs\": \".+\",//g" package.json
@@ -24,10 +24,10 @@ FROM urielch/opencv-nodejs:6.2.5-debian
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
 COPY --from=build /usr/src/app/package*.json ./
-RUN npm install -g rimraf@3.0.2 && \
+RUN npm install -g rimraf@4.4.0 && \
     npm install && \
     rimraf node_modules/**/*.{md,ts,map,h,c,cc,cpp,gyp,yml,txt} node_modules/**/{LICENSE,.github,.npmignore,LICENSE.txt,.travis.yml,.eslintrc,sponsors} && \
-    npm uninstall -g rimraf@3.0.2 && \
+    npm uninstall -g rimraf@4.4.0 && \
     npm cache clean --force && \
     find . -type f -empty -print -delete && \
     find . -type d -empty -print -delete && \
