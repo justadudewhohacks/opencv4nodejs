@@ -10,7 +10,7 @@ import { TestContext } from '../model';
 import detectorTestsFactory from './detectorTests';
 
 export default function (ctxt: TestContext) {
-  const { cv, cvVersionGreaterEqual, getTestImg } = ctxt;
+  const { cv, cvVersionGreaterEqual, getTestImg, getTestMask } = ctxt;
 
   const detectorTests = detectorTestsFactory(ctxt);
 
@@ -192,5 +192,18 @@ export default function (ctxt: TestContext) {
       assertMetaData(dst)(img.rows, img.cols * 2, img.type);
       assert(isZeroMat(dst) === false, 'dst Mat contains zeros only');
     });
+  });
+
+  describe('detect with Mask', () => {
+    let kps: KeyPoint[];
+
+    it('test mask on detect', () => {
+      const mask = getTestMask()
+      kps = new cv.ORBDetector().detect(getTestImg(), mask);
+      for(const kp of kps){
+        assert(kp.pt.y >= 256, 'keypoints are outside the mask');
+      }
+    });
+
   });
 }

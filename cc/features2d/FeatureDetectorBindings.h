@@ -13,10 +13,11 @@ namespace FeatureDetectorBindings {
     }
   
     cv::Mat img;
+    cv::Mat mask;
     std::vector<cv::KeyPoint> kps;
   
     std::string executeCatchCvExceptionWorker() {
-      det->detect(img, kps);
+      det->detect(img, kps, mask);
       return "";
     }
   
@@ -24,6 +25,11 @@ namespace FeatureDetectorBindings {
       return Mat::Converter::arg(0, &img, info);
     }
   
+    bool unwrapOptionalArgs(Nan::NAN_METHOD_ARGS_TYPE info) {
+      return (
+        Mat::Converter::optArg(1, &mask, info)
+      );
+    }
   
     v8::Local<v8::Value> getReturnValue() {
       return KeyPoint::ArrayConverter::wrap(kps);
